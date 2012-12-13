@@ -1,7 +1,7 @@
 class rails-app( $app_name, $domain ) {
-	class { "rails-app::db":
-		app_name => "$app_name",
-		password => "53cr3T",
+	package { "build-essential":
+		ensure => "installed",
+		require => Exec["update"],
 	}
 
 	package { "ruby1.9.3":
@@ -54,10 +54,5 @@ class rails-app( $app_name, $domain ) {
 		ensure => "installed",
 		name => "openjdk-6-jre-headless",
 		require => Exec["update"],
-	}
-
-	class { "rails-app::passenger":
-		path => "/srv/apps/$app_name/current/public",
-		server_name => "$app_name.$domain",
 	}
 }

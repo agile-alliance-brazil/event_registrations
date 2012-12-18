@@ -13,6 +13,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp/*
+/certs/*
 
 *.rbc
 *.sassc
@@ -26,3 +27,4 @@ capybara-*.html
 **.orig
 rerun.txt
 pickle-email-*.html
+/config/*.yml

@@ -1,9 +1,18 @@
 source :rubygems
 
 gem 'rails', '=3.2.9'
+gem 'inherited_resources', '=1.3.1'
+gem 'seed-fu', '=2.2.0'
+gem 'brhelper', '=3.3.0'
+gem 'brcpfcnpj', '=3.3.0'
+gem 'validates_existence', '=0.8.0'
+gem 'state_machine', '=1.1.2'
+gem 'haml', '=3.1.7'
+gem 'formtastic', '=2.2.1'
+gem 'airbrake', '=3.1.6'
+gem 'cancan', '=1.6.8'
 
-gem 'sqlite3'
-
+gem 'localized_country_select', :git=>'git://github.com/mlitwiniuk/localized_country_select.git', :tag=>'v0.9.1'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -34,10 +43,21 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
-gem 'puppet', '=3.0.1'
-gem 'facter', '=1.6.16'
 gem 'rake', '=10.0.2'
 
+group :production do
+  gem 'mysql2', '=0.3.11'
+end
+
 group :development do
-	gem 'vagrant', '=1.0.5'
+  gem 'sqlite3', '=1.3.6'
+  gem 'capistrano-ext', '=1.2.1'
+  gem 'vagrant', '=1.0.5'
+end
+
+group :development, :test do
+  gem 'mocha', '=0.10.5'
+  gem 'rspec-rails', '=2.12.0'
+  gem 'shoulda-matchers', '=1.4.2'
+  gem 'factory_girl_rails', '=4.1.0'
 end

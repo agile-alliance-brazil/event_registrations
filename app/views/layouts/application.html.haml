@@ -1,0 +1,57 @@
+!!! 5
+%html{html_attrs(I18n.locale)}
+
+  %head
+    %title
+      #{@event.name} -
+      = content_for?(:title) ? yield(:title) : t('title.untitled')
+    %meta{"http-equiv"=>"Content-Type", :content=>"text/html; charset=utf-8"}/
+    %link{"rel" => "shortcut icon", "href" => "/favicon.ico"}/
+    = csrf_meta_tag
+    = stylesheet_link_tag :application
+    = javascript_include_tag :application
+
+    = yield(:head)
+
+  %body
+    #container
+      #header
+        = link_to image_tag('logo.png'), root_path
+        .logo
+          %h1= @event.name
+          %strong= @event.location_and_date
+        %ul#languages
+          %li= link_to "Português", "?locale=pt"
+          %li= link_to "English", "?locale=en"
+
+      #content{ :class => 'grid_12' }
+        - flash.each do |name, msg|
+          = content_tag :div, msg, :id => "flash_#{name}"
+
+        - if show_title?
+          %h1= yield(:title)
+
+        = yield
+
+      #footer Copyleft - Agile Brazil 2010-2013 - #{t('footer.help').html_safe}
+
+    - unless AppConfig[:google].nil?
+      :javascript
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      :javascript
+        try{
+          var pageTracker = _gat._getTracker("UA-#{AppConfig[:google][:tracker_id]}");
+          pageTracker._trackPageview();
+        } catch(err) {}
+    :javascript
+      $(document).ready(function() {
+        $('textarea').TextAreaResizer();
+        $('[placeholder]').placeholder();
+        var errorInput = $('li.error :input:visible:enabled:first');
+        if (errorInput.length > 0) {
+          errorInput.focus();
+        } else if ($('.auto_focus').length > 0) {
+          $(':input:visible:enabled:first').focus();
+        }
+      })

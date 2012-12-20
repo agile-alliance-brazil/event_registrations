@@ -3,7 +3,7 @@ class passenger-apache {
 
 	package { 'librack-ruby1.9.1': 
 		ensure => "present",
-		require => Package["ruby1.9.3"],
+		require => Package["ruby1.9.1"],
 	}
 
 	package { 'libapache2-mod-passenger': 

@@ -167,8 +167,8 @@ describe AttendeesController do
       end
 
       it "should not allow creating more attendees than allowed on registration group" do
-        RegistrationGroup.any_instance.stubs(:total_attendees).returns(1)
-        RegistrationGroup.any_instance.stubs(:attendees).returns([FactoryGirl.create(:attendee)])
+        RegistrationGroup.any_instance.stubs(:complete?).returns(true)
+        # RegistrationGroup.any_instance.stubs(:attendees).returns([FactoryGirl.create(:attendee)])
         get :new, :registration_group_id => @registration_group.id
         flash[:error].should_not be_nil
         response.should redirect_to(root_path)
@@ -236,7 +236,7 @@ describe AttendeesController do
 
       it "should allow free registration type no matter the email" do
         Attendee.any_instance.stubs(:valid?).returns(true)
-        post :create, :attendee => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => "another"+@user.email}
+        post :create, :attendee => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => "another#{@user.email}"}
         response.should redirect_to(root_path)
       end
 
@@ -259,7 +259,7 @@ describe AttendeesController do
 
       it "should not allow free registration type for another email" do
         Attendee.any_instance.stubs(:valid?).returns(true)
-        post :create, :attendee => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => "another"+@user.email}
+        post :create, :attendee => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => "another#{@user.email}"}
 
         response.should render_template(:new)
         flash[:error].should == I18n.t('flash.attendee.create.free_not_allowed')

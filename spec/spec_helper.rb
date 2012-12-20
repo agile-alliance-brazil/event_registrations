@@ -55,6 +55,10 @@ Spork.prefork do
     config.infer_base_class_for_anonymous_controllers = false
   end
 
+  def sign_in user
+    controller.current_user = user
+  end
+
 end
 
 Spork.each_run do

@@ -1,7 +1,7 @@
 # encoding: UTF-8
 class AttendeesController < InheritedResources::Base
   belongs_to :registration_group, :optional => true
-  
+
   actions :index, :new, :create
   
   before_filter :validate_total_attendees, :only => [:new, :create]
@@ -9,13 +9,13 @@ class AttendeesController < InheritedResources::Base
   before_filter :validate_free_registration, :only => [:create]
 
   def index
-    # if !current_user.blank? && (current_user.admin? || current_user.registrar?)
-    #   @attendees = Attendee.all
-    #   @course_attendances = CourseAttendance.all
-    #   index!
-    # else
+    if current_user.present? && (current_user.admin? || current_user.registrar?)
+      @attendees = Attendee.all
+      @course_attendances = CourseAttendance.all
+      index!
+    else
       redirect_to new_attendee_path
-    # end
+    end
   end
   
   def new
@@ -72,7 +72,7 @@ class AttendeesController < InheritedResources::Base
   private
   def build_resource
     attributes = params[:attendee]
-    if(allowed_free_registration? && (false && !current_user.registrar?))
+    if(allowed_free_registration? && !current_user.registrar?)
       attributes ||= current_user.attributes
     else
       attributes ||= {}
@@ -83,14 +83,15 @@ class AttendeesController < InheritedResources::Base
       attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.group').id
       attributes[:organization] = parent.name
     end
-    if false && !current_user.blank? && current_user.has_approved_session?(@event)
+    if current_user.present? && current_user.has_approved_session?(@event)
       attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.free').id
     end
+    attributes.select!{ |key, value| Attendee.new.send(:_accessible_attributes)[:default].include?(key) }
     @attendee ||= end_of_association_chain.send(method_for_build, attributes)
   end
   
   def load_registration_types
-    unless @registration_types
+    if @registration_types.blank?
       @registration_types = parent? ? RegistrationType.without_free.all : RegistrationType.without_free.without_group.all
       @registration_types << RegistrationType.find_by_title('registration_type.free') if allowed_free_registration?
     end
@@ -110,7 +111,7 @@ class AttendeesController < InheritedResources::Base
       build_resource.errors[:registration_type_id] << t('activerecord.errors.models.attendee.attributes.registration_type_id.free_not_allowed')
       flash.now[:error] = t('flash.attendee.create.free_not_allowed') 
       render :new and return false
-    elsif false && !current_user.registrar? && build_resource.email != current_user.email
+    elsif !current_user.registrar? && build_resource.email != current_user.email
       build_resource.errors[:email] << t('activerecord.errors.models.attendee.attributes.email.free_not_allowed')
       flash.now[:error] = t('flash.attendee.create.free_not_allowed')
       render :new and return false
@@ -122,6 +123,6 @@ class AttendeesController < InheritedResources::Base
   end
   
   def allowed_free_registration?
-    false && !current_user.blank? && (current_user.has_approved_session?(@event) || current_user.registrar?) && !parent?
+    current_user.present? && (current_user.has_approved_session?(@event) || current_user.registrar?) && !parent?
   end
 end

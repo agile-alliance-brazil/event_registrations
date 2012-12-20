@@ -6,6 +6,19 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   before_filter :set_timezone
   before_filter :set_event
+  before_filter :authenticate_user!
+
+  def authenticate_user!
+    # TODO Implement
+  end
+  
+  def current_user
+    @current_user
+  end
+
+  def current_user= user
+    @current_user = user
+  end
 
   def set_event
     @event ||= Event.find_by_year(params[:year]) || Event.current

@@ -4,7 +4,7 @@ class rails-app( $app_name, $domain ) {
 		require => Exec["update"],
 	}
 
-	package { "ruby1.9.3":
+	package { "ruby1.9.1":
 		ensure => "installed",
 		require => Exec["update"],
 	}
@@ -12,7 +12,7 @@ class rails-app( $app_name, $domain ) {
 	exec { "update-gem-sources":
 		command => "gem sources -u",
 		path => "/usr/bin",
-		require => Package["ruby1.9.3"],
+		require => Package["ruby1.9.1"],
 	}
 
 	package { "bundler":

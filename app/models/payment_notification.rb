@@ -4,6 +4,8 @@ class PaymentNotification < ActiveRecord::Base
   serialize :params
   
   validates_existence_of :invoicer
+
+  attr_accessible :params, :invoicer_id, :invoicer_type, :status, :transaction_id, :notes
   
   after_create :mark_invoicer_as_paid
   

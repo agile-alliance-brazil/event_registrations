@@ -11,7 +11,7 @@ describe AttendeesController do
   describe "GET index" do
     it "should redirect to root when not authorized" do
       get :index
-      response.should redirect_to(root_path)
+      response.should redirect_to(new_attendee_path)
     end
 
     describe "should present a summary of all attendees states for authorized users" do

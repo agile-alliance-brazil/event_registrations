@@ -1,0 +1,9 @@
+#! /usr/bin/env ruby
+require 'vagrant'
+
+env = Vagrant::Environment.new
+cmd = "cd /srv/apps/registrations/current && /usr/local/bin/bundle exec #{File.basename($0)} #{ARGV.join(' ')}"
+
+env.vms[:dev].channel.execute(cmd) do |_, data|
+  print data
+end 

@@ -1,7 +1,13 @@
+require File.join(Rails.root, 'lib/authorization.rb')
+
 class User
-  def save!
+  include Authorization
+  attr_accessor :roles_mask
+  
+  def initialize
+    roles_mask = 0
   end
 
-  def add_role(*args)
+  def save!
   end
 end

@@ -27,3 +27,4 @@
    :secret: xxx22xxx
    :cert_id: ABCxxx
    :url: https://www.sandbox.paypal.com/cgi-bin/webscr
+ :secret_token: cc611d857e545df685c52c687259b3248ad38942b66698d1ceba3e4e799787ec20523c56bbd7d896837065aa199609c1503eb4f7ca582c7e5d6efea6bd021133

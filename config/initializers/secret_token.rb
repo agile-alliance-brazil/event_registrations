@@ -5,4 +5,9 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Current::Application.config.secret_token = 'cc611d857e545df685c52c687259b3248ad38942b66698d1ceba3e4e799787ec20523c56bbd7d896837065aa199609c1503eb4f7ca582c7e5d6efea6bd021133'
+begin
+  config = YAML.load_file("#{Rails.root}/config/config.yml")
+  Current::Application.config.secret_token = config[:secret_token]
+rescue
+  raise "config/config.yml file not found. Please check config/config.example for a sample"
+end

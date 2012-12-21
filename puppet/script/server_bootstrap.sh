@@ -11,7 +11,7 @@ RUBY_VERSION=1.9.1
 
 sudo apt-get update
 
-sudo apt-get install -y ruby$RUBY_VERSION ruby$RUBY_VERSION-dev \
+sudo apt-get install -y git-core ruby$RUBY_VERSION ruby$RUBY_VERSION-dev \
                         rubygems$RUBY_VERSION irb$RUBY_VERSION ri$RUBY_VERSION rdoc$RUBY_VERSION \
                         build-essential libopenssl-ruby$RUBY_VERSION libssl-dev zlib1g-dev libicu48
 
@@ -28,3 +28,5 @@ sudo update-alternatives --config gem
 echo Finally... installing puppet
 sudo gem install puppet -v 3.0.1 --no-ri --no-rdoc
 sudo gem install bundler -v 1.2.3 --no-ri --no-rdoc
+
+sudo groupadd puppet

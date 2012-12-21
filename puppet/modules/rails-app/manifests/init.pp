@@ -1,4 +1,4 @@
-class rails-app( $app_name, $domain ) {
+class rails-app( $user = "vagrant", $app_name, $domain ) {
 	package { "build-essential":
 		ensure => "installed",
 		require => Exec["update"],
@@ -32,20 +32,20 @@ class rails-app( $app_name, $domain ) {
 
 	file { "/srv/apps/$app_name":
 		ensure => "directory",
-		owner => "vagrant",
+		owner => $user,
 		require => File["/srv/apps"]
 	}
 
 	file { "/srv/apps/$app_name/shared":
 		ensure => "directory",
-		owner => "vagrant",
+		owner => $user,
 		require => File["/srv/apps/$app_name"]
 	}
 
 	file { "config_folder":
 		path => "/srv/apps/$app_name/shared/config",
 		ensure => "directory",
-		owner => "vagrant",
+		owner => $user,
 		require => File["/srv/apps/$app_name/shared"]
 	}
 

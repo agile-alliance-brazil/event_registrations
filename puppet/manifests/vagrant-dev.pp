@@ -28,7 +28,7 @@ node default {
 	}
 
 	class { 'rails-app':
-	  app_name => 'registrations',
+	  app_name => 'event_registrations',
 	  domain => 'agilebrazil.com',
 	}
 

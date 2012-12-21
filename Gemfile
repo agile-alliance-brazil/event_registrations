@@ -11,6 +11,8 @@ gem 'haml', '=3.1.7'
 gem 'formtastic', '=2.2.1'
 gem 'airbrake', '=3.1.6'
 gem 'cancan', '=1.6.8'
+gem 'jquery-rails', '=2.1.4'
+gem 'rake', '=10.0.3'
 
 gem 'localized_country_select', :git=>'git://github.com/mlitwiniuk/localized_country_select.git', :tag=>'v0.9.1'
 
@@ -22,27 +24,8 @@ group :assets do
 
   gem 'sass-rails',   '=3.2.5'
   gem 'coffee-rails', '=3.2.2'
-  gem 'uglifier', '= 1.3.0'
+  gem 'yui-compressor', '=0.9.6'
 end
-
-gem 'jquery-rails', '=2.1.4'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'debugger'
-
-gem 'rake', '=10.0.3'
 
 group :production do
   gem 'mysql2', '=0.3.11'

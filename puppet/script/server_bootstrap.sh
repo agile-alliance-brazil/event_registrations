@@ -22,6 +22,8 @@ sudo update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby$RUBY_VERSION
                          --slave   /usr/bin/irb irb /usr/bin/irb$RUBY_VERSION \
                          --slave   /usr/bin/rdoc rdoc /usr/bin/rdoc$RUBY_VERSION
 
+sudo update-alternatives --install /usr/bin/gem gem /usr/bin/gem$RUBY_VERSION 400
+
 sudo update-alternatives --config ruby
 sudo update-alternatives --config gem
 

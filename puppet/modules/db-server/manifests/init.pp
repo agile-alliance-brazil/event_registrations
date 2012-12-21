@@ -1,4 +1,4 @@
-class db-server {
+class db-server ($app_name = 'rails-app') {
 	include mysql
 
 	package { 'libmysql-ruby1.9.1': 

@@ -4,10 +4,13 @@ node default {
 	    path => "/usr/bin",
 	}
 
-	class { 'web-server': }
-	class { 'db-server': }
+  $app_name = "registrations"
 
-  $app_name = "event_registrations"
+	class { 'web-server': }
+	class { 'db-server': 
+    app_name => $app_name
+  }
+
   $domain = "agilebrazil.com"
   $user = "ubuntu"
   class { 'rails-app':

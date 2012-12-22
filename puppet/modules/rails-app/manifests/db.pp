@@ -15,7 +15,7 @@ class rails-app::db ($app_name = 'rails-app', $password) {
 
   mysqldb { "myapp":
   	name => "${app_name}_production",
-      user => "${app_name}_db",
-      password => $password
+    user => "${app_name}_db",
+    password => $password,
   }
 }

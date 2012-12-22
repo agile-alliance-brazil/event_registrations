@@ -27,7 +27,10 @@ node default {
 		ensure => 'present',
 	}
 
+	$user = "vagrant"
+
 	class { 'rails-app':
+		user => $user,
 	  app_name => 'registrations',
 	  domain => 'agilebrazil.com',
 	}
@@ -36,7 +39,7 @@ node default {
 		path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
 		command => 'bundle install --path vendor/bundle',
 		cwd => '/srv/apps/registrations/current',
-		user => 'vagrant',
+		user => $user,
 		logoutput => true,
 		require => [Class['rails-app'], Package['sqlite3'], Package['libmysql-ruby1.9.1'], Package['libmysqlclient-dev'], Package['git-core']]
 	}

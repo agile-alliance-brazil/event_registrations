@@ -7,7 +7,7 @@ set :user,                "ubuntu"
 
 set :domain,              "177.71.245.174"
 set :project,             "event_registrations"
-set :application,         "event_registrations"
+set :application,         "registrations"
 set :applicationdir,      "/srv/apps/#{application}"
 set :bundle_cmd,          "/usr/local/bin/bundle"
 set :rake,                "#{bundle_cmd} exec rake"

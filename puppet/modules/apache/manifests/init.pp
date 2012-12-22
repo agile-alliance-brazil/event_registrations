@@ -20,7 +20,7 @@ class apache {
 	}
 
 	service { "apache2":
-	    enable => true,
+	  enable => true,
 		ensure => running,
 		hasrestart => true,
 		hasstatus => true,

@@ -17,6 +17,8 @@ Vagrant::Config.run do |config|
     # Setting up a share so we can edit locally but run in vagrant
     config.vm.share_folder "current", "/srv/apps/registrations/current", "#{APP_DIR}"
 
+    config.vm.network :hostonly, "10.11.12.13"
+    config.vm.forward_port 22, 2200
     # Using default rack settings
     config.vm.forward_port 9292, 9292
 
@@ -27,7 +29,10 @@ Vagrant::Config.run do |config|
   end
 
   config.vm.define :deploy do |config|
-    # Using default rack settings
+
+    config.vm.network :hostonly, "10.11.12.14"
+    config.vm.forward_port 22, 2201
+    # Using default http settings
     config.vm.forward_port 80, 8081
 
     config.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|

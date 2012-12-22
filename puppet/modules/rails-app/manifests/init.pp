@@ -1,4 +1,4 @@
-class rails-app( $user = "vagrant", $app_name, $domain ) {
+class rails-app( $user, $app_name, $domain ) {
 	package { "build-essential":
 		ensure => "installed",
 		require => Exec["update"],

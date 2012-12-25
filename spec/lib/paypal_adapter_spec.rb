@@ -9,33 +9,37 @@ describe PaypalAdapter do
     end
     
     it "should add item for base registration price" do
-      adapter = PaypalAdapter.from_attendee(@attendee)
+      I18n.with_locale(:en) do
+        adapter = PaypalAdapter.from_attendee(@attendee)
 
-      adapter.items.size.should == 1
-      adapter.items[0].amount.should == @attendee.base_price
-      adapter.items[0].name.should == "Tipo de inscrição: Individual"
-      adapter.items[0].quantity.should == 1
-      adapter.items[0].number.should == @attendee.registration_type.id
+        adapter.items.size.should == 1
+        adapter.items[0].amount.should == @attendee.base_price
+        adapter.items[0].name.should == "Type of Registration: Individual"
+        adapter.items[0].quantity.should == 1
+        adapter.items[0].number.should == @attendee.registration_type.id
+      end
     end
     
     it "should add items for each course attendance" do
-      tdd_course = Course.find_by_name('course.tdd.name')
-      @attendee.course_attendances.build(:course_id => tdd_course.id)
-      lean_course = Course.find_by_name('course.lean.name')
-      @attendee.course_attendances.build(:course_id => lean_course.id)
-      
-      adapter = PaypalAdapter.from_attendee(@attendee)
-      
-      adapter.items.size.should == 3
-      adapter.items[1].amount.should == tdd_course.price(@attendee.registration_date)
-      adapter.items[1].name.should == "Cursos: TDD"
-      adapter.items[1].quantity.should == 1
-      adapter.items[1].number.should == tdd_course.id
-      
-      adapter.items[2].amount.should == lean_course.price(@attendee.registration_date)
-      adapter.items[2].name.should == "Cursos: Lean"
-      adapter.items[2].quantity.should == 1
-      adapter.items[2].number.should == lean_course.id
+      I18n.with_locale(:en) do
+        tdd_course = Course.find_by_name('course.tdd.name')
+        @attendee.course_attendances.build(:course_id => tdd_course.id)
+        lean_course = Course.find_by_name('course.lean.name')
+        @attendee.course_attendances.build(:course_id => lean_course.id)
+        
+        adapter = PaypalAdapter.from_attendee(@attendee)
+        
+        adapter.items.size.should == 3
+        adapter.items[1].amount.should == tdd_course.price(@attendee.registration_date)
+        adapter.items[1].name.should == "Courses: TDD"
+        adapter.items[1].quantity.should == 1
+        adapter.items[1].number.should == tdd_course.id
+        
+        adapter.items[2].amount.should == lean_course.price(@attendee.registration_date)
+        adapter.items[2].name.should == "Courses: Lean"
+        adapter.items[2].quantity.should == 1
+        adapter.items[2].number.should == lean_course.id
+      end
     end
     
     it "should add invoice type and id" do
@@ -55,18 +59,20 @@ describe PaypalAdapter do
     end
     
     it "should add items for each attendee's registration" do
-      adapter = PaypalAdapter.from_registration_group(@registration_group)
+      I18n.with_locale(:en) do
+        adapter = PaypalAdapter.from_registration_group(@registration_group)
 
-      adapter.items.size.should == 2
-      adapter.items[0].amount.should == @attendee_1.base_price
-      adapter.items[0].name.should == "Inscrição: #{@attendee_1.full_name}"
-      adapter.items[0].quantity.should == 1
-      adapter.items[0].number.should == @attendee_1.registration_type.id
+        adapter.items.size.should == 2
+        adapter.items[0].amount.should == @attendee_1.base_price
+        adapter.items[0].name.should == "Registration: #{@attendee_1.full_name}"
+        adapter.items[0].quantity.should == 1
+        adapter.items[0].number.should == @attendee_1.registration_type.id
 
-      adapter.items[1].amount.should == @attendee_2.base_price
-      adapter.items[1].name.should == "Inscrição: #{@attendee_2.full_name}"
-      adapter.items[1].quantity.should == 1
-      adapter.items[1].number.should == @attendee_2.registration_type.id
+        adapter.items[1].amount.should == @attendee_2.base_price
+        adapter.items[1].name.should == "Registration: #{@attendee_2.full_name}"
+        adapter.items[1].quantity.should == 1
+        adapter.items[1].number.should == @attendee_2.registration_type.id
+      end
     end
     
     it "should add items for each attendee's course attendances" do
@@ -75,18 +81,20 @@ describe PaypalAdapter do
       lean_course = Course.find_by_name('course.lean.name')
       @attendee_2.course_attendances.create(:course_id => lean_course.id)
       
-      adapter = PaypalAdapter.from_registration_group(@registration_group)
+      I18n.with_locale(:en) do
+        adapter = PaypalAdapter.from_registration_group(@registration_group)
 
-      adapter.items.size.should == 4
-      adapter.items[1].amount.should == tdd_course.price(@attendee_1.registration_date)
-      adapter.items[1].name.should == "Cursos: #{@attendee_1.full_name} (TDD)"
-      adapter.items[1].quantity.should == 1
-      adapter.items[1].number.should == tdd_course.id
+        adapter.items.size.should == 4
+        adapter.items[1].amount.should == tdd_course.price(@attendee_1.registration_date)
+        adapter.items[1].name.should == "Courses: #{@attendee_1.full_name} (TDD)"
+        adapter.items[1].quantity.should == 1
+        adapter.items[1].number.should == tdd_course.id
 
-      adapter.items[3].amount.should == lean_course.price(@attendee_2.registration_date)
-      adapter.items[3].name.should == "Cursos: #{@attendee_2.full_name} (Lean)"
-      adapter.items[3].quantity.should == 1
-      adapter.items[3].number.should == lean_course.id      
+        adapter.items[3].amount.should == lean_course.price(@attendee_2.registration_date)
+        adapter.items[3].name.should == "Courses: #{@attendee_2.full_name} (Lean)"
+        adapter.items[3].quantity.should == 1
+        adapter.items[3].number.should == lean_course.id
+      end 
     end
 
     it "should add invoice type and id" do

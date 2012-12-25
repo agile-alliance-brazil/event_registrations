@@ -187,8 +187,10 @@ describe Attendee do
     
     it "should validate that payment agreement is checked on confirmation" do
       attendee = FactoryGirl.build(:attendee, :payment_agreement => false)
-      attendee.confirm.should be_false
-      attendee.errors[:payment_agreement].should include("deve ser aceito")
+      I18n.with_locale(:en) do
+        attendee.confirm.should be_false
+        attendee.errors[:payment_agreement].should include("must be accepted")
+      end
     end
     
     context "courses" do

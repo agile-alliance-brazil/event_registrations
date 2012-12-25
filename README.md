@@ -1,4 +1,4 @@
-Event Registrations
+# Event Registrations [![Build Status](https://secure.travis-ci.org/hugocorbucci/event_registrations.png?branch=master)](http://travis-ci.org/hugocorbucci/event_registrations) [![Dependency Status](https://gemnasium.com/hugocorbucci/event_registrations.png)](https://gemnasium.com/hugocorbucci/event_registrations)
 ===================
 
 An app to handle event registrations. Intended to be lightweight and rest queriable to allow integration with third party systems.

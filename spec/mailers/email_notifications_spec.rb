@@ -5,17 +5,19 @@ require 'spec_helper'
 describe EmailNotifications do
   before do
     ActionMailer::Base.deliveries = []
-    I18n.locale = I18n.default_locale
+    @old_locale = I18n.locale
+    I18n.locale = :en
     @event = Event.current || FactoryGirl.create(:event)
   end
 
   after do
     ActionMailer::Base.deliveries.clear
+    I18n.locale = @old_locale
   end
   
   context "registration pending" do
     before(:each) do
-      @attendee = FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0))
+      @attendee = FactoryGirl.create(:attendee, :event => @event, :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0))
     end
     
     it "should be sent to attendee cc'ed to event organizer" do
@@ -48,7 +50,7 @@ describe EmailNotifications do
 
   context "registration confirmed" do
     before(:each) do
-      @attendee = FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0))
+      @attendee = FactoryGirl.create(:attendee, :event => @event, :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0))
     end
     
     it "should be sent to attendee" do
@@ -87,7 +89,7 @@ describe EmailNotifications do
   context "registration group attendee" do
     before(:each) do
       @registration_group = FactoryGirl.create(:registration_group)
-      @attendee = FactoryGirl.create(:attendee,
+      @attendee = FactoryGirl.create(:attendee, :event => @event,
         :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0),
         :registration_type => RegistrationType.find_by_title('registration_type.group'),
         :registration_group => @registration_group
@@ -119,7 +121,7 @@ describe EmailNotifications do
   context "registration group pending" do
     before(:each) do
       @registration_group = FactoryGirl.create(:registration_group)
-      @attendee = FactoryGirl.create(:attendee,
+      @attendee = FactoryGirl.create(:attendee, :event => @event,
         :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0),
         :registration_type => RegistrationType.find_by_title('registration_type.group'),
         :registration_group => @registration_group
@@ -178,7 +180,7 @@ describe EmailNotifications do
 
   context "registration reminder" do
     before(:each) do
-      @attendee = FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0))
+      @attendee = FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 04, 25, 12, 0, 0), :event => @event)
     end
     
     it "should be sent to attendee cc'ed to event organizer" do
@@ -189,9 +191,10 @@ describe EmailNotifications do
       mail.encoded.should =~ /Caro #{@attendee.full_name},/
       mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
       mail.subject.should == "[localhost:3000] Nova forma de pagamento por Paypal para inscrições na #{@event.name}"
+      
     end
     
-    it "should be sent to attendee using defult_locale" do
+    it "should be sent to attendee using its default_locale" do
       @attendee.default_locale = 'en'
       mail = EmailNotifications.registration_reminder(@attendee).deliver
       ActionMailer::Base.deliveries.size.should == 1

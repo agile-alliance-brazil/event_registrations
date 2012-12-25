@@ -28,7 +28,7 @@ group :assets do
   gem 'yui-compressor', '=0.9.6'
 end
 
-group :production do
+group :production, :travis do
   gem 'mysql2', '=0.3.11'
 end
 

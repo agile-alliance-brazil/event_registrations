@@ -90,11 +90,11 @@ ActiveRecord::Schema.define(:version => 20121217222354) do
   end
 
   create_table "pre_registrations", :force => true do |t|
-    t.integer  "conference_id"
+    t.integer  "event_id"
     t.string   "email"
     t.boolean  "used"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "registration_groups", :force => true do |t|

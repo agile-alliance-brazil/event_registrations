@@ -169,15 +169,15 @@ en:
 
   email:
     registration_pending:
-      subject: "Registration request to %{conference_name} sent"
+      subject: "Registration request to %{event_name} sent"
     registration_confirmed:
-      subject: "Registration confirmed for %{conference_name}"
+      subject: "Registration confirmed for %{event_name}"
     registration_group_pending:
-      subject: "Company registration request to %{conference_name} sent"
+      subject: "Company registration request to %{event_name} sent"
     registration_group_confirmed:
-      subject: "Registration confirmed for %{conference_name}"
+      subject: "Registration confirmed for %{event_name}"
     registration_reminder:
-      subject: "New payment option via Paypal for registration for %{conference_name}"
+      subject: "New payment option via Paypal for registration for %{event_name}"
 
   gender:
     male: "Male"

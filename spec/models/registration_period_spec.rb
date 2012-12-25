@@ -46,19 +46,21 @@ describe RegistrationPeriod do
       end
     end
 
-    context "for registration types" do
+    context "for courses for registration types" do
       before do
         @csm = Course.find_by_name('course.csm.name')
         @cspo = Course.find_by_name('course.cspo.name')
         @lean = Course.find_by_name('course.lean.name')
         @tdd = Course.find_by_name('course.tdd.name')
+        @psm = Course.find_by_name('course.psm.name')
       end
     
       it "pre_register" do
-        lambda { @pre_register.price_for_course(@csm) }.should raise_error(InvalidPrice)
-        lambda { @pre_register.price_for_course(@cspo) }.should raise_error(InvalidPrice)
-        lambda { @pre_register.price_for_course(@lean) }.should raise_error(InvalidPrice)
-        lambda { @pre_register.price_for_course(@tdd) }.should raise_error(InvalidPrice)
+        @pre_register.price_for_course(@csm).should == 990.00
+        @pre_register.price_for_course(@cspo).should == 990.00
+        @pre_register.price_for_course(@lean).should == 280.00
+        @pre_register.price_for_course(@tdd).should == 280.00
+        @pre_register.price_for_course(@psm).should == 700.00
       end
 
       it "early_bird" do
@@ -66,6 +68,7 @@ describe RegistrationPeriod do
         @early_bird.price_for_course(@cspo).should == 990.00
         @early_bird.price_for_course(@lean).should == 280.00
         @early_bird.price_for_course(@tdd).should == 280.00
+        @early_bird.price_for_course(@psm).should == 700.00
       end
 
       it "regular" do
@@ -73,6 +76,7 @@ describe RegistrationPeriod do
         @regular.price_for_course(@cspo).should == 1290.00
         @regular.price_for_course(@lean).should == 340.00
         @regular.price_for_course(@tdd).should == 340.00
+        @regular.price_for_course(@psm).should == 990.00
       end
 
       it "late" do
@@ -80,6 +84,7 @@ describe RegistrationPeriod do
         @late.price_for_course(@cspo).should == 1650.00
         @late.price_for_course(@lean).should == 390.00
         @late.price_for_course(@tdd).should == 390.00
+        @late.price_for_course(@psm).should == 1290.00
       end
     end
   end

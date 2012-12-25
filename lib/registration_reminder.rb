@@ -12,7 +12,7 @@ class RegistrationReminder
   
   private
   def pending_attendees
-    Attendee.all(:conditions => ['conference_id = ? AND status = ? AND registration_type_id <> ? AND registration_date < ?', current_conference.id, 'pending', RegistrationType.find_by_title('registration_type.group').id, Time.zone.local(2011, 5, 21)], :order => 'id')
+    Attendee.all(:conditions => ['event_id = ? AND status = ? AND registration_type_id <> ? AND registration_date < ?', current_event.id, 'pending', RegistrationType.find_by_title('registration_type.group').id, Time.zone.local(2011, 5, 21)], :order => 'id')
   end
   
   def try_with(action, &blk)
@@ -25,7 +25,7 @@ class RegistrationReminder
     Rails.logger.flush
   end
   
-  def current_conference
-    @current_conference ||= Conference.current
+  def current_event
+    @current_event ||= Event.current
   end
 end

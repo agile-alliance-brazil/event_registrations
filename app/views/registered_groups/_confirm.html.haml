@@ -5,4 +5,4 @@
         = form.input :payment_agreement, :as => :boolean, :required => true, :input_html => {:tabindex => autotab}
       = form.input :notes, :input_html => {:rows => 3, :tabindex => autotab, :disabled => @registration_group.confirmed?}
     = form.actions do
-      = form.action(:submit, :confirm_registered_attendee, :button_html => {:tabindex => autotab, :disabled => @registration_group.confirmed?})
+      = form.action(:submit, :label => :confirm_registered_attendee, :button_html => {:tabindex => autotab, :disabled => @registration_group.confirmed?})

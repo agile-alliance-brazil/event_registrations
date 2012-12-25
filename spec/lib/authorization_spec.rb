@@ -22,41 +22,20 @@ describe Authorization do
       @user.roles_mask.should == 1
       @user.roles = :admin
       @user.roles_mask.should == 1
-    end      
-    
-    it "- author" do
-      @user.roles = "author"
-      @user.roles_mask.should == 2
-      @user.roles = :author
-      @user.roles_mask.should == 2
-    end
-
-    it "- reviewer" do
-      @user.roles = "reviewer"
-      @user.roles_mask.should == 4
-      @user.roles = :reviewer
-      @user.roles_mask.should == 4
-    end
-    
-    it "- organizer" do
-      @user.roles = "organizer"
-      @user.roles_mask.should == 8
-      @user.roles = :organizer
-      @user.roles_mask.should == 8
     end
     
     it "- registrar" do
       @user.roles = "registrar"
-      @user.roles_mask.should == 16
+      @user.roles_mask.should == 2
       @user.roles = :registrar
-      @user.roles_mask.should == 16
+      @user.roles_mask.should == 2
     end
     
     it "- multiple" do
-      @user.roles = ["admin", "reviewer"]
-      @user.roles_mask.should == 5
-      @user.roles = [:admin, :reviewer]
-      @user.roles_mask.should == 5
+      @user.roles = ["admin", "registrar"]
+      @user.roles_mask.should == 3
+      @user.roles = [:admin, :registrar]
+      @user.roles_mask.should == 3
     end
     
     it "- none" do
@@ -72,10 +51,10 @@ describe Authorization do
     end
     
     it "- mixed valid and invalid (ignores invalid)" do
-      @user.roles = ["invalid", "reviewer", "admin"]
-      @user.roles_mask.should == 5
-      @user.roles = [:invalid, :reviewer, :admin]
-      @user.roles_mask.should == 5
+      @user.roles = ["invalid", "registrar", "admin"]
+      @user.roles_mask.should == 3
+      @user.roles = [:invalid, :registrar, :admin]
+      @user.roles_mask.should == 3
     end
   end
 
@@ -88,25 +67,14 @@ describe Authorization do
       @user.roles = "admin"
       @user.roles.should == ["admin"]
 
-      @user.roles = "reviewer"
-      @user.roles.should == ["reviewer"]
-
-      @user.roles = "author"
-      @user.roles.should == ["author"]
-
-      @user.roles = "organizer"
-      @user.roles.should == ["organizer"]
-
       @user.roles = "registrar"
       @user.roles.should == ["registrar"]
     end
     
     it "- multiple roles" do
-      @user.roles = ["admin", "reviewer", "author"]
+      @user.roles = ["admin", "registrar"]
       @user.roles.should include("admin")
-      @user.roles.should include("author")
-      @user.roles.should include("reviewer")
-      @user.roles.should_not include("organizer")
+      @user.roles.should include("registrar")
     end
   end
   
@@ -116,24 +84,6 @@ describe Authorization do
       @user.roles = "admin"
       @user.should be_admin
     end
-
-    it "- author" do
-      @user.should_not be_author
-      @user.roles = "author"
-      @user.should be_author
-    end
-
-    it "- reviewer" do
-      @user.should_not be_reviewer
-      @user.roles = "reviewer"
-      @user.should be_reviewer
-    end
-
-    it "- organizer" do
-      @user.should_not be_organizer
-      @user.roles = "organizer"
-      @user.should be_organizer
-    end
     
     it "- registrar" do
       @user.should_not be_registrar
@@ -142,19 +92,17 @@ describe Authorization do
     end
     
     it "- multiple" do
-      @user.roles = ["admin", "reviewer"]
+      @user.roles = ["admin", "registrar"]
       @user.should_not be_guest
       @user.should be_admin
-      @user.should_not be_author
-      @user.should be_reviewer
+      @user.should be_registrar
     end
     
     it "- none (guest)" do
       @user.roles = []
       @user.should be_guest
       @user.should_not be_admin
-      @user.should_not be_author
-      @user.should_not be_reviewer
+      @user.should_not be_registrar
     end    
   end
   
@@ -175,11 +123,10 @@ describe Authorization do
     end
     
     it "- multiple roles" do
-      @user.roles = [:admin, :author]
-      @user.add_role :reviewer
+      @user.roles = [:admin, :registrar]
+      @user.add_role :registrar
       @user.should be_admin
-      @user.should be_author
-      @user.should be_reviewer
+      @user.should be_registrar
     end
   end
 
@@ -204,14 +151,14 @@ describe Authorization do
     end
     
     it "- multiple roles" do
-      @user.add_role :reviewer
+      @user.add_role :registrar
       @user.should be_admin
-      @user.should be_reviewer
+      @user.should be_registrar
       
-      @user.remove_role "reviewer"
+      @user.remove_role "registrar"
       @user.remove_role :admin
       @user.should_not be_admin
-      @user.should_not be_reviewer
+      @user.should_not be_registrar
     end
   end
 end

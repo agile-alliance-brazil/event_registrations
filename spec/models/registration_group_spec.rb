@@ -108,20 +108,24 @@ describe RegistrationGroup do
     it { should validate_numericality_of :total_attendees }
 
     it "should validate that payment agreement is checked on confirmation" do
-      registration_group = FactoryGirl.build(:registration_group, :payment_agreement => false)
-      registration_group.expects(:attendees).returns([1, 2, 3, 4, 5])
-      registration_group.complete.should be_true
-      registration_group.confirm.should be_false
-      registration_group.errors[:payment_agreement].should include("deve ser aceito")
+      I18n.with_locale(:en) do
+        registration_group = FactoryGirl.build(:registration_group, :payment_agreement => false)
+        registration_group.expects(:attendees).returns([1, 2, 3, 4, 5])
+        registration_group.complete.should be_true
+        registration_group.confirm.should be_false
+        registration_group.errors[:payment_agreement].should include("must be accepted")
+      end
     end
 
     it "should validate that number of attendees reaches total on completion" do
-      registration_group = FactoryGirl.build(:registration_group, :total_attendees => 5)
-      registration_group.complete.should be_false
-      registration_group.errors[:total_attendees].should include("não possui 5 participantes cadastrados")
+      I18n.with_locale(:en) do
+        registration_group = FactoryGirl.build(:registration_group, :total_attendees => 5)
+        registration_group.complete.should be_false
+        registration_group.errors[:total_attendees].should include("doesn't have 5 registered attendees")
 
-      registration_group.expects(:attendees).returns([1, 2, 3, 4, 5])
-      registration_group.complete.should be_true
+        registration_group.expects(:attendees).returns([1, 2, 3, 4, 5])
+        registration_group.complete.should be_true
+      end
     end
   end
 
@@ -289,7 +293,7 @@ describe RegistrationGroup do
       FactoryGirl.create(:attendee, :registration_date => @date, :registration_group => @registration_group, :registration_type => RegistrationType.find_by_title('registration_type.group'))
       FactoryGirl.create(:attendee, :registration_date => @date, :registration_group => @registration_group, :registration_type => RegistrationType.find_by_title('registration_type.group'), :cpf => "366.624.533-15")
 
-      @registration_group.registration_fee.should == 135.00 * 2
+      @registration_group.registration_fee.should == 165.00 * 2
     end
   end
 
@@ -312,9 +316,8 @@ describe RegistrationGroup do
 
     context "attendee is pre-registered" do
       before(:each) do
-        attendee = FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 4, 5), :registration_group => @group, :registration_type => RegistrationType.find_by_title('registration_type.group'))
-        @pre = PreRegistration.new(:email => attendee.email, :used => false)
-        @pre.save!
+        attendee = FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 3, 5), :registration_group => @group, :registration_type => RegistrationType.find_by_title('registration_type.group'))
+        @pre = PreRegistration.create(:email => attendee.email, :used => false)
       end
 
       after(:each) do
@@ -328,7 +331,7 @@ describe RegistrationGroup do
 
     context "attendee not pre-registered" do
       before(:each) do
-        FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 4, 5), :registration_group => @group, :registration_type => RegistrationType.find_by_title('registration_type.group'))
+        FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 3, 5), :registration_group => @group, :registration_type => RegistrationType.find_by_title('registration_type.group'))
       end
 
       it "should return normal period for registration" do

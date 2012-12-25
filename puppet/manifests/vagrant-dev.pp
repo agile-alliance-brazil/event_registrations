@@ -44,7 +44,12 @@ node default {
 		require => [Class['rails-app'], Package['sqlite3'], Package['libmysql-ruby1.9.1'], Package['libmysqlclient-dev'], Package['git-core']]
 	}
 
+	package { 'xvfb':
+		ensure => 'installed',
+	}
+
 	package { 'phantomjs':
 		ensure => 'installed',
+		require => Package['xvfb'],
 	}
 }

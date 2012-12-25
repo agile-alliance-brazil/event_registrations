@@ -44,8 +44,8 @@ describe Attendee do
     
     it "should provide courses from course_attendances" do
       attendee = FactoryGirl.build(:attendee)
-      attendee.course_attendances.build(:course => @csm)
-      attendee.course_attendances.build(:course => @cspo)
+      attendee.course_attendances.build(:course_id => @csm.id)
+      attendee.course_attendances.build(:course_id => @cspo.id)
 
       attendee.courses.should == [@csm, @cspo]
     end
@@ -363,36 +363,36 @@ describe Attendee do
   
   describe "registration fee" do
     before do
-      @date = Time.zone.local(2011, 05, 01, 12, 0, 0)
+      @early_bird_date = Time.zone.local(2011, 04, 01, 12, 0, 0)
     end
 
     it "should calculate registration fee based on registration price and date" do
-      attendee = FactoryGirl.build(:attendee, :registration_date => @date)
+      attendee = FactoryGirl.build(:attendee, :registration_date => @early_bird_date)
       attendee.registration_fee.should == 165.00
 
-      attendee = FactoryGirl.build(:attendee, :registration_date => @date, :registration_type => RegistrationType.find_by_title('registration_type.student'))
+      attendee = FactoryGirl.build(:attendee, :registration_date => @early_bird_date, :registration_type => RegistrationType.find_by_title('registration_type.student'))
       attendee.registration_fee.should == 65.00
     end
   
     it "should calculate registration fee based on registration price and courses" do
-      attendee = FactoryGirl.build(:attendee, :registration_date => @date, :courses => [Course.find_by_name('course.csm.name').id])
+      attendee = FactoryGirl.build(:attendee, :registration_date => @early_bird_date, :courses => [Course.find_by_name('course.csm.name').id])
       attendee.registration_fee.should == 165.00 + 990.00
 
       attendee.registration_type = RegistrationType.find_by_title('registration_type.student')
       attendee.registration_fee.should == 65.00 + 990.00
       
-      attendee.course_attendances.build(:course => Course.find_by_name('course.tdd.name'))
+      attendee.course_attendances.build(:course_id => Course.find_by_name('course.tdd.name').id)
       attendee.registration_fee.should == 65.00 + 990.00 + 280.00
     end
   end
   
   describe "base price" do
     before do
-      @date = Time.zone.local(2011, 04, 10, 12, 0, 0)
+      @pre_registration_date = Time.zone.local(2011, 03, 10, 12, 0, 0)
     end
 
     it "should calculate base price based on date" do
-      attendee = FactoryGirl.build(:attendee, :registration_date => @date)
+      attendee = FactoryGirl.build(:attendee, :registration_date => @pre_registration_date)
       attendee.base_price.should == 165.00
 
       attendee.registration_date = Time.zone.local(2011, 06, 01, 12, 0, 0)
@@ -400,15 +400,15 @@ describe Attendee do
     end
 
     it "should calculate base price based on type" do
-      attendee = FactoryGirl.build(:attendee, :registration_date => @date)
+      attendee = FactoryGirl.build(:attendee, :registration_date => @pre_registration_date)
       attendee.base_price.should == 165.00
 
-      attendee = FactoryGirl.build(:attendee, :registration_date => @date, :registration_type => RegistrationType.find_by_title('registration_type.student'))
+      attendee = FactoryGirl.build(:attendee, :registration_date => @pre_registration_date, :registration_type => RegistrationType.find_by_title('registration_type.student'))
       attendee.base_price.should == 65.00
     end
 
     it "should calculate base price based on pre-registration" do
-      attendee = FactoryGirl.build(:attendee, :registration_date => @date)
+      attendee = FactoryGirl.build(:attendee, :registration_date => @pre_registration_date)
       attendee.base_price.should == 165.00
 
       pre = PreRegistration.new(:email => attendee.email, :used => false)
@@ -454,7 +454,7 @@ describe Attendee do
     end
     
     it "should calculate registration fee with discount if on pre-registration period" do
-      @attendee.registration_date = Time.zone.local(2011, 04, 10, 12, 0, 0)
+      @attendee.registration_date = Time.zone.local(2011, 03, 10, 12, 0, 0)
       @attendee.registration_fee.should == 130.00
 
       @attendee.registration_type = RegistrationType.find_by_title('registration_type.student')
@@ -462,7 +462,7 @@ describe Attendee do
     end
     
     it "should calculate registration fee with discount on pre-registration but not courses" do
-      @attendee.registration_date = Time.zone.local(2011, 04, 10, 12, 0, 0)
+      @attendee.registration_date = Time.zone.local(2011, 03, 10, 12, 0, 0)
       @attendee.courses=[3,4]
       @attendee.registration_fee.should == 130.00 + 560.00
 
@@ -471,7 +471,7 @@ describe Attendee do
     end
     
     it "should calculate regular registration fee if outside of pre-registration period" do
-      @attendee.registration_date = Time.zone.local(2011, 05, 10, 12, 0, 0)
+      @attendee.registration_date = Time.zone.local(2011, 04, 10, 12, 0, 0)
       @attendee.registration_fee.should == 165.00
 
       @attendee.registration_type = RegistrationType.find_by_title('registration_type.student')
@@ -491,13 +491,13 @@ describe Attendee do
     end
     
     it "single course should show it's name" do
-      @attendee.course_attendances.build(:course => @csm)
+      @attendee.course_attendances.build(:course_id => @csm.id)
       @attendee.courses_summary.should == I18n.t(@csm.name)
     end
 
     it "multiple courses should show all names" do
-      @attendee.course_attendances.build(:course => @csm)
-      @attendee.course_attendances.build(:course => @cspo)
+      @attendee.course_attendances.build(:course_id => @csm.id)
+      @attendee.course_attendances.build(:course_id => @cspo.id)
       @attendee.courses_summary.should == "#{I18n.t(@csm.name)},#{I18n.t(@cspo.name)}"
     end
   end
@@ -505,7 +505,7 @@ describe Attendee do
   describe "registration periods" do
     context "attendee is pre-registered" do
       before(:each) do
-        @attendee = FactoryGirl.build(:attendee, :registration_date => Time.zone.local(2011, 4, 5))
+        @attendee = FactoryGirl.build(:attendee, :registration_date => Time.zone.local(2011, 3, 5))
         @pre = PreRegistration.new(:email => @attendee.email, :used => false)
         @pre.save!
       end
@@ -525,7 +525,7 @@ describe Attendee do
     
     context "attendee not pre-registered" do
       before(:each) do
-        @attendee = FactoryGirl.build(:attendee, :registration_date => Time.zone.local(2011, 4, 5))
+        @attendee = FactoryGirl.build(:attendee, :registration_date => Time.zone.local(2011, 3, 5))
       end
 
       it "should return normal period for course" do

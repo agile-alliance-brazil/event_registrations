@@ -106,35 +106,35 @@ end
 
 CoursePrice.seed do |price|
   price.id = 16
-  price.value = 900.00
+  price.value = 990.00
   price.course_id = 1
   price.registration_period_id = 1
 end
 
 CoursePrice.seed do |price|
   price.id = 17
-  price.value = 900.00
+  price.value = 990.00
   price.course_id = 2
   price.registration_period_id = 1
 end
 
 CoursePrice.seed do |price|
   price.id = 18
-  price.value = 250.00
+  price.value = 280.00
   price.course_id = 3
   price.registration_period_id = 1
 end
 
 CoursePrice.seed do |price|
   price.id = 19
-  price.value = 250.00
+  price.value = 280.00
   price.course_id = 4
   price.registration_period_id = 1
 end
 
 CoursePrice.seed do |price|
   price.id = 20
-  price.value = 650.00
+  price.value = 700.00
   price.course_id = 5
   price.registration_period_id = 1
 end

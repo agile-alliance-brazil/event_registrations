@@ -20,9 +20,9 @@ describe PaypalAdapter do
     
     it "should add items for each course attendance" do
       tdd_course = Course.find_by_name('course.tdd.name')
-      @attendee.course_attendances.build(:course => tdd_course)
+      @attendee.course_attendances.build(:course_id => tdd_course.id)
       lean_course = Course.find_by_name('course.lean.name')
-      @attendee.course_attendances.build(:course => lean_course)
+      @attendee.course_attendances.build(:course_id => lean_course.id)
       
       adapter = PaypalAdapter.from_attendee(@attendee)
       
@@ -71,9 +71,9 @@ describe PaypalAdapter do
     
     it "should add items for each attendee's course attendances" do
       tdd_course = Course.find_by_name('course.tdd.name')
-      @attendee_1.course_attendances.create(:course => tdd_course)
+      @attendee_1.course_attendances.create(:course_id => tdd_course.id)
       lean_course = Course.find_by_name('course.lean.name')
-      @attendee_2.course_attendances.create(:course => lean_course)
+      @attendee_2.course_attendances.create(:course_id => lean_course.id)
       
       adapter = PaypalAdapter.from_registration_group(@registration_group)
 

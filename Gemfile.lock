@@ -242,6 +242,7 @@ GEM
       net-scp (~> 1.0.4)
       net-ssh (~> 2.2.2)
     validates_existence (0.8.0)
+    will_paginate (3.0.3)
     yui-compressor (0.9.6)
       POpen4 (>= 0.1.4)
 
@@ -282,4 +283,5 @@ DEPENDENCIES
   travis-lint (= 1.5.0)
   vagrant (= 1.0.5)
   validates_existence (= 0.8.0)
+  will_paginate (= 3.0.3)
   yui-compressor (= 0.9.6)

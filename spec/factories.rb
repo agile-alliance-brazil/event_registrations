@@ -2,7 +2,8 @@
 
 FactoryGirl.define do
   factory :event do
-    sequence(:name) {|n| "Agile Brazil #{2000+n}"}
+    sequence(:year) {|n| 2000 + n }
+    name {|e| "Agile Brazil #{e.year}"}
   end
 
   factory :attendee do

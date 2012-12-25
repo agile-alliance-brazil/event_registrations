@@ -1,4 +1,6 @@
 # encoding: UTF-8
+require 'csv'
+
 class PreRegistrationLoader
   attr_accessor :pre_registrations
 
@@ -14,11 +16,12 @@ class PreRegistrationLoader
 
   private
   def load_file(filepath)
-    parsed_file = CSV.read(filepath)
+    parsed_file = ::CSV.read(filepath)
     email_column = email_column(parsed_file[0])
     pre_registrations = []
+    event = Event.current
     parsed_file[1..-1].each do |row|
-      pre_registrations << PreRegistration.new(:conference => Conference.current, :email => row[email_column], :used => false)
+      pre_registrations << PreRegistration.new(:event => event, :email => row[email_column], :used => false)
     end
     pre_registrations
   end

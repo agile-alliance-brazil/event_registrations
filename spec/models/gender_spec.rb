@@ -3,9 +3,11 @@ require 'spec_helper'
 
 describe Gender do
   it "should provide translated options for select" do
-    Gender.options_for_select.should include(['Masculino', 'M'])
-    Gender.options_for_select.should include(['Feminino', 'F'])
-    Gender.options_for_select.size.should == 2
+    I18n.with_locale(:en) do
+      Gender.options_for_select.should include(['Male', 'M'])
+      Gender.options_for_select.should include(['Female', 'F'])
+      Gender.options_for_select.size.should == 2
+    end
   end
   
   it "should provide valid values" do
@@ -13,7 +15,9 @@ describe Gender do
   end
   
   it "should provide title for given value" do
-    Gender.title_for('M').should == 'Masculino'
-    Gender.title_for('F').should == 'Feminino'
+    I18n.with_locale(:en) do
+      Gender.title_for('M').should == 'Male'
+      Gender.title_for('F').should == 'Female'
+    end
   end
 end

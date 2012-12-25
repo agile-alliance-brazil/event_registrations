@@ -140,7 +140,7 @@ class CreateEventRegistrationBaseline < ActiveRecord::Migration
     end
 
     create_table :pre_registrations do |t|
-      t.references :conference
+      t.references :event
       
       t.string :email
       t.boolean :used

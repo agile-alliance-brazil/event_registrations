@@ -10,6 +10,7 @@ describe RegistrationReminder do
     Airbrake.stubs(:notify)
     
     @event = FactoryGirl.create(:event)
+    Event.stubs(:current).returns(@event)
     
     @reminder = RegistrationReminder.new
   end
@@ -22,7 +23,7 @@ describe RegistrationReminder do
   
     it "should send reminder e-mails" do
       Attendee.expects(:all).with(
-        :conditions => ['event_id = ? AND status = ? AND registration_type_id <> ? AND registration_date < ?', @event.id, 'pending', 2, Time.zone.local(2011, 5, 21)], :order => 'id').returns(@attendees)    
+        :conditions => ['event_id = ? AND status = ? AND registration_type_id <> ? AND registration_date < ?', @event.id, 'pending', 2, Time.zone.local(2011, 5, 21)], :order => 'id').returns(@attendees)
       EmailNotifications.expects(:registration_reminder).with(@attendees[0]).with(@attendees[1]).returns(stub(:deliver => true))
     
       @reminder.publish

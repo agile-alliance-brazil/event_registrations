@@ -11,4 +11,4 @@ before_script:
 script:
   - RAILS_ENV=test bundle exec rake db:migrate
   - bundle exec rake ci
-bundler_args: --local --without development production assets
+bundler_args: --without development production assets

@@ -12,7 +12,7 @@ gem 'formtastic', '=2.2.1'
 gem 'airbrake', '=3.1.6'
 gem 'cancan', '=1.6.8'
 gem 'jquery-rails', '=2.1.4'
-gem 'rake', '=10.0.2'
+gem 'rake', '=10.0.3'
 gem 'will_paginate', '=3.0.3'
 
 gem 'localized_country_select', :git=>'git://github.com/mlitwiniuk/localized_country_select.git', :tag=>'v0.9.1'

@@ -6,6 +6,7 @@ describe AttendeesController do
 
   before(:each) do
     @event ||= FactoryGirl.create(:event)
+    Event.stubs(:current).returns(@event)
   end
 
   describe "GET index" do

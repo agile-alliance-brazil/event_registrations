@@ -13,7 +13,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp/*
-/certs/*
+/certs/*.pem
 
 *.rbc
 *.sassc

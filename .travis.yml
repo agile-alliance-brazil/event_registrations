@@ -7,6 +7,9 @@ before_install:
 before_script:
   - cp ./config/config.{example,yml}
   - cp ./config/database.{travis,yml}
+  - cp ./certs/app_cert.{example,pem}
+  - cp ./certs/app_key.{example,pem}
+  - cp ./certs/paypal_cert.{example,pem}
   - mysql -e 'create database registrations_test;'
 script:
   - RAILS_ENV=test bundle exec rake db:migrate

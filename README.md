@@ -11,3 +11,16 @@ Provisioning is handled by Puppet
 Deployment is handled by Capistrano
 
 A Vagrant config is available for manual test of those two
+
+# Feedback
+
+If you have a bug or a feature request, please create a issue here:
+
+[https://github.com/hugocorbucci/event_registrations/issues](https://github.com/hugocorbucci/event_registrations/issues)
+
+# Team
+
+Thanks to everyone involved in building and maintaining this system:
+
+* [Danilo Sato](http://www.dtsato.com) (Core Developer)
+* Hugo Corbucci (Core Developer)

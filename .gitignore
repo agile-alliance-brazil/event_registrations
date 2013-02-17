@@ -19,7 +19,6 @@
 *.sassc
 .sass-cache
 capybara-*.html
-.rspec
 /vendor/bundle
 /public/system/*
 /coverage/
@@ -28,3 +27,4 @@ capybara-*.html
 rerun.txt
 pickle-email-*.html
 /config/*.yml
+.vagrant

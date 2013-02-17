@@ -39,12 +39,16 @@ group :development do
   gem 'foreman', '=0.60.2'
 end
 
+def linux_only(require_as)
+  RUBY_PLATFORM.include?('linux') && require_as
+end
+
 group :development, :test do
   gem 'sqlite3', '=1.3.6'
   gem 'mocha', '=0.10.5'
   gem 'rspec-rails', '=2.12.0'
   gem 'guard-rspec', '=2.3.3'
-  gem 'rb-inotify', '=0.8.8'
+  gem 'rb-inotify', '=0.8.8', :require => linux_only('rb-inotify')
   gem 'shoulda-matchers', '=1.4.2'
   gem 'factory_girl_rails', '=4.1.0'
   gem 'spork-rails', '=3.2.1'

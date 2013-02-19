@@ -41,16 +41,19 @@ def linux_only(require_as)
   RUBY_PLATFORM.include?('linux') && require_as
 end
 
-group :development, :test do
-  gem 'sqlite3', '=1.3.7'
+group :test do
   gem 'mocha', '=0.13.2', :require => false
-  gem 'rspec-rails', '=2.12.2'
-  gem 'guard-rspec', '=2.3.3'
   gem 'rb-inotify', '=0.8.8', :require => linux_only('rb-inotify')
   gem 'shoulda-matchers', '=1.4.1' # 1.4.2 brings in a version of bourne that depends on older mocha
-  gem 'factory_girl_rails', '=4.1.0'
+  gem 'factory_girl_rails', '=4.2.1'
+end
+
+group :development, :test do
+  gem 'sqlite3', '=1.3.7'
+  gem 'rspec-rails', '=2.12.2'
+  gem 'guard-rspec', '=2.4.0'
   gem 'spork-rails', '=3.2.1'
-  gem 'jasminerice', '=0.0.10'
   gem 'jasmine-jquery-rails', '=1.4.2'
   gem 'guard-jasmine', '=1.12.2'
+  gem 'jasminerice', '=0.0.10'
 end

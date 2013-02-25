@@ -44,7 +44,7 @@ a:hover {
     strong {
       position: absolute;
       top: 0px;
-      right: 130px;
+      right: 200px;
       color: #999999; } }
   ul#languages {
     float: right;
@@ -198,6 +198,71 @@ a:hover {
 
     pre {
       padding: 10px 0px 10px 10px;
+    }
+  }
+}
+
+.auth_providers {
+  height: 90px;
+  .auth_provider {
+    float: left;
+    text-decoration: none;
+    margin-right: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+  
+    img {
+      display: block;
+    }
+  }
+}
+
+.authentications {
+  margin-bottom: 48px;
+
+  .authentication {
+    float: left;
+    background-color: #EEE;
+    border: solid 1px #999;
+    padding: 5px 10px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    position: relative;
+    margin-right: 10px;
+
+    .remove {
+      text-decoration: none;
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      color: #333;
+      padding: 2px 4px;
+      font-size: 10px;
+    }
+
+    .remove:hover {
+      color: #FFF;
+      background-color: #777;
+      -moz-border-radius: 7px;
+      -webkit-border-radius: 7px;
+    }
+
+    img {
+      float: left;
+    }
+
+    .provider, .uid {
+      margin-left: 38px;
+      margin-right: 20px;
+    }
+
+    .provider {
+      font-weight: bold;
+    }
+
+    .uid {
+      color: #666;
+      font-size: 11px;
     }
   }
 }

@@ -9,15 +9,17 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
 
   def authenticate_user!
-    # TODO Implement
+    
   end
   
   def current_user
-    @current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
+  helper_method :current_user
 
   def current_user= user
-    @current_user = user
+    session[:user_id] = user.try(:id)
+    @current_user= user
   end
 
   def set_event

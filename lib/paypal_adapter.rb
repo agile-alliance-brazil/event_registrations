@@ -1,45 +1,22 @@
 # encoding: UTF-8
 class PaypalAdapter
   class << self
-    def from_attendee(attendee)
+    def from_attendance(attendance)
       registration_desc = lambda do |attendee|
-        "#{I18n.t('formtastic.labels.attendee.registration_type_id')}: #{I18n.t(attendee.registration_type.title)}"
+        "#{I18n.t('formtastic.labels.attendance.registration_type_id')}: #{I18n.t(attendance.registration_type.title)}"
       end
-      course_desc = lambda do |attendee, course|
-        "#{I18n.t('formtastic.labels.attendee.courses')}: #{I18n.t(course.name)}"
-      end
-      items = create_items(attendee, registration_desc, course_desc)
-      self.new(items, attendee)
-    end
-    
-    def from_registration_group(registration_group)
-      registration_desc = lambda do |attendee|
-        "#{I18n.t('registration_total.base_price')}: #{attendee.full_name}"
-      end
-      course_desc = lambda do |attendee, course|
-        "#{I18n.t('formtastic.labels.attendee.courses')}: #{attendee.full_name} (#{I18n.t(course.name)})"
-      end
-      items = registration_group.attendees.map do |attendee|
-        create_items(attendee, registration_desc, course_desc)
-      end
-      self.new(items.flatten, registration_group)
+      items = create_items(attendance, registration_desc)
+      self.new(items, attendance)
     end
     
     private
-    def create_items(attendee, registration_desc, course_desc)
+    def create_items(attendee, registration_desc)
       [].tap do |items|
         items << PaypalItem.new(
           CGI.escapeHTML(registration_desc.call(attendee)),
           attendee.registration_type.id,
           attendee.base_price
         )
-        attendee.courses.each do |course|
-          items << PaypalItem.new(
-            CGI.escapeHTML(course_desc.call(attendee, course)),
-            course.id,
-            course.price(attendee.registration_date)
-          )
-        end
       end
     end
   end

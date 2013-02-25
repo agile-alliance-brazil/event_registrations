@@ -1,30 +1,33 @@
 ---
- :smtp_settings:
-   :address: smtp.domain.com
-   :port: 587
-   :domain: domain.com
-   :authentication: :login
-   :user_name: no-reply@domain.com
-   :password: password
- :ses:
-   :access_key_id: your_aws_access_key_id
-   :secret_access_key: your_aws_secret_access_key
- :host: localhost:3000
- :organizer:
-   :name: Organizer
-   :email: organizer@domain.com
-   :cced: Organizer Helper
-   :cced_email: helper@domain.com
- :airbrake:
-   :access_key: xxx111xxx
- :google:
-   :tracker_id: google_analytics_id
-   :conversion_id: google_ads_conversion_id
-   :conversion_label: google_ads_conversion_label
- :paypal:
-   :email: seller@domain.com
-   :currency: USD
-   :secret: xxx22xxx
-   :cert_id: ABCxxx
-   :url: https://www.sandbox.paypal.com/cgi-bin/webscr
- :secret_token: cc611d857e545df685c52c687259b3248ad38942b66698d1ceba3e4e799787ec20523c56bbd7d896837065aa199609c1503eb4f7ca582c7e5d6efea6bd021133
+  :smtp_settings:
+    :address: smtp.domain.com
+    :port: 587
+    :domain: domain.com
+    :authentication: :login
+    :user_name: no-reply@domain.com
+    :password: password
+  :ses:
+    :access_key_id: your_aws_access_key_id
+    :secret_access_key: your_aws_secret_access_key
+  :host: localhost:3000
+  :organizer:
+    :name: Organizer
+    :email: organizer@domain.com
+    :cced: Organizer Helper
+    :cced_email: helper@domain.com
+  :airbrake:
+    :access_key: xxx111xxx
+  :google:
+    :tracker_id: google_analytics_id
+    :conversion_id: google_ads_conversion_id
+    :conversion_label: google_ads_conversion_label
+  :paypal:
+    :email: seller@domain.com
+    :currency: USD
+    :secret: xxx22xxx
+    :cert_id: ABCxxx
+    :url: https://www.sandbox.paypal.com/cgi-bin/webscr
+  :secret_token: cc611d857e545df685c52c687259b3248ad38942b66698d1ceba3e4e799787ec20523c56bbd7d896837065aa199609c1503eb4f7ca582c7e5d6efea6bd021133
+  :twitter:
+    :key: https://dev.twitter.com/apps/new
+    :secret: https://dev.twitter.com/apps/new

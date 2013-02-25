@@ -5,7 +5,7 @@ set :keep_releases,       5
 set :user,                "ubuntu"
 # set :password,          "Please ask to have your SSH public key added instead"
 
-set :domain,              "177.71.245.174"
+set :domain,              "54.232.82.211"
 set :project,             "event_registrations"
 set :application,         "registrations"
 set :applicationdir,      "/srv/apps/#{application}"

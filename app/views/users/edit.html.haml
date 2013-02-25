@@ -1,0 +1,7 @@
+- title t('title.profile', :user => @user.username)
+.auto_focus
+
+= semantic_form_for resource, :as => resource_name, :url => user_path(resource) do |form|
+  = render 'form', :form => form
+  = form.actions do
+    = form.action(:submit, :edit_profile, :button_html => {:tabindex => autotab})

@@ -16,7 +16,6 @@
       %th= sortable_column(t('formtastic.labels.registration_group.name'), :name)
       %th= sortable_column(t('formtastic.labels.registration_group.status'), :status)
       %th= sortable_column(t('formtastic.labels.registration_group.registered_attendees'), :registered_attendees)
-      %th= t('formtastic.labels.attendee.courses')
       %th= t('formtastic.labels.registration_group.total')
   %tbody
     - @registration_groups.each do |group|
@@ -25,7 +24,6 @@
         %td= link_to h(group.name), registered_group_path(group)
         %td= t("registration_group.status.#{group.status}")
         %td #{group.attendees.size} / #{group.total_attendees}
-        %td= group.course_attendances.size
         %td= number_to_currency(group.registration_fee, :locale => :pt)
 
 - if @registration_groups.total_pages > 1

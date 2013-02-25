@@ -1,12 +1,6 @@
 %p Dear #{h(@attendee.full_name)},
 
-%p Your registration as #{I18n.t(@attendee.registration_type.title)} priced #{number_to_currency(@attendee.base_price, :locale => :pt)} at #{@attendee.event.name} was confirmed successfully.
-
-- unless @attendee.courses.empty?
-  %p Besides the conference, you also registered for the following courses:
-  %ul
-    - @attendee.courses.each do |course|
-      %li '#{I18n.t(course.full_name)}' priced #{number_to_currency(course.price(@attendee.registration_date), :locale => :pt)}
+%p Your registration as #{I18n.t(@attendance.registration_type.title)} priced #{number_to_currency(@attendance.base_price, :locale => :pt)} at #{@attendance.event.name} was confirmed successfully.
 
 %p Please look for the event registration desk starting June 27th at 7 A.M. to get your credentials. The conference will take place at Fábrica de Negócios, Av. Monsenhor Tabosa 740, Iracema beach, with entrance through Rua João Cordeiro, at Fortaleza, Ceará.
 

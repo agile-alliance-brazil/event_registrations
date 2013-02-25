@@ -6,38 +6,12 @@ FactoryGirl.define do
     name {|e| "Agile Brazil #{e.year}"}
   end
 
-  factory :attendee do
+  factory :attendance do
     association :event
+    association :user
+
     registration_type { RegistrationType.find_by_title('registration_type.individual') }
-    
-    first_name "Attendee"
-    sequence(:last_name) {|n| "Name#{n}"}
-    email { |e| "#{e.last_name.parameterize}@example.com" }
-    email_confirmation { |e| "#{e.last_name.parameterize}@example.com" }
-    phone "(11) 3322-1234"
-    country "BR"
-    state "SP"
-    city "São Paulo"
-    organization "ThoughtWorks"
-    badge_name {|e| "The Great #{e.first_name}" }
-    cpf "111.444.777-35"
-    gender 'M'
-    twitter_user {|e| "#{e.last_name.parameterize}"}
-    address "Rua dos Bobos, 0"
-    neighbourhood "Vila Perdida"
-    zipcode "12345000"
-  end
-
-  factory :course do
-    association :event
-    name "Course"
-    full_name "That big course of ours"
-    combine false
-  end
-
-  factory :course_attendance do
-    association :course
-    association :attendee
+    registration_date { RegistrationPeriod.find_by_title('registration_period.regular').start_at }
   end
 
   factory :registration_group do
@@ -63,20 +37,25 @@ FactoryGirl.define do
     params { {:some => 'params'} }
     status "Completed"
     transaction_id "9JU83038HS278211W"
-    association :invoicer, :factory => :attendee
+    association :invoicer, :factory => :attendance
   end
 
   factory :user do
     first_name "User"
     sequence(:last_name) {|n| "Name#{n}"}
-    username { |a| "#{a.first_name}.#{a.last_name}".downcase }
-    email { |a| "#{a.username.parameterize}@example.com" }
+    email { |a| username = "#{a.first_name} #{a.last_name}".parameterize; "#{username}@example.com" }
+
     phone "(11) 3322-1234"
     country "BR"
     state "SP"
     city "São Paulo"
     organization "ThoughtWorks"
-    website_url "www.dtsato.com"
-    bio "Some text about me..."
+    badge_name {|e| "The Great #{e.first_name}" }
+    cpf "111.444.777-35"
+    gender 'M'
+    twitter_user {|e| "#{e.last_name.parameterize}"}
+    address "Rua dos Bobos, 0"
+    neighbourhood "Vila Perdida"
+    zipcode "12345000"
   end
 end

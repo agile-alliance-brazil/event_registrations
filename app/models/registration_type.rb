@@ -4,7 +4,7 @@ class RegistrationType < ActiveRecord::Base
   has_many :registration_prices
   
   scope :without_group, where('id <> ?', 2)
-  scope :without_free, where('id <> ?', 4)
+  scope :without_free, where('id <> ?', 3)
   
   def price(datetime)
     period = RegistrationPeriod.for(datetime).first

@@ -14,13 +14,15 @@ gem 'cancan', '=1.6.9'
 gem 'jquery-rails', '=2.2.1'
 gem 'rake', '=10.0.3'
 gem 'will_paginate', '=3.0.4'
+gem 'omniauth', '=1.1.1'
+gem 'omniauth-twitter', '=0.0.14'
 
 gem 'magic-localized_country_select', '=0.2.0', :require => 'localized_country_select'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'therubyracer', '0.11.3'
+  gem 'therubyracer', '=0.11.3'
   gem 'sass-rails',   '=3.2.6'
   gem 'coffee-rails', '=3.2.2'
   gem 'yui-compressor', '=0.9.6'
@@ -44,7 +46,7 @@ end
 group :test do
   gem 'mocha', '=0.13.2', :require => false
   gem 'rb-inotify', '=0.8.8', :require => linux_only('rb-inotify')
-  gem 'shoulda-matchers', '=1.4.1' # 1.4.2 brings in a version of bourne that depends on older mocha
+  gem 'shoulda-matchers', '=1.4.1', :require => false # 1.4.2 brings in a version of bourne that depends on older mocha
   gem 'factory_girl_rails', '=4.2.1'
 end
 
@@ -52,6 +54,7 @@ group :development, :test do
   gem 'sqlite3', '=1.3.7'
   gem 'rspec-rails', '=2.12.2'
   gem 'guard-rspec', '=2.4.0'
+  gem 'rb-fsevent', '=0.9.3'
   gem 'spork-rails', '=3.2.1'
   gem 'jasmine-jquery-rails', '=1.4.2'
   gem 'guard-jasmine', '=1.12.2'

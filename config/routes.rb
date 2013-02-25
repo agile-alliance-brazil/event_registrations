@@ -1,17 +1,17 @@
 # encoding: UTF-8
 Current::Application.routes.draw do
-  root :to => 'attendees#new'
+  root :to => 'sessions#new'
 
-  resources :attendees, :only => [:index, :new, :create]
-  match 'attendees/pre_registered' => 'attendees#pre_registered', :as => :pre_registered_attendee, :constraints => {:format => /js/}
-  resources :attendee_statuses, :only => [:show]
+  match '/auth/:provider/callback', to: 'sessions#create'
+  match '/auth/failure', to: 'sessions#failure'
+  match '/login', to: 'sessions#new', as: :login
+  match '/logout', to: 'sessions#destroy', as: :logout
 
-  resources :payment_notifications, :only => [:create]
-  resources :pending_attendees, :only => [:index, :update]
-  resources :registered_attendees, :only => [:index, :show, :update]
-  resources :registered_groups, :only => [:index, :show, :update]
-  resources :registration_groups, :only => [:index, :new, :create] do
-    resources :attendees, :only => [:index, :new, :create]
+  resources :users, except: [:index, :destroy]
+  resources :event_attendances, only: [:new, :create] do
+    match '/status', to: 'event_attendances#status', as: :attendance_status
   end
-  resources :registration_group_statuses, :only => [:show]
+  resources :authentications, only: :destroy
+
+  resources :payment_notifications, only: :create
 end

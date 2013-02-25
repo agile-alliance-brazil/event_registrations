@@ -1,0 +1,32 @@
+- title I18n.t('title.profile', :username => @user.full_name)
+
+%div.attendances
+  %p
+    %strong= I18n.t('event.attendance.list')
+  - @user.events.each do |event|
+    %ul.event
+      - @user.registrations_for_event(event).each do |attendance|
+        %li
+          %div.type= I18n.t(attendance.type.title)
+          %div.status= I18n.t(attendance.status.title)
+          - if attendance.can_cancel?
+            = link_to "X", attendance, :confirm => I18n.t(attendance.cancel_confirmation), :method => :delete, :class => "remove"
+      %li= link_to "Add Registration to #{@event.name}", new_event_attendance_path(:event_id => event.id), :class => "add_attendance"
+%div.clear
+
+%div.authentications
+  %p
+    %strong= I18n.t('authentication.list')
+  - @user.authentications.each do |authentication|
+    %div.authentication
+      = image_tag "#{authentication.provider}_32.png", :size => "32x32"
+      %div.provider= authentication.provider.titleize
+      %div.uid= authentication.uid
+      = #link_to "X", authentication, :confirm => I18n.t('generic.are_you_sure', action: I18n.t('actions.remove_authentication_option')), :method => :delete, :class => "remove"
+%div.clear
+
+- providers = Authentication::PROVIDERS - @user.authentications.map(&:provider)
+- unless providers.empty?
+  %p
+    %strong= I18n.t('authentication.add')
+  = render :partial => 'shared/providers', locals: { providers: providers }

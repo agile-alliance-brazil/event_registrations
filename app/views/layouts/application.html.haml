@@ -16,11 +16,17 @@
   %body
     #container
       #header
-        = link_to image_tag('logo.png'), root_path
+        = link_to image_tag("#{@event.name.parameterize}-logo.png"), root_path
         .logo
           %h1= @event.name
           %strong= @event.location_and_date
         %ul#languages
+          %li
+            - if current_user
+              = current_user.full_name
+              = link_to I18n.t('actions.logout'), logout_path
+            - else
+              = link_to I18n.t('actions.login'), login_path
           %li= link_to "Português", "?locale=pt"
           %li= link_to "English", "?locale=en"
 

@@ -5,9 +5,6 @@ The registration of company <strong>#{h(@registration_group.name)}</strong> pric
 
 - @registration_group.attendees.each do |attendee|
   #{"-"} #{h(attendee.full_name)} priced #{number_to_currency(attendee.base_price, :locale => :pt)}
-  - attendee.courses.each do |course|
-    #{"  -"} '#{I18n.t(course.full_name)}' priced #{number_to_currency(course.price(attendee.registration_date), :locale => :pt)}
-
 
 If you have any questions, please contact us at #{mail_to AppConfig[:organizer][:email]}
 

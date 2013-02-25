@@ -6,10 +6,6 @@
   - @group.attendees.each do |attendee|
     %li
       #{h(attendee.full_name)} priced #{number_to_currency(attendee.base_price, :locale => :pt)}
-      - unless attendee.courses.empty?
-        %ul
-          - attendee.courses.each do |course|
-            %li '#{I18n.t(course.full_name)}' priced #{number_to_currency(course.price(attendee.registration_date), :locale => :pt)}
 
 %p In order to complete the registration process, please follow the instructions on the page:
 

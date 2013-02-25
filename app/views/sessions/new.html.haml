@@ -1,0 +1,6 @@
+- title I18n.t('title.login')
+
+%p
+  %strong= I18n.t('authentication.new')
+  
+= render :partial => 'shared/providers', locals: { providers: Authentication::PROVIDERS }

@@ -28,3 +28,4 @@ rerun.txt
 pickle-email-*.html
 /config/*.yml
 .vagrant
+.DS_Store

@@ -11,58 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121217222354) do
+ActiveRecord::Schema.define(:version => 20121229190700) do
 
-  create_table "attendees", :force => true do |t|
+  create_table "attendances", :force => true do |t|
     t.integer  "event_id"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
-    t.string   "organization"
-    t.string   "phone"
-    t.string   "country"
-    t.string   "state"
-    t.string   "city"
-    t.string   "badge_name"
-    t.string   "cpf"
-    t.string   "gender"
-    t.string   "twitter_user"
-    t.string   "address"
-    t.string   "neighbourhood"
-    t.string   "zipcode"
+    t.integer  "user_id"
     t.integer  "registration_type_id"
     t.integer  "registration_group_id"
-    t.string   "status"
-    t.integer  "course_attendances_count", :default => 0
-    t.boolean  "email_sent",               :default => false
-    t.text     "notes"
     t.datetime "registration_date"
-    t.string   "uri_token"
-    t.string   "default_locale",           :default => "pt"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.string   "status"
+    t.boolean  "email_sent",            :default => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
   end
 
-  create_table "course_attendances", :force => true do |t|
-    t.integer  "course_id"
-    t.integer  "attendee_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  create_table "course_prices", :force => true do |t|
-    t.integer  "course_id"
-    t.integer  "registration_period_id"
-    t.decimal  "value"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
-  end
-
-  create_table "courses", :force => true do |t|
-    t.integer  "event_id"
-    t.string   "name"
-    t.string   "full_name"
-    t.boolean  "combine"
+  create_table "authentications", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "uid"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -89,38 +55,6 @@ ActiveRecord::Schema.define(:version => 20121217222354) do
     t.datetime "updated_at",      :null => false
   end
 
-  create_table "pre_registrations", :force => true do |t|
-    t.integer  "event_id"
-    t.string   "email"
-    t.boolean  "used"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "registration_groups", :force => true do |t|
-    t.string   "name"
-    t.string   "cnpj"
-    t.string   "state_inscription"
-    t.string   "municipal_inscription"
-    t.string   "contact_name"
-    t.string   "contact_email"
-    t.string   "phone"
-    t.string   "fax"
-    t.string   "address"
-    t.string   "neighbourhood"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zipcode"
-    t.string   "country"
-    t.integer  "total_attendees"
-    t.boolean  "email_sent",            :default => false
-    t.string   "uri_token"
-    t.string   "status"
-    t.text     "notes"
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
-  end
-
   create_table "registration_periods", :force => true do |t|
     t.integer  "event_id"
     t.string   "title"
@@ -143,6 +77,28 @@ ActiveRecord::Schema.define(:version => 20121217222354) do
     t.string   "title"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "organization"
+    t.string   "phone"
+    t.string   "country"
+    t.string   "state"
+    t.string   "city"
+    t.string   "badge_name"
+    t.string   "cpf"
+    t.string   "gender"
+    t.string   "twitter_user"
+    t.string   "address"
+    t.string   "neighbourhood"
+    t.string   "zipcode"
+    t.integer  "roles_mask"
+    t.string   "default_locale", :default => "pt"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
 end

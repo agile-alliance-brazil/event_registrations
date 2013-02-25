@@ -1,23 +1,18 @@
 Dear #{h(@attendee.full_name)},
 
-Your request for registration as #{I18n.t(@attendee.registration_type.title)} priced #{number_to_currency(@attendee.base_price, :locale => :pt)} at #{@attendee.event.name} was received successfully.
-
-- unless @attendee.courses.empty?
-  Besides the conference, you also registered for the following courses:
-  - @attendee.courses.each do |course|
-    #{"-"} '#{I18n.t(course.full_name)}' priced #{number_to_currency(course.price(@attendee.registration_date), :locale => :pt)}
+Your request for registration as #{I18n.t(@attendance.registration_type.title)} priced #{number_to_currency(@attendance.base_price, :locale => :pt)} at #{@attendance.event.name} was received successfully.
 
 
 In order to complete the registration process, please follow the instructions on the page:
 
 
-= attendee_status_url(@attendee.uri_token, :locale => 'en')
+= event_attendance_attendance_status_url(@attendance, :locale => 'en')
 
 
 You can access this page at any time to make the payment and check the status of your registration, so keep this e-mail and link for future reference. Your registration number is:
 
 
-REGISTRATION NUMBER: #{@attendee.id}
+REGISTRATION NUMBER: #{@attendance.id}
 
 
 If you have any questions, please contact us at #{AppConfig[:organizer][:email]}

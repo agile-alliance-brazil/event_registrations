@@ -3,114 +3,37 @@ require 'spec_helper'
 require File.join(Rails.root, '/lib/paypal_adapter.rb')
 
 describe PaypalAdapter do
-  describe "from_attendee" do
+  describe "from_attendance" do
     before(:each) do
-      @attendee ||= FactoryGirl.create(:attendee, :registration_date => Time.zone.local(2011, 5, 15))
+      @attendance ||= FactoryGirl.create(:attendance, :registration_date => Time.zone.local(2013, 5, 1))
     end
     
     it "should add item for base registration price" do
       I18n.with_locale(:en) do
-        adapter = PaypalAdapter.from_attendee(@attendee)
+        adapter = PaypalAdapter.from_attendance(@attendance)
 
         adapter.items.size.should == 1
-        adapter.items[0].amount.should == @attendee.base_price
+        adapter.items[0].amount.should == @attendance.base_price
         adapter.items[0].name.should == "Type of Registration: Individual"
         adapter.items[0].quantity.should == 1
-        adapter.items[0].number.should == @attendee.registration_type.id
-      end
-    end
-    
-    it "should add items for each course attendance" do
-      I18n.with_locale(:en) do
-        tdd_course = Course.find_by_name('course.tdd.name')
-        @attendee.course_attendances.build(:course_id => tdd_course.id)
-        lean_course = Course.find_by_name('course.lean.name')
-        @attendee.course_attendances.build(:course_id => lean_course.id)
-        
-        adapter = PaypalAdapter.from_attendee(@attendee)
-        
-        adapter.items.size.should == 3
-        adapter.items[1].amount.should == tdd_course.price(@attendee.registration_date)
-        adapter.items[1].name.should == "Courses: TDD"
-        adapter.items[1].quantity.should == 1
-        adapter.items[1].number.should == tdd_course.id
-        
-        adapter.items[2].amount.should == lean_course.price(@attendee.registration_date)
-        adapter.items[2].name.should == "Courses: Lean"
-        adapter.items[2].quantity.should == 1
-        adapter.items[2].number.should == lean_course.id
+        adapter.items[0].number.should == @attendance.registration_type.id
       end
     end
     
     it "should add invoice type and id" do
-      adapter = PaypalAdapter.from_attendee(@attendee)
-      adapter.invoice_type.should == 'Attendee'
-      adapter.invoice_id.should == @attendee.id
+      adapter = PaypalAdapter.from_attendance(@attendance)
+      adapter.invoice_type.should == 'Attendance'
+      adapter.invoice_id.should == @attendance.id
     end
   end
-  
-  describe "from_registration_group" do
-    before(:each) do
-      @date = Time.zone.local(2011, 5, 15)
-      @registration_group ||= FactoryGirl.create(:registration_group)
-      
-      @attendee_1 = FactoryGirl.create(:attendee, :registration_date => @date, :registration_group => @registration_group, :registration_type => RegistrationType.find_by_title('registration_type.group'))
-      @attendee_2 = FactoryGirl.create(:attendee, :registration_date => @date, :registration_group => @registration_group, :registration_type => RegistrationType.find_by_title('registration_type.group'), :cpf => "366.624.533-15")
-    end
-    
-    it "should add items for each attendee's registration" do
-      I18n.with_locale(:en) do
-        adapter = PaypalAdapter.from_registration_group(@registration_group)
 
-        adapter.items.size.should == 2
-        adapter.items[0].amount.should == @attendee_1.base_price
-        adapter.items[0].name.should == "Registration: #{@attendee_1.full_name}"
-        adapter.items[0].quantity.should == 1
-        adapter.items[0].number.should == @attendee_1.registration_type.id
-
-        adapter.items[1].amount.should == @attendee_2.base_price
-        adapter.items[1].name.should == "Registration: #{@attendee_2.full_name}"
-        adapter.items[1].quantity.should == 1
-        adapter.items[1].number.should == @attendee_2.registration_type.id
-      end
-    end
-    
-    it "should add items for each attendee's course attendances" do
-      tdd_course = Course.find_by_name('course.tdd.name')
-      @attendee_1.course_attendances.create(:course_id => tdd_course.id)
-      lean_course = Course.find_by_name('course.lean.name')
-      @attendee_2.course_attendances.create(:course_id => lean_course.id)
-      
-      I18n.with_locale(:en) do
-        adapter = PaypalAdapter.from_registration_group(@registration_group)
-
-        adapter.items.size.should == 4
-        adapter.items[1].amount.should == tdd_course.price(@attendee_1.registration_date)
-        adapter.items[1].name.should == "Courses: #{@attendee_1.full_name} (TDD)"
-        adapter.items[1].quantity.should == 1
-        adapter.items[1].number.should == tdd_course.id
-
-        adapter.items[3].amount.should == lean_course.price(@attendee_2.registration_date)
-        adapter.items[3].name.should == "Courses: #{@attendee_2.full_name} (Lean)"
-        adapter.items[3].quantity.should == 1
-        adapter.items[3].number.should == lean_course.id
-      end 
-    end
-
-    it "should add invoice type and id" do
-      adapter = PaypalAdapter.from_registration_group(@registration_group)
-      adapter.invoice_type.should == 'RegistrationGroup'
-      adapter.invoice_id.should == @registration_group.id
-    end
-  end
-  
   describe "to_variables" do
     it "should map each item's variables" do
-      attendee = FactoryGirl.create(:attendee)
+      attendance = FactoryGirl.create(:attendance)
       adapter = PaypalAdapter.new([
         PaypalAdapter::PaypalItem.new('item 1', 2, 10.50),
         PaypalAdapter::PaypalItem.new('item 2', 3, 9.99, 2)
-      ], attendee)
+      ], attendance)
       
       adapter.to_variables.should include({
         'amount_1' => 10.50,
@@ -125,15 +48,15 @@ describe PaypalAdapter do
     end
     
     it "should add invoice id and custom field for invoice type" do
-      attendee = FactoryGirl.create(:attendee)
+      attendance = FactoryGirl.create(:attendance)
       adapter = PaypalAdapter.new([
         PaypalAdapter::PaypalItem.new('item 1', 2, 10.50),
         PaypalAdapter::PaypalItem.new('item 2', 3, 9.99, 2)
-      ], attendee)
+      ], attendance)
 
       adapter.to_variables.should include({
-        'invoice' => attendee.id,
-        'custom' => 'Attendee'
+        'invoice' => attendance.id,
+        'custom' => 'Attendance'
       })
     end
   end

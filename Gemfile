@@ -22,7 +22,8 @@ gem 'magic-localized_country_select', '=0.2.0', :require => 'localized_country_s
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'therubyracer', '=0.11.3'
+  gem 'libv8', '=3.11.8.13', :platforms => :ruby
+  gem 'therubyracer', '=0.11.3', :platforms => :ruby
   gem 'sass-rails',   '=3.2.6'
   gem 'coffee-rails', '=3.2.2'
   gem 'yui-compressor', '=0.9.6'

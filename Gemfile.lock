@@ -269,6 +269,7 @@ DEPENDENCIES
   jasmine-jquery-rails (= 1.4.2)
   jasminerice (= 0.0.10)
   jquery-rails (= 2.2.1)
+  libv8 (= 3.11.8.13)
   magic-localized_country_select (= 0.2.0)
   mocha (= 0.13.2)
   mysql2 (= 0.3.11)

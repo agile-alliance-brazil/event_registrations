@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   end
   
   def twitter_user=(value)
-    self[:twitter_user] = value.start_with?("@") ? value[1..-1] : value
+    self[:twitter_user] = value.try(:start_with?, "@") ? value[1..-1] : value
   end
 
   def self.new_from_auth_hash(hash)

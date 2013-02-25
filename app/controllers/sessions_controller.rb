@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     else
       if self.current_user.nil?
         user = User.new_from_auth_hash(auth_hash)
-        user.twitter_user = auth_hash[:nickname] if auth_hash['provider'] == 'twitter'
+        user.twitter_user = auth_hash['nickname'] if auth_hash['provider'] == 'twitter'
         user.save!
         self.current_user = user
         flash[:notice] = I18n.t('flash.user.create')

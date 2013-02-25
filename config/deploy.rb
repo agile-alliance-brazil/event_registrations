@@ -27,7 +27,8 @@ namespace :deploy do
   
   task :symlink_configs, :roles => :app, :except => {:no_release => true} do
     run <<-CMD
-      cd #{release_path} &&
+      cd #{release_path} && rm -Rf #{release_path}/certs &&
+      ln -nfs #{shared_path}/certs #{release_path}/certs &&
       ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
       ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml
     CMD

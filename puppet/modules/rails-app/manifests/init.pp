@@ -17,7 +17,7 @@ class rails-app( $user, $app_name, $domain ) {
 
 	package { "bundler":
 		provider => "gem",
-		ensure => "1.2.3",
+		ensure => "1.2.4",
 		require => Exec["update-gem-sources"]
 	}
 

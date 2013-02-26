@@ -23,10 +23,10 @@ en:
     :yes: "Yes"
     :no: "No"
     titles:
-      attendance_personal: "Personal details"
-      attendance_address: "Contact details"
-      attendance_registrations: "Conference registrations"
-      attendance_payment: "Payment details"
+      event_attendance_personal: "Personal details"
+      event_attendance_address: "Contact details"
+      event_attendance_registrations: "Conference registrations"
+      event_attendance_payment: "Payment details"
     labels:
       attendance:
         registration_type_id: "Type of Registration"

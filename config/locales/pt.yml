@@ -166,7 +166,7 @@ pt:
       attendance_address: "Informações para Contato"
       attendance_payment: "Dados de Pagamento"
     labels:
-      attendance:
+      event_attendance:
         registration_type_id: "Tipo de inscrição"
         first_name: "Nome"
         last_name: "Sobrenome"
@@ -199,7 +199,7 @@ pt:
         notes: "Notas"
       user:
     hints:
-      attendance:
+      event_attendance:
         registration_type_id: "Indique se sua inscrição é individual normal ou de estudante. O estudante deverá comprovar seu vínculo com uma instituição de ensino técnico ou superior para ter acesso aos valores com desconto."
         badge_name: "Indique o nome que você deseja que apareça no seu crachá. Se deixar em branco, será utilizado seu nome completo."
         organization: "Nome da empresa ou organização que representa ou nome da instituição de ensino onde estuda. Essa informação constará no seu crachá."

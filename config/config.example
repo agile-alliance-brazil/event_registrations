@@ -1,3 +1,4 @@
+# encoding: UTF-8
 ---
   :smtp_settings:
     :address: smtp.domain.com
@@ -6,6 +7,7 @@
     :authentication: :login
     :user_name: no-reply@domain.com
     :password: password
+    :enable_stattls_auto: false
   :ses:
     :access_key_id: your_aws_access_key_id
     :secret_access_key: your_aws_secret_access_key
@@ -18,9 +20,9 @@
   :airbrake:
     :access_key: xxx111xxx
   :google:
-    :tracker_id: google_analytics_id
-    :conversion_id: google_ads_conversion_id
-    :conversion_label: google_ads_conversion_label
+    :tracker_id: 365434-1
+    :conversion_id: 736473
+    :conversion_label: fo37tf9fIGF3GD
   :paypal:
     :email: seller@domain.com
     :currency: USD

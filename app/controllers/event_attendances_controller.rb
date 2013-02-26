@@ -17,7 +17,7 @@ class EventAttendancesController < InheritedResources::Base
         begin
           flash[:notice] = t('flash.attendance.create.success')
           EmailNotifications.registration_pending(@attendance.attendance).deliver if @attendance.registration_fee > 0
-          @attendance.email_sent = true
+          @attendance.attendance.email_sent = true
           @attendance.save
         rescue => ex
           notify_airbrake(ex)

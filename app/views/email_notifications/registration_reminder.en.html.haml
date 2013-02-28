@@ -2,7 +2,7 @@
 
 %p We have just postponed the deadline for the early-bird registration price for #{@event_name} to Wednesday, May 25th! In order to make it easier for you to pay for your registration at #{@event_name}, you now have the option to pay via Paypal, using your credit card or Paypal account. You can find more information about your registration (ID #{@attendance.id}) and make your online payment on the page:
 
-%p= link_to event_attendance_attendance_status_url(@attendance, :locale => 'en'), event_attendance_attendance_status_url(@attendance, :locale => 'en')
+%p= link_to attendance_status_url(@attendance, :locale => 'en'), attendance_status_url(@attendance, :locale => 'en')
 
 %p You can access this page at any time to make the payment and check the status of your registration, so keep this e-mail and link for future reference.
 

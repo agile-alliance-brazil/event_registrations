@@ -96,8 +96,9 @@ describe EventAttendancesController do
 
     it "create action should redirect when model is valid" do
       Attendance.any_instance.stubs(:valid?).returns(true)
+      Attendance.any_instance.stubs(:id).returns(5)
       post :create
-      response.should redirect_to(root_path)
+      response.should redirect_to(attendance_status_path(5))
     end
 
     it "should assign current event to attendance" do
@@ -137,16 +138,20 @@ describe EventAttendancesController do
 
       it "should allow free registration type no matter the email" do
         Attendance.any_instance.stubs(:valid?).returns(true)
+        Attendance.any_instance.stubs(:id).returns(5)
+      
         post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => "another#{@user.email}"}
-        response.should redirect_to(root_path)
+        response.should redirect_to(attendance_status_path(5))
       end
 
       it "should not send pending registration e-mail for free registration" do
         EmailNotifications.expects(:registration_pending).never
         Attendance.any_instance.stubs(:valid?).returns(true)
+        Attendance.any_instance.stubs(:id).returns(5)
+
         post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
 
-        response.should redirect_to(root_path)
+        response.should redirect_to(attendance_status_path(5))
       end
     end
 
@@ -160,16 +165,18 @@ describe EventAttendancesController do
 
       it "should allow free registration type only its email" do
         Attendance.any_instance.stubs(:valid?).returns(true)
+        Attendance.any_instance.stubs(:id).returns(5)
         post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
-        response.should redirect_to(root_path)
+        response.should redirect_to(attendance_status_path(5))
       end
 
       it "should not send pending registration e-mail for free registration" do
         EmailNotifications.expects(:registration_pending).never
         Attendance.any_instance.stubs(:valid?).returns(true)
+        Attendance.any_instance.stubs(:id).returns(5)
         post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
 
-        response.should redirect_to(root_path)
+        response.should redirect_to(attendance_status_path(5))
       end
     end
   end

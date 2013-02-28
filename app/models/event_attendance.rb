@@ -6,6 +6,9 @@ class EventAttendance
   delegate :first_name, :last_name, :email, :organization, :phone,
            :country, :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address,
            :neighbourhood, :zipcode, :default_locale, :to => :user
+  delegate :first_name=, :last_name=, :email=, :organization=, :phone=,
+           :country=, :state=, :city=, :badge_name=, :cpf=, :gender=, :twitter_user=, :address=,
+           :neighbourhood=, :zipcode=, :default_locale=, :to => :user
   delegate :registration_type, :registration_period, :registration_date, :registration_fee, :event, :to => :attendance
   delegate :registration_type_id, :registration_period_id, :registration_date_id, :to => :attendance
 

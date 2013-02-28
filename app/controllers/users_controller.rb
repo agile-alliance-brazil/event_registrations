@@ -6,4 +6,9 @@ class UsersController < InheritedResources::Base
   def new
     redirect_to login_path
   end
+
+  def show
+  	params[:id] ||= current_user.id
+  	super
+  end
 end

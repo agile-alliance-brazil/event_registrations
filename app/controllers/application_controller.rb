@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
 
   def authenticate_user!
-    
+    redirect_to login_path unless current_user    
   end
   
   def current_user

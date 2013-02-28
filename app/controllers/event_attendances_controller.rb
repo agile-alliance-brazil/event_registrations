@@ -23,13 +23,17 @@ class EventAttendancesController < InheritedResources::Base
           notify_airbrake(ex)
           flash[:alert] = t('flash.attendance.mail.fail')
         end
-        redirect_to root_path
+        redirect_to attendance_status_path(@attendance.attendance)
       end
       failure.html do
         flash.now[:error] = t('flash.failure')
         render :new
       end
     end
+  end
+
+  def status
+    @attendance = Attendance.find(params[:id])
   end
   
   private

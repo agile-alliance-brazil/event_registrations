@@ -6,9 +6,10 @@ Current::Application.routes.draw do
   match '/logout', to: 'sessions#destroy', as: :logout
 
   resources :users, except: [:index, :destroy]
-  resources :event_attendances, only: [:new, :create]
-  resources :attendance_statuses, only: :show
   resources :authentications, only: :destroy
+  
+  resources :event_attendances, only: [:new, :create]
+  resources :attendance_statuses, only: [:show, :update]
 
   resources :payment_notifications, only: :create
 

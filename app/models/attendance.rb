@@ -40,6 +40,6 @@ class Attendance < ActiveRecord::Base
   end
 
   def registration_fee
-    base_price
+    0.01 || base_price
   end
 end

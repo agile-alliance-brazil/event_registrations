@@ -33,3 +33,8 @@
   :twitter:
     :key: https://dev.twitter.com/apps/new
     :secret: https://dev.twitter.com/apps/new
+  :bcash:
+    :url: https://www.bcash.com.br/checkout/pay/
+    :email: seller@domain.com
+    :key: bcash_key
+    :store_code: bcash_store_code

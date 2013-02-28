@@ -2,19 +2,47 @@
 
 .payments
   .payment_type.left
-    %h4 OPÇÃO 1: Pague com PayPal
+    %h4 OPÇÃO 1: Pague com BCash
+    %ol
+      %li
+        Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, :locale => :pt)}:
+        %p
+          = form_tag AppConfig[:bcash][:url] do
+            = hidden_field_tag :email_loja, AppConfig[:bcash][:email]
+            = hidden_field_tag :produto_codigo_1, attendance.id
+            = hidden_field_tag :produto_descricao_1, "Inscrição do tipo #{t(attendance.registration_type.title)}"
+            = hidden_field_tag :produto_qtde_1, 1
+            = hidden_field_tag :produto_valor_1, "%.2f" % attendance.registration_fee
+            = hidden_field_tag :tipo_integracao, "PAD"
+            = hidden_field_tag :frete, 0
+            = hidden_field_tag :url_retorno, attendance_status_url(attendance)
+            = hidden_field_tag :url_aviso, payment_notifications_url(type: :bcash)
+            = hidden_field_tag :redirect, "true"
+            = hidden_field_tag :redirect_time, 5
+            = hidden_field_tag :email, attendance.user.email
+            = hidden_field_tag :nome, attendance.user.full_name
+            = hidden_field_tag :cpf, attendance.user.cpf
+            = hidden_field_tag :sexo, attendance.user.gender
+            = hidden_field_tag :telefone, attendance.user.phone
+            = hidden_field_tag :endereco, attendance.user.address
+            = hidden_field_tag :bairro, attendance.user.neighbourhood
+            = hidden_field_tag :cidade, attendance.user.city
+            = hidden_field_tag :estado, attendance.user.state
+            = hidden_field_tag :cep, attendance.user.zipcode
+            = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pague com BCash"
+    %h4 OPÇÃO 2: Pague com PayPal
     %ol
       %li
         Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, :locale => :pt)}:
         %p
           = form_tag AppConfig[:paypal][:url] do
             = hidden_field_tag :cmd, "_s-xclick"
-            = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, event_attendance_attendance_status_url(attendance, :locale => 'en', :protocol => 'https'), payment_notifications_url(:secret => AppConfig[:paypal][:secret]))
+            = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, attendance_status_url(attendance, :locale => 'en', :protocol => 'https'), payment_notifications_url(:secret => AppConfig[:paypal][:secret]))
             = image_submit_tag "https://www.paypal.com/pt_BR/i/btn/btn_paynow_SM.gif"
             = link_to_function image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", :border => "0", :alt => "Pague com PayPal"), "javascript:window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');"
 
   .payment_type.right
-    %h4 OPÇÃO 2: Pague com depósito identificado
+    %h4 OPÇÃO 3: Pague com depósito identificado
     %ol
       %li
         Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, :locale => :pt)}, fazendo um depósito identificado na conta:

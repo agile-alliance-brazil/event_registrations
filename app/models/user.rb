@@ -15,7 +15,8 @@ class User < ActiveRecord::Base
 
   has_many :authentications
   
-  has_many :event_attendances
+  has_many :attendances
+  has_many :events, :through => :attendances
   has_many :payment_notifications, :as => :invoicer
   
   validates_presence_of [:first_name, :last_name]
@@ -30,16 +31,8 @@ class User < ActiveRecord::Base
     false
   end
 
-  def events
-    Event.all
-  end
-
   def registrations_for_event(event)
-    (event_attendances).select{ |attendance| attendance.event_id == event.id }
-  end
-
-  def event_attendances
-    []
+    attendances.select{ |attendance| attendance.event_id == event.id }
   end
 
   def gender=(value)

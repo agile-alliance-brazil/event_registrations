@@ -82,6 +82,7 @@ en:
     login: "Log in"
     profile: "Profile for %{username}"
     user: "New user"
+    events: "Upcoming events"
 
   actions:
     edit: "Edit"
@@ -131,8 +132,6 @@ en:
       subject: "Registration request to %{event_name} sent"
     registration_confirmed:
       subject: "Registration confirmed for %{event_name}"
-    registration_reminder:
-      subject: "New payment option via Paypal for registration for %{event_name}"
 
   gender:
     male: "Male"
@@ -177,7 +176,7 @@ en:
   event:
     attendance:
       list: "Event registrations"
-      add: "Add another registration:"
+      add: "Add Registration to %{name}"
 
   generic:
     or: "or"

@@ -12,4 +12,4 @@
 
 = render :partial => 'shared/registration_details', :locals => {:attendance => @attendance}
 
-= render :partial => "event_attendances/#{@attendance.status}", :locals => {:attendance => @attendance}
+= render :partial => @attendance.status, :locals => {:attendance => @attendance}

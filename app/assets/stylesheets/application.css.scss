@@ -37,14 +37,17 @@ a:hover {
   img {
     float: left;
     padding-right: 5px; }
+  h1 {
+    float: left;
+    padding: 5px;
+  }
   .logo {
     float: left;
     h1 {
       display: none; }
     strong {
-      position: absolute;
-      top: 0px;
-      right: 200px;
+      position: relative;
+      bottom: 0px;
       color: #999999; } }
   ul#languages {
     float: right;

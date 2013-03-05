@@ -4,11 +4,10 @@ require 'spec_helper'
 describe EventAttendancesController do
   render_views
 
-  before(:each) do
+  before :each do
     @event ||= FactoryGirl.create(:event)
     Event.stubs(:current).returns(@event)
-  end
-  before :each do
+
     now = Time.zone.local(2013, 5, 1)
     Time.zone.stubs(:now).returns(now)
   end

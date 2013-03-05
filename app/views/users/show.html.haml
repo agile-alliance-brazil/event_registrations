@@ -10,8 +10,10 @@
           %div.type= I18n.t(attendance.type.title)
           %div.status= I18n.t(attendance.status.title)
           - if attendance.can_cancel?
-            = link_to "X", attendance, :confirm => I18n.t(attendance.cancel_confirmation), :method => :delete, :class => "remove"
-      %li= link_to "Add Registration to #{@event.name}", new_event_attendance_path(:event_id => event.id), :class => "add_attendance"
+            = link_to "X", attendance, confirm: I18n.t(attendance.cancel_confirmation), method: :delete, class: "remove"
+  - (Event.all - @user.events).each do |event|
+    %ul.event
+      %li= link_to I18n.t('event.attendance.add', name: @event.name), new_event_attendance_path(event_id: event.id), :class => "add_attendance"
 %div.clear
 
 %div.authentications
@@ -22,7 +24,6 @@
       = image_tag "#{authentication.provider}_32.png", :size => "32x32"
       %div.provider= authentication.provider.titleize
       %div.uid= authentication.uid
-      = #link_to "X", authentication, :confirm => I18n.t('generic.are_you_sure', action: I18n.t('actions.remove_authentication_option')), :method => :delete, :class => "remove"
 %div.clear
 
 - providers = Authentication::PROVIDERS - @user.authentications.map(&:provider)

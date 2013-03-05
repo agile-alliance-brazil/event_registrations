@@ -69,33 +69,4 @@ describe EmailNotifications do
       mail.subject.should == "[localhost:3000] Registration confirmed for #{@event.name}"
     end
   end
-
-  context "registration reminder" do
-    before(:each) do
-      @attendance = FactoryGirl.create(:attendance, :registration_date => Time.zone.local(2013, 05, 1, 12, 0, 0), :event => @event)
-    end
-    
-    it "should be sent to attendee cc'ed to event organizer" do
-      mail = EmailNotifications.registration_reminder(@attendance).deliver
-      ActionMailer::Base.deliveries.size.should == 1
-      mail.to.should == [@attendance.user.email]
-      mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
-      mail.encoded.should =~ /Caro #{@attendance.user.full_name},/
-      mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
-      mail.subject.should == "[localhost:3000] Nova forma de pagamento por Paypal para inscrições na #{@event.name}"
-      
-    end
-    
-    it "should be sent to attendee using its default_locale" do
-      @attendance.user.default_locale = 'en'
-      mail = EmailNotifications.registration_reminder(@attendance).deliver
-      ActionMailer::Base.deliveries.size.should == 1
-      mail.to.should == [@attendance.user.email]
-      mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
-      mail.encoded.should =~ /Dear #{@attendance.user.full_name},/
-      mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
-      mail.subject.should == "[localhost:3000] New payment option via Paypal for registration for #{@event.name}"
-    end
-  end
-  
 end

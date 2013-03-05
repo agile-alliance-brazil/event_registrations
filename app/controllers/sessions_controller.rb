@@ -4,20 +4,23 @@ class SessionsController < ApplicationController
 
   def new
   end
+
+  def backdoor
+    user = User.create!(first_name: "Developer", last_name: "Offline")
+    log_in(user)
+    redirect_to self.current_user
+  end
   
   def create
     auth = Authentication.find_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
     if auth
-      self.current_user = auth.user
+      log_in(auth.user)
     else
-      if self.current_user.nil?
-        user = User.new_from_auth_hash(auth_hash)
-        user.twitter_user = auth_hash['nickname'] if auth_hash['provider'] == 'twitter'
-        user.save!
-        self.current_user = user
-        flash[:notice] = I18n.t('flash.user.create')
-      else
+      if logged_in?
         flash[:notice] = I18n.t('flash.user.authentication.new')
+      else
+        log_in(create_new_user)
+        flash[:notice] = I18n.t('flash.user.create')
       end
 
       self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'])
@@ -47,6 +50,20 @@ class SessionsController < ApplicationController
   end
 
   protected
+  def log_in(user)
+    self.current_user = user
+  end
+
+  def logged_in?
+    !self.current_user.nil?
+  end
+
+  def create_new_user
+    user = User.new_from_auth_hash(auth_hash)
+    user.twitter_user = auth_hash['nickname'] if auth_hash['provider'] == 'twitter'
+    user.save!
+    user
+  end
 
   def auth_hash
     request.env['omniauth.auth']

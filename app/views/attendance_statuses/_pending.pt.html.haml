@@ -30,6 +30,8 @@
             = hidden_field_tag :estado, attendance.user.state
             = hidden_field_tag :cep, attendance.user.zipcode
             = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pague com BCash"
+
+  .payment_type.right
     %h4 OPÇÃO 2: Pague com PayPal
     %ol
       %li
@@ -40,21 +42,6 @@
             = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, attendance_status_url(attendance, :locale => 'en', :protocol => 'https'), payment_notifications_url(:secret => AppConfig[:paypal][:secret]))
             = image_submit_tag "https://www.paypal.com/pt_BR/i/btn/btn_paynow_SM.gif"
             = link_to_function image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", :border => "0", :alt => "Pague com PayPal"), "javascript:window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');"
-
-  .payment_type.right
-    %h4 OPÇÃO 3: Pague com depósito identificado
-    %ol
-      %li
-        Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, :locale => :pt)}, fazendo um depósito identificado na conta:
-        %pre
-          Titular: RESULT SOLUÇÕES EMPRESARIAIS E EVENTOS
-          CNPJ: 10.784.390/0001-91
-          Banco: Caixa Econômica Federal (104)
-          Agência: 1560
-          Conta corrente: 113-8
-          Operação: 022
-      %li Caso não consiga identificar o depósito junto ao banco, escreva seu número de inscrição (#{attendance.id}) no comprovante de depósito
-      %li Envie o comprovante de depósito para o email #{mail_to AppConfig[:organizer][:email]} com cópia para #{mail_to AppConfig[:organizer][:cced_email]}
 
 %hr/
 

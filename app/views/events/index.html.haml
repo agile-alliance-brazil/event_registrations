@@ -1,0 +1,45 @@
+!!! 5
+%html{html_attrs(I18n.locale)}
+
+  %head
+    %title= t('title.events')
+    %meta{"http-equiv"=>"Content-Type", :content=>"text/html; charset=utf-8"}/
+    %link{"rel" => "shortcut icon", "href" => "/favicon.ico"}/
+    = csrf_meta_tag
+    = stylesheet_link_tag :application
+    = javascript_include_tag :application
+
+    = yield(:head)
+
+  %body
+    #container
+      #header
+        %h1= t('title.events')
+        %ul#languages
+          %li
+            - if current_user
+              = current_user.full_name
+              = link_to I18n.t('actions.logout'), logout_path
+            - else
+              = link_to I18n.t('actions.login'), login_path
+          %li= link_to "Português", "?locale=pt"
+          %li= link_to "English", "?locale=en"
+
+      #content{ :class => 'grid_12' }
+        - eligible_events = @events.select{|event| event.registration_periods.for(Time.now).present?}
+        - if eligible_events.empty?
+          = t('event.no_upcoming')
+        - else
+          = render :partial => 'event', :collection => eligible_events
+
+      #footer Copyleft - Agile Brazil 2010-2013 - #{t('footer.help').html_safe}
+
+    - unless AppConfig[:google].nil?
+      :javascript
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      :javascript
+        try{
+          var pageTracker = _gat._getTracker("UA-#{AppConfig[:google][:tracker_id]}");
+          pageTracker._trackPageview();
+        } catch(err) {}

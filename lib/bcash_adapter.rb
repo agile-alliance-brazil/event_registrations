@@ -14,7 +14,7 @@ class BcashAdapter
       [].tap do |items|
         items << BcashItem.new(
           CGI.escapeHTML(registration_desc.call(attendance)),
-          attendance.id,
+          attendance.registration_type.id,
           attendance.base_price
         )
       end

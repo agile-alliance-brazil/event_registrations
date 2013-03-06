@@ -21,10 +21,10 @@ class PaypalAdapter
     end
   end
   
-  attr_reader :items, :invoice_type, :invoice_id
+  attr_reader :items, :invoice_id
   
   def initialize(items, target)
-    @items, @invoice_type, @invoice_id = items, target.class.to_s, target.id
+    @items, @invoice_id = items, target.id
   end
   
   def to_variables
@@ -33,7 +33,6 @@ class PaypalAdapter
         vars.merge!(item.to_variables(index+1))
       end
       vars['invoice'] = @invoice_id
-      vars['custom'] = @invoice_type
     end
   end
   

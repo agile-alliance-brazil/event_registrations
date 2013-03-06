@@ -20,28 +20,10 @@
         Pay the total amount of #{number_to_currency(attendance.registration_fee, :locale => :pt)}:
         %p
           = form_tag AppConfig[:bcash][:url] do
-            = hidden_field_tag :email_loja, AppConfig[:bcash][:email]
-            = hidden_field_tag :produto_codigo_1, attendance.id
-            = hidden_field_tag :produto_descricao_1, "#{t(attendance.registration_type.title)} Registration"
-            = hidden_field_tag :produto_qtde_1, 1
-            = hidden_field_tag :produto_valor_1, "%.2f" % attendance.registration_fee
-            = hidden_field_tag :tipo_integracao, "PAD"
-            = hidden_field_tag :frete, 0
-            = hidden_field_tag :url_retorno, attendance_status_url(attendance)
-            = hidden_field_tag :url_aviso, payment_notifications_url(type: :bcash)
-            = hidden_field_tag :redirect, "true"
-            = hidden_field_tag :redirect_time, 5
-            = hidden_field_tag :email, attendance.user.email
-            = hidden_field_tag :nome, attendance.user.full_name
-            = hidden_field_tag :cpf, attendance.user.cpf
-            = hidden_field_tag :sexo, attendance.user.gender
-            = hidden_field_tag :telefone, attendance.user.phone
-            = hidden_field_tag :endereco, attendance.user.address
-            = hidden_field_tag :bairro, attendance.user.neighbourhood
-            = hidden_field_tag :cidade, attendance.user.city
-            = hidden_field_tag :estado, attendance.user.state
-            = hidden_field_tag :cep, attendance.user.zipcode
-            = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_buy.gif', alt: "Pay with BCash"
+            - vars = build_bcash_variables(attendance, attendance_status_url(attendance, :locale => 'en', :protocol => 'https'), payment_notifications_url(type: 'bcash'))
+            - vars.each do |key, value|
+              = hidden_field_tag key, value
+            = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pay with BCash"
 
 %hr/
 

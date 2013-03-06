@@ -86,11 +86,31 @@ describe PaymentNotification do
       :status => "Completed",
       :transaction_id =>  "AAABBBCCC",
       :invoicer_id => 2,
-      :invoicer_type => 'Attendance',
       :settle_amount => 10.5,
       :settle_currency => "USD",
       :payer_email => "payer@paypal.com",
       :notes => "Some notes from the buyer"
+    }
+  end
+
+  it "should translate params from bcash into attributes" do
+    bcash_params = {
+      :status => "Transação Conluída",
+      :cod_status => 1,
+      :id_transacao => "1234567890",
+      :id_pedido => 2,
+      :valor_total => 10.5,
+      :cliente_email => "payer@paypal.com",
+      :free => 'Attendance'
+    }
+    PaymentNotification.from_bcash_params(bcash_params).should == {
+      :params => bcash_params,
+      :status => "Completed",
+      :transaction_id =>  "1234567890",
+      :invoicer_id => 2,
+      :settle_amount => 10.5,
+      :settle_currency => "BRL",
+      :payer_email => "payer@paypal.com"
     }
   end
 end

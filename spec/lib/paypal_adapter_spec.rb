@@ -20,9 +20,8 @@ describe PaypalAdapter do
       end
     end
     
-    it "should add invoice type and id" do
+    it "should add invoice id" do
       adapter = PaypalAdapter.from_attendance(@attendance)
-      adapter.invoice_type.should == 'Attendance'
       adapter.invoice_id.should == @attendance.id
     end
   end
@@ -47,7 +46,7 @@ describe PaypalAdapter do
       })
     end
     
-    it "should add invoice id and custom field for invoice type" do
+    it "should add invoice id" do
       attendance = FactoryGirl.create(:attendance)
       adapter = PaypalAdapter.new([
         PaypalAdapter::PaypalItem.new('item 1', 2, 10.50),
@@ -55,8 +54,7 @@ describe PaypalAdapter do
       ], attendance)
 
       adapter.to_variables.should include({
-        'invoice' => attendance.id,
-        'custom' => 'Attendance'
+        'invoice' => attendance.id
       })
     end
   end

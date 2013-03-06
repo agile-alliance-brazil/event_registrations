@@ -1,11 +1,11 @@
 # encoding: UTF-8
 class PaymentNotification < ActiveRecord::Base
-  belongs_to :invoicer, :polymorphic => true
+  belongs_to :invoicer, :class_name => "Attendance"
   serialize :params
   
   validates_existence_of :invoicer
 
-  attr_accessible :params, :invoicer_id, :invoicer_type, :status, :transaction_id, :notes
+  attr_accessible :params, :invoicer_id, :status, :transaction_id, :notes
   
   after_create :mark_invoicer_as_paid
   
@@ -13,13 +13,24 @@ class PaymentNotification < ActiveRecord::Base
     params.slice(:settle_amount, :settle_currency, :payer_email).merge({
       :params => params,
       :invoicer_id => params[:invoice],
-      :invoicer_type => params[:custom],
       :status => params[:payment_status],
       :transaction_id => params[:txn_id],
       :notes => params[:memo]
     })
   end
   
+  def self.from_bcash_params(params)
+    {
+      :params => params,
+      :invoicer_id => params[:id_pedido],
+      :status => params[:cod_status] == 1 ? "Completed" : params[:status],
+      :transaction_id => params[:id_transacao],
+      :settle_amount => params[:valor_total],
+      :settle_currency => "BRL",
+      :payer_email => params[:cliente_email]
+    }
+  end
+
   private
   def mark_invoicer_as_paid
     if status == "Completed" && params_valid?

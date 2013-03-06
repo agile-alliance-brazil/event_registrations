@@ -5,7 +5,7 @@ describe PaypalHelper do
   describe "add_config_vars" do
     it "should add return url and notification url" do
       params = {}
-      helper.add_config_vars(params, 'return_url', 'notify_url')
+      helper.add_paypal_config_vars(params, 'return_url', 'notify_url')
       
       params[:return].should == 'return_url'
       params[:cancel_return].should == 'return_url'

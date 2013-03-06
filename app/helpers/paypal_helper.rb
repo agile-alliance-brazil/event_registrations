@@ -2,7 +2,7 @@
 require File.join(Rails.root, 'lib', 'paypal_adapter')
 
 module PaypalHelper
-  def add_config_vars(values, return_url, notify_url)
+  def add_paypal_config_vars(values, return_url, notify_url)
     values.tap do |vars|
       vars[:business] = AppConfig[:paypal][:email]
       vars[:cmd] = '_cart'
@@ -17,7 +17,7 @@ module PaypalHelper
   
   def paypal_encrypted_attendee(attendance, return_url, notify_url)
     encrypt_for_paypal(
-      add_config_vars(
+      add_paypal_config_vars(
         PaypalAdapter.from_attendance(attendance).to_variables,
         return_url, notify_url
       )
@@ -26,7 +26,7 @@ module PaypalHelper
 
   def paypal_encrypted_registration_group(registration_group, return_url, notify_url)
     encrypt_for_paypal(
-      add_config_vars(
+      add_paypal_config_vars(
         PaypalAdapter.from_registration_group(registration_group).to_variables,
         return_url, notify_url
       )

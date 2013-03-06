@@ -42,4 +42,8 @@ class Attendance < ActiveRecord::Base
   def registration_fee
     base_price
   end
+
+  def can_cancel?
+    false
+  end
 end

@@ -6,7 +6,6 @@ describe Attendance do
     it { should belong_to :event }
     it { should belong_to :user }
     it { should belong_to :registration_type }
-    it { should belong_to :registration_period }
   end
 
   context "protect from mass assignment" do

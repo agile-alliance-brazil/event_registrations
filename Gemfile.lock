@@ -38,6 +38,11 @@ GEM
       json
     archive-tar-minitar (0.5.2)
     arel (3.0.2)
+    aws-ses (0.4.4)
+      builder
+      mail (> 2.2.5)
+      mime-types
+      xml-simple
     brcpfcnpj (3.3.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -246,6 +251,7 @@ GEM
       net-ssh (~> 2.2.2)
     validates_existence (0.8.0)
     will_paginate (3.0.4)
+    xml-simple (1.1.2)
     yui-compressor (0.9.6)
       POpen4 (>= 0.1.4)
 
@@ -254,6 +260,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake (= 3.1.8)
+  aws-ses (= 0.4.4)
   brcpfcnpj (= 3.3.0)
   brhelper (= 3.3.0)
   cancan (= 1.6.9)

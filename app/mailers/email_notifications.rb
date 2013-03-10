@@ -25,11 +25,11 @@ class EmailNotifications < ActionMailer::Base
 
   private
   def from_address
-    ActionMailer::Base.smtp_settings[:user_name]
+    AppConfig[:ses][:from]
   end
 
   def host
-    ActionMailer::Base.default_url_options[:host]
+    AppConfig[:host]
   end
   
   def event_organizer

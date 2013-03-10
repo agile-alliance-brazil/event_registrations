@@ -8,6 +8,7 @@ after "deploy:update_code", "deploy:symlink_configs"
 
 after "deploy",             "deploy:cleanup"
 after "deploy:migrations",  "deploy:cleanup"
+after "deploy:setup",       "deploy:create_shared"
 
 namespace :passenger do
   desc "Restart Application"
@@ -37,9 +38,16 @@ namespace :deploy do
   task :puppet do
     sudo("puppet apply --modulepath #{release_path}/puppet/modules #{release_path}/puppet/manifests/default.pp")
   end
+
+  task :create_shared do
+    run <<-CMD
+      mkdir -p #{shared_path}/certs &&
+      mkdir -p #{shared_path}/config
+    CMD
+  end
 end
 
-set :stages, %w(vagrant staging)
+set :stages, %w(vagrant staging production)
 set :default_stage, "vagrant"
 
 # NOTE: As of Capistrano 2.1, anyone using Windows should allocate a PTY explicitly.

@@ -36,3 +36,6 @@ sudo gem install bundler -v 1.2.4 --no-ri --no-rdoc
 if [ -z `cat /etc/group | cut -f 1 -d':' | grep puppet` ]; then
   sudo groupadd puppet
 fi
+
+sudo mkdir -p /srv/apps
+sudo chown ubuntu:root /srv/apps

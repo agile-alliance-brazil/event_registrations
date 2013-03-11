@@ -1,0 +1,5 @@
+%p
+  - if current_user.registrations_for_event(event).present?
+    Clique #{link_to "aqui", attendance_status_path(current_user.registrations_for_event(event))} para verificar o status de sua inscrição em #{event.name}.
+  - else
+    Clique #{link_to "aqui", new_event_attendance_path(event_id: event.id)} para se inscrever para #{event.name}.

@@ -1,5 +1,6 @@
 # encoding: UTF-8
 class UsersController < InheritedResources::Base
+  layout "eventless"
   actions :show, :edit, :update
 
   def show

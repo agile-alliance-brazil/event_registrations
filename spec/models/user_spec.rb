@@ -4,6 +4,9 @@ require 'spec_helper'
 describe User do
   context "associations" do
     it { should have_many :authentications }
+    it { should have_many :attendances }
+    it { should have_many :events }
+    it { should have_many :payment_notifications }
   end
 
   context "protect from mass assignment" do

@@ -60,7 +60,7 @@ class SessionsController < ApplicationController
 
   def create_new_user
     user = User.new_from_auth_hash(auth_hash)
-    user.twitter_user = auth_hash['nickname'] if auth_hash['provider'] == 'twitter'
+    user.twitter_user = auth_hash['info']['nickname'] if auth_hash['provider'] == 'twitter'
     user.save!
     user
   end

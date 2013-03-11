@@ -4,6 +4,12 @@ module ApplicationHelper
     @current_tab += 1
   end
 
+  def link_to_menu_item(tag, name, url)
+    content_tag(tag, :class => (current_page?(url) ? "selected" : "")) do
+      link_to name, url
+    end
+  end
+
   def sortable_column(text, column, parameters=request.parameters)
     if(parameters[:column] == column.to_s)
       direction = parameters[:direction] == 'down' ? 'up' : 'down'

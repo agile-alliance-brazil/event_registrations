@@ -21,14 +21,11 @@
           %h1= @event.name
           %strong= @event.location_and_date
         %ul#languages
-          %li
-            - if current_user
-              = current_user.full_name
-              = link_to I18n.t('actions.logout'), logout_path
-            - else
-              = link_to I18n.t('actions.login'), login_path
+          -if current_user
+            %li= current_user.full_name
           %li= link_to "Português", "?locale=pt"
           %li= link_to "English", "?locale=en"
+        = render :partial => 'layouts/menu'
 
       #content{ :class => 'grid_12' }
         - flash.each do |name, msg|

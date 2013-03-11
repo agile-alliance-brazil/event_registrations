@@ -1,14 +1,7 @@
-/*
- *= require_self
- *= require formtastic
- *= require formtastic_changes
- *= require jquery.autocomplete
- */
-
-@import "mixins/reset.scss";
-@import "mixins/text.scss";
-@import "mixins/grid.scss";
-@import "mixins/helper.scss";
+@import "mixins/*";
+@import "formtastic";
+@import "formtastic_changes";
+@import "jquery.autocomplete";
 
 $color1: #009933;
 $color2: #5ad295;
@@ -17,7 +10,7 @@ $color4: #ffffe0;
 $color5: #336699;
 
 html {
-  background: white;
+  background: white url(image-path("bg.png")) repeat-x center top;
   color: #333333; }
 
 a {
@@ -37,17 +30,17 @@ a:hover {
   img {
     float: left;
     padding-right: 5px; }
-  h1 {
+  > h1 {
     float: left;
-    padding: 5px;
-  }
+    padding: 5px; }
   .logo {
     float: left;
     h1 {
       display: none; }
     strong {
-      position: relative;
-      bottom: 0px;
+      position: absolute;
+      top: 0px;
+      right: 130px;
       color: #999999; } }
   ul#languages {
     float: right;

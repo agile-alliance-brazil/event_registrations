@@ -1,16 +1,9 @@
 # encoding: UTF-8
 ---
-  :smtp_settings:
-    :address: smtp.domain.com
-    :port: 587
-    :domain: domain.com
-    :authentication: :login
-    :user_name: no-reply@domain.com
-    :password: password
-    :enable_stattls_auto: false
   :ses:
     :access_key_id: your_aws_access_key_id
     :secret_access_key: your_aws_secret_access_key
+    :from: no-reply@domain.com
   :host: localhost:3000
   :organizer:
     :name: Organizer

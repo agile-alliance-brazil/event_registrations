@@ -7,7 +7,7 @@
     %ul.event
       - @user.registrations_for_event(event).each do |attendance|
         %li
-          %div.status= I18n.t("attendance.status.#{attendance.status}")
+          %div.status= link_to I18n.t("attendance.status.#{attendance.status}"), attendance_status_path(attendance)
           - if attendance.can_cancel?
             = link_to "X", attendance, confirm: I18n.t(attendance.cancel_confirmation), method: :delete, class: "remove"
   - (Event.all - @user.events).each do |event|

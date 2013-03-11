@@ -33,4 +33,14 @@ describe Attendance do
   context "fees" do
     it "should have registration fee according to registration period"
   end
+
+  context "cancelling" do
+    it "should be cancelable if pending"
+    it "should be cancelable if paid"
+    it "should be cancelable if paid"
+    it "should be cancelable if confirmed"
+    it "should not be cancelable if canceled already"
+    it "should not be cancelable few days before the event"
+    it "should reimburse part of payment if canceled"
+  end
 end

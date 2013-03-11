@@ -22,6 +22,9 @@
           %li= link_to "English", "?locale=en"
 
       #content{ :class => 'grid_12' }
+        - flash.each do |name, msg|
+          = content_tag :div, msg, :id => "flash_#{name}"
+
         = yield
 
       #footer Copyleft - Agile Brazil 2010-2013 - #{t('footer.help').html_safe}

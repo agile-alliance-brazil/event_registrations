@@ -20,6 +20,8 @@
             %li= link_to current_user.full_name, current_user
           %li= link_to "Português", "?locale=pt"
           %li= link_to "English", "?locale=en"
+        = render :partial => 'layouts/menu'
+          
 
       #content{ :class => 'grid_12' }
         - flash.each do |name, msg|

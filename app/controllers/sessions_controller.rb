@@ -2,13 +2,9 @@
 class SessionsController < ApplicationController
   skip_before_filter :authenticate_user!
 
-  def new
-  end
+  layout 'eventless'
 
-  def backdoor
-    user = User.create!(first_name: "Developer", last_name: "Offline")
-    log_in(user)
-    redirect_to self.current_user
+  def new
   end
   
   def create

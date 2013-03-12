@@ -2,7 +2,6 @@
 Current::Application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create'
   match '/auth/failure', to: 'sessions#failure'
-  match '/auth/backdoor', to: 'sessions#backdoor' if Rails.env == 'development'
   match '/login', to: 'sessions#new', as: :login
   match '/logout', to: 'sessions#destroy', as: :logout
 

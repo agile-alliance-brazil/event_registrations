@@ -15,9 +15,9 @@ en:
         attendance:
           attributes:
             registration_type_id:
-              free_not_allowed: "Inscrição gratuita não está disponível."
+              free_not_allowed: "Free registration is not available."
             email:
-              free_not_allowed: "Inscrições gratuitas só estão disponíveis para o email do palestrante."
+              free_not_allowed: "Free registration is only available to speaker emails."
 
   formtastic:
     :yes: "Yes"

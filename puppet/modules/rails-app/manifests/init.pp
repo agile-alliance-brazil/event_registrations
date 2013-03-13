@@ -49,7 +49,7 @@ class rails-app( $user, $app_name, $domain ) {
 		require => File["/srv/apps/$app_name/shared"]
 	}
 
-    # required for asset pipeline
+  # required for asset pipeline
 	package { 'java':
 		ensure => "installed",
 		name => "openjdk-6-jre-headless",

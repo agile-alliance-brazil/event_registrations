@@ -1,3 +1,39 @@
+<%- certificate_path = File.join(@path, '..', '..', 'shared', 'certs', 'server.crt') -%>
+<%= if File.exists? certificate_path %>
+NameVirtualHost *:80
+<VirtualHost *:80>
+   ServerName <%= @server_name %>
+   Redirect permanent / https://inscricoes.agilebrazil.com/
+</VirtualHost>
+
+NameVirtualHost *:443
+
+<VirtualHost *:443>
+    DocumentRoot <%= @path %>
+
+    SSLEngine on
+    SSLOptions +StrictRequire
+
+    <Directory />
+        SSLRequireSSL
+    </Directory>
+
+    SSLProtocol -all +TLSv1 +SSLv3
+    SSLCipherSuite HIGH:MEDIUM:!aNULL:+SHA1:+MD5:+HIGH:+MEDIUM
+
+    SSLCertificateFile <%= certificate_path %>
+    SSLCertificateKeyFile <%= File.join(@path, '..', '..', 'shared', 'certs', 'server_key.pem') %>
+    SSLCertificateChainFile <%= File.join(@path, '..', '..', 'shared', 'certs', 'server_intermediate.crt') %>
+
+    SSLVerifyClient none
+    SSLProxyEngine off
+
+    <IfModule mime.c>
+        AddType application/x-x509-ca-cert      .crt
+        AddType application/x-pkcs7-crl         .crl
+    </IfModule>
+</VirtualHost>
+<%- else %>
 <VirtualHost *:80>
     ServerName <%= @server_name %>
     DocumentRoot <%= @path %>
@@ -6,3 +42,4 @@
         Options -MultiViews
     </Directory>
 </VirtualHost>
+<%- end -%>

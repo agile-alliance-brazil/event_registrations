@@ -14,16 +14,17 @@ class EventAttendancesController < InheritedResources::Base
   def create
     create! do |success, failure|
       success.html do
+        attendance = @attendance.attendance
         begin
           flash[:notice] = t('flash.attendance.create.success')
-          EmailNotifications.registration_pending(@attendance.attendance).deliver if @attendance.registration_fee > 0
-          @attendance.attendance.email_sent = true
-          @attendance.save
+          EmailNotifications.registration_pending(attendance).deliver if attendance.registration_fee > 0
+          attendance.email_sent = true
+          attendance.save
         rescue => ex
           notify_airbrake(ex)
           flash[:alert] = t('flash.attendance.mail.fail')
         end
-        redirect_to attendance_status_path(@attendance.attendance)
+        redirect_to attendance_status_path(attendance)
       end
       failure.html do
         flash.now[:error] = t('flash.failure')

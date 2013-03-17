@@ -1,4 +1,4 @@
-= form.inputs :event_attendance_personal do
+= form.inputs :attendance_personal do
   = form.input :first_name, :required => true, :input_html => {:tabindex => autotab}
   = form.input :last_name, :required => true, :input_html => {:tabindex => autotab}
   = form.input :badge_name, :input_html => {:tabindex => autotab}
@@ -6,7 +6,7 @@
   = form.input :organization, :required => true, :input_html => {:tabindex => autotab}
   = form.input :cpf, :required => true, :input_html => {:tabindex => autotab}
   = form.input :twitter_user, :input_html => {:tabindex => autotab}
-= form.inputs :event_attendance_address do
+= form.inputs :attendance_address do
   = form.input :country, :required => true, :as => :country, :priority_countries => [:BR], :input_html => {:tabindex => autotab}
   = form.input :email, :required => true, :input_html => {:tabindex => autotab}
   = form.input :email_confirmation, :required => true, :input_html => {:tabindex => autotab}
@@ -16,7 +16,7 @@
   = form.input :city, :required => true, :input_html => {:tabindex => autotab}
   = form.input :state, :required => true, :as => :select, :collection => ActionView::Helpers::FormOptionsHelper::ESTADOS_BRASILEIROS, :input_html => {:tabindex => autotab}
   = form.input :zipcode, :required => true, :input_html => {:tabindex => autotab}
-= form.inputs :event_attendance_registrations do
+= form.inputs :attendance_registrations do
   = form.input :registration_type_id, :as => :radio, :collection => @registration_types, :member_label => Proc.new { |rt| "#{t(rt.title)} - #{number_to_currency(rt.price(@attendance.registration_date), :locale => :pt)}"}, :required => true, :input_html => {:tabindex => autotab}
 
 %div.total
@@ -36,53 +36,53 @@
 
 :javascript
   $(document).ready(function() {
-    $("#event_attendance_country").bind('updated', countryTriggered);
-    $("#event_attendance_registration_type_id_input input:radio").bind('change', registrationTypeTriggered);
+    $("#attendance_country").bind('updated', countryTriggered);
+    $("#attendance_registration_type_id_input input:radio").bind('change', registrationTypeTriggered);
     
-    $("#event_attendance_email_input input").trigger('change');
-    $("#event_attendance_country").trigger('updated');
-    $("#event_attendance_registration_type_id_input input:radio").trigger('change');
+    $("#attendance_email_input input").trigger('change');
+    $("#attendance_country").trigger('updated');
+    $("#attendance_registration_type_id_input input:radio").trigger('change');
         
     $(".total").show();
   })
 
   function countryTriggered() {
     if ($(this).val() != "BR") {
-      $('#event_attendance_state').val('').attr('disabled', 'disabled');
-      $('#event_attendance_state_input').find('label abbr').hide();
-      $("#event_attendance_cpf").attr('disabled', 'disabled');
-      $('#event_attendance_cpf_input').hide();      
+      $('#attendance_state').val('').attr('disabled', 'disabled');
+      $('#attendance_state_input').find('label abbr').hide();
+      $("#attendance_cpf").attr('disabled', 'disabled');
+      $('#attendance_cpf_input').hide();      
     } else {
-      $('#event_attendance_state').removeAttr('disabled');
-      $('#event_attendance_state_input').find('label abbr').show();
-      $("#event_attendance_cpf").removeAttr('disabled');
-      $('#event_attendance_cpf_input').show();      
+      $('#attendance_state').removeAttr('disabled');
+      $('#attendance_state_input').find('label abbr').show();
+      $("#attendance_cpf").removeAttr('disabled');
+      $('#attendance_cpf_input').show();      
     }
   }
   
   function registrationTypeTriggered() {
-    var checked_type = $("#event_attendance_registration_type_id_input input:radio:checked");
+    var checked_type = $("#attendance_registration_type_id_input input:radio:checked");
     if(checked_type.length == 0) {
       return;
     }
   
     var price = "#{number_to_currency(0, :locale => :pt)}";
     if (checked_type.val() == 1) {
-      $("#event_attendance_organization_input").find('label abbr').show();
+      $("#attendance_organization_input").find('label abbr').show();
       price = "#{number_to_currency(RegistrationType.find(1).price(@attendance.registration_date), :locale => :pt)}";
     } else if (checked_type.val() == 2) {
-      $("#event_attendance_organization_input").find('label abbr').hide();
+      $("#attendance_organization_input").find('label abbr').hide();
       price = "#{number_to_currency(RegistrationType.find(2).price(@attendance.registration_date), :locale => :pt)}";
-      $("#event_attendance_registration_type_id_input input:radio").attr('disabled', 'disabled');
+      $("#attendance_registration_type_id_input input:radio").attr('disabled', 'disabled');
     } else if (checked_type.val() == 3) {
-      $("#event_attendance_organization_input").find('label abbr').hide();
+      $("#attendance_organization_input").find('label abbr').hide();
       price = "#{number_to_currency(RegistrationType.find(3).price(@attendance.registration_date), :locale => :pt)}";
     }
     
     $("td#registration_price").text(price);
     updateTotal();
     
-    $("#event_attendance_email_input input").trigger('change');
+    $("#attendance_email_input input").trigger('change');
   }
     
   function updateTotal() {

@@ -9,7 +9,7 @@ Current::Application.routes.draw do
 
   resources :events, only: [:index, :show]
   
-  resources :event_attendances, only: [:new, :create]
+  resources :attendances, only: [:new, :create]
   resources :attendance_statuses, only: :show
   match '/attendance_statuses/:id', via: :post, to: 'attendance_statuses#show' #Stupid BCash callback does a post
 

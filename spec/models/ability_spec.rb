@@ -14,7 +14,7 @@ describe Ability do
     end
 
     it "can see attendance registration details" do
-      @ability.should be_able_to(:show, EventAttendance)
+      @ability.should be_able_to(:show, Attendance)
     end
   end
 
@@ -32,12 +32,12 @@ describe Ability do
       
       it "- before deadline" do
         Time.zone.expects(:now).returns(Ability::REGISTRATION_DEADLINE)
-        @ability.should be_able_to(:create, EventAttendance)
+        @ability.should be_able_to(:create, Attendance)
       end
       
       it "- after deadline can't register" do
         Time.zone.expects(:now).returns(Ability::REGISTRATION_DEADLINE + 1.second)
-        @ability.should_not be_able_to(:create, EventAttendance)
+        @ability.should_not be_able_to(:create, Attendance)
       end
     end
   end

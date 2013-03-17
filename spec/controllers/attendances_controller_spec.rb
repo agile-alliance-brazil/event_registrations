@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe EventAttendancesController do
+describe AttendancesController do
   render_views
 
   before :each do
@@ -89,7 +89,7 @@ describe EventAttendancesController do
       # +stubs(:valid?).returns(false)+ doesn't work here because
       # inherited_resources does +obj.errors.empty?+ to determine
       # if validation failed
-      post :create, :event_attendance => {}
+      post :create, :attendance => {}
       response.should render_template(:new)
     end
 
@@ -116,11 +116,11 @@ describe EventAttendancesController do
       it "should send pending registration e-mail" do
         EmailNotifications.expects(:registration_pending).returns(@email)
         Attendance.any_instance.stubs(:valid?).returns(true)
-        post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.individual').id}
+        post :create, :attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.individual').id}
       end
 
       it "should not allow free registration type" do
-        post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id}
+        post :create, :attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id}
         response.should render_template(:new)
         flash[:error].should == I18n.t('flash.attendance.create.free_not_allowed')
       end
@@ -139,7 +139,7 @@ describe EventAttendancesController do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
       
-        post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => "another#{@user.email}"}
+        post :create, :attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => "another#{@user.email}"}
         response.should redirect_to(attendance_status_path(5))
       end
 
@@ -148,7 +148,7 @@ describe EventAttendancesController do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
 
-        post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
+        post :create, :attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
 
         response.should redirect_to(attendance_status_path(5))
       end
@@ -165,7 +165,7 @@ describe EventAttendancesController do
       it "should allow free registration type only its email" do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
-        post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
+        post :create, :attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
         response.should redirect_to(attendance_status_path(5))
       end
 
@@ -173,7 +173,7 @@ describe EventAttendancesController do
         EmailNotifications.expects(:registration_pending).never
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
-        post :create, :event_attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
+        post :create, :attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id, :email => @user.email}
 
         response.should redirect_to(attendance_status_path(5))
       end

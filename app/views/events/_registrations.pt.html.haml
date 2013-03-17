@@ -2,6 +2,6 @@
   - if current_user && current_user.registrations_for_event(event).present?
     Clique #{link_to "aqui", attendance_status_path(current_user.registrations_for_event(event))} para verificar o status de sua inscrição em #{event.name}.
     %br
-    Caso deseje adicionar outra inscrição para outra pessoa, preencha o formulário #{link_to "aqui", new_event_attendance_path(event_id: event.id, event_attendance: {})}.
+    Caso deseje adicionar outra inscrição para outra pessoa, preencha o formulário #{link_to "aqui", new_attendance_path(event_id: event.id, attendance: {})}.
   - else
-    Clique #{link_to "aqui", new_event_attendance_path(event_id: event.id)} para se inscrever para #{event.name}.
+    Clique #{link_to "aqui", new_attendance_path(event_id: event.id)} para se inscrever para #{event.name}.

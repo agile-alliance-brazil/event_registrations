@@ -1,5 +1,5 @@
 # encoding: UTF-8
-class EventAttendancesController < InheritedResources::Base
+class AttendancesController < InheritedResources::Base
   belongs_to :registration_group, :optional => true
 
   actions :new, :create
@@ -14,17 +14,16 @@ class EventAttendancesController < InheritedResources::Base
   def create
     create! do |success, failure|
       success.html do
-        attendance = @attendance.attendance
         begin
           flash[:notice] = t('flash.attendance.create.success')
-          EmailNotifications.registration_pending(attendance).deliver if attendance.registration_fee > 0
-          attendance.email_sent = true
-          attendance.save
+          EmailNotifications.registration_pending(@attendance).deliver if @attendance.registration_fee > 0
+          @attendance.email_sent = true
+          @attendance.save
         rescue => ex
           notify_airbrake(ex)
           flash[:alert] = t('flash.attendance.mail.fail')
         end
-        redirect_to attendance_status_path(attendance)
+        redirect_to attendance_status_path(@attendance)
       end
       failure.html do
         flash.now[:error] = t('flash.failure')
@@ -39,12 +38,8 @@ class EventAttendancesController < InheritedResources::Base
   
   private
   def build_resource
-    attributes = params[:event_attendance]
-    if(allowed_free_registration? && !current_user.organizer?)
-      attributes ||= current_user.attributes
-    else
-      attributes ||= {}
-    end
+    attributes = params[:attendance]
+    attributes ||= current_user.attributes
     attributes[:event_id] = @event.id
     attributes[:user_id] = current_user.id
     attributes[:default_locale] ||= I18n.locale
@@ -52,10 +47,10 @@ class EventAttendancesController < InheritedResources::Base
       attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.group').id
       attributes[:organization] = parent.name
     end
-    if current_user.present? && current_user.has_approved_session?(@event)
+    if current_user.has_approved_session?(@event)
       attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.free').id
     end
-    @attendance ||= EventAttendance.new(attributes)
+    @attendance ||= Attendance.new(attributes)
   end
   
   def load_registration_types
@@ -80,6 +75,6 @@ class EventAttendancesController < InheritedResources::Base
   end
   
   def allowed_free_registration?
-    current_user.present? && (current_user.has_approved_session?(@event) || current_user.organizer?) && !parent?
+    (current_user.has_approved_session?(@event) || current_user.organizer?) && !parent?
   end
 end

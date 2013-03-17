@@ -20,9 +20,9 @@ class Ability
   def guest_privileges
     can(:read, 'static_pages')
     can(:manage, 'password_resets')
-    can(:show, EventAttendance)
+    can(:show, Attendance)
     can do |action, subject_class, subject|
-      expand_actions([:create, :index]).include?(action) && [EventAttendance].include?(subject_class) &&
+      expand_actions([:create, :index]).include?(action) && [Attendance].include?(subject_class) &&
       Time.zone.now <= REGISTRATION_DEADLINE
     end
   end

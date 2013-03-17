@@ -3,7 +3,7 @@ class PaypalAdapter
   class << self
     def from_attendance(attendance)
       registration_desc = lambda do |attendee|
-        "#{I18n.t('formtastic.labels.event_attendance.registration_type_id')}: #{I18n.t(attendance.registration_type.title)}"
+        "#{I18n.t('formtastic.labels.attendance.registration_type_id')}: #{I18n.t(attendance.registration_type.title)}"
       end
       items = create_items(attendance, registration_desc)
       self.new(items, attendance)

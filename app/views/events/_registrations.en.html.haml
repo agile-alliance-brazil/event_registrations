@@ -2,6 +2,6 @@
   - if current_user && current_user.registrations_for_event(event).present?
     Click #{link_to "here", attendance_status_path(current_user.registrations_for_event(event))} to check the status of your registration to #{event.name}.
     %br
-    If you wish to add another registration for someone else, fill the form #{link_to "here", new_event_attendance_path(event_id: event.id, event_attendance: {})}.
+    If you wish to add another registration for someone else, fill the form #{link_to "here", new_attendance_path(event_id: event.id, attendance: {})}.
   - else
-    Click #{link_to "here", new_event_attendance_path(event_id: event.id)} to register for #{event.name}.
+    Click #{link_to "here", new_attendance_path(event_id: event.id)} to register for #{event.name}.

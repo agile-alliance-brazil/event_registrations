@@ -1,0 +1,4 @@
+%h3= link_to event.name, event
+
+%p
+  Clique #{link_to "aqui", new_attendance_path(event_id: event.id)} para se inscrever para #{event.name}.

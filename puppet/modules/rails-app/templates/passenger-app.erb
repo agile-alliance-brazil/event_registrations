@@ -1,8 +1,53 @@
+<%- if File.exists? File.join(@path, 'certs', 'server.crt') -%>
+<VirtualHost *:80>
+    ServerName <%= @server_name %>
+    DocumentRoot <%= @path %>
+    Redirect permanent / https://<%= @server_name %>/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName <%= @server_name %>
+    DocumentRoot <%= @path %>
+    SSLEngine On
+    SSLOptions +StrictRequire
+
+    <Directory <%= @path %>>
+        Allow from all
+        Options -MultiViews
+        SSLRequireSSL
+    </Directory>
+
+    SSLProtocol -all +TLSv1 +SSLv3
+    SSLCipherSuite HIGH:MEDIUM:!aNULL:+SHA1:+MD5:+HIGH:+MEDIUM
+
+    SSLRandomSeed startup file:/dev/urandom 1024
+    SSLRandomSeed connect file:/dev/urandom 1024
+
+    SSLSessionCache shm:<%= @path %>/../logs/ssl_cache_shm
+    SSLSessionCacheTimeout 600
+
+    SSLCertificateFile <%= @path %>/../certs/server.crt
+    SSLCertificateKeyFile <%= @path %>/../certs/server.key
+
+    SSLVerifyClient none
+    SSLProxyEngine off
+
+    <IfModule mime.c>
+        AddType application/x-x509-ca-cert      .crt
+        AddType application/x-pkcs7-crl         .crl
+    </IfModule>
+
+    SetEnvIf User-Agent ".*MSIE.*" \
+      nokeepalive ssl-unclean-shutdown \
+      downgrade-1.0 force-response-1.0
+</VirtualHost>
+<%- else -%>
 <VirtualHost *:80>
     ServerName <%= @server_name %>
     DocumentRoot <%= @path %>
     <Directory <%= @path %>>
-        Allow from all
-        Options -MultiViews
+         Allow from all
+         Options -MultiViews
     </Directory>
 </VirtualHost>
+<%- end -%>

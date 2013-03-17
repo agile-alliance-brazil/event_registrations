@@ -39,7 +39,7 @@ namespace :deploy do
   end
 end
 
-set :stages, %w(vagrant staging)
+set :stages, %w(vagrant staging production)
 set :default_stage, "vagrant"
 
 # NOTE: As of Capistrano 2.1, anyone using Windows should allocate a PTY explicitly.
@@ -47,7 +47,8 @@ set :default_stage, "vagrant"
 default_run_options[:pty] = true
 ssh_options[:keys] = [
         File.join(ENV['HOME'], '.ssh', 'id_rsa'),
-        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registrations.pem')
+        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registrations.pem'),
+        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registration_production.pem')
     ]
 ssh_options[:forward_agent] = true
 require './config/boot'

@@ -24,9 +24,6 @@ sudo update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.3 400 \
 
 sudo update-alternatives --install /usr/bin/gem gem /usr/bin/gem1.9.3 400
 
-# sudo update-alternatives --config ruby
-# sudo update-alternatives --config gem
-
 echo Finally... installing puppet
 sudo gem sources -u
 sudo gem install puppet -v 3.0.1 --no-ri --no-rdoc
@@ -36,3 +33,5 @@ sudo gem install bundler -v 1.2.4 --no-ri --no-rdoc
 if [ -z `cat /etc/group | cut -f 1 -d':' | grep puppet` ]; then
   sudo groupadd puppet
 fi
+
+sudo chown ubuntu:root /srv

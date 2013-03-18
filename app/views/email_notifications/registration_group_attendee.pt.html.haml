@@ -1,6 +1,6 @@
-%p Car#{@attendee.male? ? 'o' : 'a'} #{h(@attendee.full_name)},
+%p Car#{@attendance.male? ? 'o' : 'a'} #{h(@attendance.full_name)},
 
-%p Seu pedido de inscrição no grupo <strong>#{h(@group.name)}</strong> na #{@attendee.event.name} foi realizado com sucesso.
+%p Seu pedido de inscrição no grupo <strong>#{h(@group.name)}</strong> na #{@attendance.event.name} foi realizado com sucesso.
 
 %p Instruções para completar o processo de inscrição serão enviadas para o organizador do seu grupo assim que todos os participantes se inscreverem.
 

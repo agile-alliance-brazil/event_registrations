@@ -33,17 +33,17 @@ class BcashAdapter
         vars.merge!(item.to_variables(index+1))
       end
       vars['id_pedido'] = @invoice.id
-      vars['frete'] = 0
-      vars['email'] = @invoice.user.email
-      vars['nome']  = @invoice.user.full_name
-      vars['cpf']   = @invoice.user.cpf
-      vars['sexo']  = @invoice.user.gender
-      vars['telefone'] = @invoice.user.phone
-      vars['endereco'] = @invoice.user.address
-      vars['bairro'] = @invoice.user.neighbourhood
-      vars['cidade'] = @invoice.user.city
-      vars['estado'] = @invoice.user.state
-      vars['cep'] = @invoice.user.zipcode
+      vars['frete']     = 0
+      vars['email']     = @invoice.email
+      vars['nome']      = @invoice.full_name
+      vars['cpf']       = @invoice.cpf
+      vars['sexo']      = @invoice.gender
+      vars['telefone']  = @invoice.phone
+      vars['endereco']  = @invoice.address
+      vars['bairro']    = @invoice.neighbourhood
+      vars['cidade']    = @invoice.city
+      vars['estado']    = @invoice.state
+      vars['cep']       = @invoice.zipcode
     end
   end
 

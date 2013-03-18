@@ -1,4 +1,4 @@
-Car#{@attendee.male? ? 'o' : 'a'} #{h(@attendee.full_name)},
+Car#{@attendance.male? ? 'o' : 'a'} #{h(@attendance.full_name)},
 
 
 Seu pedido de inscrição de tipo #{I18n.t(@attendance.registration_type.title)} no valor de #{number_to_currency(@attendance.base_price, :locale => :pt)} na #{@attendance.event.name} foi realizado com sucesso.

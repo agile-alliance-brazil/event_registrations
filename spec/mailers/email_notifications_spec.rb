@@ -22,21 +22,21 @@ describe EmailNotifications do
     it "should be sent to attendee cc'ed to event organizer" do
       mail = EmailNotifications.registration_pending(@attendance).deliver
       ActionMailer::Base.deliveries.size.should == 1
-      mail.to.should == [@attendance.user.email]
+      mail.to.should == [@attendance.email]
       mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
-      mail.encoded.should =~ /Caro #{@attendance.user.full_name},/
+      mail.encoded.should =~ /Caro #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
       mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
       mail.subject.should == "[localhost:3000] Pedido de inscrição na #{@event.name} enviado"
     end
     
     it "should be sent to attendee according to country" do
-      @attendance.user.country = 'US'
+      @attendance.country = 'US'
       mail = EmailNotifications.registration_pending(@attendance).deliver
       ActionMailer::Base.deliveries.size.should == 1
-      mail.to.should == [@attendance.user.email]
+      mail.to.should == [@attendance.email]
       mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
-      mail.encoded.should =~ /Dear #{@attendance.user.full_name},/
+      mail.encoded.should =~ /Dear #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
       mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
       mail.subject.should == "[localhost:3000] Registration request to #{@event.name} sent"
@@ -51,19 +51,19 @@ describe EmailNotifications do
     it "should be sent to attendee" do
       mail = EmailNotifications.registration_confirmed(@attendance).deliver
       ActionMailer::Base.deliveries.size.should == 1
-      mail.to.should == [@attendance.user.email]
-      mail.encoded.should =~ /Caro #{@attendance.user.full_name},/
+      mail.to.should == [@attendance.email]
+      mail.encoded.should =~ /Caro #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
       mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
       mail.subject.should == "[localhost:3000] Inscrição na #{@event.name} confirmada"
     end
     
     it "should be sent to attendee according to country" do
-      @attendance.user.country = 'US'
+      @attendance.country = 'US'
       mail = EmailNotifications.registration_confirmed(@attendance).deliver
       ActionMailer::Base.deliveries.size.should == 1
-      mail.to.should == [@attendance.user.email]
-      mail.encoded.should =~ /Dear #{@attendance.user.full_name},/
+      mail.to.should == [@attendance.email]
+      mail.encoded.should =~ /Dear #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
       mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
       mail.subject.should == "[localhost:3000] Registration confirmed for #{@event.name}"

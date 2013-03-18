@@ -7,16 +7,14 @@ class EmailNotifications < ActionMailer::Base
 
   def registration_pending(attendance, sent_at = Time.now)
     @attendance = attendance
-    @attendee = attendance.user
-    I18n.locale = @attendee.country == 'BR' ? :pt : :en
+    I18n.locale = @attendance.country == 'BR' ? :pt : :en
     mail subject: "[#{host}] #{I18n.t('email.registration_pending.subject', :event_name => current_event.name)}",
          cc: event_organizer, date: sent_at
   end
 
   def registration_confirmed(attendance, sent_at = Time.now)
     @attendance = attendance
-    @attendee = attendance.user
-    I18n.locale = @attendee.country == 'BR' ? :pt : :en
+    I18n.locale = @attendance.country == 'BR' ? :pt : :en
     mail subject: "[#{host}] #{I18n.t('email.registration_confirmed.subject', :event_name => current_event.name)}",
       date: sent_at
   end
@@ -24,7 +22,7 @@ class EmailNotifications < ActionMailer::Base
   private
   def default_mail_preferences
     {
-      to: "\"#{@attendee.full_name}\" <#{@attendee.email}>",
+      to: "\"#{@attendance.full_name}\" <#{@attendance.email}>",
       from: "\"#{current_event.name}\" <#{from_address}>",
       reply_to: "\"#{current_event.name}\" <#{from_address}>"
     }

@@ -1,4 +1,4 @@
-%p Car#{@attendee.male? ? 'o' : 'a'} #{h(@attendee.full_name)},
+%p Car#{@attendance.male? ? 'o' : 'a'} #{h(@attendance.full_name)},
 
 %p Sua inscrição de tipo <strong>#{I18n.t(@attendance.registration_type.title)}</strong> no valor de #{number_to_currency(@attendance.base_price, :locale => :pt)} na #{@attendance.event.name} foi confirmada.
 

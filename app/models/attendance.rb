@@ -59,4 +59,12 @@ class Attendance < ActiveRecord::Base
   def can_cancel?
     false
   end
+
+  def full_name
+    [first_name, last_name].join(" ")
+  end
+
+  def male?
+    gender == 'M'
+  end
 end

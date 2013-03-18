@@ -1,5 +1,5 @@
 <%- certificate_path = File.join(@path, '..', '..', 'shared', 'certs', 'server.crt') -%>
-<%= if File.exists? certificate_path %>
+<%- if File.exists?(certificate_path) -%>
 NameVirtualHost *:80
 <VirtualHost *:80>
    ServerName <%= @server_name %>
@@ -33,7 +33,7 @@ NameVirtualHost *:443
         AddType application/x-pkcs7-crl         .crl
     </IfModule>
 </VirtualHost>
-<%- else %>
+<%- else -%>
 <VirtualHost *:80>
     ServerName <%= @server_name %>
     DocumentRoot <%= @path %>

@@ -55,7 +55,8 @@ set :default_stage, "vagrant"
 default_run_options[:pty] = true
 ssh_options[:keys] = [
         File.join(ENV['HOME'], '.ssh', 'id_rsa'),
-        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registrations.pem')
+        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registrations.pem'),
+        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registration_production.pem')
     ]
 ssh_options[:forward_agent] = true
 require './config/boot'

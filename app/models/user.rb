@@ -8,16 +8,15 @@ class User < ActiveRecord::Base
 
   attr_accessible :first_name, :last_name, :email, :organization, :phone,
                   :country, :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address,
-                  :neighbourhood, :zipcode, :registration_type_id, :status_event,
-                  :event_id, :notes, :payment_agreement, :registration_date, :default_locale
+                  :neighbourhood, :zipcode, :default_locale
   attr_trimmed    :first_name, :last_name, :email, :organization, :phone, :country, :state, :city,
-                  :badge_name, :twitter_user, :address, :neighbourhood, :zipcode, :notes
+                  :badge_name, :twitter_user, :address, :neighbourhood, :zipcode
 
   has_many :authentications
   
   has_many :attendances
   has_many :events, :through => :attendances
-  has_many :payment_notifications, :as => :invoicer
+  has_many :payment_notifications, :through => :attendances
   
   validates_presence_of [:first_name, :last_name]
   validates_length_of [:first_name, :last_name], :maximum => 100, :allow_blank => true
@@ -54,6 +53,12 @@ class User < ActiveRecord::Base
       :last_name => names[-1],
       :email => hash[:info][:email])
     user
+  end
+
+  def attendance_attributes
+    attributes.reject do |attribute, value|
+      attribute == 'id' || attribute == 'created_at' || attribute == 'updated_at' || attribute == 'roles_mask' || attribute == 'default_locale'
+    end
   end
 
   def full_name

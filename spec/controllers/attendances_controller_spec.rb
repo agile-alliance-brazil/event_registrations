@@ -106,12 +106,6 @@ describe AttendancesController do
       assigns(:attendance).event.should == @event
     end
 
-    it "should assign default locale to attendance" do
-      Attendance.any_instance.stubs(:valid?).returns(true)
-      post :create
-      assigns(:attendance).user.default_locale.should == I18n.locale
-    end
-
     describe "for individual registration" do
       it "should send pending registration e-mail" do
         EmailNotifications.expects(:registration_pending).returns(@email)
@@ -120,6 +114,8 @@ describe AttendancesController do
       end
 
       it "should not allow free registration type" do
+        Attendance.any_instance.stubs(:valid?).returns(true)
+        controller.stubs(:valid_registration_types).returns(RegistrationType.without_free.all)
         post :create, :attendance => {:registration_type_id => RegistrationType.find_by_title('registration_type.free').id}
         response.should render_template(:new)
         flash[:error].should == I18n.t('flash.attendance.create.free_not_allowed')

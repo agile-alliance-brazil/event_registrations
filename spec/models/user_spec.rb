@@ -25,11 +25,6 @@ describe User do
     it { should allow_mass_assignment_of :address }
     it { should allow_mass_assignment_of :neighbourhood }
     it { should allow_mass_assignment_of :zipcode }
-    it { should allow_mass_assignment_of :registration_type_id }
-    it { should allow_mass_assignment_of :status_event }
-    it { should allow_mass_assignment_of :event_id }
-    it { should allow_mass_assignment_of :payment_agreement }
-    it { should allow_mass_assignment_of :registration_date }
     it { should allow_mass_assignment_of :default_locale }
     
     it { should_not allow_mass_assignment_of :id }
@@ -70,6 +65,44 @@ describe User do
         user = FactoryGirl.build(:user, :twitter_user => 'agilebrazil')
         user.twitter_user.should == 'agilebrazil'
       end
+    end
+  end
+
+  context "for attendance" do
+    before do
+      @user = FactoryGirl.build(:user)
+    end
+    it "should not send id" do
+      @user.attendance_attributes.should_not include("id")
+    end
+    it "should not send created_at" do
+      @user.attendance_attributes.should_not include("created_at")
+    end
+    it "should not send updated_at" do
+      @user.attendance_attributes.should_not include("updated_at")
+    end
+    it "should not send roles_mask" do
+      @user.attendance_attributes.should_not include("roles_mask")
+    end
+    it "should not send default_locale" do
+      @user.attendance_attributes.should_not include("default_locale")
+    end
+    it "should send other attributes" do
+      @user.attendance_attributes.should include("first_name")
+      @user.attendance_attributes.should include("last_name")
+      @user.attendance_attributes.should include("email")
+      @user.attendance_attributes.should include("organization")
+      @user.attendance_attributes.should include("phone")
+      @user.attendance_attributes.should include("country")
+      @user.attendance_attributes.should include("state")
+      @user.attendance_attributes.should include("city")
+      @user.attendance_attributes.should include("badge_name")
+      @user.attendance_attributes.should include("cpf")
+      @user.attendance_attributes.should include("gender")
+      @user.attendance_attributes.should include("twitter_user")
+      @user.attendance_attributes.should include("address")
+      @user.attendance_attributes.should include("neighbourhood")
+      @user.attendance_attributes.should include("zipcode")
     end
   end
 end

@@ -39,10 +39,13 @@ class AttendancesController < InheritedResources::Base
   private
   def build_resource
     attributes = params[:attendance]
-    attributes ||= current_user.attributes
+    unless attributes
+      attributes = current_user.attendance_attributes
+      attributes[:email_confirmation] = current_user.email
+      attributes[:gender] = current_user.gender
+    end
     attributes[:event_id] = @event.id
     attributes[:user_id] = current_user.id
-    attributes[:default_locale] ||= I18n.locale
     if parent?
       attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.group').id
       attributes[:organization] = parent.name
@@ -50,24 +53,30 @@ class AttendancesController < InheritedResources::Base
     if current_user.has_approved_session?(@event)
       attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.free').id
     end
+    if @registration_types.size == 1
+      attributes[:registration_type_id] = @registration_types.first.id
+    end
+    attributes[:registration_date] ||= Time.now
     @attendance ||= Attendance.new(attributes)
   end
   
   def load_registration_types
-    if @registration_types.blank?
-      @registration_types = RegistrationType.without_free.without_group.all
-      @registration_types << RegistrationType.find_by_title('registration_type.free') if allowed_free_registration?
-    end
+    @registration_types ||= valid_registration_types
+  end
+
+  def valid_registration_types
+    registration_types = RegistrationType.without_free.without_group.all
+    registration_types << RegistrationType.find_by_title('registration_type.free') if allowed_free_registration?
+    registration_types
   end
     
   def validate_free_registration
-    if !is_free?(build_resource)
-      return true
-    elsif !allowed_free_registration?
+    if is_free?(build_resource) && !allowed_free_registration?
       build_resource.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
       flash.now[:error] = t('flash.attendance.create.free_not_allowed') 
       render :new and return false
     end
+    true
   end
   
   def is_free?(attendance)

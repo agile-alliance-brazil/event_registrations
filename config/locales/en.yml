@@ -41,7 +41,7 @@ en:
         city: "City"
         organization: "Organization / Institution"
         badge_name: "Name for badge"
-        cpf: "Identification number"
+        cpf: "Identification number (CPF if you are Brazilian, empty otherwise)"
         gender: "Gender"
         twitter_user: "Twitter username"
         address: "Address"
@@ -61,7 +61,7 @@ en:
         notes: "Notes"
     hints:
       attendance:
-        registration_type_id: "Indicate whether your registration is normal or student. The student must prove his enrollment in an institution of higher education to have access to discounted values."
+        registration_type_id: "Indicate whether your registration type."
         badge_name: "The name you want to print in your badge. If blank, your full name will be used instead."
         organization: "Name of the organization you represent or institution where you study. This information will appear in your badge."
         cpf: "Leave blank if you are not Brazilian."

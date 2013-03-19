@@ -15,14 +15,14 @@ class User < ActiveRecord::Base
   has_many :authentications
   
   has_many :attendances
-  has_many :events, :through => :attendances
-  has_many :payment_notifications, :through => :attendances
+  has_many :events, through: :attendances, uniq: true
+  has_many :payment_notifications, through: :attendances
   
   validates_presence_of [:first_name, :last_name]
-  validates_length_of [:first_name, :last_name], :maximum => 100, :allow_blank => true
-  validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :allow_blank => true
+  validates_length_of [:first_name, :last_name], maximum: 100, allow_blank: true
+  validates_format_of :email, with: /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, allow_blank: true
 
-  validates_uniqueness_of :email, :case_sensitive => false, :allow_blank => true
+  validates_uniqueness_of :email, case_sensitive: false, allow_blank: true
 
   usar_como_cpf :cpf
 
@@ -49,9 +49,9 @@ class User < ActiveRecord::Base
 
   def self.new_from_auth_hash(hash)
     names = hash[:info][:name].split(" ")
-    user = User.new(:first_name => names[0],
-      :last_name => names[-1],
-      :email => hash[:info][:email])
+    user = User.new(first_name: names[0],
+      last_name: names[-1],
+      email: hash[:info][:email])
     user
   end
 

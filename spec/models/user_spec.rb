@@ -7,6 +7,16 @@ describe User do
     it { should have_many :attendances }
     it { should have_many :events }
     it { should have_many :payment_notifications }
+
+    context "events uniqueness" do
+      it "should only show event once if user has multiple attendances" do
+        user = FactoryGirl.create(:user)
+        first_attendance = FactoryGirl.create(:attendance, user: user)
+        second_attendance = FactoryGirl.create(:attendance, user: user, event: first_attendance.event)
+
+        user.events.size.should == 1
+      end
+    end
   end
 
   context "protect from mass assignment" do

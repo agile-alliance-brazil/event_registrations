@@ -5,22 +5,22 @@
     %h4 OPTION 1: Pay with PayPal
     %ol
       %li
-        Pay the total amount of #{number_to_currency(attendance.registration_fee, :locale => :pt)}
+        Pay the total amount of #{number_to_currency(attendance.registration_fee, locale: :pt)}
         %p
           = form_tag AppConfig[:paypal][:url] do
             = hidden_field_tag :cmd, "_s-xclick"
-            = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, attendance_status_url(attendance, :locale => 'en', :protocol => 'https'), payment_notifications_url(:secret => AppConfig[:paypal][:secret]))
+            = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, attendance_status_url(attendance, locale: 'en'), payment_notifications_url(type: 'paypal', secret: AppConfig[:paypal][:secret]))
             = image_submit_tag "https://www.paypal.com/en_US/i/btn/btn_paynow_SM.gif"
-            = link_to_function image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", :border => "0", :alt => "Pay with PayPal"), "javascript:window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');"
+            = link_to_function image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", border: "0", alt: "Pay with PayPal"), "javascript:window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');"
         
   .payment_type.right
     %h4 OPÇÃO 2: If you can understand Portuguese, pay with BCash for different payment types.
     %ol
       %li
-        Pay the total amount of #{number_to_currency(attendance.registration_fee, :locale => :pt)}:
+        Pay the total amount of #{number_to_currency(attendance.registration_fee, locale: :pt)}:
         %p
           = form_tag AppConfig[:bcash][:url] do
-            - vars = build_bcash_variables(attendance, attendance_status_url(attendance, :locale => 'en', :protocol => 'https'), payment_notifications_url(type: 'bcash'))
+            - vars = build_bcash_variables(attendance, attendance_status_url(attendance, locale: 'en'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
             - vars.each do |key, value|
               = hidden_field_tag key, value
             = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pay with BCash"
@@ -30,5 +30,4 @@
 %h3 Important
 
 - deadline = attendance.registration_date.to_date + 5
-
 %p After #{I18n.l([attendance.registration_period.end_at.to_date, deadline].max)}, the registration amount will be updated according to the table available at #{link_to "http://www.agilebrazil.com/2013/en/inscricao", "http://www.agilebrazil.com/2013/en/inscricao"}.

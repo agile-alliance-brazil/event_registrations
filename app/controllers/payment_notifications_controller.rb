@@ -6,7 +6,6 @@ class PaymentNotificationsController < ApplicationController
   
   def create
     attributes = params[:type] == 'bcash' ? PaymentNotification.from_bcash_params(params) : PaymentNotification.from_paypal_params(params)
-    puts attributes.inspect
     PaymentNotification.create!(attributes)
     render :nothing => true
   end

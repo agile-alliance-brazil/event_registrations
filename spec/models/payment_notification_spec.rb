@@ -73,9 +73,9 @@ describe PaymentNotification do
         @valid_params = {
           type: 'bcash',
           secret: AppConfig[:bcash][:secret],
-          email_loja: AppConfig[:bcash][:email],
-          valor_total: @attendance.registration_fee.to_s,
-          cod_status: 1
+          transacao_id: '12345678',
+          status: 'Aprovada',
+          pedido: @attendance.id
         }
         @valid_args = {
           status: "Completed",
@@ -84,7 +84,7 @@ describe PaymentNotification do
         }
       end
 
-      it "succeed if status is Completed and params are valid" do
+      it "succeed if status is Aprovada and params are valid" do
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
         @attendance.should be_paid
       end
@@ -95,20 +95,8 @@ describe PaymentNotification do
         @attendance.should be_pending
       end
 
-      it "fails if status is not Completed" do
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(:status => "Failed"))
-        @attendance.should be_pending
-      end
-
-      it "fails if receiver address doesn't match" do
-        @valid_params.merge!(:email_loja => 'wrong@email.com')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_pending
-      end
-
-      it "fails if paid amount doesn't match" do
-        @valid_params.merge!(:valor_total => '1.00')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
+      it "fails if status is not Aprovada" do
+        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(:status => "Cancelada"))
         @attendance.should be_pending
       end
     end
@@ -136,18 +124,14 @@ describe PaymentNotification do
 
   it "should translate params from bcash into attributes" do
     bcash_params = {
-      status: "Transação Conluída",
-      cod_status: 1,
-      id_transacao: "1234567890",
-      id_pedido: 2,
-      valor_total: 10.5,
-      cliente_email: "payer@paypal.com",
-      free: 'Attendance'
+      status: "Aprovada",
+      transacao_id: "1234567890",
+      pedido: 2
     }
     PaymentNotification.from_bcash_params(bcash_params).should == {
       params: bcash_params,
       status: "Completed",
-      transaction_id:  "1234567890",
+      transaction_id: "1234567890",
       invoicer_id: 2
     }
   end

@@ -18,9 +18,8 @@ describe PaymentNotificationsController do
 
     it "should create PaymentNotification with bcash type" do
       lambda {
-        post :create, type: 'bcash', status: "Transação Conluída", cod_status: 1, id_transacao: "ABCABC",
-                      id_pedido: @attendance.id, valor_total: @attendance.registration_fee.to_s,
-                      email_loja: AppConfig[:bcash][:email], free: 'Attendance', secret: AppConfig[:bcash][:secret]
+        post :create, type: 'bcash', status: "Aprovada", transacao_id: "12345678",
+                      pedido: @attendance.id, secret: AppConfig[:bcash][:secret]
       }.should change(PaymentNotification, :count).by(1)
     end
   end

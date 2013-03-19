@@ -22,9 +22,9 @@ class PaymentNotification < ActiveRecord::Base
   def self.from_bcash_params(params)
     {
       params: params,
-      invoicer_id: params[:id_pedido],
-      status: params[:cod_status] == 1 ? "Completed" : params[:status],
-      transaction_id: params[:id_transacao]
+      invoicer_id: params[:pedido],
+      status: params[:status] == "Aprovada" ? "Completed" : params[:status],
+      transaction_id: params[:transacao_id]
     }
   end
 
@@ -46,9 +46,7 @@ class PaymentNotification < ActiveRecord::Base
   end
 
   def bcash_valid?(hash)
-    params[:secret] == hash[:secret] &&
-    params[:email_loja] == hash[:email] &&
-    BigDecimal.new(params[:valor_total].to_s) == BigDecimal.new(invoicer.registration_fee.to_s)
+    params[:secret] == hash[:secret]
   end
 
   def paypal_valid?(hash)

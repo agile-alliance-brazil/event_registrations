@@ -5,7 +5,9 @@ class PaymentNotificationsController < ApplicationController
   protect_from_forgery :except => [:create]
   
   def create
-    PaymentNotification.create!(params[:type] == "bcash" ? PaymentNotification.from_bcash_params(params) : PaymentNotification.from_paypal_params(params))
+    attributes = params[:type] == 'bcash' ? PaymentNotification.from_bcash_params(params) : PaymentNotification.from_paypal_params(params)
+    puts attributes.inspect
+    PaymentNotification.create!(attributes)
     render :nothing => true
   end
 end

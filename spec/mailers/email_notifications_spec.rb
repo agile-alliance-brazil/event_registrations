@@ -26,7 +26,7 @@ describe EmailNotifications do
       mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
       mail.encoded.should =~ /Caro #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
-      mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
+      mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
       mail.subject.should == "[localhost:3000] Pedido de inscrição na #{@event.name} enviado"
     end
     
@@ -38,7 +38,7 @@ describe EmailNotifications do
       mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
       mail.encoded.should =~ /Dear #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
-      mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
+      mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
       mail.subject.should == "[localhost:3000] Registration request to #{@event.name} sent"
     end
   end
@@ -54,7 +54,7 @@ describe EmailNotifications do
       mail.to.should == [@attendance.email]
       mail.encoded.should =~ /Caro #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
-      mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
+      mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
       mail.subject.should == "[localhost:3000] Inscrição na #{@event.name} confirmada"
     end
     
@@ -65,7 +65,7 @@ describe EmailNotifications do
       mail.to.should == [@attendance.email]
       mail.encoded.should =~ /Dear #{@attendance.full_name},/
       mail.encoded.should =~ /R\$ 499,00/
-      mail.encoded.should =~ /#{AppConfig[:organizer][:email]}/
+      mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
       mail.subject.should == "[localhost:3000] Registration confirmed for #{@event.name}"
     end
   end

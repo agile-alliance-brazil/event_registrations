@@ -14,9 +14,15 @@ class Attendance < ActiveRecord::Base
   attr_accessor :email_confirmation
 
   validates_confirmation_of :email
-  validates_presence_of [:first_name, :last_name]
-  validates_length_of [:first_name, :last_name], :maximum => 100, :allow_blank => true
+  validates_presence_of [:first_name, :last_name, :email, :organization, :phone, :country, :city]
+  validates_presence_of :state, :if => Proc.new {|a| a.in_brazil?}
+  validates_presence_of :cpf, :if => Proc.new {|a| a.in_brazil?}
+
+  validates_length_of [:first_name, :last_name, :phone, :city, :organization], :maximum => 100, :allow_blank => true
   validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :allow_blank => true
+  validates_length_of :email, :within => 6..100, :allow_blank => true
+
+  validates_format_of :phone, :with => /\A[0-9\(\) .\-\+]+\Z/i, :allow_blank => true
 
   usar_como_cpf :cpf
 
@@ -66,5 +72,9 @@ class Attendance < ActiveRecord::Base
 
   def male?
     gender == 'M'
+  end
+
+  def in_brazil?
+    self.country == "BR"
   end
 end

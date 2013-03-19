@@ -11,7 +11,7 @@ Current::Application.routes.draw do
   
   resources :attendances, only: [:new, :create]
   resources :attendance_statuses, only: :show
-  match '/attendance_statuses/:id', via: :post, to: 'attendance_statuses#show' #Stupid BCash callback does a post
+  match '/attendance_statuses/:id', via: :post, to: 'attendance_statuses#callback' #Stupid BCash callback does a post
 
   resources :payment_notifications, only: :create
 

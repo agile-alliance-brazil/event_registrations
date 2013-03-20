@@ -17,6 +17,7 @@ gem 'will_paginate', '=3.0.4'
 gem 'omniauth', '=1.1.3'
 gem 'omniauth-twitter', '=0.0.14'
 gem 'omniauth-facebook', '=1.4.1'
+gem 'omniauth-github', '=1.1.0'
 gem 'aws-ses', '=0.4.4', :require => 'aws/ses'
 
 gem 'magic-localized_country_select', '=0.2.0', :require => 'localized_country_select'

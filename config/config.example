@@ -31,6 +31,9 @@
   :facebook:
     :key: https://developers.facebook.com/apps
     :secret: https://developers.facebook.com/apps
+  :github:
+    :key: http://developer.github.com/
+    :secret: http://developer.github.com/
   :bcash:
     :url: https://www.bcash.com.br/checkout/pay/
     :email: seller@domain.com

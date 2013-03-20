@@ -1,6 +1,6 @@
 # encoding: UTF-8
 class Authentication < ActiveRecord::Base
-  PROVIDERS = %w(twitter facebook)
+  PROVIDERS = %w(twitter facebook github)
 
   belongs_to :user
   attr_accessible :provider, :uid

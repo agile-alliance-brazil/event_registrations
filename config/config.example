@@ -28,6 +28,9 @@
   :twitter:
     :key: https://dev.twitter.com/apps/new
     :secret: https://dev.twitter.com/apps/new
+  :facebook:
+    :key: https://developers.facebook.com/apps
+    :secret: https://developers.facebook.com/apps
   :bcash:
     :url: https://www.bcash.com.br/checkout/pay/
     :email: seller@domain.com

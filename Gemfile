@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '=3.2.12'
+gem 'rails', '=3.2.13'
 gem 'inherited_resources', '=1.3.1'
 gem 'seed-fu', '=2.2.0'
 gem 'brhelper', '=3.3.0'

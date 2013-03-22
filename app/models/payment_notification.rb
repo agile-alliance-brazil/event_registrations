@@ -53,6 +53,12 @@ class PaymentNotification < ActiveRecord::Base
     params[:secret] == hash[:secret] &&
     params[:receiver_email] == hash[:email] &&
     params[:mc_currency] == hash[:currency] &&
-    BigDecimal.new(params[:mc_gross].to_s) == BigDecimal.new(invoicer.registration_fee.to_s)
+    valid_price?(BigDecimal.new(params[:mc_gross].to_s))
+  end
+
+  def valid_price?(paid_price)
+     paid_price == BigDecimal.new(invoicer.registration_fee.to_s) ||
+       (invoicer.registration_period.super_early_bird? &&
+        paid_price == BigDecimal.new(RegistrationPrice.for(invoicer.registration_period, invoicer.registration_type).first.value))
   end
 end

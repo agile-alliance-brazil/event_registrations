@@ -10,6 +10,14 @@ describe RegistrationPeriod do
       @late = RegistrationPeriod.find_by_title('registration_period.late')
       @last_minute = RegistrationPeriod.find_by_title('registration_period.last_minute')
     end
+
+    it "should be super_early_bird if title matches" do
+      @super_early_bird.should be_super_early_bird
+      @early_bird.should_not be_super_early_bird
+      @regular.should_not be_super_early_bird
+      @late.should_not be_super_early_bird
+      @last_minute.should_not be_super_early_bird
+    end
     
     context "for registration types" do
       before do

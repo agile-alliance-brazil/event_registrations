@@ -61,7 +61,6 @@ describe PaymentNotification do
       it "doesn't fail if paid amount doesn't match expected but matches super early bird previous value" do
         @attendance.registration_date = Time.zone.local(2013, 2, 1)
         @attendance.save
-        puts @attendance.inspect
         @attendance.registration_period.should == RegistrationPeriod.find_by_title("registration_period.super_early_bird")
 
         RegistrationPeriod.any_instance.expects(:price_for_registration_type).returns(399)

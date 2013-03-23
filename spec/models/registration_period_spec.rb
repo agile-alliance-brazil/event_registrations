@@ -68,18 +68,18 @@ describe RegistrationPeriod do
         @super_early = RegistrationPeriod.find_by_title('registration_period.super_early_bird')
       end
 
-      it "should be 250 for 99 paid or confirmed attendances" do
-        Attendance.expects(:find_all_by_status_and_event_id)
-                  .with([:paid, :confirmed], @super_early.event_id)
-                  .returns([1] * 99)
+      it "should be 250 for 149 attendances (pending, paid or confirmed)" do
+        Attendance.expects(:find_all_by_event_id)
+                  .with(@super_early.event_id)
+                  .returns([1] * 149)
 
         @super_early.price_for_registration_type(@type).should == 250
       end
       
-      it "should be 399 for 100 paid or confirmed attendance" do
-        Attendance.expects(:find_all_by_status_and_event_id)
-                  .with([:paid, :confirmed], @super_early.event_id)
-                  .returns([1] * 100)
+      it "should be 399 after 150 attendances" do
+        Attendance.expects(:find_all_by_event_id)
+                  .with(@super_early.event_id)
+                  .returns([1] * 150)
 
         @super_early.price_for_registration_type(@type).should == 399
       end

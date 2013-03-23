@@ -58,17 +58,6 @@ describe PaymentNotification do
         @attendance.should be_pending
       end
 
-      it "doesn't fail if paid amount doesn't match expected but matches super early bird previous value" do
-        @attendance.registration_date = Time.zone.local(2013, 2, 1)
-        @attendance.save
-        @attendance.registration_period.should == RegistrationPeriod.find_by_title("registration_period.super_early_bird")
-
-        RegistrationPeriod.any_instance.expects(:price_for_registration_type).returns(399)
-        @valid_params.merge!(:mc_gross => '250.00')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_paid
-      end
-
       it "fails if currency doesn't match" do
         @valid_params.merge!(:mc_currency => 'GBP')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)

@@ -14,7 +14,7 @@ describe BcashAdapter do
 
         adapter.items.size.should == 1
         adapter.items[0].amount.should == @attendance.base_price
-        adapter.items[0].name.should == "Individual Registration"
+        adapter.items[0].name.should == "Type of Registration: Individual"
         adapter.items[0].quantity.should == 1
         adapter.items[0].number.should == @attendance.registration_type.id
       end

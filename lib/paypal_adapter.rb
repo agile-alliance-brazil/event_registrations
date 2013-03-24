@@ -1,48 +1,16 @@
 # encoding: UTF-8
-class PaypalAdapter
-  class << self
-    def from_attendance(attendance)
-      registration_desc = lambda do |attendee|
-        "#{I18n.t('formtastic.labels.attendance.registration_type_id')}: #{I18n.t(attendance.registration_type.title)}"
-      end
-      items = create_items(attendance, registration_desc)
-      self.new(items, attendance)
-    end
-    
-    private
-    def create_items(attendee, registration_desc)
-      [].tap do |items|
-        items << PaypalItem.new(
-          CGI.escapeHTML(registration_desc.call(attendee)),
-          attendee.registration_type.id,
-          attendee.base_price
-        )
-      end
-    end
+require 'payment_gateway_adapter'
+
+class PaypalAdapter < PaymentGatewayAdapter
+  def self.from_attendance(attendance)
+    PaymentGatewayAdapter.from_attendance(attendance, PaypalItem)
+  end
+
+  def add_variables(vars)
+    vars['invoice'] = @invoice.id
   end
   
-  attr_reader :items, :invoice_id
-  
-  def initialize(items, target)
-    @items, @invoice_id = items, target.id
-  end
-  
-  def to_variables
-    {}.tap do |vars|
-      @items.each_with_index do |item, index|
-        vars.merge!(item.to_variables(index+1))
-      end
-      vars['invoice'] = @invoice_id
-    end
-  end
-  
-  class PaypalItem
-    attr_reader :name, :number, :amount, :quantity
-    
-    def initialize(name, number, amount, quantity = 1)
-      @name, @number, @amount, @quantity = name, number, amount, quantity
-    end
-    
+  class PaypalItem < Item
     def to_variables(index)
       {
         "amount_#{index}" => amount,
@@ -52,5 +20,4 @@ class PaypalAdapter
       }
     end
   end
-  
 end

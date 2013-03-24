@@ -22,7 +22,7 @@ describe PaypalAdapter do
     
     it "should add invoice id" do
       adapter = PaypalAdapter.from_attendance(@attendance)
-      adapter.invoice_id.should == @attendance.id
+      adapter.invoice.should == @attendance
     end
   end
 

@@ -25,18 +25,18 @@
       %td= atendeees_for_type.select{|a| a.pending?}.size
       %td= number_to_currency(atendeees_for_type.select{|a| a.pending?}.inject(0){|s,a| s+=a.base_price})
       %td= atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.size
-      %td= number_to_currency(atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.size > 0}.inject(0){|s,a| s+=a.base_price})
+      %td= number_to_currency(atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.inject(0){|s,a| s+=a.base_price})
       %td= atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.size
-      %td= number_to_currency(atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.size == 0}.inject(0){|s,a| s+=a.base_price})
+      %td= number_to_currency(atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.inject(0){|s,a| s+=a.base_price})
       %td= atendeees_for_type.size
       %td= number_to_currency(atendeees_for_type.inject(0){|s,a| s+=a.base_price})
   %tr.total
     %td= t("registration_total.total")
     %td= @attendances.select{|a| a.pending?}.size
     %td= number_to_currency(@attendances.select{|a| a.pending?}.inject(0){|s,a| s+=a.base_price})
-    %td= @attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.size > 0}.size
+    %td= @attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.size
     %td= number_to_currency(@attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.inject(0){|s,a| s+=a.base_price})
-    %td= @attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.size == 0}.size
+    %td= @attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.size
     %td= number_to_currency(@attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.inject(0){|s,a| s+=a.base_price})
     %td= @attendances.size
     %td= number_to_currency(@attendances.inject(0){|s,a| s+=a.base_price})

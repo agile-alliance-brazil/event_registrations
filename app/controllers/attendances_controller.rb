@@ -58,9 +58,7 @@ class AttendancesController < InheritedResources::Base
 
   def collection
     @attendances ||= end_of_association_chain.
-      where(:event_id => @event.id).
-      page(params[:page]).
-      order('attendances.created_at DESC')
+      where(:event_id => @event.id)
   end
   
   def load_registration_types

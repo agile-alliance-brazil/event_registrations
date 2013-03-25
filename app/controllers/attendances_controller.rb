@@ -2,14 +2,10 @@
 class AttendancesController < InheritedResources::Base
   belongs_to :registration_group, :optional => true
 
-  actions :new, :create
+  actions :new, :create, :index
   
   before_filter :load_registration_types
   before_filter :validate_free_registration, :only => [:create]
-  
-  def new
-    new!
-  end
   
   def create
     create! do |success, failure|
@@ -58,6 +54,13 @@ class AttendancesController < InheritedResources::Base
     end
     attributes[:registration_date] ||= Time.now
     @attendance ||= Attendance.new(attributes)
+  end
+
+  def collection
+    @attendances ||= end_of_association_chain.
+      where(:event_id => @event.id).
+      page(params[:page]).
+      order('attendances.created_at DESC')
   end
   
   def load_registration_types

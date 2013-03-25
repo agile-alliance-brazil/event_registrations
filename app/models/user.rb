@@ -4,7 +4,6 @@ require File.join(Rails.root, 'lib/trimmer.rb')
 class User < ActiveRecord::Base
   include Trimmer
   include Authorization
-  attr_accessor :roles_mask
 
   attr_accessible :first_name, :last_name, :email, :organization, :phone,
                   :country, :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address,

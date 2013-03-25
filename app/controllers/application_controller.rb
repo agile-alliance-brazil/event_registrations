@@ -7,6 +7,19 @@ class ApplicationController < ActionController::Base
   before_filter :set_timezone
   before_filter :set_event
   before_filter :authenticate_user!
+  before_filter :authorize_action
+
+  rescue_from CanCan::AccessDenied do |exception|
+    Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
+
+    flash[:error] = t('flash.unauthorised')
+    redirect_to :back rescue redirect_to root_path
+  end
+
+  def current_ability
+    Rails.logger.info "User (#{current_user.id}) is organizer? #{current_user.organizer?}"
+    @current_ability ||= Ability.new(current_user, @event)
+  end
 
   def authenticate_user!
     redirect_to login_path unless current_user    
@@ -37,11 +50,19 @@ class ApplicationController < ActionController::Base
 
   private
   def set_locale
-    I18n.locale = params[:locale] || 'en' || current_user.try(:default_locale)
+    I18n.locale = params[:locale] || current_user.try(:default_locale)
   end
 
   def set_timezone
     # current_user.time_zone #=> 'London'
     Time.zone = params[:time_zone]
+  end
+
+  def authorize_action
+    obj = resource rescue nil
+    clazz = resource_class rescue nil
+    action = params[:action].to_sym
+    controller = obj || clazz || controller_name
+    authorize!(action, controller)
   end
 end

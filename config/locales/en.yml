@@ -177,6 +177,7 @@ en:
     attendance:
       list: "Event registrations"
       add: "Add Registration to %{name}"
+      summary: "Check the registration summary for %{name}"
 
   generic:
     or: "or"

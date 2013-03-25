@@ -229,6 +229,7 @@ pt:
     edit: "Editar"
     destroy: "Remover"
     cancel: "Cancelar"
+    registration: "Inscrição"
     new_registration: "Individual"
     new_speaker_registration: "Palestrante"
     new_sponsor_registration: "Patrocinador"
@@ -316,6 +317,7 @@ pt:
     attendance:
       list: "Inscrições em eventos"
       add: "Adicionar inscrição para %{name}"
+      summary: "Veja o relatório de inscrições para %{name}"
 
   generic:
     or: "ou"

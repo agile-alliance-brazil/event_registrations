@@ -12,7 +12,7 @@
             = link_to "X", attendance, confirm: I18n.t(attendance.cancel_confirmation), method: :delete, class: "remove"
   - (Event.all - @user.events).each do |event|
     %ul.event
-      %li= link_to I18n.t('event.attendance.add', name: @event.name), new_attendance_path(event_id: event.id), :class => "add_attendance"
+      %li= link_to I18n.t('event.attendance.add', name: @event.name), new_event_attendance_path(event), :class => "add_attendance"
 %div.clear
 
 %div.authentications

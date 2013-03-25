@@ -23,12 +23,12 @@
     %tr
       %td= t(registration_type.title)
       = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.pending }
-      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.map(&:payment_notifications).map(&:paypal).reject(&:empty?).empty?}}
-      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.map(&:payment_notifications).map(&:bcash).reject(&:empty?).empty?}}
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.payment_notifications.paypal.empty?}}
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.payment_notifications.bcash.empty?}}
       = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type }
   %tr.total
     %td= t("registration_total.total")
     = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.pending }
-    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.map(&:payment_notifications).map(&:paypal).reject(&:empty?).empty?}}
-    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.map(&:payment_notifications).map(&:bcash).reject(&:empty?).empty?}}
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.payment_notifications.paypal.empty?}}
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.payment_notifications.bcash.empty?}}
     = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances }

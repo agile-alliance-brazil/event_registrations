@@ -69,16 +69,16 @@ describe RegistrationPeriod do
       end
 
       it "should be 250 for 149 attendances (pending, paid or confirmed)" do
-        Attendance.expects(:find_all_by_event_id)
-                  .with(@super_early.event_id)
+        Attendance.expects(:where)
+                  .with(event_id: @super_early.event_id)
                   .returns([1] * 149)
 
         @super_early.price_for_registration_type(@type).should == 250
       end
       
       it "should be 399 after 150 attendances" do
-        Attendance.expects(:find_all_by_event_id)
-                  .with(@super_early.event_id)
+        Attendance.expects(:where)
+                  .with(event_id: @super_early.event_id)
                   .returns([1] * 150)
 
         @super_early.price_for_registration_type(@type).should == 399

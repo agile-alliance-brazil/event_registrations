@@ -58,7 +58,7 @@ class AttendancesController < InheritedResources::Base
 
   def collection
     @attendances ||= end_of_association_chain.
-      where(:event_id => @event.id)
+      for_event(@event)
   end
   
   def load_registration_types

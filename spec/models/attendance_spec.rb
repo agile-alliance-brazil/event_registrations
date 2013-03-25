@@ -78,12 +78,40 @@ describe Attendance do
     xit { should validate_confirmation_of :password }
   end
 
+  context "scopes" do
+    before do
+      5.times do
+        FactoryGirl.create(:attendance)
+      end
+    end
+
+    it "should have scope for_event" do
+      Attendance.for_event(Attendance.first.event).should == [Attendance.first]
+    end
+    
+    it "should have scope for_registration_type" do
+      Attendance.first.tap{|a| a.registration_type_id = 3}.save
+
+      Attendance.for_registration_type(RegistrationType.find(3)).should == [Attendance.first]
+    end
+    
+    it "should have scope pending" do
+      Attendance.first.tap{|a| a.pay}.save
+      Attendance.pending.should_not include(Attendance.first)
+    end
+    
+    it "should have scope paid" do
+      Attendance.first.tap{|a| a.pay}.save
+      Attendance.paid.should == [Attendance.first]
+    end
+  end
+
   context "state machine" do
     it "should start pending"
     it "should move to paid upon payment"
     it "should be confirmed on confirmation"
     it "should email upon after confirmed"
-    xit "should validate payment agreement when confirmed"
+    it "should validate payment agreement when confirmed"
   end
 
   context "fees" do

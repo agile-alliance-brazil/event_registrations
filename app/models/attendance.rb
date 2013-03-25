@@ -50,6 +50,11 @@ class Attendance < ActiveRecord::Base
 
   validates_presence_of :registration_type_id, :registration_date, :user_id, :event_id
 
+  scope :for_event, lambda { |e| where('event_id = (?)', e.id)}
+  scope :for_registration_type, lambda { |t| where('registration_type_id = (?)', t.id)}
+  scope :pending, lambda { where('status = (?)', :pending)}
+  scope :paid, lambda { where('status IN (?)', [:paid, :confirmed])}
+
   def base_price
     registration_period.price_for_registration_type(registration_type)
   end

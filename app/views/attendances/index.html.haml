@@ -19,24 +19,16 @@
     %th= t('registration.quantity')
     %th= t('formtastic.labels.attendee.total')
   - RegistrationType.all.each do |registration_type|
-    - atendeees_for_type = @attendances.select{|a| a.registration_type == registration_type}
+    - attendees_for_type = @attendances.for_registration_type(registration_type)
     %tr
       %td= t(registration_type.title)
-      %td= atendeees_for_type.select{|a| a.pending?}.size
-      %td= number_to_currency(atendeees_for_type.select{|a| a.pending?}.inject(0){|s,a| s+=a.base_price})
-      %td= atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.size
-      %td= number_to_currency(atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.inject(0){|s,a| s+=a.base_price})
-      %td= atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.size
-      %td= number_to_currency(atendeees_for_type.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.inject(0){|s,a| s+=a.base_price})
-      %td= atendeees_for_type.size
-      %td= number_to_currency(atendeees_for_type.inject(0){|s,a| s+=a.base_price})
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.pending }
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.map(&:payment_notifications).map(&:paypal).reject(&:empty?).empty?}}
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.map(&:payment_notifications).map(&:bcash).reject(&:empty?).empty?}}
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type }
   %tr.total
     %td= t("registration_total.total")
-    %td= @attendances.select{|a| a.pending?}.size
-    %td= number_to_currency(@attendances.select{|a| a.pending?}.inject(0){|s,a| s+=a.base_price})
-    %td= @attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.size
-    %td= number_to_currency(@attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'paypal'}.size > 0}.inject(0){|s,a| s+=a.base_price})
-    %td= @attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.size
-    %td= number_to_currency(@attendances.select{|a| (a.paid? || a.confirmed?) && a.payment_notifications.select{|p| p.params[:type] == 'bcash'}.size > 0}.inject(0){|s,a| s+=a.base_price})
-    %td= @attendances.size
-    %td= number_to_currency(@attendances.inject(0){|s,a| s+=a.base_price})
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.pending }
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.map(&:payment_notifications).map(&:paypal).reject(&:empty?).empty?}}
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.map(&:payment_notifications).map(&:bcash).reject(&:empty?).empty?}}
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances }

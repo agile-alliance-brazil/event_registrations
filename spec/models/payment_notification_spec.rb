@@ -102,6 +102,19 @@ describe PaymentNotification do
     end
   end
 
+  context "named scope" do
+    before do
+      @paypal = FactoryGirl.create(:payment_notification, params: {type: 'paypal'})
+      @bcash = FactoryGirl.create(:payment_notification, params: {type: 'bcash'})
+    end
+    it "should scope paypal" do
+      PaymentNotification.paypal.should == [@paypal]
+    end
+    it "should scope bcash" do
+      PaymentNotification.bcash.should == [@bcash]
+    end
+  end
+
   it "should translate params from paypal into attributes" do
     paypal_params = {
       payment_status: "Completed",

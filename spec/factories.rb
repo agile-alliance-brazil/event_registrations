@@ -50,10 +50,10 @@ FactoryGirl.define do
   end
 
   factory :payment_notification do
-    params { {:some => 'params'} }
+    params { {some: 'params', type: 'paypal'} }
     status "Completed"
     transaction_id "9JU83038HS278211W"
-    association :invoicer, :factory => :attendance
+    association :invoicer, factory: :attendance
   end
 
   factory :user do

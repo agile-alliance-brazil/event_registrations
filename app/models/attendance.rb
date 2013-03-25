@@ -4,7 +4,7 @@ class Attendance < ActiveRecord::Base
   belongs_to :user
   belongs_to :registration_type
   belongs_to :registration_period
-  has_many :payment_notifications, as: :invoicer
+  has_many :payment_notifications, foreign_key: :invoicer_id
 
   attr_accessible :event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date,
                   :first_name, :last_name, :email, :email_confirmation, :organization, :phone, :country,

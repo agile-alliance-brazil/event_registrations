@@ -12,6 +12,7 @@ describe Ability do
       @ability.should be_able_to(:read, 'static_pages')
       @ability.should be_able_to(:manage, 'password_resets')
       @ability.should be_able_to(:read, Event)
+      @ability.should be_able_to(:index, Event)
     end
   end
 

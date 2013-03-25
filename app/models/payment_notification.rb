@@ -1,6 +1,6 @@
 # encoding: UTF-8
 class PaymentNotification < ActiveRecord::Base
-  belongs_to :invoicer, class_name: "Attendance"
+  belongs_to :invoicer, class_name: 'Attendance', foreign_key: 'invoicer_id'
   serialize :params
   
   validates_existence_of :invoicer

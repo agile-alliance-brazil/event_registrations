@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130318014329) do
+ActiveRecord::Schema.define(:version => 20130325050103) do
 
   create_table "attendances", :force => true do |t|
     t.integer  "event_id"
@@ -61,7 +61,6 @@ ActiveRecord::Schema.define(:version => 20130318014329) do
     t.string   "status"
     t.string   "transaction_id"
     t.integer  "invoicer_id"
-    t.string   "invoicer_type"
     t.string   "payer_email"
     t.decimal  "settle_amount"
     t.string   "settle_currency"

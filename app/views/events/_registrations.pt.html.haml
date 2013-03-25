@@ -4,4 +4,4 @@
     %br
     Caso deseje adicionar outra inscrição para outra pessoa, preencha o formulário #{link_to "aqui", new_event_attendance_path(event)}.
   - else
-    Clique #{link_to "aqui", new_attendance_path(event_id: event.id)} para se inscrever para #{event.name}.
+    Clique #{link_to "aqui", new_event_attendance_path(event.id)} para se inscrever para #{event.name}.

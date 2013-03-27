@@ -1,7 +1,5 @@
 # encoding: UTF-8
 class RegistrationPeriod < ActiveRecord::Base
-  SUPER_EARLY_LIMIT = 150
-
   belongs_to :event
   
   attr_accessible :end_at
@@ -21,12 +19,7 @@ class RegistrationPeriod < ActiveRecord::Base
 
   private
   def prices_for(registration_type)
-    if(super_early_bird? && Attendance.where(event_id: event.id).count >= SUPER_EARLY_LIMIT)
-      next_period = RegistrationPeriod.for(end_at + 1.day).first
-      RegistrationPrice.for(next_period, registration_type)
-    else
-      RegistrationPrice.for(self, registration_type)
-    end
+    RegistrationPrice.for(self, registration_type)
   end
 end
 

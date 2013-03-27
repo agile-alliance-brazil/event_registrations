@@ -106,6 +106,54 @@ describe Attendance do
     end
   end
 
+  context "registrarion period regarding super_early_bird" do
+    before do
+      @attendance = FactoryGirl.build(:attendance, registration_date: Time.zone.local(2013, 03, 21))
+      @super_early_bird = RegistrationPeriod.find_by_title('registration_period.super_early_bird')
+      @early_bird = RegistrationPeriod.find_by_title('registration_period.early_bird')
+    end
+
+    context "unsaved attendance" do
+      it "should be super early bird for 149 attendances (pending, paid or confirmed)" do
+        @attendance.event.expects(:attendances)
+                  .returns(stub(count: 149))
+
+        @attendance.registration_period.should == @super_early_bird
+      end
+      
+      it "should regular early bird after 150 attendances" do
+        @attendance.event.expects(:attendances)
+                  .returns(stub(count: 150))
+
+        @attendance.registration_period.should == @early_bird
+      end
+    end
+
+    context "saved attendance" do
+      before do
+        @attendance.stubs(:new_record?).returns(false)
+      end
+
+      it "should be 250 for 149 attendances before this one (pending, paid or confirmed)" do
+        @attendance.id = 149
+
+        @attendance.event.expects(:attendances)
+                  .returns(stub(where: stub(count: 149)))
+
+        @attendance.registration_period.should == @super_early_bird
+      end
+      
+      it "should be 399 after 150 attendances" do
+        @attendance.id = 150
+
+        @attendance.event.expects(:attendances)
+                  .returns(stub(where: stub(count: 150)))
+
+        @attendance.registration_period.should == @early_bird
+      end
+    end
+  end
+
   context "state machine" do
     it "should start pending"
     it "should move to paid upon payment"

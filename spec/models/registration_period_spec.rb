@@ -61,29 +61,6 @@ describe RegistrationPeriod do
         lambda { @last_minute.price_for_registration_type(nil) }.should raise_error(InvalidPrice)
       end
     end
-
-    context "super_early_bird prices by registration limits" do
-      before do
-        @type = RegistrationType.find_by_title('registration_type.individual')
-        @super_early = RegistrationPeriod.find_by_title('registration_period.super_early_bird')
-      end
-
-      it "should be 250 for 149 attendances (pending, paid or confirmed)" do
-        Attendance.expects(:where)
-                  .with(event_id: @super_early.event_id)
-                  .returns([1] * 149)
-
-        @super_early.price_for_registration_type(@type).should == 250
-      end
-      
-      it "should be 399 after 150 attendances" do
-        Attendance.expects(:where)
-                  .with(event_id: @super_early.event_id)
-                  .returns([1] * 150)
-
-        @super_early.price_for_registration_type(@type).should == 399
-      end
-    end
   end
   
   context "appropriate period" do

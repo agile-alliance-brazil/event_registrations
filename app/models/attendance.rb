@@ -1,5 +1,7 @@
 # encoding: UTF-8
 class Attendance < ActiveRecord::Base
+  SUPER_EARLY_LIMIT = 150
+
   belongs_to :event
   belongs_to :user
   belongs_to :registration_type
@@ -60,7 +62,11 @@ class Attendance < ActiveRecord::Base
   end
 
   def registration_period
-    RegistrationPeriod.for(self.registration_date).first
+    period = RegistrationPeriod.for(self.registration_date).first
+    if period.super_early_bird? && !entitled_super_early_bird?
+      period = RegistrationPeriod.for(period.end_at + 1.day).first
+    end
+    period
   end
 
   def registration_fee
@@ -81,5 +87,14 @@ class Attendance < ActiveRecord::Base
 
   def in_brazil?
     self.country == "BR"
+  end
+
+  private
+  def entitled_super_early_bird?
+    attendances = event.attendances
+    if !new_record?
+      attendances = attendances.where('id < ?', id)
+    end
+    attendances.count < SUPER_EARLY_LIMIT
   end
 end

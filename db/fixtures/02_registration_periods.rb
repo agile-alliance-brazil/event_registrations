@@ -4,7 +4,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 1
   period.title = 'registration_period.super_early_bird'
   period.start_at = Time.zone.local(2013, 2, 1)
-  period.end_at = Time.zone.local(2013, 3, 31).end_of_day
+  period.end_at = Time.zone.local(2013, 3, 26).end_of_day
 end
 
 RegistrationPeriod.seed do |period|

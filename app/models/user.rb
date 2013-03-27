@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   end
 
   def self.new_from_auth_hash(hash)
-    names = hash[:info][:name].split(" ")
+    names = (hash[:info][:name] || "#{hash[:info][:first_name]} #{hash[:info][:last_name]}").split(" ")
     user = User.new(first_name: names[0],
       last_name: names[-1],
       email: hash[:info][:email])

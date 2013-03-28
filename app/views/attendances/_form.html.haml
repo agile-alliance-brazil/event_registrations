@@ -79,6 +79,9 @@
     } else if (checked_type.val() == 3) {
       $("#attendance_organization_input").find('label abbr').hide();
       price = "#{number_to_currency(attendance_price(@attendance, RegistrationType.find(3)), :locale => :pt)}";
+    } else if (checked_type.val() == 4) {
+      $("#attendance_organization_input").find('label abbr').hide();
+      price = "#{number_to_currency(attendance_price(@attendance, RegistrationType.find(4)), :locale => :pt)}";
     }
     
     $("td#registration_price").text(price);

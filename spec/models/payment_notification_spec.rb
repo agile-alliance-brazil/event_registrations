@@ -113,6 +113,11 @@ describe PaymentNotification do
     it "should scope bcash" do
       PaymentNotification.bcash.should == [@bcash]
     end
+    it "should scope completed notifications" do
+      @paypal.status = 'Failed'
+      @paypal.save
+      PaymentNotification.completed.should == [@bcash]
+    end
   end
 
   it "should translate params from paypal into attributes" do

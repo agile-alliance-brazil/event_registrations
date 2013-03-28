@@ -30,6 +30,7 @@ class PaymentNotification < ActiveRecord::Base
 
   scope :paypal, lambda { where('params LIKE ?', '%type: paypal%')}
   scope :bcash, lambda { where('params LIKE ?', '%type: bcash%')}
+  scope :completed, lambda { where('status = ?', 'Completed')}
 
   private
   def mark_invoicer_as_paid

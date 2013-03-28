@@ -148,6 +148,7 @@ en:
     group: "Company"
     individual: "Individual"
     free: "Free"
+    manual: "Manual"
 
   registration:
     quantity: "Quantity"

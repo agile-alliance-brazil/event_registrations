@@ -68,6 +68,7 @@ class AttendancesController < InheritedResources::Base
   def valid_registration_types
     registration_types = RegistrationType.without_free.without_group.all
     registration_types << RegistrationType.find_by_title('registration_type.free') if allowed_free_registration?
+    registration_types << RegistrationType.find_by_title('registration_type.manual') if current_user.organizer?
     registration_types
   end
     

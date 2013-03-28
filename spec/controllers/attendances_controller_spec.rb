@@ -48,7 +48,8 @@ describe AttendancesController do
         get :new, :event_id => @event.id
         assigns(:registration_types).should include(RegistrationType.find_by_title('registration_type.individual'))
         assigns(:registration_types).should include(RegistrationType.find_by_title('registration_type.free'))
-        assigns(:registration_types).size.should == 2
+        assigns(:registration_types).should include(RegistrationType.find_by_title('registration_type.manual'))
+        assigns(:registration_types).size.should == 3
       end
     end
 

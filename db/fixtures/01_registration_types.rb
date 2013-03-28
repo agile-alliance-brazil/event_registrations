@@ -16,3 +16,9 @@ RegistrationType.seed do |registration_type|
   registration_type.id = 3
   registration_type.title = 'registration_type.free'
 end
+
+RegistrationType.seed do |registration_type|
+  registration_type.event_id = 1
+  registration_type.id = 4
+  registration_type.title = 'registration_type.manual'
+end

@@ -288,6 +288,7 @@ pt:
     group: "Empresa"
     individual: "Individual"
     free: "Gratuita"
+    manual: "Manual"
 
   registration:
     quantity: "Quantidade"

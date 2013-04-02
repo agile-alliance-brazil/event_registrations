@@ -114,6 +114,24 @@ describe AttendancesController do
       assigns(:attendance).event.should == @event
     end
 
+    it "should notify airbrake if cannot send email" do
+      Attendance.any_instance.stubs(:valid?).returns(true)
+      exception = StandardError.new
+      EmailNotifications.expects(:registration_pending).raises(exception)
+      controller.expects(:notify_airbrake).with(exception)
+      post :create, :event_id => @event.id
+      assigns(:attendance).event.should == @event
+    end
+
+    it "should ignore airbrake errors if cannot send email" do
+      Attendance.any_instance.stubs(:valid?).returns(true)
+      exception = StandardError.new
+      EmailNotifications.expects(:registration_pending).raises(exception)
+      controller.expects(:notify_airbrake).with(exception).raises(exception)
+      post :create, :event_id => @event.id
+      assigns(:attendance).event.should == @event
+    end
+
     describe "for individual registration" do
       context "cannot add more attendances" do
         before do

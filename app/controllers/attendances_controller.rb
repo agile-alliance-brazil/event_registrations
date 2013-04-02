@@ -21,7 +21,7 @@ class AttendancesController < InheritedResources::Base
           @attendance.email_sent = true
           @attendance.save
         rescue => ex
-          notify_airbrake(ex)
+          notify_or_log(ex)
           flash[:alert] = t('flash.attendance.mail.fail')
         end
         redirect_to attendance_status_path(@attendance)
@@ -116,5 +116,14 @@ class AttendancesController < InheritedResources::Base
 
   def set_event
     @event ||= Event.find_by_id(params[:event_id])
+  end
+
+  def notify_or_log(ex)
+    begin
+      notify_airbrake(ex)
+    rescue
+      Rails.logger.error('Airbrake notification failed. Logging error locally only')
+      Rails.logger.error(ex.message)
+    end
   end
 end

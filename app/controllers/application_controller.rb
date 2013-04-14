@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    Rails.logger.info "User (#{current_user.id}) is organizer? #{current_user.organizer?}"
     @current_ability ||= Ability.new(current_user, @event)
   end
 

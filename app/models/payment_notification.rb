@@ -7,7 +7,7 @@ class PaymentNotification < ActiveRecord::Base
 
   attr_accessible :params, :invoicer_id, :status, :transaction_id, :notes
   
-  after_create :mark_invoicer_as_paid
+  after_create :mark_invoicer_as_paid, :if => Proc.new {|n| n.status == "Completed"}
   
   def self.from_paypal_params(params)
     {
@@ -34,7 +34,7 @@ class PaymentNotification < ActiveRecord::Base
 
   private
   def mark_invoicer_as_paid
-    if status == "Completed" && params_valid?
+    if params_valid?
       invoicer.pay
     else
       Airbrake.notify(

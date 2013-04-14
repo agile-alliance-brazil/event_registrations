@@ -13,16 +13,21 @@ class SessionsController < ApplicationController
     auth = Authentication.find_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
     if auth
       log_in(auth.user)
-    else
-      if logged_in?
-        flash[:notice] = I18n.t('flash.user.authentication.new')
-      else
-        log_in(create_new_user)
-        flash[:notice] = I18n.t('flash.user.create')
-      end
-
+    elsif logged_in?
+      flash[:notice] = I18n.t('flash.user.authentication.new')
       self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'])
+    else
+      user = User.new_from_auth_hash(auth_hash)
+      if user.save
+        log_in(user)
+        flash[:notice] = I18n.t('flash.user.create')
+        self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'])
+      else
+        flash[:notice] = I18n.t('flash.user.invalid')
+        redirect_to(login_path) and return
+      end
     end
+
     redirect_to self.current_user
   end
 
@@ -57,10 +62,6 @@ class SessionsController < ApplicationController
   end
 
   def create_new_user
-    user = User.new_from_auth_hash(auth_hash)
-    user.twitter_user = auth_hash['info']['nickname'] if auth_hash['provider'] == 'twitter'
-    user.save!
-    user
   end
 
   def auth_hash

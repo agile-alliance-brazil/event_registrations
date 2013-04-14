@@ -51,6 +51,7 @@ class User < ActiveRecord::Base
     user = User.new(first_name: names[0],
       last_name: names[-1],
       email: hash[:info][:email])
+    user.twitter_user = hash[:info][:nickname] if hash[:provider] == 'twitter'
     user
   end
 

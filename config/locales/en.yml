@@ -126,6 +126,7 @@ en:
       new: "Some information is missing that stops your user from being saved. Fill in the missing data below to complete your account creation."
       create: "This seems to be your first access to the system. Complete your informations below to activate your account."
       failure: "Failed to authenticate your user. Please try again later or use another system."
+      invalid: "The provider you chose could not inform us of your name. Please fill in this information with them and try to log in again."
 
   email:
     registration_pending:

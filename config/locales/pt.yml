@@ -266,6 +266,7 @@ pt:
       new: "Faltam algumas informações para salvar seu usuário. Complete as informações abaixo para completar a criação de sua conta."
       create: "Este parece ser seu primeiro acesso ao sistema. Complete suas informações abaixo para ativar sua conta."
       failure: "Não foi possível autenticar seu usuário. Queira, por favor, tentar novamente mais tarde ou utilize outro serviço."
+      invalid: "O serviço escolhido para autenticação não pôde nos informar seu nome. Por favor, preencha esta informação no serviço escolhido e tente autenticar-se novamente."
 
   email:
     registration_pending:

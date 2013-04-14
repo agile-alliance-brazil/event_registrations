@@ -119,7 +119,7 @@ describe User do
   context "new from auth hash" do
     it "should initialize user with names and email" do
       hash = {info: {name: "John Doe", email: "john@doe.com"}}
-      user=User.new_from_auth_hash(hash)
+      user = User.new_from_auth_hash(hash)
       user.first_name.should == "John"
       user.last_name.should == "Doe"
       user.email.should == "john@doe.com"
@@ -127,10 +127,16 @@ describe User do
 
     it "should work without name and email" do
       hash = {info: {email: "john@doe.com"}}
-      user=User.new_from_auth_hash(hash)
+      user = User.new_from_auth_hash(hash)
       user.first_name.should be_nil
       user.last_name.should be_nil
       user.email.should == "john@doe.com"
+    end
+
+    it "should assign twitter_user if using twitter as provider" do
+      hash = {info: {name: "John Doe", email: "john@doe.com", nickname: "johndoe"}, provider: 'twitter'}
+      user = User.new_from_auth_hash(hash)
+      user.twitter_user.should == "johndoe"
     end
   end
 end

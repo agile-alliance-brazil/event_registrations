@@ -4,6 +4,9 @@ FactoryGirl.define do
   factory :event do
     sequence(:year) {|n| 2000 + n }
     name {|e| "Agile Brazil #{e.year}"}
+
+    registration_types
+    registration_periods
   end
 
   factory :attendance do
@@ -26,8 +29,8 @@ FactoryGirl.define do
     neighbourhood {|a| a.user.neighbourhood }
     zipcode {|a| a.user.zipcode }
 
-    registration_type { RegistrationType.find_by_title('registration_type.individual') }
-    registration_date { RegistrationPeriod.find_by_title('registration_period.regular').start_at }
+    registration_type { |a| a.event.registration_types.find_by_title('registration_type.individual') }
+    registration_date { |a| a.event.registration_periods.find_by_title('registration_period.regular').start_at }
   end
 
   factory :registration_group do

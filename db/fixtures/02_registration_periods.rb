@@ -38,3 +38,27 @@ RegistrationPeriod.seed do |period|
   period.start_at = Time.zone.local(2013, 6, 17)
   period.end_at = Time.zone.local(2013, 6, 28).end_of_day
 end
+
+RegistrationPeriod.seed do |period|
+  period.id = 6
+  period.event_id = 2
+  period.title = 'registration_period.super_early_bird'
+  period.start_at = Time.zone.local(2013, 4, 16)
+  period.end_at = Time.zone.local(2013, 4, 13).end_of_day
+end
+
+RegistrationPeriod.seed do |period|
+  period.id = 7
+  period.event_id = 2
+  period.title = 'registration_period.early_bird'
+  period.start_at = Time.zone.local(2013, 4, 14)
+  period.end_at = Time.zone.local(2013, 4, 19).end_of_day
+end
+
+RegistrationPeriod.seed do |period|
+  period.id = 8
+  period.event_id = 2
+  period.title = 'registration_period.regular'
+  period.start_at = Time.zone.local(2013, 4, 20)
+  period.end_at = Time.zone.local(2013, 4, 25).end_of_day
+end

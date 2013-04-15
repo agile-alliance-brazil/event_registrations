@@ -22,3 +22,15 @@ RegistrationType.seed do |registration_type|
   registration_type.id = 4
   registration_type.title = 'registration_type.manual'
 end
+
+RegistrationType.seed do |registration_type|
+  registration_type.event_id = 2
+  registration_type.id = 5
+  registration_type.title = 'registration_type.individual'
+end
+
+RegistrationType.seed do |registration_type|
+  registration_type.event_id = 2
+  registration_type.id = 6
+  registration_type.title = 'registration_type.manual'
+end

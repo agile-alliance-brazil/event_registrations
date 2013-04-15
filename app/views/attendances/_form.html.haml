@@ -68,20 +68,12 @@
       return;
     }
   
-    var price = "#{number_to_currency(0, :locale => :pt)}";
-    if (checked_type.val() == 1) {
+    var prices = #{attendance_prices(@attendance).to_json};
+    var price = prices[checked_type.val()];
+    if (checked_type.val() == #{@event.registration_types.find_by_title('registration_type.individual').try(:id) || 0}) {
       $("#attendance_organization_input").find('label abbr').show();
-      price = "#{number_to_currency(attendance_price(@attendance, RegistrationType.find(1)), :locale => :pt)}";
-    } else if (checked_type.val() == 2) {
+    } else {
       $("#attendance_organization_input").find('label abbr').hide();
-      price = "#{number_to_currency(attendance_price(@attendance, RegistrationType.find(2)), :locale => :pt)}";
-      $("#attendance_registration_type_id_input input:radio").attr('disabled', 'disabled');
-    } else if (checked_type.val() == 3) {
-      $("#attendance_organization_input").find('label abbr').hide();
-      price = "#{number_to_currency(attendance_price(@attendance, RegistrationType.find(3)), :locale => :pt)}";
-    } else if (checked_type.val() == 4) {
-      $("#attendance_organization_input").find('label abbr').hide();
-      price = "#{number_to_currency(attendance_price(@attendance, RegistrationType.find(4)), :locale => :pt)}";
     }
     
     $("td#registration_price").text(price);

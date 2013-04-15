@@ -4,6 +4,7 @@ class AttendancesController < InheritedResources::Base
 
   actions :new, :create, :index
   
+  before_filter :set_event
   before_filter :load_registration_types
   before_filter :validate_free_registration, :only => [:create]
   
@@ -66,10 +67,10 @@ class AttendancesController < InheritedResources::Base
   end
 
   def valid_registration_types
-    registration_types = RegistrationType.without_free.without_group.all
-    registration_types << RegistrationType.find_by_title('registration_type.free') if allowed_free_registration?
-    registration_types << RegistrationType.find_by_title('registration_type.manual') if current_user.organizer?
-    registration_types
+    registration_types = @event.registration_types.without_free.without_group.all
+    registration_types << @event.registration_types.find_by_title('registration_type.free') if allowed_free_registration?
+    registration_types << @event.registration_types.find_by_title('registration_type.manual') if current_user.organizer?
+    registration_types.compact
   end
     
   def validate_free_registration
@@ -82,10 +83,14 @@ class AttendancesController < InheritedResources::Base
   end
   
   def is_free?(attendance)
-    attendance.registration_type == RegistrationType.find_by_title('registration_type.free')
+    attendance.registration_type == @event.registration_types.find_by_title('registration_type.free')
   end
   
   def allowed_free_registration?
     (current_user.has_approved_session?(@event) || current_user.organizer?) && !parent?
+  end
+
+  def set_event
+    @event ||= Event.find_by_id(params[:event_id])
   end
 end

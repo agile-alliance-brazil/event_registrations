@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_locale
   before_filter :set_timezone
-  before_filter :set_event
   before_filter :authenticate_user!
   before_filter :authorize_action
 
@@ -32,10 +31,6 @@ class ApplicationController < ActionController::Base
   def current_user= user
     session[:user_id] = user.try(:id)
     @current_user= user
-  end
-
-  def set_event
-    @event ||= Event.find_by_year(params[:year]) || Event.current
   end
 
   def default_url_options(options={})

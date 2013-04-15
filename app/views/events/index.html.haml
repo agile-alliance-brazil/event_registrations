@@ -1,5 +1,6 @@
-- eligible_events = @events.select{|event| event.registration_periods.for(Time.now).present?}
+- eligible_events = @events.select{|event| event.registration_periods.ending_after(Time.now).present?}
 - if eligible_events.empty?
   = t('event.no_upcoming')
 - else
+  %h3= t('title.events')
   = render :partial => 'event', :collection => eligible_events

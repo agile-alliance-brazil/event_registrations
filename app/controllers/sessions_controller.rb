@@ -1,6 +1,5 @@
 # encoding: UTF-8
 class SessionsController < ApplicationController
-  skip_before_filter :set_event
   skip_before_filter :authenticate_user!
   skip_before_filter :authorize_action
 

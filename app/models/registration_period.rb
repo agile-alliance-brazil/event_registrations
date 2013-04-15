@@ -5,6 +5,7 @@ class RegistrationPeriod < ActiveRecord::Base
   attr_accessible :end_at
   
   scope :for, lambda { |datetime| where('? BETWEEN start_at AND end_at', datetime).order('id desc') }
+  scope :ending_after, lambda { |datetime| where('? < end_at', datetime).order('id desc') }
 
   def price_for_registration_type(registration_type)
     prices_for(registration_type).first.value

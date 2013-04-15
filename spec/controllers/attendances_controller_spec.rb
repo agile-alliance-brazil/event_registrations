@@ -30,7 +30,7 @@ describe AttendancesController do
     describe "for individual registration" do
       it "should load registration types without groups or free" do
         get :new, :event_id => @event.id
-        assigns(:registration_types).should include(RegistrationType.find_by_title('registration_type.individual'))
+        assigns(:registration_types).should include(@event.registration_types.find_by_title('registration_type.individual'))
         assigns(:registration_types).size.should == 1
       end
     end

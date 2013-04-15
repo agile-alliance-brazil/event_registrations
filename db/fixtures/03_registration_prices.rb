@@ -138,3 +138,45 @@ RegistrationPrice.seed do |registration_price|
   registration_price.registration_period_id = 5
   registration_price.value = 0.00
 end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 21
+  registration_price.registration_type_id = 5
+  registration_price.registration_period_id = 6
+  registration_price.value = 395.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 22
+  registration_price.registration_type_id = 5
+  registration_price.registration_period_id = 7
+  registration_price.value = 553.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 23
+  registration_price.registration_type_id = 5
+  registration_price.registration_period_id = 8
+  registration_price.value = 711.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 24
+  registration_price.registration_type_id = 6
+  registration_price.registration_period_id = 6
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 25
+  registration_price.registration_type_id = 6
+  registration_price.registration_period_id = 7
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 26
+  registration_price.registration_type_id = 6
+  registration_price.registration_period_id = 8
+  registration_price.value = 0.00
+end

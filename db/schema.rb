@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130328055205) do
+ActiveRecord::Schema.define(:version => 20130416035732) do
 
   create_table "attendances", :force => true do |t|
     t.integer  "event_id"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20130328055205) do
     t.string   "location_and_date"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "price_table_link"
   end
 
   create_table "payment_notifications", :force => true do |t|

@@ -4,6 +4,7 @@ FactoryGirl.define do
   factory :event do
     sequence(:year) {|n| 2000 + n }
     name {|e| "Agile Brazil #{e.year}"}
+    price_table_link "http://localhost:9292/link"
 
     after(:build) do |event|
       event.registration_types << FactoryGirl.build(:registration_type, :event => event)

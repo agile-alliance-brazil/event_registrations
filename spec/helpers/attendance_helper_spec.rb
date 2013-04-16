@@ -11,4 +11,24 @@ describe AttendanceHelper do
       attendance_price(attendance, individual).should == 250
     end
   end
+
+  describe "price_table_link" do
+    it "should show pure link if no locale information in the link" do
+      event = FactoryGirl.build(:event)
+      price_table_link(event, :pt).should == event.price_table_link
+      price_table_link(event, :en).should == event.price_table_link
+    end
+
+    it "should replace :locale placeholder in the link if present" do
+      event = FactoryGirl.build(:event, price_table_link: 'http://localhost:9292/testing/:locale/works')
+      price_table_link(event, :pt).should == 'http://localhost:9292/testing/pt/works'
+      price_table_link(event, :en).should == 'http://localhost:9292/testing/en/works'
+    end
+
+    it "should works as a query param as well" do
+      event = FactoryGirl.build(:event, price_table_link: 'http://localhost:9292/testing?locale=:locale')
+      price_table_link(event, :pt).should == 'http://localhost:9292/testing?locale=pt'
+      price_table_link(event, :en).should == 'http://localhost:9292/testing?locale=en'
+    end
+  end
 end

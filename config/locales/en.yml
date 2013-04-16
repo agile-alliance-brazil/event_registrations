@@ -61,7 +61,7 @@ en:
         notes: "Notes"
     hints:
       attendance:
-        registration_type_id: "Indicate whether your registration type."
+        registration_type_id: "Indicate your registration type."
         badge_name: "The name you want to print in your badge. If blank, your full name will be used instead."
         organization: "Name of the organization you represent or institution where you study. This information will appear in your badge."
         cpf: "Leave blank if you are not Brazilian."

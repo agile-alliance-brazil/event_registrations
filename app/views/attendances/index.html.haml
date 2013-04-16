@@ -18,7 +18,7 @@
     %th= t('formtastic.labels.attendee.total')
     %th= t('registration.quantity')
     %th= t('formtastic.labels.attendee.total')
-  - RegistrationType.all.each do |registration_type|
+  - @event.registration_types.each do |registration_type|
     - attendees_for_type = @attendances.for_registration_type(registration_type)
     %tr
       %td= t(registration_type.title)

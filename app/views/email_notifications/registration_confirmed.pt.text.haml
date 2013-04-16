@@ -1,7 +1,7 @@
 Car#{@attendance.male? ? 'o' : 'a'} #{h(@attendance.full_name)},
 
 
-Sua inscrição de tipo <strong>#{I18n.t(@attendance.registration_type.title)}</strong> no valor de #{number_to_currency(@attendance.base_price, :locale => :pt)} na #{@attendance.event.name} foi confirmada.
+Sua inscrição de tipo <strong>#{I18n.t(@attendance.registration_type.title)}</strong> no valor de #{number_to_currency(@attendance.registration_fee, :locale => :pt)} na #{@attendance.event.name} foi confirmada.
 
 
 Por favor, procure a secretaria do evento a partir de 27/6 às 7h para o seu credenciamento, na Fábrica de Negócios, Av. Monsenhor Tabosa, 740, Praia de Iracema, entrada pela Rua João Cordeiro, em Fortaleza, Ceará.

@@ -4,7 +4,7 @@ Olá #{h(@group.contact_name)},
 A inscrição do grupo #{h(@group.name)} na #{@event_name} dos #{@group.total_attendees} participantes abaixo, no valor total de #{number_to_currency(@group.registration_fee, :locale => :pt)}, foi realizada com sucesso:
 
 - @group.attendees.each do |attendee|
-  #{"-"} #{h(attendee.full_name)} no valor de #{number_to_currency(attendee.base_price, :locale => :pt)}
+  #{"-"} #{h(attendee.full_name)} no valor de #{number_to_currency(attendee.registration_fee, :locale => :pt)}
 
 
 Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:

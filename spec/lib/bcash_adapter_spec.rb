@@ -3,17 +3,19 @@ require 'spec_helper'
 require File.join(Rails.root, '/lib/bcash_adapter.rb')
 
 describe BcashAdapter do
-  describe "from_attendance" do
-    before(:each) do
-      @attendance ||= FactoryGirl.create(:attendance, :registration_date => Time.zone.local(2013, 5, 1))
-    end
+  before(:each) do
+    event = FactoryGirl.create(:event)
+    @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
+    @attendance.stubs(:registration_fee).returns(399)
+  end
 
+  describe "from_attendance" do
     it "should add item for base registration price" do
       I18n.with_locale(:en) do
         adapter = BcashAdapter.from_attendance(@attendance)
 
         adapter.items.size.should == 1
-        adapter.items[0].amount.should == @attendance.base_price
+        adapter.items[0].amount.should == @attendance.registration_fee
         adapter.items[0].name.should == "Type of Registration: Individual"
         adapter.items[0].quantity.should == 1
         adapter.items[0].number.should == @attendance.registration_type.id
@@ -28,11 +30,10 @@ describe BcashAdapter do
 
   describe "to_variables" do
     it "should map each item's variables" do
-      attendance = FactoryGirl.create(:attendance)
       adapter = BcashAdapter.new([
         BcashAdapter::BcashItem.new('item 1', 2, 10.50),
         BcashAdapter::BcashItem.new('item 2', 3, 9.99, 2)
-      ], attendance)
+      ], @attendance)
 
       adapter.to_variables.should include({
         'produto_valor_1' => 10.50,
@@ -47,25 +48,24 @@ describe BcashAdapter do
     end
 
     it "should add invoice id and frete and client information" do
-      attendance = FactoryGirl.create(:attendance)
       adapter = BcashAdapter.new([
         BcashAdapter::BcashItem.new('item 1', 2, 10.50),
         BcashAdapter::BcashItem.new('item 2', 3, 9.99, 2)
-      ], attendance)
+      ], @attendance)
 
       adapter.to_variables.should include({
-        'id_pedido' => attendance.id,
+        'id_pedido' => @attendance.id,
         'frete' => 0,
-        'email'    => attendance.user.email,
-        'nome'     => attendance.user.full_name,
-        'cpf'      => attendance.user.cpf,
-        'sexo'     => attendance.user.gender,
-        'cep'      => attendance.user.zipcode,
-        'telefone' => attendance.user.phone,
-        'endereco' => attendance.user.address,
-        'bairro'   => attendance.user.neighbourhood,
-        'cidade'   => attendance.user.city,
-        'estado'   => attendance.user.state,
+        'email'    => @attendance.user.email,
+        'nome'     => @attendance.user.full_name,
+        'cpf'      => @attendance.user.cpf,
+        'sexo'     => @attendance.user.gender,
+        'cep'      => @attendance.user.zipcode,
+        'telefone' => @attendance.user.phone,
+        'endereco' => @attendance.user.address,
+        'bairro'   => @attendance.user.neighbourhood,
+        'cidade'   => @attendance.user.city,
+        'estado'   => @attendance.user.state,
       })
     end
   end

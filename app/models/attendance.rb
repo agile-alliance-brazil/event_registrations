@@ -58,7 +58,8 @@ class Attendance < ActiveRecord::Base
   scope :paid, lambda { where('status IN (?)', [:paid, :confirmed])}
 
   def base_price
-    registration_period.price_for_registration_type(registration_type)
+    Rails.logger.warn('Attendance#base_price is deprecated. It was called from ' + caller[1..5].join('\n'))
+    registration_fee
   end
 
   def registration_period
@@ -69,8 +70,8 @@ class Attendance < ActiveRecord::Base
     period
   end
 
-  def registration_fee
-    base_price
+  def registration_fee(overriden_registration_type = nil)
+    registration_period.price_for_registration_type(overriden_registration_type || registration_type)
   end
 
   def can_cancel?

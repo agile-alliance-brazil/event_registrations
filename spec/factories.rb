@@ -5,8 +5,23 @@ FactoryGirl.define do
     sequence(:year) {|n| 2000 + n }
     name {|e| "Agile Brazil #{e.year}"}
 
-    registration_types
-    registration_periods
+    after(:build) do |event|
+      event.registration_types << FactoryGirl.build(:registration_type, :event => event)
+      event.registration_periods << FactoryGirl.build(:registration_period, :event => event)
+      event
+    end
+  end
+
+  factory :registration_type do
+    association :event
+    title 'registration_type.individual'
+  end
+
+  factory :registration_period do
+    association :event
+    title 'registration_period.regular'
+    start_at Time.zone.now
+    end_at (Time.zone.now + 1.day).end_of_day
   end
 
   factory :attendance do

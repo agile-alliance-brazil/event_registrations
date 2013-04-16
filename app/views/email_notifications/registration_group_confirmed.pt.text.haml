@@ -5,7 +5,7 @@ A inscrição da empresa <strong>#{h(@registration_group.name)}</strong> no valo
 
 
 - @registration_group.attendees.each do |attendee|
-  #{"-"} #{h(attendee.full_name)} no valor de #{number_to_currency(attendee.base_price, :locale => :pt)}
+  #{"-"} #{h(attendee.full_name)} no valor de #{number_to_currency(attendee.registration_fee, :locale => :pt)}
 
 
 Qualquer dúvida, entre em contato através do email #{mail_to AppConfig[:organizer][:contact_email]}

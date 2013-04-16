@@ -108,9 +108,11 @@ describe Attendance do
 
   context "registrarion period regarding super_early_bird" do
     before do
-      @attendance = FactoryGirl.build(:attendance, registration_date: Time.zone.local(2013, 03, 21))
-      @super_early_bird = RegistrationPeriod.find_by_title('registration_period.super_early_bird')
-      @early_bird = RegistrationPeriod.find_by_title('registration_period.early_bird')
+      @attendance = FactoryGirl.build(:attendance)
+      @period = RegistrationPeriod.new
+      @period.end_at = Time.zone.local(2000, 1, 1)
+      @period.stubs(:super_early_bird?).returns(true)
+      @attendance.event.registration_periods.expects(:for).with(@attendance.registration_date).returns([@period])
     end
 
     context "unsaved attendance" do
@@ -118,14 +120,15 @@ describe Attendance do
         @attendance.event.expects(:attendances)
                   .returns(stub(count: 149))
 
-        @attendance.registration_period.should == @super_early_bird
+        @attendance.registration_period.should == @period
       end
       
       it "should regular early bird after 150 attendances" do
         @attendance.event.expects(:attendances)
                   .returns(stub(count: 150))
+        @attendance.event.registration_periods.expects(:for).with(@period.end_at + 1.day).returns([])
 
-        @attendance.registration_period.should == @early_bird
+        @attendance.registration_period.should_not == @period
       end
     end
 
@@ -140,7 +143,7 @@ describe Attendance do
         @attendance.event.expects(:attendances)
                   .returns(stub(where: stub(count: 149)))
 
-        @attendance.registration_period.should == @super_early_bird
+        @attendance.registration_period.should == @period
       end
       
       it "should be 399 after 150 attendances" do
@@ -148,8 +151,9 @@ describe Attendance do
 
         @attendance.event.expects(:attendances)
                   .returns(stub(where: stub(count: 150)))
+        @attendance.event.registration_periods.expects(:for).with(@period.end_at + 1.day).returns([])
 
-        @attendance.registration_period.should == @early_bird
+        @attendance.registration_period.should_not == @period
       end
     end
   end

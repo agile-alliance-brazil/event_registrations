@@ -5,6 +5,7 @@ describe PaymentNotificationsController do
   describe "POST create" do
     before do
       @attendance = FactoryGirl.create(:attendance)
+      Attendance.any_instance.stubs(:registration_fee).returns(399)
     end
 
     it "should create PaymentNotification with paypal type" do

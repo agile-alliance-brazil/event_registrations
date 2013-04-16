@@ -13,8 +13,10 @@ describe PaymentNotification do
   context "callbacks" do
     describe "paypal payment" do
       before(:each) do
-        @attendance = FactoryGirl.create(:attendance, registration_date: Time.zone.local(2013, 5, 1))
+        event = FactoryGirl.create(:event)
+        @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
         @attendance.should be_pending
+        @attendance.stubs(:registration_fee).returns(399)
 
         @valid_params = {
           type: 'paypal',

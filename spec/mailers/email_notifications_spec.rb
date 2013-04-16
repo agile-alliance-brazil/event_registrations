@@ -7,6 +7,7 @@ describe EmailNotifications do
     @old_locale = I18n.locale
     I18n.locale = :en
     @event = Event.current || FactoryGirl.create(:event)
+    Attendance.any_instance.stubs(:registration_fee).returns(499)
   end
 
   after do
@@ -16,7 +17,7 @@ describe EmailNotifications do
   
   context "registration pending" do
     before(:each) do
-      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 1, 12, 0, 0))
+      @attendance = FactoryGirl.create(:attendance, event: @event)
     end
     
     it "should be sent to attendee cc'ed to event organizer" do

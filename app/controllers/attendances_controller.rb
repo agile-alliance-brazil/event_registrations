@@ -44,11 +44,11 @@ class AttendancesController < InheritedResources::Base
     attributes[:event_id] = @event.id
     attributes[:user_id] = current_user.id
     if parent?
-      attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.group').id
+      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.group').id
       attributes[:organization] = parent.name
     end
     if current_user.has_approved_session?(@event)
-      attributes[:registration_type_id] = RegistrationType.find_by_title('registration_type.free').id
+      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.free').id
     end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id

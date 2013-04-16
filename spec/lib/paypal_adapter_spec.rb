@@ -5,7 +5,9 @@ require File.join(Rails.root, '/lib/paypal_adapter.rb')
 describe PaypalAdapter do
   describe "from_attendance" do
     before(:each) do
-      @attendance ||= FactoryGirl.create(:attendance, :registration_date => Time.zone.local(2013, 5, 1))
+      event = FactoryGirl.create(:event)
+      @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
+      @attendance.stubs(:registration_fee).returns(399)
     end
     
     it "should add item for base registration price" do
@@ -13,7 +15,7 @@ describe PaypalAdapter do
         adapter = PaypalAdapter.from_attendance(@attendance)
 
         adapter.items.size.should == 1
-        adapter.items[0].amount.should == @attendance.base_price
+        adapter.items[0].amount.should == @attendance.registration_fee
         adapter.items[0].name.should == "Type of Registration: Individual"
         adapter.items[0].quantity.should == 1
         adapter.items[0].number.should == @attendance.registration_type.id

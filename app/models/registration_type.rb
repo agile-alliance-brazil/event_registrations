@@ -3,11 +3,11 @@ class RegistrationType < ActiveRecord::Base
   belongs_to :event
   has_many :registration_prices
   
-  scope :without_group, where('id <> ?', 2)
-  scope :without_free, where('id <> ? AND  id <> ?', 3, 4)
+  scope :without_group, where('title != ?', 'registration_type.group')
+  scope :without_free, where('title != ? AND title != ?', 'registration_type.manual', 'registration_type.free')
   
   def price(datetime)
-    period = RegistrationPeriod.for(datetime).first
+    period = event.registration_periods.for(datetime).first
     period.price_for_registration_type(self)
   end
 end

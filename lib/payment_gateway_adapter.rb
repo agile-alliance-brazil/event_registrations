@@ -13,7 +13,7 @@ class PaymentGatewayAdapter
       [].tap do |items|
         items << item_class.send(:new, CGI.escapeHTML(registration_desc.call(attendee)),
           attendee.registration_type.id,
-          attendee.base_price
+          attendee.registration_fee
         )
       end
     end

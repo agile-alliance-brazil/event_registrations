@@ -42,23 +42,23 @@ end
 RegistrationPeriod.seed do |period|
   period.id = 6
   period.event_id = 2
-  period.title = 'registration_period.super_early_bird'
-  period.start_at = Time.zone.local(2013, 4, 16)
-  period.end_at = Time.zone.local(2013, 4, 13).end_of_day
+  period.title = 'registration_period.early_bird'
+  period.start_at = Time.zone.local(2013, 4, 14)
+  period.end_at = Time.zone.local(2013, 4, 22).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
   period.id = 7
   period.event_id = 2
-  period.title = 'registration_period.early_bird'
-  period.start_at = Time.zone.local(2013, 4, 14)
-  period.end_at = Time.zone.local(2013, 4, 19).end_of_day
+  period.title = 'registration_period.regular'
+  period.start_at = Time.zone.local(2013, 4, 23)
+  period.end_at = Time.zone.local(2013, 5, 6).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
   period.id = 8
   period.event_id = 2
-  period.title = 'registration_period.regular'
-  period.start_at = Time.zone.local(2013, 4, 20)
-  period.end_at = Time.zone.local(2013, 4, 25).end_of_day
+  period.title = 'registration_period.late'
+  period.start_at = Time.zone.local(2013, 5, 7)
+  period.end_at = Time.zone.local(2013, 5, 14).end_of_day
 end

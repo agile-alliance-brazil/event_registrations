@@ -1,5 +1,29 @@
 = form.inputs :user_login do
-  = form.input :default_locale, :as => :hidden
   = form.input :first_name, :required => true, :input_html => {:tabindex => autotab}
   = form.input :last_name, :required => true, :input_html => {:tabindex => autotab}
-  = form.input :email, :required => true, :input_html => {:tabindex => autotab}
+  = form.input :email, :input_html => {:tabindex => autotab}
+  = form.input :phone, :input_html => {:tabindex => autotab}
+  = form.input :country, :as => :country, :priority_countries => [:BR], :input_html => {:tabindex => autotab}
+  = form.input :state, :as => :select, :collection => ActionView::Helpers::FormOptionsHelper::ESTADOS_BRASILEIROS, :input_html => {:tabindex => autotab}
+  = form.input :city, :input_html => {:tabindex => autotab}
+  = form.input :organization, :input_html => {:tabindex => autotab}
+  = form.input :twitter_user, :input_html => {:tabindex => autotab}
+  = form.input :default_locale,:as => :select, :collection => [['Português', 'pt'], ['English', 'en']], :input_html => {:tabindex => autotab}
+
+:javascript
+  $(document).ready(function() {
+    $("#user_country").bind('updated', countryTriggered);
+    $("#user_country").bindSelectUpdated();
+
+    $("#user_country").trigger('updated');
+  })
+
+  function countryTriggered() {
+    if ($(this).val() != "BR") {
+      $('#user_state').val('').attr('disabled', 'disabled');
+      $('#user_state_input').find('label abbr').hide();
+    } else {
+      $('#user_state').removeAttr('disabled');
+      $('#user_state_input').find('label abbr').show();
+    }
+  }

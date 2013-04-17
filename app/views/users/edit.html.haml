@@ -1,7 +1,7 @@
-- title t('title.profile', :user => @user.username)
+- title t('title.profile', :username => current_user.full_name)
 .auto_focus
 
-= semantic_form_for resource, :as => resource_name, :url => user_path(resource) do |form|
+= semantic_form_for resource, :as => :user, :url => user_path(resource), :html => {:method => :put} do |form|
   = render 'form', :form => form
   = form.actions do
-    = form.action(:submit, :edit_profile, :button_html => {:tabindex => autotab})
+    = form.action :submit, :label => :edit_profile, :button_html => {:tabindex => autotab}

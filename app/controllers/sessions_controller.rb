@@ -60,9 +60,6 @@ class SessionsController < ApplicationController
     !self.current_user.nil?
   end
 
-  def create_new_user
-  end
-
   def auth_hash
     request.env['omniauth.auth']
   end

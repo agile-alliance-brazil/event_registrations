@@ -314,6 +314,11 @@ pt:
     list: "Serviços de autenticação registrados"
     add: "Adicione outro serviço de autenticação:"
     new: "Autentique-se por um desses serviços:"
+    providers:
+      github: "Github"
+      twitter: "Twitter"
+      facebook: "Facebook"
+      submission_system: "Sistema de Submissões"
 
   event:
     attendance:

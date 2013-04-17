@@ -138,5 +138,29 @@ describe User do
       user = User.new_from_auth_hash(hash)
       user.twitter_user.should == "johndoe"
     end
+
+    it "should work when more information is passed" do
+      hash = {info: {
+        :first_name => "John",
+        :last_name => "Doe",
+        :email => "john@doe.com",
+        :twitter_user => "@jdoe",
+        :organization => "Company",
+        :phone => "12342",
+        :country => "BR",
+        :state => "SP",
+        :city => "São Paulo"
+      }}
+      user = User.new_from_auth_hash(hash)
+      user.first_name.should == "John"
+      user.last_name.should == "Doe"
+      user.email.should == "john@doe.com"
+      user.twitter_user.should == "jdoe"
+      user.organization.should == "Company"
+      user.phone.should == "12342"
+      user.country.should == "BR"
+      user.state.should == "SP"
+      user.city.should == "São Paulo"
+    end
   end
 end

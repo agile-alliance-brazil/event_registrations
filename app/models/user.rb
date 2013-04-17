@@ -47,12 +47,18 @@ class User < ActiveRecord::Base
   end
 
   def self.new_from_auth_hash(hash)
-    names = (hash[:info][:name] || "#{hash[:info][:first_name]} #{hash[:info][:last_name]}").split(" ")
-    user = User.new(first_name: names[0],
-      last_name: names[-1],
-      email: hash[:info][:email])
-    user.twitter_user = hash[:info][:nickname] if hash[:provider] == 'twitter'
-    user
+    User.new.tap do |user|
+      names = hash[:info][:name].split(" ")
+      user.first_name = hash[:info][:first_name] || names[0]
+      user.last_name = hash[:info][:last_name] || names[-1]
+      user.email = hash[:info][:email]
+      user.twitter_user = hash[:provider] == 'twitter' ? hash[:info][:nickname] : hash[:info][:twitter_user]
+      user.organization = hash[:info][:organization]
+      user.phone = hash[:info][:phone]
+      user.country = hash[:info][:country]
+      user.state = hash[:info][:state]
+      user.city = hash[:info][:city]
+    end
   end
 
   def attendance_attributes

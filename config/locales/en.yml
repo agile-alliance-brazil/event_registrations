@@ -122,6 +122,9 @@ en:
       news: "<a href='/registration_groups/new?locale=en'>Click here</a> for company registration."
       mail:
         fail: "There was a problem while sending your confirmation email. Your registration was received but we could not deliver the confirmation email. We will try later but if you do not receive it in 24 hours, please contact us at contato@agilebrazil.com."
+      enable_voting:
+        missing_authentication: "Submission system is not registered as an authentication service. Add the service below and try again."
+        success: "Access granted to start voting. Click <a href='%{url}' target='blank'>here</a> to vote on your favorite sessions."
     registration:
       attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
     registered_attendances:
@@ -197,6 +200,7 @@ en:
       list: "Event registrations"
       add: "Add Registration to %{name}"
       summary: "Check the registration summary for %{name}"
+      enable_voting: "Enable voting"
 
   generic:
     or: "or"

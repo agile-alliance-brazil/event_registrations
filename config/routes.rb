@@ -8,7 +8,10 @@ Current::Application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   resources :events, only: [:index, :show] do
-    resources :attendances, only: [:new, :create, :index]
+    resources :attendances, only: [:new, :create, :index] do
+      post :enable_voting, on: :member
+      get :voting_instructions, on: :member
+    end
   end
 
   resources :attendance_statuses, only: :show

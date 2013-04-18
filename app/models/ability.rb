@@ -25,6 +25,7 @@ class Ability
     can(:show, Attendance) do |attendance|
       attendance.user == @user
     end
+    can([:enable_voting, :voting_instructions], Attendance, :user_id => @user.id)
     can do |action, subject_class, subject|
       expand_actions([:create]).include?(action) && [Attendance].include?(subject_class) &&
       Time.zone.now <= REGISTRATION_DEADLINE

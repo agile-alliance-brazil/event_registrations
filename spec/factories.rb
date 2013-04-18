@@ -93,4 +93,10 @@ FactoryGirl.define do
     neighbourhood "Vila Perdida"
     zipcode "12345000"
   end
+
+  factory :authentication do
+    user
+    uid { |a| a.user.id }
+    provider "twitter"
+  end
 end

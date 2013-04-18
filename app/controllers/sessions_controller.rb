@@ -14,13 +14,13 @@ class SessionsController < ApplicationController
       log_in(auth.user)
     elsif logged_in?
       flash[:notice] = I18n.t('flash.user.authentication.new')
-      self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'])
+      self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'], :refresh_token => auth_hash['credentials']['refresh_token'])
     else
       user = User.new_from_auth_hash(auth_hash)
       if user.save
         log_in(user)
         flash[:notice] = I18n.t('flash.user.create')
-        self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'])
+        self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'], :refresh_token => auth_hash['credentials']['refresh_token'])
       else
         flash[:notice] = I18n.t('flash.user.invalid')
         redirect_to(login_path) and return
@@ -58,9 +58,6 @@ class SessionsController < ApplicationController
 
   def logged_in?
     !self.current_user.nil?
-  end
-
-  def create_new_user
   end
 
   def auth_hash

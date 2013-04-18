@@ -106,7 +106,7 @@ describe Attendance do
     end
   end
 
-  context "registrarion period regarding super_early_bird" do
+  context "registration period regarding super_early_bird" do
     before do
       @attendance = FactoryGirl.build(:attendance)
       @period = RegistrationPeriod.new
@@ -155,6 +155,27 @@ describe Attendance do
 
         @attendance.registration_period.should_not == @period
       end
+    end
+  end
+
+  describe "can_vote?" do
+    let(:attendance) { FactoryGirl.build(:attendance) }
+
+    it "should be true if attendance confirmed" do
+      attendance.should_not be_can_vote
+      attendance.confirm
+      attendance.should_not be_can_vote
+    end
+
+    it "should be true if any registration period allows voting" do
+      period = FactoryGirl.build(:registration_period)
+      period.expects(:allow_voting?).twice.returns(false, true)
+
+      attendance.event.registration_periods.stubs(:for).returns([period])
+      attendance.confirm
+
+      attendance.should_not be_can_vote
+      attendance.should be_can_vote
     end
   end
 

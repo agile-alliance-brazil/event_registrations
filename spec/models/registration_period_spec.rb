@@ -71,4 +71,43 @@ describe RegistrationPeriod do
       RegistrationPeriod.for(@last_minute.end_at + 1.second).first.should be_nil
     end
   end
+
+  describe "boolean tests" do
+    subject { FactoryGirl.build(:registration_period) }
+
+    it { should_not be_super_early_bird }
+    it { should_not be_early_bird }
+    it { should_not be_allow_voting }
+
+    context "super early bird" do
+      before { subject.title = 'registration_period.super_early_bird' }
+      it { should be_super_early_bird }
+    end
+
+    context "early bird" do
+      before { subject.title = 'registration_period.early_bird' }
+      it { should be_early_bird }
+    end
+
+    context "allow voting" do
+      it "should be false when event does not allow voting" do
+        subject.event.allow_voting = false
+        subject.should_not be_allow_voting
+      end
+
+      it "should be true for super early bird" do
+        subject.event.allow_voting = true
+        subject.should_not be_allow_voting
+        subject.title = 'registration_period.super_early_bird'
+        subject.should be_allow_voting
+      end
+
+      it "should be true for early bird" do
+        subject.event.allow_voting = true
+        subject.should_not be_allow_voting
+        subject.title = 'registration_period.early_bird'
+        subject.should be_allow_voting
+      end
+    end
+  end
 end

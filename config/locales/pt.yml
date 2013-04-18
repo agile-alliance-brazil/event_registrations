@@ -199,6 +199,16 @@ pt:
         settle_amount: "Total pago"
         notes: "Notas"
       user:
+        first_name: "Nome"
+        last_name: "Sobrenome"
+        email: "Email"
+        phone: "Telefone para contato"
+        country: "País"
+        state: "Estado"
+        city: "Cidade"
+        organization: "Organização"
+        twitter_user: "Usuário no Twitter"
+        default_locale: "Idioma preferido"
     hints:
       attendance:
         registration_type_id: "Indique o tipo de sua inscrição."
@@ -209,6 +219,7 @@ pt:
         email_confirmation: "Certifique-se que o e-mail está correto pois esse será o principal canal de comunicação a respeito de sua inscrição."
         notes: "Deixe aqui qualquer anotação ou observação que considere relevante, para futura referência (por exemplo: número de confirmação do pagamento, ou alguma informação especial sobre essa inscrição)"
     actions:
+      edit_profile: "Atualizar perfil"
       new_registration: "Submeter inscrição"
       confirm_registered_attendance: "Confirmar Pagamento"
       update_pending_attendance: "Atualizar preço"
@@ -250,6 +261,9 @@ pt:
       news: "<a href='/registration_groups/new?locale=pt'>Clique aqui</a> para cadastro de empresa."
       mail:
         fail: "Ocorreu um problema para enviar o email de confirmação. Sua inscrição foi recebida mas não foi possível entregar o email de confirmação. Tentaremos mais tarde mas se não receber o email em 24 horas, entre em contato via contato@agilebrazil.com."
+      enable_voting:
+        missing_authentication: "Sistema de submissões não está registrado como um serviço de autenticação. Adicione abaixo e tente novamente."
+        success: "Acesso liberado para votação. Clique <a href='%{url}' target='blank'>aqui</a> para votar nas suas sessões preferidas."
     registration:
       attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
     registered_attendances:
@@ -314,12 +328,18 @@ pt:
     list: "Serviços de autenticação registrados"
     add: "Adicione outro serviço de autenticação:"
     new: "Autentique-se por um desses serviços:"
+    providers:
+      github: "Github"
+      twitter: "Twitter"
+      facebook: "Facebook"
+      submission_system: "Sistema de Submissões"
 
   event:
     attendance:
       list: "Inscrições em eventos"
       add: "Adicionar inscrição para %{name}"
       summary: "Veja o relatório de inscrições para %{name}"
+      enable_voting: "Habilitar votação"
 
   generic:
     or: "ou"

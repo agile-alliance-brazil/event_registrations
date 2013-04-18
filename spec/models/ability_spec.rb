@@ -53,6 +53,20 @@ describe Ability do
         @ability.should_not be_able_to(:create, Attendance)
       end
     end
+
+    it "can enable voting if when user match" do
+      attendance = FactoryGirl.build(:attendance)
+      @ability.should_not be_able_to(:enable_voting, attendance)
+      attendance.user = @user
+      @ability.should be_able_to(:enable_voting, attendance)
+    end
+
+    it "can read voting instructions when user match" do
+      attendance = FactoryGirl.build(:attendance)
+      @ability.should_not be_able_to(:voting_instructions, attendance)
+      attendance.user = @user
+      @ability.should be_able_to(:voting_instructions, attendance)
+    end
   end
   
   context "- admin" do

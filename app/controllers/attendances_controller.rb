@@ -32,6 +32,26 @@ class AttendancesController < InheritedResources::Base
   def status
     @attendance = Attendance.find(params[:id])
   end
+
+  def enable_voting
+    @attendance = Attendance.find(params[:id])
+    if @attendance.can_vote?
+      authentication = current_user.authentications.where(:provider => :submission_system).first
+      if authentication.blank?
+        flash[:error] = t('flash.attendance.enable_voting.missing_authentication')
+      else
+        token = authentication.get_token
+        result = token.post('/api/user/make_voter').parsed
+        flash[:notice] = t('flash.attendance.enable_voting.success', :url => result['vote_url']).html_safe if result['success']
+      end
+    end
+    redirect_to :back
+  end
+
+  def voting_instructions
+    @attendance = Attendance.find(params[:id])
+    @submission_system_authentication = current_user.authentications.find_by_provider('submission_system')
+  end
   
   private
   def build_resource

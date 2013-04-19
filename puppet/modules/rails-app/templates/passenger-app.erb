@@ -1,6 +1,4 @@
-<%- certificate_path = File.expand_path(File.join(@path, '..', '..', 'shared', 'certs', 'server.crt')) -%>
-<%- if File.exists?(certificate_path) -%>
-NameVirtualHost *:80
+<%- if @use_ssl -%>
 <VirtualHost *:80>
    ServerName <%= @server_name %>
    Redirect permanent / https://<%= @app_url %>
@@ -21,7 +19,7 @@ NameVirtualHost *:443
     SSLProtocol -all +TLSv1 +SSLv3
     SSLCipherSuite HIGH:MEDIUM:!aNULL:+SHA1:+MD5:+HIGH:+MEDIUM
 
-    SSLCertificateFile <%= certificate_path %>
+    SSLCertificateFile <%= File.expand_path(File.join(@path, '..', '..', 'shared', 'certs', 'server.crt')) %>
     SSLCertificateKeyFile <%= File.expand_path(File.join(@path, '..', '..', 'shared', 'certs', 'server_key.pem')) %>
 
     <%- intermediate_cert_path = File.expand_path(File.join(@path, '..', '..', 'shared', 'certs', 'server_intermediate.crt')) -%>

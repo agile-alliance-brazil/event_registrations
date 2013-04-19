@@ -5,6 +5,7 @@ node default {
 	}
 
   $app_name = "registrations"
+  $use_ssl = true
 
 	class { 'web-server': }
 	class { 'db-server': 

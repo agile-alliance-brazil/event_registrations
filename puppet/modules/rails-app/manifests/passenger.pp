@@ -9,4 +9,16 @@ class rails-app::passenger ($path = '/srv/apps/rails-app/current/public', $serve
 		ensure => "/etc/apache2/sites-available/$server_name",
 		require => File["/etc/apache2/sites-available/$server_name"],
 	}
+
+  if $use_ssl {
+    file { "/etc/apache2/mods-enabled/ssl.conf":
+      ensure => "link",
+      target => "/etc/apache2/mods-available/ssl.conf",
+    }
+
+    file { "/etc/apache2/mods-enabled/ssl.load":
+      ensure => "link",
+      target => "/etc/apache2/mods-available/ssl.load",
+    }
+  }
 }

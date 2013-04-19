@@ -1,5 +1,5 @@
-<%- certificate_path = File.join(@path, '..', '..', 'shared', 'certs', 'server.crt') -%>
-<%- if File.exists?(File.expand_path(certificate_path)) -%>
+<%- certificate_path = File.expand_path(File.join(@path, '..', '..', 'shared', 'certs', 'server.crt')) -%>
+<%- if File.exists?(certificate_path) -%>
 NameVirtualHost *:80
 <VirtualHost *:80>
    ServerName <%= @server_name %>
@@ -22,9 +22,9 @@ NameVirtualHost *:443
     SSLCipherSuite HIGH:MEDIUM:!aNULL:+SHA1:+MD5:+HIGH:+MEDIUM
 
     SSLCertificateFile <%= certificate_path %>
-    SSLCertificateKeyFile <%= File.join(@path, '..', '..', 'shared', 'certs', 'server_key.pem') %>
+    SSLCertificateKeyFile <%= File.expand_path(File.join(@path, '..', '..', 'shared', 'certs', 'server_key.pem')) %>
 
-    <%- intermediate_cert_path = File.join(@path, '..', '..', 'shared', 'certs', 'server_intermediate.crt') -%>
+    <%- intermediate_cert_path = File.expand_path(File.join(@path, '..', '..', 'shared', 'certs', 'server_intermediate.crt')) -%>
     <%- if File.exists?(intermediate_cert_path) -%>
     SSLCertificateChainFile <%= intermediate_cert_path %>
     <%- end -%>

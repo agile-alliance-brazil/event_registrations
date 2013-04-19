@@ -48,9 +48,9 @@ class User < ActiveRecord::Base
 
   def self.new_from_auth_hash(hash)
     User.new.tap do |user|
-      names = hash[:info][:name].split(" ")
-      user.first_name = hash[:info][:first_name] || names[0]
-      user.last_name = hash[:info][:last_name] || names[-1]
+      names = extract_names(hash[:info])
+      user.first_name = names[0]
+      user.last_name = names[-1]
       user.email = hash[:info][:email]
       user.twitter_user = hash[:provider] == 'twitter' ? hash[:info][:nickname] : hash[:info][:twitter_user]
       user.organization = hash[:info][:organization]
@@ -73,5 +73,14 @@ class User < ActiveRecord::Base
 
   def male?
     gender == 'M'
+  end
+
+  private
+  def self.extract_names(hash)
+    if(hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?))
+      hash[:name].split(" ")
+    else
+      [hash[:first_name], hash[:last_name]]
+    end
   end
 end

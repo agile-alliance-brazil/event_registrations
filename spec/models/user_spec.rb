@@ -133,6 +133,14 @@ describe User do
       user.email.should == "john@doe.com"
     end
 
+    it "should prefer first and last name rather than name" do
+      hash = {info: {email: "john@doe.com", name: "John of Doe", first_name: "John", last_name: "of Doe"}}
+      user = User.new_from_auth_hash(hash)
+      user.first_name.should == "John"
+      user.last_name.should == "of Doe"
+      user.email.should == "john@doe.com"
+    end
+
     it "should assign twitter_user if using twitter as provider" do
       hash = {info: {name: "John Doe", email: "john@doe.com", nickname: "johndoe"}, provider: 'twitter'}
       user = User.new_from_auth_hash(hash)

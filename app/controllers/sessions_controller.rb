@@ -11,7 +11,11 @@ class SessionsController < ApplicationController
   def create
     auth = Authentication.find_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
     if auth
-      log_in(auth.user)
+      if logged_in? && auth.user != current_user
+        flash[:error] = I18n.t('flash.user.authentication.already_in_use')
+      else
+        log_in(auth.user)
+      end
     elsif logged_in?
       flash[:notice] = I18n.t('flash.user.authentication.new')
       self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'], :refresh_token => auth_hash['credentials']['refresh_token'])
@@ -22,12 +26,13 @@ class SessionsController < ApplicationController
         flash[:notice] = I18n.t('flash.user.create')
         self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'], :refresh_token => auth_hash['credentials']['refresh_token'])
       else
-        flash[:notice] = I18n.t('flash.user.invalid')
+        flash[:error] = I18n.t('flash.user.invalid')
         redirect_to(login_path) and return
       end
     end
 
-    redirect_to self.current_user
+    origin = request.env['omniauth.origin']
+    redirect_to (origin == login_url ? self.current_user : origin)
   end
 
   def resource

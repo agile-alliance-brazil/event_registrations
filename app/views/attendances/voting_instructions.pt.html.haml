@@ -1,8 +1,8 @@
 - title "Instruções para votar no programa"
 
 %p Por ter confirmado sua inscrição "Early Bird" no #{@attendance.event.name}, você ganhou o direito de
-votar nas sessões que você quer ver no programa da conferência! As sessões mais votadas pelos
-participantes do evento terão lugar garantido no programa. Para dar o seu voto, siga as instruções
+votar nas sessões que você quer ver no programa da conferência! A sessão mais votada pelos
+participantes do evento terá lugar garantido no programa. Para dar o seu voto, siga as instruções
 abaixo:
 
 %br
@@ -15,7 +15,8 @@ abaixo:
     Você já possui conta no sistema de submissões! Pule para o passo 3
 - else
   %p
-    Clique #{link_to 'aqui', "#{AppConfig[:submission_system][:url]}users/signup?locale=pt", :target => :blank}
+    Caso você já possua uma conta de usuário no sistema de submissões, pule para o passo 2. Caso
+    contrátio, clique #{link_to 'aqui', "#{AppConfig[:submission_system][:url]}users/signup?locale=pt", :target => :blank}
     e preencha o formulário para cadastrar uma conta de usuário no sistema de submissões.
 
 %br
@@ -33,8 +34,10 @@ abaixo:
       .uid= @submission_system_authentication.uid
 
 - else
-  %p Com a conta criada, você precisa associá-la com sua inscrição para provar que já comprovou o
-  pagamento na faixa "Early Bird". Clique no botão abaixo para associar sua conta:
+  %p
+    Com uma conta de usuário criada no sistema de submissões, você precisa associá-la com sua
+    inscrição para provar que já comprovou o pagamento na faixa "Early Bird". Clique no botão abaixo
+    para associar sua conta e volte para esta página para ler as instruções dos próximos passos:
 
   = render :partial => 'shared/providers', locals: { providers: ['submission_system'] }
 
@@ -62,4 +65,4 @@ abaixo:
     %li Você pode mudar seu voto enquanto o prazo de votação não terminar
 
   %p OBS: Votar em uma sessão não garante que ela seja escolhida para o programa. A equipe de organizadores
-  irá escolher apenas as sessões que forem mais votadas.
+  irá escolher apenas a sessão mais votada.

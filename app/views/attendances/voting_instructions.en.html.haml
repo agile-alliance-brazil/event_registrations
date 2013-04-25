@@ -1,7 +1,7 @@
 - title "Instructions to vote on the program"
 
 %p By confirming your registration to #{@attendance.event.name} at the Early Bird period, you have
-the right to vote on which sessions you want to see in the conference program! The sessions that have
+the right to vote on which sessions you want to see in the conference program! The session with
 the most number of votes by participants will have a guaranteed spot in the program. To vote, follow
 the instructions below:
 
@@ -15,7 +15,8 @@ the instructions below:
     You already have a user registered at the submissions system! Skip to step 3
 - else
   %p
-    Click #{link_to 'here', "#{AppConfig[:submission_system][:url]}users/signup?locale=en", :target => :blank}
+    If you already have an account in the submissions system, you can skip to step 2.
+    Otherwise, click #{link_to 'here', "#{AppConfig[:submission_system][:url]}users/signup?locale=en", :target => :blank}
     and fill out the form to register a new user account in the submissions system.
 
 %br
@@ -33,9 +34,10 @@ the instructions below:
       .uid= @submission_system_authentication.uid
 
 - else
-  %p After creating your account, you have to link it with your registration to prove that you have
-  already confirmed and paid for the Early Bird registration. Click the button below to link the
-  accounts:
+  %p
+    Now that you have a valid submission system account, you have to link it with your registration
+    to prove that you have already confirmed and paid for the Early Bird registration. Click the button
+    below to link the accounts and come back to this page to see the next steps instructions:
 
   = render :partial => 'shared/providers', locals: { providers: ['submission_system'] }
 
@@ -64,4 +66,4 @@ the instructions below:
     %li You can change your vote before the voting deadline
 
   %p OBS: Voting for a session does not guarantee that it will be chosen to be part of the conference program.
-  The program organizers will choose only the sessions that receive the most number of votes.
+  The program organizers will choose only the session that receive the most number of votes.

@@ -1,9 +1,10 @@
 - title "Instruções para votar no programa"
 
-%p Por ter confirmado sua inscrição "Early Bird" no #{@attendance.event.name}, você ganhou o direito de
-votar nas sessões que você quer ver no programa da conferência! A sessão mais votada pelos
-participantes do evento terá lugar garantido no programa. Para dar o seu voto, siga as instruções
-abaixo:
+%p
+  Por ter confirmado sua inscrição "Early Bird" no #{@attendance.event.name}, você ganhou o direito de
+  votar nas sessões que você quer ver no programa da conferência! A sessão mais votada pelos
+  participantes do evento terá lugar garantido no programa. Para dar o seu voto, siga as instruções
+  abaixo:
 
 %br
 %br
@@ -16,7 +17,7 @@ abaixo:
 - else
   %p
     Caso você já possua uma conta de usuário no sistema de submissões, pule para o passo 2. Caso
-    contrátio, clique #{link_to 'aqui', "#{AppConfig[:submission_system][:url]}users/signup?locale=pt", :target => :blank}
+    contrário, clique #{link_to 'aqui', "#{AppConfig[:submission_system][:url]}users/signup?locale=pt", :target => :blank}
     e preencha o formulário para cadastrar uma conta de usuário no sistema de submissões.
 
 %br
@@ -64,5 +65,6 @@ abaixo:
     %li Caso seja autor de uma sessão, você não poderá votar na mesma
     %li Você pode mudar seu voto enquanto o prazo de votação não terminar
 
-  %p OBS: Votar em uma sessão não garante que ela seja escolhida para o programa. A equipe de organizadores
-  irá escolher apenas a sessão mais votada.
+  %p
+    OBS: Votar em uma sessão não garante que ela seja escolhida para o programa. A equipe de organizadores
+    irá escolher apenas a sessão mais votada.

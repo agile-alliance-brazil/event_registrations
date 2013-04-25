@@ -193,6 +193,7 @@ en:
     list: "Registered authentications"
     add: "Add another service to sign in with:"
     new: "Sign in through one of these services:"
+    notice: "Attention: if you have already accessed the system before, use the same authentication service to avoid creating duplicate accounts. Once authenticated with your existing account, you can associate it with other authentication providers."
     providers:
       github: "Github"
       twitter: "Twitter"

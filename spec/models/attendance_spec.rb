@@ -161,13 +161,29 @@ describe Attendance do
   describe "can_vote?" do
     let(:attendance) { FactoryGirl.build(:attendance) }
 
-    it "should be true if attendance confirmed" do
+    it "should be true if attendance paid" do
+      period = FactoryGirl.build(:registration_period)
+      period.stubs(:allow_voting?).returns(true)
+
+      attendance.event.registration_periods.stubs(:for).returns([period])
+      
       attendance.should_not be_can_vote
-      attendance.confirm
-      attendance.should_not be_can_vote
+      attendance.pay
+      attendance.should be_can_vote
     end
 
-    it "should be true if any registration period allows voting" do
+    it "should be true if attendance confirmed" do
+      period = FactoryGirl.build(:registration_period)
+      period.stubs(:allow_voting?).returns(true)
+
+      attendance.event.registration_periods.stubs(:for).returns([period])
+      
+      attendance.should_not be_can_vote
+      attendance.confirm
+      attendance.should be_can_vote
+    end
+
+    it "should be true if registration period allows voting" do
       period = FactoryGirl.build(:registration_period)
       period.expects(:allow_voting?).twice.returns(false, true)
 

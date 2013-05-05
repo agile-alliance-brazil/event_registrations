@@ -79,7 +79,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def can_vote?
-    self.confirmed? && event.registration_periods.for(self.registration_date).any?(&:allow_voting?)
+    (self.confirmed? || self.paid?) && event.registration_periods.for(self.registration_date).any?(&:allow_voting?)
   end
 
   def full_name

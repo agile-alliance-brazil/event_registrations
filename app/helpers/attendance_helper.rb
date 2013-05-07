@@ -5,8 +5,8 @@ module AttendanceHelper
 
   def attendance_prices(attendance)
     attendance.event.registration_types.map do |registration_type|
-      number_to_currency(attendance_price(attendance, registration_type), :locale => :pt)
-    end
+      {registration_type.id => number_to_currency(attendance_price(attendance, registration_type), :locale => :pt)}
+    end.inject({}, :merge)
   end
 
   def price_table_link(event, locale)

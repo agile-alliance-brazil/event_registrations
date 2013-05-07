@@ -12,6 +12,18 @@ describe AttendanceHelper do
     end
   end
 
+  describe "attendance_prices as a map" do
+    it "should return attendance prices with ids as keys and formatted prices as values" do
+      attendance = FactoryGirl.build(:attendance, registration_date: Time.zone.local(2013, 03, 21))
+      other = attendance.event.registration_types.build
+      individual = attendance.event.registration_types.first
+      attendance.expects(:registration_fee).with(individual).returns(250)
+      attendance.expects(:registration_fee).with(other).returns(400)
+
+      attendance_prices(attendance).should == {individual.id => "R$ 250,00", other.id => "R$ 400,00"}
+    end
+  end
+
   describe "price_table_link" do
     it "should show pure link if no locale information in the link" do
       event = FactoryGirl.build(:event)

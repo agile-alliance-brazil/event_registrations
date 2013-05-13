@@ -9,6 +9,10 @@ class AttendancesController < InheritedResources::Base
   before_filter :validate_free_registration, :only => [:create]
   
   def create
+    if !current_user.organizer? && !@event.can_add_attendance?
+      redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') } and return
+    end
+
     create! do |success, failure|
       success.html do
         begin

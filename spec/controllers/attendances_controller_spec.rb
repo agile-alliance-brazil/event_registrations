@@ -115,6 +115,33 @@ describe AttendancesController do
     end
 
     describe "for individual registration" do
+      context "cannot add more attendances" do
+        before do
+          Event.any_instance.stubs(:can_add_attendance?).returns(false)
+        end
+
+        it "should redirect to home page with error message when cannot add more attendances" do
+          post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
+          response.should redirect_to(root_path)
+          flash[:error].should == I18n.t('flash.attendance.create.max_limit_reached')
+        end
+
+        it "should allow attendance creation if user is organizer" do
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          Attendance.any_instance.stubs(:id).returns(5)
+
+          user = FactoryGirl.create(:user)
+          user.add_role :organizer
+          user.save!
+          sign_in user
+          disable_authorization
+
+          post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
+
+          response.should redirect_to(attendance_status_path(5))
+        end
+      end
+
       it "should send pending registration e-mail" do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)

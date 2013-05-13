@@ -6,7 +6,7 @@ describe EmailNotifications do
     ActionMailer::Base.deliveries = []
     @old_locale = I18n.locale
     I18n.locale = :en
-    @event = Event.current || FactoryGirl.create(:event)
+    @event = Event.last || FactoryGirl.create(:event)
     Attendance.any_instance.stubs(:registration_fee).returns(499)
   end
 

@@ -1,4 +1,4 @@
-- eligible_events = @events.select{|event| event.registration_periods.ending_after(Time.now).present?}
+- eligible_events = @events.select{|event| event.registration_periods.ending_after(Time.now).present? }
 - if eligible_events.empty?
   = t('event.no_upcoming')
 - else

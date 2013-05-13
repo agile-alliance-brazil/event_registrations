@@ -6,7 +6,7 @@ class Ability
 
   def initialize(user, event)
     @user = user || User.new # guest
-    @event = event || Event.current
+    @event = event
 
     alias_action :edit, :update, :destroy, :to => :modify
 

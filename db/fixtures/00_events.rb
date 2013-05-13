@@ -6,6 +6,7 @@ Event.seed do |event|
   event.location_and_date    = 'Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/inscricao/'
   event.allow_voting         = true
+  event.attendance_limit     = 0
 end
 
 Event.seed do |event|
@@ -15,6 +16,7 @@ Event.seed do |event|
   event.location_and_date    = 'Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/'
   event.allow_voting         = false
+  event.attendance_limit     = 25
 end
 
 Event.seed do |event|
@@ -24,6 +26,7 @@ Event.seed do |event|
   event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/psm'
   event.allow_voting         = false
+  event.attendance_limit     = 30
 end
 
 Event.seed do |event|
@@ -33,6 +36,7 @@ Event.seed do |event|
   event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/management-3-0'
   event.allow_voting         = false
+  event.attendance_limit     = 30
 end
 
 Event.seed do |event|
@@ -42,6 +46,7 @@ Event.seed do |event|
   event.location_and_date    = '25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/kit-para-retrospectivas-ageis'
   event.allow_voting         = false
+  event.attendance_limit     = 20
 end
 
 Event.seed do |event|
@@ -51,6 +56,7 @@ Event.seed do |event|
   event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/cspo'
   event.allow_voting         = false
+  event.attendance_limit     = 30
 end
 
 Event.seed do |event|
@@ -60,6 +66,7 @@ Event.seed do |event|
   event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/workshop-de-testes-refatoracao/'
   event.allow_voting         = false
+  event.attendance_limit     = 20
 end
 
 Event.seed do |event|
@@ -69,6 +76,7 @@ Event.seed do |event|
   event.location_and_date    = '22 & 23 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/praticas-ageis'
   event.allow_voting         = false
+  event.attendance_limit     = 20
 end
 
 Event.seed do |event|
@@ -78,6 +86,7 @@ Event.seed do |event|
   event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/lean-startup'
   event.allow_voting         = false
+  event.attendance_limit     = 30
 end
 
 Event.seed do |event|
@@ -87,6 +96,7 @@ Event.seed do |event|
   event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/piramide-lean'
   event.allow_voting         = false
+  event.attendance_limit     = 25
 end
 
 Event.seed do |event|
@@ -96,4 +106,5 @@ Event.seed do |event|
   event.location_and_date    = '22 & 23 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/continuous-delivery'
   event.allow_voting         = false
+  event.attendance_limit     = 30
 end

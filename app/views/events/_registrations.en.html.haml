@@ -1,7 +1,9 @@
-%p
-  - if current_user && current_user.registrations_for_event(event).present?
-    Click #{link_to "here", attendance_status_path(current_user.registrations_for_event(event).first)} to check the status of your registration to #{event.name}.
-    %br
-    If you wish to add another registration for someone else, fill the form #{link_to "here", new_event_attendance_path(event)}.
-  - else
-    Click #{link_to "here", new_event_attendance_path(event)} to register for #{event.name}.
+- if !current_user.try(:organizer?) && current_user.try(:registrations_for_event, event).present?
+  %p Click #{link_to "here", attendance_status_path(current_user.registrations_for_event(event).first)} to check the status of your registration to #{event.name}.
+
+- if current_user.try(:organizer?) || (event.can_add_attendance? && current_user.try(:registrations_for_event, event).blank?)
+  %p Click #{link_to "here", new_event_attendance_path(event)} to register for #{event.name}.
+- elsif event.can_add_attendance?
+  %p If you wish to add another registration for someone else, fill the form #{link_to "here", new_event_attendance_path(event)}.
+- else
+  %p Registrations are closed.  The event has reached the maximum number of participants.

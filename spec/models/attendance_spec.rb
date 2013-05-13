@@ -74,8 +74,6 @@ describe Attendance do
     it { should_not allow_value("a@").for(:email) }
     it { should_not allow_value("a@a").for(:email) }
     it { should_not allow_value("@12.com").for(:email) }
-
-    xit { should validate_confirmation_of :password }
   end
 
   context "scopes" do
@@ -90,9 +88,10 @@ describe Attendance do
     end
     
     it "should have scope for_registration_type" do
-      Attendance.first.tap{|a| a.registration_type_id = 3}.save
+      rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
+      Attendance.first.tap{|a| a.registration_type = rt}.save
 
-      Attendance.for_registration_type(RegistrationType.find(3)).should == [Attendance.first]
+      Attendance.for_registration_type(rt).should == [Attendance.first]
     end
     
     it "should have scope pending" do

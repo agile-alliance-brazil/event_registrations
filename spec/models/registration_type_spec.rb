@@ -9,9 +9,14 @@ describe RegistrationType do
   
   describe "price" do
     it "delegates to RegistrationPeriod" do
-      type = RegistrationType.find_by_title('registration_type.individual')
-      late = RegistrationPeriod.find_by_title('registration_period.late')
-      type.price(late.start_at + 1.day).should == 599.00
+      time = Time.now
+      type = FactoryGirl.build(:registration_type)
+      price = RegistrationPeriod.new
+
+      type.event.registration_periods.expects(:for).with(time).returns([price])
+      price.expects(:price_for_registration_type).with(type).returns(599)
+
+      type.price(time).should == 599.00
     end
   end
 end

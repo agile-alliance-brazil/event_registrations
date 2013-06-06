@@ -66,7 +66,7 @@ Event.seed do |event|
   event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/workshop-de-testes-refatoracao/'
   event.allow_voting         = false
-  event.attendance_limit     = 20
+  event.attendance_limit     = 22
 end
 
 Event.seed do |event|

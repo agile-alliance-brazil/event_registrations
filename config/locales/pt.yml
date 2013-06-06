@@ -321,7 +321,9 @@ pt:
       pending: "Pendente"
       confirmed: "Confirmado"
       paid: "Pagamento efetuado"
+      cancelled: "Cancelado"
       all: "Todos"
+    cancel_confirmation: "Tem certeza que deseja cancelar sua inscrição na %{event}?\nSe o fizer, você deverá preencher um novo formulário para criar uma nova inscrição."
 
   registration_group:
     status:

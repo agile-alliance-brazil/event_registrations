@@ -34,6 +34,13 @@ describe Ability do
       @ability.should be_able_to(:show, attendance)
     end
 
+    it "can cancel (destroy) their attendances" do
+      attendance = FactoryGirl.build(:attendance)
+      @ability.should_not be_able_to(:destroy, attendance)
+      attendance.user = @user
+      @ability.should be_able_to(:destroy, attendance)
+    end
+
     it "cannot index all attendances" do
       @ability.should_not be_able_to(:index, Attendance)
     end
@@ -90,6 +97,10 @@ describe Ability do
   
     it "can show attendances" do
       @ability.should be_able_to(:show, Attendance)
+    end
+
+    it "can cancel (destroy) their attendances" do
+      @ability.should be_able_to(:destroy, Attendance)
     end
     
     it "can update attendances" do

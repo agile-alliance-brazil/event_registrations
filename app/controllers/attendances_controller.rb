@@ -2,7 +2,7 @@
 class AttendancesController < InheritedResources::Base
   belongs_to :registration_group, :optional => true
 
-  actions :new, :create, :index
+  actions :new, :create, :index, :destroy
   
   before_filter :set_event
   before_filter :load_registration_types
@@ -83,7 +83,7 @@ class AttendancesController < InheritedResources::Base
 
   def collection
     @attendances ||= end_of_association_chain.
-      for_event(@event)
+      for_event(@event).active
   end
   
   def load_registration_types

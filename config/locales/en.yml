@@ -182,7 +182,9 @@ en:
       pending: "Pending"
       confirmed: "Confirmed"
       paid: "Payment received"
+      cancelled: "Cancelled"
       all: "All"
+    cancel_confirmation: "Are you sure you want to cancel your registration at %{event}?\nIf you do, you will need to fill a new form to create a new registration."
 
   registration_group:
     status:

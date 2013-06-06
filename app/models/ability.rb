@@ -25,6 +25,9 @@ class Ability
     can(:show, Attendance) do |attendance|
       attendance.user == @user
     end
+    can(:destroy, Attendance) do |attendance|
+      attendance.user == @user
+    end
     can([:enable_voting, :voting_instructions], Attendance, :user_id => @user.id)
     can do |action, subject_class, subject|
       expand_actions([:create]).include?(action) && [Attendance].include?(subject_class) &&
@@ -37,10 +40,10 @@ class Ability
   end
 
   def organizer_privileges
+    can(:index, Attendance)
+    can(:create, Attendance)
     can(:show, Attendance)
     can(:update, Attendance)
-    can do |action, subject_class, subject|
-      expand_actions([:create, :index]).include?(action) && [Attendance].include?(subject_class)
-    end
+    can(:destroy, Attendance)
   end
 end

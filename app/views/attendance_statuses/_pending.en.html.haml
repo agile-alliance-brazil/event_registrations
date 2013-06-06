@@ -31,3 +31,7 @@
 
 - deadline = attendance.registration_date.to_date + 5
 %p After #{I18n.l([attendance.registration_period.end_at.to_date, deadline].max)}, the registration amount will be updated according to the table available at #{link_to price_table_link(attendance.event, :en), price_table_link(attendance.event, :en)}.
+
+%h4 Cancelling
+
+%p If you cannot make it to the event, please notify us that you won't be able to join us by #{link_to 'cancelling your registration', [attendance.event, attendance], confirm: t('attendance.cancel_confirmation', event: attendance.event.name), method: :delete, class: 'remove'}.

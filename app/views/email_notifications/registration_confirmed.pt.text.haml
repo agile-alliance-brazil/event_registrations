@@ -1,10 +1,28 @@
 Car#{@attendance.male? ? 'o' : 'a'} #{h(@attendance.full_name)},
 
 
-Sua inscrição de tipo <strong>#{I18n.t(@attendance.registration_type.title)}</strong> no valor de #{number_to_currency(@attendance.registration_fee, :locale => :pt)} na #{@attendance.event.name} foi confirmada.
+
+Sua inscrição na #{@attendance.event.name} foi confirmada.
 
 
-Por favor, procure a secretaria do evento a partir de 27/6 às 7h para o seu credenciamento, na Fábrica de Negócios, Av. Monsenhor Tabosa, 740, Praia de Iracema, entrada pela Rua João Cordeiro, em Fortaleza, Ceará.
+
+Data: 26, 27 e 28/06/2013
+
+Hora: 9h às 19h
+
+Local: Royal Tulip Brasília Alvorada - SHTN, Trecho 01 Conj 1b - Bloco C,  Lago Norte, Brasília - DF
+
+
+
+Observações:
+  
+1. Seu crachá deverá ser retirado no balcão de credenciamento, no local do evento, a partir do dia 26/06/2013.
+
+2. Os certificados serão encaminhados por e-mail. Caso não receba no prazo máximo de 10 dias após o evento, favor entrar em contato pelo e-mail #{AppConfig[:organizer][:contact_email]}.
+  
+3. Haverá serviço de manobristas no local para as pessoas que optarem por ir de carro.
+
+4. Não será servido almoço durante o evento. Sugerimos que se desloquem para restaurantes da Vila Planalto, bairro que fica próximo ao hotel.
 
 
 

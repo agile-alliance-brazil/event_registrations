@@ -153,6 +153,8 @@ en:
       subject: "Registration request to %{event_name} sent"
     registration_confirmed:
       subject: "Registration confirmed for %{event_name}"
+    cancelling_registration:
+      subject: "Notice about registration %{attendance_id} cancelation for %{event_name}"
 
   gender:
     male: "Male"

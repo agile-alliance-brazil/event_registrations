@@ -27,9 +27,17 @@ describe Event do
       @event.can_add_attendance?.should be_true
     end
     it "should not be able to add more attendance after reaching limit" do
-      @event.attendances << FactoryGirl.build(:attendance, :event => @event)
+      attendance = FactoryGirl.build(:attendance, :event => @event)
+      @event.attendances.expects(:active).returns([attendance])
 
       @event.can_add_attendance?.should be_false
+    end
+    it "should be able to add more attendance after reaching cancelling attendance" do
+      attendance = FactoryGirl.build(:attendance, :event => @event)
+      attendance.cancel
+      @event.attendances.expects(:active).returns([])
+
+      @event.can_add_attendance?.should be_true
     end
   end
 end

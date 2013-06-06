@@ -70,4 +70,29 @@ describe EmailNotifications do
       mail.subject.should == "[localhost:3000] Registration confirmed for #{@event.name}"
     end
   end
+
+  context "cancelling registration" do
+    before(:each) do
+      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
+    end
+    
+    it "should be sent to pending attendee" do
+      mail = EmailNotifications.cancelling_registration(@attendance).deliver
+      ActionMailer::Base.deliveries.size.should == 1
+      mail.to.should == [@attendance.email]
+      mail.encoded.should =~ /Caro #{@attendance.full_name},/
+      mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
+      mail.subject.should == "[localhost:3000] Aviso de cancelamento da inscrição #{@attendance.id} na #{@event.name}"
+    end
+    
+    it "should be sent to attendee according to country" do
+      @attendance.country = 'US'
+      mail = EmailNotifications.cancelling_registration(@attendance).deliver
+      ActionMailer::Base.deliveries.size.should == 1
+      mail.to.should == [@attendance.email]
+      mail.encoded.should =~ /Dear #{@attendance.full_name},/
+      mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
+      mail.subject.should == "[localhost:3000] Notice about registration #{@attendance.id} cancelation for #{@event.name}"
+    end
+  end
 end

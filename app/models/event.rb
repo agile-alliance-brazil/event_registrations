@@ -5,6 +5,6 @@ class Event < ActiveRecord::Base
   has_many :registration_types
 
   def can_add_attendance?
-    attendance_limit.nil? || attendance_limit == 0 || attendances.size < attendance_limit
+    attendance_limit.nil? || attendance_limit == 0 || (attendance_limit > attendances.active.size)
   end
 end

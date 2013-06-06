@@ -292,6 +292,8 @@ pt:
       subject: "Pedido de inscrição na %{event_name} enviado"
     registration_confirmed:
       subject: "Inscrição na %{event_name} confirmada"
+    cancelling_registration:
+      subject: "Aviso de cancelamento da inscrição %{attendance_id} na %{event_name}"
 
   gender:
     male: "Masculino"

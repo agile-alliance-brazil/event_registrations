@@ -1,0 +1,20 @@
+Dear #{h(@attendance.full_name)},
+
+
+Thank you for your interest on #{@attendance.event.name}, but, unfortunately, we had to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
+
+
+If you already settled your registration payment, please contact us with your paypal or bcash payment confirmation so we can restore your registration.
+
+
+However, if you still want to register, you can fill in the form once again and complete the new registration. We hope to meet you in Brasília between June 26th and 28th or in one of the courses from the Agile Marathon.
+
+
+Sincerely,
+Agile Brazil's organizing commitee.
+
+
+If you have any questions, please contact us at #{AppConfig[:organizer][:contact_email]}
+
+
+[Please do not reply to this e-mail. It was sent from an unmonitored email address]

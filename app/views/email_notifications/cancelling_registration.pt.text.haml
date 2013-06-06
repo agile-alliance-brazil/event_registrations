@@ -1,0 +1,21 @@
+Car#{@attendance.male? ? 'o' : 'a'} #{h(@attendance.full_name)},
+
+
+Agradecemos o seu interesse pela #{@attendance.event.name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
+
+
+Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do paypal ou do bcash que restauraremos sua inscrição.
+
+
+No entanto, #{@attendance.male? ? 'o senhor' : 'a senhora'} poderá se inscrever novamente e completar esse novo registro. Esperamos encontrá-lo em Brasília entre os dias 26 e 28 de Junho ou em algum dos cursos da Virada Ágil.
+
+
+Sinceramente,
+Comitê de organização do Agile Brazil.
+
+
+Qualquer dúvida, entre em contato através do email #{AppConfig[:organizer][:contact_email]}
+
+
+
+[Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]

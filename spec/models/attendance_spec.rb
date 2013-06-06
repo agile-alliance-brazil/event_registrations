@@ -103,6 +103,11 @@ describe Attendance do
       Attendance.first.tap{|a| a.pay}.save
       Attendance.paid.should == [Attendance.first]
     end
+    
+    it "should have scope active that excludes cancelled attendances" do
+      Attendance.first.tap{|a| a.cancel}.save
+      Attendance.active.should_not include(Attendance.first)
+    end
   end
 
   context "registration period regarding super_early_bird" do
@@ -207,12 +212,22 @@ describe Attendance do
   end
 
   context "cancelling" do
-    it "should be cancelable if pending"
-    it "should be cancelable if paid"
-    it "should be cancelable if paid"
-    it "should be cancelable if confirmed"
-    it "should not be cancelable if canceled already"
-    it "should not be cancelable few days before the event"
-    it "should reimburse part of payment if canceled"
+    let(:attendance) { FactoryGirl.build(:attendance) }
+    it "should be cancellable if pending" do
+      attendance.should be_cancellable
+    end
+    it "should not be cancellable if paid" do
+      attendance.pay
+      attendance.should_not be_cancellable
+    end
+    it "should not be cancellable if confirmed" do
+      attendance.pay
+      attendance.confirm
+      attendance.should_not be_cancellable
+    end
+    it "should not be cancellable if cancelled already" do
+      attendance.cancel
+      attendance.should_not be_cancellable
+    end
   end
 end

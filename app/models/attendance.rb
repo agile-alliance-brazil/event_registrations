@@ -36,6 +36,10 @@ class Attendance < ActiveRecord::Base
     event :pay do
       transition :pending => :paid
     end
+
+    event :cancel do
+      transition :pending => :cancelled
+    end
     
     state :confirmed do
       validates_acceptance_of :payment_agreement
@@ -56,6 +60,7 @@ class Attendance < ActiveRecord::Base
   scope :for_registration_type, lambda { |t| where('registration_type_id = (?)', t.id)}
   scope :pending, lambda { where('status = (?)', :pending)}
   scope :paid, lambda { where('status IN (?)', [:paid, :confirmed])}
+  scope :active, lambda { where('status != (?)', :cancelled)}
 
   def base_price
     Rails.logger.warn('Attendance#base_price is deprecated. It was called from ' + caller[1..5].join('\n'))
@@ -74,8 +79,8 @@ class Attendance < ActiveRecord::Base
     registration_period.price_for_registration_type(overriden_registration_type || registration_type)
   end
 
-  def can_cancel?
-    false
+  def cancellable?
+    pending?
   end
 
   def can_vote?

@@ -13,7 +13,7 @@
               \-
               = link_to t('event.attendance.enable_voting'), voting_instructions_event_attendance_path(event, attendance)
           - if attendance.can_cancel?
-            = link_to "X", attendance, confirm: t(attendance.cancel_confirmation), method: :delete, class: "remove"
+            = link_to "X", attendance, confirm: t('attendance.cancel_confirmation'), method: :delete, class: "remove"
   - (Event.all - @user.events).each do |event|
     %ul.event
       %li= link_to t('event.attendance.add', name: event.name), new_event_attendance_path(event), :class => "add_attendance"

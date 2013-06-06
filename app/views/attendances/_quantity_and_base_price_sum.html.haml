@@ -1,2 +1,2 @@
 %td= attendees.size
-%td= number_to_currency(attendees.map(&:base_price).inject(0, :+))
+%td= number_to_currency(attendees.map(&:registration_fee).inject(0, :+))

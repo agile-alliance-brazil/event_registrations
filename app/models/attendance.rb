@@ -16,7 +16,7 @@ class Attendance < ActiveRecord::Base
   attr_accessor :email_confirmation
 
   validates_confirmation_of :email
-  validates_presence_of [:first_name, :last_name, :email, :organization, :phone, :country, :city]
+  validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
   validates_presence_of :state, :if => Proc.new {|a| a.in_brazil?}
   validates_presence_of :cpf, :if => Proc.new {|a| a.in_brazil?}
 

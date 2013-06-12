@@ -58,9 +58,11 @@ class Attendance < ActiveRecord::Base
 
   scope :for_event, lambda { |e| where('event_id = (?)', e.id)}
   scope :for_registration_type, lambda { |t| where('registration_type_id = (?)', t.id)}
+  scope :without_registration_type, lambda { |t| where('registration_type_id != (?)', t.id)}
   scope :pending, lambda { where('status = (?)', :pending)}
   scope :paid, lambda { where('status IN (?)', [:paid, :confirmed])}
   scope :active, lambda { where('status != (?)', :cancelled)}
+  scope :older_than, lambda { |date| where('registration_date < (?)', date)}
 
   def base_price
     Rails.logger.warn('Attendance#base_price is deprecated. It was called from ' + caller[1..5].join('\n'))

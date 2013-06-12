@@ -52,6 +52,7 @@ group :test do
   gem 'rb-inotify', '=0.8.8', :require => linux_only('rb-inotify')
   gem 'shoulda-matchers', '=1.5.4', :require => false
   gem 'factory_girl_rails', '=4.2.1'
+  gem 'timecop', '=0.6.1'
 end
 
 group :development, :test do

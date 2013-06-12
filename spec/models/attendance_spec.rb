@@ -85,27 +85,39 @@ describe Attendance do
     it "should have scope for_event" do
       Attendance.for_event(Attendance.first.event).should == [Attendance.first]
     end
-    
+
     it "should have scope for_registration_type" do
       rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
       Attendance.first.tap{|a| a.registration_type = rt}.save
 
       Attendance.for_registration_type(rt).should == [Attendance.first]
     end
-    
+
+    it "should have scope without_registration_type" do
+      rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
+      Attendance.first.tap{|a| a.registration_type = rt}.save
+
+      Attendance.without_registration_type(rt).should_not include(Attendance.first)
+    end
+
     it "should have scope pending" do
       Attendance.first.tap{|a| a.pay}.save
       Attendance.pending.should_not include(Attendance.first)
     end
-    
+
     it "should have scope paid" do
       Attendance.first.tap{|a| a.pay}.save
       Attendance.paid.should == [Attendance.first]
     end
-    
+
     it "should have scope active that excludes cancelled attendances" do
       Attendance.first.tap{|a| a.cancel}.save
       Attendance.active.should_not include(Attendance.first)
+    end
+
+    it "should have scope older_than that selects old attendances" do
+      Attendance.first.tap{|a| a.registration_date = 10.days.ago}.save
+      Attendance.older_than(5.days.ago).should == [Attendance.first]
     end
   end
 
@@ -125,7 +137,7 @@ describe Attendance do
 
         @attendance.registration_period.should == @period
       end
-      
+
       it "should regular early bird after 150 attendances" do
         @attendance.event.expects(:attendances)
                   .returns(stub(count: 150))
@@ -169,7 +181,7 @@ describe Attendance do
       period.stubs(:allow_voting?).returns(true)
 
       attendance.event.registration_periods.stubs(:for).returns([period])
-      
+
       attendance.should_not be_can_vote
       attendance.pay
       attendance.should be_can_vote

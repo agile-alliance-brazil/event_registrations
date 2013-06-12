@@ -14,39 +14,69 @@ describe RegistrationNotifier do
     @notifier = RegistrationNotifier.new
   end
 
-  it "should notify attendance created 30 days ago" do
-    attendance = FactoryGirl.build(:attendance, event: @event, registration_date: 30.days.ago)
-    @event.stubs(:attendances).returns([attendance])
+  context "cancel" do
+    context "older than 30 days" do
+      before do
+        Timecop.freeze(Time.now)
+        deadline = 30.days.ago
+        @attendance = FactoryGirl.build(:attendance, event: @event,
+          registration_date: deadline)
 
-    EmailNotifications.expects(:cancelling_registration).with(attendance).returns(mock(:deliver => true))
+        query_relation = mock()
+        query_relation.expects(:older_than).with(deadline).returns([@attendance])
+        @notifier.expects(:pending_attendances).returns(query_relation)
+      end
 
-    @notifier.cancel
-  end
+      after do
+        Timecop.return
+      end
 
-  it "should cancel attendance created 30 days ago" do
-    attendance = FactoryGirl.build(:attendance, event: @event, registration_date: 30.days.ago)
-    @event.stubs(:attendances).returns([attendance])
+      it "should notify pending attendance older than 30 days ago" do
+        EmailNotifications.expects(:cancelling_registration).
+          with(@attendance).returns(mock(:deliver => true))
 
-    attendance.expects(:cancel)
+        @notifier.cancel
+      end
 
-    @notifier.cancel
-  end
+      it "should cancel attendance created 30 days ago" do
+        @attendance.expects(:cancel)
 
-  it "should not notify paid attendance" do
-    attendance = FactoryGirl.build(:attendance, event: @event, registration_date: 30.days.ago, status: :paid)
-    @event.stubs(:attendances).returns([attendance])
+        @notifier.cancel
+      end
+    end
 
-    EmailNotifications.expects(:cancelling_registration).never
+    context "newer than 30 days" do
+      it "should not notify attendance created less than 30 days ago" do
+        Timecop.freeze(Time.now) do
+          query_relation = mock()
+          query_relation.expects(:older_than).with(30.days.ago).returns([])
+          @notifier.expects(:pending_attendances).returns(query_relation)
+          EmailNotifications.expects(:cancelling_registration).never
 
-    @notifier.cancel
-  end
+          @notifier.cancel
+        end
+      end
+    end
 
-  it "should not notify attendance created less than 30 days ago" do
-    attendance = FactoryGirl.build(:attendance, event: @event, registration_date: 29.days.ago)
-    @event.stubs(:attendances).returns([attendance])
+    context "pending attendances" do
+      it "should have pending attendances without manual registrations" do
+        event= FactoryGirl.create(:event)
+        manual_type = FactoryGirl.create(:registration_type, title: 'registration_type.manual.title', event: event)
 
-    EmailNotifications.expects(:cancelling_registration).never
+        cancelled = FactoryGirl.create(:attendance, event: event)
+        cancelled.cancel
+        pending = FactoryGirl.create(:attendance, event: event)
+        paid = FactoryGirl.create(:attendance, event: event)
+        paid.pay
+        confirmed = FactoryGirl.create(:attendance, event: event)
+        confirmed.confirm
 
-    @notifier.cancel
+        manual = FactoryGirl.create(:attendance, event: event, registration_type: manual_type)
+
+        Event.stubs(:find).returns(event)
+
+        @notifier.pending_attendances.should == [pending]
+      end
+    end
   end
 end

@@ -187,6 +187,8 @@ en:
       cancelled: "Cancelled"
       all: "All"
     cancel_confirmation: "Are you sure you want to cancel your registration at %{event}?\nIf you do, you will need to fill a new form to create a new registration."
+    confirmed:
+      unpaid: "External/Delayed payment"
 
   registration_group:
     status:

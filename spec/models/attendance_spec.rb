@@ -28,6 +28,7 @@ describe Attendance do
     it { should allow_mass_assignment_of :address }
     it { should allow_mass_assignment_of :neighbourhood }
     it { should allow_mass_assignment_of :zipcode }
+    it { should allow_mass_assignment_of :notes }
     
     it { should_not allow_mass_assignment_of :id }
   end

@@ -11,7 +11,7 @@ class Attendance < ActiveRecord::Base
   attr_accessible :event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date,
                   :first_name, :last_name, :email, :email_confirmation, :organization, :phone, :country,
                   :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-                  :zipcode
+                  :zipcode, :notes
 
   attr_accessor :email_confirmation
 
@@ -56,12 +56,12 @@ class Attendance < ActiveRecord::Base
 
   validates_presence_of :registration_type_id, :registration_date, :user_id, :event_id
 
-  scope :for_event, lambda { |e| where('event_id = (?)', e.id)}
-  scope :for_registration_type, lambda { |t| where('registration_type_id = (?)', t.id)}
-  scope :without_registration_type, lambda { |t| where('registration_type_id != (?)', t.id)}
-  scope :pending, lambda { where('status = (?)', :pending)}
-  scope :paid, lambda { where('status IN (?)', [:paid, :confirmed])}
-  scope :active, lambda { where('status != (?)', :cancelled)}
+  scope :for_event, lambda { |e| where(event_id: e.id)}
+  scope :for_registration_type, lambda { |t| where(registration_type_id: t.id)}
+  scope :without_registration_type, lambda { |t| where("#{table_name}.registration_type_id != (?)", t.id)}
+  scope :pending, lambda { where(status: :pending)}
+  scope :paid, lambda { where(status: [:paid, :confirmed])}
+  scope :active, lambda {  where("#{table_name}.status != (?)", :cancelled)}
   scope :older_than, lambda { |date| where('registration_date < (?)', date)}
 
   def base_price

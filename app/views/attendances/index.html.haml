@@ -5,10 +5,11 @@
 %table.summary
   %tr
     %th{:rowspan=>2}= t('formtastic.labels.attendee.status')
-    %th{:colspan=>2}= t("attendee.status.pending")
-    %th{:colspan=>2}= "Paypal"
-    %th{:colspan=>2}= "BCash"
-    %th{:colspan=>2}= t("registration_total.total")
+    %th{:colspan=>2}= t('attendee.status.pending')
+    %th{:colspan=>2}= 'Paypal'
+    %th{:colspan=>2}= 'BCash'
+    %th{:colspan=>2}= t('attendance.confirmed.unpaid')
+    %th{:colspan=>2}= t('registration_total.total')
   %tr
     %th= t('registration.quantity')
     %th= t('formtastic.labels.attendee.total')
@@ -18,17 +19,21 @@
     %th= t('formtastic.labels.attendee.total')
     %th= t('registration.quantity')
     %th= t('formtastic.labels.attendee.total')
+    %th= t('registration.quantity')
+    %th= t('formtastic.labels.attendee.total')
   - @event.registration_types.each do |registration_type|
-    - attendees_for_type = @attendances.for_registration_type(registration_type)
+    - attendees_for_type = @attendances.select{|a| a.registration_type_id == registration_type.id}
     %tr
       %td= t(registration_type.title)
-      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.pending }
-      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.payment_notifications.completed.paypal.empty?}}
-      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.paid.reject{|a| a.payment_notifications.completed.bcash.empty?}}
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.select(&:pending?) }
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.reject{|a| a.pending? || a.payment_notifications.completed.paypal.empty?}}
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.reject{|a| a.pending? || a.payment_notifications.completed.bcash.empty?}}
+      = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type.select{|a| !a.pending? && a.payment_notifications.completed.empty?}}
       = render partial: 'quantity_and_base_price_sum', locals: {attendees: attendees_for_type }
   %tr.total
-    %td= t("registration_total.total")
-    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.pending }
-    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.payment_notifications.completed.paypal.empty?}}
-    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.paid.reject{|a| a.payment_notifications.completed.bcash.empty?}}
+    %td= t('registration_total.total')
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.select(&:pending?) }
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.reject{|a| a.pending? || a.payment_notifications.completed.paypal.empty?}}
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.reject{|a| a.pending? || a.payment_notifications.completed.bcash.empty?}}
+    = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances.select{|a|!a.pending? && a.payment_notifications.completed.empty?}}
     = render partial: 'quantity_and_base_price_sum', locals: {attendees: @attendances }

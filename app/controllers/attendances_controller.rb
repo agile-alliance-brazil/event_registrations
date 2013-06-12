@@ -82,8 +82,7 @@ class AttendancesController < InheritedResources::Base
   end
 
   def collection
-    @attendances ||= end_of_association_chain.
-      for_event(@event).active
+    @attendances ||= end_of_association_chain.for_event(@event).active.all(include: [:payment_notifications, :event, :registration_type])
   end
   
   def load_registration_types
@@ -115,7 +114,7 @@ class AttendancesController < InheritedResources::Base
   end
 
   def set_event
-    @event ||= Event.find_by_id(params[:event_id])
+    @event ||= Event.joins(:registration_types).find_by_id(params[:event_id])
   end
 
   def notify_or_log(ex)

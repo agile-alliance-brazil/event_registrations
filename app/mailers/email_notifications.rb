@@ -26,6 +26,13 @@ class EmailNotifications < ActionMailer::Base
       date: sent_at
   end
 
+  def cancelling_registration_warning(attendance, sent_at = Time.now)
+    @attendance = attendance
+    I18n.locale = @attendance.country == 'BR' ? :pt : :en
+    mail subject: "[#{host}] #{I18n.t('email.cancelling_registration_warning.subject', event_name: @attendance.event.name, attendance_id: @attendance.id)}",
+      date: sent_at
+  end
+
   private
   def default_mail_preferences
     {

@@ -120,11 +120,9 @@ class AttendancesController < InheritedResources::Base
   def notify(attendance)
     if attendance.registration_fee > 0
       EmailNotifications.registration_pending(attendance).deliver
-    else
-      EmailNotifications.registration_confirmed(attendance).deliver
+      attendance.email_sent = true
+      attendance.save
     end
-    attendance.email_sent = true
-    attendance.save
   end
 
   def notify_or_log(ex)

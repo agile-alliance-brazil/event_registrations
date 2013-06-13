@@ -17,12 +17,10 @@ class AttendancesController < InheritedResources::Base
       success.html do
         begin
           flash[:notice] = t('flash.attendance.create.success')
-          EmailNotifications.registration_pending(@attendance).deliver if @attendance.registration_fee > 0
-          @attendance.email_sent = true
-          @attendance.save
+          notify(@attendance)
         rescue => ex
-          notify_or_log(ex)
           flash[:alert] = t('flash.attendance.mail.fail')
+          notify_or_log(ex)
         end
         redirect_to attendance_status_path(@attendance)
       end
@@ -39,16 +37,18 @@ class AttendancesController < InheritedResources::Base
 
   def enable_voting
     @attendance = Attendance.find(params[:id])
+    
     if @attendance.can_vote?
       authentication = current_user.authentications.where(:provider => :submission_system).first
-      if authentication.blank?
-        flash[:error] = t('flash.attendance.enable_voting.missing_authentication')
+      result = authentication ? authentication.get_token.post('/api/user/make_voter').parsed : {}
+
+      if result['success']
+        flash[:notice] = t('flash.attendance.enable_voting.success', :url => result['vote_url']).html_safe
       else
-        token = authentication.get_token
-        result = token.post('/api/user/make_voter').parsed
-        flash[:notice] = t('flash.attendance.enable_voting.success', :url => result['vote_url']).html_safe if result['success']
+        flash[:error] = t('flash.attendance.enable_voting.missing_authentication')
       end
     end
+    
     redirect_to :back
   end
 
@@ -115,6 +115,16 @@ class AttendancesController < InheritedResources::Base
 
   def set_event
     @event ||= Event.joins(:registration_types).find_by_id(params[:event_id])
+  end
+
+  def notify(attendance)
+    if attendance.registration_fee > 0
+      EmailNotifications.registration_pending(attendance).deliver
+    else
+      EmailNotifications.registration_confirmed(attendance).deliver
+    end
+    attendance.email_sent = true
+    attendance.save
   end
 
   def notify_or_log(ex)

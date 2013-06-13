@@ -51,13 +51,10 @@ class User < ActiveRecord::Base
       names = extract_names(hash[:info])
       user.first_name = names[0]
       user.last_name = names[-1]
-      user.email = hash[:info][:email]
-      user.twitter_user = hash[:provider] == 'twitter' ? hash[:info][:nickname] : hash[:info][:twitter_user]
-      user.organization = hash[:info][:organization]
-      user.phone = hash[:info][:phone]
-      user.country = hash[:info][:country]
-      user.state = hash[:info][:state]
-      user.city = hash[:info][:city]
+      user.twitter_user = extract_twitter_user(hash)
+      [:email, :organization, :phone, :country, :state, :city]. each do |attribute|
+        user.send("{attribute}=", hash[:info][attribute])
+      end
     end
   end
 
@@ -82,5 +79,9 @@ class User < ActiveRecord::Base
     else
       [hash[:first_name], hash[:last_name]]
     end
+  end
+
+  def self.extract_twitter_user(hash)
+    hash[:provider] == 'twitter' ? hash[:info][:nickname] : hash[:info][:twitter_user]
   end
 end

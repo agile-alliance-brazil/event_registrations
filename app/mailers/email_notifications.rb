@@ -1,39 +1,34 @@
 # encoding: UTF-8
 class EmailNotifications < ActionMailer::Base
+  def registration_pending(attendance, sent_at = Time.now)
+    mail_attendance(attendance, sent_at, 'email.registration_pending.subject')
+  end
+
+  def registration_confirmed(attendance, sent_at = Time.now)
+    mail_attendance(attendance, sent_at, 'email.registration_confirmed.subject')
+  end
+
+  def cancelling_registration(attendance, sent_at = Time.now)
+    mail_attendance(attendance, sent_at, 'email.cancelling_registration.subject')
+  end
+
+  def cancelling_registration_warning(attendance, sent_at = Time.now)
+    mail_attendance(attendance, sent_at, 'email.cancelling_registration_warning.subject')
+  end
+
+  private
+  def mail_attendance(attendance, sent_at, title)
+    @attendance = attendance
+    I18n.locale = attendance.country == 'BR' ? :pt : :en
+    subject = "[#{host}] #{I18n.t(title, event_name: attendance.event.name, attendance_id: attendance.id)}"
+    mail subject: subject, cc: event_organizer, date: sent_at
+  end
+  
   def mail_with_default(params)
     mail_without_default default_mail_preferences.merge(params)
   end
   alias_method_chain :mail, :default
 
-  def registration_pending(attendance, sent_at = Time.now)
-    @attendance = attendance
-    I18n.locale = @attendance.country == 'BR' ? :pt : :en
-    mail subject: "[#{host}] #{I18n.t('email.registration_pending.subject', event_name: @attendance.event.name)}",
-         cc: event_organizer, date: sent_at
-  end
-
-  def registration_confirmed(attendance, sent_at = Time.now)
-    @attendance = attendance
-    I18n.locale = @attendance.country == 'BR' ? :pt : :en
-    mail subject: "[#{host}] #{I18n.t('email.registration_confirmed.subject', event_name: @attendance.event.name)}",
-      date: sent_at
-  end
-
-  def cancelling_registration(attendance, sent_at = Time.now)
-    @attendance = attendance
-    I18n.locale = @attendance.country == 'BR' ? :pt : :en
-    mail subject: "[#{host}] #{I18n.t('email.cancelling_registration.subject', event_name: @attendance.event.name, attendance_id: @attendance.id)}",
-      date: sent_at
-  end
-
-  def cancelling_registration_warning(attendance, sent_at = Time.now)
-    @attendance = attendance
-    I18n.locale = @attendance.country == 'BR' ? :pt : :en
-    mail subject: "[#{host}] #{I18n.t('email.cancelling_registration_warning.subject', event_name: @attendance.event.name, attendance_id: @attendance.id)}",
-      date: sent_at
-  end
-
-  private
   def default_mail_preferences
     {
       to: "\"#{@attendance.full_name}\" <#{@attendance.email}>",

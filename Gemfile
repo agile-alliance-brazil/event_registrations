@@ -48,9 +48,9 @@ def linux_only(require_as)
 end
 
 group :test do
-  gem 'mocha', '=0.13.2', :require => false
+  gem 'mocha', '=0.14.0', :require => false
   gem 'rb-inotify', '=0.9.0', :require => linux_only('rb-inotify')
-  gem 'shoulda-matchers', '=1.5.4', :require => false
+  gem 'shoulda-matchers', '=2.2.0', :require => false
   gem 'factory_girl_rails', '=4.2.1'
   gem 'timecop', '=0.6.1'
 end
@@ -58,7 +58,7 @@ end
 group :development, :test do
   gem 'sqlite3', '=1.3.7'
   gem 'rspec-rails', '=2.13.2'
-  gem 'guard-rspec', '=3.0.1'
+  gem 'guard-rspec', '=3.0.2'
   gem 'rb-fsevent', '=0.9.3'
   gem 'spork-rails', '=3.2.1'
   gem 'jasmine-jquery-rails', '=1.4.2'

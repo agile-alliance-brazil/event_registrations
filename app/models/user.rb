@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
       user.last_name = names[-1]
       user.twitter_user = extract_twitter_user(hash)
       [:email, :organization, :phone, :country, :state, :city]. each do |attribute|
-        user.send("{attribute}=", hash[:info][attribute])
+        user.send("#{attribute}=", hash[:info][attribute])
       end
     end
   end

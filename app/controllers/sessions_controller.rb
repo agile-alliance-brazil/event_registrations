@@ -11,20 +11,16 @@ class SessionsController < ApplicationController
   def create
     auth = Authentication.find_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
     if auth
-      if logged_in? && auth.user != current_user
-        flash[:error] = I18n.t('flash.user.authentication.already_in_use')
-      else
-        log_in(auth.user)
-      end
+      log_in_with(auth)
     elsif logged_in?
       flash[:notice] = I18n.t('flash.user.authentication.new')
-      self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'], :refresh_token => auth_hash['credentials']['refresh_token'])
+      add_authentication(auth_hash)
     else
       user = User.new_from_auth_hash(auth_hash)
       if user.save
-        log_in(user)
         flash[:notice] = I18n.t('flash.user.create')
-        self.current_user.authentications.create(:provider => auth_hash['provider'], :uid => auth_hash['uid'], :refresh_token => auth_hash['credentials']['refresh_token'])
+        log_in(user)
+        add_authentication(auth_hash)
       else
         flash[:error] = I18n.t('flash.user.invalid')
         redirect_to(login_path) and return
@@ -57,6 +53,19 @@ class SessionsController < ApplicationController
   end
 
   protected
+  def log_in_with(auth)
+    if logged_in? && auth.user != current_user
+      flash[:error] = I18n.t('flash.user.authentication.already_in_use')
+    else
+      log_in(auth.user)
+    end
+  end
+
+  def add_authentication(auth_hash)
+    self.current_user.authentications.create(:provider => auth_hash['provider'],
+      :uid => auth_hash['uid'], :refresh_token => auth_hash['credentials']['refresh_token'])
+  end
+
   def log_in(user)
     self.current_user = user
   end

@@ -5,12 +5,26 @@ class AttendancesController < InheritedResources::Base
   actions :new, :create, :index, :destroy
   
   before_filter :set_event
-  before_filter :load_registration_types
+  before_filter :load_registration_types, only: [:new, :create]
   before_filter :validate_free_registration, :only => [:create]
   
+  def confirm
+    attendance = Attendance.find(params[:id])
+    begin
+      attendance.confirm
+    rescue => ex
+      flash[:alert] = t('flash.attendance.mail.fail')
+      Rails.logger.error('Airbrake notification failed. Logging error locally only')
+      Rails.logger.error(ex.message)
+    end
+
+    redirect_to attendance_status_path(attendance)
+  end
+
   def create
     if !current_user.organizer? && !@event.can_add_attendance?
-      redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') } and return
+      redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
+      return
     end
 
     create! do |success, failure|
@@ -114,7 +128,7 @@ class AttendancesController < InheritedResources::Base
   end
 
   def set_event
-    @event ||= Event.joins(:registration_types).find_by_id(params[:event_id])
+    @event ||= Event.find_by_id(params[:event_id])
   end
 
   def notify(attendance)

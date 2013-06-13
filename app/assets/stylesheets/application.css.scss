@@ -283,3 +283,25 @@ ul.spaced {
     border: 1px solid black;
   }
 }
+
+.actions {
+  text-align: center;
+  form,div {
+    width: 50%;
+    display: inline;
+
+    input {
+      padding: 5px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 20px 40px;
+      border-radius:10px;
+      color: white;
+      background-color: darkgreen;
+
+      &.remove {
+        background-color: firebrick;
+      }
+    }
+  }
+}

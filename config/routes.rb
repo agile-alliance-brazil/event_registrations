@@ -11,6 +11,7 @@ Current::Application.routes.draw do
     resources :attendances, only: [:new, :create, :index, :destroy] do
       post :enable_voting, on: :member
       get :voting_instructions, on: :member
+      put :confirm, on: :member
     end
   end
 

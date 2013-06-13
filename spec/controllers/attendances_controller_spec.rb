@@ -11,12 +11,16 @@ describe AttendancesController do
     @manual = FactoryGirl.create(:registration_type, title: 'registration_type.manual', event: @event)
 
     now = Time.zone.local(2013, 5, 1)
-    Time.zone.stubs(:now).returns(now)
+    Timecop.freeze(now)
 
     Attendance.any_instance.stubs(:registration_fee).with(@individual).returns(399)
     Attendance.any_instance.stubs(:registration_fee).with(@free).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@manual).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with().returns(399)
+  end
+
+  after :each do
+    Timecop.return
   end
 
   describe "GET new" do
@@ -86,6 +90,57 @@ describe AttendancesController do
     end
   end
 
+  describe "PUT confirm" do
+    before(:each) do
+      user = FactoryGirl.create(:user)
+      user.add_role :organizer
+      user.save
+      sign_in user
+      disable_authorization
+
+      controller.current_user = user
+
+      @attendance = FactoryGirl.build(:attendance, user: user, id: 5)
+
+      Attendance.stubs(:find).with(@attendance.id.to_s).returns(@attendance)
+    end
+
+    it "should confirm attendance" do
+      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver: true))
+      @attendance.expects(:confirm)
+
+      put :confirm, event_id: @event.id, id: @attendance.id
+    end
+
+    it "should redirect back to status" do
+      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver: true))
+      put :confirm, event_id: @event.id, id: @attendance.id
+
+      response.should redirect_to(attendance_status_path(5))
+    end
+
+    it "should notify airbrake if cannot send email" do
+      exception = StandardError.new
+      EmailNotifications.expects(:registration_confirmed).raises(exception)
+
+      Airbrake.expects(:notify).with(exception)
+
+      put :confirm, event_id: @event.id, id: @attendance.id
+
+      response.should redirect_to(attendance_status_path(5))
+    end
+
+    it "should ignore airbrake errors if cannot send email" do
+      exception = StandardError.new
+      EmailNotifications.expects(:registration_confirmed).raises(exception)
+      Airbrake.expects(:notify).with(exception).raises(exception)
+
+      put :confirm, event_id: @event.id, id: @attendance.id
+
+      response.should redirect_to(attendance_status_path(5))
+    end
+  end
+
   describe "POST create" do
     before(:each) do
       @email = stub(deliver: true)
@@ -93,7 +148,7 @@ describe AttendancesController do
       EmailNotifications.stubs(:registration_pending).returns(@email)
     end
 
-    it "create action should render new template when model is invalid" do
+    it "should render new template when model is invalid" do
       # +stubs(:valid?).returns(false)+ doesn't work here because
       # inherited_resources does +obj.errors.empty?+ to determine
       # if validation failed
@@ -101,7 +156,7 @@ describe AttendancesController do
       response.should render_template(:new)
     end
 
-    it "create action should redirect when model is valid" do
+    it "should redirect when model is valid" do
       Attendance.any_instance.stubs(:valid?).returns(true)
       Attendance.any_instance.stubs(:id).returns(5)
       post :create, event_id: @event.id

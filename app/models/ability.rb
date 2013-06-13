@@ -43,6 +43,7 @@ class Ability
     can(:index, Attendance)
     can(:create, Attendance)
     can(:show, Attendance)
+    can(:confirm, Attendance)
     can(:update, Attendance)
     can(:destroy, Attendance)
   end

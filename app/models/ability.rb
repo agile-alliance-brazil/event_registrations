@@ -46,6 +46,5 @@ class Ability
     can(:confirm, Attendance)
     can(:update, Attendance)
     can(:destroy, Attendance)
-    can(:create, Transfer)
   end
 end

@@ -120,10 +120,6 @@ describe Ability do
       @ability.should be_able_to(:index, Attendance)
     end
     
-    it "can create transfer" do
-      @ability.should be_able_to(:create, Transfer)
-    end
-    
     describe "can create a new attendance if:" do
       it "- before deadline" do
         Time.zone.stubs(:now).returns(Ability::REGISTRATION_DEADLINE)

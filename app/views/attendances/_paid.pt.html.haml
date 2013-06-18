@@ -3,3 +3,7 @@
 %h3 Instruções:
 
 %p Pagamento efetuado com sucesso. Após revisarmos os detalhes da sua inscrição, enviaremos um e-mail de confirmação da sua inscrição no evento.
+
+- if can? :transfer, Attendance
+  %div.actions
+    = button_to 'Transferir inscrição', attendance_transfer_path(attendance)

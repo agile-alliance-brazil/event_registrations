@@ -1,0 +1,5 @@
+- flash.now[:notice] = "Sua inscrição está confirmada!"
+
+- if can? :transfer, Attendance
+  %div.actions
+    = button_to 'Transferir inscrição', attendance_transfer_path(attendance)

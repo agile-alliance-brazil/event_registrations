@@ -3,3 +3,7 @@
 %h3 Instructions:
 
 %p We have received your payment. After reviewing your registration details, we will send a confirmation e-mail.
+
+- if can? :transfer, Attendance
+  %div.actions
+    = button_to 'Transfer registration', attendance_transfer_path(attendance)

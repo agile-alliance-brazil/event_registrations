@@ -8,15 +8,16 @@ Current::Application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   resources :events, only: [:index, :show] do
-    resources :attendances, only: [:new, :create, :index, :destroy] do
-      post :enable_voting, on: :member
-      get :voting_instructions, on: :member
-      put :confirm, on: :member
-    end
+    resources :attendances, only: [:new, :create, :index], controller: :event_attendances
   end
 
-  resources :attendance_statuses, only: :show
-  match '/attendance_statuses/:id', via: :post, to: 'attendance_statuses#callback' #Stupid BCash callback does a post
+  match '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
+  match '/attendance_statuses/:id', via: :post, to: redirect("/attendances/%{id}")
+  resources :attendances, only: [:show, :destroy] do
+    post :enable_voting, on: :member
+    get :voting_instructions, on: :member
+    put :confirm, on: :member
+  end
 
   resources :payment_notifications, only: :create
 

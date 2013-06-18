@@ -8,7 +8,7 @@
         Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, locale: :pt)}:
         %p
           = form_tag AppConfig[:bcash][:url] do
-            - vars = build_bcash_variables(attendance, attendance_status_url(attendance, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
+            - vars = build_bcash_variables(attendance, attendance_url(attendance, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
             - vars.each do |key, value|
               = hidden_field_tag key, value
             = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pague com BCash"
@@ -21,7 +21,7 @@
         %p
           = form_tag AppConfig[:paypal][:url] do
             = hidden_field_tag :cmd, "_s-xclick"
-            = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, attendance_status_url(attendance, locale: 'pt'), payment_notifications_url(type: 'paypal', secret: AppConfig[:paypal][:secret]))
+            = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, attendance_url(attendance, locale: 'pt'), payment_notifications_url(type: 'paypal', secret: AppConfig[:paypal][:secret]))
             = image_submit_tag "https://www.paypal.com/pt_BR/i/btn/btn_paynow_SM.gif"
             = link_to_function image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", border: "0", alt: "Pague com PayPal"), "javascript:window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');"
 
@@ -34,5 +34,5 @@
 
 %div.actions
   - if can? :confirm, Attendance
-    = button_to 'Confirmar inscrição', confirm_event_attendance_path(attendance.event, attendance), confirm: t('attendance.confirm_confirmation', event: attendance.event.name), method: :put
-  = button_to 'Cancelar inscrição', [attendance.event, attendance], confirm: t('attendance.cancel_confirmation', event: attendance.event.name), method: :delete, class: 'remove'
+    = button_to 'Confirmar inscrição', confirm_attendance_path(attendance), confirm: t('attendance.confirm_confirmation', event: attendance.event.name), method: :put
+  = button_to 'Cancelar inscrição', attendance, confirm: t('attendance.cancel_confirmation', event: attendance.event.name), method: :delete, class: 'remove'

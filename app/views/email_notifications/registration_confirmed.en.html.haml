@@ -2,18 +2,7 @@
 
 %p Your registration was confirmed successfully.
 
-%ul 
-  %li Date: June 26th, 27th and 28th, 2013
-  %li Time: 9h às 19h
-  %li Location: Royal Tulip Brasília Alvorada - SHTN, Trecho 01 Conj 1b - Bloco C,  Lago Norte, Brasília - DF
-
-%p 
-  Observações:
-  %ol
-    %li Your badge should be obtained at the registration desk, at the conference location, as early as June 26th.
-    %li The conference's attendance certification will be delivered by e-mail. If you do not receive it 10 days after the event, please contact us through #{mail_to AppConfig[:organizer][:contact_email]}.
-    %li There will be a valet service at the conference for those who will drive.
-    %li The conference will not provide lunch. We suggest that you dine at restaurants in Vila Planalto, a neighborhood next to the conference hotel.
+= render "email_notifications/event_#{@attendance.event.id}_details"
 
 %p If you have any questions, please contact us at #{mail_to AppConfig[:organizer][:contact_email]}
 

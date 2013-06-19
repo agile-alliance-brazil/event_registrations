@@ -33,7 +33,7 @@ Event.seed do |event|
   event.id                   = 4
   event.name                 = 'Virada Ágil - Management 3.0 - Adaptworks'
   event.year                 = 2013
-  event.location_and_date    = '24 & 25 Jun, Brasília, DF'
+  event.location_and_date    = '20 & 21 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/management-3-0'
   event.allow_voting         = false
   event.attendance_limit     = 30
@@ -73,7 +73,7 @@ Event.seed do |event|
   event.id                   = 8
   event.name                 = 'Virada Ágil - Práticas ágeis - Caelum'
   event.year                 = 2013
-  event.location_and_date    = '22 & 23 Jun, Brasília, DF'
+  event.location_and_date    = '24 & 25 Jun, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/praticas-ageis'
   event.allow_voting         = false
   event.attendance_limit     = 20

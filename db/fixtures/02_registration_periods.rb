@@ -84,7 +84,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 3
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 21).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -108,7 +108,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 4
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 20).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -132,7 +132,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 5
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 21).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -156,7 +156,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 6
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 21).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -180,7 +180,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 7
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 21).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -204,7 +204,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 8
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 21).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -228,7 +228,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 9
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 21).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -252,7 +252,7 @@ RegistrationPeriod.seed do |period|
   period.event_id = 10
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 21).end_of_day
 end
 
 RegistrationPeriod.seed do |period|
@@ -276,5 +276,5 @@ RegistrationPeriod.seed do |period|
   period.event_id = 11
   period.title = 'registration_period.late'
   period.start_at = Time.zone.local(2013, 6, 11)
-  period.end_at = Time.zone.local(2013, 6, 22).end_of_day
+  period.end_at = Time.zone.local(2013, 6, 20).end_of_day
 end

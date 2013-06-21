@@ -313,6 +313,10 @@ pt:
     individual: "Individual"
     free: "Gratuita"
     manual: "Manual"
+    speaker: "Palestrante"
+    sponsor: "Patrocinador"
+    organizer: "Organizador"
+    guest: "Convidado"
 
   registration:
     quantity: "Quantidade"

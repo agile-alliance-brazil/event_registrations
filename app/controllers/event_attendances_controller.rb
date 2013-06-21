@@ -45,11 +45,11 @@ class EventAttendancesController < InheritedResources::Base
     attributes[:event_id] = @event.id
     attributes[:user_id] = current_user.id
     if parent?
-      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.group').id
+      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.group').try(:id)
       attributes[:organization] = parent.name
     end
     if current_user.has_approved_session?(@event)
-      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.free').id
+      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.speaker').try(:id)
     end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id
@@ -67,10 +67,9 @@ class EventAttendancesController < InheritedResources::Base
   end
 
   def valid_registration_types
-    registration_types = @event.registration_types.without_free.without_group.all
-    registration_types << @event.registration_types.find_by_title('registration_type.free') if allowed_free_registration?
-    registration_types << @event.registration_types.find_by_title('registration_type.manual') if current_user.organizer?
-    registration_types.compact
+    registration_types = @event.registration_types.paid.without_group.all
+    registration_types << @event.registration_types.without_group.all if current_user.organizer?
+    registration_types.flatten.uniq.compact
   end
     
   def validate_free_registration
@@ -83,7 +82,7 @@ class EventAttendancesController < InheritedResources::Base
   end
   
   def is_free?(attendance)
-    attendance.registration_type == @event.registration_types.find_by_title('registration_type.free')
+    !@event.registration_types.paid.include?(attendance.registration_type)
   end
   
   def allowed_free_registration?

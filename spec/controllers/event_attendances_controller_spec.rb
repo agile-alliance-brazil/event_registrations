@@ -9,12 +9,14 @@ describe EventAttendancesController do
     @individual = @event.registration_types.first
     @free = FactoryGirl.create(:registration_type, title: 'registration_type.free', event: @event)
     @manual = FactoryGirl.create(:registration_type, title: 'registration_type.manual', event: @event)
+    @speaker = FactoryGirl.create(:registration_type, title: 'registration_type.speaker', event: @event)
 
     now = Time.zone.local(2013, 5, 1)
     Timecop.freeze(now)
 
     Attendance.any_instance.stubs(:registration_fee).with(@individual).returns(399)
     Attendance.any_instance.stubs(:registration_fee).with(@free).returns(0)
+    Attendance.any_instance.stubs(:registration_fee).with(@speaker).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@manual).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with().returns(399)
   end
@@ -46,7 +48,7 @@ describe EventAttendancesController do
       end
     end
 
-    describe "for sponsors" do
+    describe "for organizers" do
       before do
         @user = FactoryGirl.create(:user)
         @user.add_role :organizer
@@ -59,33 +61,9 @@ describe EventAttendancesController do
         get :new, event_id: @event.id
         assigns(:registration_types).should include(@individual)
         assigns(:registration_types).should include(@free)
+        assigns(:registration_types).should include(@speaker)
         assigns(:registration_types).should include(@manual)
-        assigns(:registration_types).size.should == 3
-      end
-    end
-
-    describe "for speakers" do
-      before do
-        User.any_instance.stubs(:has_approved_session?).returns(true)
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-        disable_authorization
-      end
-
-      it "should load registration types without groups but with free" do
-        get :new, event_id: @event.id
-        assigns(:registration_types).should include(@individual)
-        assigns(:registration_types).should include(@free)
-        assigns(:registration_types).size.should == 2
-      end
-
-      it "should pre select free registration group for attendance and fill email with speakers email" do
-        get :new, event_id: @event.id
-        assigns(:attendance).registration_type.should == @free
-        assigns(:attendance).first_name.should == @user.first_name
-        assigns(:attendance).last_name.should == @user.last_name
-        assigns(:attendance).organization.should == @user.organization
-        assigns(:attendance).email.should == @user.email
+        assigns(:registration_types).size.should == 4
       end
     end
   end

@@ -5,6 +5,7 @@ class RegistrationType < ActiveRecord::Base
   
   scope :without_group, where('title != ?', 'registration_type.group')
   scope :without_free, where('title != ? AND title != ?', 'registration_type.manual', 'registration_type.free')
+  scope :paid, where(title: ['registration_type.individual', 'registration_type.group'])
   
   def price(datetime)
     period = event.registration_periods.for(datetime).first

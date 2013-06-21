@@ -600,3 +600,108 @@ RegistrationPrice.seed do |registration_price|
   registration_price.registration_period_id = 35
   registration_price.value = 0.00
 end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 81
+  registration_price.registration_type_id = 25
+  registration_price.registration_period_id = 1
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 82
+  registration_price.registration_type_id = 25
+  registration_price.registration_period_id = 2
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 83
+  registration_price.registration_type_id = 25
+  registration_price.registration_period_id = 3
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 84
+  registration_price.registration_type_id = 25
+  registration_price.registration_period_id = 4
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 85
+  registration_price.registration_type_id = 25
+  registration_price.registration_period_id = 5
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 86
+  registration_price.registration_type_id = 26
+  registration_price.registration_period_id = 1
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 87
+  registration_price.registration_type_id = 26
+  registration_price.registration_period_id = 2
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 88
+  registration_price.registration_type_id = 26
+  registration_price.registration_period_id = 3
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 89
+  registration_price.registration_type_id = 26
+  registration_price.registration_period_id = 4
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 90
+  registration_price.registration_type_id = 26
+  registration_price.registration_period_id = 5
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 91
+  registration_price.registration_type_id = 27
+  registration_price.registration_period_id = 1
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 92
+  registration_price.registration_type_id = 27
+  registration_price.registration_period_id = 2
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 93
+  registration_price.registration_type_id = 27
+  registration_price.registration_period_id = 3
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 94
+  registration_price.registration_type_id = 27
+  registration_price.registration_period_id = 4
+  registration_price.value = 0.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 95
+  registration_price.registration_type_id = 27
+  registration_price.registration_period_id = 5
+  registration_price.value = 0.00
+end

@@ -14,7 +14,7 @@ end
 RegistrationType.seed do |registration_type|
   registration_type.event_id = 1
   registration_type.id = 3
-  registration_type.title = 'registration_type.free'
+  registration_type.title = 'registration_type.speaker'
 end
 
 RegistrationType.seed do |registration_type|
@@ -141,4 +141,22 @@ RegistrationType.seed do |registration_type|
   registration_type.event_id = 11
   registration_type.id = 24
   registration_type.title = 'registration_type.manual'
+end
+
+RegistrationType.seed do |registration_type|
+  registration_type.event_id = 1
+  registration_type.id = 25
+  registration_type.title = 'registration_type.sponsor'
+end
+
+RegistrationType.seed do |registration_type|
+  registration_type.event_id = 1
+  registration_type.id = 26
+  registration_type.title = 'registration_type.organizer'
+end
+
+RegistrationType.seed do |registration_type|
+  registration_type.event_id = 1
+  registration_type.id = 27
+  registration_type.title = 'registration_type.guest'
 end

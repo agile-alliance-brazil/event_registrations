@@ -182,6 +182,8 @@ en:
   registration:
     quantity: "Quantity"
     status: "Registration status on %{date}"
+    details:
+      csv: 'Download CSV attendee list'
 
   attendance:
     status:

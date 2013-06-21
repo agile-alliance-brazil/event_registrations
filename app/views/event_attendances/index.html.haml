@@ -1,7 +1,11 @@
 - title t('title.attendances_summary')
 
 %p= t('registration.status', :date => I18n.l(Time.zone.now))
-  
+
+%p
+  = link_to image_tag('icon-csv.png'), event_attendances_path(event_id: @event.id, format: :csv)
+  = link_to t('registration.details.csv'), event_attendances_path(event_id: @event.id, format: :csv)
+
 %table.summary
   %tr
     %th{:rowspan=>2}= t('formtastic.labels.attendee.status')

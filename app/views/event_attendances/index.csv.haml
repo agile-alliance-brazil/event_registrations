@@ -1,0 +1,5 @@
+- inscritos = @attendances.map{|a| [a.id, a.full_name, a.cpf, a.email, a.phone, a.state, a.country, a.organization, I18n.t(a.registration_type.title), a.status]}
+
+= CSV.generate do |csv|
+  - csv << ['ID', 'Nome Completo', 'CPF', 'Email', 'Telefone', 'Estado', 'País', 'Organização', 'Tipo de inscrição', 'Status']
+  - inscritos.each {|i| csv << i}

@@ -9,6 +9,15 @@ class EventAttendancesController < InheritedResources::Base
   before_filter :set_event
   before_filter :load_registration_types, only: [:new, :create]
   before_filter :validate_free_registration, :only => [:create]
+
+  def index
+    index! do |format|
+      format.html
+      format.csv {
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{@event.name.parameterize.underscore}.csv\""
+      }
+    end
+  end
   
   def create
     if !current_user.organizer? && !@event.can_add_attendance?

@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    @current_ability ||= Ability.new(current_user, @event)
+    @current_ability ||= Ability.new(current_user, event)
   end
 
   def authenticate_user!
@@ -50,6 +50,10 @@ class ApplicationController < ActionController::Base
   def set_timezone
     # current_user.time_zone #=> 'London'
     Time.zone = params[:time_zone]
+  end
+
+  def event
+    @event ||= Event.find_by_id(params[:event_id])
   end
 
   def authorize_action

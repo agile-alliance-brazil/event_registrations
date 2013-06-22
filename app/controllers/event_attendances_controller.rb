@@ -6,7 +6,7 @@ class EventAttendancesController < InheritedResources::Base
 
   actions :new, :create, :index
   
-  before_filter :set_event
+  before_filter :event
   before_filter :load_registration_types, only: [:new, :create]
   before_filter :validate_free_registration, :only => [:create]
 
@@ -14,13 +14,13 @@ class EventAttendancesController < InheritedResources::Base
     index! do |format|
       format.html
       format.csv {
-        response.headers['Content-Disposition'] = "attachment; filename=\"#{@event.name.parameterize.underscore}.csv\""
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{event.name.parameterize.underscore}.csv\""
       }
     end
   end
   
   def create
-    if !current_user.organizer? && !@event.can_add_attendance?
+    if !current_user.organizer? && !event.can_add_attendance?
       redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
       return
     end
@@ -51,24 +51,24 @@ class EventAttendancesController < InheritedResources::Base
       attributes[:email_confirmation] = current_user.email
       attributes[:gender] = current_user.gender
     end
-    attributes[:event_id] = @event.id
+    attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
     if parent?
-      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.group').try(:id)
+      attributes[:registration_type_id] = event.registration_types.find_by_title('registration_type.group').try(:id)
       attributes[:organization] = parent.name
     end
-    if current_user.has_approved_session?(@event)
-      attributes[:registration_type_id] = @event.registration_types.find_by_title('registration_type.speaker').try(:id)
+    if current_user.has_approved_session?(event)
+      attributes[:registration_type_id] = event.registration_types.find_by_title('registration_type.speaker').try(:id)
     end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id
     end
-    attributes[:registration_date] ||= Time.now
+    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.now].min
     @attendance ||= Attendance.new(attributes)
   end
 
   def collection
-    @attendances ||= end_of_association_chain.for_event(@event).active.all(include: [:payment_notifications, :event, :registration_type])
+    @attendances ||= end_of_association_chain.for_event(event).active.all(include: [:payment_notifications, :event, :registration_type])
   end
   
   def load_registration_types
@@ -76,8 +76,8 @@ class EventAttendancesController < InheritedResources::Base
   end
 
   def valid_registration_types
-    registration_types = @event.registration_types.paid.without_group.all
-    registration_types << @event.registration_types.without_group.all if current_user.organizer?
+    registration_types = event.registration_types.paid.without_group.all
+    registration_types << event.registration_types.without_group.all if current_user.organizer?
     registration_types.flatten.uniq.compact
   end
     
@@ -91,14 +91,14 @@ class EventAttendancesController < InheritedResources::Base
   end
   
   def is_free?(attendance)
-    !@event.registration_types.paid.include?(attendance.registration_type)
+    !event.registration_types.paid.include?(attendance.registration_type)
   end
   
   def allowed_free_registration?
-    (current_user.has_approved_session?(@event) || current_user.organizer?) && !parent?
+    (current_user.has_approved_session?(event) || current_user.organizer?) && !parent?
   end
 
-  def set_event
+  def event
     @event ||= Event.find_by_id(params[:event_id])
   end
 

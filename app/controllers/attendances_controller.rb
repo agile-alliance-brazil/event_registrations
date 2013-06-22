@@ -1,6 +1,6 @@
 # encoding: UTF-8
 class AttendancesController < InheritedResources::Base
-  before_filter :set_event
+  before_filter :event
   skip_before_filter :authenticate_user!, only: :callback
   skip_before_filter :authorize_action, only: :callback
   protect_from_forgery :except => [:callback]
@@ -53,7 +53,7 @@ class AttendancesController < InheritedResources::Base
     @attendance ||= Attendance.find(params[:id])
   end
 
-  def set_event
+  def event
     @event = attendance.event
   end
 end

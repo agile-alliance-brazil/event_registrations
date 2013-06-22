@@ -5,6 +5,7 @@ describe Ability do
   before(:each) do
     @user = FactoryGirl.build(:user)
     @event = FactoryGirl.build(:event)
+    @deadline = @event.registration_periods.last.end_at
   end
   
   shared_examples_for "all users" do
@@ -51,18 +52,16 @@ describe Ability do
     end
     
     describe "can create a new attendance if:" do
-      before(:each) do
-        Time.zone.stubs(:now).returns(Ability::REGISTRATION_DEADLINE - 3.days)
-      end
-      
       it "- before deadline" do
-        Time.zone.expects(:now).returns(Ability::REGISTRATION_DEADLINE)
-        @ability.should be_able_to(:create, Attendance)
+        Timecop.freeze(@deadline - 1.day) do
+          @ability.should be_able_to(:create, Attendance)
+        end
       end
       
       it "- after deadline can't register" do
-        Time.zone.expects(:now).returns(Ability::REGISTRATION_DEADLINE + 1.second)
-        @ability.should_not be_able_to(:create, Attendance)
+        Timecop.freeze(@deadline + 1.second) do
+          @ability.should_not be_able_to(:create, Attendance)
+        end
       end
     end
 
@@ -122,13 +121,15 @@ describe Ability do
     
     describe "can create a new attendance if:" do
       it "- before deadline" do
-        Time.zone.stubs(:now).returns(Ability::REGISTRATION_DEADLINE)
-        @ability.should be_able_to(:create, Attendance)
+        Timecop.freeze(@deadline - 1.day) do
+          @ability.should be_able_to(:create, Attendance)
+        end
       end
       
       it "- after deadline" do
-        Time.zone.stubs(:now).returns(Ability::REGISTRATION_DEADLINE + 1.second)
-        @ability.should be_able_to(:create, Attendance)
+        Timecop.freeze(@deadline + 1.second) do
+          @ability.should be_able_to(:create, Attendance)
+        end
       end
     end
   end

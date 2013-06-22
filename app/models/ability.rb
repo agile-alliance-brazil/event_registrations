@@ -31,7 +31,7 @@ class Ability
     can([:enable_voting, :voting_instructions], Attendance, :user_id => @user.id)
     can do |action, subject_class, subject|
       expand_actions([:create]).include?(action) && [Attendance].include?(subject_class) &&
-      Time.zone.now <= REGISTRATION_DEADLINE
+      Time.zone.now <= @event.registration_periods.last.end_at
     end
   end
 

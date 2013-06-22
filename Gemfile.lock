@@ -121,7 +121,7 @@ GEM
       coffee-rails
       haml
     journey (1.0.4)
-    jquery-rails (2.2.1)
+    jquery-rails (3.0.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.7.7)
@@ -303,7 +303,7 @@ DEPENDENCIES
   inherited_resources (= 1.4.0)
   jasmine-jquery-rails (= 1.4.2)
   jasminerice (= 0.0.10)
-  jquery-rails (= 2.2.1)
+  jquery-rails (= 3.0.1)
   libv8 (= 3.11.8.17)
   magic-localized_country_select (= 0.2.0)
   mocha (= 0.14.0)

@@ -33,6 +33,39 @@ describe AttendancesController do
     Timecop.return
   end
 
+  describe "GET show" do
+    it "should set attendance variable" do
+      get :show, id: @attendance.id
+
+      assigns[:attendance].should == @attendance
+    end
+    it "should respond to json" do
+      get :show, id: @attendance.id, format: :json
+
+      response.should be_success      
+    end
+  end
+
+  describe "DELETE destroy" do
+    it "should cancel attendance" do
+      @attendance.expects(:cancel)
+
+      delete :destroy, id: @attendance.id
+    end
+
+    it "should not delete attendance" do
+      @attendance.expects(:destroy).never
+
+      delete :destroy, id: @attendance.id
+    end
+
+    it "should redirect back to status" do
+      delete :destroy, id: @attendance.id
+
+      response.should redirect_to(attendance_path(5))
+    end
+  end
+
   describe "PUT confirm" do
     it "should confirm attendance" do
       EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver: true))
@@ -65,26 +98,6 @@ describe AttendancesController do
       Airbrake.expects(:notify).with(exception).raises(exception)
 
       put :confirm, id: @attendance.id
-
-      response.should redirect_to(attendance_path(5))
-    end
-  end
-
-  describe "DELETE destroy" do
-    it "should cancel attendance" do
-      @attendance.expects(:cancel)
-
-      delete :destroy, id: @attendance.id
-    end
-
-    it "should not delete attendance" do
-      @attendance.expects(:destroy).never
-
-      delete :destroy, id: @attendance.id
-    end
-
-    it "should redirect back to status" do
-      delete :destroy, id: @attendance.id
 
       response.should redirect_to(attendance_path(5))
     end

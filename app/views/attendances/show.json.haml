@@ -1,0 +1,1 @@
+= @attendance.attributes.select{|key,value| key == 'first_name' || key == 'last_name' || key == 'id' || key == 'status'}.to_json.html_safe

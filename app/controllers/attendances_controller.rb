@@ -6,10 +6,7 @@ class AttendancesController < InheritedResources::Base
   protect_from_forgery :except => [:callback]
 
   actions :show, :destroy
-
-  def bcash_callback
-    redirect_to attendance_path(attendance)
-  end
+  respond_to :json, only: [:show]
 
   def destroy
     attendance.cancel

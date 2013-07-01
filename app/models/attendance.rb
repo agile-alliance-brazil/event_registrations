@@ -20,25 +20,25 @@ class Attendance < ActiveRecord::Base
   validates_presence_of :state, :if => Proc.new {|a| a.in_brazil?}
   validates_presence_of :cpf, :if => Proc.new {|a| a.in_brazil?}
 
-  validates_length_of [:first_name, :last_name, :phone, :city, :organization], :maximum => 100, :allow_blank => true
-  validates_format_of :email, :with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, :allow_blank => true
-  validates_length_of :email, :within => 6..100, :allow_blank => true
+  validates_length_of [:first_name, :last_name, :phone, :city, :organization], maximum: 100, allow_blank: true
+  validates_format_of :email, with: /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, allow_blank: true
+  validates_length_of :email, within: 6..100, allow_blank: true
 
-  validates_format_of :phone, :with => /\A[0-9\(\) .\-\+]+\Z/i, :allow_blank => true
+  validates_format_of :phone, with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true
 
   usar_como_cpf :cpf
 
-  state_machine :status, :initial => :pending do
+  state_machine :status, initial: :pending do
     event :confirm do
       transition [:pending, :paid] => :confirmed
     end
 
     event :pay do
-      transition :pending => :paid
+      transition pending: :paid
     end
 
     event :cancel do
-      transition :pending => :cancelled
+      transition pending: :cancelled
     end
     
     state :confirmed do

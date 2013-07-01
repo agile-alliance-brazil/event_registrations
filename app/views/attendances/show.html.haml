@@ -1,15 +1,7 @@
 - title t('title.attendance')
 
-%ul.spaced
-  %li.first #{t('formtastic.labels.attendance.full_name')}:
-  %li= @attendance.full_name
-%ul.spaced
-  %li.first #{t('generic.registration_number')}:
-  %li= @attendance.id
-%ul.spaced
-  %li.first #{t('formtastic.labels.attendance.status')}:
-  %li= t("attendance.status.#{@attendance.status}")
+= render partial: 'shared/badge', locals: {attendance: @attendance}
 
-= render :partial => 'shared/registration_details', :locals => {:attendance => @attendance}
+= render partial: 'shared/registration_details', locals: {attendance: @attendance}
 
-= render :partial => @attendance.status, :locals => {:attendance => @attendance}
+= render partial: @attendance.status, locals: {attendance: @attendance}

@@ -19,10 +19,9 @@ describe AttendancesController do
     user = FactoryGirl.create(:user)
     user.add_role :organizer
     user.save
-    sign_in user
     disable_authorization
 
-    controller.current_user = user
+    sign_in user
 
     @attendance = FactoryGirl.build(:attendance, user: user, id: 5)
 

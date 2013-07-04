@@ -18,6 +18,7 @@ Current::Application.routes.draw do
     get :voting_instructions, on: :member
     put :confirm, on: :member
   end
+  resources :transfers, only: [:new, :create]
 
   resources :payment_notifications, only: :create
 

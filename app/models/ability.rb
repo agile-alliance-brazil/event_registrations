@@ -22,13 +22,8 @@ class Ability
     can(:manage, 'password_resets')
     can(:read, Event)
     can(:manage, @user)
-    can(:show, Attendance) do |attendance|
-      attendance.user == @user
-    end
-    can(:destroy, Attendance) do |attendance|
-      attendance.user == @user
-    end
-    can([:enable_voting, :voting_instructions], Attendance, :user_id => @user.id)
+
+    can([:show, :destroy, :enable_voting, :voting_instructions], Attendance, :user_id => @user.id)
     can do |action, subject_class, subject|
       expand_actions([:create]).include?(action) && [Attendance].include?(subject_class) &&
       Time.zone.now <= @event.registration_periods.last.end_at
@@ -40,11 +35,8 @@ class Ability
   end
 
   def organizer_privileges
-    can(:index, Attendance)
-    can(:create, Attendance)
-    can(:show, Attendance)
-    can(:confirm, Attendance)
-    can(:update, Attendance)
-    can(:destroy, Attendance)
+    can(:manage, Attendance)
+
+    can(:manage, "transfers")
   end
 end

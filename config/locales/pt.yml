@@ -168,6 +168,7 @@ pt:
       attendance_payment: "Dados de Pagamento"
     labels:
       attendance:
+        id: "Número de inscrição"
         registration_type_id: "Tipo de inscrição"
         first_name: "Nome"
         last_name: "Sobrenome"
@@ -209,6 +210,9 @@ pt:
         organization: "Organização"
         twitter_user: "Usuário no Twitter"
         default_locale: "Idioma preferido"
+      transfer:
+        origin_id: "Origem"
+        destination_id: "Destino"
     hints:
       attendance:
         registration_type_id: "Indique o tipo de sua inscrição."
@@ -229,6 +233,7 @@ pt:
   # Mensagens customizadas
   title:
     registration: "Nova inscrição"
+    transfer: "Transferir inscrição"
     attendance: "Detalhes da inscrição"
     attendances_summary: "Resumo das inscrições"
     login: "Acessar"
@@ -283,6 +288,9 @@ pt:
       create: "Este parece ser seu primeiro acesso ao sistema. Complete suas informações abaixo para ativar sua conta."
       failure: "Não foi possível autenticar seu usuário. Queira, por favor, tentar novamente mais tarde ou utilize outro serviço."
       invalid: "O serviço escolhido para autenticação não pôde nos informar seu nome. Por favor, preencha esta informação no serviço escolhido e tente autenticar-se novamente."
+    transfer:
+      success: "Transferência realizada com sucesso"
+      failure: "A transferência falhou. Verifique que a inscrição de origem está paga e/ou confirmada e a de destino está pendente.\n\nInscrições canceladas não podem receber uma transferência. Uma nova inscrição precisa ser criada neste caso."
 
   footer:
     help: "Se tiver dúvidas, críticas ou sugestões entre em contato através do email <a href='mailto:inscricoes@agilebrazil.com'>inscricoes@agilebrazil.com</a>"

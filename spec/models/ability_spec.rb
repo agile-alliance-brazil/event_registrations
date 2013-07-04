@@ -50,14 +50,14 @@ describe Ability do
     it "cannot index all attendances" do
       @ability.should_not be_able_to(:index, Attendance)
     end
-    
+
     describe "can create a new attendance if:" do
       it "- before deadline" do
         Timecop.freeze(@deadline - 1.day) do
           @ability.should be_able_to(:create, Attendance)
         end
       end
-      
+
       it "- after deadline can't register" do
         Timecop.freeze(@deadline + 1.second) do
           @ability.should_not be_able_to(:create, Attendance)
@@ -79,7 +79,7 @@ describe Ability do
       @ability.should be_able_to(:voting_instructions, attendance)
     end
   end
-  
+
   context "- admin" do
     before(:each) do
       @user.add_role "admin"
@@ -98,7 +98,7 @@ describe Ability do
     end
 
     it_should_behave_like "all users"
-  
+
     it "can show attendances" do
       @ability.should be_able_to(:show, Attendance)
     end
@@ -110,7 +110,7 @@ describe Ability do
     it "can confirm attendances" do
       @ability.should be_able_to(:confirm, Attendance)
     end
-    
+
     it "can update attendances" do
       @ability.should be_able_to(:update, Attendance)
     end
@@ -118,14 +118,18 @@ describe Ability do
     it "can index all attendances" do
       @ability.should be_able_to(:index, Attendance)
     end
-    
+
+    it "can create transfer" do
+      @ability.should be_able_to(:create, "transfers")
+    end
+
     describe "can create a new attendance if:" do
       it "- before deadline" do
         Timecop.freeze(@deadline - 1.day) do
           @ability.should be_able_to(:create, Attendance)
         end
       end
-      
+
       it "- after deadline" do
         Timecop.freeze(@deadline + 1.second) do
           @ability.should be_able_to(:create, Attendance)

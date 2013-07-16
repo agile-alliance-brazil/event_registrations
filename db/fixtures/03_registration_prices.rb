@@ -705,3 +705,17 @@ RegistrationPrice.seed do |registration_price|
   registration_price.registration_period_id = 5
   registration_price.value = 0.00
 end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 96
+  registration_price.registration_type_id = 19
+  registration_price.registration_period_id = 36
+  registration_price.value = 600.00
+end
+
+RegistrationPrice.seed do |registration_price|
+  registration_price.id = 97
+  registration_price.registration_type_id = 20
+  registration_price.registration_period_id = 36
+  registration_price.value = 0.00
+end

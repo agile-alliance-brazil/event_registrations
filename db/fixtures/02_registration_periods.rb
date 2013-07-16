@@ -278,3 +278,11 @@ RegistrationPeriod.seed do |period|
   period.start_at = Time.zone.local(2013, 6, 11)
   period.end_at = Time.zone.local(2013, 6, 20).end_of_day
 end
+
+RegistrationPeriod.seed do |period|
+  period.id = 36
+  period.event_id = 9
+  period.title = 'registration_period.late'
+  period.start_at = Time.zone.local(2013, 6, 22)
+  period.end_at = Time.zone.local(2013, 7, 20).end_of_day
+end

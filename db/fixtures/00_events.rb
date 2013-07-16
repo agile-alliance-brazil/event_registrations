@@ -74,7 +74,7 @@ end
 Event.seed do |event|
   event.id                   = 9
   event.name                 = 'Virada Ágil - Lean Startup - SEA Tecnologia'
-  event.location_and_date    = '24 & 25 Jun, Brasília, DF'
+  event.location_and_date    = '22 & 23 Jul, Brasília, DF'
   event.price_table_link     = 'http://www.agilebrazil.com/2013/:locale/viradaagil/lean-startup'
   event.allow_voting         = false
   event.attendance_limit     = 30

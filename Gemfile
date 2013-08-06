@@ -25,7 +25,7 @@ gem 'magic-localized_country_select', '=0.2.0', :require => 'localized_country_s
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'libv8', '=3.11.8.17', :platforms => :ruby
+  gem 'libv8', '=3.11.8.17', :platforms => :ruby #therubyracer needs to be updated to update libv8
   gem 'therubyracer', '=0.11.4', :platforms => :ruby
   gem 'sass-rails',   '=3.2.6'
   gem 'coffee-rails', '=3.2.2'

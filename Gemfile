@@ -9,7 +9,7 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=3.2.21' # Issue #61 - target 4.0.2
+gem 'rails', '=4.0.0'
 gem 'inherited_resources', '=1.5.1'
 gem 'seed-fu', '=2.3.3'
 gem 'brhelper', '=3.3.0'
@@ -19,6 +19,7 @@ gem 'state_machine', '=1.2.0'
 gem 'haml', '=4.0.6'
 gem 'formtastic', '=3.1.2'
 gem 'airbrake', '=4.1.0'
+gem 'localized_country_select', '=0.9.9'
 gem 'cancan', '=1.6.10'
 gem 'jquery-rails', '=3.1.2' # 4.0.1 requires rails 4
 gem 'rake'
@@ -29,14 +30,12 @@ gem 'omniauth-facebook', '=2.0.0'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 
-gem 'localized_country_select', '=0.9.9'
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   gem 'therubyracer', '=0.12.1', :platforms => :ruby
-  gem 'sass-rails',   '=3.2.6' # 4.0.1 requires rails 4
-  gem 'coffee-rails', '=3.2.2' # 4.0.1 requires rails 4
+  gem 'sass-rails',   '=4.0.1'
+  gem 'coffee-rails', '=4.0.1'
   gem 'yui-compressor', '=0.12.0'
 end
 

@@ -20,7 +20,7 @@ gem 'omniauth-facebook', '=1.4.1'
 gem 'omniauth-github', '=1.1.1'
 gem 'aws-ses', '=0.5.0', :require => 'aws/ses'
 
-gem 'magic-localized_country_select', '=0.2.0', :require => 'localized_country_select'
+gem 'localized_country_select', '>= 0.9.3'
 
 # Gems used only for assets and not required
 # in production environments by default.

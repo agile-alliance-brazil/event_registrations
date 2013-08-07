@@ -1,6 +1,7 @@
 # encoding: UTF-8
 class Authentication < ActiveRecord::Base
   PROVIDERS = %w(twitter facebook github submission_system)
+  PROVIDERS << 'developer' unless Rails.env.production?
 
   belongs_to :user
   attr_accessible :provider, :uid, :refresh_token

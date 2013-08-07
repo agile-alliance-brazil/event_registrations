@@ -362,6 +362,7 @@ pt:
       twitter: "Twitter"
       facebook: "Facebook"
       submission_system: "Sistema de Submissões"
+      developer: "Developer Backdoor"
 
   event:
     attendance:

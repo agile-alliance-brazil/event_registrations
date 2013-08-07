@@ -8,7 +8,7 @@ raise "Submission system key/secret is not configured in config/config.yml file 
 require File.expand_path('lib/omniauth/strategies/submission_system', Rails.root)
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  # provider :developer unless Rails.env.production?
+  provider :developer unless Rails.env.production?
   provider :github, AppConfig[:github][:key], AppConfig[:github][:secret]
   provider :twitter, AppConfig[:twitter][:key], AppConfig[:twitter][:secret]
   provider :facebook, AppConfig[:facebook][:key], AppConfig[:facebook][:secret]

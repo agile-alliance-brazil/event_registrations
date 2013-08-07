@@ -223,6 +223,7 @@ en:
       twitter: "Twitter"
       facebook: "Facebook"
       submission_system: "Submissions System"
+      developer: "Developer Backdoor"
 
   event:
     attendance:

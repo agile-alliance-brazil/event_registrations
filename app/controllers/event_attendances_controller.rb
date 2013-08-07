@@ -45,7 +45,7 @@ class EventAttendancesController < InheritedResources::Base
   
   private
   def build_resource
-    attributes = params[:attendance]
+    attributes = attendance_params
     unless attributes
       attributes = current_user.attendance_attributes
       attributes[:email_confirmation] = current_user.email
@@ -69,6 +69,12 @@ class EventAttendancesController < InheritedResources::Base
 
   def collection
     @attendances ||= end_of_association_chain.for_event(event).active.all(include: [:payment_notifications, :event, :registration_type])
+  end
+
+  def attendance_params
+    params.require(:attendance).permit(:event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date,
+      :first_name, :last_name, :email, :email_confirmation, :organization, :phone, :country, :state, :city, :badge_name, :cpf,
+      :gender, :twitter_user, :address, :neighbourhood, :zipcode, :notes)
   end
   
   def load_registration_types

@@ -4,7 +4,6 @@ class Authentication < ActiveRecord::Base
   PROVIDERS << 'developer' unless Rails.env.production?
 
   belongs_to :user
-  attr_accessible :provider, :uid, :refresh_token
 
   validates_presence_of :provider
   validates_presence_of :uid

@@ -4,8 +4,6 @@ class PaymentNotification < ActiveRecord::Base
   serialize :params
   
   validates_existence_of :invoicer
-
-  attr_accessible :params, :invoicer_id, :status, :transaction_id, :notes
   
   after_create :mark_invoicer_as_paid, :if => Proc.new {|n| n.status == "Completed"}
   

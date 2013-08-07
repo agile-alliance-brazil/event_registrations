@@ -2,8 +2,6 @@
 class RegistrationPeriod < ActiveRecord::Base
   belongs_to :event
   
-  attr_accessible :end_at
-  
   scope :for, lambda { |datetime| where('? BETWEEN start_at AND end_at', datetime).order('id desc') }
   scope :ending_after, lambda { |datetime| where('? < end_at', datetime).order('id desc') }
 

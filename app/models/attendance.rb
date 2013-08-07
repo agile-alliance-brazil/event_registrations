@@ -8,11 +8,6 @@ class Attendance < ActiveRecord::Base
   belongs_to :registration_period
   has_many :payment_notifications, foreign_key: :invoicer_id
 
-  attr_accessible :event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date,
-                  :first_name, :last_name, :email, :email_confirmation, :organization, :phone, :country,
-                  :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-                  :zipcode, :notes
-
   attr_accessor :email_confirmation
 
   validates_confirmation_of :email
@@ -21,7 +16,7 @@ class Attendance < ActiveRecord::Base
   validates_presence_of :cpf, :if => Proc.new {|a| a.in_brazil?}
 
   validates_length_of [:first_name, :last_name, :phone, :city, :organization], maximum: 100, allow_blank: true
-  validates_format_of :email, with: /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, allow_blank: true
+  validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
   validates_length_of :email, within: 6..100, allow_blank: true
 
   validates_format_of :phone, with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true

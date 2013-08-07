@@ -5,9 +5,6 @@ class User < ActiveRecord::Base
   include Trimmer
   include Authorization
 
-  attr_accessible :first_name, :last_name, :email, :organization, :phone,
-                  :country, :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address,
-                  :neighbourhood, :zipcode, :default_locale
   attr_trimmed    :first_name, :last_name, :email, :organization, :phone, :country, :state, :city,
                   :badge_name, :twitter_user, :address, :neighbourhood, :zipcode
 
@@ -19,7 +16,7 @@ class User < ActiveRecord::Base
   
   validates_presence_of [:first_name, :last_name]
   validates_length_of [:first_name, :last_name], maximum: 100, allow_blank: true
-  validates_format_of :email, with: /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i, allow_blank: true
+  validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
 
   validates_uniqueness_of :email, case_sensitive: false, allow_blank: true
 

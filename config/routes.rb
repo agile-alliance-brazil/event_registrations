@@ -1,9 +1,9 @@
 # encoding: UTF-8
 Current::Application.routes.draw do
-  match '/auth/:provider/callback', to: 'sessions#create'
-  match '/auth/failure', to: 'sessions#failure'
-  match '/login', to: 'sessions#new', as: :login
-  match '/logout', to: 'sessions#destroy', as: :logout
+  post '/auth/:provider/callback', to: 'sessions#create' #should really be a post
+  get '/auth/failure', to: 'sessions#failure'
+  get '/login', to: 'sessions#new', as: :login
+  delete '/logout', to: 'sessions#destroy', as: :logout
 
   resources :users, only: [:show, :edit, :update]
 
@@ -11,8 +11,8 @@ Current::Application.routes.draw do
     resources :attendances, only: [:new, :create, :index], controller: :event_attendances
   end
 
-  match '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
-  match '/attendance_statuses/:id', via: :post, to: redirect("/attendances/%{id}")
+  get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
+  post '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
   resources :attendances, only: [:show, :destroy] do
     post :enable_voting, on: :member
     get :voting_instructions, on: :member

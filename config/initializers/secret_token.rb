@@ -8,6 +8,7 @@
 begin
   config = YAML.load_file("#{Rails.root}/config/config.yml")
   Current::Application.config.secret_token = config[:secret_token]
+  Current::Application.config.secret_token_base = config[:secret_token_base]
 rescue
   raise "config/config.yml file not found. Please check config/config.example for a sample"
 end

@@ -1,7 +1,9 @@
 #!/bin/bash
 
 USER=${1:-root}
-set -e
+set -e -x
+export DEBIAN_FRONTEND=noninteractive
+SUDO_COMMAND=sudo
 
 if [ ${USER} == root ] && [ -z $(getent passwd ubuntu) ]; then
   USER=ubuntu
@@ -11,7 +13,6 @@ if [ ${USER} == root ] && [ -z $(getent passwd ubuntu) ]; then
   mkdir -p /home/${USER}/.ssh/
   cp ~/.ssh/authorized_keys /home/${USER}/.ssh/authorized_keys
   chown ubuntu:ubuntu /home/${USER}/.ssh/authorized_keys
-  su ${USER}
 fi
 
 if [ -e /usr/local/bin/puppet ]; then
@@ -19,6 +20,8 @@ if [ -e /usr/local/bin/puppet ]; then
   exit 0
 fi
 
+
+su ${USER} <<EOF
 sudo apt-get update
 
 sudo apt-get install -y git-core ruby1.9 ruby1.9.1-dev \
@@ -48,3 +51,4 @@ fi
 
 sudo mkdir -p /srv/apps
 sudo chown ${USER}:root /srv/apps
+EOF

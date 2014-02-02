@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 USER=${1:-root}
 set -e

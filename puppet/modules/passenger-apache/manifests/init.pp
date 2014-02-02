@@ -11,8 +11,19 @@ class passenger-apache {
     require => Exec["update"],
   }
 
-	package { 'libapache2-mod-passenger': 
-		ensure => "present",
+	package { 'passenger': 
+		ensure => "3.0.19",
+    provider => "gem",
 		require => Package['librack-ruby1.9.1'],
 	}
+
+  file { '/etc/apache2/mods-enabled/passenger.load':
+    source => 'passenger.load',
+    require => Class['apache'],
+  }
+
+  file { '/etc/apache2/mods-enabled/passenger.conf':
+    source => 'passenger.conf',
+    require => Class['apache'],
+  }
 }

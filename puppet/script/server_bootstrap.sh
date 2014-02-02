@@ -1,6 +1,18 @@
 #!/bin/sh
 
+USER=${1:-root}
 set -e
+
+if [ ${USER} == root ] && [ -z $(getent passwd ubuntu) ]; then
+  USER=ubuntu
+  useradd -m -G sudo ${USER}
+  echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER}
+  chmod 0440 /etc/sudoers.d/${USER}
+  mkdir -p /home/${USER}/.ssh/
+  cp ~/.ssh/authorized_keys /home/${USER}/.ssh/authorized_keys
+  chown ubuntu:ubuntu /home/${USER}/.ssh/authorized_keys
+  su ${USER}
+fi
 
 if [ -e /usr/local/bin/puppet ]; then
   echo This puppet theatre is ready!
@@ -35,4 +47,4 @@ if [ -z `cat /etc/group | cut -f 1 -d':' | grep puppet` ]; then
 fi
 
 sudo mkdir -p /srv/apps
-sudo chown ubuntu:root /srv/apps
+sudo chown ${USER}:root /srv/apps

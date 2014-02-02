@@ -17,13 +17,20 @@ class passenger-apache {
 		require => Package['librack-ruby1.9.1'],
 	}
 
+  exec { "passenger-install-apache2-module":
+    command => "passenger-install-apache2-module --auto",
+    path => "/usr/local/bin/",
+    refreshonly => true,
+    subscribe => Package['passenger'],
+  }
+
   file { '/etc/apache2/mods-enabled/passenger.load':
-    source => 'passenger.load',
+    source => 'puppet://modules/passenger-apache/passenger.load',
     require => Class['apache'],
   }
 
   file { '/etc/apache2/mods-enabled/passenger.conf':
-    source => 'passenger.conf',
+    source => 'puppet://modules/passenger-apache/passenger.conf',
     require => Class['apache'],
   }
 }

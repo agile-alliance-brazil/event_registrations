@@ -24,12 +24,12 @@ class passenger-apache {
     subscribe => Package['passenger'],
   }
 
-  file { '/etc/apache2/mods-enabled/passenger.load':
+  file { '/etc/apache2/mods-available/passenger.load':
     source => 'puppet://modules/passenger-apache/passenger.load',
     require => Class['apache'],
   }
 
-  file { '/etc/apache2/mods-enabled/passenger.conf':
+  file { '/etc/apache2/mods-available/passenger.conf':
     source => 'puppet://modules/passenger-apache/passenger.conf',
     require => Class['apache'],
   }

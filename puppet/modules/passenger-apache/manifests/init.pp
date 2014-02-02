@@ -25,12 +25,12 @@ class passenger-apache {
   }
 
   file { '/etc/apache2/mods-available/passenger.load':
-    source => 'puppet://modules/passenger-apache/passenger.load',
+    source => 'puppet:///modules/passenger-apache/passenger.load',
     require => Class['apache'],
   }
 
   file { '/etc/apache2/mods-available/passenger.conf':
-    source => 'puppet://modules/passenger-apache/passenger.conf',
+    source => 'puppet:///modules/passenger-apache/passenger.conf',
     require => Class['apache'],
   }
 }

@@ -11,7 +11,7 @@ class swap( $ensure = 'present', $swapfile = '/swapfile', $swapsize = 1M ) {
 
   if $ensure == 'present' {
     exec { 'Create swap file':
-      command => "/bin/dd if=/dev/zero of=${swapfile} bs=1M count=${swapfilesize}",
+      command => "/bin/dd if=/dev/zero of=${swapfile} bs=1024 count=${swapfilesize}",
       creates => $swapfile,
     }
 

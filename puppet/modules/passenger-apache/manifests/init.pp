@@ -39,7 +39,7 @@ class passenger-apache {
     require => [
       Package['passenger'], Package['build-essential'], Package['libcurl4-openssl-dev'],
       Package['libssl-dev'], Package['zlib1g-dev'], Package['apache2-prefork-dev'],
-      Package['libapr1-dev'], Package['libaprutil1-dev']
+      Package['libapr1-dev'], Package['libaprutil1-dev'], Class['swap']
     ],
   }
 

@@ -4,12 +4,16 @@ node default {
 	    path => "/usr/bin",
 	}
 
+  class { 'swap':
+    swapsize => 1M,
+  }
+
   $app_name = "registrations"
   $use_ssl = true
 
 	class { 'web-server': }
 	class { 'db-server': 
-    app_name => $app_name
+    app_name => $app_name,
   }
 
   $domain = "agilebrazil.com"

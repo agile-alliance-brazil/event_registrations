@@ -9,7 +9,7 @@ Vagrant.configure('2') do |config|
   config.vm.box     = "server-precise64"
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
   config.vm.provider :virtualbox do |vm|
-    vm.customize ["modifyvm", :id, "--memory", 613]
+    vm.customize ["modifyvm", :id, "--memory", 1024]
   end
 
   # We want to use the same ruby version that production will use

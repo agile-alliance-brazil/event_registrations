@@ -46,12 +46,22 @@ class passenger-apache {
   file { '/etc/apache2/mods-available/passenger.load':
     source => 'puppet:///modules/passenger-apache/passenger.load',
     require => Exec['passenger-install-apache2-module'],
-    notify => Service['apache2'],
   }
 
   file { '/etc/apache2/mods-available/passenger.conf':
     source => 'puppet:///modules/passenger-apache/passenger.conf',
     require => Exec['passenger-install-apache2-module'],
+  }
+
+  file { '/etc/apache2/mods-enabled/passenger.load':
+    ensure => '/etc/apache2/mods-available/passenger.load',
+    require => File['/etc/apache2/mods-available/passenger.load'],
+    notify => Service['apache2'],
+  }
+
+  file { '/etc/apache2/mods-enabled/passenger.conf':
+    ensure => '/etc/apache2/mods-available/passenger.conf',
+    require => File['/etc/apache2/mods-available/passenger.conf'],
     notify => Service['apache2'],
   }
 }

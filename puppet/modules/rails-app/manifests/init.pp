@@ -13,13 +13,13 @@ class rails-app( $user, $app_name, $domain ) {
 	package { "bundler":
 		provider => "gem",
 		ensure => "1.5.2",
-		require => Exec["update-gem-sources"]
+		require => Exec["update-gem-sources"],
 	}
 
 	package { "puppet":
 		provider => "gem",
 		ensure => "3.4.2",
-		require => Exec["update-gem-sources"]
+		require => Exec["update-gem-sources"],
 	}
 
 	file { "/srv":
@@ -28,26 +28,50 @@ class rails-app( $user, $app_name, $domain ) {
 
 	file { "/srv/apps":
 		ensure => "directory",
-		require => File["/srv"]
+		require => File["/srv"],
 	}
 
 	file { "/srv/apps/$app_name":
 		ensure => "directory",
 		owner => $user,
-		require => File["/srv/apps"]
+		require => File["/srv/apps"],
 	}
 
 	file { "/srv/apps/$app_name/shared":
 		ensure => "directory",
 		owner => $user,
-		require => File["/srv/apps/$app_name"]
+		require => File["/srv/apps/$app_name"],
 	}
 
 	file { "config_folder":
 		path => "/srv/apps/$app_name/shared/config",
 		ensure => "directory",
 		owner => $user,
-		require => File["/srv/apps/$app_name/shared"]
+		require => File["/srv/apps/$app_name/shared"],
+	}
+
+	file { "certs_folder":
+		path => "/srv/apps/$app_name/shared/certs",
+		ensure => "directory",
+		owner => $user,
+		require => File["/srv/apps/$app_name/shared"],
+	}
+
+	if $use_ssl {
+	  file { "self-signed.config":
+	    ensure => "present",
+	    path => "/srv/apps/$app_name/shared/certs/self-signed.config",
+	    source => "puppet:///modules/rails-app/self-signed.config",
+	    require => File["/srv/apps/$app_name/shared"],
+	  }
+
+	  exec { "generate-certificate":
+	    command => "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server_key.pem -out server.crt -config self-signed.config",
+	    path => "/usr/bin/",
+	    cwd => "/srv/apps/$app_name/shared/certs",
+	    notify => Service['apache2'],
+	    require => File['self-signed.config'],
+	  }
 	}
 
   # required for asset pipeline

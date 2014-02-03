@@ -36,6 +36,7 @@ class passenger-apache {
     command => "passenger-install-apache2-module --languages ruby --auto",
     path => "/usr/local/bin/",
     onlyif => "/usr/bin/test ! -f /var/lib/gems/1.9.1/gems/passenger-4.0.37/buildout/apache2/mod_passenger.so",
+    user => 'root',
     require => [
       Package['passenger'], Package['build-essential'], Package['libcurl4-openssl-dev'],
       Package['libssl-dev'], Package['zlib1g-dev'], Package['apache2-prefork-dev'],

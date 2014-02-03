@@ -33,9 +33,9 @@ class passenger-apache {
   }
 
   exec { "passenger-install-apache2-module":
-    command => "passenger-install-apache2-module --auto",
+    command => "passenger-install-apache2-module --auto --languags",
     path => "/usr/local/bin/",
-    refreshonly => true,
+    onlyif => "test -f /var/lib/gems/1.9.1/gems/passenger-4.0.37/buildout/apache2/mod_passenger.so",
     require => [
       Package['passenger'], Package['build-essential'], Package['libcurl4-openssl-dev'],
       Package['libssl-dev'], Package['zlib1g-dev'], Package['apache2-prefork-dev'],

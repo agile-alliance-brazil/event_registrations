@@ -33,7 +33,7 @@ class passenger-apache {
   }
 
   exec { "passenger-install-apache2-module":
-    command => "passenger-install-apache2-module --auto --languags",
+    command => "passenger-install-apache2-module --languages ruby --auto",
     path => "/usr/local/bin/",
     onlyif => "test -f /var/lib/gems/1.9.1/gems/passenger-4.0.37/buildout/apache2/mod_passenger.so",
     require => [

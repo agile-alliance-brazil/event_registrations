@@ -31,8 +31,6 @@ sudo apt-get install -y git-core ruby1.9 ruby1.9.1-dev \
                         ruby-odbc-dbg ruby-odbc
 
 sudo update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.3 400 \
-                         --slave   /usr/share/man/man1/ruby.1.gz ruby.1.gz \
-                                   /usr/share/man/man1/ruby1.9.gz \
                          --slave   /usr/bin/ri ri /usr/bin/ri1.9.3 \
                          --slave   /usr/bin/irb irb /usr/bin/irb1.9.3 \
                          --slave   /usr/bin/rdoc rdoc /usr/bin/rdoc1.9.3

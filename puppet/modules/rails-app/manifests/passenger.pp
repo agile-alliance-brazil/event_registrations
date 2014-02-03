@@ -25,7 +25,7 @@ class rails-app::passenger ($path = '/srv/apps/rails-app/current/public', $serve
 
     file { "self-signed.config":
       ensure => "present",
-      path => "$path/../certs",
+      path => "$path/../../shared/certs",
       source => "puppet:///modules/rails-app/self-signed.config"
     }
 

@@ -20,6 +20,7 @@ class passenger-apache {
   exec { "passenger-install-apache2-module":
     command => "passenger-install-apache2-module --auto",
     path => "/usr/local/bin/",
+    user => root,
     refreshonly => true,
     subscribe => Package['passenger'],
   }

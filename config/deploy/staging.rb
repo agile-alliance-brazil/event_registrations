@@ -11,6 +11,7 @@ set :application,         "registrations"
 set :applicationdir,      "/srv/apps/#{application}"
 set :bundle_cmd,          "/usr/local/bin/bundle"
 set :rake,                "#{bundle_cmd} exec rake"
+set :manifest,            "default"
 
 set :scm,                 :git
 set :repository,          "git://github.com/hugocorbucci/event_registrations.git"

@@ -11,6 +11,7 @@ set :application,         "registrations"
 set :applicationdir,      "/srv/apps/#{application}"
 set :bundle_cmd,          "/usr/local/bin/bundle"
 set :rake,                "#{bundle_cmd} exec rake"
+set :manifest,            "vagrant-dev"
 
 set :scm,                 :none
 set :repository,          "#{File.join(File.dirname(__FILE__), '/../../')}"

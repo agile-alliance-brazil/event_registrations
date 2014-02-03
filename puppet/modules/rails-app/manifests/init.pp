@@ -1,9 +1,4 @@
 class rails-app( $user, $app_name, $domain ) {
-	package { "build-essential":
-		ensure => "installed",
-		require => Exec["update"],
-	}
-
 	package { "ruby1.9.3":
 		ensure => "installed",
 		require => Exec["update"],

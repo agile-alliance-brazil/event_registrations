@@ -58,9 +58,11 @@ end
 
 execute %Q{scp #{key_param} #{RAILS_ROOT}/puppet/script/kickstart-server.sh #{@user}@#{@target}:~}
 execute %Q{ssh #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/kickstart-server.sh && /bin/bash ~/kickstart-server.sh'}
-deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
-File.open("config/deploy/#{@target}.rb", 'w+') do |file|
-  file.write deploy_configs.gsub(/set :domain,\s*"[^"]*"/, "set :domain, \"#{@target}\"")
+unless File.exists?("config/deploy/#{@target}.rb")
+  deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
+  File.open("config/deploy/#{@target}.rb", 'w+') do |file|
+    file.write deploy_configs.gsub(/set :domain,\s*"[^"]*"/, "set :domain, \"#{@target}\"")
+  end
 end
 execute %Q{bundle}
 execute %Q{bundle exec cap #{@target} deploy:setup}

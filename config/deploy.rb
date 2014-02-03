@@ -36,7 +36,7 @@ namespace :deploy do
   end
 
   task :puppet do
-    sudo("FACTER_APP_URL=#{domain} puppet apply --modulepath #{release_path}/puppet/modules #{release_path}/puppet/manifests/default.pp")
+    sudo("FACTER_APP_URL=#{domain} puppet apply --modulepath #{release_path}/puppet/modules #{release_path}/puppet/manifests/#{manifest}.pp")
   end
 
   task :create_shared do

@@ -13,7 +13,10 @@ Vagrant.configure('2') do |config|
   end
 
   # We want to use the same ruby version that production will use
-  config.vm.provision :shell, :path => "#{INFRA_DIR}/script/server_bootstrap.sh"
+  config.vm.provision :shell do |s|
+    s.path = "#{INFRA_DIR}/script/server_bootstrap.sh"
+    s.args = 'vagrant'
+  end
 
   config.vm.define :dev do |config|
     # Setting up a share so we can edit locally but run in vagrant

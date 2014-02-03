@@ -4,23 +4,25 @@ HERE = File.dirname(__FILE__)
 APP_DIR = "#{HERE}"
 INFRA_DIR = "#{HERE}/puppet"
 
-Vagrant::Config.run do |config|
-  # Production is Ubuntu 12.04 in an AWS micro instance so is our Vagrant box
+Vagrant.configure('2') do |config|
+  # Production is Ubuntu 12.04 in an AWS micro instance/Digital Ocean basic droplet so is our Vagrant box
   config.vm.box     = "server-precise64"
-  config.vm.box_url = "http://dl.dropbox.com/u/1537815/precise64.box"
-  config.vm.customize ["modifyvm", :id, "--memory", 613]
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
+  config.vm.provider :virtualbox do |vm|
+    vm.customize ["modifyvm", :id, "--memory", 613]
+  end
 
   # We want to use the same ruby version that production will use
   config.vm.provision :shell, :path => "#{INFRA_DIR}/script/server_bootstrap.sh"
 
   config.vm.define :dev do |config|
     # Setting up a share so we can edit locally but run in vagrant
-    config.vm.share_folder "current", "/srv/apps/registrations/current", "#{APP_DIR}"
+    config.vm.synced_folder "#{APP_DIR}", "/srv/apps/registrations/current"
 
-    config.vm.network :hostonly, "10.11.12.13"
-    config.vm.forward_port 22, 2200
+    config.vm.network :private_network, ip: "10.11.12.13"
+    config.vm.network :forwarded_port, guest: 22, host: 2200
     # Using default rack settings
-    config.vm.forward_port 9292, 9292
+    config.vm.network :forwarded_port, guest: 9292, host: 9292
 
     config.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|
       puppet.manifests_path = "puppet/manifests"
@@ -30,10 +32,10 @@ Vagrant::Config.run do |config|
 
   config.vm.define :deploy do |config|
 
-    config.vm.network :hostonly, "10.11.12.14"
-    config.vm.forward_port 22, 2201
-    # Using default http settings
-    config.vm.forward_port 80, 8081
+    config.vm.network :private_network, ip: "10.11.12.14"
+    config.vm.network :forwarded_port, guest: 22, host: 2201
+    # Using default rack settings
+    config.vm.network :forwarded_port, guest: 80, host: 8081
 
     config.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|
       puppet.manifests_path = "puppet/manifests"

@@ -56,8 +56,9 @@ deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
 File.open("config/deploy/#{@target}.rb", 'w+') do |file|
   file.write deploy_configs.gsub(/set :domain,\s*"[^"]*"/, "set :domain, \"#{@target}\"")
 end
+execute %Q{bundle}
+execute %Q{bundle exec cap #{@target} deploy:setup}
 files_to_upload.each do |file|
   execute %Q{scp #{tag_with_target(file)} #{@user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}}
 end
-execute %Q{bundle}
-execute %Q{bundle exec cap #{@target} deploy:setup deploy:migrations}
+execute %Q{bundle exec cap #{@target} deploy:migrations}

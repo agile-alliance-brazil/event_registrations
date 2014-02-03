@@ -25,8 +25,7 @@ gem 'localized_country_select', '>= 0.9.3'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'libv8', '=3.11.8.17', :platforms => :ruby #therubyracer needs to be updated to update libv8
-  gem 'therubyracer', '=0.11.4', :platforms => :ruby
+  gem 'therubyracer', '=0.12.0', :platforms => :ruby
   gem 'sass-rails',   '=3.2.6'
   gem 'coffee-rails', '=3.2.2'
   gem 'yui-compressor', '=0.11.0'
@@ -37,7 +36,6 @@ group :production, :travis do
 end
 
 group :development do
-  gem 'vagrant', '=1.0.7'
   gem 'capistrano-ext', '=1.2.1'
   gem 'travis-lint', '=1.7.0'
   gem 'foreman', '=0.63.0'

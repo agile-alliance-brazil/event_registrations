@@ -28,7 +28,7 @@ group :assets do
   gem 'therubyracer', '=0.12.0', :platforms => :ruby
   gem 'sass-rails',   '=3.2.6'
   gem 'coffee-rails', '=3.2.2'
-  gem 'yui-compressor', '=0.11.0'
+  gem 'yui-compressor', '=0.12.0'
 end
 
 group :production, :travis do
@@ -50,16 +50,16 @@ group :test do
   gem 'rb-inotify', '=0.9.0', :require => linux_only('rb-inotify')
   gem 'shoulda-matchers', '=2.5.0', :require => false
   gem 'factory_girl_rails', '=4.3.0'
-  gem 'timecop', '=0.6.3'
+  gem 'timecop', '=0.7.1'
 end
 
 group :development, :test do
-  gem 'sqlite3', '=1.3.7'
+  gem 'sqlite3', '=1.3.8'
   gem 'rspec-rails', '=2.14.1'
-  gem 'guard-rspec', '=3.0.2'
-  gem 'rb-fsevent', '=0.9.3'
+  gem 'guard-rspec', '=4.2.5'
+  gem 'rb-fsevent', '=0.9.4'
   gem 'spork-rails', '=3.2.1'
-  gem 'jasmine-jquery-rails', '=1.5.6'
-  gem 'guard-jasmine', '=1.18.0'
+  gem 'jasmine-jquery-rails', '=1.5.9'
+  gem 'guard-jasmine', '=1.19.0'
   gem 'jasminerice', '=0.0.10'
 end

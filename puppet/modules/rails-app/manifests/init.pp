@@ -17,7 +17,13 @@ class rails-app( $user, $app_name, $domain ) {
 
 	package { "bundler":
 		provider => "gem",
-		ensure => "1.2.4",
+		ensure => "1.5.2",
+		require => Exec["update-gem-sources"]
+	}
+
+	package { "puppet":
+		provider => "gem",
+		ensure => "3.4.2",
 		require => Exec["update-gem-sources"]
 	}
 

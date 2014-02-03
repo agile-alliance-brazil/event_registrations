@@ -39,8 +39,8 @@ sudo update-alternatives --install /usr/bin/gem gem /usr/bin/gem1.9.3 400
 
 echo Finally... installing puppet
 sudo gem sources -u
-sudo gem install puppet -v 3.0.1 --no-ri --no-rdoc
-sudo gem install bundler -v 1.2.4 --no-ri --no-rdoc
+sudo gem install puppet -v 3.4.2 --no-ri --no-rdoc
+sudo gem install bundler -v 1.5.2 --no-ri --no-rdoc
 
 # Puppet needs the puppet group to exist. Pretty dumb
 if [ -z `cat /etc/group | cut -f 1 -d':' | grep puppet` ]; then

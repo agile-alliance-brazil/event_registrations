@@ -11,6 +11,11 @@ Vagrant.configure('2') do |config|
   config.vm.provider :virtualbox do |vm|
     vm.customize ["modifyvm", :id, "--memory", 1024]
   end
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.auto_detect = true
+    # If you are using VirtualBox, you might want to enable NFS for shared folders
+    config.cache.enable_nfs  = true
+  end
 
   # We want to use the same ruby version that production will use
   config.vm.provision :shell do |s|
@@ -27,9 +32,10 @@ Vagrant.configure('2') do |config|
     # Using default rack settings
     config.vm.network :forwarded_port, guest: 9292, host: 9292
 
-    config.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|
+    config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/manifests"
       puppet.manifest_file = "vagrant-dev.pp"
+      puppet.module_path = "puppet/modules"
     end
   end
 

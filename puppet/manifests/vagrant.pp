@@ -5,6 +5,10 @@ exec { 'update':
 
 $app_name = "registrations"
 
+class { 'swap':
+  swapsize => 1M,
+}
+
 class { 'web-server': }
 class { 'db-server': 
   app_name => $app_name

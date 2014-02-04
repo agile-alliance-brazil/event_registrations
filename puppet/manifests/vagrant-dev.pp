@@ -35,6 +35,10 @@ node default {
 	  domain => 'agilebrazil.com',
 	}
 
+  class { 'swap':
+    swapsize => 1M,
+  }
+
 	exec { 'bundle install':
 		path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
 		command => 'bundle install --path vendor/bundle',

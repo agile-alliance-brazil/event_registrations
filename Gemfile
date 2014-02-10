@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '=3.2.16'
+gem 'rails', '=3.2.16' # Issue #61 - target 4.0.2
 gem 'inherited_resources', '=1.4.1'
 gem 'seed-fu', '=2.3.0'
 gem 'brhelper', '=3.3.0'
@@ -26,8 +26,8 @@ gem 'localized_country_select', '=0.9.7'
 # in production environments by default.
 group :assets do
   gem 'therubyracer', '=0.12.1', :platforms => :ruby
-  gem 'sass-rails',   '=3.2.6'
-  gem 'coffee-rails', '=3.2.2'
+  gem 'sass-rails',   '=3.2.6' # 4.0.1 requires rails 4
+  gem 'coffee-rails', '=3.2.2' # 4.0.1 requires rails 4
   gem 'yui-compressor', '=0.12.0'
 end
 
@@ -56,10 +56,10 @@ end
 group :development, :test do
   gem 'sqlite3', '=1.3.8'
   gem 'rspec-rails', '=2.14.1'
-  gem 'guard-rspec', '=4.2.5'
+  gem 'guard-rspec', '=4.2.6'
   gem 'rb-fsevent', '=0.9.4'
-  gem 'spork-rails', '=3.2.1'
-  gem 'jasmine-jquery-rails', '=1.5.9'
+  gem 'spork-rails', '=4.0.0'
+  gem 'jasmine-jquery-rails', '=1.5.9' # 2.x requires jasmine 2.0 which is not yet supported by jasminerice
   gem 'guard-jasmine', '=1.19.0'
   gem 'jasminerice', '=0.0.10'
 end

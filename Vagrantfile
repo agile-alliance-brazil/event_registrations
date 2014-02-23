@@ -28,9 +28,8 @@ Vagrant.configure('2') do |config|
     config.vm.synced_folder "#{APP_DIR}", "/srv/apps/registrations/current"
 
     config.vm.network :private_network, ip: "10.11.12.13"
-    config.vm.network :forwarded_port, guest: 22, host: 2200
-    # Using default rack settings
-    config.vm.network :forwarded_port, guest: 9292, host: 9292
+    config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2202
+    config.vm.network :forwarded_port, guest: 9292, host: 9293
 
     config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/manifests"
@@ -41,8 +40,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.define :deploy do |config|
     config.vm.network :private_network, ip: "10.11.12.14"
-    config.vm.network :forwarded_port, guest: 22, host: 2201
-    # Using default rack settings
+    config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2203
     config.vm.network :forwarded_port, guest: 80, host: 8081
   end
 end

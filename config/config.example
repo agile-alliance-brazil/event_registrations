@@ -1,45 +1,45 @@
 # encoding: UTF-8
 ---
-  :ses:
-    :access_key_id: your_aws_access_key_id
-    :secret_access_key: your_aws_secret_access_key
-    :from: no-reply@domain.com
-  :host: localhost:3000
-  :organizer:
-    :name: Organizer
-    :email: organizer@domain.com
-    :cced: Organizer Helper
-    :cced_email: helper@domain.com
-    :contact: Registration Help
-    :contact_email: help@domain.com
-  :airbrake:
-    :access_key: xxx111xxx
-  :google:
-    :tracker_id: 365434-1
-    :conversion_id: 736473
-    :conversion_label: fo37tf9fIGF3GD
-  :paypal:
-    :email: seller@domain.com
-    :currency: USD
-    :secret: xxx22xxx
-    :cert_id: ABCxxx
-    :url: https://www.sandbox.paypal.com/cgi-bin/webscr
-  :secret_token: cc611d857e545df685c52c687259b3248ad38942b66698d1ceba3e4e799787ec20523c56bbd7d896837065aa199609c1503eb4f7ca582c7e5d6efea6bd021133
-  :twitter:
-    :key: https://dev.twitter.com/apps/new
-    :secret: https://dev.twitter.com/apps/new
-  :facebook:
-    :key: https://developers.facebook.com/apps
-    :secret: https://developers.facebook.com/apps
-  :github:
-    :key: http://developer.github.com/
-    :secret: http://developer.github.com/
-  :submission_system:
-    :url: http://localhost:3000/
-    :key: http://localhost/
-    :secret: http://localhost/
-  :bcash:
-    :url: https://www.bcash.com.br/checkout/pay/
-    :email: seller@domain.com
-    :key: bcash_key
-    :store_code: bcash_store_code
+  ses:
+    access_key_id: your_aws_access_key_id
+    secret_access_key: your_aws_secret_access_key
+    from: no-reply@domain.com
+  host: localhost:3000
+  organizer:
+    name: Organizer
+    email: organizer@domain.com
+    cced: Organizer Helper
+    cced_email: helper@domain.com
+    contact: Registration Help
+    contact_email: help@domain.com
+  airbrake:
+    access_key: xxx111xxx
+  google:
+    tracker_id: 365434-1
+    conversion_id: 736473
+    conversion_label: fo37tf9fIGF3GD
+  paypal:
+    email: seller@domain.com
+    currency: USD
+    secret: xxx22xxx
+    cert_id: ABCxxx
+    url: https://www.sandbox.paypal.com/cgi-bin/webscr
+  secret_token: cc611d857e545df685c52c687259b3248ad38942b66698d1ceba3e4e799787ec20523c56bbd7d896837065aa199609c1503eb4f7ca582c7e5d6efea6bd021133
+  twitter:
+    key: https://dev.twitter.com/apps/new
+    secret: https://dev.twitter.com/apps/new
+  facebook:
+    key: https://developers.facebook.com/apps
+    secret: https://developers.facebook.com/apps
+  github:
+    key: http://developer.github.com/
+    secret: http://developer.github.com/
+  submission_system:
+    url: http://localhost:3000/
+    key: http://localhost/
+    secret: http://localhost/
+  bcash:
+    url: https://www.bcash.com.br/checkout/pay/
+    email: seller@domain.com
+    key: bcash_key
+    store_code: bcash_store_code

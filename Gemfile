@@ -9,10 +9,10 @@ gem 'validates_existence', '=0.8.0'
 gem 'state_machine', '=1.2.0'
 gem 'haml', '=4.0.5'
 gem 'formtastic', '=2.2.1'
-gem 'airbrake', '=3.1.15'
+gem 'airbrake', '=3.1.16'
 gem 'cancan', '=1.6.10'
 gem 'jquery-rails', '=3.1.0'
-gem 'rake', '=10.1.1'
+gem 'rake', '=10.2.1'
 gem 'will_paginate', '=3.0.5'
 gem 'omniauth', '=1.2.1'
 gem 'omniauth-twitter', '=1.0.1'
@@ -37,7 +37,7 @@ end
 
 group :development do
   gem 'capistrano-ext', '=1.2.1'
-  gem 'travis-lint', '=1.7.0'
+  gem 'travis-lint', '=1.8.0'
   gem 'foreman', '=0.63.0'
 end
 
@@ -54,9 +54,9 @@ group :test do
 end
 
 group :development, :test do
-  gem 'sqlite3', '=1.3.8'
-  gem 'rspec-rails', '=2.14.1'
-  gem 'guard-rspec', '=4.2.6'
+  gem 'sqlite3', '=1.3.9'
+  gem 'rspec-rails', '=2.14.2'
+  gem 'guard-rspec', '=4.2.8'
   gem 'rb-fsevent', '=0.9.4'
   gem 'spork-rails', '=4.0.0'
   gem 'jasmine-jquery-rails', '=1.5.9' # 2.x requires jasmine 2.0 which is not yet supported by jasminerice

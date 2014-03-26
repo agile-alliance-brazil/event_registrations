@@ -12,5 +12,5 @@ before_script:
   - mysql -e 'create database registrations_test;'
 script:
   - RAILS_ENV=test bundle exec rake db:migrate
-  - bundle exec rake ci
+  - bundle exec rake spec
 bundler_args: --without development production assets

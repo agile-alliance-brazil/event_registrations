@@ -5,7 +5,7 @@ node default {
 	}
 
   class { 'swap':
-    swapsize => 1G,
+    swapsize => 10M,
   }
 
   $app_name = "registrations"

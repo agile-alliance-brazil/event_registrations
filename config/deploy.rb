@@ -1,64 +1,41 @@
 # encoding: UTF-8
-require 'capistrano/ext/multistage'
-require 'bundler/capistrano'
+# config valid only for Capistrano 3.1
+lock '3.1.0'
 
-before "bundle:install", "deploy:puppet"
+set :stages, %w(vagrant staging production 10.11.12.14 162.243.247.114)
+set :default_stage, 'vagrant'
 
-after "deploy:update_code", "deploy:symlink_configs"
+set :rails_env,           'production'
+set :keep_releases,       5
 
-after "deploy",             "deploy:cleanup"
-after "deploy:migrations",  "deploy:cleanup"
-after "deploy:setup",       "deploy:create_shared"
+set :application,         'registrations'
+SSHKit.config.command_map[:rake]  = 'bundle exec rake' #8
+SSHKit.config.command_map[:rails] = 'bundle exec rails'
 
-namespace :passenger do
-  desc "Restart Application"
-  task :restart, :roles => :app do
-    run <<-CMD
-      touch #{current_path}/tmp/restart.txt
-    CMD
-  end
-end
+set :scm,                 :git
+set :repo_url,            'git://github.com/hugocorbucci/event_registrations.git'
+set :scm_verbose,         true
 
-namespace :deploy do
-  %w(start restart).each do |name|
-    task name, :roles => :app do
-      passenger.restart
-    end
-  end
-  
-  task :symlink_configs, :roles => :app, :except => {:no_release => true} do
-    run <<-CMD
-      cd #{release_path} && rm -Rf #{release_path}/certs &&
-      ln -nfs #{shared_path}/certs #{release_path}/certs &&
-      ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
-      ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml
-    CMD
-  end
+set :deploy_to,           '/srv/apps/registrations'
+set :deploy_via,          :remote_cache
 
-  task :puppet do
-    sudo("FACTER_APP_URL=#{domain} puppet apply --modulepath /etc/puppet/modules:#{release_path}/puppet/modules #{release_path}/puppet/manifests/#{manifest}.pp")
-  end
+# Default value for :format is :pretty
+# set :format, :pretty
 
-  task :create_shared do
-    run <<-CMD
-      mkdir -p #{shared_path}/certs &&
-      mkdir -p #{shared_path}/config
-    CMD
-  end
-end
+# Default value for :log_level is :debug
+# set :log_level, :debug
 
-set :stages, %w(vagrant staging production)
-set :default_stage, "vagrant"
+# Default value for :pty is false
+# set :pty, true
 
-# NOTE: As of Capistrano 2.1, anyone using Windows should allocate a PTY explicitly.
-# Otherwise, you will see command prompts (such as requests for SVN passwords) act funny.
-default_run_options[:pty] = true
-ssh_options[:keys] = [
-        File.join(ENV['HOME'], '.ssh', 'id_rsa'),
-        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registrations.pem'),
-        File.join(File.dirname(__FILE__), '..', 'certs', 'event_registration_production.pem'),
-        File.join(ENV['HOME'], '.vagrant.d', 'insecure_private_key'),
-    ]
-ssh_options[:forward_agent] = true
-require './config/boot'
-require 'airbrake/capistrano'
+# Default branch is :master
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+
+# Default value for :linked_files is []
+set :linked_files, %w{config/database.yml config/config.yml certs/paypal_cert.pem certs/app_cert.pem certs/app_key.pem}
+
+# Default value for linked_dirs is []
+set :linked_dirs, %w{bin log certs tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }

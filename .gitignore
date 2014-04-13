@@ -14,8 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp/*
-/certs/*.pem
-/certs/*.crt
+/certs/*
 
 *.rbc
 *.sassc

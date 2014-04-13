@@ -16,6 +16,10 @@ Vagrant.configure('2') do |config|
     # If you are using VirtualBox, you might want to enable NFS for shared folders
     config.cache.enable_nfs  = true
   end
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = true
+    config.vbguest.no_remote = true
+  end
 
   # We want to use the same ruby version that production will use
   config.vm.provision :shell do |s|

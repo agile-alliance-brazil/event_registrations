@@ -9,14 +9,16 @@ node default {
   }
 
   $app_name = "registrations"
+  $domain = "agilebrazil.com"
   $use_ssl = true
 
-	class { 'web-server': }
+	class { 'web-server':
+    server_name => "$app_name.$domain",
+  }
 	class { 'db-server': 
     app_name => $app_name,
   }
 
-  $domain = "agilebrazil.com"
   $user = "ubuntu"
   class { 'rails-app':
     user => $user,

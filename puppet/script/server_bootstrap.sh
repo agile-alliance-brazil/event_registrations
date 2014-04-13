@@ -7,7 +7,7 @@ SUDO_COMMAND=sudo
 
 if [ ${USER} == root ] && [ -z $(getent passwd ubuntu) ]; then
   USER=ubuntu
-  useradd -m -G sudo ${USER}
+  useradd -m -G sudo ${USER} -s /bin/bash
   echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER}
   chmod 0440 /etc/sudoers.d/${USER}
   mkdir -p /home/${USER}/.ssh/

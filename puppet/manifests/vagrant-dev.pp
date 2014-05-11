@@ -32,7 +32,6 @@ node default {
 	class { 'rails-app':
 		user => $user,
 	  app_name => 'registrations',
-	  domain => 'agilebrazil.com',
 	}
 
   class { 'swap':

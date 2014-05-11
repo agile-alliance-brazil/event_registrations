@@ -9,7 +9,9 @@ class { 'swap':
   swapsize => 1M,
 }
 
-class { 'web-server': }
+class { 'web-server':
+  server_url => $server_url
+}
 class { 'db-server': 
   app_name => $app_name
 }
@@ -17,5 +19,4 @@ class { 'db-server':
 class { 'rails-app':
   user => "vagrant",
   app_name => $app_name,
-  domain => "agilebrazil.com",
 }

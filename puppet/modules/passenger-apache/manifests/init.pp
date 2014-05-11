@@ -1,17 +1,17 @@
 class passenger-apache {
-	include apache
+  include apache
 
-	package { 'librack-ruby1.9.1': 
-		ensure => 'present',
-		require => Package['ruby1.9.3'],
-	}
+  package { 'librack-ruby1.9.1': 
+    ensure => 'present',
+    require => Package['ruby1.9.3'],
+  }
 
   $version = '4.0.37'
   package { 'passenger':
     ensure => $version,
     provider => 'gem',
     require => Package['librack-ruby1.9.1'],
-	}
+  }
 
   package { 'build-essential':
     ensure => 'installed',

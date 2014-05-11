@@ -9,7 +9,6 @@ class rails-app::passenger ($path = '/srv/apps/rails-app/current/public', $serve
   file { '/etc/apache2/sites-enabled/000-default':
     ensure => "/etc/apache2/sites-available/$server_url",
     require => File["/etc/apache2/sites-available/$server_url"],
-    require => Package['apache2'],
     notify => Service['apache2'],
   }
 

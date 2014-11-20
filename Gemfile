@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '=3.2.18' # Issue #61 - target 4.0.2
+gem 'rails', '=3.2.21' # Issue #61 - target 4.0.2
 gem 'inherited_resources', '=1.4.1'
 gem 'seed-fu', '=2.3.0'
 gem 'brhelper', '=3.3.0'
@@ -32,7 +32,7 @@ group :assets do
 end
 
 group :production, :travis do
-  gem 'mysql2', '=0.3.15'
+  gem 'mysql2', '=0.3.17'
 end
 
 group :development do

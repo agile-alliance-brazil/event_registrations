@@ -13,7 +13,7 @@ SSHKit.config.command_map[:rake]  = 'bundle exec rake' #8
 SSHKit.config.command_map[:rails] = 'bundle exec rails'
 
 set :scm,                 :git
-set :repo_url,            'git://github.com/hugocorbucci/event_registrations.git'
+set :repo_url,            'git://github.com/agile-alliance-brazil/event_registrations.git'
 set :scm_verbose,         true
 
 set :deploy_to,           '/srv/apps/registrations'

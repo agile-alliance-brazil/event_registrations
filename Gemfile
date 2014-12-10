@@ -53,6 +53,7 @@ group :test do
   gem 'shoulda-matchers', '=2.5.0', :require => false
   gem 'factory_girl_rails', '=4.3.0'
   gem 'timecop', '=0.7.1'
+  gem 'codeclimate-test-reporter', '0.4.3', require: nil
 end
 
 group :development, :test do

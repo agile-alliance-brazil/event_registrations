@@ -11,25 +11,25 @@ end
 
 gem 'rails', '=3.2.21' # Issue #61 - target 4.0.2
 gem 'inherited_resources', '=1.4.1'
-gem 'seed-fu', '=2.3.0'
+gem 'seed-fu', '=2.3.3'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
-gem 'validates_existence', '=0.8.0'
+gem 'validates_existence', '=0.9.2'
 gem 'state_machine', '=1.2.0'
-gem 'haml', '=4.0.5'
+gem 'haml', '=4.0.6'
 gem 'formtastic', '=2.2.1'
-gem 'airbrake', '=3.1.16'
+gem 'airbrake', '=4.1.0'
 gem 'cancan', '=1.6.10'
 gem 'jquery-rails', '=3.1.0'
 gem 'rake'
 gem 'will_paginate', '=3.0.7'
-gem 'omniauth', '=1.2.1'
-gem 'omniauth-twitter', '=1.0.1'
+gem 'omniauth', '=1.2.2'
+gem 'omniauth-twitter', '=1.1.0'
 gem 'omniauth-facebook', '=2.0.0'
-gem 'omniauth-github', '=1.1.1'
-gem 'aws-ses', '=0.5.0', require: 'aws/ses'
+gem 'omniauth-github', '=1.1.2'
+gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 
-gem 'localized_country_select', '=0.9.7'
+gem 'localized_country_select', '=0.9.9'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -55,7 +55,8 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'konacha'
   gem 'guard-konacha', git: 'https://github.com/lbeder/guard-konacha.git'
-  gem 'poltergeist'
+  gem 'poltergeist', require: 'capybara/poltergeist'
+  gem 'selenium-webdriver'
 end
 
 group :development do

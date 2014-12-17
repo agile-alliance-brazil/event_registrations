@@ -1,6 +1,17 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
+### Guard::Konacha
+#  available options:
+#  - :run_all_on_start, defaults to true
+#  - :notification, defaults to true
+#  - :rails_environment_file, location of rails environment file,
+#    should be able to find it automatically
+guard :konacha do
+  watch(%r{^app/assets/javascripts/(.*)\.js(\.coffee)?$}) { |m| "#{m[1]}_spec.js" }
+  watch(%r{^spec/javascripts/.+_spec(\.js|\.js\.coffee)$})
+end
+
 # Note: The cmd option is now required due to the increasing number of ways
 #       rspec may be run, below are examples of the most common uses.
 #  * bundler: 'bundle exec rspec'
@@ -9,7 +20,7 @@
 #                          installed the spring binstubs per the docs)
 #  * zeus: 'zeus rspec' (requires the server to be started separetly)
 #  * 'just' rspec: 'rspec'
-guard :rspec, cmd: 'bundle exec rspec' do
+guard :rspec, cmd: 'bundle exec spring rspec' do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')  { "spec" }
@@ -30,14 +41,3 @@ guard :rspec, cmd: 'bundle exec rspec' do
   watch(%r{^spec/acceptance/(.+)\.feature$})
   watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
 end
-
-### Guard::Konacha
-#  available options:
-#  - :run_all_on_start, defaults to true
-#  - :notification, defaults to true
-#  - :rails_environment_file, location of rails environment file,
-#    should be able to find it automatically
-#guard :konacha do
-#  watch(%r{^app/assets/javascripts/(.*)\.js(\.coffee)?$}) { |m| "#{m[1]}_spec.js" }
-#  watch(%r{^spec/javascripts/.+_spec(\.js|\.js\.coffee)$})
-#end

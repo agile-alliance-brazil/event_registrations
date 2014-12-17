@@ -1,4 +1,5 @@
 source 'http://rubygems.org'
+ruby '1.9.3'
 
 gem 'rails', '=3.2.21' # Issue #61 - target 4.0.2
 gem 'inherited_resources', '=1.4.1'
@@ -36,31 +37,36 @@ group :production, :travis do
 end
 
 group :development do
-  gem 'capistrano', '3.1.0', require: false
-  gem 'capistrano-rails', '1.1.1', require: false
-  gem 'capistrano-bundler', '1.1.2', require: false
-  gem 'travis-lint', '=1.8.0'
-  gem 'foreman', '=0.63.0'
+  gem 'capistrano', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'travis-lint'
+  gem 'foreman'
 end
 
 def linux_only(require_as)
-  RUBY_PLATFORM.include?('linux') && require_as
+  RbConfig::CONFIG['host_os'] =~ /linux/ ? require_as : false
+end
+# Mac OS X
+def darwin_only(require_as)
+  RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
 group :test do
-  gem 'mocha', '=1.0.0', :require => false
-  gem 'rb-inotify', '=0.9.0', :require => linux_only('rb-inotify')
-  gem 'shoulda-matchers', '=2.5.0', :require => false
-  gem 'factory_girl_rails', '=4.3.0'
-  gem 'timecop', '=0.7.1'
-  gem 'codeclimate-test-reporter', '0.4.3', require: nil
+  gem 'mocha', require: false
+  gem 'shoulda-matchers', require: false
+  gem 'factory_girl_rails'
+  gem 'timecop'
+  gem 'codeclimate-test-reporter', require: nil
 end
 
 group :development, :test do
-  gem 'sqlite3', '=1.3.9'
-  gem 'rspec-rails', '=2.14.2'
-  gem 'guard-rspec', '=4.2.8'
-  gem 'rb-fsevent', '=0.9.4'
+  gem 'sqlite3'
+  gem 'rspec-rails', '=2.99.0'
+  gem 'guard-rspec'
+  gem 'rb-fsevent', require: darwin_only('rb-fsevent')
+  gem 'terminal-notifier-guard', require: darwin_only('terminal-notifier-guard')
+  gem 'rb-inotify', require: linux_only('rb-inotify')
   gem 'spork-rails', '=4.0.0'
   gem 'jasmine-jquery-rails', '=1.5.9' # 2.x requires jasmine 2.0 which is not yet supported by jasminerice
   gem 'guard-jasmine', '=1.19.0'

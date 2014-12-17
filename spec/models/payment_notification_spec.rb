@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe PaymentNotification do
+describe PaymentNotification, type: :model do
   context "associations" do
     it { should belong_to :invoicer }
   end
@@ -15,7 +15,7 @@ describe PaymentNotification do
       before(:each) do
         event = FactoryGirl.create(:event)
         @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
         @attendance.stubs(:registration_fee).returns(399)
 
         @valid_params = {
@@ -34,43 +34,43 @@ describe PaymentNotification do
 
       it "succeed if status is Completed and params are valid" do
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_paid
+        expect(@attendance).to be_paid
       end
 
       it "fails if secret doesn't match" do
         @valid_params.merge!(:secret => 'wrong_secret')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
       end
 
       it "fails if status is not Completed" do
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(:status => "Failed"))
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
       end
 
       it "fails if receiver address doesn't match" do
         @valid_params.merge!(:receiver_email => 'wrong@email.com')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
       end
 
       it "fails if paid amount doesn't match" do
         @valid_params.merge!(:mc_gross => '1.00')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
       end
 
       it "fails if currency doesn't match" do
         @valid_params.merge!(:mc_currency => 'GBP')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
       end
     end
 
     describe "bcash payment" do
       before(:each) do
         @attendance = FactoryGirl.create(:attendance, registration_date: Time.zone.local(2013, 5, 1))
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
 
         @valid_params = {
           type: 'bcash',
@@ -88,18 +88,18 @@ describe PaymentNotification do
 
       it "succeed if status is Aprovada and params are valid" do
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_paid
+        expect(@attendance).to be_paid
       end
 
       it "fails if secret doesn't match" do
         @valid_params.merge!(:secret => 'wrong_secret')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
       end
 
       it "fails if status is not Aprovada" do
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(:status => "Cancelada"))
-        @attendance.should be_pending
+        expect(@attendance).to be_pending
       end
     end
   end
@@ -110,15 +110,15 @@ describe PaymentNotification do
       @bcash = FactoryGirl.create(:payment_notification, params: {type: 'bcash'})
     end
     it "should scope paypal" do
-      PaymentNotification.paypal.should == [@paypal]
+      expect(PaymentNotification.paypal).to eq([@paypal])
     end
     it "should scope bcash" do
-      PaymentNotification.bcash.should == [@bcash]
+      expect(PaymentNotification.bcash).to eq([@bcash])
     end
     it "should scope completed notifications" do
       @paypal.status = 'Failed'
       @paypal.save
-      PaymentNotification.completed.should == [@bcash]
+      expect(PaymentNotification.completed).to eq([@bcash])
     end
   end
 
@@ -133,13 +133,13 @@ describe PaymentNotification do
       memo: "Some notes from the buyer",
       custom: 'Attendance'
     }
-    PaymentNotification.from_paypal_params(paypal_params).should == {
+    expect(PaymentNotification.from_paypal_params(paypal_params)).to eq({
       params: paypal_params,
       status: "Completed",
       transaction_id:  "AAABBBCCC",
       invoicer_id: 2,
       notes: "Some notes from the buyer"
-    }
+    })
   end
 
   it "should translate params from bcash into attributes" do
@@ -148,11 +148,11 @@ describe PaymentNotification do
       transacao_id: "1234567890",
       pedido: 2
     }
-    PaymentNotification.from_bcash_params(bcash_params).should == {
+    expect(PaymentNotification.from_bcash_params(bcash_params)).to eq({
       params: bcash_params,
       status: "Completed",
       transaction_id: "1234567890",
       invoicer_id: 2
-    }
+    })
   end
 end

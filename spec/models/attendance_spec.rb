@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe Attendance do
+describe Attendance, type: :model do
   context "associations" do
     it { should belong_to :event }
     it { should belong_to :user }
@@ -84,41 +84,41 @@ describe Attendance do
     end
 
     it "should have scope for_event" do
-      Attendance.for_event(Attendance.first.event).should == [Attendance.first]
+      expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first])
     end
 
     it "should have scope for_registration_type" do
       rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
       Attendance.first.tap{|a| a.registration_type = rt}.save
 
-      Attendance.for_registration_type(rt).should == [Attendance.first]
+      expect(Attendance.for_registration_type(rt)).to eq([Attendance.first])
     end
 
     it "should have scope without_registration_type" do
       rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
       Attendance.first.tap{|a| a.registration_type = rt}.save
 
-      Attendance.without_registration_type(rt).should_not include(Attendance.first)
+      expect(Attendance.without_registration_type(rt)).not_to include(Attendance.first)
     end
 
     it "should have scope pending" do
       Attendance.first.tap{|a| a.pay}.save
-      Attendance.pending.should_not include(Attendance.first)
+      expect(Attendance.pending).not_to include(Attendance.first)
     end
 
     it "should have scope paid" do
       Attendance.first.tap{|a| a.pay}.save
-      Attendance.paid.should == [Attendance.first]
+      expect(Attendance.paid).to eq([Attendance.first])
     end
 
     it "should have scope active that excludes cancelled attendances" do
       Attendance.first.tap{|a| a.cancel}.save
-      Attendance.active.should_not include(Attendance.first)
+      expect(Attendance.active).not_to include(Attendance.first)
     end
 
     it "should have scope older_than that selects old attendances" do
       Attendance.first.tap{|a| a.registration_date = 10.days.ago}.save
-      Attendance.older_than(5.days.ago).should == [Attendance.first]
+      expect(Attendance.older_than(5.days.ago)).to eq([Attendance.first])
     end
   end
 
@@ -136,7 +136,7 @@ describe Attendance do
         @attendance.event.expects(:attendances)
                   .returns(stub(count: 149))
 
-        @attendance.registration_period.should == @period
+        expect(@attendance.registration_period).to eq(@period)
       end
 
       it "should regular early bird after 150 attendances" do
@@ -144,7 +144,7 @@ describe Attendance do
                   .returns(stub(count: 150))
         @attendance.event.registration_periods.expects(:for).with(@period.end_at + 1.day).returns([])
 
-        @attendance.registration_period.should_not == @period
+        expect(@attendance.registration_period).not_to eq(@period)
       end
     end
 
@@ -159,7 +159,7 @@ describe Attendance do
         @attendance.event.expects(:attendances)
                   .returns(stub(where: stub(count: 149)))
 
-        @attendance.registration_period.should == @period
+        expect(@attendance.registration_period).to eq(@period)
       end
       
       it "should be 399 after 150 attendances" do
@@ -169,7 +169,7 @@ describe Attendance do
                   .returns(stub(where: stub(count: 150)))
         @attendance.event.registration_periods.expects(:for).with(@period.end_at + 1.day).returns([])
 
-        @attendance.registration_period.should_not == @period
+        expect(@attendance.registration_period).not_to eq(@period)
       end
     end
   end
@@ -183,9 +183,9 @@ describe Attendance do
 
       attendance.event.registration_periods.stubs(:for).returns([period])
 
-      attendance.should_not be_can_vote
+      expect(attendance).not_to be_can_vote
       attendance.pay
-      attendance.should be_can_vote
+      expect(attendance).to be_can_vote
     end
 
     it "should be true if attendance confirmed" do
@@ -194,9 +194,9 @@ describe Attendance do
 
       attendance.event.registration_periods.stubs(:for).returns([period])
       
-      attendance.should_not be_can_vote
+      expect(attendance).not_to be_can_vote
       attendance.confirm
-      attendance.should be_can_vote
+      expect(attendance).to be_can_vote
     end
 
     it "should be true if registration period allows voting" do
@@ -206,8 +206,8 @@ describe Attendance do
       attendance.event.registration_periods.stubs(:for).returns([period])
       attendance.confirm
 
-      attendance.should_not be_can_vote
-      attendance.should be_can_vote
+      expect(attendance).not_to be_can_vote
+      expect(attendance).to be_can_vote
     end
   end
 
@@ -226,20 +226,20 @@ describe Attendance do
   context "cancelling" do
     let(:attendance) { FactoryGirl.build(:attendance) }
     it "should be cancellable if pending" do
-      attendance.should be_cancellable
+      expect(attendance).to be_cancellable
     end
     it "should not be cancellable if paid" do
       attendance.pay
-      attendance.should_not be_cancellable
+      expect(attendance).not_to be_cancellable
     end
     it "should not be cancellable if confirmed" do
       attendance.pay
       attendance.confirm
-      attendance.should_not be_cancellable
+      expect(attendance).not_to be_cancellable
     end
     it "should not be cancellable if cancelled already" do
       attendance.cancel
-      attendance.should_not be_cancellable
+      expect(attendance).not_to be_cancellable
     end
   end
 end

@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe TransfersController do
+describe TransfersController, type: :controller do
   before do
     @origin = FactoryGirl.build(:attendance)
     @origin.id = 3
@@ -19,65 +19,65 @@ describe TransfersController do
     it 'should be successful' do
       get :new
 
-      response.code.should == '200'
+      expect(response.code).to eq('200')
     end
     it 'should set potential destinations as all pending attendances' do
       Attendance.stubs(:pending).returns([@origin, @destination])
 
       get :new
 
-      assigns[:destinations].should == [@origin, @destination]
+      expect(assigns[:destinations]).to eq([@origin, @destination])
     end
 
     context 'empty' do
       it 'should set event to fake event' do
         get :new
 
-        assigns[:event].should be_new_record
+        expect(assigns[:event]).to be_new_record
       end
       it 'should set empty transfer' do
         get :new
 
-        assigns[:transfer].should be_new_record
-        assigns[:transfer].origin_id.should be_nil
-        assigns[:transfer].destination_id.should be_nil
+        expect(assigns[:transfer]).to be_new_record
+        expect(assigns[:transfer].origin_id).to be_nil
+        expect(assigns[:transfer].destination_id).to be_nil
       end
     end
     context 'with origin' do
       it 'should set event' do
         get :new, transfer: {origin_id: 3}
 
-        assigns[:event].should == @origin.event
+        expect(assigns[:event]).to eq(@origin.event)
       end
       it 'should set transfer origin' do
         get :new, transfer: {origin_id: 3}
 
-        assigns[:transfer].origin.should == @origin
+        expect(assigns[:transfer].origin).to eq(@origin)
       end
     end
     context 'with destination' do
       it 'should set event' do
         get :new, transfer: {destination_id: 5}
 
-        assigns[:event].should == @destination.event
+        expect(assigns[:event]).to eq(@destination.event)
       end
       it 'should set transfer destination' do
         get :new, transfer: {destination_id: 5}
 
-        assigns[:transfer].destination.should == @destination
+        expect(assigns[:transfer].destination).to eq(@destination)
       end
     end
     context 'with origin and destination' do
       it 'should set event according to origin' do
         get :new, transfer: {origin_id: 3, destination_id: 5}
 
-        assigns[:event].should == @origin.event
+        expect(assigns[:event]).to eq(@origin.event)
       end
       it 'should set transfer origin and destination' do
         get :new, transfer: {origin_id: 3, destination_id: 5}
 
-        assigns[:transfer].origin.should == @origin
-        assigns[:transfer].destination.should == @destination
+        expect(assigns[:transfer].origin).to eq(@origin)
+        expect(assigns[:transfer].destination).to eq(@destination)
       end
     end
     
@@ -90,7 +90,7 @@ describe TransfersController do
 
         get :new
 
-        assigns[:origins].should == [@origin, @destination]
+        expect(assigns[:origins]).to eq([@origin, @destination])
       end
     end
     context 'as a guest' do
@@ -101,7 +101,7 @@ describe TransfersController do
         
         get :new
 
-        assigns[:origins].should == [@origin, @destination]
+        expect(assigns[:origins]).to eq([@origin, @destination])
       end
     end
   end
@@ -121,12 +121,12 @@ describe TransfersController do
       it 'should set success flash message' do
         post :create, transfer: {origin_id: 3, destination_id: 5}
 
-        flash[:notice].should == I18n.t('flash.transfer.success')
+        expect(flash[:notice]).to eq(I18n.t('flash.transfer.success'))
       end
       it 'should redirect to new confirmed (or paid) attendance' do
         post :create, transfer: {origin_id: 3, destination_id: 5}
 
-        response.should redirect_to(attendance_path(id: 3))
+        expect(response).to redirect_to(attendance_path(id: 3))
       end
       it 'should save the transfer' do
         transfer = Transfer.new(@origin, @destination)
@@ -144,12 +144,12 @@ describe TransfersController do
       it 'should render transfer form again' do
         post :create, transfer: {origin_id: 3, destination_id: 5}
 
-        response.should render_template(:new)
+        expect(response).to render_template(:new)
       end
       it 'should show flash error message' do
         post :create, transfer: {origin_id: 3, destination_id: 5}
 
-        flash[:error].should == I18n.t('flash.transfer.failure')
+        expect(flash[:error]).to eq(I18n.t('flash.transfer.failure'))
       end
     end
   end

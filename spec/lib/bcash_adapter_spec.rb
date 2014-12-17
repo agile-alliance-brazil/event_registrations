@@ -14,17 +14,17 @@ describe BcashAdapter do
       I18n.with_locale(:en) do
         adapter = BcashAdapter.from_attendance(@attendance)
 
-        adapter.items.size.should == 1
-        adapter.items[0].amount.should == @attendance.registration_fee
-        adapter.items[0].name.should == "Type of Registration: Individual"
-        adapter.items[0].quantity.should == 1
-        adapter.items[0].number.should == @attendance.registration_type.id
+        expect(adapter.items.size).to eq(1)
+        expect(adapter.items[0].amount).to eq(@attendance.registration_fee)
+        expect(adapter.items[0].name).to eq("Type of Registration: Individual")
+        expect(adapter.items[0].quantity).to eq(1)
+        expect(adapter.items[0].number).to eq(@attendance.registration_type.id)
       end
     end
 
     it "should add invoice" do
       adapter = BcashAdapter.from_attendance(@attendance)
-      adapter.invoice.should == @attendance
+      expect(adapter.invoice).to eq(@attendance)
     end
   end
 
@@ -35,7 +35,7 @@ describe BcashAdapter do
         BcashAdapter::BcashItem.new('item 2', 3, 9.99, 2)
       ], @attendance)
 
-      adapter.to_variables.should include({
+      expect(adapter.to_variables).to include({
         'produto_valor_1' => 10.50,
         'produto_descricao_1' => 'item 1',
         'produto_qtde_1' => 1,
@@ -53,7 +53,7 @@ describe BcashAdapter do
         BcashAdapter::BcashItem.new('item 2', 3, 9.99, 2)
       ], @attendance)
 
-      adapter.to_variables.should include({
+      expect(adapter.to_variables).to include({
         'id_pedido' => @attendance.id,
         'frete' => 0,
         'email'    => @attendance.user.email,
@@ -72,38 +72,38 @@ describe BcashAdapter do
 
   describe BcashAdapter::BcashItem do
     it "should have name" do
-      BcashAdapter::BcashItem.new('item', 2, 10.50).name.should == 'item'
+      expect(BcashAdapter::BcashItem.new('item', 2, 10.50).name).to eq('item')
     end
 
     it "should have number" do
-      BcashAdapter::BcashItem.new('item', 2, 10.50).number.should == 2
+      expect(BcashAdapter::BcashItem.new('item', 2, 10.50).number).to eq(2)
     end
 
     it "should have amount" do
-      BcashAdapter::BcashItem.new('item', 2, 10.50).amount.should == 10.50
+      expect(BcashAdapter::BcashItem.new('item', 2, 10.50).amount).to eq(10.50)
     end
 
     it "should have optional quantity" do
-      BcashAdapter::BcashItem.new('item', 2, 10.50).quantity.should == 1
-      BcashAdapter::BcashItem.new('item', 2, 10.50, 3).quantity.should == 3
+      expect(BcashAdapter::BcashItem.new('item', 2, 10.50).quantity).to eq(1)
+      expect(BcashAdapter::BcashItem.new('item', 2, 10.50, 3).quantity).to eq(3)
     end
 
     describe "to_variables" do
       it "should map item name, number, amount, and quantity for given index" do
         item = BcashAdapter::BcashItem.new('item', 2, 10.50)
-        item.to_variables(1).should == {
+        expect(item.to_variables(1)).to eq({
           'produto_valor_1' => 10.50,
           'produto_descricao_1' => 'item',
           'produto_qtde_1' => 1,
           'produto_codigo_1' => 2
-        }
+        })
 
-        item.to_variables(10).should == {
+        expect(item.to_variables(10)).to eq({
           'produto_valor_10' => 10.50,
           'produto_descricao_10' => 'item',
           'produto_qtde_10' => 1,
           'produto_codigo_10' => 2
-        }
+        })
       end
     end
   end

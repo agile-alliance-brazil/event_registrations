@@ -62,7 +62,7 @@ end
 
 group :development, :test do
   gem 'sqlite3'
-  gem 'rspec-rails', '=2.99.0'
+  gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'rb-fsevent', require: darwin_only('rb-fsevent')
   gem 'terminal-notifier-guard', require: darwin_only('terminal-notifier-guard')

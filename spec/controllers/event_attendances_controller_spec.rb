@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe EventAttendancesController do
+describe EventAttendancesController, type: :controller do
   render_views
 
   before :each do
@@ -32,19 +32,19 @@ describe EventAttendancesController do
 
     it "should render new template" do
       get :new, event_id: @event.id
-      response.should render_template(:new)
+      expect(response).to render_template(:new)
     end
 
     it "should assign current event to attendance" do
       get :new, event_id: @event.id
-      assigns(:attendance).event.should == @event
+      expect(assigns(:attendance).event).to eq(@event)
     end
 
     describe "for individual registration" do
       it "should load registration types without groups or free" do
         get :new, event_id: @event.id
-        assigns(:registration_types).should include(@individual)
-        assigns(:registration_types).size.should == 1
+        expect(assigns(:registration_types)).to include(@individual)
+        expect(assigns(:registration_types).size).to eq(1)
       end
     end
 
@@ -59,11 +59,11 @@ describe EventAttendancesController do
 
       it "should load registration types without groups but with free" do
         get :new, event_id: @event.id
-        assigns(:registration_types).should include(@individual)
-        assigns(:registration_types).should include(@free)
-        assigns(:registration_types).should include(@speaker)
-        assigns(:registration_types).should include(@manual)
-        assigns(:registration_types).size.should == 4
+        expect(assigns(:registration_types)).to include(@individual)
+        expect(assigns(:registration_types)).to include(@free)
+        expect(assigns(:registration_types)).to include(@speaker)
+        expect(assigns(:registration_types)).to include(@manual)
+        expect(assigns(:registration_types).size).to eq(4)
       end
     end
   end
@@ -80,20 +80,20 @@ describe EventAttendancesController do
       # inherited_resources does +obj.errors.empty?+ to determine
       # if validation failed
       post :create, event_id: @event.id, attendance: {}
-      response.should render_template(:new)
+      expect(response).to render_template(:new)
     end
 
     it "should redirect when model is valid" do
       Attendance.any_instance.stubs(:valid?).returns(true)
       Attendance.any_instance.stubs(:id).returns(5)
       post :create, event_id: @event.id
-      response.should redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(5))
     end
 
     it "should assign current event to attendance" do
       Attendance.any_instance.stubs(:valid?).returns(true)
       post :create, event_id: @event.id
-      assigns(:attendance).event.should == @event
+      expect(assigns(:attendance).event).to eq(@event)
     end
 
     it "should notify airbrake if cannot send email" do
@@ -102,7 +102,7 @@ describe EventAttendancesController do
       EmailNotifications.expects(:registration_pending).raises(exception)
       controller.expects(:notify_airbrake).with(exception)
       post :create, :event_id => @event.id
-      assigns(:attendance).event.should == @event
+      expect(assigns(:attendance).event).to eq(@event)
     end
 
     it "should ignore airbrake errors if cannot send email" do
@@ -111,7 +111,7 @@ describe EventAttendancesController do
       EmailNotifications.expects(:registration_pending).raises(exception)
       controller.expects(:notify_airbrake).with(exception).raises(exception)
       post :create, :event_id => @event.id
-      assigns(:attendance).event.should == @event
+      expect(assigns(:attendance).event).to eq(@event)
     end
 
     describe "for individual registration" do
@@ -122,8 +122,8 @@ describe EventAttendancesController do
 
         it "should redirect to home page with error message when cannot add more attendances" do
           post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
-          response.should redirect_to(root_path)
-          flash[:error].should == I18n.t('flash.attendance.create.max_limit_reached')
+          expect(response).to redirect_to(root_path)
+          expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
 
         it "should allow attendance creation if user is organizer" do
@@ -138,7 +138,7 @@ describe EventAttendancesController do
 
           post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
 
-          response.should redirect_to(attendance_path(5))
+          expect(response).to redirect_to(attendance_path(5))
         end
       end
 
@@ -152,8 +152,8 @@ describe EventAttendancesController do
         Attendance.any_instance.stubs(:valid?).returns(true)
         controller.stubs(:valid_registration_types).returns([@individual, @manual])
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id}
-        response.should render_template(:new)
-        flash[:error].should == I18n.t('flash.attendance.create.free_not_allowed')
+        expect(response).to render_template(:new)
+        expect(flash[:error]).to eq(I18n.t('flash.attendance.create.free_not_allowed'))
       end
     end
 
@@ -171,7 +171,7 @@ describe EventAttendancesController do
         Attendance.any_instance.stubs(:id).returns(5)
       
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: "another#{@user.email}"}
-        response.should redirect_to(attendance_path(5))
+        expect(response).to redirect_to(attendance_path(5))
       end
 
       it "should not send pending registration e-mail for free registration" do
@@ -181,7 +181,7 @@ describe EventAttendancesController do
 
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
 
-        response.should redirect_to(attendance_path(5))
+        expect(response).to redirect_to(attendance_path(5))
       end
     end
 
@@ -197,7 +197,7 @@ describe EventAttendancesController do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
-        response.should redirect_to(attendance_path(5))
+        expect(response).to redirect_to(attendance_path(5))
       end
 
       it "should not send pending registration e-mail for free registration" do
@@ -206,7 +206,7 @@ describe EventAttendancesController do
         Attendance.any_instance.stubs(:id).returns(5)
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
 
-        response.should redirect_to(attendance_path(5))
+        expect(response).to redirect_to(attendance_path(5))
       end
     end
   end

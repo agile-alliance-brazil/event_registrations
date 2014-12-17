@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe RegistrationPeriod do  
+describe RegistrationPeriod, type: :model do  
   before do
     @event = FactoryGirl.create(:event)
     @regular = @event.registration_periods.first 
@@ -14,11 +14,11 @@ describe RegistrationPeriod do
 
   context "prices" do
     it "should be super_early_bird if title matches" do
-      @super_early_bird.should be_super_early_bird
-      @early_bird.should_not be_super_early_bird
-      @regular.should_not be_super_early_bird
-      @late.should_not be_super_early_bird
-      @last_minute.should_not be_super_early_bird
+      expect(@super_early_bird).to be_super_early_bird
+      expect(@early_bird).not_to be_super_early_bird
+      expect(@regular).not_to be_super_early_bird
+      expect(@late).not_to be_super_early_bird
+      expect(@last_minute).not_to be_super_early_bird
     end
     
     context "for registration types" do
@@ -30,45 +30,45 @@ describe RegistrationPeriod do
         price = RegistrationPrice.new
         price.value = 250
         RegistrationPrice.stubs(:for).with(@super_early_bird, @individual).returns([price])
-        @super_early_bird.price_for_registration_type(@individual).should == 250.00
+        expect(@super_early_bird.price_for_registration_type(@individual)).to eq(250.00)
       end
 
       it "should throw an InvalidPrice error if no registration price can be found" do
         RegistrationPrice.stubs(:for).with(@super_early_bird, @individual).returns([])
-        lambda { @super_early_bird.price_for_registration_type(@individual) }.should raise_error(InvalidPrice)
+        expect(lambda { @super_early_bird.price_for_registration_type(@individual) }).to raise_error(InvalidPrice)
       end
     end
   end
   
   context "appropriate period" do    
     it "should not include date before its start" do
-      RegistrationPeriod.for(@regular.start_at - 1.second).first.should == @early_bird
+      expect(RegistrationPeriod.for(@regular.start_at - 1.second).first).to eq(@early_bird)
     end
 
     it "should include its start date" do
-      RegistrationPeriod.for(@regular.start_at).first.should == @regular
+      expect(RegistrationPeriod.for(@regular.start_at).first).to eq(@regular)
     end
     
     it "should include a date between start and end" do
-      RegistrationPeriod.for(@regular.start_at + 5).first.should == @regular
+      expect(RegistrationPeriod.for(@regular.start_at + 5).first).to eq(@regular)
     end
     
     it "should include end date" do
-      RegistrationPeriod.for(@regular.end_at).first.should == @regular
+      expect(RegistrationPeriod.for(@regular.end_at).first).to eq(@regular)
     end
     
     it "should not include date after end date" do
-      RegistrationPeriod.for(@regular.end_at + 1.week).first.should == @late
+      expect(RegistrationPeriod.for(@regular.end_at + 1.week).first).to eq(@late)
     end
     
     # TODO Crappy test depends on other events not starting before this.
     it "should not have any period before super_early_bird" do
-      RegistrationPeriod.for(@super_early_bird.start_at - 1.second).first.should be_nil
+      expect(RegistrationPeriod.for(@super_early_bird.start_at - 1.second).first).to be_nil
     end
     
     # TODO Crappy test depends on other events not finishing after this.
     it "should not have any period after last minute" do
-      RegistrationPeriod.for(@last_minute.end_at + 1.second).first.should be_nil
+      expect(RegistrationPeriod.for(@last_minute.end_at + 1.second).first).to be_nil
     end
   end
 
@@ -92,21 +92,21 @@ describe RegistrationPeriod do
     context "allow voting" do
       it "should be false when event does not allow voting" do
         subject.event.allow_voting = false
-        subject.should_not be_allow_voting
+        expect(subject).not_to be_allow_voting
       end
 
       it "should be true for super early bird" do
         subject.event.allow_voting = true
-        subject.should_not be_allow_voting
+        expect(subject).not_to be_allow_voting
         subject.title = 'registration_period.super_early_bird'
-        subject.should be_allow_voting
+        expect(subject).to be_allow_voting
       end
 
       it "should be true for early bird" do
         subject.event.allow_voting = true
-        subject.should_not be_allow_voting
+        expect(subject).not_to be_allow_voting
         subject.title = 'registration_period.early_bird'
-        subject.should be_allow_voting
+        expect(subject).to be_allow_voting
       end
     end
   end

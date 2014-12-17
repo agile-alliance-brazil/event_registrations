@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe Authentication do
+describe Authentication, type: :model do
   context "associations" do
     it { should belong_to :user }
   end
@@ -27,24 +27,24 @@ describe Authentication do
 
     it "should be nil if refresh_token is not present" do
       authentication.refresh_token = nil
-      authentication.get_token.should be_nil
+      expect(authentication.get_token).to be_nil
     end
 
     it "should be nil if provider is not submission system" do
       authentication.provider = 'twitter'
-      authentication.get_token.should be_nil
+      expect(authentication.get_token).to be_nil
 
       authentication.provider = 'facebook'
-      authentication.get_token.should be_nil
+      expect(authentication.get_token).to be_nil
     end
 
     it "should return access token" do
-      authentication.get_token.should == new_token
+      expect(authentication.get_token).to eq(new_token)
     end
 
     it "should update the refresh_token" do
       authentication.get_token
-      authentication.refresh_token.should == "DEF"
+      expect(authentication.refresh_token).to eq("DEF")
     end
   end
 end

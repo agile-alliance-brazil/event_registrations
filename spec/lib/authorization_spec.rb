@@ -19,114 +19,114 @@ describe Authorization do
   context "persist as bit mask" do
     it "- admin" do
       @user.roles = "admin"
-      @user.roles_mask.should == 1
+      expect(@user.roles_mask).to eq(1)
       @user.roles = :admin
-      @user.roles_mask.should == 1
+      expect(@user.roles_mask).to eq(1)
     end
     
     it "- organizer" do
       @user.roles = "organizer"
-      @user.roles_mask.should == 2
+      expect(@user.roles_mask).to eq(2)
       @user.roles = :organizer
-      @user.roles_mask.should == 2
+      expect(@user.roles_mask).to eq(2)
     end
     
     it "- multiple" do
       @user.roles = ["admin", "organizer"]
-      @user.roles_mask.should == 3
+      expect(@user.roles_mask).to eq(3)
       @user.roles = [:admin, :organizer]
-      @user.roles_mask.should == 3
+      expect(@user.roles_mask).to eq(3)
     end
     
     it "- none" do
       @user.roles = []
-      @user.roles_mask.should == 0
+      expect(@user.roles_mask).to eq(0)
     end
     
     it "- invalid is ignored" do
       @user.roles = "invalid"
-      @user.roles_mask.should == 0
+      expect(@user.roles_mask).to eq(0)
       @user.roles = :invalid
-      @user.roles_mask.should == 0
+      expect(@user.roles_mask).to eq(0)
     end
     
     it "- mixed valid and invalid (ignores invalid)" do
       @user.roles = ["invalid", "organizer", "admin"]
-      @user.roles_mask.should == 3
+      expect(@user.roles_mask).to eq(3)
       @user.roles = [:invalid, :organizer, :admin]
-      @user.roles_mask.should == 3
+      expect(@user.roles_mask).to eq(3)
     end
   end
 
   context "attribute reader for roles" do
     it "- no roles" do
-      @user.roles.should be_empty
+      expect(@user.roles).to be_empty
     end
 
     it "- single role" do
       @user.roles = "admin"
-      @user.roles.should == ["admin"]
+      expect(@user.roles).to eq(["admin"])
 
       @user.roles = "organizer"
-      @user.roles.should == ["organizer"]
+      expect(@user.roles).to eq(["organizer"])
     end
     
     it "- multiple roles" do
       @user.roles = ["admin", "organizer"]
-      @user.roles.should include("admin")
-      @user.roles.should include("organizer")
+      expect(@user.roles).to include("admin")
+      expect(@user.roles).to include("organizer")
     end
   end
   
   context "defining boolean methods for roles" do
     it "- admin" do
-      @user.should_not be_admin
+      expect(@user).not_to be_admin
       @user.roles = "admin"
-      @user.should be_admin
+      expect(@user).to be_admin
     end
     
     it "- organizer" do
-      @user.should_not be_organizer
+      expect(@user).not_to be_organizer
       @user.roles = "organizer"
-      @user.should be_organizer
+      expect(@user).to be_organizer
     end
     
     it "- multiple" do
       @user.roles = ["admin", "organizer"]
-      @user.should_not be_guest
-      @user.should be_admin
-      @user.should be_organizer
+      expect(@user).not_to be_guest
+      expect(@user).to be_admin
+      expect(@user).to be_organizer
     end
     
     it "- none (guest)" do
       @user.roles = []
-      @user.should be_guest
-      @user.should_not be_admin
-      @user.should_not be_organizer
+      expect(@user).to be_guest
+      expect(@user).not_to be_admin
+      expect(@user).not_to be_organizer
     end    
   end
   
   context "adding a role" do
     it "- string" do
       @user.add_role "admin"
-      @user.should be_admin
+      expect(@user).to be_admin
     end
     
     it "- symbol" do
       @user.add_role :admin
-      @user.should be_admin
+      expect(@user).to be_admin
     end
     
     it "- invalid" do
       @user.add_role :invalid
-      @user.roles_mask.should == 0
+      expect(@user.roles_mask).to eq(0)
     end
     
     it "- multiple roles" do
       @user.roles = [:admin, :organizer]
       @user.add_role :organizer
-      @user.should be_admin
-      @user.should be_organizer
+      expect(@user).to be_admin
+      expect(@user).to be_organizer
     end
   end
 
@@ -137,28 +137,28 @@ describe Authorization do
     
     it "- string" do
       @user.remove_role "admin"
-      @user.should_not be_admin
+      expect(@user).not_to be_admin
     end
     
     it "- symbol" do
       @user.remove_role :admin
-      @user.should_not be_admin
+      expect(@user).not_to be_admin
     end
     
     it "- invalid" do
       @user.remove_role :invalid
-      @user.roles_mask.should == 1
+      expect(@user.roles_mask).to eq(1)
     end
     
     it "- multiple roles" do
       @user.add_role :organizer
-      @user.should be_admin
-      @user.should be_organizer
+      expect(@user).to be_admin
+      expect(@user).to be_organizer
       
       @user.remove_role "organizer"
       @user.remove_role :admin
-      @user.should_not be_admin
-      @user.should_not be_organizer
+      expect(@user).not_to be_admin
+      expect(@user).not_to be_organizer
     end
   end
 end

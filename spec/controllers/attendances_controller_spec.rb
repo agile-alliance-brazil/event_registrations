@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe AttendancesController do
+describe AttendancesController, type: :controller do
   before :each do
     @event = FactoryGirl.create(:event)
     @individual = @event.registration_types.first
@@ -36,12 +36,12 @@ describe AttendancesController do
     it "should set attendance variable" do
       get :show, id: @attendance.id
 
-      assigns[:attendance].should == @attendance
+      expect(assigns[:attendance]).to eq(@attendance)
     end
     it "should respond to json" do
       get :show, id: @attendance.id, format: :json
 
-      response.should be_success      
+      expect(response).to be_success      
     end
   end
 
@@ -61,7 +61,7 @@ describe AttendancesController do
     it "should redirect back to status" do
       delete :destroy, id: @attendance.id
 
-      response.should redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(5))
     end
   end
 
@@ -77,7 +77,7 @@ describe AttendancesController do
       EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver: true))
       put :confirm, id: @attendance.id
 
-      response.should redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(5))
     end
 
     it "should notify airbrake if cannot send email" do
@@ -88,7 +88,7 @@ describe AttendancesController do
 
       put :confirm, id: @attendance.id
 
-      response.should redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(5))
     end
 
     it "should ignore airbrake errors if cannot send email" do
@@ -98,7 +98,7 @@ describe AttendancesController do
 
       put :confirm, id: @attendance.id
 
-      response.should redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(5))
     end
   end
 end

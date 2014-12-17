@@ -75,7 +75,7 @@ describe RegistrationNotifier do
 
         Event.stubs(:find).returns(event)
 
-        @notifier.pending_attendances.should == [pending]
+        expect(@notifier.pending_attendances).to eq([pending])
       end
     end
   end

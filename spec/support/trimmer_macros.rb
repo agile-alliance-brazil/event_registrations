@@ -11,7 +11,7 @@ module TrimmerMacros
           it "should trim #{attr}" do
             model = model_class.new(attr.to_sym => "  needs trimming  ")
             model.valid?
-            model.send(attr).should == "needs trimming"
+            expect(model.send(attr)).to eq("needs trimming")
           end
         end
       end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Transfer do
+describe Transfer, type: :model do
   subject { Transfer.build({}) }
   it { should_not be_persisted }
 
@@ -25,46 +25,46 @@ describe Transfer do
   context 'validations' do
     it 'should not be valid without origin' do
       transfer = Transfer.build(destination_id: 5)
-      transfer.should_not be_valid
+      expect(transfer).not_to be_valid
     end
     it 'should not be valid with pending origin' do
       @origin.status = 'pending'
       
-      @transfer.should_not be_valid
+      expect(@transfer).not_to be_valid
     end
     it 'should not be valid with cancelled origin' do
       @origin.status = 'cancel'
       
-      @transfer.should_not be_valid
+      expect(@transfer).not_to be_valid
     end
 
     it 'should not be valid without destination' do
       transfer = Transfer.build(origin_id: 3)
-      transfer.should_not be_valid
+      expect(transfer).not_to be_valid
     end
     it 'should not be valid with paid destination' do
       @destination.status = 'paid'
       
-      @transfer.should_not be_valid
+      expect(@transfer).not_to be_valid
     end
     it 'should not be valid with confirmed destination' do
       @destination.status = 'confirmed'
       
-      @transfer.should_not be_valid
+      expect(@transfer).not_to be_valid
     end
     it 'should not be valid with cancelled destination' do
       @destination.status = 'cancelled'
       
-      @transfer.should_not be_valid
+      expect(@transfer).not_to be_valid
     end
 
     it 'should be valid with paid origin and pending destination' do
-      @transfer.should be_valid
+      expect(@transfer).to be_valid
     end
     it 'should be valid with confirmed origin and pending destination' do
       @origin.status = 'confirmed'
 
-      @transfer.should be_valid
+      expect(@transfer).to be_valid
     end
   end
 
@@ -76,9 +76,9 @@ describe Transfer do
 
       @transfer.save
 
-      @origin.id.should == 3
-      @origin.created_at.should == timestamp
-      @origin.updated_at.should == timestamp
+      expect(@origin.id).to eq(3)
+      expect(@origin.created_at).to eq(timestamp)
+      expect(@origin.updated_at).to eq(timestamp)
     end
     it 'should not change origin registration_date' do
       date = Time.zone.now
@@ -86,19 +86,19 @@ describe Transfer do
 
       @transfer.save
 
-      @origin.registration_date.should == date
+      expect(@origin.registration_date).to eq(date)
     end
     it 'should not change origin email_sent' do
       @origin.email_sent = true
 
       @transfer.save
 
-      @origin.email_sent.should be_true
+      expect(@origin.email_sent).to be true
     end
     it 'should not change origin status' do
       @transfer.save
 
-      @origin.status.should == 'paid'
+      expect(@origin.status).to eq('paid')
     end
     it 'should switch all other attributes with destination' do
       destination_name = @destination.last_name
@@ -108,10 +108,10 @@ describe Transfer do
 
       @transfer.save
 
-      @origin.last_name.should == destination_name
-      @origin.email.should == destination_email
-      @origin.badge_name.should == destination_badge_name
-      @origin.twitter_user.should == destination_twitter_user
+      expect(@origin.last_name).to eq(destination_name)
+      expect(@origin.email).to eq(destination_email)
+      expect(@origin.badge_name).to eq(destination_badge_name)
+      expect(@origin.twitter_user).to eq(destination_twitter_user)
     end
   end
 
@@ -119,20 +119,20 @@ describe Transfer do
     it 'should create empty transfer from empty hash' do
       transfer = Transfer.build({})
 
-      transfer.origin.should be_new_record
-      transfer.origin.id.should be_nil
-      transfer.destination.should be_new_record
-      transfer.destination.id.should be_nil
+      expect(transfer.origin).to be_new_record
+      expect(transfer.origin.id).to be_nil
+      expect(transfer.destination).to be_new_record
+      expect(transfer.destination.id).to be_nil
     end
     it 'should create transfer with origin if hash has origin_id' do
       transfer = Transfer.build(origin_id: 3)
 
-      transfer.origin.should == @origin
+      expect(transfer.origin).to eq(@origin)
     end
     it 'should create transfer with destination if hash has destination_id' do
       transfer = Transfer.build(destination_id: 5)
 
-      transfer.destination.should == @destination
+      expect(transfer.destination).to eq(@destination)
     end
   end
 end

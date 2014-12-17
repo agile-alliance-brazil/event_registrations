@@ -10,7 +10,7 @@ def darwin_only(require_as)
 end
 
 gem 'rails', '=3.2.21' # Issue #61 - target 4.0.2
-gem 'inherited_resources', '=1.4.1'
+gem 'inherited_resources', '=1.5.1'
 gem 'seed-fu', '=2.3.3'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
@@ -20,7 +20,7 @@ gem 'haml', '=4.0.6'
 gem 'formtastic', '=3.1.2'
 gem 'airbrake', '=4.1.0'
 gem 'cancan', '=1.6.10'
-gem 'jquery-rails', '=3.1.0'
+gem 'jquery-rails', '=3.1.2' # 4.0.1 requires rails 4
 gem 'rake'
 gem 'will_paginate', '=3.0.7'
 gem 'omniauth', '=1.2.2'

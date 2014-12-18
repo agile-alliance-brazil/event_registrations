@@ -19,29 +19,6 @@ describe User, type: :model do
     end
   end
 
-  context "protect from mass assignment" do
-    it { should allow_mass_assignment_of :first_name }
-    it { should allow_mass_assignment_of :last_name }
-    it { should allow_mass_assignment_of :email }
-    it { should allow_mass_assignment_of :organization }
-    it { should allow_mass_assignment_of :phone }
-    it { should allow_mass_assignment_of :country }
-    it { should allow_mass_assignment_of :state }
-    it { should allow_mass_assignment_of :city }
-    it { should allow_mass_assignment_of :badge_name }
-    it { should allow_mass_assignment_of :cpf }
-    it { should allow_mass_assignment_of :gender }
-    it { should allow_mass_assignment_of :twitter_user }
-    it { should allow_mass_assignment_of :address }
-    it { should allow_mass_assignment_of :neighbourhood }
-    it { should allow_mass_assignment_of :zipcode }
-    it { should allow_mass_assignment_of :default_locale }
-    
-    it { should_not allow_mass_assignment_of :id }
-    it { should_not allow_mass_assignment_of :active }
-    it { should_not allow_mass_assignment_of :roles_mask }
-  end
-
   it_should_trim_attributes User, :first_name, :last_name, :email, :organization, :phone,
                                   :country, :state, :city, :badge_name, :twitter_user,
                                   :address, :neighbourhood, :zipcode

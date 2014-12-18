@@ -6,11 +6,6 @@ describe Authentication, type: :model do
     it { should belong_to :user }
   end
 
-  context "protect from mass assignment" do
-    it { should allow_mass_assignment_of :provider }
-    it { should allow_mass_assignment_of :uid }
-  end
-
   context "validations" do
     it { should validate_presence_of :provider }
     it { should validate_presence_of :uid }

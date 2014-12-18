@@ -8,31 +8,6 @@ describe Attendance, type: :model do
     it { should belong_to :registration_type }
   end
 
-  context "protect from mass assignment" do
-    it { should allow_mass_assignment_of :event_id }
-    it { should allow_mass_assignment_of :user_id }
-    it { should allow_mass_assignment_of :registration_type_id }
-    it { should allow_mass_assignment_of :registration_date }
-    it { should allow_mass_assignment_of :first_name }
-    it { should allow_mass_assignment_of :last_name }
-    it { should allow_mass_assignment_of :email }
-    it { should allow_mass_assignment_of :organization }
-    it { should allow_mass_assignment_of :phone }
-    it { should allow_mass_assignment_of :country }
-    it { should allow_mass_assignment_of :state }
-    it { should allow_mass_assignment_of :city }
-    it { should allow_mass_assignment_of :badge_name }
-    it { should allow_mass_assignment_of :cpf }
-    it { should allow_mass_assignment_of :gender }
-    it { should allow_mass_assignment_of :twitter_user }
-    it { should allow_mass_assignment_of :address }
-    it { should allow_mass_assignment_of :neighbourhood }
-    it { should allow_mass_assignment_of :zipcode }
-    it { should allow_mass_assignment_of :notes }
-    
-    it { should_not allow_mass_assignment_of :id }
-  end
-
   context "validations" do
     it { should validate_presence_of :first_name }
     it { should validate_presence_of :last_name }

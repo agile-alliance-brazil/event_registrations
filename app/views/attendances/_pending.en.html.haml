@@ -11,7 +11,7 @@
             = hidden_field_tag :cmd, "_s-xclick"
             = hidden_field_tag :encrypted, paypal_encrypted_attendee(attendance, attendance_url(attendance, locale: 'en'), payment_notifications_url(type: 'paypal', secret: AppConfig[:paypal][:secret]))
             = image_submit_tag "https://www.paypal.com/en_US/i/btn/btn_paynow_SM.gif"
-            = link_to_function image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", border: "0", alt: "Pay with PayPal"), "javascript:window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');"
+            = link_to image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", border: "0", alt: "Pay with PayPal"), "https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside", target: '_blank', data: { function: "window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');" }
         
   .payment_type.right
     %h4 OPTION 2: If you can understand Portuguese, pay with BCash for different payment types.
@@ -34,5 +34,5 @@
 
 %div.actions
   - if can? :confirm, Attendance
-    = button_to 'Confirm registration', confirm_attendance_path(attendance), confirm: t('attendance.confirm_confirmation', event: attendance.event.name), method: :put
-  = button_to 'Cancel registration', attendance, confirm: t('attendance.cancel_confirmation', event: attendance.event.name), method: :delete, class: 'remove'
+    = button_to 'Confirm registration', confirm_attendance_path(attendance), method: :put, data: { confirm: t('attendance.confirm_confirmation', event: attendance.event.name) }
+  = button_to 'Cancel registration', attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name ) }

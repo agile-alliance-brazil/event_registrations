@@ -50,7 +50,7 @@ module Current
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
-    config.assets.css_compressor = :yui
-    config.assets.js_compressor = :yui
+    # config.assets.css_compressor = :yui
+    # config.assets.js_compressor = :uglifier
   end
 end

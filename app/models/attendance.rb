@@ -8,8 +8,6 @@ class Attendance < ActiveRecord::Base
   belongs_to :registration_period
   has_many :payment_notifications, foreign_key: :invoicer_id
 
-  attr_accessor :email_confirmation
-
   validates_confirmation_of :email
   validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
   validates_presence_of :state, :if => Proc.new {|a| a.in_brazil?}
@@ -51,13 +49,13 @@ class Attendance < ActiveRecord::Base
 
   validates_presence_of :registration_type_id, :registration_date, :user_id, :event_id
 
-  scope :for_event, lambda { |e| where(event_id: e.id)}
-  scope :for_registration_type, lambda { |t| where(registration_type_id: t.id)}
-  scope :without_registration_type, lambda { |t| where("#{table_name}.registration_type_id != (?)", t.id)}
-  scope :pending, lambda { where(status: :pending)}
-  scope :paid, lambda { where(status: [:paid, :confirmed])}
-  scope :active, lambda {  where("#{table_name}.status != (?)", :cancelled)}
-  scope :older_than, lambda { |date| where('registration_date < (?)', date)}
+  scope :for_event, ->(e) { where(event_id: e.id)}
+  scope :for_registration_type, ->(t) { where(registration_type_id: t.id)}
+  scope :without_registration_type, ->(t) { where("#{table_name}.registration_type_id != (?)", t.id)}
+  scope :pending, -> { where(status: :pending)}
+  scope :paid, -> { where(status: [:paid, :confirmed])}
+  scope :active, -> {  where("#{table_name}.status != (?)", :cancelled)}
+  scope :older_than, ->(date) { where('registration_date < (?)', date)}
 
   def base_price
     Rails.logger.warn('Attendance#base_price is deprecated. It was called from ' + caller[1..5].join('\n'))

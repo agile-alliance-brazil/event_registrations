@@ -69,9 +69,33 @@ describe EventAttendancesController, type: :controller do
   end
 
   describe "POST create" do
+    let(:user){ FactoryGirl.create(:user) }
+    let(:valid_attendance) do
+      {
+        event_id: @event.id,
+        user_id: user.id,
+        registration_type_id: @individual.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        email_confirmation: user.email,
+        organization: user.organization,
+        phone: user.phone,
+        country: user.country,
+        state: user.state,
+        city: user.city,
+        badge_name: user.badge_name,
+        cpf: user.cpf,
+        gender: user.gender,
+        twitter_user: user.twitter_user,
+        address: user.address,
+        neighbourhood: user.neighbourhood,
+        zipcode: user.zipcode
+      }
+    end
     before(:each) do
       @email = stub(deliver: true)
-      controller.current_user = FactoryGirl.create(:user)
+      controller.current_user = user
       EmailNotifications.stubs(:registration_pending).returns(@email)
     end
 
@@ -79,20 +103,20 @@ describe EventAttendancesController, type: :controller do
       # +stubs(:valid?).returns(false)+ doesn't work here because
       # inherited_resources does +obj.errors.empty?+ to determine
       # if validation failed
-      post :create, event_id: @event.id, attendance: {}
+      post :create, event_id: @event.id, attendance: {event_id: @event.id}
       expect(response).to render_template(:new)
     end
 
     it "should redirect when model is valid" do
       Attendance.any_instance.stubs(:valid?).returns(true)
       Attendance.any_instance.stubs(:id).returns(5)
-      post :create, event_id: @event.id
+      post :create, event_id: @event.id, attendance: valid_attendance
       expect(response).to redirect_to(attendance_path(5))
     end
 
     it "should assign current event to attendance" do
       Attendance.any_instance.stubs(:valid?).returns(true)
-      post :create, event_id: @event.id
+      post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq(@event)
     end
 
@@ -101,7 +125,7 @@ describe EventAttendancesController, type: :controller do
       exception = StandardError.new
       EmailNotifications.expects(:registration_pending).raises(exception)
       controller.expects(:notify_airbrake).with(exception)
-      post :create, :event_id => @event.id
+      post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq(@event)
     end
 
@@ -110,7 +134,7 @@ describe EventAttendancesController, type: :controller do
       exception = StandardError.new
       EmailNotifications.expects(:registration_pending).raises(exception)
       controller.expects(:notify_airbrake).with(exception).raises(exception)
-      post :create, :event_id => @event.id
+      post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq(@event)
     end
 

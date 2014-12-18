@@ -6,7 +6,7 @@ describe EmailNotifications, type: :mailer do
     ActionMailer::Base.deliveries = []
     @old_locale = I18n.locale
     I18n.locale = :en
-    @event = Event.last || FactoryGirl.build(:event)
+    @event = Event.last || FactoryGirl.create(:event)
     Attendance.any_instance.stubs(:registration_fee).returns(499)
   end
 
@@ -17,7 +17,7 @@ describe EmailNotifications, type: :mailer do
   
   context "registration pending" do
     before(:each) do
-      @attendance = FactoryGirl.build(:attendance, event: @event)
+      @attendance = FactoryGirl.create(:attendance, event: @event)
       @attendance.id = 435
     end
     
@@ -47,7 +47,7 @@ describe EmailNotifications, type: :mailer do
 
   context "registration confirmed" do
     before(:each) do
-      @attendance = FactoryGirl.build(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
+      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
       @event.id = 1
     end
     
@@ -83,7 +83,7 @@ describe EmailNotifications, type: :mailer do
 
   context "cancelling registration" do
     before(:each) do
-      @attendance = FactoryGirl.build(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
+      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
     end
     
     it "should be sent to pending attendee" do
@@ -108,7 +108,7 @@ describe EmailNotifications, type: :mailer do
 
   context "cancel registration warning" do
     before(:each) do
-      @attendance = FactoryGirl.build(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
+      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
     end
     
     it "should be sent to pending attendee" do

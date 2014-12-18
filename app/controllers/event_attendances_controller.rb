@@ -1,14 +1,14 @@
 # encoding: UTF-8
 class EventAttendancesController < InheritedResources::Base
-  defaults :resource_class => Attendance, :instance_name => "attendance"
+  defaults resource_class: Attendance, instance_name: "attendance"
 
-  belongs_to :registration_group, :optional => true
+  belongs_to :registration_group, optional: true
 
   actions :new, :create, :index
   
   before_filter :event
   before_filter :load_registration_types, only: [:new, :create]
-  before_filter :validate_free_registration, :only => [:create]
+  before_filter :validate_free_registration, only: [:create]
 
   def index
     index! do |format|
@@ -72,9 +72,11 @@ class EventAttendancesController < InheritedResources::Base
   end
 
   def attendance_params
-    params.require(:attendance).permit(:event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date,
-      :first_name, :last_name, :email, :email_confirmation, :organization, :phone, :country, :state, :city, :badge_name, :cpf,
-      :gender, :twitter_user, :address, :neighbourhood, :zipcode, :notes)
+    params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
+      :registration_group_id, :registration_date, :first_name, :last_name, :email,
+      :email_confirmation, :organization, :phone, :country, :state, :city,
+      :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
+      :zipcode, :notes)
   end
   
   def load_registration_types
@@ -82,8 +84,8 @@ class EventAttendancesController < InheritedResources::Base
   end
 
   def valid_registration_types
-    registration_types = event.registration_types.paid.without_group.all
-    registration_types << event.registration_types.without_group.all if current_user.organizer?
+    registration_types = event.registration_types.paid.without_group.to_a
+    registration_types += event.registration_types.without_group.to_a if current_user.organizer?
     registration_types.flatten.uniq.compact
   end
     
@@ -105,7 +107,7 @@ class EventAttendancesController < InheritedResources::Base
   end
 
   def event
-    @event ||= Event.find_by_id(params[:event_id])
+    @event ||= Event.find_by_id(params.require(:event_id))
   end
 
   def notify(attendance)

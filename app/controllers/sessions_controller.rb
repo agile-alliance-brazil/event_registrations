@@ -2,6 +2,7 @@
 class SessionsController < ApplicationController
   skip_before_filter :authenticate_user!
   skip_before_filter :authorize_action
+  skip_before_filter :verify_authenticity_token
 
   layout 'eventless'
 

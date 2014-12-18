@@ -31,6 +31,7 @@ class ApplicationController < ActionController::Base
 
   def current_user= user
     session[:user_id] = user.try(:id)
+    Rails.logger.info "Saving session id as #{session[:user_id]}"
     @current_user = user
   end
 

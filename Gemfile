@@ -9,7 +9,7 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=4.0.0'
+gem 'rails', '=4.0.12'
 gem 'inherited_resources', '=1.5.1'
 gem 'seed-fu', '=2.3.3'
 gem 'brhelper', '=3.3.0'
@@ -21,7 +21,7 @@ gem 'formtastic', '=3.1.2'
 gem 'airbrake', '=4.1.0'
 gem 'localized_country_select', '=0.9.9'
 gem 'cancan', '=1.6.10'
-gem 'jquery-rails', '=3.1.2' # 4.0.1 requires rails 4
+gem 'jquery-rails', '=3.1.2' # 4.0.1 requires rails 4.2.0.beta
 gem 'rake'
 gem 'will_paginate', '=3.0.7'
 gem 'omniauth', '=1.2.2'
@@ -34,9 +34,9 @@ gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 # in production environments by default.
 group :assets do
   gem 'therubyracer', '=0.12.1', :platforms => :ruby
-  gem 'sass-rails',   '=4.0.1'
-  gem 'coffee-rails', '=4.0.1'
-  gem 'yui-compressor', '=0.12.0'
+  gem 'sass-rails',   '=5.0.0'
+  gem 'coffee-rails', '=4.1.0'
+  gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
 end
 
 group :production, :travis do

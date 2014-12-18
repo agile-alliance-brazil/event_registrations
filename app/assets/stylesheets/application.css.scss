@@ -1,7 +1,12 @@
-@import "mixins/*";
-@import "formtastic";
-@import "formtastic_changes";
-@import "jquery.autocomplete";
+/*
+ *=require formtastic
+ *=require formtastic_changes
+ *=require jquery.autocomplete
+ */
+@import 'mixins/grid';
+@import 'mixins/helper';
+@import 'mixins/reset';
+@import 'mixins/text';
 
 $color1: #009933;
 $color2: #5ad295;

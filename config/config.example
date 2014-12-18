@@ -24,7 +24,8 @@
     secret: xxx22xxx
     cert_id: ABCxxx
     url: https://www.sandbox.paypal.com/cgi-bin/webscr
-  secret_token: cc611d857e545df685c52c687259b3248ad38942b66698d1ceba3e4e799787ec20523c56bbd7d896837065aa199609c1503eb4f7ca582c7e5d6efea6bd021133
+  secret_token: 5d2a01a0054e1ce4a87ff5a297b84063396e231ba994de27d69834766cf50423b9dd4eca113c88b6decd3b845ae7616f1e0f1256a2cfed8c15d0483f9880cdb3
+  secret_key_base: 917cc0a9e91b58e1e6f8e9e6ff443f16b19832b1ad628b1e33f0149fd71c819e98f1307bc1caf342d1d4356f8048406f9361689b36a707fdefb820b27a9b5e22
   twitter:
     key: https://dev.twitter.com/apps/new
     secret: https://dev.twitter.com/apps/new

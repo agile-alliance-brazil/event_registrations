@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :authentications
   
   has_many :attendances
-  has_many :events, through: :attendances, uniq: true
+  has_many :events, -> { uniq }, through: :attendances
   has_many :payment_notifications, through: :attendances
   
   validates_presence_of [:first_name, :last_name]

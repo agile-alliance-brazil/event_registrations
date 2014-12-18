@@ -12,4 +12,11 @@ module AttendanceHelper
   def price_table_link(event, locale)
     event.price_table_link.gsub(/:locale(\/?)/, "#{locale.to_s}\\1")
   end
+
+  def convert_registration_types_to_radio(attendance, registration_types)
+    registration_types.map do |rt|
+      price = number_to_currency(attendance_price(attendance, rt), locale: :pt)
+      [ "#{t(rt.title)} - #{price}", rt.id ]
+    end
+  end
 end

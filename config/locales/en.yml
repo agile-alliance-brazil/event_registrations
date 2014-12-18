@@ -186,6 +186,8 @@ en:
     sponsor: "Sponsor"
     organizer: "Organizer"
     guest: "Guest"
+    member: "Member"
+    non_member: "Non Member"
 
   registration:
     quantity: "Quantity"

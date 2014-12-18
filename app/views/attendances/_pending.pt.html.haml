@@ -34,5 +34,5 @@
 
 %div.actions
   - if can? :confirm, Attendance
-    = button_to 'Confirmar inscrição', confirm_attendance_path(attendance), event: attendance.event.name), method: :put, data: { confirm: t('attendance.confirm_confirmation' }
-  = button_to 'Cancelar inscrição', attendance, event: attendance.event.name), method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation'}
+    = button_to 'Confirmar inscrição', confirm_attendance_path(attendance), method: :put, data: { confirm: t('attendance.confirm_confirmation', event: attendance.event.name) }
+  = button_to 'Cancelar inscrição', attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name) }

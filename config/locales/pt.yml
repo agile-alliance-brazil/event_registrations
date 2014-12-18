@@ -325,6 +325,8 @@ pt:
     sponsor: "Patrocinador"
     organizer: "Organizador"
     guest: "Convidado"
+    member: "Membro"
+    non_member: "Não Membro"
 
   registration:
     quantity: "Quantidade"

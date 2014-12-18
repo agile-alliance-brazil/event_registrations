@@ -4,9 +4,9 @@ module ApplicationHelper
     @current_tab += 1
   end
 
-  def link_to_menu_item(tag, name, url)
+  def link_to_menu_item(tag, name, url, options = {})
     content_tag(tag, :class => (current_page?(url) ? "selected" : "")) do
-      link_to name, url
+      link_to name, url, options
     end
   end
 

@@ -9,7 +9,7 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=4.0.12'
+gem 'rails', '=4.1.8'
 gem 'inherited_resources', '=1.5.1'
 gem 'seed-fu', '=2.3.3'
 gem 'brhelper', '=3.3.0'

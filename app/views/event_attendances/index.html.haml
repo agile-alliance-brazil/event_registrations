@@ -1,6 +1,6 @@
 - title t('title.attendances_summary')
 
-%p= t('registration.status', :date => I18n.l(Time.zone.now))
+%p= t('registration.status', date: I18n.l(Time.zone.now))
 
 %p
   = link_to image_tag('icon-csv.png'), event_attendances_path(event_id: @event.id, format: :csv)
@@ -8,12 +8,12 @@
 
 %table.summary
   %tr
-    %th{:rowspan=>2}= t('formtastic.labels.attendee.status')
-    %th{:colspan=>2}= t('attendee.status.pending')
-    %th{:colspan=>2}= 'Paypal'
-    %th{:colspan=>2}= 'BCash'
-    %th{:colspan=>2}= t('attendance.confirmed.unpaid')
-    %th{:colspan=>2}= t('registration_total.total')
+    %th{rowspan: 2}= t('formtastic.labels.attendee.status')
+    %th{colspan: 2}= t('attendee.status.pending')
+    %th{colspan: 2} Paypal
+    %th{colspan: 2} BCash
+    %th{colspan: 2}= t('attendance.confirmed.unpaid')
+    %th{colspan: 2}= t('registration_total.total')
   %tr
     %th= t('registration.quantity')
     %th= t('formtastic.labels.attendee.total')

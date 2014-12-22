@@ -57,7 +57,9 @@ class User < ActiveRecord::Base
 
   def attendance_attributes
     attributes.reject do |attribute, value|
-      attribute == 'id' || attribute == 'created_at' || attribute == 'updated_at' || attribute == 'roles_mask' || attribute == 'default_locale'
+      attribute == 'id' || attribute == 'created_at' ||
+        attribute == 'updated_at' || attribute == 'roles_mask' ||
+        attribute == 'default_locale'
     end
   end
 

@@ -211,6 +211,18 @@ ul.spaced {
   }
 }
 
+ul.event {
+  li {
+    div.status {
+      display: inline;
+    }
+  }
+}
+
+#content>div {
+  margin: 10px 0;
+}
+
 .attention {
   font-size: 10px;
   color: #996666;
@@ -231,8 +243,16 @@ ul.spaced {
   }
 }
 
+.profile {
+  ul {
+    li {
+      list-style: none;
+    }
+  }
+}
+
 .authentications {
-  margin-bottom: 48px;
+  padding-bottom: 48px;
 
   .authentication {
     float: left;

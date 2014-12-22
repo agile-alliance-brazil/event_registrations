@@ -286,6 +286,8 @@ pt:
         already_in_use: "Esse serviço de autenticação já está sendo usado por outro usuário. Você provavelmente acessou o sistema separadamente usando 2 serviços de autenticação diferentes, criando duas contas de usuário. Para associar o serviço de autenticação com esta conta, o outro usuário precisa ser removido. Entre em contato com inscricoes@agilebrazil.com para mais detalhes."
       new: "Faltam algumas informações para salvar seu usuário. Complete as informações abaixo para completar a criação de sua conta."
       create: "Este parece ser seu primeiro acesso ao sistema. Complete suas informações abaixo para ativar sua conta."
+      edit: "Faltam algumas informações para salvar seu usuário. Complete as informações abaixo para atualizar seu perfil."
+      update: "Informações atualizadas com sucesso. Obrigado!"
       failure: "Não foi possível autenticar seu usuário. Queira, por favor, tentar novamente mais tarde ou utilize outro serviço."
       invalid: "O serviço escolhido para autenticação não pôde nos informar seu nome. Por favor, preencha esta informação no serviço escolhido e tente autenticar-se novamente."
     transfer:

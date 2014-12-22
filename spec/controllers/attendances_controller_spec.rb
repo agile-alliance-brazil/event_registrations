@@ -23,8 +23,7 @@ describe AttendancesController, type: :controller do
 
     sign_in user
 
-    @attendance = FactoryGirl.build(:attendance, user: user, id: 5)
-
+    @attendance = FactoryGirl.create(:attendance, user: user)
     Attendance.stubs(:find).with(@attendance.id.to_s).returns(@attendance)
   end
 
@@ -61,7 +60,7 @@ describe AttendancesController, type: :controller do
     it "should redirect back to status" do
       delete :destroy, id: @attendance.id
 
-      expect(response).to redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(@attendance))
     end
   end
 
@@ -77,7 +76,7 @@ describe AttendancesController, type: :controller do
       EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver: true))
       put :confirm, id: @attendance.id
 
-      expect(response).to redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(@attendance))
     end
 
     it "should notify airbrake if cannot send email" do
@@ -88,7 +87,7 @@ describe AttendancesController, type: :controller do
 
       put :confirm, id: @attendance.id
 
-      expect(response).to redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(@attendance))
     end
 
     it "should ignore airbrake errors if cannot send email" do
@@ -98,7 +97,7 @@ describe AttendancesController, type: :controller do
 
       put :confirm, id: @attendance.id
 
-      expect(response).to redirect_to(attendance_path(5))
+      expect(response).to redirect_to(attendance_path(@attendance))
     end
   end
 end

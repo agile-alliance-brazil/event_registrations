@@ -100,9 +100,7 @@ describe EventAttendancesController, type: :controller do
     end
 
     it "should render new template when model is invalid" do
-      # +stubs(:valid?).returns(false)+ doesn't work here because
-      # inherited_resources does +obj.errors.empty?+ to determine
-      # if validation failed
+      user.phone = nil # User cannot have everything or we will just pick from there.
       post :create, event_id: @event.id, attendance: {event_id: @event.id}
       expect(response).to render_template(:new)
     end

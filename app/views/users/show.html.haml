@@ -1,4 +1,14 @@
-- title t('title.profile', :username => @user.full_name)
+- title t('title.profile', username: @user.full_name)
+
+.profile
+  %p
+    %strong= t('formtastic.titles.attendance_personal')
+  %ul
+    - [:first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale].each do |attribute|
+      %li
+        = t("formtastic.labels.user.#{attribute}") + ': '
+        = @user.send(attribute)
+  = link_to t('formtastic.actions.edit_profile'), edit_user_path(@user)
 
 .attendances
   %p
@@ -24,13 +34,14 @@
     %strong= t('authentication.list')
   - @user.authentications.each do |authentication|
     .authentication
-      = image_tag "#{authentication.provider}_32.png", :size => "32x32"
+      = image_tag "#{authentication.provider}_32.png", size: "32x32"
       .provider= t("authentication.providers.#{authentication.provider}")
       .uid= authentication.uid
 .clear
 
 - providers = Authentication::PROVIDERS - @user.authentications.map(&:provider)
 - unless providers.empty?
-  %p
-    %strong= t('authentication.add')
-  = render :partial => 'shared/providers', locals: { providers: providers }
+  .providers
+    %p
+      %strong= t('authentication.add')
+    = render partial: 'shared/providers', locals: { providers: providers }

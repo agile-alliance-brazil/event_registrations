@@ -17,7 +17,7 @@
 - else
   %p
     Caso você já possua uma conta de usuário no sistema de submissões, pule para o passo 2. Caso
-    contrário, clique #{link_to 'aqui', "#{AppConfig[:submission_system][:url]}users/signup?locale=pt", :target => :blank}
+    contrário, clique #{link_to 'aqui', "#{AppConfig[:submission_system][:url]}users/signup?locale=pt", target: :blank}
     e preencha o formulário para cadastrar uma conta de usuário no sistema de submissões.
 
 %br
@@ -30,7 +30,7 @@
 
   .authentications
     .authentication
-      = image_tag "#{@submission_system_authentication.provider}_32.png", :size => "32x32"
+      = image_tag "#{@submission_system_authentication.provider}_32.png", size: "32x32"
       .provider= t("authentication.providers.#{@submission_system_authentication.provider}")
       .uid= @submission_system_authentication.uid
 
@@ -40,7 +40,7 @@
     inscrição para provar que já comprovou o pagamento na faixa "Early Bird". Clique no botão abaixo
     para associar sua conta e volte para esta página para ler as instruções dos próximos passos:
 
-  = render :partial => 'shared/providers', locals: { providers: ['submission_system'] }
+  = render partial: 'shared/providers', locals: { providers: ['submission_system'] }
 
 %br
 
@@ -57,7 +57,7 @@
 
 - if @submission_system_authentication
   %p
-    Agora é só #{link_to "votar", "#{AppConfig[:submission_system][:url]}sessions", :target => :blank}
+    Agora é só #{link_to "votar", "#{AppConfig[:submission_system][:url]}sessions", target: :blank}
     nas suas sessões preferidas. As regras para votação são:
 
   %ul

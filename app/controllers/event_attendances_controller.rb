@@ -1,22 +1,21 @@
 # encoding: UTF-8
-class EventAttendancesController < InheritedResources::Base
-  defaults resource_class: Attendance, instance_name: "attendance"
-
-  belongs_to :registration_group, optional: true
-
-  actions :new, :create, :index
-  
+class EventAttendancesController < ApplicationController
   before_filter :event
   before_filter :load_registration_types, only: [:new, :create]
-  before_filter :validate_free_registration, only: [:create]
 
   def index
-    index! do |format|
+    @attendances = Attendance.for_event(event).active.
+      includes(:payment_notifications, :event, :registration_type).all
+    respond_to do |format|
       format.html
       format.csv {
         response.headers['Content-Disposition'] = "attachment; filename=\"#{event.name.parameterize.underscore}.csv\""
       }
     end
+  end
+
+  def new
+    @attendance = Attendance.new(build_attributes)
   end
   
   def create
@@ -24,39 +23,39 @@ class EventAttendancesController < InheritedResources::Base
       redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
       return
     end
+    @attendance = Attendance.new(build_attributes)
 
-    create! do |success, failure|
-      success.html do
-        begin
-          flash[:notice] = t('flash.attendance.create.success')
-          notify(@attendance)
-        rescue => ex
-          flash[:alert] = t('flash.attendance.mail.fail')
-          notify_or_log(ex)
-        end
-        redirect_to attendance_path(@attendance)
+    return unless validate_free_registration(@attendance)
+    if @attendance.save
+      begin
+        flash[:notice] = t('flash.attendance.create.success')
+        notify(@attendance)
+      rescue => ex
+        flash[:alert] = t('flash.attendance.mail.fail')
+        notify_or_log(ex)
       end
-      failure.html do
-        flash.now[:error] = t('flash.failure')
-        render :new
-      end
+      redirect_to attendance_path(@attendance)
+    else
+      flash.now[:error] = t('flash.failure')
+      render :new
     end
   end
   
   private
-  def build_resource
-    attributes = attendance_params
-    unless attributes
-      attributes = current_user.attendance_attributes
-      attributes[:email_confirmation] = current_user.email
-      attributes[:gender] = current_user.gender
-    end
+  def resource
+    Attendance.find_by_id(params[:id])
+  end
+
+  def resource_class
+    Attendance
+  end
+
+  def build_attributes
+    attributes = attendance_params || {}
+    attributes = current_user.attendance_attributes.merge(attributes)
+    attributes[:email_confirmation] ||= current_user.email
     attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
-    if parent?
-      attributes[:registration_type_id] = event.registration_types.find_by_title('registration_type.group').try(:id)
-      attributes[:organization] = parent.name
-    end
     if current_user.has_approved_session?(event)
       attributes[:registration_type_id] = event.registration_types.find_by_title('registration_type.speaker').try(:id)
     end
@@ -64,11 +63,7 @@ class EventAttendancesController < InheritedResources::Base
       attributes[:registration_type_id] = @registration_types.first.id
     end
     attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.now].min
-    @attendance ||= Attendance.new(attributes)
-  end
-
-  def collection
-    @attendances ||= end_of_association_chain.for_event(event).active.all(include: [:payment_notifications, :event, :registration_type])
+    attributes
   end
 
   def attendance_params
@@ -89,9 +84,9 @@ class EventAttendancesController < InheritedResources::Base
     registration_types.flatten.uniq.compact
   end
     
-  def validate_free_registration
-    if is_free?(build_resource) && !allowed_free_registration?
-      build_resource.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
+  def validate_free_registration(attendance)
+    if is_free?(attendance) && !allowed_free_registration?
+      attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
       flash.now[:error] = t('flash.attendance.create.free_not_allowed') 
       render :new and return false
     end
@@ -103,7 +98,7 @@ class EventAttendancesController < InheritedResources::Base
   end
   
   def allowed_free_registration?
-    (current_user.has_approved_session?(event) || current_user.organizer?) && !parent?
+    current_user.has_approved_session?(event) || current_user.organizer?
   end
 
   def event

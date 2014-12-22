@@ -22,5 +22,5 @@ Current::Application.routes.draw do
 
   resources :payment_notifications, only: :create
 
-  root :to => 'events#index'
+  root to: 'events#index'
 end

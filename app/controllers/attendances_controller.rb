@@ -1,20 +1,27 @@
 # encoding: UTF-8
-class AttendancesController < InheritedResources::Base
-  before_filter :event
+class AttendancesController < ApplicationController
+  before_filter :load_event
   skip_before_filter :authenticate_user!, only: :callback
   skip_before_filter :authorize_action, only: :callback
-  protect_from_forgery :except => [:callback]
+  protect_from_forgery except: [:callback]
 
-  actions :show, :destroy
-  respond_to :json, only: [:show]
+  def show
+    @attendance = resource
+    respond_to do |format|
+      format.html
+      format.json
+    end
+  end
 
   def destroy
+    attendance = resource
     attendance.cancel
     
     redirect_to attendance_path(attendance)
   end
 
   def confirm
+    attendance = resource
     begin
       attendance.confirm
     rescue => ex
@@ -27,12 +34,13 @@ class AttendancesController < InheritedResources::Base
   end
 
   def enable_voting
+    attendance = resource
     if attendance.can_vote?
-      authentication = current_user.authentications.where(:provider => :submission_system).first
+      authentication = current_user.authentications.where(provider: :submission_system).first
       result = authentication ? authentication.get_token.post('/api/user/make_voter').parsed : {}
 
       if result['success']
-        flash[:notice] = t('flash.attendance.enable_voting.success', :url => result['vote_url']).html_safe
+        flash[:notice] = t('flash.attendance.enable_voting.success', url: result['vote_url']).html_safe
       else
         flash[:error] = t('flash.attendance.enable_voting.missing_authentication')
       end
@@ -42,15 +50,20 @@ class AttendancesController < InheritedResources::Base
   end
 
   def voting_instructions
+    @attendance = resource
     @submission_system_authentication = current_user.authentications.find_by_provider('submission_system')
   end
   
   private
-  def attendance
-    @attendance ||= Attendance.find(params[:id])
+  def resource_class
+    Attendance
   end
 
-  def event
-    @event = attendance.event
+  def resource
+    Attendance.find(params[:id])
+  end
+
+  def load_event
+    @event = resource.event
   end
 end

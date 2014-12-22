@@ -8,7 +8,7 @@ class Ability
     @user = user || User.new # guest
     @event = event
 
-    alias_action :edit, :update, :destroy, :to => :modify
+    alias_action :edit, :update, :destroy, to: :modify
 
     guest_privileges
     admin_privileges if @user.admin?
@@ -23,7 +23,7 @@ class Ability
     can(:read, Event)
     can(:manage, @user)
 
-    can([:show, :destroy, :enable_voting, :voting_instructions], Attendance, :user_id => @user.id)
+    can([:show, :destroy, :enable_voting, :voting_instructions], Attendance, user_id: @user.id)
     can do |action, subject_class, subject|
       expand_actions([:create]).include?(action) && [Attendance].include?(subject_class) &&
       Time.zone.now <= @event.registration_periods.last.end_at

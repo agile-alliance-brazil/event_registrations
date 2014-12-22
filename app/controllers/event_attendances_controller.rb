@@ -57,7 +57,8 @@ class EventAttendancesController < ApplicationController
     attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
     if current_user.has_approved_session?(event)
-      attributes[:registration_type_id] = event.registration_types.find_by_title('registration_type.speaker').try(:id)
+      attributes[:registration_type_id] = event.registration_types.
+        where(title: 'registration_type.speaker').select(:id).first.try(:id)
     end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id
@@ -102,7 +103,7 @@ class EventAttendancesController < ApplicationController
   end
 
   def event
-    @event ||= Event.find_by_id(params.require(:event_id))
+    @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
   end
 
   def notify(attendance)

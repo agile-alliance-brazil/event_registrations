@@ -70,7 +70,7 @@
   
     var prices = #{attendance_prices(@attendance).to_json};
     var price = prices[checked_type.val()];
-    if (checked_type.val() == #{@event.registration_types.find_by_title('registration_type.individual').try(:id) || 0}) {
+    if (checked_type.val() == #{@event.registration_types.where(title: 'registration_type.individual').select(:id).first.try(:id) || 0}) {
       $("#attendance_organization_input").find('label abbr').show();
     } else {
       $("#attendance_organization_input").find('label abbr').hide();

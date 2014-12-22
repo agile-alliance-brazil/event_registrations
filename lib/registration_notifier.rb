@@ -4,7 +4,7 @@ class RegistrationNotifier
     pending_attendances.older_than(30.days.ago).each do |attendance|
       Rails.logger.info("[Attendance] #{attendance.to_param}")
       try_with("CANCEL") do
-        EmailNotifications.cancelling_registration(attendance).deliver
+        EmailNotifications.cancelling_registration(attendance).deliver_now
         attendance.cancel
       end
     end
@@ -14,7 +14,7 @@ class RegistrationNotifier
     pending_attendances.older_than(7.days.ago).each do |attendance|
       Rails.logger.info("[Attendance] #{attendance.to_param}")
       try_with("WARN") do
-        EmailNotifications.cancelling_registration_warning(attendance).deliver
+        EmailNotifications.cancelling_registration_warning(attendance).deliver_now
       end
     end
   end

@@ -22,7 +22,7 @@ describe EmailNotifications, type: :mailer do
     end
     
     it "should be sent to attendee cc'ed to event organizer" do
-      mail = EmailNotifications.registration_pending(@attendance).deliver
+      mail = EmailNotifications.registration_pending(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.cc).to eq([AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]])
@@ -34,7 +34,7 @@ describe EmailNotifications, type: :mailer do
     
     it "should be sent to attendee according to country" do
       @attendance.country = 'US'
-      mail = EmailNotifications.registration_pending(@attendance).deliver
+      mail = EmailNotifications.registration_pending(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.cc).to eq([AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]])
@@ -47,12 +47,12 @@ describe EmailNotifications, type: :mailer do
 
   context "registration confirmed" do
     before(:each) do
-      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
+      @attendance = FactoryGirl.create(:attendance, event: @event, registration_date: Time.zone.local(2013, 05, 01, 12, 0, 0))
       @event.id = 1
     end
     
     it "should be sent to attendee" do
-      mail = EmailNotifications.registration_confirmed(@attendance).deliver
+      mail = EmailNotifications.registration_confirmed(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Caro #{@attendance.full_name},/)
@@ -63,7 +63,7 @@ describe EmailNotifications, type: :mailer do
     
     it "should be sent to attendee according to country" do
       @attendance.country = 'US'
-      mail = EmailNotifications.registration_confirmed(@attendance).deliver
+      mail = EmailNotifications.registration_confirmed(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Dear #{@attendance.full_name},/)
@@ -74,7 +74,7 @@ describe EmailNotifications, type: :mailer do
 
     it "should be sent according to event id" do
       @event.id = 4
-      mail = EmailNotifications.registration_confirmed(@attendance).deliver
+      mail = EmailNotifications.registration_confirmed(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Naoum Express/)
@@ -83,11 +83,11 @@ describe EmailNotifications, type: :mailer do
 
   context "cancelling registration" do
     before(:each) do
-      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
+      @attendance = FactoryGirl.create(:attendance, event: @event, registration_date: Time.zone.local(2013, 05, 01, 12, 0, 0))
     end
     
     it "should be sent to pending attendee" do
-      mail = EmailNotifications.cancelling_registration(@attendance).deliver
+      mail = EmailNotifications.cancelling_registration(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Caro #{@attendance.full_name},/)
@@ -97,7 +97,7 @@ describe EmailNotifications, type: :mailer do
     
     it "should be sent to attendee according to country" do
       @attendance.country = 'US'
-      mail = EmailNotifications.cancelling_registration(@attendance).deliver
+      mail = EmailNotifications.cancelling_registration(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Dear #{@attendance.full_name},/)
@@ -108,11 +108,11 @@ describe EmailNotifications, type: :mailer do
 
   context "cancel registration warning" do
     before(:each) do
-      @attendance = FactoryGirl.create(:attendance, :event => @event, :registration_date => Time.zone.local(2013, 05, 01, 12, 0, 0))
+      @attendance = FactoryGirl.create(:attendance, event: @event, registration_date: Time.zone.local(2013, 05, 01, 12, 0, 0))
     end
     
     it "should be sent to pending attendee" do
-      mail = EmailNotifications.cancelling_registration_warning(@attendance).deliver
+      mail = EmailNotifications.cancelling_registration_warning(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Caro #{@attendance.full_name},/)
@@ -122,7 +122,7 @@ describe EmailNotifications, type: :mailer do
     
     it "should be sent to attendee according to country" do
       @attendance.country = 'US'
-      mail = EmailNotifications.cancelling_registration_warning(@attendance).deliver
+      mail = EmailNotifications.cancelling_registration_warning(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Dear #{@attendance.full_name},/)

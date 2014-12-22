@@ -66,14 +66,14 @@ describe AttendancesController, type: :controller do
 
   describe "PUT confirm" do
     it "should confirm attendance" do
-      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver: true))
+      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
       @attendance.expects(:confirm)
 
       put :confirm, id: @attendance.id
     end
 
     it "should redirect back to status" do
-      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver: true))
+      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
       put :confirm, id: @attendance.id
 
       expect(response).to redirect_to(attendance_path(@attendance))

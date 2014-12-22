@@ -9,8 +9,8 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=4.1.8'
-gem 'seed-fu', '=2.3.3'
+gem 'rails', '=4.2.0'
+gem 'seed-fu', '=2.3.3', git: 'https://github.com/Nikamura/seed-fu.git'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
 gem 'validates_existence', '=0.9.2'
@@ -20,7 +20,6 @@ gem 'formtastic', '=3.1.2'
 gem 'airbrake', '=4.1.0'
 gem 'localized_country_select', '=0.9.9'
 gem 'cancan', '=1.6.10'
-gem 'jquery-rails', '=3.1.2' # 4.0.1 requires rails 4.2.0.beta
 gem 'rake'
 gem 'will_paginate', '=3.0.7'
 gem 'omniauth', '=1.2.2'
@@ -29,14 +28,12 @@ gem 'omniauth-facebook', '=2.0.0'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'therubyracer', '=0.12.1', :platforms => :ruby
-  gem 'sass-rails',   '=5.0.0'
-  gem 'coffee-rails', '=4.1.0'
-  gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
-end
+
+gem 'jquery-rails', '=4.0.2'
+gem 'therubyracer', '=0.12.1', platforms: :ruby
+gem 'sass-rails', '=5.0.0'
+gem 'coffee-rails', '=4.1.0'
+gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
 
 group :production, :travis do
   gem 'mysql2', '=0.3.17'

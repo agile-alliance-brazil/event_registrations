@@ -40,7 +40,7 @@ class Attendance < ActiveRecord::Base
     
     after_transition any => :confirmed do |attendance|
       begin
-        EmailNotifications.registration_confirmed(attendance).deliver
+        EmailNotifications.registration_confirmed(attendance).deliver_now
       rescue => ex
         Airbrake.notify(ex)
       end

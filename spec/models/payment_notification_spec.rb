@@ -38,30 +38,30 @@ describe PaymentNotification, type: :model do
       end
 
       it "fails if secret doesn't match" do
-        @valid_params.merge!(:secret => 'wrong_secret')
+        @valid_params.merge!(secret: 'wrong_secret')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it "fails if status is not Completed" do
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(:status => "Failed"))
+        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(status: "Failed"))
         expect(@attendance).to be_pending
       end
 
       it "fails if receiver address doesn't match" do
-        @valid_params.merge!(:receiver_email => 'wrong@email.com')
+        @valid_params.merge!(receiver_email: 'wrong@email.com')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it "fails if paid amount doesn't match" do
-        @valid_params.merge!(:mc_gross => '1.00')
+        @valid_params.merge!(mc_gross: '1.00')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it "fails if currency doesn't match" do
-        @valid_params.merge!(:mc_currency => 'GBP')
+        @valid_params.merge!(mc_currency: 'GBP')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
@@ -92,13 +92,13 @@ describe PaymentNotification, type: :model do
       end
 
       it "fails if secret doesn't match" do
-        @valid_params.merge!(:secret => 'wrong_secret')
+        @valid_params.merge!(secret: 'wrong_secret')
         payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it "fails if status is not Aprovada" do
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(:status => "Cancelada"))
+        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(status: "Cancelada"))
         expect(@attendance).to be_pending
       end
     end

@@ -7,6 +7,10 @@ if defined?(Bundler)
   Bundler.require(:default, Rails.env)
 end
 
+# Needed for Guard::Konacha since it'll try to initialize
+# with the same configs but won't invoke the Current::Application
+I18n.available_locales = [:en, :pt]
+
 module Current
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -29,6 +33,7 @@ module Current
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+    config.i18n.available_locales = [:en, :pt]
     config.i18n.default_locale = :pt
 
     # Configure the default encoding used in templates for Ruby 1.9.

@@ -101,7 +101,7 @@ GEM
     coffee-script (2.3.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.8.0)
+    coffee-script-source (1.9.0)
     colorize (0.7.5)
     diff-lcs (1.2.5)
     docile (1.1.5)
@@ -276,7 +276,7 @@ GEM
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
     rubyzip (1.1.6)
-    sass (3.4.10)
+    sass (3.4.11)
     sass-rails (5.0.1)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
@@ -289,7 +289,7 @@ GEM
       rubyzip (~> 1.0)
       websocket (~> 1.0)
     shellany (0.0.1)
-    shoulda-matchers (2.7.0)
+    shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
     simplecov (0.9.1)
       docile (~> 1.1.0)

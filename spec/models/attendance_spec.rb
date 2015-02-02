@@ -37,11 +37,11 @@ describe Attendance, type: :model do
       it { should_not validate_presence_of :cpf }
     end
 
-    it { should ensure_length_of(:email).is_at_least(6).is_at_most(100) }
-    it { should ensure_length_of(:first_name).is_at_most(100) }
-    it { should ensure_length_of(:last_name).is_at_most(100) }
-    it { should ensure_length_of(:city).is_at_most(100) }
-    it { should ensure_length_of(:organization).is_at_most(100) }
+    it { should validate_length_of(:email).is_at_least(6).is_at_most(100) }
+    it { should validate_length_of(:first_name).is_at_most(100) }
+    it { should validate_length_of(:last_name).is_at_most(100) }
+    it { should validate_length_of(:city).is_at_most(100) }
+    it { should validate_length_of(:organization).is_at_most(100) }
 
     it { should allow_value("user@domain.com.br").for(:email) }
     it { should allow_value("test_user.name@a.co.uk").for(:email) }

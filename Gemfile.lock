@@ -346,7 +346,7 @@ DEPENDENCIES
   brcpfcnpj (= 3.3.0)
   brhelper (= 3.3.0)
   cancan (= 1.6.10)
-  capistrano
+  capistrano (= 3.4.0)
   capistrano-bundler
   capistrano-rails
   codeclimate-test-reporter

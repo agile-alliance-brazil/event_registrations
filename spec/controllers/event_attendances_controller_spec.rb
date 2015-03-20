@@ -297,4 +297,57 @@ describe EventAttendancesController, type: :controller do
       end
     end
   end
+
+  describe '#attendances_list' do
+    let(:user) { FactoryGirl.create(:user) }
+    before do
+      sign_in user
+      disable_authorization
+    end
+
+    context 'with no attendances' do
+      let!(:event) { FactoryGirl.create(:event) }
+      before { get :attendances_list, event_id: event }
+      it { expect(assigns(:attendances_list)).to eq [] }
+    end
+
+    context 'with attendances' do
+      let!(:attendance) { FactoryGirl.create(:attendance) }
+      context 'and one attendance, but no association with event' do
+        let!(:event) { FactoryGirl.create(:event) }
+        before { get :attendances_list, event_id: event }
+        it { expect(assigns(:attendances_list)).to eq [] }
+      end
+      context 'and one attendance associated' do
+        let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+        before { get :attendances_list, event_id: event.id }
+        it { expect(assigns(:attendances_list)).to match_array [attendance] }
+      end
+      context 'and one associated and other not' do
+        let!(:other_attendance) { FactoryGirl.create(:attendance) }
+        let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+        before { get :attendances_list, event_id: event.id }
+        it { expect(assigns(:attendances_list)).to match_array [attendance] }
+      end
+      context 'and two associated' do
+        let!(:other_attendance) { FactoryGirl.create(:attendance) }
+        let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
+        before { get :attendances_list, event_id: event.id }
+        it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+      end
+      context 'and one active and other inactive' do
+        let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
+        let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
+        before { get :attendances_list, event_id: event.id }
+        it { expect(assigns(:attendances_list)).to match_array [attendance] }
+      end
+      context 'and two inactives' do
+        let!(:inactive_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
+        let!(:event) { FactoryGirl.create(:event, attendances: [inactive_attendance, other_attendance]) }
+        before { get :attendances_list, event_id: event.id }
+        it { expect(assigns(:attendances_list)).to match_array [] }
+      end
+    end
+  end
 end

@@ -14,6 +14,10 @@ class EventAttendancesController < ApplicationController
     end
   end
 
+  def attendances_list
+    @attendances_list = Attendance.for_event(event).active.all
+  end
+
   def new
     @attendance = Attendance.new(build_attributes)
   end
@@ -42,6 +46,7 @@ class EventAttendancesController < ApplicationController
   end
   
   private
+
   def resource
     Attendance.find_by_id(params[:id])
   end

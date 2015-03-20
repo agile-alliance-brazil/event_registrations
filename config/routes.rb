@@ -8,7 +8,11 @@ Current::Application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   resources :events, only: [:index, :show] do
-    resources :attendances, only: [:new, :create, :index], controller: :event_attendances
+    resources :attendances, only: [:new, :create, :index], controller: :event_attendances do
+      collection do
+        get :attendances_list
+      end
+    end
   end
 
   get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")

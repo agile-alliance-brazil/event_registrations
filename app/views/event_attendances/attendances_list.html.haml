@@ -1,5 +1,25 @@
-- title t('title.attendances_summary')
+- title t('title.attendances_list')
 
 %p= t('registration.status', date: I18n.l(Time.zone.now))
 
+= form_for attendances_list_event_attendances_path(@event), method: 'get' do
+  %p= text_field_tag :search, params[:search]
+  %p= submit_tag 'Search', :name => nil
+
 %p
+
+%table.summary
+  %th Name
+  %th Organization
+  %th Email
+  %th Type
+  %th Price
+  %th Status
+  - @attendances_list.each do |attendance|
+    %tr
+      %td= "#{attendance.last_name}, #{attendance.first_name}"
+      %td= attendance.organization
+      %td= attendance.email
+      %td= attendance.registration_type.title
+      %td= attendance.registration_type.price(Date.today)
+      %td= attendance.status

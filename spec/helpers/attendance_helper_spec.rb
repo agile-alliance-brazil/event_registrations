@@ -42,6 +42,8 @@ describe AttendanceHelper, type: :helper do
       expect(price_table_link(event, :pt)).to eq('http://localhost:9292/testing?locale=pt')
       expect(price_table_link(event, :en)).to eq('http://localhost:9292/testing?locale=en')
     end
+
+    pending 'Test if event has no price_table_link defined. The field on model is not required.'
   end
 
   describe "convert_registration_types_to_radio for attendance and registration types" do

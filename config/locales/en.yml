@@ -27,6 +27,8 @@ en:
       attendance_address: "Contact details"
       attendance_registrations: "Conference registrations"
       attendance_payment: "Payment details"
+      attendances_summary: "Attendances Summary"
+      attendances_list: 'Attendances List'
     labels:
       attendance:
         id: "Registration Number"
@@ -100,6 +102,7 @@ en:
     profile: "Profile for %{username}"
     user: "New user"
     events: "Upcoming events"
+    until: "until"
 
   actions:
     edit: "Edit"
@@ -116,6 +119,8 @@ en:
     remove_authentication_option: "remove authentication option"
     login: "Log in"
     logout: "Log out"
+    list_attendances: "to list attendances"
+    click: 'Click'
 
   flash:
     failure: "Please check the highlighted fields"
@@ -235,6 +240,8 @@ en:
       add: "Add Registration to %{name}"
       summary: "Check the registration summary for %{name}"
       enable_voting: "Enable voting"
+    register:
+      to_register_message: 'to register for'
 
   generic:
     or: "or"
@@ -251,3 +258,4 @@ en:
     show: "Show %{target}"
     hide: "Hide %{target}"
     registration_id: "Registration number"
+    here: 'here'

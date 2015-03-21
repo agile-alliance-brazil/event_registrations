@@ -1,6 +1,6 @@
 - title t('title.attendances_list')
 
-%p= t('registration.status', date: I18n.l(Time.zone.now))
+%p= t('registration.status', date: l(Time.zone.now))
 
 = form_for attendances_list_event_attendances_path(@event), method: 'get' do
   %p= text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50
@@ -22,6 +22,6 @@
       %td= attendance.organization
       %td= attendance.email
       %td= l(attendance.registration_date)
-      %td= attendance.registration_type.title
-      %td= attendance.registration_type.price(Date.today)
+      %td= attendance.registration_type.type_title
+      %td= number_with_precision(attendance.registration_type.price(Date.today), precision: 2)
       %td= attendance.status

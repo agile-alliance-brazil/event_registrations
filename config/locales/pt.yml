@@ -422,6 +422,7 @@ pt:
         zero: 'nenhum congressita'
         one: '1 congressista'
         other: '%{count} congressistas'
+      to_register_message: 'para se registrar em'
 
   generic:
     or: "ou"

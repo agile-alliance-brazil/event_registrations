@@ -15,7 +15,13 @@ class EventAttendancesController < ApplicationController
   end
 
   def attendances_list
-    @attendances_list = Attendance.for_event(event).active.all
+    if params[:search].present?
+      @attendances_list = Attendance.for_event(event).
+        active.where('first_name LIKE :query OR last_name LIKE :query OR organization LIKE :query OR email LIKE :query',
+                     query: "%#{params[:search]}%")
+    else
+      @attendances_list = Attendance.for_event(event).active.all
+    end
   end
 
   def new

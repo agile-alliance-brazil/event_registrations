@@ -1,8 +1,10 @@
 %h3= link_to event.name, event
 
-%p
-  Clique #{link_to "aqui", new_event_attendance_path(event)} para se inscrever para #{event.name}.
+%p #{l(event.registration_periods.first.start_at)} #{t('title.until')} #{l(event.registration_periods.first.end_at)}
 
 %p
-  Clique #{ link_to "aqui", attendances_list_event_attendances_path(event) } para listar inscritos.
+  #{ t('actions.click') } #{link_to t('generic.here'), new_event_attendance_path(event)} #{ t('event.register.to_register_message') } #{event.name}.
+
+%p
+  #{ t('actions.click') } #{ link_to t('generic.here'), attendances_list_event_attendances_path(event) } #{ t('actions.list_attendances') }
 

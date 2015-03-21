@@ -1,5 +1,5 @@
 !!! 5
-%html{html_attrs(I18n.locale)}
+%html{ html_attrs => I18n.locale }
 
   %head
     %title
@@ -36,7 +36,7 @@
 
         = yield
 
-      #footer Copyleft - Agile Brazil 2010-2013 - #{t('footer.help').html_safe}
+      #footer Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
 
     - unless AppConfig[:google].nil?
       :javascript

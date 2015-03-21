@@ -29,12 +29,16 @@ en:
       attendance_payment: "Payment details"
       attendances_summary: "Attendances Summary"
       attendances_list: 'Attendances List'
+    fields:
+      search:
+       placeholder: 'search in name, organization or email'
     labels:
       attendance:
         id: "Registration Number"
         registration_type_id: "Type of Registration"
         first_name: "First name"
         last_name: "Last name"
+        name: 'Name'
         full_name: "Name"
         email: "E-mail address"
         email_confirmation: "Confirm e-mail address"
@@ -56,6 +60,7 @@ en:
         notes: "Notes"
         only_with_notes: "Show only results with notes"
         total: "Amount"
+        price: 'Price'
       payment_notification:
         transaction_id: "Transaction ID"
         paid_at: "Payment date"

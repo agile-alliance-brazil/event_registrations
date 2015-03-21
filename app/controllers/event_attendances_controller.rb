@@ -15,19 +15,13 @@ class EventAttendancesController < ApplicationController
   end
 
   def attendances_list
-    if params[:search].present?
-      @attendances_list = Attendance.for_event(event).
-        active.where('first_name LIKE :query OR last_name LIKE :query OR organization LIKE :query OR email LIKE :query',
-                     query: "%#{params[:search]}%")
-    else
-      @attendances_list = Attendance.for_event(event).active.all
-    end
+    @attendances_list = Engines::SearchAttendance.search(params[:search], event)
   end
 
   def new
     @attendance = Attendance.new(build_attributes)
   end
-  
+
   def create
     if !current_user.organizer? && !event.can_add_attendance?
       redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
@@ -50,7 +44,7 @@ class EventAttendancesController < ApplicationController
       render :new
     end
   end
-  
+
   private
 
   def resource
@@ -80,12 +74,12 @@ class EventAttendancesController < ApplicationController
 
   def attendance_params
     params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
-      :registration_group_id, :registration_date, :first_name, :last_name, :email,
-      :email_confirmation, :organization, :phone, :country, :state, :city,
-      :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-      :zipcode, :notes)
+                                                                        :registration_group_id, :registration_date, :first_name, :last_name, :email,
+                                                                        :email_confirmation, :organization, :phone, :country, :state, :city,
+                                                                        :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
+                                                                        :zipcode, :notes)
   end
-  
+
   def load_registration_types
     @registration_types ||= valid_registration_types
   end
@@ -95,20 +89,20 @@ class EventAttendancesController < ApplicationController
     registration_types += event.registration_types.without_group.to_a if current_user.organizer?
     registration_types.flatten.uniq.compact
   end
-    
+
   def validate_free_registration(attendance)
     if is_free?(attendance) && !allowed_free_registration?
       attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
-      flash.now[:error] = t('flash.attendance.create.free_not_allowed') 
+      flash.now[:error] = t('flash.attendance.create.free_not_allowed')
       render :new and return false
     end
     true
   end
-  
+
   def is_free?(attendance)
     !event.registration_types.paid.include?(attendance.registration_type)
   end
-  
+
   def allowed_free_registration?
     current_user.has_approved_session?(event) || current_user.organizer?
   end

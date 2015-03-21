@@ -21,7 +21,7 @@ namespace :data do
         country: Faker::Address.country,
         city: 'Rio de Janeiro',
         registration_type: registration_type,
-        registration_date: Date.today,
+        registration_date: Time.now,
         user: User.last,
         event: event)
       end

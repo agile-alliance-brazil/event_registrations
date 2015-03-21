@@ -2,9 +2,8 @@
 
 %p #{l(event.registration_periods.first.start_at)} #{t('title.until')} #{l(event.registration_periods.first.end_at)}
 
-%p
-  #{ t('actions.click') } #{link_to t('generic.here'), new_event_attendance_path(event)} #{ t('event.register.to_register_message') } #{event.name}.
+%p #{ t('actions.click') } #{link_to t('generic.here'), new_event_attendance_path(event)} #{ t('event.register.to_register_message') } #{event.name}.
 
-%p
-  #{ t('actions.click') } #{ link_to t('generic.here'), attendances_list_event_attendances_path(event) } #{ t('actions.list_attendances') }
+- if can? :attendances_list, Attendance
+  %p #{ t('actions.click') } #{ link_to t('generic.here'), attendances_list_event_attendances_path(event) } #{ t('actions.list_attendances') }
 

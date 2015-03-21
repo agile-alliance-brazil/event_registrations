@@ -4,30 +4,24 @@ class EventAttendancesController < ApplicationController
   before_filter :load_registration_types, only: [:new, :create]
 
   def index
-    @attendances = Attendance.for_event(event).active
-      .includes(:payment_notifications, :event, :registration_type).all
+    @attendances = Attendance.for_event(event).active.
+      includes(:payment_notifications, :event, :registration_type).all
     respond_to do |format|
       format.html
-      format.csv do
+      format.csv {
         response.headers['Content-Disposition'] = "attachment; filename=\"#{event.name.parameterize.underscore}.csv\""
-      end
+      }
     end
   end
 
   def attendances_list
-    if params[:search].present?
-      @attendances_list = Attendance.for_event(event).
-        active.where('first_name LIKE :query OR last_name LIKE :query OR organization LIKE :query OR email LIKE :query',
-                     query: "%#{params[:search]}%")
-    else
-      @attendances_list = Attendance.for_event(event).active.all
-    end
+    @attendances_list = Engines::SearchAttendance.search(params[:search], event)
   end
 
   def new
     @attendance = Attendance.new(build_attributes)
   end
-  
+
   def create
     if !current_user.organizer? && !event.can_add_attendance?
       redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
@@ -50,7 +44,7 @@ class EventAttendancesController < ApplicationController
       render :new
     end
   end
-  
+
   private
 
   def resource
@@ -67,24 +61,25 @@ class EventAttendancesController < ApplicationController
     attributes[:email_confirmation] ||= current_user.email
     attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
-    if current_user.approved_author_at?(event)
-      attributes[:registration_type_id] = event.registration_types
-        .where(title: 'registration_type.speaker').pluck(:id).first
+    if current_user.has_approved_session?(event)
+      attributes[:registration_type_id] = event.registration_types.
+        where(title: 'registration_type.speaker').select(:id).first.try(:id)
     end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id
     end
-    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.zone.now].min
+    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.now].min
     attributes
   end
 
   def attendance_params
     params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
-      :registration_group_id, :registration_date, :first_name, :last_name, :email,
-      :email_confirmation, :organization, :phone, :country, :state, :city, :badge_name,
-      :cpf, :gender, :twitter_user, :address, :neighbourhood, :zipcode, :notes)
+                                                                        :registration_group_id, :registration_date, :first_name, :last_name, :email,
+                                                                        :email_confirmation, :organization, :phone, :country, :state, :city,
+                                                                        :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
+                                                                        :zipcode, :notes)
   end
-  
+
   def load_registration_types
     @registration_types ||= valid_registration_types
   end
@@ -96,16 +91,20 @@ class EventAttendancesController < ApplicationController
   end
 
   def validate_free_registration(attendance)
-    if free_attendance?(attendance) && !current_user.approved_author_at?(event) && !current_user.organizer?
+    if is_free?(attendance) && !allowed_free_registration?
       attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
-      flash.now[:error] = t('flash.attendance.create.free_not_allowed') 
+      flash.now[:error] = t('flash.attendance.create.free_not_allowed')
       render :new and return false
     end
     true
   end
-  
-  def free_attendance?(attendance)
+
+  def is_free?(attendance)
     !event.registration_types.paid.include?(attendance.registration_type)
+  end
+
+  def allowed_free_registration?
+    current_user.has_approved_session?(event) || current_user.organizer?
   end
 
   def event
@@ -113,16 +112,19 @@ class EventAttendancesController < ApplicationController
   end
 
   def notify(attendance)
-    return nil if attendance.registration_fee == 0
-
-    EmailNotifications.registration_pending(attendance).deliver
-    attendance.tap{|a| a.email_sent = true}.save
+    if attendance.registration_fee > 0
+      EmailNotifications.registration_pending(attendance).deliver
+      attendance.email_sent = true
+      attendance.save
+    end
   end
 
   def notify_or_log(ex)
-    notify_airbrake(ex)
-  rescue
-    Rails.logger.error('Airbrake notification failed. Logging error locally only')
-    Rails.logger.error(ex.message)
+    begin
+      notify_airbrake(ex)
+    rescue
+      Rails.logger.error('Airbrake notification failed. Logging error locally only')
+      Rails.logger.error(ex.message)
+    end
   end
 end

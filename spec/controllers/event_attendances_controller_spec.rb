@@ -305,48 +305,110 @@ describe EventAttendancesController, type: :controller do
       disable_authorization
     end
 
-    context 'with no attendances' do
-      let!(:event) { FactoryGirl.create(:event) }
-      before { get :attendances_list, event_id: event }
-      it { expect(assigns(:attendances_list)).to eq [] }
-    end
+    context 'with no search parameter' do
 
-    context 'with attendances' do
-      let!(:attendance) { FactoryGirl.create(:attendance) }
-      context 'and one attendance, but no association with event' do
+      context 'and no attendances' do
         let!(:event) { FactoryGirl.create(:event) }
         before { get :attendances_list, event_id: event }
         it { expect(assigns(:attendances_list)).to eq [] }
       end
-      context 'and one attendance associated' do
-        let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
-        before { get :attendances_list, event_id: event.id }
-        it { expect(assigns(:attendances_list)).to match_array [attendance] }
+
+      context 'and having attendances' do
+        let!(:attendance) { FactoryGirl.create(:attendance) }
+        context 'and one attendance, but no association with event' do
+          let!(:event) { FactoryGirl.create(:event) }
+          before { get :attendances_list, event_id: event }
+          it { expect(assigns(:attendances_list)).to eq [] }
+        end
+        context 'and one attendance associated' do
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+          before { get :attendances_list, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+        end
+        context 'and one associated and other not' do
+          let!(:other_attendance) { FactoryGirl.create(:attendance) }
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+          before { get :attendances_list, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+        end
+        context 'and two associated' do
+          let!(:other_attendance) { FactoryGirl.create(:attendance) }
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
+          before { get :attendances_list, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
+        context 'and one active and other inactive' do
+          let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
+          before { get :attendances_list, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+        end
+        context 'and two inactives' do
+          let!(:inactive_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
+          let!(:event) { FactoryGirl.create(:event, attendances: [inactive_attendance, other_attendance]) }
+          before { get :attendances_list, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [] }
+        end
       end
-      context 'and one associated and other not' do
-        let!(:other_attendance) { FactoryGirl.create(:attendance) }
-        let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
-        before { get :attendances_list, event_id: event.id }
-        it { expect(assigns(:attendances_list)).to match_array [attendance] }
+    end
+
+    context 'with search parameters, insensitive case' do
+      let!(:event) { FactoryGirl.create(:event) }
+      context 'and no attendances' do
+        before { get :attendances_list, event_id: event, search: 'bla' }
+        it { expect(assigns(:attendances_list)).to eq [] }
       end
-      context 'and two associated' do
-        let!(:other_attendance) { FactoryGirl.create(:attendance) }
-        let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
-        before { get :attendances_list, event_id: event.id }
-        it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
-      end
-      context 'and one active and other inactive' do
-        let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
-        let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
-        before { get :attendances_list, event_id: event.id }
-        it { expect(assigns(:attendances_list)).to match_array [attendance] }
-      end
-      context 'and two inactives' do
-        let!(:inactive_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
-        let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
-        let!(:event) { FactoryGirl.create(:event, attendances: [inactive_attendance, other_attendance]) }
-        before { get :attendances_list, event_id: event.id }
-        it { expect(assigns(:attendances_list)).to match_array [] }
+
+      context 'and having attendances' do
+        context 'and one attendance' do
+          context 'and matching first name' do
+            let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', event: event) }
+            before { get :attendances_list, event_id: event, search: 'xPTo' }
+            it { expect(assigns(:attendances_list)).to match_array [attendance] }
+          end
+          context 'and matching last name' do
+            let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', event: event) }
+            before { get :attendances_list, event_id: event, search: 'bLa' }
+            it { expect(assigns(:attendances_list)).to match_array [attendance] }
+          end
+          context 'and matching organization' do
+            let!(:attendance) { FactoryGirl.create(:attendance, organization: 'bla', event: event) }
+            before { get :attendances_list, event_id: event, search: 'bLa' }
+            it { expect(assigns(:attendances_list)).to match_array [attendance] }
+          end
+          context 'and matching email' do
+            let!(:attendance) { FactoryGirl.create(:attendance, email: 'bla@xpto.com', email_confirmation: 'bla@xpto.com', event: event) }
+            before { get :attendances_list, event_id: event, search: 'bLa' }
+            it { expect(assigns(:attendances_list)).to match_array [attendance] }
+          end
+        end
+
+        context 'and two not matching attendances' do
+          let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', event: event) }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'foo', last_name: 'bar', event: event) }
+          before { get :attendances_list, event_id: event, search: 'bLa' }
+          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+        end
+
+        context 'and two matching attendances on same field' do
+          let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', event: event) }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bar', event: event) }
+          before { get :attendances_list, event_id: event, search: 'xpto' }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
+
+        context 'and two matching attendances on different fields' do
+          let!(:attendance) { FactoryGirl.create(:attendance,
+                                                 first_name: 'xpto',
+                                                 last_name: 'bla',
+                                                 email: 'foo@bar.com',
+                                                 email_confirmation: 'foo@bar.com',
+                                                 event: event) }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'foo', last_name: 'bar', event: event) }
+          before { get :attendances_list, event_id: event, search: 'foo' }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
       end
     end
   end

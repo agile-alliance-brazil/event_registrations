@@ -9,6 +9,7 @@ class RegistrationType < ActiveRecord::Base
 
   def price(datetime)
     period = event.registration_periods.for(datetime).first
-    period.price_for_registration_type(self)
+    return period.price_for_registration_type(self) if period.present?
+    0
   end
 end

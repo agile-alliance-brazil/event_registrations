@@ -12,4 +12,9 @@ class RegistrationType < ActiveRecord::Base
     return period.price_for_registration_type(self) if period.present?
     0
   end
+
+  def type_title
+    title.gsub('registration_type.', '').gsub('_', ' ').capitalize
+  end
+
 end

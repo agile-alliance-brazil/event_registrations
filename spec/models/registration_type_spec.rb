@@ -4,7 +4,7 @@ describe RegistrationType, type: :model do
     it { should have_many :registration_prices }
   end
   
-  describe 'price' do
+  describe '#price' do
     context 'with a valid registration period' do
       it 'delegates to RegistrationPeriod' do
         time = Time.now
@@ -22,6 +22,28 @@ describe RegistrationType, type: :model do
       let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
       let(:registration_type) { FactoryGirl.create(:registration_type, event: event) }
       it { expect(registration_type.price(Time.now)).to eq 0 }
+    end
+  end
+
+  describe '#type_title' do
+    context 'registration_type.individual' do
+      let(:registration_type) { RegistrationType.new title: 'registration_type.individual' }
+      it { expect(registration_type.type_title).to eq 'Individual' }
+    end
+
+    context 'registration_type.group' do
+      let(:registration_type) { RegistrationType.new title: 'registration_type.group' }
+      it { expect(registration_type.type_title).to eq 'Group' }
+    end
+
+    context 'registration_type.member' do
+      let(:registration_type) { RegistrationType.new title: 'registration_type.member' }
+      it { expect(registration_type.type_title).to eq 'Member' }
+    end
+
+    context 'registration_type.member' do
+      let(:registration_type) { RegistrationType.new title: 'registration_type.non_member' }
+      it { expect(registration_type.type_title).to eq 'Non member' }
     end
   end
 end

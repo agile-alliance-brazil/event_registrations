@@ -60,7 +60,7 @@ en:
         notes: "Notes"
         only_with_notes: "Show only results with notes"
         total: "Amount"
-        price: 'Price'
+        price: 'Price (R$)'
       payment_notification:
         transaction_id: "Transaction ID"
         paid_at: "Payment date"

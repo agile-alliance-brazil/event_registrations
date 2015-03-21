@@ -197,7 +197,7 @@ pt:
         notes: "Anotações"
         only_with_notes: "Exibir apenas resultados com anotações"
         total: "Valor"
-        price: 'Preço'
+        price: 'Preço (R$)'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"

@@ -17,5 +17,11 @@ describe RegistrationType, type: :model do
         expect(type.price(time)).to eq(599.00)
       end
     end
+
+    context 'with no registration period' do
+      let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+      let(:registration_type) { FactoryGirl.create(:registration_type, event: event) }
+      it { expect(registration_type.price(Time.now)).to eq 0 }
+    end
   end
 end

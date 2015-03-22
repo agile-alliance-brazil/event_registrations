@@ -1,14 +1,10 @@
-# encoding: UTF-8
 class Attendance < ActiveRecord::Base
+  include Concerns::Registrable
   SUPER_EARLY_LIMIT = 150
 
   belongs_to :event
   belongs_to :user
-  belongs_to :registration_type
-  belongs_to :registration_period
   has_many :payment_notifications, foreign_key: :invoicer_id
-
-  belongs_to :registration_group
 
   validates_confirmation_of :email
   validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
@@ -49,7 +45,6 @@ class Attendance < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :registration_type_id, :registration_date, :user_id, :event_id
 
   scope :for_event, ->(e) { where(event_id: e.id) }
   scope :for_registration_type, ->(t) { where(registration_type_id: t.id) }

@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require 'faker'
+
 FactoryGirl.define do
   factory :event do
     sequence(:name) {|n| "Agile Brazil #{2000 + n}"}
@@ -48,25 +50,6 @@ FactoryGirl.define do
     registration_date { Time.zone.now }
   end
 
-  factory :registration_group do
-    name "Big Corp"
-    contact_name "Contact Name"
-    contact_email { |e| "contact@#{e.name.parameterize}.com" }
-    contact_email_confirmation { |e| "contact@#{e.name.parameterize}.com" }
-    phone "(11) 3322-1234"
-    fax "(11) 4422-1234"
-    country "BR"
-    state "SP"
-    city "São Paulo"
-    cnpj "69.103.604/0001-60"
-    state_inscription "110.042.490.114"
-    municipal_inscription "9999999"
-    address "Rua dos Bobos, 0"
-    neighbourhood "Vila Perdida"
-    zipcode "12345000"
-    total_attendees 5
-  end
-
   factory :payment_notification do
     params { {some: 'params', type: 'paypal'} }
     status "Completed"
@@ -100,5 +83,10 @@ FactoryGirl.define do
     user
     uid { |a| a.user.id }
     provider "twitter"
+  end
+
+  factory :registration_group do
+    name Faker::Company.name
+    event
   end
 end

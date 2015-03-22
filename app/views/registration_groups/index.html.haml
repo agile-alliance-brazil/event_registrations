@@ -1,0 +1,11 @@
+- title t('registration_group.list')
+
+%table.summary
+  %th= t('formtastic.labels.registration_group.name')
+  %th= t('formtastic.labels.registration_group.event')
+  %th= t('formtastic.labels.registration_group.qtd_attendances')
+  - @groups.each do |group|
+    %tr
+      %td= group.name
+      %td= group.event.name
+      %td= group.qtd_attendances

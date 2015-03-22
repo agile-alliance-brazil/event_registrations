@@ -26,38 +26,39 @@ namespace :data do
               registration_date: Time.now,
               user: User.last,
               event: event)
+          RegistrationGroup.create!(name: Faker::Company.name, event: event, attendances: [attendance])
         end
+        puts '√'
       end
-      puts '√'
-    end
 
-    desc 'Clean'
-    task :clean => :environment do
-      print 'Cleaning all '
-      Dir["#{Rails.root}/app/models/*.rb"].each do |file|
-        read_file = File.read(file)
-        if active_record?(read_file) && !embedded?(read_file) && !user?(read_file)
-          class_name = file.split('/').last.gsub('.rb', '').camelize
-          self.class.const_get(class_name).__send__ :delete_all
+      desc 'Clean'
+      task :clean => :environment do
+        print 'Cleaning all '
+        Dir["#{Rails.root}/app/models/*.rb"].each do |file|
+          read_file = File.read(file)
+          if active_record?(read_file) && !embedded?(read_file) && !user?(read_file)
+            class_name = file.split('/').last.gsub('.rb', '').camelize
+            self.class.const_get(class_name).__send__ :delete_all
+          end
         end
+        puts '√'
       end
-      puts '√'
-    end
-    desc 'Generates all'
-    task :all => [:clean, :seeds]
+      desc 'Generates all'
+      task :all => [:clean, :seeds]
 
-    private
+      private
 
-    def embedded?(read_file)
-      read_file.include?('embedded_in')
-    end
+      def embedded?(read_file)
+        read_file.include?('embedded_in')
+      end
 
-    def user?(read_file)
-      read_file.include?('User')
-    end
+      def user?(read_file)
+        read_file.include?('User')
+      end
 
-    def active_record?(read_file)
-      read_file.include?('ActiveRecord::Base')
+      def active_record?(read_file)
+        read_file.include?('ActiveRecord::Base')
+      end
     end
   end
 end

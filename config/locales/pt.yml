@@ -218,6 +218,11 @@ pt:
       transfer:
         origin_id: "Origem"
         destination_id: "Destino"
+      registration_group:
+        name: 'Nome'
+        event: 'Evento'
+        qtd_attendances: 'Total de registrados'
+
     hints:
       attendance:
         registration_type_id: "Indique o tipo de sua inscrição."
@@ -263,6 +268,7 @@ pt:
     login: "Acessar"
     logout: "Sair"
     list_attendances: "para listar os inscritos"
+    list_groups: "para listar os grupos"
     click: 'Clique'
 
   flash:
@@ -357,14 +363,6 @@ pt:
     confirmed:
       unpaid: "Boleto/Transferência/Empenho"
 
-  registration_group:
-    status:
-      incomplete: "Incompleto"
-      complete: "Pendente"
-      paid: "Pagamento efetuado"
-      confirmed: "Confirmado"
-      all: "Todos"
-
   authentication:
     list: "Serviços de autenticação registrados"
     add: "Adicione outro serviço de autenticação:"
@@ -384,7 +382,11 @@ pt:
       summary: "Veja o relatório de inscrições para %{name}"
       enable_voting: "Habilitar votação"
     register:
-      to_register_message: 'para se registrar em'
+      to_register_message: 'para se inscrever em'
+    not_found: 'Evento não encontrado.'
+
+  registration_group:
+    list: 'Lista dos grupos'
 
   generic:
     or: "ou"

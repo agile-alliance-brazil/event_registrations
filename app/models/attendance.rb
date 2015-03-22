@@ -11,6 +11,8 @@ class Attendance < ActiveRecord::Base
   has_many :payment_notifications, foreign_key: :invoicer_id
   has_many :invoices
 
+  belongs_to :registration_group
+
   validates_confirmation_of :email
   validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
   validates_presence_of :state, if: ->(a) {a.in_brazil?}

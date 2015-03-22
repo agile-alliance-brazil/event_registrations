@@ -17,6 +17,8 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#generate_token' do
+  let(:event) { FactoryGirl.create :event }
+    let(:group) { RegistrationGroup.create! event: event }
     before { SecureRandom.expects(:hex).returns('eb693ec8252cd630102fd0d0fb7c3485') }
     it { expect(group.token).to eq 'eb693ec8252cd630102fd0d0fb7c3485' }
   end

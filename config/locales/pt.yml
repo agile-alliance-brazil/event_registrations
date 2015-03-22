@@ -412,6 +412,8 @@ pt:
     register:
       to_register_message: 'para se inscrever em'
     not_found: 'Evento não encontrado.'
+  registration_group:
+    list: 'Lista dos grupos'
 
   registration_group:
     list: 'Lista dos grupos de %{event_name}'

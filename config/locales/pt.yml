@@ -239,6 +239,8 @@ pt:
         status: 'Status'
         index:
           actions: 'Ações'
+        event: 'Evento'
+        qtd_attendances: 'Total de registrados'
 
     hints:
       attendance:

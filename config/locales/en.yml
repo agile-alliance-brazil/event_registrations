@@ -269,7 +269,6 @@ en:
         one: '1 attendance'
         other: '%{count} attendances'
 
-
   generic:
     or: "or"
     and: "and"

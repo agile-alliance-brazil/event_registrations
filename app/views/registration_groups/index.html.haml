@@ -2,14 +2,10 @@
 
 %table.summary
   %th= t('formtastic.labels.registration_group.name')
-  %th= t('formtastic.labels.registration_group.discount')
   %th= t('formtastic.labels.registration_group.event')
   %th= t('formtastic.labels.registration_group.qtd_attendances')
-  %th= t('formtastic.labels.registration_group.index.actions')
   - @groups.each do |group|
     %tr
-      %td= link_to group.name, event_registration_group_path(@event, group)
-      %td= group.discount
+      %td= group.name
       %td= group.event.name
       %td= group.qtd_attendances
-      %td= link_to t('actions.destroy'), event_registration_group_path(@event, group), method: :delete

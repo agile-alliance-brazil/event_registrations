@@ -7,6 +7,9 @@ class RegistrationGroupsController < ApplicationController
   before_action :find_event
   before_action :find_group, only: [:destroy]
 
+  before_action :find_event
+  before_action :find_group, only: [:destroy]
+
   def index
     @groups = @event.registration_groups
     @new_group = RegistrationGroup.new

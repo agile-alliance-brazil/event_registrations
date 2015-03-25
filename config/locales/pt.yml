@@ -414,6 +414,9 @@ pt:
     not_found: 'Evento não encontrado.'
   registration_group:
     list: 'Lista dos grupos'
+    destroy:
+      success: 'Grupo excluído com sucesso.'
+      error: 'Falha ao excluir o grupo.'
 
   registration_group:
     list: 'Lista dos grupos de %{event_name}'

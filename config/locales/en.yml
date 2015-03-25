@@ -83,8 +83,11 @@ en:
         destination_id: "Destination"
       registration_group:
         name: 'Name'
+        discount: 'Discount (%)'
         event: 'Event'
         qtd_attendances: 'Attendances Total'
+        index:
+          actions: 'Actions'
 
     hints:
       attendance:
@@ -249,6 +252,9 @@ en:
 
   registration_group:
     list: 'Groups list'
+    destroy:
+      success: 'Group deleted.'
+      error: 'An error occurred. The group was not deleted.'
 
   generic:
     or: "or"

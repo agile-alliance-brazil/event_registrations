@@ -32,14 +32,15 @@ describe RegistrationGroupsController, type: :controller do
         it { expect(response).to render_template :index }
       end
     end
+  end
 
-    context 'with invalid data' do
-      context 'and an existent group for event' do
-        before { get :index, event_id: 'foo' }
-        it { expect(assigns(:groups)).to be_nil }
-        it { expect(response).to redirect_to events_path }
-        it { expect(flash[:alert]).to eq I18n.t('event.not_found') }
-      end
+  describe '#destroy' do
+    context 'valid data' do
+      let!(:group) { FactoryGirl.create :registration_group }
+      before { delete :destroy, event_id: group.event.id, id: group.id }
+      it { expect(RegistrationGroup.count).to be 0 }
+      it { expect(response).to redirect_to event_registration_groups_path(group.event) }
+      it { expect(flash[:notice]).to eq I18n.t('registration_group.destroy.success') }
     end
   end
 end

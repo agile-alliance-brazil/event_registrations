@@ -18,11 +18,9 @@ class UsersController < ApplicationController
       redirect_to @user
     else
       flash[:error] = I18n.t('flash.user.edit')
-      render :edit
+      render(:edit)
     end
   end
-
-  private
 
   def resource
     resource_class.find(params[:id])
@@ -33,6 +31,7 @@ class UsersController < ApplicationController
     User
   end
 
+  protected
   def update_user_params
     params.require(:user).permit(:first_name, :last_name, :email, :phone,
       :country, :state, :city, :organization, :twitter_user, :default_locale)

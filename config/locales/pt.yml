@@ -227,6 +227,7 @@ pt:
         qtd_attendances: 'Total de registrados'
         index:
           actions: 'Ações'
+
     hints:
       attendance:
         registration_type_id: "Indique o tipo de sua inscrição."

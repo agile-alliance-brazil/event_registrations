@@ -241,6 +241,8 @@ pt:
           actions: 'Ações'
         event: 'Evento'
         qtd_attendances: 'Total de registrados'
+        index:
+          actions: 'Ações'
 
     hints:
       attendance:
@@ -424,7 +426,6 @@ pt:
         zero: 'nenhum congressita'
         one: '1 congressista'
         other: '%{count} congressistas'
-
   generic:
     or: "ou"
     and: "e"

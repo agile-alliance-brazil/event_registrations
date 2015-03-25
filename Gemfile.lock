@@ -392,6 +392,7 @@ DEPENDENCIES
   seed-fu (= 2.3.4)!
   selenium-webdriver
   shoulda-matchers
+  simplecov
   spring
   spring-commands-rspec
   sqlite3

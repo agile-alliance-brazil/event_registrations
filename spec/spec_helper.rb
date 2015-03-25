@@ -1,16 +1,8 @@
+# encoding: UTF-8
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
+
 ENV['RAILS_ENV'] ||= 'test'
-
-unless ENV['CODECLIMATE_REPO_TOKEN'].nil?
-  require 'codeclimate-test-reporter'
-  CodeClimate::TestReporter.start
-end
-
-require 'simplecov'
-SimpleCov.start 'rails' do
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Mailers', 'app/mailers'
-end
-
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'mocha/api'

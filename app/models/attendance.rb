@@ -73,7 +73,7 @@ class Attendance < ActiveRecord::Base
   def registration_fee(overriden_registration_type = nil)
     registration_period.price_for_registration_type(overriden_registration_type || registration_type)
   end
-  
+
   def cancellable?
     pending?
   end

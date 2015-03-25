@@ -52,6 +52,7 @@ group :development, :test do
   gem 'guard-konacha-rails'
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'selenium-webdriver'
+  gem 'faker'
 end
 
 group :development do
@@ -68,5 +69,4 @@ group :test do
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
-  gem 'faker'
 end

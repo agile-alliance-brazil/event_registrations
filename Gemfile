@@ -56,6 +56,7 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'guard-rubocop'
   gem 'metric_fu'
+  gem 'faker'
 end
 
 group :development do
@@ -72,5 +73,4 @@ group :test do
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
-  gem 'faker'
 end

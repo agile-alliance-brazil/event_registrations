@@ -1,5 +1,6 @@
 = text_field_tag :registration_token, nil, placeholder: I18n.t('formtastic.fields.token.placeholder'), size: 100
 = form.inputs :attendance_personal do
+  = form.input :registration_token, input_html: { tabindex: autotab }
   = form.input :first_name, required: true, input_html: {tabindex: autotab}
   = form.input :last_name, required: true, input_html: {tabindex: autotab}
   = form.input :badge_name, input_html: {tabindex: autotab}

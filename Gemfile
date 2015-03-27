@@ -9,8 +9,8 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=4.2.0'
-gem 'seed-fu', '=2.3.3', git: 'https://github.com/Nikamura/seed-fu.git'
+gem 'rails', '=4.2.1'
+gem 'seed-fu', '=2.3.4', git: 'https://github.com/DHUers/seed-fu.git'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
 gem 'validates_existence', '=0.9.2'
@@ -18,7 +18,7 @@ gem 'state_machine', '=1.2.0'
 gem 'haml', '=4.0.6'
 gem 'formtastic', '=3.1.3'
 gem 'airbrake', '=4.1.0'
-gem 'localized_country_select', '=0.9.10'
+gem 'localized_country_select', '=0.9.11'
 gem 'cancan', '=1.6.10'
 gem 'rake'
 gem 'will_paginate', '=3.0.7'

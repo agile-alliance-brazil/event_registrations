@@ -20,6 +20,8 @@ class Attendance < ActiveRecord::Base
 
   validates_format_of :phone, with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true
 
+  delegate :token, to: :registration_group
+
   usar_como_cpf :cpf
 
   state_machine :status, initial: :pending do

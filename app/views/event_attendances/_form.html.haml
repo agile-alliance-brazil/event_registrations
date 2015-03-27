@@ -1,4 +1,5 @@
 = form.inputs :attendance_personal do
+  = form.input :registration_token, input_html: { tabindex: autotab }
   = form.input :first_name, required: true, input_html: {tabindex: autotab}
   = form.input :last_name, required: true, input_html: {tabindex: autotab}
   = form.input :badge_name, input_html: {tabindex: autotab}

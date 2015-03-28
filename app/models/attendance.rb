@@ -49,13 +49,17 @@ class Attendance < ActiveRecord::Base
 
   validates_presence_of :registration_type_id, :registration_date, :user_id, :event_id
 
-  scope :for_event, ->(e) { where(event_id: e.id)}
-  scope :for_registration_type, ->(t) { where(registration_type_id: t.id)}
-  scope :without_registration_type, ->(t) { where("#{table_name}.registration_type_id != (?)", t.id)}
-  scope :pending, -> { where(status: :pending)}
-  scope :paid, -> { where(status: [:paid, :confirmed])}
-  scope :active, -> {  where("#{table_name}.status != (?)", :cancelled)}
-  scope :older_than, ->(date) { where('registration_date < (?)', date)}
+  scope :for_event, ->(e) { where(event_id: e.id) }
+  scope :for_registration_type, ->(t) { where(registration_type_id: t.id) }
+  scope :without_registration_type, ->(t) { where("#{table_name}.registration_type_id != (?)", t.id) }
+  scope :pending, -> { where(status: :pending) }
+  scope :paid, -> { where(status: [:paid, :confirmed]) }
+  scope :active, -> { where('status != (?)', :cancelled) }
+  scope :older_than, ->(date) { where('registration_date < (?)', date) }
+  scope :search_for_list, ->(param) {
+    active.where('first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ?',
+                 "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%")
+  }
 
   def base_price
     Rails.logger.warn('Attendance#base_price is deprecated. It was called from ' + caller[1..5].join('\n'))

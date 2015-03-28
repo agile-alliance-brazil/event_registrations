@@ -14,10 +14,6 @@ class EventAttendancesController < ApplicationController
     end
   end
 
-  def attendances_list
-    @attendances_list = Engines::SearchAttendance.search(params[:search], event)
-  end
-
   def new
     @attendance = Attendance.new(build_attributes)
   end

@@ -1,9 +1,14 @@
 # encoding: UTF-8
 class AttendancesController < ApplicationController
-  before_filter :load_event
+  before_filter :load_event, except: :index
+  skip_before_filter :attendance, only: :index
   skip_before_filter :authenticate_user!, only: :callback
-  skip_before_filter :authorize_action, only: :callback
+  skip_before_filter :authorize_action, only: [:callback, :index]
   protect_from_forgery except: [:callback]
+
+  def index
+    @attendances_list = event_for_index.attendances.search_for_list(params[:search])
+  end
 
   def show
     @attendance = resource
@@ -65,5 +70,9 @@ class AttendancesController < ApplicationController
 
   def load_event
     @event = resource.event
+  end
+
+  def event_for_index
+    @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
   end
 end

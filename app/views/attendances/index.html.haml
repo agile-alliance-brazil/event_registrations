@@ -2,7 +2,8 @@
 
 %p= t('registration.status', date: l(Time.zone.now))
 
-= form_for attendances_list_event_attendances_path(@event), method: 'get' do
+= form_for attendances_path, method: 'get' do
+  = hidden_field_tag :event_id, @event.id
   %p= text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50
   %p= submit_tag 'Search', :name => nil
 
@@ -14,7 +15,6 @@
   %th= t('formtastic.labels.attendance.email')
   %th= t('formtastic.labels.attendance.registration_date')
   %th= t('formtastic.labels.attendance.registration_type_id')
-  %th= t('formtastic.labels.attendance.price')
   %th= t('formtastic.labels.attendance.status')
   - @attendances_list.each do |attendance|
     %tr
@@ -22,6 +22,5 @@
       %td= attendance.organization
       %td= attendance.email
       %td= l(attendance.registration_date)
-      %td= attendance.registration_type.type_title
-      %td= number_with_precision(attendance.registration_type.price(Date.today), precision: 2)
+      %td= t(attendance.registration_type.title)
       %td= attendance.status

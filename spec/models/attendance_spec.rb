@@ -51,49 +51,112 @@ describe Attendance, type: :model do
     it { should_not allow_value("@12.com").for(:email) }
   end
 
-  context "scopes" do
-    before do
-      5.times do
-        FactoryGirl.create(:attendance)
+  context 'scopes' do
+    context 'with five attendances created' do
+      before { 5.times { FactoryGirl.create(:attendance) } }
+
+      it 'should have scope for_event' do
+        expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first])
+      end
+
+      it 'should have scope for_registration_type' do
+        rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
+        Attendance.first.tap{|a| a.registration_type = rt}.save
+
+        expect(Attendance.for_registration_type(rt)).to eq([Attendance.first])
+      end
+
+      it 'should have scope without_registration_type' do
+        rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
+        Attendance.first.tap{|a| a.registration_type = rt}.save
+
+        expect(Attendance.without_registration_type(rt)).not_to include(Attendance.first)
+      end
+
+      it 'should have scope pending' do
+        Attendance.first.tap{|a| a.pay}.save
+        expect(Attendance.pending).not_to include(Attendance.first)
+      end
+
+      it 'should have scope paid' do
+        Attendance.first.tap{|a| a.pay}.save
+        expect(Attendance.paid).to eq([Attendance.first])
+      end
+
+      it 'should have scope active that excludes cancelled attendances' do
+        Attendance.first.tap{|a| a.cancel}.save
+        expect(Attendance.active).not_to include(Attendance.first)
+      end
+
+      it 'should have scope older_than that selects old attendances' do
+        Attendance.first.tap{|a| a.registration_date = 10.days.ago}.save
+        expect(Attendance.older_than(5.days.ago)).to eq([Attendance.first])
       end
     end
 
-    it "should have scope for_event" do
-      expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first])
-    end
+    context 'with specific seed' do
 
-    it "should have scope for_registration_type" do
-      rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
-      Attendance.first.tap{|a| a.registration_type = rt}.save
+      describe '.search_for_list' do
 
-      expect(Attendance.for_registration_type(rt)).to eq([Attendance.first])
-    end
+        context 'and no attendances' do
+          it { expect(Attendance.search_for_list('bla')).to eq [] }
+        end
 
-    it "should have scope without_registration_type" do
-      rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
-      Attendance.first.tap{|a| a.registration_type = rt}.save
+        context 'and having attendances' do
+          let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto',
+                                                 last_name: 'bla', organization: 'foo',
+                                                 email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
 
-      expect(Attendance.without_registration_type(rt)).not_to include(Attendance.first)
-    end
+          context 'active' do
+            context 'and one active and other inactive' do
+              let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
+              it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance] }
+            end
+          end
 
-    it "should have scope pending" do
-      Attendance.first.tap{|a| a.pay}.save
-      expect(Attendance.pending).not_to include(Attendance.first)
-    end
+          context 'with one attendance' do
+            context 'and matching fields' do
+              context 'entire field' do
+                it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('bLa')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('FoO')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('sbRUblEs')).to match_array [attendance] }
+              end
 
-    it "should have scope paid" do
-      Attendance.first.tap{|a| a.pay}.save
-      expect(Attendance.paid).to eq([Attendance.first])
-    end
+              context 'field part' do
+                it { expect(Attendance.search_for_list('PT')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('bL')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('oO')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('RUblEs')).to match_array [attendance] }
+              end
+            end
+          end
 
-    it "should have scope active that excludes cancelled attendances" do
-      Attendance.first.tap{|a| a.cancel}.save
-      expect(Attendance.active).not_to include(Attendance.first)
-    end
+          context 'with three attendances, one not matching' do
+            let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'bla',
+                                                         last_name: 'xpto', organization: 'sbrubles',
+                                                         email: 'foo@xpto.com', email_confirmation: 'foo@xpto.com') }
 
-    it "should have scope older_than that selects old attendances" do
-      Attendance.first.tap{|a| a.registration_date = 10.days.ago}.save
-      expect(Attendance.older_than(5.days.ago)).to eq([Attendance.first])
+            let!(:out_attendance) { FactoryGirl.create(:attendance, first_name: 'Edsger',
+                                                         last_name: 'Dijkstra', organization: 'Turing',
+                                                         email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
+
+            context 'entire field' do
+              it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('bLa')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('FoO')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('sbRUblEs')).to match_array [attendance, other_attendance] }
+            end
+
+            context 'field part' do
+              it { expect(Attendance.search_for_list('PT')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('bL')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('oO')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('RUblEs')).to match_array [attendance, other_attendance] }
+            end
+          end
+        end
+      end
     end
   end
 
@@ -109,14 +172,14 @@ describe Attendance, type: :model do
     context "unsaved attendance" do
       it "should be super early bird for 149 attendances (pending, paid or confirmed)" do
         @attendance.event.expects(:attendances)
-                  .returns(stub(count: 149))
+            .returns(stub(count: 149))
 
         expect(@attendance.registration_period).to eq(@period)
       end
 
       it "should regular early bird after 150 attendances" do
         @attendance.event.expects(:attendances)
-                  .returns(stub(count: 150))
+            .returns(stub(count: 150))
         @attendance.event.registration_periods.expects(:for).with(@period.end_at + 1.day).returns([])
 
         expect(@attendance.registration_period).not_to eq(@period)
@@ -132,16 +195,16 @@ describe Attendance, type: :model do
         @attendance.id = 149
 
         @attendance.event.expects(:attendances)
-                  .returns(stub(where: stub(count: 149)))
+            .returns(stub(where: stub(count: 149)))
 
         expect(@attendance.registration_period).to eq(@period)
       end
-      
+
       it "should be 399 after 150 attendances" do
         @attendance.id = 150
 
         @attendance.event.expects(:attendances)
-                  .returns(stub(where: stub(count: 150)))
+            .returns(stub(where: stub(count: 150)))
         @attendance.event.registration_periods.expects(:for).with(@period.end_at + 1.day).returns([])
 
         expect(@attendance.registration_period).not_to eq(@period)
@@ -168,7 +231,7 @@ describe Attendance, type: :model do
       period.stubs(:allow_voting?).returns(true)
 
       attendance.event.registration_periods.stubs(:for).returns([period])
-      
+
       expect(attendance).not_to be_can_vote
       attendance.confirm
       expect(attendance).to be_can_vote

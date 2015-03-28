@@ -8,16 +8,12 @@ Current::Application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   resources :events, only: [:index, :show] do
-    resources :attendances, only: [:new, :create, :index], controller: :event_attendances do
-      collection do
-        get :attendances_list
-      end
-    end
+    resources :attendances, only: [:new, :create, :index], controller: :event_attendances
   end
 
   get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
   post '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
-  resources :attendances, only: [:show, :destroy] do
+  resources :attendances, only: [:show, :destroy, :index] do
     post :enable_voting, on: :member
     get :voting_instructions, on: :member
     put :confirm, on: :member

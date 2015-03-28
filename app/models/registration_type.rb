@@ -9,12 +9,7 @@ class RegistrationType < ActiveRecord::Base
 
   def price(datetime)
     period = event.registration_periods.for(datetime).first
-    return period.price_for_registration_type(self) if period.present?
-    0
-  end
-
-  def type_title
-    title.gsub('registration_type.', '').gsub('_', ' ').capitalize
+    period.price_for_registration_type(self)
   end
 
 end

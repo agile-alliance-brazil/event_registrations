@@ -233,4 +233,5 @@ describe EventAttendancesController, type: :controller do
       end
     end
   end
+
 end

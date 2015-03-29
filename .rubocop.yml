@@ -9,9 +9,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/ClassAndModuleChildren:
-  Enabled: false # 1 violation
-
 Style/SpaceAfterComma:
   Enabled: false # 1 violation
 

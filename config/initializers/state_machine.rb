@@ -9,8 +9,12 @@ unless StateMachine::VERSION == '1.2.0'
  Rails.logger.warn "Please remove me, StateMachine version has changed"
 end
 
-module StateMachine::Integrations::ActiveModel
- public :around_validation
+module StateMachine
+  module Integrations
+    module ActiveModel
+      public :around_validation
+    end
+  end
 end
 
 module ActiveRecord

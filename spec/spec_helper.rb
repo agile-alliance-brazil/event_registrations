@@ -14,7 +14,7 @@ require 'shoulda-matchers'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 module Airbrake
-  def self.notify(thing)
+  def self.notify(_thing)
     # do nothing.
   end
 end

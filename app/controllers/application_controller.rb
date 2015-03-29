@@ -41,7 +41,8 @@ class ApplicationController < ActionController::Base
 
   def default_url_options(options = {})
     # Keep locale when navigating links if locale is specified
-    params[:locale] ? { :locale => params[:locale] } : {}
+    locale_options = params[:locale] ? { locale: params[:locale] } : {}
+    options.merge(locale_options)
   end
 
   def sanitize(text)

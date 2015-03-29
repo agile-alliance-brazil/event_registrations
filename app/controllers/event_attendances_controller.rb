@@ -4,8 +4,8 @@ class EventAttendancesController < ApplicationController
   before_filter :load_registration_types, only: [:new, :create]
 
   def index
-    @attendances = Attendance.for_event(event).active.
-      includes(:payment_notifications, :event, :registration_type).all
+    @attendances = Attendance.for_event(event).active
+      .includes(:payment_notifications, :event, :registration_type).all
     respond_to do |format|
       format.html
       format.csv {
@@ -57,8 +57,8 @@ class EventAttendancesController < ApplicationController
     attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
     if current_user.approved_author_at?(event)
-      attributes[:registration_type_id] = event.registration_types.
-        where(title: 'registration_type.speaker').select(:id).first.try(:id)
+      attributes[:registration_type_id] = event.registration_types
+        .where(title: 'registration_type.speaker').select(:id).first.try(:id)
     end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id

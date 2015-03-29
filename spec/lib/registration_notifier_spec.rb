@@ -35,8 +35,8 @@ describe RegistrationNotifier do
       end
 
       it "should notify pending attendance older than 30 days ago" do
-        EmailNotifications.expects(:cancelling_registration).
-          with(@attendance).returns(mock(deliver_now: true))
+        EmailNotifications.expects(:cancelling_registration)
+          .with(@attendance).returns(mock(deliver_now: true))
 
         @notifier.cancel
       end

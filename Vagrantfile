@@ -27,24 +27,24 @@ Vagrant.configure('2') do |config|
     s.args = 'vagrant'
   end
 
-  config.vm.define :dev do |config|
+  config.vm.define :dev do |vm_config|
     # Setting up a share so we can edit locally but run in vagrant
-    config.vm.synced_folder "#{APP_DIR}", "/srv/apps/registrations/current"
+    vm_config.vm.synced_folder "#{APP_DIR}", "/srv/apps/registrations/current"
 
-    config.vm.network :private_network, ip: "10.11.12.13"
-    config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2202
-    config.vm.network :forwarded_port, guest: 9292, host: 9293
+    vm_config.vm.network :private_network, ip: "10.11.12.13"
+    vm_config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2202
+    vm_config.vm.network :forwarded_port, guest: 9292, host: 9293
 
-    config.vm.provision :puppet do |puppet|
+    vm_config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/manifests"
       puppet.manifest_file = "vagrant-dev.pp"
       puppet.module_path = "puppet/modules"
     end
   end
 
-  config.vm.define :deploy do |config|
-    config.vm.network :private_network, ip: "10.11.12.14"
-    config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2203
-    config.vm.network :forwarded_port, guest: 80, host: 8081
+  config.vm.define :deploy do |vm_config|
+    vm_config.vm.network :private_network, ip: "10.11.12.14"
+    vm_config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2203
+    vm_config.vm.network :forwarded_port, guest: 80, host: 8081
   end
 end

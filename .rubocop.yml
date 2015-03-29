@@ -10,12 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Lint/ShadowingOuterLocalVariable:
-  Enabled: false # 2 violations
-
-Style/DotPosition:
-  EnforcedStyle: leading
-  Enabled: false # 3 violations
 
 Lint/HandleExceptions:
   Enabled: false # 3 violations

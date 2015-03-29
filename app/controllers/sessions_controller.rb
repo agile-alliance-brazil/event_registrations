@@ -60,8 +60,11 @@ class SessionsController < ApplicationController
   end
 
   def add_authentication(auth_hash)
-    self.current_user.authentications.create(provider: auth_hash['provider'],
-      uid: auth_hash['uid'], refresh_token: auth_hash['credentials']['refresh_token'])
+    self.current_user.authentications.create(
+      uid: auth_hash['uid'],
+      provider: auth_hash['provider'],
+      refresh_token: auth_hash['credentials']['refresh_token']
+    )
   end
 
   def log_in(user)

@@ -19,8 +19,11 @@ describe RegistrationNotifier do
       before do
         Timecop.freeze(Time.now)
         deadline = 30.days.ago
-        @attendance = FactoryGirl.build(:attendance, event: @event,
-          registration_date: deadline)
+        @attendance = FactoryGirl.build(
+          :attendance,
+          event: @event,
+          registration_date: deadline
+        )
 
         query_relation = mock()
         query_relation.expects(:older_than).with(deadline).returns([@attendance])

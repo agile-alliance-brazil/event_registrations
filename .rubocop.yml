@@ -14,7 +14,7 @@ Style/AlignHash:
   EnforcedHashRocketStyle: key
   EnforcedColonStyle: key
   EnforcedLastArgumentHashStyle: always_inspect
-  Enabled: false # 2 violations
+  Enabled: true # 2 violations
 
 Style/IfUnlessModifier:
   MaxLineLength: 80

@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/NestedTernaryOperator:
-  Enabled: false # 1 violation
-
 Style/RedundantBegin:
   Enabled: false # 1 violation
 

@@ -36,7 +36,13 @@ class User < ActiveRecord::Base
 
   def gender
     value = read_attribute(:gender)
-    value.nil? ? nil : (value ? 'M' : 'F')
+    if value.nil?
+      nil
+    elsif value
+      'M'
+    else
+      'F'
+    end
   end
   
   def twitter_user=(value)

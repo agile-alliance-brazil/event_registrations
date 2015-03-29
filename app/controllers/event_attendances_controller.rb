@@ -107,11 +107,11 @@ class EventAttendancesController < ApplicationController
   end
 
   def notify(attendance)
-    if attendance.registration_fee > 0
-      EmailNotifications.registration_pending(attendance).deliver
-      attendance.email_sent = true
-      attendance.save
-    end
+    return nil if attendance.registration_fee == 0
+
+    EmailNotifications.registration_pending(attendance).deliver
+    attendance.email_sent = true
+    attendance.save
   end
 
   def notify_or_log(ex)

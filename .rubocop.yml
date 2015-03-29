@@ -9,10 +9,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/GuardClause:
-  MinBodyLength: 1
-  Enabled: false # 1 violation
-
 Style/NumericLiterals:
   MinDigits: 5
   Enabled: false # 1 violation

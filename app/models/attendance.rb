@@ -97,9 +97,7 @@ class Attendance < ActiveRecord::Base
   private
   def entitled_super_early_bird?
     attendances = event.attendances
-    if !new_record?
-      attendances = attendances.where('id < ?', id)
-    end
+    attendances = attendances.where('id < ?', id) unless new_record?
     attendances.count < SUPER_EARLY_LIMIT
   end
 end

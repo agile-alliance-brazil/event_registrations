@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/NegatedIf:
-  Enabled: false # 1 violation
-
 Style/NestedTernaryOperator:
   Enabled: false # 1 violation
 

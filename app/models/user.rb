@@ -31,11 +31,11 @@ class User < ActiveRecord::Base
   end
 
   def gender=(value)
-    write_attribute(:gender, value.nil? ? nil : value == 'M')
+    self[:gender] = value.nil? ? nil : value == 'M'
   end
 
   def gender
-    value = read_attribute(:gender)
+    value = self[:gender]
     if value.nil?
       nil
     elsif value

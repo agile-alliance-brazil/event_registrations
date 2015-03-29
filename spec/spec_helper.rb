@@ -55,6 +55,6 @@ RSpec.configure do |config|
   config.order = "random"
 end
 
-def sign_in user
+def sign_in(user)
   controller.current_user = user
 end

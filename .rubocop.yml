@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/MethodDefParentheses:
-  EnforcedStyle: require_parentheses
-  Enabled: false # 4 violations
-
 Style/EmptyLinesAroundBlockBody:
   EnforcedStyle: no_empty_lines
   Enabled: false # 4 violations

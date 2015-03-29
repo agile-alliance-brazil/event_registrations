@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
 
   usar_como_cpf :cpf
 
-  def approved_author_at? _event
+  def approved_author_at?(_event)
     false
   end
 

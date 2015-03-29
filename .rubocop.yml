@@ -11,10 +11,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/BarePercentLiterals:
-  EnforcedStyle: bare_percent
-  Enabled: false # 7 violations
-
 Style/UnneededPercentQ:
   Enabled: false # 7 violations
 

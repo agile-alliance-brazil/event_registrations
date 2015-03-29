@@ -10,11 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/TrivialAccessors:
-  ExactNameMatch: false
-  AllowPredicates: false
-  Enabled: false # 2 violations
-
 Rails/ReadWriteAttribute:
   Include:
     - app/models/**/*.rb

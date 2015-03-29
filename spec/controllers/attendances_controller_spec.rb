@@ -14,7 +14,7 @@ describe AttendancesController, type: :controller do
     Attendance.any_instance.stubs(:registration_fee).with(@individual).returns(399)
     Attendance.any_instance.stubs(:registration_fee).with(@free).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@manual).returns(0)
-    Attendance.any_instance.stubs(:registration_fee).with().returns(399)
+    Attendance.any_instance.stubs(:registration_fee).with.returns(399)
 
     user = FactoryGirl.create(:user)
     user.add_role :organizer

@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/MethodCallParentheses:
-  Enabled: false # 4 violations
-
 Style/RegexpLiteral:
   Enabled: false # 5 violations
 

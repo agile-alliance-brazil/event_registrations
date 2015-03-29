@@ -18,7 +18,7 @@ describe EventAttendancesController, type: :controller do
     Attendance.any_instance.stubs(:registration_fee).with(@free).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@speaker).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@manual).returns(0)
-    Attendance.any_instance.stubs(:registration_fee).with().returns(399)
+    Attendance.any_instance.stubs(:registration_fee).with.returns(399)
   end
 
   after :each do

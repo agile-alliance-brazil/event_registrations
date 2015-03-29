@@ -77,7 +77,10 @@ FactoryGirl.define do
   factory :user do
     first_name "User"
     sequence(:last_name) {|n| "Name#{n}"}
-    email { |a| username = "#{a.first_name} #{a.last_name}".parameterize; "#{username}@example.com" }
+    email do |user|
+      username = "#{user.first_name} #{user.last_name}".parameterize
+      "#{username}@example.com"
+    end
 
     phone "(11) 3322-1234"
     country "BR"

@@ -5,9 +5,14 @@ describe RegistrationPeriod, type: :model do
   before do
     @event = FactoryGirl.create(:event)
     @regular = @event.registration_periods.first 
+    
     @super_early_bird = FactoryGirl.create(:registration_period, event: @event, title: 'registration_period.super_early_bird', start_at: Time.zone.local(2013, 01, 01), end_at: Time.zone.local(2013, 01, 31).end_of_day)
     @early_bird = FactoryGirl.create(:registration_period, event: @event, title: 'registration_period.early_bird', start_at: Time.zone.local(2013, 02, 01), end_at: Time.zone.local(2013, 02, 28).end_of_day)
-    @regular.tap{|p| p.start_at = Time.zone.local(2013, 03, 01); p.end_at = Time.zone.local(2013, 03, 31).end_of_day}.save
+    
+    @regular.start_at = Time.zone.local(2013, 03, 01)
+    @regular.end_at = Time.zone.local(2013, 03, 31).end_of_day
+    @regular.save
+
     @late = FactoryGirl.create(:registration_period, event: @event, title: 'registration_period.late', start_at: Time.zone.local(2013, 04, 01), end_at: Time.zone.local(2013, 04, 30).end_of_day)
     @last_minute = FactoryGirl.create(:registration_period, event: @event, title: 'registration_period.last_minute', start_at: Time.zone.local(2013, 05, 01), end_at: Time.zone.local(3013, 05, 31).end_of_day)
   end

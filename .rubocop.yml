@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/Semicolon:
-  AllowAsExpressionSeparator: false
-  Enabled: false # 2 violations
-
 Style/SpaceInsideBrackets:
   Enabled: false # 2 violations
 

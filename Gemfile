@@ -52,6 +52,7 @@ group :development, :test do
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'selenium-webdriver'
   gem 'rubocop', require: false
+  gem 'guard-rubocop'
 end
 
 group :development do

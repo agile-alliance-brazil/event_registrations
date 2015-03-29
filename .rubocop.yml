@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/SpaceInsideBrackets:
-  Enabled: false # 2 violations
-
 Style/AccessorMethodName:
   Enabled: false # 1 violation
 

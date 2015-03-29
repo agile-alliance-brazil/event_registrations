@@ -11,9 +11,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/CommentIndentation:
-  Enabled: false # 6 violations
-
 Style/LeadingCommentSpace:
   Enabled: false # 6 violations
 

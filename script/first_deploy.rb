@@ -35,7 +35,7 @@ def origin_files
 end
 
 def missing_files
-  origin_files.reject { |file| File.exists?(file) }
+  origin_files.reject { |file| File.exist?(file) }
 end
 
 if missing_files.size > 0
@@ -58,7 +58,7 @@ end
 
 execute %Q{scp #{key_param} #{RAILS_ROOT}/puppet/script/kickstart-server.sh #{@user}@#{@target}:~}
 execute %Q{ssh #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/kickstart-server.sh && /bin/bash ~/kickstart-server.sh'}
-unless File.exists?("config/deploy/#{@target}.rb")
+unless File.exist?("config/deploy/#{@target}.rb")
   deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
   File.open("config/deploy/#{@target}.rb", 'w+') do |file|
     file.write deploy_configs.gsub(/set :domain,\s*"[^"]*"/, "set :domain, \"#{@target}\"")

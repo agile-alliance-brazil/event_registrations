@@ -18,7 +18,7 @@ module StateMachine
 end
 
 module ActiveRecord
-  # HACK to set state_machine initial states as default attributes with Rails 4
+  # HACK: to set state_machine initial states as default attributes with Rails 4
   module ModelSchema
     module ClassMethods
       private
@@ -33,7 +33,7 @@ module ActiveRecord
     end
   end
 
-  # HACK to store state_machine initial states in DB too with Rails 4
+  # HACK: to store state_machine initial states in DB too with Rails 4
   module AttributeMethods
     private
 

@@ -10,15 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/CommentAnnotation:
-  Keywords:
-    - TODO
-    - FIXME
-    - OPTIMIZE
-    - HACK
-    - REVIEW
-  Enabled: false # 4 violations
-
 Style/SpaceAroundOperators:
   Enabled: false # 4 violations
 

@@ -66,12 +66,12 @@ describe RegistrationPeriod, type: :model do
       expect(RegistrationPeriod.for(@regular.end_at + 1.week).first).to eq(@late)
     end
     
-    # TODO Crappy test depends on other events not starting before this.
+    # TODO: Crappy test depends on other events not starting before this.
     it "should not have any period before super_early_bird" do
       expect(RegistrationPeriod.for(@super_early_bird.start_at - 1.second).first).to be_nil
     end
     
-    # TODO Crappy test depends on other events not finishing after this.
+    # TODO: Crappy test depends on other events not finishing after this.
     it "should not have any period after last minute" do
       expect(RegistrationPeriod.for(@last_minute.end_at + 1.second).first).to be_nil
     end

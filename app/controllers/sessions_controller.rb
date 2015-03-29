@@ -16,16 +16,13 @@ class SessionsController < ApplicationController
     elsif logged_in?
       flash[:notice] = I18n.t('flash.user.authentication.new')
       add_authentication(auth_hash)
+    elsif (user = User.new_from_auth_hash(auth_hash)).save
+      flash[:notice] = I18n.t('flash.user.create')
+      log_in(user)
+      add_authentication(auth_hash)
     else
-      user = User.new_from_auth_hash(auth_hash)
-      if user.save
-        flash[:notice] = I18n.t('flash.user.create')
-        log_in(user)
-        add_authentication(auth_hash)
-      else
-        flash[:error] = I18n.t('flash.user.invalid') + "#{user.errors.inspect} with #{auth_hash}"
-        redirect_to(login_path) and return
-      end
+      flash[:error] = I18n.t('flash.user.invalid') + "#{user.errors.inspect} with #{auth_hash}"
+      redirect_to(login_path) and return
     end
 
     origin = request.env['omniauth.origin']

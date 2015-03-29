@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Metrics/PerceivedComplexity:
-  Max: 7
-  Enabled: false # 1 violation
-
 Style/NegatedIf:
   Enabled: false # 1 violation
 

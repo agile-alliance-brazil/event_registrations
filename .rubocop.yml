@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Lint/ParenthesesAsGroupedExpression:
-  Enabled: false # 2 violations
-
 Style/Semicolon:
   AllowAsExpressionSeparator: false
   Enabled: false # 2 violations

@@ -21,7 +21,7 @@ FactoryGirl.define do
     association :event
     title 'registration_period.regular'
     start_at Time.zone.now
-    end_at (Time.zone.now + 1.day).end_of_day
+    end_at((Time.zone.now + 1.day).end_of_day)
   end
 
   factory :attendance do

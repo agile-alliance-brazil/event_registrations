@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
     end
 
     origin = request.env['omniauth.origin']
-    redirect_to (origin == login_url ? self.current_user : origin)
+    redirect_to origin == login_url ? self.current_user : origin
   end
 
   def resource

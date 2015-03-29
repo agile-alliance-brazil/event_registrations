@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Lint/UselessAccessModifier:
-  Enabled: false # 1 violation
-
 Style/AlignHash:
   EnforcedHashRocketStyle: key
   EnforcedColonStyle: key

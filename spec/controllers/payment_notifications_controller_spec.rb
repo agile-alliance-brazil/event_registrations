@@ -10,17 +10,17 @@ describe PaymentNotificationsController, type: :controller do
 
     it "should create PaymentNotification with paypal type" do
       expect{
-        post :create, type: 'paypal', txn_id: "ABCABC", secret: AppConfig[:paypal][:secret],
+        post :create, type: 'paypal', txn_id: "ABCABC", secret: APP_CONFIG[:paypal][:secret],
                       invoice: @attendance.id, custom: 'Attendance', payment_status: "Completed",
-                      receiver_email: AppConfig[:paypal][:email], mc_gross: @attendance.registration_fee.to_s,
-                      mc_currency: AppConfig[:paypal][:currency]
+                      receiver_email: APP_CONFIG[:paypal][:email], mc_gross: @attendance.registration_fee.to_s,
+                      mc_currency: APP_CONFIG[:paypal][:currency]
       }.to change(PaymentNotification, :count).by(1)
     end
 
     it "should create PaymentNotification with bcash type" do
       expect{
         post :create, type: 'bcash', status: "Aprovada", transacao_id: "12345678",
-                      pedido: @attendance.id, secret: AppConfig[:bcash][:secret]
+                      pedido: @attendance.id, secret: APP_CONFIG[:bcash][:secret]
       }.to change(PaymentNotification, :count).by(1)
     end
   end

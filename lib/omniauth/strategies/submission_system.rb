@@ -4,7 +4,7 @@ module OmniAuth
       option :name, :submission_system
 
       option :client_options, {
-        :site => AppConfig[:submission_system][:url],
+        :site => APP_CONFIG[:submission_system][:url],
         :authorize_url => "/oauth/authorize"
       }
 

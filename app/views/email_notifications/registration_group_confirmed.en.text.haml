@@ -6,7 +6,7 @@ The registration of company <strong>#{h(@registration_group.name)}</strong> pric
 - @registration_group.attendees.each do |attendee|
   #{"-"} #{h(attendee.full_name)} priced #{number_to_currency(attendee.registration_fee, :locale => :pt)}
 
-If you have any questions, please contact us at #{mail_to AppConfig[:organizer][:contact_email]}
+If you have any questions, please contact us at #{mail_to APP_CONFIG[:organizer][:contact_email]}
 
 
 [Please do not reply to this e-mail. It was sent from an unmonitored email address]

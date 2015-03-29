@@ -4,14 +4,14 @@ require File.join(Rails.root, 'lib', 'paypal_adapter')
 module PaypalHelper
   def add_paypal_config_vars(values, return_url, notify_url)
     values.tap do |vars|
-      vars[:business] = AppConfig[:paypal][:email]
+      vars[:business] = APP_CONFIG[:paypal][:email]
       vars[:cmd] = '_cart'
       vars[:upload] = 1
       vars[:return] = return_url
       vars[:cancel_return] = return_url
-      vars[:currency_code] = AppConfig[:paypal][:currency]
+      vars[:currency_code] = APP_CONFIG[:paypal][:currency]
       vars[:notify_url] = notify_url
-      vars[:cert_id] = AppConfig[:paypal][:cert_id]
+      vars[:cert_id] = APP_CONFIG[:paypal][:cert_id]
     end
   end
   

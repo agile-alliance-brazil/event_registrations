@@ -38,17 +38,17 @@ class EmailNotifications < ActionMailer::Base
   end
 
   def from_address
-    AppConfig[:ses][:from]
+    APP_CONFIG[:ses][:from]
   end
 
   def host
-    AppConfig[:host]
+    APP_CONFIG[:host]
   end
   
   def event_organizer
     [
-      "\"#{AppConfig[:organizer][:name]}\" <#{AppConfig[:organizer][:email]}>",
-      "\"#{AppConfig[:organizer][:cced]}\" <#{AppConfig[:organizer][:cced_email]}>"
+      "\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>",
+      "\"#{APP_CONFIG[:organizer][:cced]}\" <#{APP_CONFIG[:organizer][:cced_email]}>"
     ]
   end
 end

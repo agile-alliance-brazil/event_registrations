@@ -6,4 +6,4 @@ unless File.exist?(config_file)
 end
 config = HashWithIndifferentAccess.new(YAML.load_file(config_file))
 
-::AppConfig = config
+::APP_CONFIG = config

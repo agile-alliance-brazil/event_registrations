@@ -17,7 +17,7 @@
 - else
   %p
     If you already have an account in the submissions system, you can skip to step 2.
-    Otherwise, click #{link_to 'here', "#{AppConfig[:submission_system][:url]}users/signup?locale=en", target: :blank}
+    Otherwise, click #{link_to 'here', "#{APP_CONFIG[:submission_system][:url]}users/signup?locale=en", target: :blank}
     and fill out the form to register a new user account in the submissions system.
 
 %br
@@ -58,7 +58,7 @@
 - if @submission_system_authentication
 
   %p
-    Now you just have to #{link_to "vote", "#{AppConfig[:submission_system][:url]}sessions", target: :blank}
+    Now you just have to #{link_to "vote", "#{APP_CONFIG[:submission_system][:url]}sessions", target: :blank}
     for your favorite sessions. The rules for voting are:
 
   %ul

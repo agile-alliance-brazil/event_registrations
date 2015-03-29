@@ -44,7 +44,7 @@ class PaymentNotification < ActiveRecord::Base
   end
   
   def params_valid?
-    params[:type] == 'bcash' ? bcash_valid?(AppConfig[:bcash]) : paypal_valid?(AppConfig[:paypal])
+    params[:type] == 'bcash' ? bcash_valid?(APP_CONFIG[:bcash]) : paypal_valid?(APP_CONFIG[:paypal])
   end
 
   def bcash_valid?(hash)

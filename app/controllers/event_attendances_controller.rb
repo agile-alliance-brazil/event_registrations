@@ -70,9 +70,8 @@ class EventAttendancesController < ApplicationController
   def attendance_params
     params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
       :registration_group_id, :registration_date, :first_name, :last_name, :email,
-      :email_confirmation, :organization, :phone, :country, :state, :city,
-      :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-      :zipcode, :notes)
+      :email_confirmation, :organization, :phone, :country, :state, :city, :badge_name,
+      :cpf, :gender, :twitter_user, :address, :neighbourhood, :zipcode, :notes)
   end
   
   def load_registration_types
@@ -84,9 +83,9 @@ class EventAttendancesController < ApplicationController
     registration_types += event.registration_types.without_group.to_a if current_user.organizer?
     registration_types.flatten.uniq.compact
   end
-    
+
   def validate_free_registration(attendance)
-    if is_free?(attendance) && !allowed_free_registration?
+    if is_free?(attendance) && !current_user.has_approved_session?(event) && !current_user.organizer?
       attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
       flash.now[:error] = t('flash.attendance.create.free_not_allowed') 
       render :new and return false
@@ -97,10 +96,6 @@ class EventAttendancesController < ApplicationController
   def is_free?(attendance)
     !event.registration_types.paid.include?(attendance.registration_type)
   end
-  
-  def allowed_free_registration?
-    current_user.has_approved_session?(event) || current_user.organizer?
-  end
 
   def event
     @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
@@ -110,8 +105,7 @@ class EventAttendancesController < ApplicationController
     return nil if attendance.registration_fee == 0
 
     EmailNotifications.registration_pending(attendance).deliver
-    attendance.email_sent = true
-    attendance.save
+    attendance.tap{|a| a.email_sent = true}.save
   end
 
   def notify_or_log(ex)

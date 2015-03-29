@@ -10,11 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Metrics/ClassLength:
-  CountComments: false  # count full line comments?
-  Max: 100
-  Enabled: false # 1 violation
-
 Metrics/PerceivedComplexity:
   Max: 7
   Enabled: false # 1 violation

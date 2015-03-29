@@ -46,7 +46,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    self.current_user= nil
+    self.current_user = nil
     redirect_to login_path
   end
 

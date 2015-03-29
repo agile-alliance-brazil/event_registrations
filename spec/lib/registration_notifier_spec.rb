@@ -25,7 +25,7 @@ describe RegistrationNotifier do
           registration_date: deadline
         )
 
-        query_relation = mock()
+        query_relation = mock
         query_relation.expects(:older_than).with(deadline).returns([@attendance])
         @notifier.expects(:pending_attendances).returns(query_relation)
       end
@@ -51,7 +51,7 @@ describe RegistrationNotifier do
     context "newer than 30 days" do
       it "should not notify attendance created less than 30 days ago" do
         Timecop.freeze(Time.now) do
-          query_relation = mock()
+          query_relation = mock
           query_relation.expects(:older_than).with(30.days.ago).returns([])
           @notifier.expects(:pending_attendances).returns(query_relation)
           EmailNotifications.expects(:cancelling_registration).never
@@ -63,7 +63,7 @@ describe RegistrationNotifier do
 
     context "pending attendances" do
       it "should have pending attendances without manual registrations" do
-        event= FactoryGirl.create(:event)
+        event = FactoryGirl.create(:event)
         manual_type = FactoryGirl.create(:registration_type, title: 'registration_type.manual.title', event: event)
 
         cancelled = FactoryGirl.create(:attendance, event: event)

@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   end
 
   def sanitize(text)
-    text.gsub(/[\s;'\"]/,'')
+    text.gsub(/[\s;'\"]/, '')
   end
 
   private

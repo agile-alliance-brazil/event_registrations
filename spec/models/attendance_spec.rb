@@ -77,17 +77,17 @@ describe Attendance, type: :model do
     end
 
     it "should have scope pending" do
-      Attendance.first.tap{|a| a.pay}.save
+      Attendance.first.tap(&:pay).save
       expect(Attendance.pending).not_to include(Attendance.first)
     end
 
     it "should have scope paid" do
-      Attendance.first.tap{|a| a.pay}.save
+      Attendance.first.tap(&:pay).save
       expect(Attendance.paid).to eq([Attendance.first])
     end
 
     it "should have scope active that excludes cancelled attendances" do
-      Attendance.first.tap{|a| a.cancel}.save
+      Attendance.first.tap(&:cancel).save
       expect(Attendance.active).not_to include(Attendance.first)
     end
 

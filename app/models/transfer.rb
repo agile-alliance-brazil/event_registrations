@@ -48,7 +48,7 @@ class Transfer
   end
 
   def assignable_attributes(attendance)
-    attendance.attributes.reject do |key, value|
+    attendance.attributes.reject do |key, _value|
       PROTECTED_ATTRIBUTES.include?(key.to_sym)
     end
   end

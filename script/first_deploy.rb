@@ -68,6 +68,6 @@ end
 execute %q{bundle}
 execute %q{bundle exec cap #{@target} deploy:check:directories deploy:check:make_linked_dirs}
 files_to_upload.each do |file|
-  execute %q{scp #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}}
+  execute "scp #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
 end
 execute %q{bundle exec cap #{@target} deploy}

@@ -39,7 +39,7 @@ namespace :deploy do
   after :publishing, :restart
 
   task :puppet do
-    on roles(:all) do |host|
+    on roles(:all) do
       within release_path.join('puppet') do
         execute :'librarian-puppet', :install
       end

@@ -45,7 +45,7 @@ FactoryGirl.define do
     zipcode {|a| a.user.zipcode }
 
     registration_type { |a| a.event.registration_types.find_by_title('registration_type.individual') }
-    registration_date { |a| Time.zone.now }
+    registration_date { Time.zone.now }
   end
 
   factory :registration_group do

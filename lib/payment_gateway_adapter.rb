@@ -2,7 +2,7 @@
 class PaymentGatewayAdapter
   class << self
     def from_attendance(attendance, item_class)
-      registration_desc = lambda do |attendee|
+      registration_desc = lambda do |_attendee|
         "#{I18n.t('formtastic.labels.attendance.registration_type_id')}: #{I18n.t(attendance.registration_type.title)}"
       end
       create_items(attendance, item_class, registration_desc)

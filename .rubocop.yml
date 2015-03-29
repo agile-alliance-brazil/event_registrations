@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/SpaceAfterControlKeyword:
-  Enabled: false # 2 violations
-
 Style/SpaceAroundEqualsInParameterDefault:
   EnforcedStyle: space
   Enabled: false # 2 violations

@@ -78,7 +78,7 @@ class User < ActiveRecord::Base
   end
 
   def self.extract_names(hash)
-    if(hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?))
+    if hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?)
       hash[:name].split(" ")
     else
       [hash[:first_name], hash[:last_name]]

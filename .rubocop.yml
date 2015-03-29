@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/ColonMethodCall:
-  Enabled: false # 3 violations
-
 Lint/UnusedMethodArgument:
   Enabled: false # 3 violations
 

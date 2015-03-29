@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/MethodCalledOnDoEndBlock:
-  Enabled: false # 1 violation
-
 Metrics/ClassLength:
   CountComments: false  # count full line comments?
   Max: 100

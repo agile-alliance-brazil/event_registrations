@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Lint/StringConversionInInterpolation:
-  Enabled: false # 1 violation
-
 Style/ConstantName:
   Enabled: false # 1 violation
 

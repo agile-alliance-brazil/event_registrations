@@ -10,14 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Rails/Output:
-  Include:
-    - app/**/*.rb
-    - config/**/*.rb
-    - db/**/*.rb
-    - lib/**/*.rb
-  Enabled: false # 2 violations
-
 Style/TrivialAccessors:
   ExactNameMatch: false
   AllowPredicates: false

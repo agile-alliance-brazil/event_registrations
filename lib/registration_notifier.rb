@@ -34,8 +34,6 @@ class RegistrationNotifier
   rescue => e
     Airbrake.notify(e)
     Rails.logger.info("  [FAILED #{action}] #{e.message}")
-    puts e.message
-    puts e.backtrace
   ensure
     Rails.logger.flush
   end

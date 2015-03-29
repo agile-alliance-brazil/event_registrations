@@ -22,7 +22,11 @@ class EventAttendancesController < ApplicationController
       redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
       return
     end
-    @attendance = Attendance.new(build_attributes)
+    attributes = build_attributes
+    @attendance = Attendance.new(attributes)
+
+    group = RegistrationGroup.find_by_token(params['registration_token'])
+    @attendance.registration_group = group if group.present?
 
     return unless validate_free_registration(@attendance)
     if @attendance.save

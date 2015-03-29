@@ -169,6 +169,8 @@ pt:
     fields:
       search:
         placeholder: 'procurar por nome, organização ou email'
+      token:
+        placeholder: 'entre com o seu token de inscrição se você possuir um'
     labels:
       attendance:
         id: "Número de inscrição"

@@ -164,6 +164,31 @@ describe EventAttendancesController, type: :controller do
         end
       end
 
+      context 'with no token' do
+        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
+        let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
+        subject(:attendance) { assigns(:attendance) }
+        before { post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id } }
+        it { expect(attendance.registration_group).to be_nil }
+      end
+
+      context 'with registration token' do
+        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
+        let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
+        context 'an invalid' do
+          before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: { registration_type_id: @individual.id } }
+          subject(:attendance) { assigns(:attendance) }
+          it { expect(attendance.registration_group).to be_nil }
+        end
+
+        context 'a valid' do
+          let!(:group) { FactoryGirl.create(:registration_group, event: @event, token: 'bla-xpto-foo') }
+          before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
+          subject(:attendance) { assigns(:attendance) }
+          it { expect(attendance.registration_group).to eq group }
+        end
+      end
+
       it "should send pending registration e-mail" do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)

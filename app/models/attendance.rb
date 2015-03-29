@@ -79,7 +79,9 @@ class Attendance < ActiveRecord::Base
   end
 
   def registration_fee(overriden_registration_type = nil)
-    registration_period.price_for_registration_type(overriden_registration_type || registration_type)
+    registration_value = registration_value(overriden_registration_type)
+    return registration_value unless registration_group.present?
+    registration_value * (1 - (registration_group.discount / 100.00))
   end
 
   def cancellable?
@@ -103,6 +105,11 @@ class Attendance < ActiveRecord::Base
   end
 
   private
+
+  def registration_value(registration_type)
+    registration_period.price_for_registration_type(registration_type || self.registration_type)
+  end
+
   def entitled_super_early_bird?
     attendances = event.attendances
     attendances = attendances.where('id < ?', id) unless new_record?

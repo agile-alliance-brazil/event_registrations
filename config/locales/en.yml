@@ -31,7 +31,9 @@ en:
       attendances_list: 'Attendances List'
     fields:
       search:
-       placeholder: 'search in name, organization or email'
+        placeholder: 'search in name, organization or email'
+      token:
+        placeholder: 'enter your registration token if you have one'
     labels:
       attendance:
         id: "Registration Number"

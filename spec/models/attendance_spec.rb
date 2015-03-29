@@ -268,4 +268,22 @@ describe Attendance, type: :model do
       expect(attendance).not_to be_cancellable
     end
   end
+
+  describe '#registration_fee' do
+    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:registration_period) { RegistrationPeriod.create!(start_at: 1.month.ago, end_at: 1.month.from_now, event: event) }
+    let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+    let!(:price) { RegistrationPrice.create!(registration_type: individual, registration_period: registration_period, value: 100.00) }
+
+    context 'with no registration group' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      it { expect(Attendance.last.registration_fee individual).to eq 100 }
+    end
+
+    context 'with registration group' do
+      let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 10) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+      it { expect(Attendance.last.registration_fee individual).to eq 90 }
+    end
+  end
 end

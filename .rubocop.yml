@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/IndentationWidth:
-  Width: 2
-  Enabled: false # 2 violations
-
 Style/SpecialGlobalVars:
   Enabled: false # 2 violations
 

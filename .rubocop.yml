@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/RedundantBegin:
-  Enabled: false # 1 violation
-
 Lint/UselessAccessModifier:
   Enabled: false # 1 violation
 

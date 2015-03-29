@@ -8,9 +8,9 @@ class EventAttendancesController < ApplicationController
       .includes(:payment_notifications, :event, :registration_type).all
     respond_to do |format|
       format.html
-      format.csv {
+      format.csv do
         response.headers['Content-Disposition'] = "attachment; filename=\"#{event.name.parameterize.underscore}.csv\""
-      }
+      end
     end
   end
 

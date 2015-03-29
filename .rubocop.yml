@@ -10,12 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/CollectionMethods:
-  Enabled: false # 3 violations
-
-Style/Blocks:
-  Enabled: false # 3 violations
-
 Style/MethodDefParentheses:
   EnforcedStyle: require_parentheses
   Enabled: false # 4 violations

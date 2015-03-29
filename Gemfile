@@ -28,7 +28,6 @@ gem 'omniauth-facebook', '=2.0.1'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 
-
 gem 'jquery-rails', '=4.0.3'
 gem 'therubyracer', '=0.12.1', platforms: :ruby
 gem 'sass-rails', '=5.0.1'
@@ -52,6 +51,7 @@ group :development, :test do
   gem 'guard-konacha-rails'
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'selenium-webdriver'
+  gem 'rubocop', require: false
 end
 
 group :development do

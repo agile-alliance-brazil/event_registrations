@@ -11,10 +11,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/TrailingComma:
-  EnforcedStyleForMultiline: comma
-  Enabled: false # 5 violations
-
 Style/WordArray:
   MinSize: 0
   # The regular expression WordRegex decides what is considered a word.

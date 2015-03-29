@@ -65,7 +65,7 @@ describe BcashAdapter do
         'endereco' => @attendance.user.address,
         'bairro'   => @attendance.user.neighbourhood,
         'cidade'   => @attendance.user.city,
-        'estado'   => @attendance.user.state,
+        'estado'   => @attendance.user.state
       })
     end
   end

@@ -22,7 +22,7 @@ def files_to_upload
     'config/database.yml',
     'certs/paypal_cert.pem',
     'certs/app_cert.pem',
-    'certs/app_key.pem',
+    'certs/app_key.pem'
   ]
 end
 

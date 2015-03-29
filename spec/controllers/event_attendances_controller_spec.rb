@@ -190,83 +190,89 @@ describe EventAttendancesController, type: :controller do
             before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: { registration_type_id: @individual.id } }
             it { expect(attendance.registration_group).to be_nil }
           end
+          context 'an invalid' do
+            before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: { registration_type_id: @individual.id } }
+            subject(:attendance) { assigns(:attendance) }
+            it { expect(attendance.registration_group).to be_nil }
+          end
+
+          context 'a valid' do
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event, token: 'bla-xpto-foo') }
+            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
+            subject(:attendance) { assigns(:attendance) }
+            it { expect(attendance.registration_group).to eq group }
+          end
         end
 
-        context 'a valid' do
-          let!(:group) { FactoryGirl.create(:registration_group, event: @event, token: 'bla-xpto-foo') }
-          before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
-          it { expect(attendance.registration_group).to eq group }
+        it "should send pending registration e-mail" do
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          EmailNotifications.expects(:registration_pending).returns(@email)
+          post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
+        end
+
+        it "should not allow free registration type" do
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          controller.stubs(:valid_registration_types).returns([@individual, @manual])
+          post :create, event_id: @event.id, attendance: {registration_type_id: @free.id}
+          expect(response).to render_template(:new)
+          expect(flash[:error]).to eq(I18n.t('flash.attendance.create.free_not_allowed'))
         end
       end
 
-      it "should send pending registration e-mail" do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        EmailNotifications.expects(:registration_pending).returns(@email)
-        post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
+      describe "for sponsor registration" do
+        before do
+          @user = FactoryGirl.create(:user)
+          @user.add_role :organizer
+          @user.save!
+          sign_in @user
+          disable_authorization
+        end
+
+        it "should allow free registration type no matter the email" do
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          Attendance.any_instance.stubs(:id).returns(5)
+
+          post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: "another#{@user.email}"}
+          expect(response).to redirect_to(attendance_path(5))
+        end
+
+        it "should not send pending registration e-mail for free registration" do
+          EmailNotifications.expects(:registration_pending).never
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          Attendance.any_instance.stubs(:id).returns(5)
+
+          post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
+
+          expect(response).to redirect_to(attendance_path(5))
+        end
       end
 
-      it "should not allow free registration type" do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        controller.stubs(:valid_registration_types).returns([@individual, @manual])
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id}
-        expect(response).to render_template(:new)
-        expect(flash[:error]).to eq(I18n.t('flash.attendance.create.free_not_allowed'))
-      end
-    end
+      describe "for speaker registration" do
+        before do
+          User.any_instance.stubs(:approved_author_at?).returns(true)
+          @user = FactoryGirl.create(:user)
+          sign_in @user
+          disable_authorization
+        end
 
-    describe "for sponsor registration" do
-      before do
-        @user = FactoryGirl.create(:user)
-        @user.add_role :organizer
-        @user.save!
-        sign_in @user
-        disable_authorization
-      end
+        it "should allow free registration type only its email" do
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          Attendance.any_instance.stubs(:id).returns(5)
+          post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
 
-      it "should allow free registration type no matter the email" do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
+          expect(response).to redirect_to(attendance_path(5))
+        end
 
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: "another#{@user.email}"}
-        expect(response).to redirect_to(attendance_path(5))
-      end
+        it "should not send pending registration e-mail for free registration" do
+          EmailNotifications.expects(:registration_pending).never
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          Attendance.any_instance.stubs(:id).returns(5)
+          post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
 
-      it "should not send pending registration e-mail for free registration" do
-        EmailNotifications.expects(:registration_pending).never
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
-
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
-
-        expect(response).to redirect_to(attendance_path(5))
-      end
-    end
-
-    describe "for speaker registration" do
-      before do
-        User.any_instance.stubs(:approved_author_at?).returns(true)
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-        disable_authorization
-      end
-
-      it "should allow free registration type only its email" do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
-
-        expect(response).to redirect_to(attendance_path(5))
-      end
-
-      it "should not send pending registration e-mail for free registration" do
-        EmailNotifications.expects(:registration_pending).never
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
-
-        expect(response).to redirect_to(attendance_path(5))
+          expect(response).to redirect_to(attendance_path(5))
+        end
       end
     end
+
   end
-
 end

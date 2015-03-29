@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-
-Lint/HandleExceptions:
-  Enabled: false # 3 violations
-
 Style/Proc:
   Enabled: false # 3 violations
 

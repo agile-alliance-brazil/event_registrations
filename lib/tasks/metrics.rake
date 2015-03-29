@@ -6,4 +6,5 @@ begin
     config.metrics -= [:rails_best_practices]
   end
 rescue LoadError
+  STDERR.puts("Metric fu isn't loaded! Either remove this rake task or ensure MetricFu is loaded.")
 end

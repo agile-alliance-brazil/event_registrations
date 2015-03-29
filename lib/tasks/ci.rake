@@ -8,4 +8,5 @@ begin
     sh 'bundle exec rubocop'
   end
 rescue LoadError
+  STDERR.puts("RSpec, Rubocop or Konacha isn't loaded! Either remove this rake task or ensure those are available.")
 end

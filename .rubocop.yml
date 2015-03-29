@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/PercentQLiterals:
-  EnforcedStyle: lower_case_q
-  Enabled: false # 1 violation
-
 Style/RaiseArgs:
   EnforcedStyle: exploded
   Enabled: false # 1 violation

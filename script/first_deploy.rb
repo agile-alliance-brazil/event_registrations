@@ -65,7 +65,7 @@ unless File.exists?("config/deploy/#{@target}.rb")
   end
 end
 @deployed_user = File.read("config/deploy/#{@target}.rb").match(/user[^']+'([^']+)'/)[1]
-execute %Q{bundle}
+execute %q{bundle}
 execute %Q{bundle exec cap #{@target} deploy:check:directories deploy:check:make_linked_dirs}
 files_to_upload.each do |file|
   execute %Q{scp #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}}

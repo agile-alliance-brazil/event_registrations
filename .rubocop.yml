@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - 'puppet/modules/stdlib/**/*' # Pulled from Puppetfile
+    - 'puppet/.tmp/**/*' # Temporary files
     - 'vendor/**/*' # Pulled from Gemfile
     - 'db/schema.rb' # Auto-generated file
     - 'config/locales/localized_country_select*'
@@ -10,9 +11,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/RegexpLiteral:
-  Enabled: false # 5 violations
-
 Style/SignalException:
   EnforcedStyle: semantic
   Enabled: false # 5 violations

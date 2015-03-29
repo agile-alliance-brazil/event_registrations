@@ -5,7 +5,7 @@ class PaymentNotification < ActiveRecord::Base
   
   validates_existence_of :invoicer
   
-  after_create :mark_invoicer_as_paid, :if => Proc.new {|n| n.status == "Completed"}
+  after_create :mark_invoicer_as_paid, if: ->(n) {n.status == "Completed"}
   
   def self.from_paypal_params(params)
     {

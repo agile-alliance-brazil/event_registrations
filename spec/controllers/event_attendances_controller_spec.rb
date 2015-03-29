@@ -209,7 +209,7 @@ describe EventAttendancesController, type: :controller do
 
     describe "for speaker registration" do
       before do
-        User.any_instance.stubs(:has_approved_session?).returns(true)
+        User.any_instance.stubs(:approved_author_at?).returns(true)
         @user = FactoryGirl.create(:user)
         sign_in @user
         disable_authorization

@@ -56,7 +56,7 @@ class EventAttendancesController < ApplicationController
     attributes[:email_confirmation] ||= current_user.email
     attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
-    if current_user.has_approved_session?(event)
+    if current_user.approved_author_at?(event)
       attributes[:registration_type_id] = event.registration_types.
         where(title: 'registration_type.speaker').select(:id).first.try(:id)
     end
@@ -85,7 +85,7 @@ class EventAttendancesController < ApplicationController
   end
 
   def validate_free_registration(attendance)
-    if is_free?(attendance) && !current_user.has_approved_session?(event) && !current_user.organizer?
+    if free_attendance?(attendance) && !current_user.approved_author_at?(event) && !current_user.organizer?
       attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
       flash.now[:error] = t('flash.attendance.create.free_not_allowed') 
       render :new and return false
@@ -93,7 +93,7 @@ class EventAttendancesController < ApplicationController
     true
   end
   
-  def is_free?(attendance)
+  def free_attendance?(attendance)
     !event.registration_types.paid.include?(attendance.registration_type)
   end
 

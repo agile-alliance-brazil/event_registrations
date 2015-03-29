@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/EmptyLinesAroundBlockBody:
-  EnforcedStyle: no_empty_lines
-  Enabled: false # 4 violations
-
 Style/CommentAnnotation:
   Keywords:
     - TODO

@@ -10,16 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/AlignHash:
-  EnforcedHashRocketStyle: key
-  EnforcedColonStyle: key
-  EnforcedLastArgumentHashStyle: always_inspect
-  Enabled: true # 2 violations
-
-Style/IfUnlessModifier:
-  MaxLineLength: 80
-  Enabled: false # 2 violations
-
 Style/IndentationWidth:
   Width: 2
   Enabled: false # 2 violations

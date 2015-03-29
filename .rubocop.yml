@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/SpecialGlobalVars:
-  Enabled: false # 2 violations
-
 Lint/ParenthesesAsGroupedExpression:
   Enabled: false # 2 violations
 

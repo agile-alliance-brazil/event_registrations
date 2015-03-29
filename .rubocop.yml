@@ -10,10 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/SpaceAroundEqualsInParameterDefault:
-  EnforcedStyle: space
-  Enabled: false # 2 violations
-
 Lint/ShadowingOuterLocalVariable:
   Enabled: false # 2 violations
 

@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
     @current_user = user
   end
 
-  def default_url_options(options={})
+  def default_url_options(options = {})
     # Keep locale when navigating links if locale is specified
     params[:locale] ? { :locale => params[:locale] } : {}
   end

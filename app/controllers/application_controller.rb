@@ -12,7 +12,11 @@ class ApplicationController < ActionController::Base
     Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
 
     flash[:error] = t('flash.unauthorised')
-    redirect_to :back rescue redirect_to root_path
+    begin
+      redirect_to :back
+    rescue
+      redirect_to root_path
+    end
   end
 
   def current_ability
@@ -59,10 +63,16 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_action
-    obj = resource rescue nil
-    clazz = resource_class rescue nil
+    obj = call_or_nil(:resource)
+    clazz = call_or_nil(:resource_class)
     action = params[:action].to_sym
     controller = obj || clazz || controller_name
     authorize!(action, controller)
+  end
+
+  def call_or_nil(method)
+    send(method)
+  rescue
+    nil
   end
 end

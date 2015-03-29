@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/RescueModifier:
-  Enabled: false # 3 violations
-
 Lint/DeprecatedClassMethods:
   Enabled: false # 3 violations
 

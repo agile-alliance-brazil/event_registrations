@@ -11,9 +11,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/UnneededPercentQ:
-  Enabled: false # 7 violations
-
 Style/MultilineOperationIndentation:
   EnforcedStyle: aligned
   Enabled: false # 10 violations

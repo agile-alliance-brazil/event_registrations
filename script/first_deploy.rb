@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 
 if ARGV.count < 2
-  puts %q{Usage: #{File.basename(__FILE__)} <user> <target_machine> <optional_ssh_key>
+  puts <<-END
+Usage: #{File.basename(__FILE__)} <user> <target_machine> <optional_ssh_key>
 
 <user>: The user that will be used to ssh into the machine. Either root for Digital Ocean machines or ubuntu for AWS EC2 machines. It MUST have an ssh key already set up to ssh into.
 <target_machine>: The public DNS or public IP address of the machine to be deployed
 <optional_ssh_key>: The path to the ssh key to be used to log in with the specified user on the specified machine
-  }
+END
   exit(1)
 end
 
@@ -56,8 +57,8 @@ def key_param
   @key_path.nil? ? '' : "-i #{@key_path}"
 end
 
-execute %q{scp #{key_param} #{RAILS_ROOT}/puppet/script/kickstart-server.sh #{@user}@#{@target}:~}
-execute %q{ssh #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/kickstart-server.sh && /bin/bash ~/kickstart-server.sh'}
+execute "scp #{key_param} #{RAILS_ROOT}/puppet/script/kickstart-server.sh #{@user}@#{@target}:~"
+execute "ssh #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/kickstart-server.sh && /bin/bash ~/kickstart-server.sh'"
 unless File.exist?("config/deploy/#{@target}.rb")
   deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
   File.open("config/deploy/#{@target}.rb", 'w+') do |file|
@@ -65,9 +66,9 @@ unless File.exist?("config/deploy/#{@target}.rb")
   end
 end
 @deployed_user = File.read("config/deploy/#{@target}.rb").match(/user[^']+'([^']+)'/)[1]
-execute %q{bundle}
-execute %q{bundle exec cap #{@target} deploy:check:directories deploy:check:make_linked_dirs}
+execute "bundle"
+execute "bundle exec cap #{@target} deploy:check:directories deploy:check:make_linked_dirs"
 files_to_upload.each do |file|
   execute "scp #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
 end
-execute %q{bundle exec cap #{@target} deploy}
+execute "bundle exec cap #{@target} deploy"

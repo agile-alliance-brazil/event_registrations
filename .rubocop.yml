@@ -11,9 +11,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/LeadingCommentSpace:
-  Enabled: false # 6 violations
-
 Style/BarePercentLiterals:
   EnforcedStyle: bare_percent
   Enabled: false # 7 violations

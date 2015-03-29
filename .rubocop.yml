@@ -10,9 +10,6 @@ Style/SymbolArray:
   Enabled: true
 
 # TODO: FIX
-Style/Lambda:
-  Enabled: false # 1 violation
-
 Style/PredicateName:
   NamePrefix:
     - is_

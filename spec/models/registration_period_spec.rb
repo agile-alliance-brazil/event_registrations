@@ -40,7 +40,7 @@ describe RegistrationPeriod, type: :model do
 
       it "should throw an InvalidPrice error if no registration price can be found" do
         RegistrationPrice.stubs(:for).with(@super_early_bird, @individual).returns([])
-        expect(lambda { @super_early_bird.price_for_registration_type(@individual) }).to raise_error(InvalidPrice)
+        expect(-> { @super_early_bird.price_for_registration_type(@individual) }).to raise_error(InvalidPrice)
       end
     end
   end

@@ -1,9 +1,9 @@
 OmniAuth.config.logger = Rails.logger
 
-raise "Twitter key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:twitter]
-raise "Facebook key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:facebook]
-raise "Github key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:github]
-raise "Submission system key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:submission_system]
+fail "Twitter key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:twitter]
+fail "Facebook key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:facebook]
+fail "Github key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:github]
+fail "Submission system key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample" unless APP_CONFIG[:submission_system]
 
 require File.expand_path('lib/omniauth/strategies/submission_system', Rails.root)
 

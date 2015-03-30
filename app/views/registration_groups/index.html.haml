@@ -8,7 +8,7 @@
   %th= t('formtastic.labels.registration_group.index.actions')
   - @groups.each do |group|
     %tr
-      %td= group.name
+      %td= link_to group.name, event_registration_group_path(@event, group)
       %td= group.discount
       %td= group.event.name
       %td= group.qtd_attendances

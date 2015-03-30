@@ -395,6 +395,13 @@ pt:
     destroy:
       success: 'Grupo excluído com sucesso.'
       error: 'Falha ao excluir o grupo.'
+    show:
+      title: 'Detalhes para o grupo %{group_name}'
+      discount: 'Desconto %{group_discount}%'
+      attendances:
+        zero: 'nenhum congressita'
+        one: '1 congressista'
+        other: '%{count} congressistas'
 
   generic:
     or: "ou"

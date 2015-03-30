@@ -7,7 +7,6 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe '#index' do
-
     context 'with valid data' do
       let(:event) { FactoryGirl.create :event }
       let!(:group) { FactoryGirl.create :registration_group, event: event }
@@ -32,6 +31,15 @@ describe RegistrationGroupsController, type: :controller do
         it { expect(response).to render_template :index }
       end
     end
+  end
+
+  describe '#show' do
+    let(:event) { FactoryGirl.create :event }
+    let!(:group) { FactoryGirl.create :registration_group, event: event }
+    subject(:found_group) { assigns(:group) }
+    before { get :show, event_id: event.id, id: group.id }
+    it { expect(found_group).to eq group }
+    it { expect(response).to render_template :show }
   end
 
   describe '#destroy' do

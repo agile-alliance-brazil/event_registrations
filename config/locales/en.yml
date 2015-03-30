@@ -257,6 +257,13 @@ en:
     destroy:
       success: 'Group deleted.'
       error: 'An error occurred. The group was not deleted.'
+    show:
+      title: 'Details for group %{group_name}'
+      discount: 'Discount %{group_discount}%'
+      attendances:
+        one: '1 attendance'
+        other: '%{count} attendances'
+
 
   generic:
     or: "or"

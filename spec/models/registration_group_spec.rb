@@ -21,4 +21,23 @@ describe RegistrationGroup, type: :model do
     before { 2.times { FactoryGirl.create :attendance, registration_group: group } }
     it { expect(group.qtd_attendances).to eq 2 }
   end
+
+  describe '#total_price' do
+    let(:individual) { event.registration_types.first }
+    let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now) }
+    let!(:price) { RegistrationPrice.create!(registration_type: individual, registration_period: period, value: 100.00) }
+    let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+    let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+
+    context 'and one attendance' do
+      it { expect(group.total_price).to eq attendance.registration_fee }
+    end
+
+    context 'and more attendances' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+      let!(:other) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+      let!(:another) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+      it { expect(group.total_price).to eq (attendance.registration_fee + other.registration_fee + another.registration_fee) }
+    end
+  end
 end

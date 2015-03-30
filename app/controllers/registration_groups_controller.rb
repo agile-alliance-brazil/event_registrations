@@ -2,10 +2,14 @@
 class RegistrationGroupsController < ApplicationController
 
   before_action :find_event
-  before_action :find_group, only: [:destroy]
+  before_action :find_group, only: [:destroy, :show]
 
   def index
     @groups = @event.registration_groups
+  end
+
+  def show
+
   end
 
   def destroy

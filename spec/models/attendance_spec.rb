@@ -281,9 +281,23 @@ describe Attendance, type: :model do
     end
 
     context 'with registration group' do
-      let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 10) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
-      it { expect(Attendance.last.registration_fee individual).to eq 90 }
+      context 'and no discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 0) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 100 }
+      end
+
+      context 'and partial discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 10) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 90 }
+      end
+
+      context 'and full discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 100) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 0 }
+      end
     end
   end
 end

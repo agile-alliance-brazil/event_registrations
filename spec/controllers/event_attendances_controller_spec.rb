@@ -175,16 +175,26 @@ describe EventAttendancesController, type: :controller do
       context 'with registration token' do
         let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
         let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
+        subject(:attendance) { assigns(:attendance) }
+
         context 'an invalid' do
-          before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: { registration_type_id: @individual.id } }
-          subject(:attendance) { assigns(:attendance) }
-          it { expect(attendance.registration_group).to be_nil }
+          context 'and one event' do
+            before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: { registration_type_id: @individual.id } }
+            it { expect(attendance.registration_group).to be_nil }
+          end
+
+          context 'and with a registration token from other event' do
+            let(:other_event) { FactoryGirl.create :event }
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+            let!(:other_group) { FactoryGirl.create(:registration_group, event: other_event) }
+            before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: { registration_type_id: @individual.id } }
+            it { expect(attendance.registration_group).to be_nil }
+          end
         end
 
         context 'a valid' do
           let!(:group) { FactoryGirl.create(:registration_group, event: @event, token: 'bla-xpto-foo') }
           before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
-          subject(:attendance) { assigns(:attendance) }
           it { expect(attendance.registration_group).to eq group }
         end
       end

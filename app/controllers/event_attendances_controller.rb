@@ -25,7 +25,7 @@ class EventAttendancesController < ApplicationController
     attributes = build_attributes
     @attendance = Attendance.new(attributes)
 
-    group = RegistrationGroup.find_by_token(params['registration_token'])
+    group = @event.registration_groups.find_by_token(params['registration_token'])
     @attendance.registration_group = group if group.present?
 
     return unless validate_free_registration(@attendance)

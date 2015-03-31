@@ -10,7 +10,7 @@ def darwin_only(require_as)
 end
 
 gem 'rails', '=4.2.1'
-gem 'seed-fu', '=2.3.4', git: 'https://github.com/DHUers/seed-fu.git'
+gem 'seed-fu', '=2.3.5'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
 gem 'validates_existence', '=0.9.2'

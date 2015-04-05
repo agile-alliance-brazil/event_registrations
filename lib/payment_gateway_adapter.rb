@@ -7,7 +7,7 @@ class PaymentGatewayAdapter
       end
       create_items(attendance, item_class, registration_desc)
     end
-    
+
     private
     def create_items(attendee, item_class, registration_desc)
       [].tap do |items|

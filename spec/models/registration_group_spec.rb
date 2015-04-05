@@ -30,7 +30,7 @@ describe RegistrationGroup, type: :model do
     let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
 
     context 'and one attendance' do
-      it { expect(group.total_price).to eq attendance.registration_fee }
+      it { expect(group.total_price).to eq 80 }
     end
 
     context 'and more attendances' do
@@ -38,6 +38,30 @@ describe RegistrationGroup, type: :model do
       let!(:other) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
       let!(:another) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
       it { expect(group.total_price).to eq (attendance.registration_fee + other.registration_fee + another.registration_fee) }
+    end
+  end
+
+  describe '#has_price?' do
+    let(:individual) { event.registration_types.first }
+    let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now) }
+    let!(:price) { RegistrationPrice.create!(registration_type: individual, registration_period: period, value: 100.00) }
+    let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+
+    context 'without attendances' do
+      it { expect(group.has_price?).to be_falsey }
+    end
+
+    context 'with attendances' do
+      context 'and no value' do
+        let(:group) { RegistrationGroup.create! event: event, discount: 100 }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+        it { expect(group.has_price?).to be_falsey }
+      end
+
+      context 'and having value' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+        it { expect(group.has_price?).to be_truthy }
+      end
     end
   end
 end

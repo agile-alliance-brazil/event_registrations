@@ -28,6 +28,11 @@ describe BcashAdapter do
     end
   end
 
+  describe '.from_registration_group' do
+    pending 'with no value for group'
+    pending 'with value for group'
+  end
+
   describe "to_variables" do
     it "should map each item's variables" do
       adapter = BcashAdapter.new([

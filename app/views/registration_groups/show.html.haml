@@ -20,3 +20,6 @@
       %td= l(attendance.registration_date)
       %td= t(attendance.registration_type.title)
       %td= attendance.status
+
+- if @group.has_price?
+  = render partial: 'shared/payment_request', locals: { payer: @group.attendances.last }

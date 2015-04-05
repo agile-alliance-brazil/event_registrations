@@ -217,6 +217,11 @@ en:
     status: "Registration status on %{date}"
     details:
       csv: 'Download CSV attendee list'
+    payment:
+      request:
+        option_one: 'OPTION 1: Pay with PayPal'
+        option_two: 'OPTION 2: If you can understand Portuguese, pay with BCash for different payment types'
+        text: 'Pay the total amount of %{value}'
 
   attendance:
     status:

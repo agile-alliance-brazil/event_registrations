@@ -355,6 +355,11 @@ pt:
     status: "Status das inscrições para %{date}"
     details:
       csv: 'Baixe a lista de participantes em formato CSV'
+    payment:
+      request:
+        option_one: 'OPÇÃO 1: Pague com BCash'
+        option_two: 'OPÇÃO 2: Pague com PayPal'
+        text: 'Efetue o pagamento no valor de %{value}'
 
   attendance:
     status:

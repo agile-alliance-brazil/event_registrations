@@ -14,6 +14,10 @@ class RegistrationGroup < ActiveRecord::Base
     attendances.map(&:registration_fee).sum
   end
 
+  def has_price?
+    total_price > 0
+  end
+
   private
 
   def generate_token

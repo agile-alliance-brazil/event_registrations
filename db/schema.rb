@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150329160512) do
+ActiveRecord::Schema.define(version: 20150322025042) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -39,8 +39,6 @@ ActiveRecord::Schema.define(version: 20150329160512) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.string   "notes"
-    t.string   "registration_token"
-    t.decimal  "event_price"
   end
 
   create_table "authentications", force: :cascade do |t|

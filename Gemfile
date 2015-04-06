@@ -30,7 +30,7 @@ gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 
 gem 'jquery-rails', '=4.0.3'
 gem 'therubyracer', '=0.12.1', platforms: :ruby
-gem 'sass-rails', '=5.0.2'
+gem 'sass-rails', '=5.0.3'
 gem 'coffee-rails', '=4.1.0'
 gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
 

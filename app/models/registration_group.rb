@@ -5,6 +5,8 @@ class RegistrationGroup < ActiveRecord::Base
   has_many :attendances
   has_many :invoices
 
+  has_many :invoices
+
   validates :event, presence: true
 
   before_create :generate_token

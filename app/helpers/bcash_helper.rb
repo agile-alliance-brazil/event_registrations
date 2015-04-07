@@ -9,6 +9,8 @@ module BcashHelper
     )
   end
 
+
+
   def add_bcash_config_vars(values, return_url, notify_url)
     values.tap do |vars|
       vars[:email_loja] = APP_CONFIG[:bcash][:email]

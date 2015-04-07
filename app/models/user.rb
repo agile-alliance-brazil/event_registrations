@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_many :attendances
   has_many :events, -> { uniq }, through: :attendances
   has_many :payment_notifications, through: :attendances
-  
+
   validates_presence_of [:first_name, :last_name]
   validates_length_of [:first_name, :last_name], maximum: 100, allow_blank: true
   validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true

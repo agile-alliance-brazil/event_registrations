@@ -9,8 +9,8 @@ describe BcashAdapter do
     @attendance.stubs(:registration_fee).returns(399)
   end
 
-  describe "from_attendance" do
-    it "should add item for base registration price" do
+  describe 'from_attendance' do
+    it 'should add item for base registration price' do
       I18n.with_locale(:en) do
         adapter = BcashAdapter.from_attendance(@attendance)
 
@@ -22,9 +22,10 @@ describe BcashAdapter do
       end
     end
 
-    it "should add invoice" do
+    it 'should add invoice' do
       adapter = BcashAdapter.from_attendance(@attendance)
-      expect(adapter.invoice).to eq(@attendance)
+      invoice = Invoice.from_attendance(@attendance)
+      expect(adapter.invoice.email).to eq invoice.email
     end
   end
 

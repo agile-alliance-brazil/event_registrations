@@ -1,6 +1,7 @@
 describe RegistrationGroup, type: :model do
   context 'associations' do
     it { should have_many :attendances }
+    it { should have_many :invoices }
     it { should belong_to :event }
   end
 

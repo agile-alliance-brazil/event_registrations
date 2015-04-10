@@ -1,18 +1,18 @@
 describe RegistrationGroup, type: :model do
+  let(:event) { FactoryGirl.create :event }
+  let(:group) { RegistrationGroup.create! event: event }
 
   context 'associations' do
     it { should have_many :attendances }
     it { should belong_to :event }
+    it { expect(group).to belong_to(:leader).class_name('User') }
   end
 
   context 'validations' do
     it { should validate_presence_of :event }
   end
 
-  let(:event) { FactoryGirl.create :event }
-
   describe '#generate_token' do
-    let(:group) { RegistrationGroup.create! event: event }
     before { SecureRandom.expects(:hex).returns('eb693ec8252cd630102fd0d0fb7c3485') }
     it { expect(group.token).to eq 'eb693ec8252cd630102fd0d0fb7c3485' }
   end

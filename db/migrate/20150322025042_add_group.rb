@@ -10,8 +10,10 @@ class AddGroup < ActiveRecord::Migration
       t.string :token
 
       t.timestamps
+
+      t.references :leader
     end
 
-    add_foreign_key :attendances, :registration_groups
+    add_foreign_key :users, :registration_groups
   end
 end

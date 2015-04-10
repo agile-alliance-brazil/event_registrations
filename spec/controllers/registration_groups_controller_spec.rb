@@ -10,6 +10,12 @@ describe RegistrationGroupsController, type: :controller do
     context 'with valid data' do
       let(:event) { FactoryGirl.create :event }
       let!(:group) { FactoryGirl.create :registration_group, event: event }
+
+      context 'instance variables' do
+        before { get :index, event_id: event }
+        it { expect(assigns(:new_group)).not_to be_nil }
+      end
+
       context 'and an existent group for event' do
         before { get :index, event_id: event }
         it { expect(assigns(:groups)).to match_array [group] }
@@ -50,5 +56,16 @@ describe RegistrationGroupsController, type: :controller do
       it { expect(response).to redirect_to event_registration_groups_path(group.event) }
       it { expect(flash[:notice]).to eq I18n.t('registration_group.destroy.success') }
     end
+  end
+
+  describe '#create' do
+    let(:event) { FactoryGirl.create :event }
+    let(:valid_params) { { name: 'new_group', discount: 5 } }
+    before { post :create, event_id: event, registration_group: valid_params }
+    subject(:new_group) { RegistrationGroup.last }
+    it { expect(new_group.event).to eq event }
+    it { expect(new_group.name).to eq 'new_group' }
+    it { expect(new_group.discount).to eq 5 }
+    it { expect(new_group.token).not_to be_blank }
   end
 end

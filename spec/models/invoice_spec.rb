@@ -18,5 +18,6 @@ describe Invoice, type: :model do
     subject(:invoice) { Invoice.from_registration_group(group) }
 
     it { expect(invoice.registration_group).to eq group }
+    it { expect(invoice.attendance).to eq group.leader }
   end
 end

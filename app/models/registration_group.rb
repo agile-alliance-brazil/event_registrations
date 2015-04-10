@@ -1,6 +1,9 @@
 class RegistrationGroup < ActiveRecord::Base
   belongs_to :event
+  belongs_to :leader, class_name: 'User', inverse_of: :led_groups
+
   has_many :attendances
+  has_many :invoices
 
   validates :event, presence: true
 

@@ -24,8 +24,7 @@ describe BcashAdapter do
 
     it 'should add invoice' do
       adapter = BcashAdapter.from_attendance(@attendance)
-      invoice = Invoice.from_attendance(@attendance)
-      expect(adapter.invoice.email).to eq invoice.email
+      expect(adapter.invoice.attendance).to eq @attendance
     end
   end
 

@@ -239,10 +239,6 @@ pt:
         status: 'Status'
         index:
           actions: 'Ações'
-        event: 'Evento'
-        qtd_attendances: 'Total de registrados'
-        index:
-          actions: 'Ações'
 
     hints:
       attendance:
@@ -413,7 +409,7 @@ pt:
       to_register_message: 'para se inscrever em'
     not_found: 'Evento não encontrado.'
   registration_group:
-    list: 'Lista dos grupos'
+    list: 'Lista dos grupos de %{event_name}'
     destroy:
       success: 'Grupo excluído com sucesso.'
       error: 'Falha ao excluir o grupo.'

@@ -40,6 +40,10 @@ class RegistrationGroup < ActiveRecord::Base
     total_price > 0
   end
 
+  def leader_name
+    leader.full_name if leader
+  end
+
   private
 
   def generate_token

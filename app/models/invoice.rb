@@ -40,8 +40,4 @@ class Invoice < ActiveRecord::Base
     registration_group.total_price
   end
 
-  def name
-    return attendance.full_name unless registration_group.present?
-    registration_group.name
-  end
 end

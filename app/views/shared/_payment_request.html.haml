@@ -7,7 +7,7 @@
       %li
         %p
           = form_tag AppConfig[:bcash][:url] do
-            - vars = build_bcash_variables(payer, attendance_url(payer, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
+            - vars = bcash_variables_from_attendance(payer, attendance_url(payer, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
             - vars.each do |key, value|
               = hidden_field_tag key, value
             = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pague com BCash"

@@ -102,10 +102,6 @@ en:
         status: 'Status'
         index:
           actions: 'Actions'
-        event: 'Event'
-        qtd_attendances: 'Attendances Total'
-        index:
-          actions: 'Actions'
 
     hints:
       attendance:

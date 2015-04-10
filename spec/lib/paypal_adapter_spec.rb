@@ -16,7 +16,7 @@ describe PaypalAdapter do
 
         expect(adapter.items.size).to eq(1)
         expect(adapter.items[0].amount).to eq(@attendance.registration_fee)
-        expect(adapter.items[0].name).to eq("Type of Registration: Individual")
+        expect(adapter.items[0].name).to eq @attendance.full_name
         expect(adapter.items[0].quantity).to eq(1)
         expect(adapter.items[0].number).to eq(@attendance.registration_type.id)
       end

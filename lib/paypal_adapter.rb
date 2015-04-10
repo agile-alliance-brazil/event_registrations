@@ -3,7 +3,8 @@ require 'payment_gateway_adapter'
 
 class PaypalAdapter < PaymentGatewayAdapter
   def self.from_attendance(attendance)
-    items = PaymentGatewayAdapter.from_attendance(attendance, PaypalItem)
+    invoice = Invoice.from_attendance(attendance)
+    items = PaymentGatewayAdapter.from_invoice(invoice, PaypalItem)
     self.new(items, attendance)
   end
 

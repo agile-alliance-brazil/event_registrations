@@ -3,8 +3,8 @@ require 'payment_gateway_adapter'
 
 class BcashAdapter < PaymentGatewayAdapter
   def self.from_attendance(attendance)
-    items = PaymentGatewayAdapter.from_attendance(attendance, BcashItem)
     invoice = Invoice.from_attendance(attendance)
+    items = PaymentGatewayAdapter.from_invoice(invoice, BcashItem)
     self.new(items, invoice)
   end
 

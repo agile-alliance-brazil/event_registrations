@@ -16,9 +16,11 @@ module PaypalHelper
   end
   
   def paypal_encrypted_attendee(attendance, return_url, notify_url)
+    invoice = Invoice.from_attendance(attendance)
+
     encrypt_for_paypal(
       add_paypal_config_vars(
-        PaypalAdapter.from_attendance(attendance).to_variables,
+        PaypalAdapter.from_invoice(invoice).to_variables,
         return_url, notify_url
       )
     )

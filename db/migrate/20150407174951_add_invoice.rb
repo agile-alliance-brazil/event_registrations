@@ -3,8 +3,9 @@ class AddInvoice < ActiveRecord::Migration
 
     create_table :invoices do |t|
       t.integer :frete
+      t.decimal :amount
 
-      t.belongs_to :attendance
+      t.belongs_to :user
       t.belongs_to :registration_group
     end
   end

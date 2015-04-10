@@ -9,10 +9,7 @@ class PaymentGatewayAdapter
 
     def create_items(invoice, item_class)
       [].tap do |items|
-        items << item_class.send(:new, invoice.name,
-          invoice.registration_type.id,
-          invoice.amount
-        )
+        items << item_class.send(:new, invoice.name, invoice.id, invoice.amount)
       end
     end
   end

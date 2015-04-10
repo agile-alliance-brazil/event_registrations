@@ -86,6 +86,8 @@ en:
       registration_group:
         name: 'Name'
         discount: 'Discount (%)'
+        token: 'Registration token'
+        leader: 'Leader'
         event: 'Event'
         qtd_attendances: 'Attendances Total'
         index:
@@ -107,6 +109,7 @@ en:
       paid_pending_attendance: "Payment Received"
       search: "Search"
       edit_profile: "Update profile"
+      new_group: "Submit group"
 
   # Custom messages
   title:
@@ -258,7 +261,7 @@ en:
     not_found: 'Event not found'
 
   registration_group:
-    list: 'Groups list'
+    list: 'Groups list of %{event_name}'
     destroy:
       success: 'Group deleted.'
       error: 'An error occurred. The group was not deleted.'

@@ -223,6 +223,8 @@ pt:
       registration_group:
         name: 'Nome'
         discount: 'Desconto (%)'
+        token: 'Token para inscrição'
+        leader: 'Líder'
         event: 'Evento'
         qtd_attendances: 'Total de registrados'
         index:
@@ -244,6 +246,7 @@ pt:
       update_pending_attendance: "Atualizar preço"
       paid_pending_attendance: "Pagamento recebido"
       search: "Buscar"
+      new_group: "Submeter grupo"
 
   # Mensagens customizadas
   title:
@@ -396,7 +399,7 @@ pt:
     not_found: 'Evento não encontrado.'
 
   registration_group:
-    list: 'Lista dos grupos'
+    list: 'Lista dos grupos de %{event_name}'
     destroy:
       success: 'Grupo excluído com sucesso.'
       error: 'Falha ao excluir o grupo.'

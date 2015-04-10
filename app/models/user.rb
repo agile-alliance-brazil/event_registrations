@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
 
   has_many :led_groups, class_name: 'RegistrationGroup', inverse_of: :leader, foreign_key: :leader_id
 
+  has_many :invoices
+
   validates_presence_of [:first_name, :last_name]
   validates_length_of [:first_name, :last_name], maximum: 100, allow_blank: true
   validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true

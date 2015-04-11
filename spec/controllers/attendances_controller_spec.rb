@@ -78,17 +78,18 @@ describe AttendancesController, type: :controller do
     end
   end
 
-  describe "GET show" do
-    it "should set attendance variable" do
+  describe '#show' do
+    it 'set attendance variable' do
       get :show, id: @attendance.id
-
       expect(assigns[:attendance]).to eq(@attendance)
     end
-    it "should respond to json" do
+    it 'responds to json' do
       get :show, id: @attendance.id, format: :json
-
-      expect(response).to be_success      
+      expect(response).to be_success
     end
+
+    pending 'control the invoice creation'
+
   end
 
   describe "DELETE destroy" do

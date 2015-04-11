@@ -46,6 +46,8 @@ describe RegistrationGroupsController, type: :controller do
     before { get :show, event_id: event.id, id: group.id }
     it { expect(found_group).to eq group }
     it { expect(response).to render_template :show }
+
+    pending 'control the invoice creation'
   end
 
   describe '#destroy' do

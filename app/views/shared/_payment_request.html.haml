@@ -1,5 +1,5 @@
 .payments
-  %h3= "#{t(:'registration.payment.request.text', value: number_to_currency(payer.registration_fee, locale: :pt)) }"
+  %h3= "#{t(:'registration.payment.request.text', value: number_to_currency(@invoice.amount, locale: :pt)) }"
 
   .payment_type.left
     %h4= t(:'registration.payment.request.option_one')
@@ -7,7 +7,7 @@
       %li
         %p
           = form_tag AppConfig[:bcash][:url] do
-            - vars = bcash_variables_from_attendance(payer, attendance_url(payer, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
+            - vars = bcash_variables(@invoice, event_registration_group_url(@event, @group, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
             - vars.each do |key, value|
               = hidden_field_tag key, value
             = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pague com BCash"
@@ -20,6 +20,6 @@
         %p
           = form_tag AppConfig[:paypal][:url] do
             = hidden_field_tag :cmd, "_s-xclick"
-            = hidden_field_tag :encrypted, paypal_encrypted_attendee(payer, attendance_url(payer, locale: 'pt'), payment_notifications_url(type: 'paypal', secret: AppConfig[:paypal][:secret]))
+            = hidden_field_tag :encrypted, paypal_encrypted_attendee(@invoice, event_registration_group_url(@event, @group, locale: 'pt'), payment_notifications_url(type: 'paypal', secret: AppConfig[:paypal][:secret]))
             = image_submit_tag "https://www.paypal.com/pt_BR/i/btn/btn_paynow_SM.gif"
             = link_to image_tag("https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", border: "0", alt: "Pague com Paypal"), "https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside", target: '_blank', data: { function: "window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');" }

@@ -6,13 +6,7 @@ module BcashHelper
     build_config_vars(invoice, notify_url, return_url)
   end
 
-  def bcash_variables_from_attendance(attendance, return_url, notify_url)
-    invoice = Invoice.from_attendance(attendance)
-    build_config_vars(invoice, notify_url, return_url)
-  end
-
-  def bcash_variables_from_group(group, return_url, notify_url)
-    invoice = Invoice.from_registration_group(group)
+  def bcash_variables(invoice, return_url, notify_url)
     build_config_vars(invoice, notify_url, return_url)
   end
 

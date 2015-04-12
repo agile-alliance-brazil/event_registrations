@@ -30,7 +30,7 @@ class RegistrationGroupsController < ApplicationController
   private
 
   def group_params
-    params.require(:registration_group).permit(:name, :discount)
+    params.require(:registration_group).permit(:name, :discount, :minimum_size)
   end
 
   def find_event

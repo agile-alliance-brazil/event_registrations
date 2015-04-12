@@ -26,7 +26,7 @@ namespace :data do
               registration_date: Time.now,
               user: User.last,
               event: event)
-          RegistrationGroup.create!(name: Faker::Company.name, event: event, leader: User.last, attendances: [attendance], discount: 15)
+          RegistrationGroup.create!(name: Faker::Company.name, event: event, leader: User.last, attendances: [attendance], discount: 15, minimum_size: 10)
         end
       end
       puts '√'

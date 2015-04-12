@@ -223,6 +223,7 @@ pt:
       registration_group:
         name: 'Nome'
         discount: 'Desconto (%)'
+        minimum_size: 'Tamanho mínimo'
         token: 'Token para inscrição'
         leader: 'Líder'
         event: 'Evento'
@@ -414,7 +415,8 @@ pt:
       error: 'Falha ao excluir o grupo.'
     show:
       title: 'Detalhes para o grupo %{group_name}'
-      discount: 'Desconto %{group_discount}%'
+      discount: 'Desconto: %{group_discount}%'
+      minimum_size: 'Tamanho mínimo: %{minimum_size}'
       attendances:
         zero: 'nenhum congressita'
         one: '1 congressista'

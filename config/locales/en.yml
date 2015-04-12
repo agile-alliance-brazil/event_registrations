@@ -86,6 +86,7 @@ en:
       registration_group:
         name: 'Name'
         discount: 'Discount (%)'
+        minimum_size: 'Minimum size'
         token: 'Registration token'
         leader: 'Leader'
         event: 'Event'
@@ -276,7 +277,9 @@ en:
       error: 'An error occurred. The group was not deleted.'
     show:
       title: 'Details for group %{group_name}'
-      discount: 'Discount %{group_discount}%'
+      discount: 'Discount: %{group_discount}%'
+      minimum_size: 'Minimum size: %{minimum_size}'
+
       attendances:
         one: '1 attendance'
         other: '%{count} attendances'

@@ -1,6 +1,8 @@
 %h3= t('registration_group.show.title', group_name: @group.name)
 
 %h5= t('registration_group.show.discount', group_discount: @group.discount)
+%h5= t('registration_group.show.minimum_size', minimum_size: @group.minimum_size)
+
 %h5 #{ number_to_currency @group.total_price }
 
 %h5= t('registration_group.show.attendances', count: @group.attendances.count)

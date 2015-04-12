@@ -5,6 +5,8 @@ class AddInvoice < ActiveRecord::Migration
       t.integer :frete
       t.decimal :amount
 
+      t.timestamps
+
       t.belongs_to :user
       t.belongs_to :registration_group
     end

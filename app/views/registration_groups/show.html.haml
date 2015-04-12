@@ -1,7 +1,7 @@
 %h3= t('registration_group.show.title', group_name: @group.name)
 
 %h5= t('registration_group.show.discount', group_discount: @group.discount)
-%h5 #{number_to_currency(@group.total_price)}
+%h5 #{ number_to_currency @group.total_price }
 
 %h5= t('registration_group.show.attendances', count: @group.attendances.count)
 
@@ -22,4 +22,6 @@
       %td= attendance.status
 
 - if @group.has_price?
-  = render partial: 'shared/payment_request', locals: { payer: @group.attendances.last }
+  = render 'shared/payment_request'
+
+= render partial: 'shared/invoices'

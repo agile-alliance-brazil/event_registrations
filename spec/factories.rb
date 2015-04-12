@@ -86,4 +86,14 @@ FactoryGirl.define do
     name Faker::Company.name
     event
   end
+
+  factory :invoice do
+    user
+    status Invoice::PENDING
+  end
+
+  factory :invoice_group do
+    registration_group
+    status Invoice::PENDING
+  end
 end

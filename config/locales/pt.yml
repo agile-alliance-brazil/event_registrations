@@ -229,6 +229,15 @@ pt:
         qtd_attendances: 'Total de registrados'
         index:
           actions: 'Ações'
+      invoice:
+        title: 'Fatura'
+        name: 'Nome'
+        amount: 'Valor'
+        created_at: 'Criada em'
+        user: 'Usuário'
+        status: 'Status'
+        index:
+          actions: 'Ações'
 
     hints:
       attendance:

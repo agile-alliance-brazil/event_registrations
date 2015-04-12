@@ -1,0 +1,17 @@
+%h5= t('formtastic.labels.invoice.title')
+
+%table.summary
+  %th= t('formtastic.labels.invoice.name')
+  %th= t('formtastic.labels.invoice.created_at')
+  %th= t('formtastic.labels.invoice.user')
+  %th= t('formtastic.labels.invoice.status')
+  %th= t('formtastic.labels.invoice.amount')
+  %th= t('formtastic.labels.invoice.index.actions')
+
+  %tr
+    %td= @invoice.name
+    %td= l @invoice.created_at
+    %td= @invoice.user.full_name
+    %td= @invoice.status.capitalize
+    %td= number_to_currency @invoice.amount
+    %td renew/cancel

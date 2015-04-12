@@ -92,6 +92,15 @@ en:
         qtd_attendances: 'Attendances Total'
         index:
           actions: 'Actions'
+      invoice:
+        title: 'Fatura'
+        name: 'Name'
+        amount: 'Amount'
+        created_at: 'Created at'
+        user: 'User'
+        status: 'Status'
+        index:
+          actions: 'Actions'
 
     hints:
       attendance:

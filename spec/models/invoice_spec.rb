@@ -14,18 +14,47 @@ describe Invoice, type: :model do
     let(:group) { RegistrationGroup.create! event: event, discount: 20 }
     let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
 
-    subject(:invoice) { Invoice.from_attendance(attendance) }
+    context 'with no pending invoice already existent' do
+      subject(:invoice) { Invoice.from_attendance(attendance) }
+      it { expect(invoice.user).to eq attendance.user }
+      it { expect(invoice.amount).to eq attendance.registration_fee }
+    end
 
-    it { expect(invoice.user).to eq attendance.user }
-    it { expect(invoice.amount).to eq attendance.registration_fee }
+    context 'with an already existent pending invoice' do
+      let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user) }
+      subject!(:other_invoice) { Invoice.from_attendance(attendance) }
+      it { expect(other_invoice).to eq invoice }
+      it { expect(Invoice.count).to eq 1 }
+    end
   end
 
   describe '.from_registration_group' do
     let(:user) { FactoryGirl.create :user }
     let(:group) { FactoryGirl.create :registration_group, leader: user }
-    subject(:invoice) { Invoice.from_registration_group(group) }
 
-    it { expect(invoice.registration_group).to eq group }
-    it { expect(invoice.user).to eq group.leader }
+    context 'with no existent invoice' do
+      subject(:invoice) { Invoice.from_registration_group(group) }
+      it { expect(invoice.registration_group).to eq group }
+      it { expect(invoice.user).to eq group.leader }
+    end
+
+    context 'with an already existent invoice' do
+      let!(:invoice) { FactoryGirl.create(:invoice, registration_group: group) }
+      subject!(:other_invoice) { Invoice.from_registration_group(group) }
+      it { expect(other_invoice).to eq invoice }
+      it { expect(Invoice.count).to eq 1 }
+    end
+  end
+
+  describe '#pay_it' do
+    let(:invoice) { FactoryGirl.create :invoice }
+    before { invoice.pay_it }
+    it { expect(invoice.status).to eq Invoice::PAID }
+  end
+
+  describe '#send_it' do
+    let(:invoice) { FactoryGirl.create :invoice }
+    before { invoice.send_it }
+    it { expect(invoice.status).to eq Invoice::SENT }
   end
 end

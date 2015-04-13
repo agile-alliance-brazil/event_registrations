@@ -219,6 +219,7 @@ describe EventAttendancesController, type: :controller do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
+
         expect(response).to redirect_to(attendance_path(5))
       end
 

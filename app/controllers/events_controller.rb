@@ -8,7 +8,7 @@ class EventsController < ApplicationController
 
   def index
     @events = Event.includes(:registration_periods).all.select do |event|
-      event.registration_periods.ending_after(Time.now).present?
+      event.registration_periods.ending_after(Time.zone.now).present?
     end
   end
 

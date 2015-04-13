@@ -9,7 +9,7 @@ describe RegistrationType, type: :model do
   
   describe "price" do
     it "delegates to RegistrationPeriod" do
-      time = Time.now
+      time = Time.zone.now
       type = FactoryGirl.build(:registration_type)
       price = RegistrationPeriod.new
 

@@ -58,12 +58,12 @@ class EventAttendancesController < ApplicationController
     attributes[:user_id] = current_user.id
     if current_user.approved_author_at?(event)
       attributes[:registration_type_id] = event.registration_types
-        .where(title: 'registration_type.speaker').select(:id).first.try(:id)
+        .where(title: 'registration_type.speaker').pluck(:id).first
     end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id
     end
-    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.now].min
+    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.zone.now].min
     attributes
   end
 

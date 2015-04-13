@@ -1,18 +1,18 @@
 # encoding: UTF-8
 class EmailNotifications < ActionMailer::Base
-  def registration_pending(attendance, sent_at = Time.now)
+  def registration_pending(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.registration_pending.subject')
   end
 
-  def registration_confirmed(attendance, sent_at = Time.now)
+  def registration_confirmed(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.registration_confirmed.subject')
   end
 
-  def cancelling_registration(attendance, sent_at = Time.now)
+  def cancelling_registration(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.cancelling_registration.subject')
   end
 
-  def cancelling_registration_warning(attendance, sent_at = Time.now)
+  def cancelling_registration_warning(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.cancelling_registration_warning.subject')
   end
 

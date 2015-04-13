@@ -10,7 +10,7 @@ module AttendanceHelper
   end
 
   def price_table_link(event, locale)
-    event.price_table_link.gsub(/:locale(\/?)/, "#{locale}\\1")
+    event.price_table_link.gsub(%r(:locale(/?)), "#{locale}\\1")
   end
 
   def convert_registration_types_to_radio(attendance, registration_types)

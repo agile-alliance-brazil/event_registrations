@@ -17,7 +17,7 @@ describe RegistrationNotifier do
   context "cancel" do
     context "older than 30 days" do
       before do
-        Timecop.freeze(Time.now)
+        Timecop.freeze(Time.zone.now)
         deadline = 30.days.ago
         @attendance = FactoryGirl.build(
           :attendance,
@@ -50,7 +50,7 @@ describe RegistrationNotifier do
 
     context "newer than 30 days" do
       it "should not notify attendance created less than 30 days ago" do
-        Timecop.freeze(Time.now) do
+        Timecop.freeze(Time.zone.now) do
           query_relation = mock
           query_relation.expects(:older_than).with(30.days.ago).returns([])
           @notifier.expects(:pending_attendances).returns(query_relation)

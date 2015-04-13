@@ -5,7 +5,6 @@ describe RegistrationGroup, type: :model do
   context 'associations' do
     it { should have_many :attendances }
     it { should have_many :invoices }
-
     pending 'Actually should have one invoice and not many. Change prior test and behaviour.'
 
     it { should belong_to :event }
@@ -68,6 +67,27 @@ describe RegistrationGroup, type: :model do
       context 'and having value' do
         let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
         it { expect(group.price?).to be_truthy }
+      end
+    end
+  end
+
+  describe '#update_invoice' do
+    let(:group) { RegistrationGroup.create! event: event, discount: 100 }
+    context 'with a pending invoice' do
+      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 100.00 }
+      it 'will change the invoice amount' do
+        group.stubs(:total_price).returns 200.00
+        group.update_invoice
+        expect(Invoice.last.amount).to eq 200.00
+      end
+    end
+
+    context 'with a not pending invoice' do
+      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 100.00, status: Invoice::PAID }
+      it 'will not change the invoice amount' do
+        group.stubs(:total_price).returns 200.00
+        group.update_invoice
+        expect(Invoice.last.amount).to eq 100.00
       end
     end
   end

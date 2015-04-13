@@ -39,5 +39,4 @@ class Invoice < ActiveRecord::Base
     return attendance.registration_fee unless registration_group.present?
     registration_group.total_price
   end
-
 end

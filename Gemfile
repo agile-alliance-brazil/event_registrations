@@ -48,6 +48,7 @@ group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'konacha'
+  gem 'sprockets', '< 3.0' # Konacha 3.3.0 cannot handle sprockets 3.0 yet
   gem 'guard-konacha-rails'
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'selenium-webdriver'

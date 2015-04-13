@@ -14,4 +14,4 @@
     %td= @invoice.user.full_name
     %td= @invoice.status.capitalize
     %td= number_to_currency @invoice.amount
-    %td renew
+    %td= link_to t('actions.renew'), renew_invoice_event_registration_group_path(@event, @group), method: :put

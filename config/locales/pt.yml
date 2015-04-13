@@ -288,6 +288,7 @@ pt:
     list_attendances: "para listar os inscritos"
     list_groups: "para listar os grupos"
     click: 'Clique'
+    renew: 'renovar'
 
   flash:
     failure: "Por favor verifique os campos em destaque"

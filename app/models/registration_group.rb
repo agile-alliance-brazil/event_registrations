@@ -25,6 +25,18 @@ class RegistrationGroup < ActiveRecord::Base
     leader.full_name if leader
   end
 
+  def update_invoice
+    invoice = invoices.last
+    if invoice.pending?
+      invoice.amount = total_price
+      invoice.save!
+    end
+  end
+
+  def accept_members?
+    invoices.present? ? invoices.last.pending? : true
+  end
+
   private
 
   def generate_token

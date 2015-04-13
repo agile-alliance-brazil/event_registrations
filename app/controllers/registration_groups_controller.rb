@@ -3,7 +3,7 @@
 class RegistrationGroupsController < ApplicationController
 
   before_action :find_event
-  before_action :find_group, only: [:destroy, :show]
+  before_action :find_group, only: [:destroy, :show, :renew_invoice]
 
   def index
     @groups = @event.registration_groups
@@ -25,6 +25,11 @@ class RegistrationGroupsController < ApplicationController
     new_group.leader = current_user
     new_group.save!
     redirect_to event_registration_groups_path(@event)
+  end
+
+  def renew_invoice
+    @group.update_invoice
+    redirect_to event_registration_group_path(@event, @group)
   end
 
   private

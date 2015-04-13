@@ -9,7 +9,11 @@ Current::Application.routes.draw do
 
   resources :events, only: [:index, :show] do
     resources :attendances, only: [:new, :create, :index], controller: :event_attendances
-    resources :registration_groups, only: [:index, :destroy, :show, :create]
+    resources :registration_groups, only: [:index, :destroy, :show, :create] do
+      member do
+        put :renew_invoice
+      end
+    end
   end
 
   get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")

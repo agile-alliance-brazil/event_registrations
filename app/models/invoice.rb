@@ -31,4 +31,9 @@ class Invoice < ActiveRecord::Base
     return user.full_name unless registration_group.present?
     registration_group.name
   end
+
+  def pending?
+    status == PENDING
+  end
+
 end

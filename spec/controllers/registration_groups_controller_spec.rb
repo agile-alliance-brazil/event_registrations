@@ -48,7 +48,6 @@ describe RegistrationGroupsController, type: :controller do
     it { expect(assigns(:invoice)).to eq invoice }
     it { expect(response).to render_template :show }
 
-    pending 'renew invoice when is not paid or sent.'
     pending 'check if is possible to renew or cancel a paid or sent invoice.'
   end
 
@@ -72,5 +71,20 @@ describe RegistrationGroupsController, type: :controller do
     it { expect(new_group.discount).to eq 5 }
     it { expect(new_group.minimum_size).to eq 10 }
     it { expect(new_group.token).not_to be_blank }
+  end
+
+  describe '#renew_invoice' do
+    let(:event) { FactoryGirl.create :event }
+    let(:group) { FactoryGirl.create :registration_group, event: event }
+    context 'with a pending invoice' do
+      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PENDING, amount: 120.00 }
+      context 'and the group total price is different from current amount in invoice' do
+        it 'will update the invoice amount' do
+          RegistrationGroup.any_instance.stubs(:total_price).returns(240.00)
+          put :renew_invoice, event_id: event, id: group.id
+          expect(Invoice.last.amount).to eq 240.00
+        end
+      end
+    end
   end
 end

@@ -150,6 +150,7 @@ en:
     list_attendances: "to list attendances"
     list_groups: "to list groups"
     click: 'Click'
+    renew: 'renew'
 
   flash:
     failure: "Please check the highlighted fields"

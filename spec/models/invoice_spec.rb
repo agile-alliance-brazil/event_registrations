@@ -57,4 +57,21 @@ describe Invoice, type: :model do
     before { invoice.send_it }
     it { expect(invoice.status).to eq Invoice::SENT }
   end
+
+  describe '#pending?' do
+    context 'with a pending invoice' do
+      let(:invoice) { FactoryGirl.create :invoice, status: Invoice::PENDING }
+      it { expect(invoice.pending?).to be_truthy }
+    end
+
+    context 'with a paid invoice' do
+      let(:invoice) { FactoryGirl.create :invoice, status: Invoice::PAID }
+      it { expect(invoice.pending?).to be_falsey }
+    end
+
+    context 'with a sent invoice' do
+      let(:invoice) { FactoryGirl.create :invoice, status: Invoice::SENT }
+      it { expect(invoice.pending?).to be_falsey }
+    end
+  end
 end

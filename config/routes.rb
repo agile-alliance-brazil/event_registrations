@@ -16,6 +16,12 @@ Current::Application.routes.draw do
         put :renew_invoice
       end
     end
+
+    resources :payments, only: [:pay_pag_seguro] do
+      collection do
+        post :pay_pag_seguro
+      end
+    end
   end
 
   get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")

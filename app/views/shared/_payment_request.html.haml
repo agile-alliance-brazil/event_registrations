@@ -6,11 +6,11 @@
     %ol
       %li
         %p
-          = form_tag AppConfig[:bcash][:url] do
-            - vars = bcash_variables(@invoice, event_registration_group_url(@event, @group, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
+          = form_tag AppConfig[:pag_seguro][:url], method: :post do
+            - vars = pag_seguro_variables(@invoice, event_registration_group_url(@event, @group, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
             - vars.each do |key, value|
               = hidden_field_tag key, value
-            = image_submit_tag 'https://a248.e.akamai.net/f/248/96284/12h/www.bcash.com.br/webroot/img/bt_comprar.gif', alt: "Pague com BCash"
+            = image_submit_tag 'https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif', alt: 'Pague com PagSeguro'
 
   .payment_type.right
     %h4= t(:'registration.payment.request.option_two')

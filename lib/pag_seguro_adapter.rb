@@ -13,10 +13,11 @@ class PagSeguroAdapter < PaymentGatewayAdapter
   class PagSeguroItem < Item
     def to_variables(index)
       {
-        'id' => number,
-        'description' => name,
-        'weight' => 0,
-        'amount' => amount
+        "id_#{index}" => number,
+        "description_#{index}" => name,
+        "weight_#{index}" => 0,
+        "quantity_#{index}" => 1,
+        "amount_#{index}" => amount
       }
     end
   end

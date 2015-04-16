@@ -234,7 +234,7 @@ en:
     payment:
       request:
         option_one: 'OPTION 1: Pay with PayPal'
-        option_two: 'OPTION 2: If you can understand Portuguese, pay with BCash for different payment types'
+        option_two: 'OPTION 2: If you can understand Portuguese, pay with PagSeguro for different payment types'
         text: 'Pay the total amount of %{value}'
 
   attendance:
@@ -280,10 +280,11 @@ en:
       title: 'Details for group %{group_name}'
       discount: 'Discount: %{group_discount}%'
       minimum_size: 'Minimum size: %{minimum_size}'
-
       attendances:
         one: '1 attendance'
         other: '%{count} attendances'
+  invoice:
+    not_found: 'Invoice not found'
 
   generic:
     or: "or"

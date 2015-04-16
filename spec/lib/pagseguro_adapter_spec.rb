@@ -34,7 +34,7 @@ describe PagSeguroAdapter do
     context 'specifying item variables' do
       it 'map each item variable' do
         adapter = PagSeguroAdapter.new([item], invoice)
-        expected_hash = { 'id' => 2, 'description' => 'item 1', 'weight' => 0, 'amount' => 10.50 }
+        expected_hash = { 'id_1' => 2, 'description_1' => 'item 1', 'weight_1' => 0, 'quantity_1' => 1, 'amount_1' => 10.50 }
 
         expect(adapter.to_variables).to eq expected_hash
       end
@@ -54,7 +54,7 @@ describe PagSeguroAdapter do
     describe '#to_variables' do
       it 'maps item name, number, amount, and quantity for given index' do
         item = PagSeguroAdapter::PagSeguroItem.new('item', 2, 10.50)
-        expected_hash = { 'id' => 2, 'description' => 'item', 'weight' => 0, 'amount' => 10.50 }
+        expected_hash = { 'id_1' => 2, 'description_1' => 'item', 'weight_1' => 0, 'quantity_1' => 1, 'amount_1' => 10.50 }
         expect(item.to_variables(1)).to eq expected_hash
       end
     end

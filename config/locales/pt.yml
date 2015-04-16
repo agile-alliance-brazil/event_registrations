@@ -371,7 +371,7 @@ pt:
       csv: 'Baixe a lista de participantes em formato CSV'
     payment:
       request:
-        option_one: 'OPÇÃO 1: Pague com BCash'
+        option_one: 'OPÇÃO 1: Pague com PagSeguro'
         option_two: 'OPÇÃO 2: Pague com PayPal'
         text: 'Efetue o pagamento no valor de %{value}'
 
@@ -427,6 +427,9 @@ pt:
         zero: 'nenhum congressita'
         one: '1 congressista'
         other: '%{count} congressistas'
+  invoice:
+    not_found: 'Fatura não encontrada'
+
   generic:
     or: "ou"
     and: "e"

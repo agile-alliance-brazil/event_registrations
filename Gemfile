@@ -32,7 +32,6 @@ gem 'faker'
 gem 'jquery-rails', '=4.0.3'
 gem 'therubyracer', '=0.12.2', platforms: :ruby
 gem 'sass-rails', '=5.0.3'
-gem 'pagseguro-oficial', '~> 2.1.0'
 
 gem 'coffee-rails', '=4.1.0'
 gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'

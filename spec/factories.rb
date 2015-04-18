@@ -94,6 +94,7 @@ FactoryGirl.define do
   factory :invoice do
     user
     status Invoice::PENDING
+    amount 1.00
   end
 
   factory :invoice_group do

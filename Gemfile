@@ -28,6 +28,7 @@ gem 'omniauth-facebook', '=2.0.1'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 gem 'faker'
+gem 'pagseguro-oficial'
 
 gem 'jquery-rails', '=4.0.3'
 gem 'therubyracer', '=0.12.2', platforms: :ruby

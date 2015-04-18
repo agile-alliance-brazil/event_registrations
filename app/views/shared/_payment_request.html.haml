@@ -6,10 +6,7 @@
     %ol
       %li
         %p
-          = form_tag AppConfig[:pag_seguro][:url], method: :post do
-            - vars = pag_seguro_variables(@invoice, event_registration_group_url(@event, @group, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
-            - vars.each do |key, value|
-              = hidden_field_tag key, value
+          = form_tag checkout_event_payment_path(event_id: @event, id: @invoice), method: :post do
             = image_submit_tag 'https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif', alt: 'Pague com PagSeguro'
 
   .payment_type.right

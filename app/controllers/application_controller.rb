@@ -12,7 +12,11 @@ class ApplicationController < ActionController::Base
     Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
 
     flash[:error] = t('flash.unauthorised')
-    redirect_to :back rescue redirect_to root_path
+    begin
+      redirect_to :back
+    rescue
+      redirect_to root_path
+    end
   end
 
   def current_ability
@@ -29,19 +33,20 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_user
 
-  def current_user= user
+  def current_user=(user)
     session[:user_id] = user.try(:id)
     Rails.logger.info "Saving session id as #{session[:user_id]}"
     @current_user = user
   end
 
-  def default_url_options(options={})
+  def default_url_options(options = {})
     # Keep locale when navigating links if locale is specified
-    params[:locale] ? { :locale => params[:locale] } : {}
+    locale_options = params[:locale] ? { locale: params[:locale] } : {}
+    options.merge(locale_options)
   end
 
   def sanitize(text)
-    text.gsub(/[\s;'\"]/,'')
+    text.gsub(/[\s;'\"]/, '')
   end
 
   private
@@ -59,10 +64,16 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_action
-    obj = resource rescue nil
-    clazz = resource_class rescue nil
+    obj = call_or_nil(:resource)
+    clazz = call_or_nil(:resource_class)
     action = params[:action].to_sym
     controller = obj || clazz || controller_name
     authorize!(action, controller)
+  end
+
+  def call_or_nil(method)
+    send(method)
+  rescue
+    nil
   end
 end

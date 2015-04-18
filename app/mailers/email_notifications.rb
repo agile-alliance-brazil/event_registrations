@@ -1,18 +1,18 @@
 # encoding: UTF-8
 class EmailNotifications < ActionMailer::Base
-  def registration_pending(attendance, sent_at = Time.now)
+  def registration_pending(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.registration_pending.subject')
   end
 
-  def registration_confirmed(attendance, sent_at = Time.now)
+  def registration_confirmed(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.registration_confirmed.subject')
   end
 
-  def cancelling_registration(attendance, sent_at = Time.now)
+  def cancelling_registration(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.cancelling_registration.subject')
   end
 
-  def cancelling_registration_warning(attendance, sent_at = Time.now)
+  def cancelling_registration_warning(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.cancelling_registration_warning.subject')
   end
 
@@ -38,17 +38,17 @@ class EmailNotifications < ActionMailer::Base
   end
 
   def from_address
-    AppConfig[:ses][:from]
+    APP_CONFIG[:ses][:from]
   end
 
   def host
-    AppConfig[:host]
+    APP_CONFIG[:host]
   end
   
   def event_organizer
     [
-      "\"#{AppConfig[:organizer][:name]}\" <#{AppConfig[:organizer][:email]}>",
-      "\"#{AppConfig[:organizer][:cced]}\" <#{AppConfig[:organizer][:cced_email]}>"
+      "\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>",
+      "\"#{APP_CONFIG[:organizer][:cced]}\" <#{APP_CONFIG[:organizer][:cced_email]}>"
     ]
   end
 end

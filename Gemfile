@@ -10,7 +10,7 @@ def darwin_only(require_as)
 end
 
 gem 'rails', '=4.2.1'
-gem 'seed-fu', '=2.3.4', git: 'https://github.com/DHUers/seed-fu.git'
+gem 'seed-fu', '=2.3.5'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
 gem 'validates_existence', '=0.9.2'
@@ -28,10 +28,9 @@ gem 'omniauth-facebook', '=2.0.1'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 
-
 gem 'jquery-rails', '=4.0.3'
-gem 'therubyracer', '=0.12.1', platforms: :ruby
-gem 'sass-rails', '=5.0.1'
+gem 'therubyracer', '=0.12.2', platforms: :ruby
+gem 'sass-rails', '=5.0.3'
 gem 'coffee-rails', '=4.1.0'
 gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
 
@@ -49,9 +48,13 @@ group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'konacha'
+  gem 'sprockets', '< 3.0' # Konacha 3.3.0 cannot handle sprockets 3.0 yet
   gem 'guard-konacha-rails'
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'selenium-webdriver'
+  gem 'rubocop', require: false
+  gem 'guard-rubocop'
+  gem 'metric_fu'
   gem 'faker'
 end
 

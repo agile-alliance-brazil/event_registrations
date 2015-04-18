@@ -5,7 +5,7 @@ class PaymentNotification < ActiveRecord::Base
   
   validates_existence_of :invoicer
   
-  after_create :mark_invoicer_as_paid, :if => Proc.new {|n| n.status == "Completed"}
+  after_create :mark_invoicer_as_paid, if: ->(n) {n.status == "Completed"}
   
   def self.from_paypal_params(params)
     {
@@ -44,7 +44,7 @@ class PaymentNotification < ActiveRecord::Base
   end
   
   def params_valid?
-    params[:type] == 'bcash' ? bcash_valid?(AppConfig[:bcash]) : paypal_valid?(AppConfig[:paypal])
+    params[:type] == 'bcash' ? bcash_valid?(APP_CONFIG[:bcash]) : paypal_valid?(APP_CONFIG[:paypal])
   end
 
   def bcash_valid?(hash)

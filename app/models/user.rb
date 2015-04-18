@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
 
   usar_como_cpf :cpf
 
-  def has_approved_session? event
+  def approved_author_at?(_event)
     false
   end
 
@@ -31,12 +31,18 @@ class User < ActiveRecord::Base
   end
 
   def gender=(value)
-    write_attribute(:gender, value.nil? ? nil : value == 'M')
+    self[:gender] = value.nil? ? nil : value == 'M'
   end
 
   def gender
-    value = read_attribute(:gender)
-    value.nil? ? nil : (value ? 'M' : 'F')
+    value = self[:gender]
+    if value.nil?
+      nil
+    elsif value
+      'M'
+    else
+      'F'
+    end
   end
   
   def twitter_user=(value)
@@ -56,10 +62,8 @@ class User < ActiveRecord::Base
   end
 
   def attendance_attributes
-    attributes.reject do |attribute, value|
-      attribute == 'id' || attribute == 'created_at' ||
-        attribute == 'updated_at' || attribute == 'roles_mask' ||
-        attribute == 'default_locale'
+    attributes.reject do |attribute, _value|
+      %w(id created_at updated_at roles_mask default_locale).include?(attribute)
     end
   end
 
@@ -71,9 +75,8 @@ class User < ActiveRecord::Base
     gender == 'M'
   end
 
-  private
   def self.extract_names(hash)
-    if(hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?))
+    if hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?)
       hash[:name].split(" ")
     else
       [hash[:first_name], hash[:last_name]]

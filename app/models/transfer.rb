@@ -3,6 +3,7 @@ class Transfer
   extend ActiveModel::Naming
 
   attr_reader :origin_id, :origin, :destination_id, :destination
+  PROTECTED_ATTRIBUTES = [:id, :email_sent, :registration_date, :created_at, :updated_at, :status]
 
   def self.build(attributes)
     origin = initialize_attendance(attributes[:origin_id])
@@ -47,8 +48,8 @@ class Transfer
   end
 
   def assignable_attributes(attendance)
-    attendance.attributes.reject do |key, value|
-      ['id', 'email_sent', 'registration_date', 'created_at', 'updated_at', 'status'].include? key.to_s
+    attendance.attributes.reject do |key, _value|
+      PROTECTED_ATTRIBUTES.include?(key.to_sym)
     end
   end
 end

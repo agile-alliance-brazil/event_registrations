@@ -42,7 +42,7 @@ class AttendancesController < ApplicationController
     attendance = resource
     if attendance.can_vote?
       authentication = current_user.authentications.where(provider: :submission_system).first
-      result = authentication ? authentication.get_token.post('/api/user/make_voter').parsed : {}
+      result = authentication ? authentication.token.post('/api/user/make_voter').parsed : {}
 
       if result['success']
         flash[:notice] = t('flash.attendance.enable_voting.success', url: result['vote_url']).html_safe

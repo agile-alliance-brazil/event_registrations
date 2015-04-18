@@ -14,7 +14,7 @@ require 'shoulda-matchers'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 module Airbrake
-  def self.notify(thing)
+  def self.notify(_thing)
     # do nothing.
   end
 end
@@ -55,6 +55,6 @@ RSpec.configure do |config|
   config.order = "random"
 end
 
-def sign_in user
+def sign_in(user)
   controller.current_user = user
 end

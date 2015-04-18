@@ -8,13 +8,13 @@ class Authentication < ActiveRecord::Base
   validates_presence_of :provider
   validates_presence_of :uid
 
-  def get_token
+  def token
     return nil unless provider == 'submission_system' && refresh_token.present?
 
     client = OAuth2::Client.new(
-      AppConfig[:submission_system][:key],
-      AppConfig[:submission_system][:secret],
-      :site => AppConfig[:submission_system][:url],
+      APP_CONFIG[:submission_system][:key],
+      APP_CONFIG[:submission_system][:secret],
+      :site => APP_CONFIG[:submission_system][:url],
       :parse_json => true
     )
     token = OAuth2::AccessToken.new(

@@ -9,7 +9,7 @@ class RegistrationPeriod < ActiveRecord::Base
     prices_for(registration_type).first.value
   rescue => e
     Rails.logger.error("Error fetching price for registration type #{registration_type.inspect}: #{e.message}")
-    raise InvalidPrice.new("Invalid price for registration type #{registration_type.inspect}")
+    raise InvalidPrice, "Invalid price for registration type #{registration_type.inspect}"
   end
 
   def super_early_bird?

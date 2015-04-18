@@ -10,8 +10,8 @@ class Attendance < ActiveRecord::Base
 
   validates_confirmation_of :email
   validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
-  validates_presence_of :state, :if => Proc.new {|a| a.in_brazil?}
-  validates_presence_of :cpf, :if => Proc.new {|a| a.in_brazil?}
+  validates_presence_of :state, if: ->(a) {a.in_brazil?}
+  validates_presence_of :cpf, if: ->(a) {a.in_brazil?}
 
   validates_length_of [:first_name, :last_name, :phone, :city, :organization], maximum: 100, allow_blank: true
   validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
@@ -101,9 +101,7 @@ class Attendance < ActiveRecord::Base
   private
   def entitled_super_early_bird?
     attendances = event.attendances
-    if !new_record?
-      attendances = attendances.where('id < ?', id)
-    end
+    attendances = attendances.where('id < ?', id) unless new_record?
     attendances.count < SUPER_EARLY_LIMIT
   end
 end

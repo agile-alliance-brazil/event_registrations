@@ -2,7 +2,7 @@
 require 'vagrant'
 
 env = Vagrant::Environment.new
-cmd = "cd /srv/apps/registrations/current && /usr/local/bin/bundle exec #{File.basename($0)} #{ARGV.join(' ')}"
+cmd = "cd /srv/apps/registrations/current && /usr/local/bin/bundle exec #{File.basename($PROGRAM_NAME)} #{ARGV.join(' ')}"
 
 env.vms[:dev].channel.execute(cmd) do |_, data|
   print data

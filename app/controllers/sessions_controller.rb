@@ -16,20 +16,17 @@ class SessionsController < ApplicationController
     elsif logged_in?
       flash[:notice] = I18n.t('flash.user.authentication.new')
       add_authentication(auth_hash)
+    elsif (user = User.new_from_auth_hash(auth_hash)).save
+      flash[:notice] = I18n.t('flash.user.create')
+      log_in(user)
+      add_authentication(auth_hash)
     else
-      user = User.new_from_auth_hash(auth_hash)
-      if user.save
-        flash[:notice] = I18n.t('flash.user.create')
-        log_in(user)
-        add_authentication(auth_hash)
-      else
-        flash[:error] = I18n.t('flash.user.invalid') + "#{user.errors.inspect} with #{auth_hash}"
-        redirect_to(login_path) and return
-      end
+      flash[:error] = I18n.t('flash.user.invalid') + "#{user.errors.inspect} with #{auth_hash}"
+      redirect_to(login_path) and return
     end
 
     origin = request.env['omniauth.origin']
-    redirect_to (origin == login_url ? self.current_user : origin)
+    redirect_to origin == login_url ? self.current_user : origin
   end
 
   def resource
@@ -49,7 +46,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    self.current_user= nil
+    self.current_user = nil
     redirect_to login_path
   end
 
@@ -63,8 +60,11 @@ class SessionsController < ApplicationController
   end
 
   def add_authentication(auth_hash)
-    self.current_user.authentications.create(provider: auth_hash['provider'],
-      uid: auth_hash['uid'], refresh_token: auth_hash['credentials']['refresh_token'])
+    self.current_user.authentications.create(
+      uid: auth_hash['uid'],
+      provider: auth_hash['provider'],
+      refresh_token: auth_hash['credentials']['refresh_token']
+    )
   end
 
   def log_in(user)

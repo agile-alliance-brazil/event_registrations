@@ -38,10 +38,10 @@
 
       #footer Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
 
-    - unless AppConfig[:google].nil?
+    - unless APP_CONFIG[:google].nil?
       :javascript
         var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-#{AppConfig[:google][:tracker_id]}']);
+        _gaq.push(['_setAccount', 'UA-#{APP_CONFIG[:google][:tracker_id]}']);
         _gaq.push(['_trackPageview']);
 
         (function() {

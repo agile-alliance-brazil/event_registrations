@@ -2,7 +2,6 @@
 require File.join(File.dirname(__FILE__), '../registration_notifier')
 
 namespace :registration do
-
   desc "Cancels registrations older than 30 days with a note to attendees"
   task :cancel => [:environment] do
     RegistrationNotifier.new.cancel
@@ -12,5 +11,4 @@ namespace :registration do
   task :warn => [:environment] do
     RegistrationNotifier.new.cancel_warning
   end
-  
 end

@@ -4,17 +4,21 @@
 require 'state_machine/version'
 
 unless StateMachine::VERSION == '1.2.0'
- # If you see this message, please test removing this file
- # If it's still required, please bump up the version above
- Rails.logger.warn "Please remove me, StateMachine version has changed"
+  # If you see this message, please test removing this file
+  # If it's still required, please bump up the version above
+  Rails.logger.warn "Please remove me, StateMachine version has changed"
 end
 
-module StateMachine::Integrations::ActiveModel
- public :around_validation
+module StateMachine
+  module Integrations
+    module ActiveModel
+      public :around_validation
+    end
+  end
 end
 
 module ActiveRecord
-  # HACK to set state_machine initial states as default attributes with Rails 4
+  # HACK: to set state_machine initial states as default attributes with Rails 4
   module ModelSchema
     module ClassMethods
       private
@@ -29,7 +33,7 @@ module ActiveRecord
     end
   end
 
-  # HACK to store state_machine initial states in DB too with Rails 4
+  # HACK: to store state_machine initial states in DB too with Rails 4
   module AttributeMethods
     private
 

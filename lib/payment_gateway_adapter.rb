@@ -2,7 +2,7 @@
 class PaymentGatewayAdapter
   class << self
     def from_attendance(attendance, item_class)
-      registration_desc = lambda do |attendee|
+      registration_desc = lambda do |_attendee|
         "#{I18n.t('formtastic.labels.attendance.registration_type_id')}: #{I18n.t(attendance.registration_type.title)}"
       end
       create_items(attendance, item_class, registration_desc)
@@ -13,8 +13,7 @@ class PaymentGatewayAdapter
       [].tap do |items|
         items << item_class.send(:new, CGI.escapeHTML(registration_desc.call(attendee)),
           attendee.registration_type.id,
-          attendee.registration_fee
-        )
+          attendee.registration_fee)
       end
     end
   end
@@ -28,7 +27,7 @@ class PaymentGatewayAdapter
   def to_variables
     {}.tap do |vars|
       @items.each_with_index do |item, index|
-        vars.merge!(item.to_variables(index+1))
+        vars.merge!(item.to_variables(index + 1))
       end
       add_variables(vars)
     end

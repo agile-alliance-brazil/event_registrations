@@ -17,7 +17,7 @@
 - else
   %p
     Caso você já possua uma conta de usuário no sistema de submissões, pule para o passo 2. Caso
-    contrário, clique #{link_to 'aqui', "#{AppConfig[:submission_system][:url]}users/signup?locale=pt", target: :blank}
+    contrário, clique #{link_to 'aqui', "#{APP_CONFIG[:submission_system][:url]}users/signup?locale=pt", target: :blank}
     e preencha o formulário para cadastrar uma conta de usuário no sistema de submissões.
 
 %br
@@ -57,7 +57,7 @@
 
 - if @submission_system_authentication
   %p
-    Agora é só #{link_to "votar", "#{AppConfig[:submission_system][:url]}sessions", target: :blank}
+    Agora é só #{link_to "votar", "#{APP_CONFIG[:submission_system][:url]}sessions", target: :blank}
     nas suas sessões preferidas. As regras para votação são:
 
   %ul

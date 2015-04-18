@@ -20,10 +20,10 @@ describe PaymentNotification, type: :model do
 
         @valid_params = {
           type: 'paypal',
-          secret: AppConfig[:paypal][:secret],
-          receiver_email: AppConfig[:paypal][:email],
+          secret: APP_CONFIG[:paypal][:secret],
+          receiver_email: APP_CONFIG[:paypal][:email],
           mc_gross: @attendance.registration_fee.to_s,
-          mc_currency: AppConfig[:paypal][:currency]
+          mc_currency: APP_CONFIG[:paypal][:currency]
         }
         @valid_args = {
           status: "Completed",
@@ -74,7 +74,7 @@ describe PaymentNotification, type: :model do
 
         @valid_params = {
           type: 'bcash',
-          secret: AppConfig[:bcash][:secret],
+          secret: APP_CONFIG[:bcash][:secret],
           transacao_id: '12345678',
           status: 'Aprovada',
           pedido: @attendance.id

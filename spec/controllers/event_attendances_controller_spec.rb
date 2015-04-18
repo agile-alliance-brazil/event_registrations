@@ -18,7 +18,7 @@ describe EventAttendancesController, type: :controller do
     Attendance.any_instance.stubs(:registration_fee).with(@free).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@speaker).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@manual).returns(0)
-    Attendance.any_instance.stubs(:registration_fee).with().returns(399)
+    Attendance.any_instance.stubs(:registration_fee).with.returns(399)
   end
 
   after :each do
@@ -209,7 +209,7 @@ describe EventAttendancesController, type: :controller do
 
     describe "for speaker registration" do
       before do
-        User.any_instance.stubs(:has_approved_session?).returns(true)
+        User.any_instance.stubs(:approved_author_at?).returns(true)
         @user = FactoryGirl.create(:user)
         sign_in @user
         disable_authorization
@@ -219,6 +219,7 @@ describe EventAttendancesController, type: :controller do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
+
         expect(response).to redirect_to(attendance_path(5))
       end
 

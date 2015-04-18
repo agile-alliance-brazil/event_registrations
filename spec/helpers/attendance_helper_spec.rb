@@ -72,7 +72,7 @@ describe AttendanceHelper, type: :helper do
       radio_collection = convert_registration_types_to_radio(@attendance, [individual, other])
       expect(radio_collection).to eq([
         ["#{t(individual.title)} - R$ 250,00", individual.id],
-        ["#{t(other.title)} - R$ 400,00", other.id],
+        ["#{t(other.title)} - R$ 400,00", other.id]
       ])
     end
   end

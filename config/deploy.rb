@@ -1,5 +1,5 @@
 # encoding: UTF-8
-# config valid only for Capistrano 3.1
+# config valid only for Capistrano 3.4.0
 lock '3.4.0'
 
 set :stages, %w(vagrant staging production 10.11.12.14 162.243.247.114 162.243.94.207)
@@ -9,7 +9,7 @@ set :rails_env,           'production'
 set :keep_releases,       5
 
 set :application,         'registrations'
-SSHKit.config.command_map[:rake]  = 'bundle exec rake' #8
+SSHKit.config.command_map[:rake]  = 'bundle exec rake'
 SSHKit.config.command_map[:rails] = 'bundle exec rails'
 
 set :scm,                 :git

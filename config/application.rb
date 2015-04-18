@@ -3,9 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 require 'csv'
 
-if defined?(Bundler)
-  Bundler.require(:default, Rails.env)
-end
+Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 # Needed for Guard::Konacha since it'll try to initialize
 # with the same configs but won't invoke the Current::Application

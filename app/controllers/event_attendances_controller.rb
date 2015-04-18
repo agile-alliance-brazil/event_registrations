@@ -57,10 +57,6 @@ class EventAttendancesController < ApplicationController
     attributes[:email_confirmation] ||= current_user.email
     attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
-    if current_user.has_approved_session?(event)
-      attributes[:registration_type_id] = event.registration_types.
-        where(title: 'registration_type.speaker').select(:id).first.try(:id)
-    end
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id
     end
@@ -100,7 +96,7 @@ class EventAttendancesController < ApplicationController
   end
 
   def allowed_free_registration?
-    current_user.has_approved_session?(event) || current_user.organizer?
+    current_user.organizer?
   end
 
   def event

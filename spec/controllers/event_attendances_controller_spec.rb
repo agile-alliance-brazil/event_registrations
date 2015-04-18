@@ -72,25 +72,25 @@ describe EventAttendancesController, type: :controller do
     let(:user){ FactoryGirl.create(:user) }
     let(:valid_attendance) do
       {
-        event_id: @event.id,
-        user_id: user.id,
-        registration_type_id: @individual.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        email_confirmation: user.email,
-        organization: user.organization,
-        phone: user.phone,
-        country: user.country,
-        state: user.state,
-        city: user.city,
-        badge_name: user.badge_name,
-        cpf: user.cpf,
-        gender: user.gender,
-        twitter_user: user.twitter_user,
-        address: user.address,
-        neighbourhood: user.neighbourhood,
-        zipcode: user.zipcode
+          event_id: @event.id,
+          user_id: user.id,
+          registration_type_id: @individual.id,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          email_confirmation: user.email,
+          organization: user.organization,
+          phone: user.phone,
+          country: user.country,
+          state: user.state,
+          city: user.city,
+          badge_name: user.badge_name,
+          cpf: user.cpf,
+          gender: user.gender,
+          twitter_user: user.twitter_user,
+          address: user.address,
+          neighbourhood: user.neighbourhood,
+          zipcode: user.zipcode
       }
     end
     before(:each) do
@@ -191,7 +191,7 @@ describe EventAttendancesController, type: :controller do
       it "should allow free registration type no matter the email" do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
-      
+
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: "another#{@user.email}"}
         expect(response).to redirect_to(attendance_path(5))
       end
@@ -233,4 +233,5 @@ describe EventAttendancesController, type: :controller do
       end
     end
   end
+
 end

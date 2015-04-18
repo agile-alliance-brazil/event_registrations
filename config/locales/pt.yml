@@ -166,12 +166,16 @@ pt:
       attendance_address: "Informações para Contato"
       attendance_registrations: "Inscrição para o evento"
       attendance_payment: "Dados de Pagamento"
+    fields:
+      search:
+        placeholder: 'procurar por nome, organização ou email'
     labels:
       attendance:
         id: "Número de inscrição"
         registration_type_id: "Tipo de inscrição"
         first_name: "Nome"
         last_name: "Sobrenome"
+        name: 'Nome'
         full_name: "Nome"
         email: "Email"
         email_confirmation: "Confirmação de email"
@@ -193,6 +197,7 @@ pt:
         notes: "Anotações"
         only_with_notes: "Exibir apenas resultados com anotações"
         total: "Valor"
+        price: 'Preço (R$)'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"
@@ -236,10 +241,12 @@ pt:
     transfer: "Transferir inscrição"
     attendance: "Detalhes da inscrição"
     attendances_summary: "Resumo das inscrições"
+    attendances_list: "Lista dos inscritos"
     login: "Acessar"
     profile: "Perfil de %{username}"
     user: "Novo usuário"
     events: "Próximos eventos"
+    until: "até"
 
   actions:
     edit: "Editar"
@@ -255,6 +262,8 @@ pt:
     remove_authentication_option: "remover essa opção de autenticação"
     login: "Acessar"
     logout: "Sair"
+    list_attendances: "para listar os inscritos"
+    click: 'Clique'
 
   flash:
     failure: "Por favor verifique os campos em destaque"
@@ -374,6 +383,8 @@ pt:
       add: "Adicionar inscrição para %{name}"
       summary: "Veja o relatório de inscrições para %{name}"
       enable_voting: "Habilitar votação"
+    register:
+      to_register_message: 'para se registrar em'
 
   generic:
     or: "ou"
@@ -390,3 +401,4 @@ pt:
     show: "Exibir %{target}"
     hide: "Esconder %{target}"
     registration_id: "Número da inscrição"
+    here: 'aqui'

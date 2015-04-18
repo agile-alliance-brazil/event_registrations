@@ -31,6 +31,57 @@ describe AttendancesController, type: :controller do
     Timecop.return
   end
 
+  describe '#index' do
+    let(:user) { FactoryGirl.create(:user) }
+    before do
+      sign_in user
+      disable_authorization
+    end
+
+    context 'with no search parameter' do
+
+      context 'and no attendances' do
+        let!(:event) { FactoryGirl.create(:event) }
+        before { get :index, event_id: event }
+        it { expect(assigns(:attendances_list)).to eq [] }
+      end
+
+      context 'and having attendances' do
+        let!(:attendance) { FactoryGirl.create(:attendance) }
+        context 'and one attendance, but no association with event' do
+          let!(:event) { FactoryGirl.create(:event) }
+          before { get :index, event_id: event }
+          it { expect(assigns(:attendances_list)).to eq [] }
+        end
+        context 'and one attendance associated' do
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+          before { get :index, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+        end
+        context 'and one associated and other not' do
+          let!(:other_attendance) { FactoryGirl.create(:attendance) }
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+          before { get :index, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+        end
+        context 'and two associated' do
+          let!(:other_attendance) { FactoryGirl.create(:attendance) }
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
+          before { get :index, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
+      end
+    end
+
+    context 'with search parameters, insensitive case' do
+      let!(:event) { FactoryGirl.create(:event) }
+      context 'and no attendances' do
+        before { get :index, event_id: event, search: 'bla' }
+        it { expect(assigns(:attendances_list)).to eq [] }
+      end
+    end
+  end
+
   describe "GET show" do
     it "should set attendance variable" do
       get :show, id: @attendance.id

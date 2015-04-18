@@ -70,7 +70,6 @@ class Attendance < ActiveRecord::Base
   end
 
   def registration_period
-    p self.registration_date
     period = event.registration_periods.for(self.registration_date).first
     if period.super_early_bird? && !entitled_super_early_bird?
       period = event.registration_periods.for(period.end_at + 1.day).first

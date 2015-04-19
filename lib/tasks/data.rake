@@ -9,7 +9,7 @@ namespace :data do
     task :seeds => :environment do
       print 'Generating seeds '
       3.times do |count|
-        event = Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link')
+        event = Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link', full_price: 850.00 )
         registration_period = RegistrationPeriod.create!(start_at: Date.today - 1, end_at: Date.today + (count + 1).months, event: event)
         registration_type = RegistrationType.create!(title: 'registration_type.individual', event: event)
         RegistrationPrice.create!(registration_type: registration_type, registration_period: registration_period, value: 100.00)

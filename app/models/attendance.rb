@@ -7,6 +7,7 @@ class Attendance < ActiveRecord::Base
   belongs_to :registration_type
   belongs_to :registration_period
   belongs_to :registration_group
+  belongs_to :registration_quota
   has_many :payment_notifications, foreign_key: :invoicer_id
 
   validates_confirmation_of :email

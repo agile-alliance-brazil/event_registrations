@@ -1,8 +1,9 @@
 describe Attendance, type: :model do
-  context "associations" do
+  context 'associations' do
     it { should belong_to :event }
     it { should belong_to :user }
     it { should belong_to :registration_type }
+    it { should belong_to :registration_quota }
   end
 
   context "validations" do

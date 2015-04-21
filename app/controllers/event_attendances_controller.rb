@@ -4,13 +4,12 @@ class EventAttendancesController < ApplicationController
   before_filter :load_registration_types, only: [:new, :create]
 
   def index
-    @attendances = Attendance.for_event(event).active.
-      includes(:payment_notifications, :event, :registration_type).all
+    @attendances = Attendance.for_event(event).active.includes(:payment_notifications, :event, :registration_type).all
     respond_to do |format|
       format.html
-      format.csv {
+      format.csv do
         response.headers['Content-Disposition'] = "attachment; filename=\"#{event.name.parameterize.underscore}.csv\""
-      }
+      end
     end
   end
 
@@ -23,7 +22,11 @@ class EventAttendancesController < ApplicationController
       redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
       return
     end
-    @attendance = Attendance.new(build_attributes)
+    attributes = build_attributes
+    @attendance = Attendance.new(attributes)
+
+    group = @event.registration_groups.find_by_token(params['registration_token'])
+    @attendance.registration_group = group if group.present? && group.accept_members?
 
     return unless validate_free_registration(@attendance)
     if @attendance.save
@@ -60,16 +63,16 @@ class EventAttendancesController < ApplicationController
     if @registration_types.size == 1
       attributes[:registration_type_id] = @registration_types.first.id
     end
-    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.now].min
+    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.zone.now].min
     attributes
   end
 
   def attendance_params
     params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
-                                                                        :registration_group_id, :registration_date, :first_name, :last_name, :email,
-                                                                        :email_confirmation, :organization, :phone, :country, :state, :city,
-                                                                        :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-                                                                        :zipcode, :notes)
+    :registration_group_id, :registration_date, :first_name, :last_name, :email,
+    :email_confirmation, :organization, :phone, :country, :state, :city,
+    :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
+    :zipcode, :notes)
   end
 
   def load_registration_types
@@ -83,7 +86,7 @@ class EventAttendancesController < ApplicationController
   end
 
   def validate_free_registration(attendance)
-    if is_free?(attendance) && !allowed_free_registration?
+    if free?(attendance) && !allowed_free_registration?
       attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
       flash.now[:error] = t('flash.attendance.create.free_not_allowed')
       render :new and return false
@@ -91,7 +94,7 @@ class EventAttendancesController < ApplicationController
     true
   end
 
-  def is_free?(attendance)
+  def free?(attendance)
     !event.registration_types.paid.include?(attendance.registration_type)
   end
 
@@ -104,19 +107,16 @@ class EventAttendancesController < ApplicationController
   end
 
   def notify(attendance)
-    if attendance.registration_fee > 0
-      EmailNotifications.registration_pending(attendance).deliver
-      attendance.email_sent = true
-      attendance.save
-    end
+    return unless attendance.registration_fee > 0
+    EmailNotifications.registration_pending(attendance).deliver
+    attendance.email_sent = true
+    attendance.save
   end
 
   def notify_or_log(ex)
-    begin
-      notify_airbrake(ex)
-    rescue
-      Rails.logger.error('Airbrake notification failed. Logging error locally only')
-      Rails.logger.error(ex.message)
-    end
+    notify_airbrake(ex)
+  rescue
+    Rails.logger.error('Airbrake notification failed. Logging error locally only')
+    Rails.logger.error(ex.message)
   end
 end

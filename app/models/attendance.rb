@@ -6,6 +6,8 @@ class Attendance < ActiveRecord::Base
   belongs_to :user
   belongs_to :registration_type
   belongs_to :registration_period
+  belongs_to :registration_group
+  belongs_to :registration_quota
   has_many :payment_notifications, foreign_key: :invoicer_id
 
   validates_confirmation_of :email
@@ -18,6 +20,8 @@ class Attendance < ActiveRecord::Base
   validates_length_of :email, within: 6..100, allow_blank: true
 
   validates_format_of :phone, with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true
+
+  delegate :token, to: :registration_group
 
   usar_como_cpf :cpf
 
@@ -56,7 +60,7 @@ class Attendance < ActiveRecord::Base
   scope :paid, -> { where(status: [:paid, :confirmed]) }
   scope :active, -> { where('status != (?)', :cancelled) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
-  scope :search_for_list, ->(param) {
+  scope :search_for_list, lambda { |param|
     active.where('first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ?',
                  "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%")
   }
@@ -75,7 +79,9 @@ class Attendance < ActiveRecord::Base
   end
 
   def registration_fee(overriden_registration_type = nil)
-    registration_period.price_for_registration_type(overriden_registration_type || registration_type)
+    registration_value = registration_value(overriden_registration_type)
+    return registration_value unless registration_group.present?
+    registration_value * (1 - (registration_group.discount / 100.00))
   end
 
   def cancellable?
@@ -99,6 +105,11 @@ class Attendance < ActiveRecord::Base
   end
 
   private
+
+  def registration_value(registration_type)
+    registration_period.price_for_registration_type(registration_type || self.registration_type)
+  end
+
   def entitled_super_early_bird?
     attendances = event.attendances
     attendances = attendances.where('id < ?', id) unless new_record?

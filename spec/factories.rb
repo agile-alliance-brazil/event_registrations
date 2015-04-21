@@ -1,9 +1,12 @@
 # encoding: UTF-8
 
+require 'faker'
+
 FactoryGirl.define do
   factory :event do
     sequence(:name) {|n| "Agile Brazil #{2000 + n}"}
-    price_table_link "http://localhost:9292/link"
+    price_table_link 'http://localhost:9292/link'
+    full_price 850.00
 
     after(:build) do |event|
       event.registration_types << FactoryGirl.build(:registration_type, :event => event)
@@ -21,7 +24,7 @@ FactoryGirl.define do
     association :event
     title 'registration_period.regular'
     start_at Time.zone.now
-    end_at((Time.zone.now + 1.day).end_of_day)
+    end_at (Time.zone.now + 1.day).end_of_day
   end
 
   factory :attendance do
@@ -45,26 +48,7 @@ FactoryGirl.define do
     zipcode {|a| a.user.zipcode }
 
     registration_type { |a| a.event.registration_types.find_by_title('registration_type.individual') }
-    registration_date { Time.zone.now }
-  end
-
-  factory :registration_group do
-    name "Big Corp"
-    contact_name "Contact Name"
-    contact_email { |e| "contact@#{e.name.parameterize}.com" }
-    contact_email_confirmation { |e| "contact@#{e.name.parameterize}.com" }
-    phone "(11) 3322-1234"
-    fax "(11) 4422-1234"
-    country "BR"
-    state "SP"
-    city "São Paulo"
-    cnpj "69.103.604/0001-60"
-    state_inscription "110.042.490.114"
-    municipal_inscription "9999999"
-    address "Rua dos Bobos, 0"
-    neighbourhood "Vila Perdida"
-    zipcode "12345000"
-    total_attendees 5
+    registration_date { |a| Time.zone.now }
   end
 
   factory :payment_notification do
@@ -77,10 +61,7 @@ FactoryGirl.define do
   factory :user do
     first_name "User"
     sequence(:last_name) {|n| "Name#{n}"}
-    email do |user|
-      username = "#{user.first_name} #{user.last_name}".parameterize
-      "#{username}@example.com"
-    end
+    email { |a| username = "#{a.first_name} #{a.last_name}".parameterize; "#{username}@example.com" }
 
     phone "(11) 3322-1234"
     country "BR"
@@ -100,5 +81,22 @@ FactoryGirl.define do
     user
     uid { |a| a.user.id }
     provider "twitter"
+  end
+
+  factory :registration_group do
+    name Faker::Company.name
+    event
+    minimum_size 13
+    discount 15
+  end
+
+  factory :invoice do
+    user
+    status Invoice::PENDING
+  end
+
+  factory :invoice_group do
+    registration_group
+    status Invoice::PENDING
   end
 end

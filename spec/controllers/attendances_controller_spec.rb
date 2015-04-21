@@ -1,6 +1,3 @@
-# encoding: UTF-8
-require 'spec_helper'
-
 describe AttendancesController, type: :controller do
   before :each do
     @event = FactoryGirl.create(:event)
@@ -39,7 +36,6 @@ describe AttendancesController, type: :controller do
     end
 
     context 'with no search parameter' do
-
       context 'and no attendances' do
         let!(:event) { FactoryGirl.create(:event) }
         before { get :index, event_id: event }
@@ -82,16 +78,14 @@ describe AttendancesController, type: :controller do
     end
   end
 
-  describe "GET show" do
-    it "should set attendance variable" do
+  describe '#show' do
+    it 'set attendance variable' do
       get :show, id: @attendance.id
-
       expect(assigns[:attendance]).to eq(@attendance)
     end
-    it "should respond to json" do
+    it 'responds to json' do
       get :show, id: @attendance.id, format: :json
-
-      expect(response).to be_success      
+      expect(response).to be_success
     end
   end
 

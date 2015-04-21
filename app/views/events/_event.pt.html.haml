@@ -6,3 +6,4 @@
 
 - if can? :attendances_list, Attendance
   %p #{ t('actions.click') } #{ link_to t('generic.here'), attendances_path(event_id: event) } #{ t('actions.list_attendances') }
+  %p #{ t('actions.click') } #{ link_to t('generic.here'), event_registration_groups_path(event) } #{ t('actions.list_groups') }

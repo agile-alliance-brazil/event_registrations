@@ -18,7 +18,7 @@ describe EventAttendancesController, type: :controller do
     Attendance.any_instance.stubs(:registration_fee).with(@free).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@speaker).returns(0)
     Attendance.any_instance.stubs(:registration_fee).with(@manual).returns(0)
-    Attendance.any_instance.stubs(:registration_fee).with.returns(399)
+    Attendance.any_instance.stubs(:registration_fee).with().returns(399)
   end
 
   after :each do
@@ -164,6 +164,48 @@ describe EventAttendancesController, type: :controller do
         end
       end
 
+      context 'with no token' do
+        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
+        let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
+        subject(:attendance) { assigns(:attendance) }
+        before { post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id } }
+        it { expect(attendance.registration_group).to be_nil }
+      end
+
+      context 'with registration token' do
+        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
+        let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
+        subject(:attendance) { assigns(:attendance) }
+
+        context 'an invalid' do
+          context 'and one event' do
+            before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: { registration_type_id: @individual.id } }
+            it { expect(attendance.registration_group).to be_nil }
+          end
+
+          context 'and with a registration token from other event' do
+            let(:other_event) { FactoryGirl.create :event }
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+            let!(:other_group) { FactoryGirl.create(:registration_group, event: other_event) }
+            before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: { registration_type_id: @individual.id } }
+            it { expect(attendance.registration_group).to be_nil }
+          end
+
+          context 'and with a registration token with invalid invoice status' do
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+            let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID }
+            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
+            it { expect(attendance.registration_group).to be_nil }
+          end
+        end
+
+        context 'a valid' do
+          let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+          before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
+          it { expect(attendance.registration_group).to eq group }
+        end
+      end
+
       it "should send pending registration e-mail" do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)
@@ -209,7 +251,7 @@ describe EventAttendancesController, type: :controller do
 
     describe "for speaker registration" do
       before do
-        User.any_instance.stubs(:approved_author_at?).returns(true)
+        User.any_instance.stubs(:has_approved_session?).returns(true)
         @user = FactoryGirl.create(:user)
         sign_in @user
         disable_authorization
@@ -219,7 +261,6 @@ describe EventAttendancesController, type: :controller do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
-
         expect(response).to redirect_to(attendance_path(5))
       end
 

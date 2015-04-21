@@ -31,7 +31,9 @@ en:
       attendances_list: 'Attendances List'
     fields:
       search:
-       placeholder: 'search in name, organization or email'
+        placeholder: 'search in name, organization or email'
+      token:
+        placeholder: 'enter your registration token if you have one'
     labels:
       attendance:
         id: "Registration Number"
@@ -81,6 +83,26 @@ en:
       transfer:
         origin_id: "Origin"
         destination_id: "Destination"
+      registration_group:
+        name: 'Name'
+        discount: 'Discount (%)'
+        minimum_size: 'Minimum size'
+        token: 'Registration token'
+        leader: 'Leader'
+        event: 'Event'
+        qtd_attendances: 'Attendances Total'
+        index:
+          actions: 'Actions'
+      invoice:
+        title: 'Fatura'
+        name: 'Name'
+        amount: 'Amount'
+        created_at: 'Created at'
+        user: 'User'
+        status: 'Status'
+        index:
+          actions: 'Actions'
+
     hints:
       attendance:
         registration_type_id: "Indicate your registration type."
@@ -97,6 +119,7 @@ en:
       paid_pending_attendance: "Payment Received"
       search: "Search"
       edit_profile: "Update profile"
+      new_group: "Submit group"
 
   # Custom messages
   title:
@@ -125,7 +148,9 @@ en:
     login: "Log in"
     logout: "Log out"
     list_attendances: "to list attendances"
+    list_groups: "to list groups"
     click: 'Click'
+    renew: 'renew'
 
   flash:
     failure: "Please check the highlighted fields"
@@ -206,6 +231,11 @@ en:
     status: "Registration status on %{date}"
     details:
       csv: 'Download CSV attendee list'
+    payment:
+      request:
+        option_one: 'OPTION 1: Pay with PayPal'
+        option_two: 'OPTION 2: If you can understand Portuguese, pay with BCash for different payment types'
+        text: 'Pay the total amount of %{value}'
 
   attendance:
     status:
@@ -218,14 +248,6 @@ en:
     confirm_confirmation: "If you confirm this registration to %{event}, you will notify the attendee and will not be able to cancel this operation.\n\nAre you sure you want to proceed?"
     confirmed:
       unpaid: "External/Delayed payment"
-
-  registration_group:
-    status:
-      incomplete: "Incomplete"
-      complete: "Pending"
-      paid: "Payment received"
-      confirmed: "Confirmed"
-      all: "All"
 
   authentication:
     list: "Registered authentications"
@@ -247,6 +269,21 @@ en:
       enable_voting: "Enable voting"
     register:
       to_register_message: 'to register for'
+    not_found: 'Event not found'
+
+  registration_group:
+    list: 'Groups list of %{event_name}'
+    destroy:
+      success: 'Group deleted.'
+      error: 'An error occurred. The group was not deleted.'
+    show:
+      title: 'Details for group %{group_name}'
+      discount: 'Discount: %{group_discount}%'
+      minimum_size: 'Minimum size: %{minimum_size}'
+
+      attendances:
+        one: '1 attendance'
+        other: '%{count} attendances'
 
   generic:
     or: "or"

@@ -1,11 +1,9 @@
-# encoding: UTF-8
-require 'spec_helper'
-
 describe Attendance, type: :model do
-  context "associations" do
+  context 'associations' do
     it { should belong_to :event }
     it { should belong_to :user }
     it { should belong_to :registration_type }
+    it { should belong_to :registration_quota }
   end
 
   context "validations" do
@@ -74,17 +72,17 @@ describe Attendance, type: :model do
       end
 
       it 'should have scope pending' do
-        Attendance.first.tap{|a| a.pay}.save
+        Attendance.first.tap(&:pay).save
         expect(Attendance.pending).not_to include(Attendance.first)
       end
 
       it 'should have scope paid' do
-        Attendance.first.tap{|a| a.pay}.save
+        Attendance.first.tap(&:pay).save
         expect(Attendance.paid).to eq([Attendance.first])
       end
 
       it 'should have scope active that excludes cancelled attendances' do
-        Attendance.first.tap{|a| a.cancel}.save
+        Attendance.first.tap(&:cancel).save
         expect(Attendance.active).not_to include(Attendance.first)
       end
 
@@ -95,17 +93,13 @@ describe Attendance, type: :model do
     end
 
     context 'with specific seed' do
-
       describe '.search_for_list' do
-
         context 'and no attendances' do
           it { expect(Attendance.search_for_list('bla')).to eq [] }
         end
 
         context 'and having attendances' do
-          let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto',
-                                                 last_name: 'bla', organization: 'foo',
-                                                 email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
+          let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
 
           context 'active' do
             context 'and one active and other inactive' do
@@ -133,13 +127,8 @@ describe Attendance, type: :model do
           end
 
           context 'with three attendances, one not matching' do
-            let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'bla',
-                                                         last_name: 'xpto', organization: 'sbrubles',
-                                                         email: 'foo@xpto.com', email_confirmation: 'foo@xpto.com') }
-
-            let!(:out_attendance) { FactoryGirl.create(:attendance, first_name: 'Edsger',
-                                                         last_name: 'Dijkstra', organization: 'Turing',
-                                                         email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
+            let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'bla', last_name: 'xpto', organization: 'sbrubles', email: 'foo@xpto.com', email_confirmation: 'foo@xpto.com') }
+            let!(:out_attendance) { FactoryGirl.create(:attendance, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
 
             context 'entire field' do
               it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance, other_attendance] }
@@ -278,6 +267,38 @@ describe Attendance, type: :model do
     it "should not be cancellable if cancelled already" do
       attendance.cancel
       expect(attendance).not_to be_cancellable
+    end
+  end
+
+  describe '#registration_fee' do
+    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:registration_period) { RegistrationPeriod.create!(start_at: 1.month.ago, end_at: 1.month.from_now, event: event) }
+    let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+    let!(:price) { RegistrationPrice.create!(registration_type: individual, registration_period: registration_period, value: 100.00) }
+
+    context 'with no registration group' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      it { expect(Attendance.last.registration_fee individual).to eq 100 }
+    end
+
+    context 'with registration group' do
+      context 'and no discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 0) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 100 }
+      end
+
+      context 'and partial discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 10) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 90 }
+      end
+
+      context 'and full discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 100) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 0 }
+      end
     end
   end
 end

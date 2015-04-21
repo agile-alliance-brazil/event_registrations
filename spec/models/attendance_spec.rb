@@ -1,6 +1,3 @@
-# encoding: UTF-8
-require 'spec_helper'
-
 describe Attendance, type: :model do
   context "associations" do
     it { should belong_to :event }
@@ -74,17 +71,17 @@ describe Attendance, type: :model do
       end
 
       it 'should have scope pending' do
-        Attendance.first.tap{|a| a.pay}.save
+        Attendance.first.tap(&:pay).save
         expect(Attendance.pending).not_to include(Attendance.first)
       end
 
       it 'should have scope paid' do
-        Attendance.first.tap{|a| a.pay}.save
+        Attendance.first.tap(&:pay).save
         expect(Attendance.paid).to eq([Attendance.first])
       end
 
       it 'should have scope active that excludes cancelled attendances' do
-        Attendance.first.tap{|a| a.cancel}.save
+        Attendance.first.tap(&:cancel).save
         expect(Attendance.active).not_to include(Attendance.first)
       end
 
@@ -95,17 +92,13 @@ describe Attendance, type: :model do
     end
 
     context 'with specific seed' do
-
       describe '.search_for_list' do
-
         context 'and no attendances' do
           it { expect(Attendance.search_for_list('bla')).to eq [] }
         end
 
         context 'and having attendances' do
-          let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto',
-                                                 last_name: 'bla', organization: 'foo',
-                                                 email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
+          let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
 
           context 'active' do
             context 'and one active and other inactive' do
@@ -133,13 +126,8 @@ describe Attendance, type: :model do
           end
 
           context 'with three attendances, one not matching' do
-            let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'bla',
-                                                         last_name: 'xpto', organization: 'sbrubles',
-                                                         email: 'foo@xpto.com', email_confirmation: 'foo@xpto.com') }
-
-            let!(:out_attendance) { FactoryGirl.create(:attendance, first_name: 'Edsger',
-                                                         last_name: 'Dijkstra', organization: 'Turing',
-                                                         email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
+            let!(:other_attendance) { FactoryGirl.create(:attendance, first_name: 'bla', last_name: 'xpto', organization: 'sbrubles', email: 'foo@xpto.com', email_confirmation: 'foo@xpto.com') }
+            let!(:out_attendance) { FactoryGirl.create(:attendance, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
 
             context 'entire field' do
               it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance, other_attendance] }

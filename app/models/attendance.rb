@@ -56,7 +56,7 @@ class Attendance < ActiveRecord::Base
   scope :paid, -> { where(status: [:paid, :confirmed]) }
   scope :active, -> { where('status != (?)', :cancelled) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
-  scope :search_for_list, ->(param) {
+  scope :search_for_list, lambda { |param|
     active.where('first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ?',
                  "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%")
   }

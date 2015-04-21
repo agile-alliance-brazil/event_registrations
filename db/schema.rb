@@ -9,20 +9,20 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130620204230) do
+ActiveRecord::Schema.define(version: 20130620204230) do
 
-  create_table "attendances", :force => true do |t|
+  create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
     t.integer  "user_id"
     t.integer  "registration_type_id"
     t.integer  "registration_group_id"
     t.datetime "registration_date"
     t.string   "status"
-    t.boolean  "email_sent",            :default => false
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.boolean  "email_sent",            default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
@@ -41,26 +41,26 @@ ActiveRecord::Schema.define(:version => 20130620204230) do
     t.string   "notes"
   end
 
-  create_table "authentications", :force => true do |t|
+  create_table "authentications", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "provider"
     t.string   "uid"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "refresh_token"
   end
 
-  create_table "events", :force => true do |t|
+  create_table "events", force: :cascade do |t|
     t.string   "name"
     t.string   "location_and_date"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "price_table_link"
     t.boolean  "allow_voting"
     t.integer  "attendance_limit"
   end
 
-  create_table "payment_notifications", :force => true do |t|
+  create_table "payment_notifications", force: :cascade do |t|
     t.text     "params"
     t.string   "status"
     t.string   "transaction_id"
@@ -69,35 +69,35 @@ ActiveRecord::Schema.define(:version => 20130620204230) do
     t.decimal  "settle_amount"
     t.string   "settle_currency"
     t.text     "notes"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "registration_periods", :force => true do |t|
+  create_table "registration_periods", force: :cascade do |t|
     t.integer  "event_id"
     t.string   "title"
     t.datetime "start_at"
     t.datetime "end_at"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "registration_prices", :force => true do |t|
+  create_table "registration_prices", force: :cascade do |t|
     t.integer  "registration_type_id"
     t.integer  "registration_period_id"
     t.decimal  "value"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "registration_types", :force => true do |t|
+  create_table "registration_types", force: :cascade do |t|
     t.integer  "event_id"
     t.string   "title"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "users", :force => true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
@@ -114,9 +114,9 @@ ActiveRecord::Schema.define(:version => 20130620204230) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.integer  "roles_mask"
-    t.string   "default_locale", :default => "pt"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.string   "default_locale", default: "pt"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

@@ -24,6 +24,6 @@ class Event < ActiveRecord::Base
   private
 
   def find_quota
-    registration_quotas.each { |quota| return quota if quota.have_vacancy? }
+    registration_quotas.order(order: :asc).each { |quota| return quota if quota.have_vacancy? }
   end
 end

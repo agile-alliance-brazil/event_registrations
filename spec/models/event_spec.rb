@@ -42,7 +42,7 @@ describe Event, type: :model do
       let!(:registration_period) { FactoryGirl.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: registration_period, value: 100.00) }
 
-      it { expect(event.registration_price(registration_type, Date.today)).to eq price.value }
+      it { expect(event.registration_price(registration_type, Time.zone.today)).to eq price.value }
     end
 
     context 'with two registrations periods, one passed and one current' do
@@ -51,14 +51,14 @@ describe Event, type: :model do
       let!(:period_passed) { FactoryGirl.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
       let!(:price_passed) { RegistrationPrice.create!(registration_type: registration_type, registration_period: period_passed, value: 50.00) }
 
-      it { expect(event.registration_price(registration_type, Date.today)).to eq price.value }
+      it { expect(event.registration_price(registration_type, Time.zone.today)).to eq price.value }
     end
 
     context 'with one registration quota with vacancy' do
       let!(:price) { RegistrationPrice.create!(registration_type: registration_type, value: 430.00) }
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, registration_price: price, quota: 25 }
 
-      it { expect(event.registration_price(registration_type, Date.today)).to eq price.value }
+      it { expect(event.registration_price(registration_type, Time.zone.today)).to eq price.value }
     end
 
     context 'with one passed period and one registration quota with vacancy' do
@@ -67,7 +67,7 @@ describe Event, type: :model do
       let!(:price) { RegistrationPrice.create!(registration_type: registration_type, value: 430.00) }
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, registration_price: price, quota: 25 }
 
-      it { expect(event.registration_price(registration_type, Date.today)).to eq price.value }
+      it { expect(event.registration_price(registration_type, Time.zone.today)).to eq price.value }
     end
 
     context 'with one passed period and one registration quota with vacancy' do
@@ -76,14 +76,31 @@ describe Event, type: :model do
       let!(:quota_price) { RegistrationPrice.create!(registration_type: registration_type, value: 430.00) }
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, registration_price: quota_price, quota: 25 }
 
-      it { expect(event.registration_price(registration_type, Date.today)).to eq period_price.value }
+      it { expect(event.registration_price(registration_type, Time.zone.today)).to eq period_price.value }
     end
 
     context 'with one passed period and no quota' do
       let!(:period_passed) { FactoryGirl.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
       let!(:price_passed) { RegistrationPrice.create!(registration_type: registration_type, registration_period: period_passed, value: 50.00) }
 
-      it { expect(event.registration_price(registration_type, Date.today)).to eq event.full_price }
+      it { expect(event.registration_price(registration_type, Time.zone.today)).to eq event.full_price }
+    end
+
+    context 'and with three quotas, one with limit reached, and other two not' do
+      it 'get the next quota, respecting the order' do
+        no_vacancy_quota_price = RegistrationPrice.create!(registration_type: registration_type, value: 360.00)
+        forty_attendances = FactoryGirl.create_list(:attendance, 40, event: event)
+        FactoryGirl.create :registration_quota, event: event, registration_price: no_vacancy_quota_price, attendances: forty_attendances, quota: 25, order: 1
+
+        last_quota_price = RegistrationPrice.create!(registration_type: registration_type, value: 700.00)
+        twenty_five_attendances = FactoryGirl.create_list(:attendance, 25, event: event)
+        FactoryGirl.create :registration_quota, event: event, registration_price: last_quota_price, attendances: twenty_five_attendances, quota: 40, order: 3
+
+        medium_quota_price = RegistrationPrice.create!(registration_type: registration_type, value: 470.00)
+        FactoryGirl.create :registration_quota, event: event, registration_price: medium_quota_price, quota: 40, order: 2
+
+        expect(event.registration_price(registration_type, Time.zone.today)).to eq 470.00
+      end
     end
   end
 end

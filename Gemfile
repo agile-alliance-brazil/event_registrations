@@ -27,6 +27,7 @@ gem 'omniauth-twitter', '=1.1.0'
 gem 'omniauth-facebook', '=2.0.1'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
+gem 'faker'
 
 gem 'jquery-rails', '=4.0.3'
 gem 'therubyracer', '=0.12.2', platforms: :ruby
@@ -55,7 +56,6 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'guard-rubocop'
   gem 'metric_fu'
-  gem 'faker'
 end
 
 group :development do

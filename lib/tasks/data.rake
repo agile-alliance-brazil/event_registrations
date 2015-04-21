@@ -1,31 +1,28 @@
-#encoding: utf-8
-
 require 'faker'
 
 namespace :data do
-
   unless Rails.env.production?
     desc 'Generates seeds'
     task :seeds => :environment do
       print 'Generating seeds '
       3.times do |count|
         event = Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link')
-        registration_period = RegistrationPeriod.create!(start_at: Date.today - 1, end_at: Date.today + (count + 1).months, event: event)
+        registration_period = RegistrationPeriod.create!(start_at: Time.zone.today - 1, end_at: Time.zone.today + (count + 1).months, event: event)
         registration_type = RegistrationType.create!(title: 'registration_type.individual', event: event)
         RegistrationPrice.create!(registration_type: registration_type, registration_period: registration_period, value: 100.00)
         10.times do
           attendance = Attendance.create!(
-              first_name: Faker::Name.first_name,
-              last_name: Faker::Name.last_name,
-              organization: Faker::Company.name,
-              email: Faker::Internet.email,
-              phone: Faker::PhoneNumber.cell_phone,
-              country: Faker::Address.country,
-              city: 'Rio de Janeiro',
-              registration_type: registration_type,
-              registration_date: Time.now,
-              user: User.last,
-              event: event)
+            first_name: Faker::Name.first_name,
+            last_name: Faker::Name.last_name,
+            organization: Faker::Company.name,
+            email: Faker::Internet.email,
+            phone: Faker::PhoneNumber.cell_phone,
+            country: Faker::Address.country,
+            city: 'Rio de Janeiro',
+            registration_type: registration_type,
+            registration_date: Time.zone.now,
+            user: User.last,
+            event: event)
         end
       end
       puts '√'

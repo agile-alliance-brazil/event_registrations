@@ -1,6 +1,3 @@
-# encoding: UTF-8
-require 'spec_helper'
-
 describe AttendancesController, type: :controller do
   before :each do
     @event = FactoryGirl.create(:event)
@@ -39,7 +36,6 @@ describe AttendancesController, type: :controller do
     end
 
     context 'with no search parameter' do
-
       context 'and no attendances' do
         let!(:event) { FactoryGirl.create(:event) }
         before { get :index, event_id: event }

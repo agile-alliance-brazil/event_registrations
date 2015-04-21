@@ -7,7 +7,7 @@ describe RegistrationType, type: :model do
   describe '#price' do
     context 'with a valid registration period' do
       it 'delegates to RegistrationPeriod' do
-        time = Time.now
+        time = Time.zone.now
         type = FactoryGirl.build(:registration_type)
         price = RegistrationPeriod.new
 
@@ -17,7 +17,5 @@ describe RegistrationType, type: :model do
         expect(type.price(time)).to eq(599.00)
       end
     end
-
   end
-
 end

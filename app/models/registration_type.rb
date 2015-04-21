@@ -1,4 +1,3 @@
-# encoding: UTF-8
 class RegistrationType < ActiveRecord::Base
   belongs_to :event
   has_many :registration_prices
@@ -11,5 +10,4 @@ class RegistrationType < ActiveRecord::Base
     period = event.registration_periods.for(datetime).first
     period.price_for_registration_type(self)
   end
-
 end

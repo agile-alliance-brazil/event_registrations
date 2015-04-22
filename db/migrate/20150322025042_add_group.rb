@@ -1,5 +1,11 @@
 class AddGroup < ActiveRecord::Migration
   def change
+    change_table :attendances do |t|
+      t.remove :registration_groups_id if column_exists?(:attendances, :registration_groups_id)
+    end
+
+    drop_table :registration_groups if ActiveRecord::Base.connection.table_exists? 'registration_groups'
+
     create_table :registration_groups do |t|
       t.references	:event
 

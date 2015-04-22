@@ -23,10 +23,7 @@ class AddGroup < ActiveRecord::Migration
       t.references :leader
     end
 
-    change_table :users do |t|
-      t.integer :registration_group_id
-    end
-
-    add_foreign_key :users, :registration_groups, :integer
+    add_column :users, :registration_group_id, :integer
+    add_foreign_key :users, :registration_groups
   end
 end

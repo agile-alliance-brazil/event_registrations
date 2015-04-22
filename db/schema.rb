@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20150421220159) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.string   "notes"
+    t.integer  "invoice_id"
     t.integer  "registration_quota_id"
   end
 
@@ -96,6 +97,7 @@ ActiveRecord::Schema.define(version: 20150421220159) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "leader_id"
+    t.integer  "invoice_id"
     t.integer  "minimum_size"
   end
 

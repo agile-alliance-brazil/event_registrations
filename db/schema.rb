@@ -152,9 +152,10 @@ ActiveRecord::Schema.define(version: 20150421220159) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.integer  "roles_mask"
-    t.string   "default_locale", default: "pt"
+    t.string   "default_locale",        default: "pt"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "registration_group_id"
   end
 
 end

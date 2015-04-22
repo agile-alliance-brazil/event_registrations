@@ -2,16 +2,16 @@
 require 'payment_gateway_adapter'
 
 class BcashAdapter < PaymentGatewayAdapter
-  def self.from_attendance(attendance)
-    items = PaymentGatewayAdapter.from_attendance(attendance, BcashItem)
-    self.new(items, attendance)
+  def self.from_invoice(invoice)
+    items = PaymentGatewayAdapter.from_invoice(invoice, BcashItem)
+    self.new(items, invoice)
   end
 
   def add_variables(vars)
     vars['id_pedido'] = @invoice.id
     vars['frete']     = 0
     vars['email']     = @invoice.email
-    vars['nome']      = @invoice.full_name
+    vars['nome']      = @invoice.name
     vars['cpf']       = @invoice.cpf
     vars['sexo']      = @invoice.gender
     vars['telefone']  = @invoice.phone

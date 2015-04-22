@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe User, type: :model do
-  context "associations" do
+  context 'associations' do
     it { should have_many :authentications }
     it { should have_many :attendances }
     it { should have_many :events }

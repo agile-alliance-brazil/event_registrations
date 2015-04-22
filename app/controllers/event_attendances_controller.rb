@@ -22,9 +22,19 @@ class EventAttendancesController < ApplicationController
       redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
       return
     end
-    @attendance = Attendance.new(build_attributes)
+    attributes = build_attributes
+    @attendance = Attendance.new(attributes)
+
+    group = @event.registration_groups.find_by_token(params['registration_token'])
+    @attendance.registration_group = group if group.present? && group.accept_members?
 
     return unless validate_free_registration(@attendance)
+    save_attendance!
+  end
+
+  private
+
+  def save_attendance!
     if @attendance.save
       begin
         flash[:notice] = t('flash.attendance.create.success')
@@ -39,8 +49,6 @@ class EventAttendancesController < ApplicationController
       render :new
     end
   end
-
-  private
 
   def resource
     Attendance.find_by_id(params[:id])
@@ -82,20 +90,12 @@ class EventAttendancesController < ApplicationController
   end
 
   def validate_free_registration(attendance)
-    if free?(attendance) && !allowed_free_registration?
+    if @event.free?(attendance) && !current_user.allowed_free_registration?
       attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
       flash.now[:error] = t('flash.attendance.create.free_not_allowed')
       render :new and return false
     end
     true
-  end
-
-  def free?(attendance)
-    !event.registration_types.paid.include?(attendance.registration_type)
-  end
-
-  def allowed_free_registration?
-    current_user.organizer?
   end
 
   def event

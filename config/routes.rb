@@ -1,6 +1,6 @@
 # encoding: UTF-8
 Current::Application.routes.draw do
-  get '/auth/:provider/callback', to: 'sessions#create' # should really be a post
+  post '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/failure', to: 'sessions#failure'
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
@@ -9,6 +9,11 @@ Current::Application.routes.draw do
 
   resources :events, only: [:index, :show] do
     resources :attendances, only: [:new, :create, :index], controller: :event_attendances
+    resources :registration_groups, only: [:index, :destroy, :show, :create] do
+      member do
+        put :renew_invoice
+      end
+    end
   end
 
   get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")

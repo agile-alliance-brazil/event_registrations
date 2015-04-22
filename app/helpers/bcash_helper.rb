@@ -2,11 +2,8 @@
 require File.join(Rails.root, 'lib', 'bcash_adapter')
 
 module BcashHelper
-  def build_bcash_variables(attendance, return_url, notify_url)
-    add_bcash_config_vars(
-      BcashAdapter.from_attendance(attendance).to_variables,
-      return_url, notify_url
-    )
+  def bcash_variables(invoice, return_url, notify_url)
+    build_config_vars(invoice, notify_url, return_url)
   end
 
   def add_bcash_config_vars(values, return_url, notify_url)
@@ -18,5 +15,14 @@ module BcashHelper
       vars[:redirect] = "true"
       vars[:redirect_time] = 5
     end
+  end
+
+  private
+
+  def build_config_vars(invoice, notify_url, return_url)
+    add_bcash_config_vars(
+      BcashAdapter.from_invoice(invoice).to_variables,
+        return_url, notify_url
+    )
   end
 end

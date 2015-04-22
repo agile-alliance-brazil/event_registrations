@@ -2,6 +2,15 @@
 require File.join(Rails.root, 'lib', 'paypal_adapter')
 
 module PaypalHelper
+  def paypal_encrypted_attendee(invoice, return_url, notify_url)
+    encrypt_for_paypal(
+      add_paypal_config_vars(
+        PaypalAdapter.from_invoice(invoice).to_variables,
+          return_url, notify_url
+      )
+    )
+  end
+
   def add_paypal_config_vars(values, return_url, notify_url)
     values.tap do |vars|
       vars[:business] = APP_CONFIG[:paypal][:email]
@@ -15,15 +24,6 @@ module PaypalHelper
     end
   end
   
-  def paypal_encrypted_attendee(attendance, return_url, notify_url)
-    encrypt_for_paypal(
-      add_paypal_config_vars(
-        PaypalAdapter.from_attendance(attendance).to_variables,
-        return_url, notify_url
-      )
-    )
-  end
-
   def paypal_encrypted_registration_group(registration_group, return_url, notify_url)
     encrypt_for_paypal(
       add_paypal_config_vars(

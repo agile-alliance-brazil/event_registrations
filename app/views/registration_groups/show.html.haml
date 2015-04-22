@@ -1,0 +1,29 @@
+%h3= t('registration_group.show.title', group_name: @group.name)
+
+%h5= t('registration_group.show.discount', group_discount: @group.discount)
+%h5= t('registration_group.show.minimum_size', minimum_size: @group.minimum_size)
+
+%h5 #{ number_to_currency @group.total_price }
+
+%h5= t('registration_group.show.attendances', count: @group.attendances.count)
+
+%table.summary
+  %th= t('formtastic.labels.attendance.name')
+  %th= t('formtastic.labels.attendance.organization')
+  %th= t('formtastic.labels.attendance.email')
+  %th= t('formtastic.labels.attendance.registration_date')
+  %th= t('formtastic.labels.attendance.registration_type_id')
+  %th= t('formtastic.labels.attendance.status')
+  - @group.attendances.each do |attendance|
+    %tr
+      %td= "#{attendance.last_name}, #{attendance.first_name}"
+      %td= attendance.organization
+      %td= attendance.email
+      %td= l(attendance.registration_date)
+      %td= t(attendance.registration_type.title)
+      %td= attendance.status
+
+- if @group.has_price?
+  = render 'shared/payment_request'
+
+= render partial: 'shared/invoices'

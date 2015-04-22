@@ -169,6 +169,8 @@ pt:
     fields:
       search:
         placeholder: 'procurar por nome, organização ou email'
+      token:
+        placeholder: 'entre com o seu token de inscrição se você possuir um'
     labels:
       attendance:
         id: "Número de inscrição"
@@ -218,6 +220,26 @@ pt:
       transfer:
         origin_id: "Origem"
         destination_id: "Destino"
+      registration_group:
+        name: 'Nome'
+        discount: 'Desconto (%)'
+        minimum_size: 'Tamanho mínimo'
+        token: 'Token para inscrição'
+        leader: 'Líder'
+        event: 'Evento'
+        qtd_attendances: 'Total de registrados'
+        index:
+          actions: 'Ações'
+      invoice:
+        title: 'Fatura'
+        name: 'Nome'
+        amount: 'Valor'
+        created_at: 'Criada em'
+        user: 'Usuário'
+        status: 'Status'
+        index:
+          actions: 'Ações'
+
     hints:
       attendance:
         registration_type_id: "Indique o tipo de sua inscrição."
@@ -234,6 +256,7 @@ pt:
       update_pending_attendance: "Atualizar preço"
       paid_pending_attendance: "Pagamento recebido"
       search: "Buscar"
+      new_group: "Submeter grupo"
 
   # Mensagens customizadas
   title:
@@ -263,7 +286,9 @@ pt:
     login: "Acessar"
     logout: "Sair"
     list_attendances: "para listar os inscritos"
+    list_groups: "para listar os grupos"
     click: 'Clique'
+    renew: 'renovar'
 
   flash:
     failure: "Por favor verifique os campos em destaque"
@@ -344,6 +369,11 @@ pt:
     status: "Status das inscrições para %{date}"
     details:
       csv: 'Baixe a lista de participantes em formato CSV'
+    payment:
+      request:
+        option_one: 'OPÇÃO 1: Pague com BCash'
+        option_two: 'OPÇÃO 2: Pague com PayPal'
+        text: 'Efetue o pagamento no valor de %{value}'
 
   attendance:
     status:
@@ -356,14 +386,6 @@ pt:
     confirm_confirmation: "Se confirmar essa inscrição na %{event}, o participante será notificado e  não será possível cancelar essa operação.\n\nTem certeza que deseja continuar?"
     confirmed:
       unpaid: "Boleto/Transferência/Empenho"
-
-  registration_group:
-    status:
-      incomplete: "Incompleto"
-      complete: "Pendente"
-      paid: "Pagamento efetuado"
-      confirmed: "Confirmado"
-      all: "Todos"
 
   authentication:
     list: "Serviços de autenticação registrados"
@@ -384,7 +406,22 @@ pt:
       summary: "Veja o relatório de inscrições para %{name}"
       enable_voting: "Habilitar votação"
     register:
-      to_register_message: 'para se registrar em'
+      to_register_message: 'para se inscrever em'
+    not_found: 'Evento não encontrado.'
+
+  registration_group:
+    list: 'Lista dos grupos de %{event_name}'
+    destroy:
+      success: 'Grupo excluído com sucesso.'
+      error: 'Falha ao excluir o grupo.'
+    show:
+      title: 'Detalhes para o grupo %{group_name}'
+      discount: 'Desconto: %{group_discount}%'
+      minimum_size: 'Tamanho mínimo: %{minimum_size}'
+      attendances:
+        zero: 'nenhum congressita'
+        one: '1 congressista'
+        other: '%{count} congressistas'
 
   generic:
     or: "ou"

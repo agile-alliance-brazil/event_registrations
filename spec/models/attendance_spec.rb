@@ -1,8 +1,9 @@
 describe Attendance, type: :model do
-  context "associations" do
+  context 'associations' do
     it { should belong_to :event }
     it { should belong_to :user }
     it { should belong_to :registration_type }
+    it { should belong_to :registration_quota }
   end
 
   context "validations" do
@@ -266,6 +267,38 @@ describe Attendance, type: :model do
     it "should not be cancellable if cancelled already" do
       attendance.cancel
       expect(attendance).not_to be_cancellable
+    end
+  end
+
+  describe '#registration_fee' do
+    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:registration_period) { RegistrationPeriod.create!(start_at: 1.month.ago, end_at: 1.month.from_now, event: event) }
+    let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+    let!(:price) { RegistrationPrice.create!(registration_type: individual, registration_period: registration_period, value: 100.00) }
+
+    context 'with no registration group' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      it { expect(Attendance.last.registration_fee individual).to eq 100 }
+    end
+
+    context 'with registration group' do
+      context 'and no discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 0) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 100 }
+      end
+
+      context 'and partial discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 10) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 90 }
+      end
+
+      context 'and full discount' do
+        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 100) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+        it { expect(Attendance.last.registration_fee individual).to eq 0 }
+      end
     end
   end
 end

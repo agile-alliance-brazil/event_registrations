@@ -27,21 +27,8 @@ namespace :edition_2015 do
     puts '√'
   end
 
-  desc 'Clean'
-  task :clean => :environment do
-    print 'Cleaning all '
-    Dir["#{Rails.root}/app/models/*.rb"].each do |file|
-      read_file = File.read(file)
-      if active_record?(read_file) && !embedded?(read_file) && !user?(read_file)
-        class_name = file.split('/').last.gsub('.rb', '').camelize
-        self.class.const_get(class_name).__send__ :delete_all
-      end
-    end
-    puts '√'
-  end
-
   desc 'Generates all'
-  task :all => [:clean, :seeds]
+  task :all => [:seeds]
 
   private
 

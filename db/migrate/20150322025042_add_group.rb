@@ -26,5 +26,7 @@ class AddGroup < ActiveRecord::Migration
     change_table :users do |t|
       t.integer :registration_group_id
     end
+
+    add_foreign_key :users, :registration_groups, :integer
   end
 end

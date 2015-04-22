@@ -23,7 +23,7 @@ class PaymentGatewayAdapter
   def to_variables
     {}.tap do |vars|
       @items.each_with_index do |item, index|
-        vars.merge!(item.to_variables(index+1))
+        vars.merge!(item.to_variables(index + 1))
       end
       add_variables(vars)
     end

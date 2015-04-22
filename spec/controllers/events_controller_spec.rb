@@ -1,5 +1,4 @@
 describe EventsController, type: :controller do
-
   describe '#show' do
     let!(:event) { FactoryGirl.create :event }
     context 'with an existent user' do
@@ -21,7 +20,7 @@ describe EventsController, type: :controller do
 
     context 'with events' do
       let!(:event) { Event.create name: 'Foo' }
-      let!(:registration_period) { RegistrationPeriod.create!(event: event, start_at: Date.today - 1, end_at: Date.today + 1.months) }
+      let!(:registration_period) { RegistrationPeriod.create!(event: event, start_at: Time.zone.today - 1, end_at: Time.zone.today + 1.months) }
 
       context 'and one event at the right period' do
         before { get :index }
@@ -30,7 +29,7 @@ describe EventsController, type: :controller do
 
       context 'and two at the right period' do
         let!(:other_event) { FactoryGirl.create :event }
-        let!(:other_period) { RegistrationPeriod.create!(event: other_event, start_at: Date.today - 1, end_at: Date.today + 2.months) }
+        let!(:other_period) { RegistrationPeriod.create!(event: other_event, start_at: Time.zone.today - 1, end_at: Time.zone.today + 2.months) }
         before { get :index }
         it { expect(assigns(:events)).to match_array [event, other_event] }
       end
@@ -44,7 +43,7 @@ describe EventsController, type: :controller do
 
       context 'and two at the right period and other not' do
         let!(:other_event) { FactoryGirl.create :event }
-        let!(:other_period) { RegistrationPeriod.create!(event: other_event, start_at: Date.today - 1, end_at: Date.today + 2.months) }
+        let!(:other_period) { RegistrationPeriod.create!(event: other_event, start_at: Time.zone.today - 1, end_at: Time.zone.today + 2.months) }
         let!(:out) { Event.create name: 'Bar' }
         let!(:other_period) { RegistrationPeriod.create!(event: out, start_at: 2.years.ago, end_at: 1.year.ago) }
 

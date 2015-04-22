@@ -103,4 +103,19 @@ describe Event, type: :model do
       end
     end
   end
+
+  describe '#free?' do
+    let(:event) { FactoryGirl.build(:event) }
+    context 'with a non free registration' do
+      let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
+      let(:attendance) { FactoryGirl.build(:attendance, event: event, registration_type: registration_type) }
+      it { expect(event.free?(attendance)).to be_falsey }
+    end
+
+    context 'with a non free registration' do
+      let!(:registration_type) { FactoryGirl.create :registration_type, event: event, title: 'bla-xpto' }
+      let(:attendance) { FactoryGirl.build(:attendance, event: event, registration_type: registration_type) }
+      it { expect(event.free?(attendance)).to be_truthy }
+    end
+  end
 end

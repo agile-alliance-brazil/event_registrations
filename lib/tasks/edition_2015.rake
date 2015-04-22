@@ -3,7 +3,6 @@
 require 'faker'
 
 namespace :edition_2015 do
-
   desc 'Generates seeds'
   task :seeds => :environment do
     print 'Generating seeds '

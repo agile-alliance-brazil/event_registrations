@@ -3,9 +3,7 @@ require 'spec_helper'
 require File.join(Rails.root, '/lib/paypal_adapter.rb')
 
 describe PaypalAdapter do
-
   describe '.from_invoice' do
-
     before(:each) do
       event = FactoryGirl.create(:event)
       @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)

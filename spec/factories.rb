@@ -24,7 +24,7 @@ FactoryGirl.define do
     association :event
     title 'registration_period.regular'
     start_at Time.zone.now
-    end_at (Time.zone.now + 1.day).end_of_day
+    end_at 1.day.from_now.end_of_day
   end
 
   factory :attendance do
@@ -48,7 +48,7 @@ FactoryGirl.define do
     zipcode {|a| a.user.zipcode }
 
     registration_type { |a| a.event.registration_types.find_by_title('registration_type.individual') }
-    registration_date { |a| Time.zone.now }
+    registration_date { Time.zone.now }
   end
 
   factory :payment_notification do
@@ -61,7 +61,7 @@ FactoryGirl.define do
   factory :user do
     first_name "User"
     sequence(:last_name) {|n| "Name#{n}"}
-    email { |a| username = "#{a.first_name} #{a.last_name}".parameterize; "#{username}@example.com" }
+    email { |a| username = "#{a.first_name} #{a.last_name}".parameterize "#{username}@example.com" }
 
     phone "(11) 3322-1234"
     country "BR"

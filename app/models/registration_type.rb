@@ -7,7 +7,6 @@ class RegistrationType < ActiveRecord::Base
   scope :paid, -> { where(title: ['registration_type.individual', 'registration_type.group', 'registration_type.member', 'registration_type.non_member']) }
   scope :individual, -> { where(title: 'registration_type.individual') }
 
-
   def price(datetime)
     period = event.registration_periods.for(datetime).first
     period.price_for_registration_type(self)

@@ -1,6 +1,5 @@
 class AddInvoice < ActiveRecord::Migration
   def change
-
     create_table :invoices do |t|
       t.integer :frete
       t.decimal :amount

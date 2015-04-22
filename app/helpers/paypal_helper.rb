@@ -2,13 +2,12 @@
 require File.join(Rails.root, 'lib', 'paypal_adapter')
 
 module PaypalHelper
-
   def paypal_encrypted_attendee(invoice, return_url, notify_url)
     encrypt_for_paypal(
-        add_paypal_config_vars(
-            PaypalAdapter.from_invoice(invoice).to_variables,
-            return_url, notify_url
-        )
+      add_paypal_config_vars(
+        PaypalAdapter.from_invoice(invoice).to_variables,
+          return_url, notify_url
+      )
     )
   end
 

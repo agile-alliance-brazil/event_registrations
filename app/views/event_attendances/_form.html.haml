@@ -17,23 +17,12 @@
   = form.input :city, required: true, input_html: {tabindex: autotab}
   = form.input :state, required: true, as: :select, collection: ActionView::Helpers::FormOptionsHelper::ESTADOS_BRASILEIROS, input_html: {tabindex: autotab}
   = form.input :zipcode, input_html: {tabindex: autotab}
-= form.inputs :attendance_registrations do
-  = form.input :registration_type_id, as: :radio, collection: convert_registration_types_to_radio(@attendance, @registration_types), required: true, input_html: {tabindex: autotab}
-  - if current_user.organizer?
-    = form.input :notes, input_html: {tabindex: autotab}
 
 %div.total
   %h6= t('registration_total.title')
   %table
     %tr
-      %th= t('registration_total.base_price')
-      %td#registration_price= number_to_currency(0, locale: :pt)
-    %tr
-      %th= t('registration_total.discount')
-      %td#discount= number_to_currency(0, locale: :pt)
-    %tr.last
-      %th= t('registration_total.total')
-      %td#total= number_to_currency(0, locale: :pt)
+      %td= number_to_currency @event.registration_price(@event.registration_types.where(title: 'registration_type.individual'), Time.zone.today)
 
 #flash_notice= t('flash.registration.attendance')
 
@@ -59,14 +48,8 @@
         return;
       }
     
-      var prices = #{attendance_prices(@attendance).to_json};
-      var price = prices[checked_type.val()];
-      if (checked_type.val() == #{@event.registration_types.where(title: 'registration_type.individual').select(:id).first.try(:id) || 0}) {
-        $("#attendance_organization_input").find('label abbr').show();
-      } else {
-        $("#attendance_organization_input").find('label abbr').hide();
-      }
-      
+      var price = #{@event.registration_price(@event.registration_types.where(title: 'registration_type.individual'), Time.zone.today).to_json};
+
       $("td#registration_price").text(price);
       updateTotal();
       

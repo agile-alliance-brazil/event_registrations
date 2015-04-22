@@ -31,21 +31,17 @@ describe BcashAdapter do
   describe 'to_variables' do
     let(:invoice) { Invoice.from_attendance(@attendance) }
     it 'map each item variable' do
-
-      adapter = BcashAdapter.new([
-                                     BcashAdapter::BcashItem.new('item 1', 2, 10.50),
-                                     BcashAdapter::BcashItem.new('item 2', 3, 9.99, 2)
-                                 ], invoice)
+      adapter = BcashAdapter.new([BcashAdapter::BcashItem.new('item 1', 2, 10.50), BcashAdapter::BcashItem.new('item 2', 3, 9.99, 2)], invoice)
 
       expect(adapter.to_variables).to include({
-                                                  'produto_valor_1' => 10.50,
-                                                  'produto_descricao_1' => 'item 1',
-                                                  'produto_qtde_1' => 1,
-                                                  'produto_codigo_1' => 2,
-                                                  'produto_valor_2' => 9.99,
-                                                  'produto_descricao_2' => 'item 2',
-                                                  'produto_qtde_2' => 2,
-                                                  'produto_codigo_2' => 3
+                                                'produto_valor_1' => 10.50,
+                                                'produto_descricao_1' => 'item 1',
+                                                'produto_qtde_1' => 1,
+                                                'produto_codigo_1' => 2,
+                                                'produto_valor_2' => 9.99,
+                                                'produto_descricao_2' => 'item 2',
+                                                'produto_qtde_2' => 2,
+                                                'produto_codigo_2' => 3
                                               })
     end
 

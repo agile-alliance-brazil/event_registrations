@@ -21,9 +21,13 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def free?(attendance)
+    !registration_types.paid.include?(attendance.registration_type)
+  end
+
   private
 
   def find_quota
-    registration_quotas.order(order: :asc).each { |quota| return quota if quota.have_vacancy? }
+    registration_quotas.order(order: :asc).each { |quota| return quota if quota.vacancy? }
   end
 end

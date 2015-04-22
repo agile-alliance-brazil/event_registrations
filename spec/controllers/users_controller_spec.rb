@@ -1,5 +1,4 @@
 describe UsersController, type: :controller do
-
   context 'authorized' do
     let!(:user) { FactoryGirl.create :user }
     before { sign_in user }

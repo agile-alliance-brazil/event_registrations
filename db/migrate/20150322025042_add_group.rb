@@ -1,6 +1,5 @@
 class AddGroup < ActiveRecord::Migration
   def change
-
     create_table :registration_groups do |t|
       t.references	:event
 

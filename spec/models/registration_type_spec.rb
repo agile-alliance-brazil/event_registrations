@@ -8,10 +8,8 @@ describe RegistrationType, type: :model do
     describe '.individual' do
       let!(:registration_type) { FactoryGirl.create(:registration_type, title: 'registration_type.individual') }
       it { expect(RegistrationType.individual.last).to eq registration_type }
-
     end
   end
-
 
   describe '#price' do
     context 'with a valid registration period' do

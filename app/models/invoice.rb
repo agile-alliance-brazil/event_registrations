@@ -1,5 +1,4 @@
 class Invoice < ActiveRecord::Base
-
   STATUSES = [PENDING = 'pending', SENT = 'sent', PAID = 'paid']
 
   belongs_to :user
@@ -8,13 +7,13 @@ class Invoice < ActiveRecord::Base
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
   def self.from_attendance(attendance)
-    invoice = where(user: attendance.user).first
+    invoice = find_by(user: attendance.user)
     return invoice if invoice.present?
     Invoice.create!(user: attendance.user, amount: attendance.registration_fee, status: Invoice::PENDING)
   end
 
   def self.from_registration_group(group)
-    invoice = where(registration_group: group).first
+    invoice = find_by(registration_group: group)
     return invoice if invoice.present?
     Invoice.create!(registration_group: group, user: group.leader, amount: group.total_price, status: Invoice::PENDING)
   end
@@ -35,5 +34,4 @@ class Invoice < ActiveRecord::Base
   def pending?
     status == PENDING
   end
-
 end

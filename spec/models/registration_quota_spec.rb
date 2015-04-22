@@ -5,15 +5,12 @@ describe RegistrationQuota, type: :model do
     it { should belong_to :registration_price }
   end
 
-  describe '#have_vacancy?' do
+  describe '#vacancy?' do
     let(:registration_quota) { FactoryGirl.create :registration_quota, quota: 23 }
-
     context 'with vacancy' do
       let(:attendances) { FactoryGirl.create_list(:attendance, 20) }
       before { registration_quota.attendances = attendances }
-      it { expect(registration_quota.have_vacancy?).to be_truthy }
-
+      it { expect(registration_quota.vacancy?).to be_truthy }
     end
   end
-
 end

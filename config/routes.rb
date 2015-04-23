@@ -1,6 +1,9 @@
 # encoding: UTF-8
 Current::Application.routes.draw do
   post '/auth/:provider/callback', to: 'sessions#create'
+
+  get '/auth/:provider/callback', to: 'sessions#create' # due problems without dev backdoor
+
   get '/auth/failure', to: 'sessions#failure'
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout

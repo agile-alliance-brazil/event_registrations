@@ -9,7 +9,7 @@ class Invoice < ActiveRecord::Base
   def self.from_attendance(attendance)
     invoice = find_by(user: attendance.user)
     return invoice if invoice.present?
-    Invoice.create!(user: attendance.user, amount: attendance.registration_fee, status: Invoice::PENDING)
+    Invoice.create!(user: attendance.user, amount: attendance.event.registration_price_for(attendance), status: Invoice::PENDING)
   end
 
   def self.from_registration_group(group)

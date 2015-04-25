@@ -29,6 +29,7 @@ class EventAttendancesController < ApplicationController
     @attendance.registration_group = group if group.present? && group.accept_members?
 
     return unless validate_free_registration(@attendance)
+    @attendance.registration_value = @event.registration_price_for(@attendance)
     save_attendance!
   end
 

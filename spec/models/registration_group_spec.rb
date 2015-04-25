@@ -32,15 +32,15 @@ describe RegistrationGroup, type: :model do
     let(:group) { RegistrationGroup.create! event: event, discount: 20 }
     let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
 
-    context 'and one attendance' do
-      it { expect(group.total_price).to eq attendance.registration_fee }
+    context 'with one attendance and 20% discount' do
+      it { expect(group.total_price).to eq 320.00 }
     end
 
-    context 'and more attendances' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
-      let!(:other) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
-      let!(:another) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
-      it { expect(group.total_price).to eq attendance.registration_fee + other.registration_fee + another.registration_fee }
+    context 'with more attendances and 20% discount' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 440.00) }
+      let!(:other) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 530.00) }
+      let!(:another) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 700.00) }
+      it { expect(group.total_price).to eq 1336.00 }
     end
   end
 

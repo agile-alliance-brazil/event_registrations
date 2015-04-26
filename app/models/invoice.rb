@@ -34,9 +34,4 @@ class Invoice < ActiveRecord::Base
   def pending?
     status == PENDING
   end
-
-  def amount
-    return attendance.registration_fee unless registration_group.present?
-    registration_group.total_price
-  end
 end

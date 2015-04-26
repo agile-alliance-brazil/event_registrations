@@ -17,8 +17,8 @@ module PagSeguroHelper
 
   def add_pag_seguro_config_vars(values, return_url, notify_url)
     values.tap do |vars|
-      vars[:email] = AppConfig[:pag_seguro][:email]
-      vars[:token] = AppConfig[:pag_seguro][:token]
+      vars[:email] = APP_CONFIG[:pag_seguro][:email]
+      vars[:token] = APP_CONFIG[:pag_seguro][:token]
       vars[:url_aviso] = notify_url
       vars[:currency] = 'BRL'
     end

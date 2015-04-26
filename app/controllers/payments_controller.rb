@@ -7,8 +7,8 @@ class PaymentsController < ApplicationController
   def checkout
 
     PagSeguro.configure do |config|
-      config.token = AppConfig[:pag_seguro][:token]
-      config.email = AppConfig[:pag_seguro][:email]
+      config.token = APP_CONFIG[:pag_seguro][:token]
+      config.email = APP_CONFIG[:pag_seguro][:email]
     end
 
     payment = PagSeguro::PaymentRequest.new

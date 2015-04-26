@@ -58,7 +58,6 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'guard-rubocop'
   gem 'metric_fu'
-  gem 'faker'
 end
 
 group :development do

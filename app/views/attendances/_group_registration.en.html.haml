@@ -1,5 +1,5 @@
 %h5 Your registration has been through the group #{@attendance.registration_group.name}
-- if @attendance.registration_fee > 0
+- if @attendance.event.registration_price_for(attendance) > 0
   %h6 When the group reaches the minimum number of participants the leader can make the payment.
 - else
   %h6 You made the registration through a free group. Wait until the administrator confirm your registration.

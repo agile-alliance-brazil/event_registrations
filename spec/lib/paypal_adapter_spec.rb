@@ -1,31 +1,27 @@
-# encoding: UTF-8
-require 'spec_helper'
 require File.join(Rails.root, '/lib/paypal_adapter.rb')
 
 describe PaypalAdapter do
   describe '.from_invoice' do
-    before(:each) do
-      event = FactoryGirl.create(:event)
-      @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
-      @attendance.stubs(:registration_fee).returns(399)
-    end
-    
+    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link', full_price: 930.00) }
+    let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
+    let!(:attendance) { FactoryGirl.create :attendance, event: event }
+
     it 'should add item for base registration price' do
-      invoice = Invoice.from_attendance(@attendance)
+      invoice = Invoice.from_attendance(attendance)
 
       I18n.with_locale(:en) do
         adapter = PaypalAdapter.from_invoice(invoice)
 
         expect(adapter.items.size).to eq 1
-        expect(adapter.items[0].amount).to eq @attendance.registration_fee
-        expect(adapter.items[0].name).to eq @attendance.full_name
+        expect(adapter.items[0].amount).to eq attendance.event.registration_price_for(attendance)
+        expect(adapter.items[0].name).to eq attendance.full_name
         expect(adapter.items[0].quantity).to eq 1
         expect(adapter.items[0].number).to eq invoice.id
       end
     end
     
     it 'should add invoice id' do
-      invoice = Invoice.from_attendance(@attendance)
+      invoice = Invoice.from_attendance(attendance)
       adapter = PaypalAdapter.from_invoice(invoice)
       expect(adapter.invoice).to eq invoice
     end

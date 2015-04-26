@@ -14,7 +14,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def total_price
-    attendances.map(&:registration_fee).sum
+    attendances.map(&:registration_value).sum * (1 - discount / 100.00)
   end
 
   def price?

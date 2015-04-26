@@ -1,7 +1,6 @@
 # encoding: UTF-8
 Current::Application.routes.draw do
   post '/auth/:provider/callback', to: 'sessions#create'
-
   get '/auth/:provider/callback', to: 'sessions#create' # due problems without dev backdoor
 
   get '/auth/failure', to: 'sessions#failure'
@@ -15,6 +14,12 @@ Current::Application.routes.draw do
     resources :registration_groups, only: [:index, :destroy, :show, :create] do
       member do
         put :renew_invoice
+      end
+    end
+
+    resources :payments, only: [:checkout] do
+      member do
+        post :checkout
       end
     end
   end

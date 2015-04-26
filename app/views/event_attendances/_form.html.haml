@@ -22,7 +22,7 @@
   %h6= t('registration_total.title')
   %table
     %tr
-      %td= number_to_currency @event.registration_price(@event.registration_types.where(title: 'registration_type.individual'), Time.zone.today)
+      %td= number_to_currency @event.registration_price_for(@attendance)
 
 #flash_notice= t('flash.registration.attendance')
 
@@ -48,7 +48,7 @@
         return;
       }
     
-      var price = #{@event.registration_price(@event.registration_types.where(title: 'registration_type.individual'), Time.zone.today).to_json};
+      var price = #{@event.registration_price_for(@attendance).to_json};
 
       $("td#registration_price").text(price);
       updateTotal();

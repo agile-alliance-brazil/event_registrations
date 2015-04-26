@@ -371,7 +371,7 @@ pt:
       csv: 'Baixe a lista de participantes em formato CSV'
     payment:
       request:
-        option_one: 'OPÇÃO 1: Pague com BCash'
+        option_one: 'OPÇÃO 1: Pague com PagSeguro'
         option_two: 'OPÇÃO 2: Pague com PayPal'
         text: 'Efetue o pagamento no valor de %{value}'
 
@@ -408,6 +408,11 @@ pt:
     register:
       to_register_message: 'para se inscrever em'
     not_found: 'Evento não encontrado.'
+  registration_group:
+    list: 'Lista dos grupos de %{event_name}'
+    destroy:
+      success: 'Grupo excluído com sucesso.'
+      error: 'Falha ao excluir o grupo.'
 
   registration_group:
     list: 'Lista dos grupos de %{event_name}'
@@ -422,6 +427,8 @@ pt:
         zero: 'nenhum congressita'
         one: '1 congressista'
         other: '%{count} congressistas'
+  invoice:
+    not_found: 'Fatura não encontrada'
 
   generic:
     or: "ou"

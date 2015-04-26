@@ -70,20 +70,6 @@ class Attendance < ActiveRecord::Base
     registration_fee
   end
 
-  def registration_period
-    period = event.registration_periods.for(self.registration_date).first
-    if period.super_early_bird? && !entitled_super_early_bird?
-      period = event.registration_periods.for(period.end_at + 1.day).first
-    end
-    period
-  end
-
-  def registration_fee(overriden_registration_type = nil)
-    registration_value = registration_value(overriden_registration_type)
-    return registration_value unless registration_group.present?
-    registration_value * (1 - (registration_group.discount / 100.00))
-  end
-
   def cancellable?
     pending?
   end
@@ -104,11 +90,13 @@ class Attendance < ActiveRecord::Base
     self.country == "BR"
   end
 
-  private
-
-  def registration_value(registration_type)
-    registration_period.price_for_registration_type(registration_type || self.registration_type)
+  def discount
+    amount = 1
+    amount = 1 - (registration_group.discount / 100.00) if registration_group.present?
+    amount
   end
+
+  private
 
   def entitled_super_early_bird?
     attendances = event.attendances

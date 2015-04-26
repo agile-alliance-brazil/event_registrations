@@ -1,7 +1,5 @@
 describe PagSeguroService do
-
   describe '.checkout' do
-
     context 'with a valid invoice' do
       let(:invoice) { FactoryGirl.create :invoice }
       it 'returns an empty hash if no errors' do
@@ -12,7 +10,7 @@ describe PagSeguroService do
         expect(payment.items.first.description).to eq invoice.name
         expect(payment.items.first.amount).to eq invoice.amount
         expect(payment.items.first.weight).to eq 0
-        expect(response).to eq Hash.new
+        expect(response).to eq({})
       end
 
       it 'returns internal server error when response is nil' do

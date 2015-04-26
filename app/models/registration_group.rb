@@ -36,10 +36,6 @@ class RegistrationGroup < ActiveRecord::Base
     invoices.present? ? invoices.last.pending? : true
   end
 
-  def has_price?
-    total_price > 0
-  end
-
   private
 
   def generate_token

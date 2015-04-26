@@ -1,6 +1,5 @@
 class PagSeguroService
   def self.checkout(invoice, payment_request)
-
     payment_request.items << {
         id: invoice.id,
         description: invoice.name,

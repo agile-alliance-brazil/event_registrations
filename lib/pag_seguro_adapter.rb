@@ -6,8 +6,7 @@ class PagSeguroAdapter < PaymentGatewayAdapter
     self.new(items, invoice)
   end
 
-  def add_variables(vars)
-
+  def add_variables(_vars)
   end
 
   class PagSeguroItem < Item

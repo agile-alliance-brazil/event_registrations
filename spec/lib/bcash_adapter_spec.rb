@@ -1,7 +1,6 @@
 require File.join(Rails.root, '/lib/bcash_adapter.rb')
 
 describe BcashAdapter do
-
   describe '.from_invoice' do
     let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link', full_price: 930.00) }
     let!(:registration_type) { FactoryGirl.create :registration_type, event: event }

@@ -6,10 +6,6 @@ module BcashHelper
     build_config_vars(invoice, notify_url, return_url)
   end
 
-  def bcash_variables(invoice, return_url, notify_url)
-    build_config_vars(invoice, notify_url, return_url)
-  end
-
   def add_bcash_config_vars(values, return_url, notify_url)
     values.tap do |vars|
       vars[:email_loja] = APP_CONFIG[:bcash][:email]
@@ -25,7 +21,7 @@ module BcashHelper
 
   def build_config_vars(invoice, notify_url, return_url)
     add_bcash_config_vars(
-        BcashAdapter.from_invoice(invoice).to_variables,
+      BcashAdapter.from_invoice(invoice).to_variables,
         return_url, notify_url
     )
   end

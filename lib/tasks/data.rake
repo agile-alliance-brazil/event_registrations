@@ -14,17 +14,17 @@ namespace :data do
         RegistrationPrice.create!(registration_type: registration_type, registration_period: registration_period, value: 100.00)
         10.times do
           attendance = Attendance.create!(
-          first_name: Faker::Name.first_name,
-              last_name: Faker::Name.last_name,
-              organization: Faker::Company.name,
-              email: Faker::Internet.email,
-              phone: Faker::PhoneNumber.cell_phone,
-              country: Faker::Address.country,
-              city: 'Rio de Janeiro',
-              registration_type: registration_type,
-              registration_date: Time.zone.now,
-              user: User.last,
-              event: event)
+            first_name: Faker::Name.first_name,
+            last_name: Faker::Name.last_name,
+            organization: Faker::Company.name,
+            email: Faker::Internet.email,
+            phone: Faker::PhoneNumber.cell_phone,
+            country: Faker::Address.country,
+            city: 'Rio de Janeiro',
+            registration_type: registration_type,
+            registration_date: Time.zone.now,
+            user: User.last,
+            event: event)
           RegistrationGroup.create!(name: Faker::Company.name, event: event, leader: User.last, attendances: [attendance], discount: 15, minimum_size: 10)
         end
         puts '√'

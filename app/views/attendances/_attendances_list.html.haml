@@ -6,6 +6,8 @@
   %th= t('formtastic.labels.attendance.registration_date')
   %th= t('formtastic.labels.attendance.registration_value')
   %th= t('formtastic.labels.attendance.status')
+  %th= t('formtastic.labels.attendance.actions')
+
   - attendances_list.each do |attendance|
     %tr
       %td= "#{attendance.last_name}, #{attendance.first_name}"
@@ -15,3 +17,4 @@
       %td= l(attendance.registration_date)
       %td= attendance.registration_value
       %td= attendance.status
+      %td= link_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put

@@ -187,10 +187,24 @@ describe Attendance, type: :model do
     end
   end
 
-  context "state machine" do
-    it "should start pending"
-    it "should move to paid upon payment"
-    it "should be confirmed on confirmation"
+  context 'state machine' do
+    it 'starts pending' do
+      attendance = Attendance.new
+      expect(attendance.status).to eq 'pending'
+    end
+
+    it 'move to paid upon payment' do
+      attendance = FactoryGirl.create :attendance
+      attendance.pay
+      expect(attendance.status).to eq 'paid'
+    end
+
+    it 'changes to confirmed on confirmation' do
+      attendance = FactoryGirl.create :attendance
+      attendance.confirm
+      expect(attendance.status).to eq 'confirmed'
+    end
+
     it "should email upon after confirmed"
     it "should validate payment agreement when confirmed"
   end

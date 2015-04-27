@@ -202,6 +202,7 @@ pt:
         only_with_notes: "Exibir apenas resultados com anotações"
         total: "Valor"
         price: 'Preço (R$)'
+        actions: 'Ações'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"
@@ -239,8 +240,6 @@ pt:
         created_at: 'Criada em'
         user: 'Usuário'
         status: 'Status'
-        index:
-          actions: 'Ações'
 
     hints:
       attendance:
@@ -291,6 +290,7 @@ pt:
     list_groups: "para listar os grupos"
     click: 'Clique'
     renew: 'renovar'
+    pay: 'Marcar com pago'
 
   flash:
     failure: "Por favor verifique os campos em destaque"
@@ -306,6 +306,9 @@ pt:
       enable_voting:
         missing_authentication: "Sistema de submissões não está registrado como um serviço de autenticação. Adicione abaixo e tente novamente."
         success: "Acesso liberado para votação. Clique <a href='%{url}' target='blank'>aqui</a> para votar nas suas sessões preferidas."
+      payment:
+        success: 'Conferencista marcado como pago.'
+        error: 'Não foi possível marcar como pago.'
     registration:
       attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
     registered_attendances:

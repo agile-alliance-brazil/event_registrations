@@ -46,6 +46,7 @@ FactoryGirl.define do
     address {|a| a.user.address }
     neighbourhood {|a| a.user.neighbourhood }
     zipcode {|a| a.user.zipcode }
+    registration_value 400.00
 
     registration_type { |a| a.event.registration_types.find_by_title('registration_type.individual') }
     registration_date { Time.zone.now }
@@ -93,6 +94,7 @@ FactoryGirl.define do
   factory :invoice do
     user
     status Invoice::PENDING
+    amount 1.00
   end
 
   factory :invoice_group do

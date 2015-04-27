@@ -17,7 +17,7 @@ describe Invoice, type: :model do
     context 'with no pending invoice already existent' do
       subject(:invoice) { Invoice.from_attendance(attendance) }
       it { expect(invoice.user).to eq attendance.user }
-      it { expect(invoice.amount).to eq attendance.registration_fee }
+      it { expect(invoice.amount).to eq attendance.event.registration_price_for(attendance) }
     end
 
     context 'with an already existent pending invoice' do

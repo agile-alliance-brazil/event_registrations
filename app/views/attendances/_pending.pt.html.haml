@@ -6,8 +6,7 @@
 
 %h3 Importante
 
-- deadline = attendance.registration_date.to_date + 5
-%p Após o dia #{I18n.l([attendance.registration_period.end_at.to_date, deadline].max)}, o valor da inscrição será atualizado conforme a tabela disponível em #{link_to price_table_link(attendance.event, :pt), price_table_link(attendance.event, :pt)}.
+%p O valor da inscrição será atualizado conforme a tabela disponível em #{link_to price_table_link(attendance.event, :pt), price_table_link(attendance.event, :pt)}.
 
 %div.actions
   - if can? :confirm, Attendance

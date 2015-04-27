@@ -1,6 +1,8 @@
 # encoding: UTF-8
 Current::Application.routes.draw do
   post '/auth/:provider/callback', to: 'sessions#create'
+  get '/auth/:provider/callback', to: 'sessions#create' # due problems without dev backdoor
+
   get '/auth/failure', to: 'sessions#failure'
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
@@ -14,14 +16,23 @@ Current::Application.routes.draw do
         put :renew_invoice
       end
     end
+
+    resources :payments, only: [:checkout] do
+      member do
+        post :checkout
+      end
+    end
   end
 
   get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
   post '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
   resources :attendances, only: [:show, :destroy, :index] do
-    post :enable_voting, on: :member
-    get :voting_instructions, on: :member
-    put :confirm, on: :member
+    member do
+      post :enable_voting
+      get :voting_instructions
+      put :confirm
+      put :pay_it
+    end
   end
   resources :transfers, only: [:new, :create]
 

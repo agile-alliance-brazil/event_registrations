@@ -6,7 +6,7 @@
   %tr
     %td #{t('formtastic.labels.attendance.registration_type_id')}: #{t(attendance.registration_type.title)}
     %td= l(attendance.registration_date.to_date)
-    %td= number_to_currency(attendance.registration_fee, :locale => :pt)
+    %td= number_to_currency(attendance.event.registration_price_for(attendance), :locale => :pt)
   %tr.last
     %th{:colspan => 2}= t('registration_total.total')
-    %th= number_to_currency(attendance.registration_fee, :locale => :pt)
+    %th= number_to_currency(attendance.event.registration_price_for(attendance), :locale => :pt)

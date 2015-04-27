@@ -43,6 +43,7 @@ en:
         name: 'Name'
         full_name: "Name"
         email: "E-mail address"
+        group: "Grupo"
         email_confirmation: "Confirm e-mail address"
         phone: "Phone"
         country: "Country"
@@ -58,11 +59,13 @@ en:
         zipcode: "Zip Code"
         status: "Status"
         registration_date: "Registration Date"
+        registration_value: "Registration Value"
         payment_agreement: "I confirm that the participant made the payment of the above mentioned amount. The system will notify the participant that his/her registration to the conference is confirmed."
         notes: "Notes"
         only_with_notes: "Show only results with notes"
         total: "Amount"
         price: 'Price (R$)'
+        actions: 'Actions'
       payment_notification:
         transaction_id: "Transaction ID"
         paid_at: "Payment date"
@@ -151,6 +154,8 @@ en:
     list_groups: "to list groups"
     click: 'Click'
     renew: 'renew'
+    pay: 'Check as paid'
+
 
   flash:
     failure: "Please check the highlighted fields"
@@ -166,6 +171,9 @@ en:
       enable_voting:
         missing_authentication: "Submission system is not registered as an authentication service. Add the service below and try again."
         success: "Access granted to start voting. Click <a href='%{url}' target='blank'>here</a> to vote on your favorite sessions."
+      payment:
+        success: 'Attendee check as paid.'
+        error: 'Could not check attendee as paid.'
     registration:
       attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
     registered_attendances:
@@ -234,7 +242,7 @@ en:
     payment:
       request:
         option_one: 'OPTION 1: Pay with PayPal'
-        option_two: 'OPTION 2: If you can understand Portuguese, pay with BCash for different payment types'
+        option_two: 'OPTION 2: If you can understand Portuguese, pay with PagSeguro for different payment types'
         text: 'Pay the total amount of %{value}'
 
   attendance:
@@ -280,10 +288,11 @@ en:
       title: 'Details for group %{group_name}'
       discount: 'Discount: %{group_discount}%'
       minimum_size: 'Minimum size: %{minimum_size}'
-
       attendances:
         one: '1 attendance'
         other: '%{count} attendances'
+  invoice:
+    not_found: 'Invoice not found'
 
   generic:
     or: "or"

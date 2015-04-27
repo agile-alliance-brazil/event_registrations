@@ -179,6 +179,7 @@ pt:
         last_name: "Sobrenome"
         name: 'Nome'
         full_name: "Nome"
+        group: "Grupo"
         email: "Email"
         email_confirmation: "Confirmação de email"
         phone: "Telefone para contato"
@@ -195,11 +196,13 @@ pt:
         zipcode: "CEP"
         status: "Status"
         registration_date: "Data de Inscrição"
+        registration_value: "Valor da Inscrição"
         payment_agreement: "Confirmo que o participante realizou o pagamento no valor acima. O sistema notificará o participante por email de que sua inscrição foi confirmada."
         notes: "Anotações"
         only_with_notes: "Exibir apenas resultados com anotações"
         total: "Valor"
         price: 'Preço (R$)'
+        actions: 'Ações'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"
@@ -237,8 +240,6 @@ pt:
         created_at: 'Criada em'
         user: 'Usuário'
         status: 'Status'
-        index:
-          actions: 'Ações'
 
     hints:
       attendance:
@@ -289,6 +290,7 @@ pt:
     list_groups: "para listar os grupos"
     click: 'Clique'
     renew: 'renovar'
+    pay: 'Marcar com pago'
 
   flash:
     failure: "Por favor verifique os campos em destaque"
@@ -304,6 +306,9 @@ pt:
       enable_voting:
         missing_authentication: "Sistema de submissões não está registrado como um serviço de autenticação. Adicione abaixo e tente novamente."
         success: "Acesso liberado para votação. Clique <a href='%{url}' target='blank'>aqui</a> para votar nas suas sessões preferidas."
+      payment:
+        success: 'Conferencista marcado como pago.'
+        error: 'Não foi possível marcar como pago.'
     registration:
       attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
     registered_attendances:
@@ -371,7 +376,7 @@ pt:
       csv: 'Baixe a lista de participantes em formato CSV'
     payment:
       request:
-        option_one: 'OPÇÃO 1: Pague com BCash'
+        option_one: 'OPÇÃO 1: Pague com PagSeguro'
         option_two: 'OPÇÃO 2: Pague com PayPal'
         text: 'Efetue o pagamento no valor de %{value}'
 
@@ -408,6 +413,11 @@ pt:
     register:
       to_register_message: 'para se inscrever em'
     not_found: 'Evento não encontrado.'
+  registration_group:
+    list: 'Lista dos grupos de %{event_name}'
+    destroy:
+      success: 'Grupo excluído com sucesso.'
+      error: 'Falha ao excluir o grupo.'
 
   registration_group:
     list: 'Lista dos grupos de %{event_name}'
@@ -422,6 +432,8 @@ pt:
         zero: 'nenhum congressita'
         one: '1 congressista'
         other: '%{count} congressistas'
+  invoice:
+    not_found: 'Fatura não encontrada'
 
   generic:
     or: "ou"

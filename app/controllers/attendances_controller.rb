@@ -60,8 +60,19 @@ class AttendancesController < ApplicationController
     @attendance = resource
     @submission_system_authentication = current_user.authentications.find_by_provider('submission_system')
   end
+
+  def pay_it
+    if resource.cancelled?
+      flash[:alert] = t('flash.attendance.payment.error')
+    else
+      resource.pay
+      flash[:notice] = t('flash.attendance.payment.success')
+    end
+    redirect_to attendances_path(event_id: @event.id)
+  end
   
   private
+
   def resource_class
     Attendance
   end

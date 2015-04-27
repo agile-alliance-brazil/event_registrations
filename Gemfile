@@ -27,10 +27,13 @@ gem 'omniauth-twitter', '=1.1.0'
 gem 'omniauth-facebook', '=2.0.1'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
+gem 'faker'
+gem 'pagseguro-oficial'
 
 gem 'jquery-rails', '=4.0.3'
 gem 'therubyracer', '=0.12.2', platforms: :ruby
 gem 'sass-rails', '=5.0.3'
+
 gem 'coffee-rails', '=4.1.0'
 gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
 
@@ -55,7 +58,6 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'guard-rubocop'
   gem 'metric_fu'
-  gem 'faker'
 end
 
 group :development do
@@ -72,4 +74,5 @@ group :test do
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'simplecov', require: false
 end

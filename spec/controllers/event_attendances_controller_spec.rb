@@ -68,7 +68,7 @@ describe EventAttendancesController, type: :controller do
     end
   end
 
-  describe "POST create" do
+  describe '#create' do
     let(:user){ FactoryGirl.create(:user) }
     let(:valid_attendance) do
       {
@@ -99,26 +99,51 @@ describe EventAttendancesController, type: :controller do
       EmailNotifications.stubs(:registration_pending).returns(@email)
     end
 
-    it "should render new template when model is invalid" do
+    it 'renders new template when model is invalid' do
       user.phone = nil # User cannot have everything or we will just pick from there.
+      # I think we need to consolidate all user and attendee information
       post :create, event_id: @event.id, attendance: {event_id: @event.id}
       expect(response).to render_template(:new)
     end
 
-    it "should redirect when model is valid" do
+    it 'redirects when model is valid' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       Attendance.any_instance.stubs(:id).returns(5)
       post :create, event_id: @event.id, attendance: valid_attendance
       expect(response).to redirect_to(attendance_path(5))
     end
 
-    it "should assign current event to attendance" do
+    it 'assigns current event to attendance' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       post :create, event_id: @event.id, attendance: valid_attendance
-      expect(assigns(:attendance).event).to eq(@event)
+      expect(assigns(:attendance).event).to eq @event
     end
 
-    it "should notify airbrake if cannot send email" do
+    context 'event value for attendance' do
+      before { Timecop.return }
+      context 'with no period, quotas or groups' do
+        before { post :create, event_id: @event.id, attendance: valid_attendance }
+        it { expect(assigns(:attendance).registration_value).to eq @event.full_price }
+      end
+
+      context 'with no period or quotas, but with a valid group' do
+        let(:group) { FactoryGirl.create(:registration_group, event: @event, discount: 30) }
+        before { post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
+        it { expect(assigns(:attendance).registration_value).to eq @event.full_price * 0.7 }
+      end
+
+      context 'with period and no quotas or group' do
+        let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
+        let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
+        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event) }
+        let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: full_registration_period, value: 740.00) }
+
+        before { post :create, event_id: event.id, attendance: valid_attendance }
+        it { expect(assigns(:attendance).registration_value).to eq 740.00 }
+      end
+    end
+
+    it 'notifies airbrake if cannot send email' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       exception = StandardError.new
       EmailNotifications.expects(:registration_pending).raises(exception)
@@ -127,7 +152,7 @@ describe EventAttendancesController, type: :controller do
       expect(assigns(:attendance).event).to eq(@event)
     end
 
-    it "should ignore airbrake errors if cannot send email" do
+    it 'should ignore airbrake errors if cannot send email' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       exception = StandardError.new
       EmailNotifications.expects(:registration_pending).raises(exception)
@@ -136,19 +161,17 @@ describe EventAttendancesController, type: :controller do
       expect(assigns(:attendance).event).to eq(@event)
     end
 
-    describe "for individual registration" do
-      context "cannot add more attendances" do
-        before do
-          Event.any_instance.stubs(:can_add_attendance?).returns(false)
-        end
+    context 'for individual registration' do
+      context 'cannot add more attendances' do
+        before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
 
-        it "should redirect to home page with error message when cannot add more attendances" do
+        it 'redirects to home page with error message when cannot add more attendances' do
           post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
           expect(response).to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
 
-        it "should allow attendance creation if user is organizer" do
+        it 'allows attendance creation if user is organizer' do
           Attendance.any_instance.stubs(:valid?).returns(true)
           Attendance.any_instance.stubs(:id).returns(5)
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421220159) do
+ActiveRecord::Schema.define(version: 20150424001453) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20150421220159) do
     t.string   "zipcode"
     t.string   "notes"
     t.integer  "registration_quota_id"
+    t.decimal  "registration_value"
   end
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"

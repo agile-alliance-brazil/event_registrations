@@ -19,6 +19,9 @@ module Airbrake
   end
 end
 
+require 'simplecov'
+SimpleCov.start 'rails'
+
 RSpec.configure do |config|
   config.include(ControllerMacros, type: :controller)
   config.include(DisableAuthorization, type: :controller)

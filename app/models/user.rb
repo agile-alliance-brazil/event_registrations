@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   has_many :attendances
   has_many :events, -> { uniq }, through: :attendances
   has_many :payment_notifications, through: :attendances
+  has_many :led_groups, class_name: 'RegistrationGroup', inverse_of: :leader, foreign_key: :leader_id
+  has_many :invoices
 
   has_many :led_groups, class_name: 'RegistrationGroup', inverse_of: :leader, foreign_key: :leader_id
 

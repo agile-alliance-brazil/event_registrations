@@ -29,6 +29,7 @@ class EventAttendancesController < ApplicationController
     @attendance.registration_group = group if group.present? && group.accept_members?
 
     return unless validate_free_registration(@attendance)
+    @attendance.registration_value = @event.registration_price_for(@attendance)
     save_attendance!
   end
 
@@ -49,6 +50,8 @@ class EventAttendancesController < ApplicationController
       render :new
     end
   end
+
+  private
 
   def resource
     Attendance.find_by_id(params[:id])
@@ -73,10 +76,10 @@ class EventAttendancesController < ApplicationController
 
   def attendance_params
     params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
-    :registration_group_id, :registration_date, :first_name, :last_name, :email,
-    :email_confirmation, :organization, :phone, :country, :state, :city,
-    :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-    :zipcode, :notes)
+                                                                        :registration_group_id, :registration_date, :first_name, :last_name, :email,
+                                                                        :email_confirmation, :organization, :phone, :country, :state, :city,
+                                                                        :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
+                                                                        :zipcode, :notes)
   end
 
   def load_registration_types

@@ -179,6 +179,7 @@ pt:
         last_name: "Sobrenome"
         name: 'Nome'
         full_name: "Nome"
+        group: "Grupo"
         email: "Email"
         email_confirmation: "Confirmação de email"
         phone: "Telefone para contato"

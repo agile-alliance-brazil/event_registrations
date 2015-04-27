@@ -22,6 +22,7 @@ class Attendance < ActiveRecord::Base
   validates_format_of :phone, with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true
 
   delegate :token, to: :registration_group
+  delegate :name, to: :registration_group, prefix: :group, allow_nil: true
 
   usar_como_cpf :cpf
 

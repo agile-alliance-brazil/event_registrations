@@ -43,6 +43,7 @@ en:
         name: 'Name'
         full_name: "Name"
         email: "E-mail address"
+        group: "Grupo"
         email_confirmation: "Confirm e-mail address"
         phone: "Phone"
         country: "Country"

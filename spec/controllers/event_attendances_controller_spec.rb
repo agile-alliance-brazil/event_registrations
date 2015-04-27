@@ -135,7 +135,7 @@ describe EventAttendancesController, type: :controller do
       context 'with period and no quotas or group' do
         let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
         let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
-        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 1.day.ago, end_at: 1.day.from_now, event: event) }
+        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event) }
         let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: full_registration_period, value: 740.00) }
 
         before { post :create, event_id: event.id, attendance: valid_attendance }

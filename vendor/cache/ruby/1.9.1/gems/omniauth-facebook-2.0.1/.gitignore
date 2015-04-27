@@ -1,9 +1,0 @@
-*.gem
-.bundle
-.rspec
-/Gemfile.lock
-pkg/*
-.powenv
-tmp
-bin
-example/app.log

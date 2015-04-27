@@ -1,6 +1,7 @@
 %table.summary
   %th= t('formtastic.labels.attendance.name')
   %th= t('formtastic.labels.attendance.organization')
+  %th= t('formtastic.labels.attendance.group')
   %th= t('formtastic.labels.attendance.email')
   %th= t('formtastic.labels.attendance.registration_date')
   %th= t('formtastic.labels.attendance.registration_value')
@@ -9,6 +10,7 @@
     %tr
       %td= "#{attendance.last_name}, #{attendance.first_name}"
       %td= attendance.organization
+      %td= attendance.group_name
       %td= attendance.email
       %td= l(attendance.registration_date)
       %td= attendance.registration_value

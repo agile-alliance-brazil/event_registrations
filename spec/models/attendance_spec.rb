@@ -3,6 +3,7 @@ describe Attendance, type: :model do
     it { should belong_to :event }
     it { should belong_to :user }
     it { should belong_to :registration_type }
+    it { should belong_to :registration_group }
     it { should belong_to :registration_quota }
   end
 
@@ -234,6 +235,22 @@ describe Attendance, type: :model do
       let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 100) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
       it { expect(attendance.discount).to eq 0 }
+    end
+  end
+
+  describe '#group_name' do
+    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    context 'with a registration group' do
+      let!(:group) { FactoryGirl.create :registration_group, event: event }
+      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+      it { expect(attendance.group_name).to eq group.name }
+    end
+
+    context 'with no registration group' do
+      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      it { expect(attendance.group_name).to eq nil }
     end
   end
 end

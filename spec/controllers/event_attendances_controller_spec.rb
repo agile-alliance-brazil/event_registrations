@@ -135,7 +135,7 @@ describe EventAttendancesController, type: :controller do
       context 'with period and no quotas or group' do
         let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
         let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
-        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 1.day.ago, end_at: 1.day.from_now, event: event) }
+        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event) }
         let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: full_registration_period, value: 740.00) }
 
         before { post :create, event_id: event.id, attendance: valid_attendance }
@@ -161,19 +161,17 @@ describe EventAttendancesController, type: :controller do
       expect(assigns(:attendance).event).to eq(@event)
     end
 
-    describe "for individual registration" do
-      context "cannot add more attendances" do
-        before do
-          Event.any_instance.stubs(:can_add_attendance?).returns(false)
-        end
+    context 'for individual registration' do
+      context 'cannot add more attendances' do
+        before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
 
-        it "should redirect to home page with error message when cannot add more attendances" do
+        it 'redirects to home page with error message when cannot add more attendances' do
           post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
           expect(response).to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
 
-        it "should allow attendance creation if user is organizer" do
+        it 'allows attendance creation if user is organizer' do
           Attendance.any_instance.stubs(:valid?).returns(true)
           Attendance.any_instance.stubs(:id).returns(5)
 

@@ -30,20 +30,18 @@ describe RegistrationGroup, type: :model do
 
   describe '#total_price' do
     let(:individual) { event.registration_types.first }
-    let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now) }
-    let!(:price) { RegistrationPrice.create!(registration_type: individual, registration_period: period, value: 100.00) }
-    let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+    let(:group) { RegistrationGroup.create! event: event }
     let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
 
-    context 'with one attendance and 20% discount' do
-      it { expect(group.total_price).to eq 320.00 }
+    context 'with one attendance and 20% discount over full price' do
+      it { expect(group.total_price).to eq 400.00 }
     end
 
     context 'with more attendances and 20% discount' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 440.00) }
       let!(:other) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 530.00) }
       let!(:another) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 700.00) }
-      it { expect(group.total_price).to eq 1336.00 }
+      it { expect(group.total_price).to eq 1670.00 }
     end
   end
 
@@ -59,8 +57,8 @@ describe RegistrationGroup, type: :model do
 
     context 'with attendances' do
       context 'and no value' do
-        let(:group) { RegistrationGroup.create! event: event, discount: 100 }
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+        let(:group) { RegistrationGroup.create! event: event }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 0) }
         it { expect(group.price?).to be_falsey }
       end
 

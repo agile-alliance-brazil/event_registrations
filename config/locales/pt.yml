@@ -179,6 +179,7 @@ pt:
         last_name: "Sobrenome"
         name: 'Nome'
         full_name: "Nome"
+        group: "Grupo"
         email: "Email"
         email_confirmation: "Confirmação de email"
         phone: "Telefone para contato"
@@ -195,6 +196,7 @@ pt:
         zipcode: "CEP"
         status: "Status"
         registration_date: "Data de Inscrição"
+        registration_value: "Valor da Inscrição"
         payment_agreement: "Confirmo que o participante realizou o pagamento no valor acima. O sistema notificará o participante por email de que sua inscrição foi confirmada."
         notes: "Anotações"
         only_with_notes: "Exibir apenas resultados com anotações"

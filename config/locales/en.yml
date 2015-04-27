@@ -43,6 +43,7 @@ en:
         name: 'Name'
         full_name: "Name"
         email: "E-mail address"
+        group: "Grupo"
         email_confirmation: "Confirm e-mail address"
         phone: "Phone"
         country: "Country"
@@ -58,6 +59,7 @@ en:
         zipcode: "Zip Code"
         status: "Status"
         registration_date: "Registration Date"
+        registration_value: "Registration Value"
         payment_agreement: "I confirm that the participant made the payment of the above mentioned amount. The system will notify the participant that his/her registration to the conference is confirmed."
         notes: "Notes"
         only_with_notes: "Show only results with notes"

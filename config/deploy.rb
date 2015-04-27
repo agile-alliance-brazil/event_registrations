@@ -18,6 +18,7 @@ set :scm_verbose,         true
 
 set :deploy_to,           '/srv/apps/registrations'
 set :deploy_via,          :remote_cache
+set :bundle_flags,        '--no-cache'
 
 # Default value for :format is :pretty
 # set :format, :pretty

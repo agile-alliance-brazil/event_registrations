@@ -1,0 +1,84 @@
+/*
+ *= require mocha
+ */
+
+body {
+  padding: 60px 0;
+}
+
+.test-context {
+  -webkit-transform-origin: right top;
+     -moz-transform-origin: right top;
+      -ms-transform-origin: right top;
+       -o-transform-origin: right top;
+          transform-origin: right top;
+
+  width: 55%;
+  height: 700px;
+
+  position: fixed;
+  top: 80px;
+  right: 25px;
+
+  /* inset */
+  border-top: 2px solid #c8c8c8;
+  border-bottom: 2px solid #eee;
+  border-left: 2px solid #ddd;
+  border-right: 2px solid #ddd;
+
+  /* opaque */
+  z-index: 1;
+  background-color: white;
+
+  /* dynamically shown */
+  display: none;
+}
+
+#mocha {
+  width: 40%;
+}
+
+
+@media (max-width: 1860px) {
+  .test-context {
+    width: 66%;
+    -webkit-transform: scale(0.6666666666);
+       -moz-transform: scale(0.6666666666);
+        -ms-transform: scale(0.6666666666);
+         -o-transform: scale(0.6666666666);
+            transform: scale(0.6666666666);
+  }
+}
+
+@media (max-width: 1550px) {
+  .test-context {
+    width: 100%;
+    -webkit-transform: scale(0.5);
+       -moz-transform: scale(0.5);
+        -ms-transform: scale(0.5);
+         -o-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+}
+
+@media (max-width: 1230px) {
+  .test-context {
+    width: 150%;
+    -webkit-transform: scale(0.3333333333);
+       -moz-transform: scale(0.3333333333);
+        -ms-transform: scale(0.3333333333);
+         -o-transform: scale(0.3333333333);
+            transform: scale(0.3333333333);
+  }
+}
+
+@media (max-width: 1050px) {
+  .test-context {
+    width: 250%;
+    -webkit-transform: scale(0.2);
+       -moz-transform: scale(0.2);
+        -ms-transform: scale(0.2);
+         -o-transform: scale(0.2);
+            transform: scale(0.2);
+  }
+}

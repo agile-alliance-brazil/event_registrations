@@ -1,0 +1,49 @@
+0.4.5:
+* Check for existence of html or text body when attachments are included
+* Message ids in mail objects should now reflect what is actually sent.
+
+0.4.4:
+* Fixed error in initialized settings if you don't set them manually
+
+0.4.3:
+* No more error from Rails 3.1 about incompatible gem versions
+* Better error message
+* No duplicate dependencies
+
+0.4.2:
+* Added support for ReplyToAddresses, Destinations, and Source (pzb)
+* Added custom User-Agent header (pzb)
+* Widespread doc updates
+
+0.4.1:
+* Removed many unneeded monkeypatch extensions
+* Tests ( and gem ) run in 1.9.2
+
+0.4.0:
+* This version may have some small incompatibilities due to adding support for MessageId.  Check that the result still matches what you previously expected.
+* Added MessageId support in responses
+* Improved resulting data from many responses
+* Added tests and documentation for quota and statistics
+* Added Rails 2.3.x support ( I HOPE!!! )
+
+0.3.2:
+* Removed unused extensions that were conflicting with S3
+
+0.3.1:
+* Downgraded mail gem version required to enhance Rails 3.0.0 compatibility
+
+0.3.0:
+* Added send_raw_email support
+* Added support for Rails3
+* Vastly improved error handling and got rid of a bunch of stuff that wasn't used
+
+0.2.0:
+* Added info support
+* Added send_email
+
+0.1.0:
+- Initial creation that supports:
+
+* addresses.list
+* addresses.verify(email)
+* addresses.delete(email)

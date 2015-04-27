@@ -195,6 +195,7 @@ pt:
         zipcode: "CEP"
         status: "Status"
         registration_date: "Data de Inscrição"
+        registration_value: "Valor da Inscrição"
         payment_agreement: "Confirmo que o participante realizou o pagamento no valor acima. O sistema notificará o participante por email de que sua inscrição foi confirmada."
         notes: "Anotações"
         only_with_notes: "Exibir apenas resultados com anotações"

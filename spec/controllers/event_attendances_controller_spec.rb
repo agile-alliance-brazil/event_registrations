@@ -161,19 +161,17 @@ describe EventAttendancesController, type: :controller do
       expect(assigns(:attendance).event).to eq(@event)
     end
 
-    describe "for individual registration" do
-      context "cannot add more attendances" do
-        before do
-          Event.any_instance.stubs(:can_add_attendance?).returns(false)
-        end
+    context 'for individual registration' do
+      context 'cannot add more attendances' do
+        before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
 
-        it "should redirect to home page with error message when cannot add more attendances" do
+        it 'redirects to home page with error message when cannot add more attendances' do
           post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
           expect(response).to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
 
-        it "should allow attendance creation if user is organizer" do
+        it 'allows attendance creation if user is organizer' do
           Attendance.any_instance.stubs(:valid?).returns(true)
           Attendance.any_instance.stubs(:id).returns(5)
 

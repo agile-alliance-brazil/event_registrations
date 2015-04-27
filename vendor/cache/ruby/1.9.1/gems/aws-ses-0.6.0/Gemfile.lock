@@ -1,0 +1,22 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    builder (3.2.2)
+    flexmock (0.8.11)
+    mail (2.6.1)
+      mime-types (>= 1.16, < 3)
+    mime-types (2.4.1)
+    shoulda-context (1.2.1)
+    xml-simple (1.1.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  builder
+  bundler
+  flexmock (~> 0.8.11)
+  mail (> 2.2.5)
+  mime-types
+  shoulda-context
+  xml-simple

@@ -1,0 +1,134 @@
+---
+UnusedParameters:
+  exclude: []
+UncommunicativeParameterName:
+  accept: []
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+TooManyInstanceVariables:
+  exclude:
+  - Unparser::CLI
+  enabled: true
+  max_instance_variables: 3
+TooManyMethods:
+  exclude:
+  - Unparser::Emitter # TODO: 13 methods, mostly helpers for deduplicate sublcasses
+  - Unparser::Buffer  # 11 methods
+  - Unparser::CLI::Source # 11 methods
+  enabled: true
+  max_methods: 10
+UncommunicativeMethodName:
+  accept:
+  - s
+  - n
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^[a-z]$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+LongParameterList:
+  max_params: 3
+  exclude:
+  - Unparser#self.transquote
+  enabled: true
+  overrides: {}
+FeatureEnvy:
+  exclude:
+  # False positives
+  - Unparser::CLI::Differ#collapsed_hunks
+  - Unparser::Emitter::Send::Arguments#effective_arguments
+  # Helper methods, false positive
+  - Unparser::CLI::Source#strip
+  - Unparser::CLI::Source#report_unparser
+  - Unparser::CLI#sources
+  enabled: true
+ClassVariable:
+  exclude: []
+  enabled: true
+BooleanParameter:
+  exclude: []
+  enabled: true
+IrresponsibleModule:
+  exclude: []
+  enabled: true
+UncommunicativeModuleName:
+  accept: []
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+NestedIterators:
+  ignore_iterators: []
+  exclude:
+  # Acceptable cases:
+  - Unparser::Emitter::Literal::Regexp#dispatch
+  - Unparser::CLI::Preprocessor::Dstr#collapsed_children
+  - Unparser::Preprocessor::CollapseStrChildren#collapsed_children
+  enabled: true
+  max_allowed_nesting: 1
+TooManyStatements:
+  max_statements: 6
+  enabled: true
+  exclude:
+  - Unparser::CLI#add_options
+  - Unparser::CLI#initialize
+  - Unparser::CLI::Source#report_unparser
+  - Unparser::Emitter#delimited
+DuplicateMethodCall:
+  allow_calls: []
+  exclude: []
+  enabled: false
+  max_calls: 1
+UtilityFunction:
+  max_helper_calls: 1
+  exclude:
+  # Intent to be helper methods
+  - Unparser::CLI::Source#strip
+  - Unparser::CLI#sources
+  enabled: true
+Attribute:
+  exclude: []
+  enabled: false
+UncommunicativeVariableName:
+  accept: []
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+RepeatedConditional:
+  exclude:
+  # TODO:
+  - Unparser::Comments
+  # False positives
+  - Unparser::Emitter::If
+  - Unparser::CLI
+  enabled: true
+  max_ifs: 1
+DataClump:
+  exclude: []
+  enabled: true
+  max_copies: 1
+  min_clump_size: 3
+ControlParameter:
+  exclude:
+    # False positive:
+    - Unparser::Emitter#emit_body
+    - Unparser::Emitter#conditional_parentheses
+    - Unparser::AST::LocalVariableScope#match
+  enabled: true
+NilCheck:
+  enabled: false
+LongYieldList:
+  max_params: 1
+  exclude:
+  - Unparser::AST::LocalVariableScopeEnumerator#visit
+  - Unparser::AST::LocalVariableScope#match
+  enabled: true

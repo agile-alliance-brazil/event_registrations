@@ -118,7 +118,7 @@ int t() { rb_integer_pack(); return 0; }
 1 warning generated.
 Undefined symbols for architecture x86_64:
   "_rb_integer_pack", referenced from:
-      _t in conftest-4bee41.o
+      _t in conftest-3873cd.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 checked program was:
@@ -261,7 +261,7 @@ int t() { sqlite3_column_database_name(); return 0; }
 1 warning generated.
 Undefined symbols for architecture x86_64:
   "_sqlite3_column_database_name", referenced from:
-      _t in conftest-a37128.o
+      _t in conftest-f23c74.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 checked program was:
@@ -312,7 +312,7 @@ int t() { sqlite3_enable_load_extension(); return 0; }
 1 warning generated.
 Undefined symbols for architecture x86_64:
   "_sqlite3_enable_load_extension", referenced from:
-      _t in conftest-8a38ec.o
+      _t in conftest-b90037.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 checked program was:
@@ -363,7 +363,7 @@ int t() { sqlite3_load_extension(); return 0; }
 1 warning generated.
 Undefined symbols for architecture x86_64:
   "_sqlite3_load_extension", referenced from:
-      _t in conftest-e00e01.o
+      _t in conftest-22b62e.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 checked program was:

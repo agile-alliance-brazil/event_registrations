@@ -88,6 +88,17 @@ describe AttendancesController, type: :controller do
       delete :destroy, id: attendance.id
       expect(response).to redirect_to(attendances_path(event_id: attendance.event.id))
     end
+
+    context 'with invoice' do
+      it 'cancel the attendance and the invoice' do
+        Invoice.from_attendance(attendance)
+        delete :destroy, id: attendance.id
+        expect(Attendance.last.status).to eq 'cancelled'
+        expect(Invoice.last.status).to eq 'cancelled'
+
+
+      end
+    end
   end
 
   describe '#confirm' do

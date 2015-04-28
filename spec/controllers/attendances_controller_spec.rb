@@ -86,7 +86,7 @@ describe AttendancesController, type: :controller do
 
     it 'redirects back to status' do
       delete :destroy, id: attendance.id
-      expect(response).to redirect_to(attendance_path(attendance))
+      expect(response).to redirect_to(attendances_path(event_id: attendance.event.id))
     end
   end
 
@@ -144,7 +144,7 @@ describe AttendancesController, type: :controller do
 
     context 'cancelled attendance' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'cancelled') }
-      it 'marks as paid, save when this occurs and redirect to attendances index' do
+      it 'doesnt mark as paid and redirect to attendances index with alert' do
         put :pay_it, id: attendance.id
         expect(response).to redirect_to attendances_path(event_id: event.id)
         expect(flash[:alert]).to eq I18n.t('flash.attendance.payment.error')

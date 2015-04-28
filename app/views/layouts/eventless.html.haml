@@ -21,7 +21,7 @@
           %li= link_to "Português", "?locale=pt"
           %li= link_to "English", "?locale=en"
         = render :partial => 'layouts/menu'
-          
+
 
       #content{ :class => 'grid_12' }
         - flash.each do |name, msg|
@@ -29,7 +29,7 @@
 
         = yield
 
-      #footer Copyleft - Agile Brazil 2010-2013 - #{t('footer.help').html_safe}
+      #footer Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
 
     - unless APP_CONFIG[:google].nil?
       :javascript

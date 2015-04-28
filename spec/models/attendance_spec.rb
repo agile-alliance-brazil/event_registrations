@@ -230,6 +230,32 @@ describe Attendance, type: :model do
       expect(attendance.status).to eq 'confirmed'
     end
 
+    describe '#cancel' do
+      context 'when is pending' do
+        it 'cancel the attendance' do
+          attendance = FactoryGirl.create :attendance
+          attendance.cancel
+          expect(attendance.status).to eq 'cancelled'
+        end
+      end
+
+      context 'when is confirmed' do
+        it 'dont change the attendance status' do
+          attendance = FactoryGirl.create :attendance, status: 'confirmed'
+          attendance.cancel
+          expect(attendance.status).to eq 'confirmed'
+        end
+      end
+
+      context 'when is paid' do
+        it 'dont change the attendance status' do
+          attendance = FactoryGirl.create :attendance, status: 'paid'
+          attendance.cancel
+          expect(attendance.status).to eq 'paid'
+        end
+      end
+    end
+
     it "should email upon after confirmed"
     it "should validate payment agreement when confirmed"
   end

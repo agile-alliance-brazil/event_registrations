@@ -109,9 +109,8 @@ class Attendance < ActiveRecord::Base
 
   def pay_invoice!
     invoice = user.invoices.where(status: 'pending').last
-    if invoice.present?
-      invoice.pay_it
-      invoice.save!
-    end
+    return unless invoice.present?
+    invoice.pay_it
+    invoice.save!
   end
 end

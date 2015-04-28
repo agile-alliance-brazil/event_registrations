@@ -95,8 +95,6 @@ describe AttendancesController, type: :controller do
         delete :destroy, id: attendance.id
         expect(Attendance.last.status).to eq 'cancelled'
         expect(Invoice.last.status).to eq 'cancelled'
-
-
       end
     end
   end

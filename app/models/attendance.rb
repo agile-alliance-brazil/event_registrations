@@ -28,6 +28,7 @@ class Attendance < ActiveRecord::Base
 
   state_machine :status, initial: :pending do
     after_transition on: :pay, do: :pay_invoice!
+    after_transition on: :cancel, do: :cancel_invoice!
 
     event :confirm do
       transition [:pending, :paid] => :confirmed
@@ -109,9 +110,15 @@ class Attendance < ActiveRecord::Base
 
   def pay_invoice!
     invoice = user.invoices.where(status: 'pending').last
-    if invoice.present?
-      invoice.pay_it
-      invoice.save!
-    end
+    return unless invoice.present?
+    invoice.pay_it
+    invoice.save!
+  end
+
+  def cancel_invoice!
+    invoice = user.invoices.where(status: 'pending').last
+    return unless invoice.present?
+    invoice.cancel_it
+    invoice.save!
   end
 end

@@ -23,8 +23,8 @@ class AttendancesController < ApplicationController
   def destroy
     attendance = resource
     attendance.cancel
-    
-    redirect_to attendance_path(attendance)
+
+    redirect_to attendances_path(event_id: attendance.event.id)
   end
 
   def confirm
@@ -70,7 +70,7 @@ class AttendancesController < ApplicationController
     end
     redirect_to attendances_path(event_id: @event.id)
   end
-  
+
   private
 
   def resource_class

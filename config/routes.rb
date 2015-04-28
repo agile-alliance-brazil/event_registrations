@@ -26,12 +26,13 @@ Current::Application.routes.draw do
 
   get '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
   post '/attendance_statuses/:id', to: redirect("/attendances/%{id}")
-  resources :attendances, only: [:show, :destroy, :index] do
+  resources :attendances, only: [:show, :index] do
     member do
       post :enable_voting
       get :voting_instructions
       put :confirm
       put :pay_it
+      delete :destroy
     end
   end
   resources :transfers, only: [:new, :create]

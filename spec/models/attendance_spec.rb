@@ -187,10 +187,49 @@ describe Attendance, type: :model do
     end
   end
 
-  context "state machine" do
-    it "should start pending"
-    it "should move to paid upon payment"
-    it "should be confirmed on confirmation"
+  context 'state machine' do
+    it 'starts pending' do
+      attendance = Attendance.new
+      expect(attendance.status).to eq 'pending'
+    end
+
+    describe '#pay' do
+      context 'from pending' do
+        context 'without invoice' do
+          it 'move to paid upon payment' do
+            attendance = FactoryGirl.create :attendance
+            attendance.pay
+            expect { attendance.pay }.not_to raise_error
+            expect(attendance.status).to eq 'paid'
+          end
+        end
+
+        context 'with an invoice' do
+          it 'move to paid upon payment and check as paid the related invoice' do
+            attendance = FactoryGirl.create :attendance
+            Invoice.from_attendance(attendance)
+            attendance.pay
+            expect(attendance.status).to eq 'paid'
+            expect(Invoice.last.status).to eq 'paid'
+          end
+        end
+      end
+
+      context 'from confirmed' do
+        it 'move to paid upon payment' do
+          attendance = FactoryGirl.create :attendance, status: 'confirmed'
+          attendance.pay
+          expect(attendance.status).to eq 'paid'
+        end
+      end
+    end
+
+    it 'changes to confirmed on confirmation' do
+      attendance = FactoryGirl.create :attendance
+      attendance.confirm
+      expect(attendance.status).to eq 'confirmed'
+    end
+
     it "should email upon after confirmed"
     it "should validate payment agreement when confirmed"
   end

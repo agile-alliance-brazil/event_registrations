@@ -65,6 +65,7 @@ en:
         only_with_notes: "Show only results with notes"
         total: "Amount"
         price: 'Price (R$)'
+        actions: 'Actions'
       payment_notification:
         transaction_id: "Transaction ID"
         paid_at: "Payment date"
@@ -153,6 +154,8 @@ en:
     list_groups: "to list groups"
     click: 'Click'
     renew: 'renew'
+    pay: 'Check as paid'
+
 
   flash:
     failure: "Please check the highlighted fields"
@@ -168,6 +171,9 @@ en:
       enable_voting:
         missing_authentication: "Submission system is not registered as an authentication service. Add the service below and try again."
         success: "Access granted to start voting. Click <a href='%{url}' target='blank'>here</a> to vote on your favorite sessions."
+      payment:
+        success: 'Attendee check as paid.'
+        error: 'Could not check attendee as paid.'
     registration:
       attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
     registered_attendances:

@@ -20,9 +20,7 @@ module Airbrake
 end
 
 require 'simplecov'
-SimpleCov.start 'rails' do
-  add_group 'Models', 'app/models'
-end
+SimpleCov.start 'rails'
 
 RSpec.configure do |config|
   config.include(ControllerMacros, type: :controller)

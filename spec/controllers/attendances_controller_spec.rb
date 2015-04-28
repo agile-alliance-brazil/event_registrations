@@ -126,4 +126,30 @@ describe AttendancesController, type: :controller do
       expect(response).to redirect_to(attendance_path(attendance))
     end
   end
+
+  describe '#pay_it' do
+    let!(:event) { FactoryGirl.create(:event) }
+
+    context 'pending attendance' do
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+      let!(:invoice) { Invoice.from_attendance(attendance) }
+      it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
+        put :pay_it, id: attendance.id
+        expect(response).to redirect_to attendances_path(event_id: event.id)
+        expect(flash[:notice]).to eq I18n.t('flash.attendance.payment.success')
+        expect(Attendance.last.status).to eq 'paid'
+        expect(Invoice.last.status).to eq 'paid'
+      end
+    end
+
+    context 'cancelled attendance' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'cancelled') }
+      it 'marks as paid, save when this occurs and redirect to attendances index' do
+        put :pay_it, id: attendance.id
+        expect(response).to redirect_to attendances_path(event_id: event.id)
+        expect(flash[:alert]).to eq I18n.t('flash.attendance.payment.error')
+        expect(Attendance.last.status).to eq 'cancelled'
+      end
+    end
+  end
 end

@@ -131,12 +131,14 @@ describe AttendancesController, type: :controller do
     let!(:event) { FactoryGirl.create(:event) }
 
     context 'pending attendance' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
-      it 'marks as paid, save when this occurs and redirect to attendances index' do
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+      let!(:invoice) { Invoice.from_attendance(attendance) }
+      it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
         put :pay_it, id: attendance.id
         expect(response).to redirect_to attendances_path(event_id: event.id)
         expect(flash[:notice]).to eq I18n.t('flash.attendance.payment.success')
         expect(Attendance.last.status).to eq 'paid'
+        expect(Invoice.last.status).to eq 'paid'
       end
     end
 

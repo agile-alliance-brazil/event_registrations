@@ -193,16 +193,67 @@ describe Attendance, type: :model do
       expect(attendance.status).to eq 'pending'
     end
 
-    it 'move to paid upon payment' do
-      attendance = FactoryGirl.create :attendance
-      attendance.pay
-      expect(attendance.status).to eq 'paid'
+    describe '#pay' do
+      context 'from pending' do
+        context 'without invoice' do
+          it 'move to paid upon payment' do
+            attendance = FactoryGirl.create :attendance
+            attendance.pay
+            expect { attendance.pay }.not_to raise_error
+            expect(attendance.status).to eq 'paid'
+          end
+        end
+
+        context 'with an invoice' do
+          it 'move to paid upon payment and check as paid the related invoice' do
+            attendance = FactoryGirl.create :attendance
+            Invoice.from_attendance(attendance)
+            attendance.pay
+            expect(attendance.status).to eq 'paid'
+            expect(Invoice.last.status).to eq 'paid'
+          end
+        end
+      end
+
+      context 'from confirmed' do
+        it 'move to paid upon payment' do
+          attendance = FactoryGirl.create :attendance, status: 'confirmed'
+          attendance.pay
+          expect(attendance.status).to eq 'paid'
+        end
+      end
     end
 
     it 'changes to confirmed on confirmation' do
       attendance = FactoryGirl.create :attendance
       attendance.confirm
       expect(attendance.status).to eq 'confirmed'
+    end
+
+    describe '#cancel' do
+      context 'when is pending' do
+        it 'cancel the attendance' do
+          attendance = FactoryGirl.create :attendance
+          attendance.cancel
+          expect(attendance.status).to eq 'cancelled'
+        end
+      end
+
+      context 'when is confirmed' do
+        it 'dont change the attendance status' do
+          attendance = FactoryGirl.create :attendance, status: 'confirmed'
+          attendance.cancel
+          expect(attendance.status).to eq 'confirmed'
+        end
+      end
+
+      context 'when is paid' do
+        it 'dont change the attendance status' do
+          attendance = FactoryGirl.create :attendance, status: 'paid'
+          attendance.cancel
+          expect(attendance.status).to eq 'paid'
+        end
+      end
     end
 
     it "should email upon after confirmed"

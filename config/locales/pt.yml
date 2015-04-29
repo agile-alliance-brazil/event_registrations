@@ -388,6 +388,7 @@ pt:
       cancelled: "Cancelado"
       all: "Todos"
     cancel_confirmation: "Tem certeza que deseja cancelar sua inscrição na %{event}?\nSe o fizer, você deverá preencher um novo formulário para criar uma nova inscrição."
+    cancel_unauthorized: 'Cancelamento não autorizado. Conferencista em estado inválido: %{status}'
     confirm_confirmation: "Se confirmar essa inscrição na %{event}, o participante será notificado e  não será possível cancelar essa operação.\n\nTem certeza que deseja continuar?"
     confirmed:
       unpaid: "Boleto/Transferência/Empenho"

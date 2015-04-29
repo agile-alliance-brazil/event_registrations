@@ -45,7 +45,7 @@
     key: bcash_key
     store_code: bcash_store_code
   pag_seguro:
-    url: https://www.bcash.com.br/checkout/pay/
-    email: seller@domain.com
-    key: bcash_key
-    store_code: bcash_store_code
+    url: https://ws.pagseguro.uol.com.br/v2/checkout
+    email: alexandra.martins@agilealliance.org
+    token: 4C7157623D554340996998DECB83BDD8
+    store_code: pagseguro_store_code

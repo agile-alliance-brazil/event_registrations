@@ -1,5 +1,5 @@
 class Invoice < ActiveRecord::Base
-  STATUSES = [PENDING = 'pending', SENT = 'sent', PAID = 'paid']
+  STATUSES = [PENDING = 'pending', SENT = 'sent', PAID = 'paid', CANCELLED = 'cancelled']
 
   belongs_to :user
   belongs_to :registration_group
@@ -24,6 +24,10 @@ class Invoice < ActiveRecord::Base
 
   def send_it
     self.status = Invoice::SENT
+  end
+
+  def cancel_it
+    self.status = Invoice::CANCELLED
   end
 
   def name

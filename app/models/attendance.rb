@@ -27,12 +27,15 @@ class Attendance < ActiveRecord::Base
   usar_como_cpf :cpf
 
   state_machine :status, initial: :pending do
+    after_transition on: :pay, do: :pay_invoice!
+    after_transition on: :cancel, do: :cancel_invoice!
+
     event :confirm do
       transition [:pending, :paid] => :confirmed
     end
 
     event :pay do
-      transition pending: :paid
+      transition [:pending, :confirmed] => :paid
     end
 
     event :cancel do
@@ -103,5 +106,19 @@ class Attendance < ActiveRecord::Base
     attendances = event.attendances
     attendances = attendances.where('id < ?', id) unless new_record?
     attendances.count < SUPER_EARLY_LIMIT
+  end
+
+  def pay_invoice!
+    invoice = user.invoices.where(status: 'pending').last
+    return unless invoice.present?
+    invoice.pay_it
+    invoice.save!
+  end
+
+  def cancel_invoice!
+    invoice = user.invoices.where(status: 'pending').last
+    return unless invoice.present?
+    invoice.cancel_it
+    invoice.save!
   end
 end

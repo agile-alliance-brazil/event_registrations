@@ -74,4 +74,10 @@ describe Invoice, type: :model do
       it { expect(invoice.pending?).to be_falsey }
     end
   end
+
+  describe '#cancel_it' do
+    let(:invoice) { FactoryGirl.create :invoice }
+    before { invoice.cancel_it }
+    it { expect(invoice.status).to eq Invoice::CANCELLED }
+  end
 end

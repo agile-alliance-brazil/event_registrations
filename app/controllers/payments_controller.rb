@@ -17,7 +17,7 @@ class PaymentsController < ApplicationController
     else
       @invoice.send_it
       @invoice.save!
-      redirect_to event_registration_groups_path(@event), notice: 'Payment sent'
+      redirect_to response[:url]
     end
   end
 

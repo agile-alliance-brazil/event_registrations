@@ -26,8 +26,22 @@ class PaymentNotification < ActiveRecord::Base
     }
   end
 
+  def self.from_pag_seguro_params(params)
+    PagSeguroService.config
+    transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
+
+    {
+      params: params,
+      invoicer_id: params[:pedido],
+      status: transaction.status.paid? ? "Completed" : transaction.status.status,
+      transaction_id: transaction.code,
+      notes: transaction.inspect
+    }
+  end
+
   scope :paypal, -> { where('params LIKE ?', '%type: paypal%')}
   scope :bcash, -> { where('params LIKE ?', '%type: bcash%')}
+  scope :pag_seguro, -> { where('params LIKE ?', '%type: pag_seguro%')}
   scope :completed, -> { where('status = ?', 'Completed')}
 
   private
@@ -44,7 +58,12 @@ class PaymentNotification < ActiveRecord::Base
   end
   
   def params_valid?
-    params[:type] == 'bcash' ? bcash_valid?(APP_CONFIG[:bcash]) : paypal_valid?(APP_CONFIG[:paypal])
+    type = params[:type]
+    send "#{type}_valid?", APP_CONFIG[type]
+  end
+
+  def pag_seguro_valid?(hash)
+    params[:store_code] == hash[:store_code]
   end
 
   def bcash_valid?(hash)

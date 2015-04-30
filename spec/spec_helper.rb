@@ -8,7 +8,7 @@ require 'rspec/rails'
 require 'mocha/api'
 require 'cancan/matchers'
 require 'shoulda-matchers'
-require 'webmock/rspec'
+# require 'webmock/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

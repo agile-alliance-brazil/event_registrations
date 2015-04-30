@@ -23,7 +23,7 @@ end
 require 'simplecov'
 SimpleCov.start 'rails'
 
-WebMock.disable_net_connect!(:allow_localhost => true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: /codeclimate.com/)
 
 RSpec.configure do |config|
   config.include(ControllerMacros, type: :controller)

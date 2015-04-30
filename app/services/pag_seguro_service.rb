@@ -12,8 +12,6 @@ class PagSeguroService
 
   def self.checkout(invoice, payment_request)
     payment_request.reference = invoice.id
-    payment_request.notification_url = 'inscricoes-staging.agilebrazil.com'
-    payment_request.redirect_url = 'inscricoes-staging.agilebrazil.com'
 
     payment_request.items << {
         id: invoice.id,

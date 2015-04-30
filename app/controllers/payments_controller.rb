@@ -6,10 +6,12 @@ class PaymentsController < ApplicationController
   def checkout
     PagSeguroService.config
     payment = PagSeguro::PaymentRequest.new
+    payment.notification_url = notification_url
+    payment.redirect_url = back_url
     response = PagSeguroService.checkout(@invoice, payment)
 
     if response[:errors].present?
-      redirect_to event_registration_groups_path(@event), alert: response[:errors]
+      redirect_to :back, alert: response[:errors]
     else
       @invoice.send_it
       @invoice.save!
@@ -18,6 +20,18 @@ class PaymentsController < ApplicationController
   end
 
   private
+
+  def back_url
+    request.referer || root_path
+  end
+
+  def notification_url
+    payment_notifications_url(
+      type: "pag_seguro",
+      pedido: @invoice.id,
+      store_code: APP_CONFIG[:pag_seguro][:store_code]
+    )
+  end
 
   def find_event
     @event = Event.find params[:event_id]

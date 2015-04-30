@@ -1,8 +1,17 @@
 class PagSeguroService
+  ENVIRONMENT = Rails.env.production? ? :production : :sandbox
+
+  def self.config(mode = ENVIRONMENT)
+    PagSeguro.environment = mode
+
+    PagSeguro.configure do |config|
+      config.token = APP_CONFIG[:pag_seguro][:token]
+      config.email = APP_CONFIG[:pag_seguro][:email]
+    end
+  end
+
   def self.checkout(invoice, payment_request)
     payment_request.reference = invoice.id
-    payment_request.notification_url = 'inscricoes-staging.agilebrazil.com'
-    payment_request.redirect_url = 'inscricoes-staging.agilebrazil.com'
 
     payment_request.items << {
         id: invoice.id,

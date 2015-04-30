@@ -29,7 +29,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/Caro #{@attendance.full_name},/)
       expect(mail.encoded).to match(/R\$ 499,00/)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Pedido de inscrição na #{@event.name} enviado")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Pedido de inscrição na #{@event.name} enviado")
     end
     
     it "should be sent to attendee according to country" do
@@ -41,7 +41,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/Dear #{@attendance.full_name},/)
       expect(mail.encoded).to match(/R\$ 499,00/)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Registration request to #{@event.name} sent")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Registration request to #{@event.name} sent")
     end
   end
 
@@ -58,7 +58,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/Caro #{@attendance.full_name},/)
       expect(mail.encoded).to match(/\n\s*1.([^\n]+\n)+\s*2./)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Inscrição na #{@event.name} confirmada")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Inscrição na #{@event.name} confirmada")
     end
     
     it "should be sent to attendee according to country" do
@@ -69,7 +69,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/Dear #{@attendance.full_name},/)
       expect(mail.encoded).to match(/\n\s*1.([^\n]+\n)+\s*2./)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Registration confirmed for #{@event.name}")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Registration confirmed for #{@event.name}")
     end
 
     it "should be sent according to event id" do
@@ -92,7 +92,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Caro #{@attendance.full_name},/)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Aviso de cancelamento da inscrição #{@attendance.id} na #{@event.name}")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Aviso de cancelamento da inscrição #{@attendance.id} na #{@event.name}")
     end
     
     it "should be sent to attendee according to country" do
@@ -102,7 +102,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Dear #{@attendance.full_name},/)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Notice about registration #{@attendance.id} cancelation for #{@event.name}")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Notice about registration #{@attendance.id} cancelation for #{@event.name}")
     end
   end
 
@@ -117,7 +117,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Caro #{@attendance.full_name},/)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Lembrete de pagamento da inscrição #{@attendance.id} na #{@event.name}")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Lembrete de pagamento da inscrição #{@attendance.id} na #{@event.name}")
     end
     
     it "should be sent to attendee according to country" do
@@ -127,7 +127,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.to).to eq([@attendance.email])
       expect(mail.encoded).to match(/Dear #{@attendance.full_name},/)
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-      expect(mail.subject).to eq("[localhost:3000] Payment reminder about registration #{@attendance.id} for #{@event.name}")
+      expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Payment reminder about registration #{@attendance.id} for #{@event.name}")
     end
   end
 end

@@ -56,6 +56,14 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  # config.before do
+  #   WebMock.disable!
+  # end
+
+  # config.before(:each, :block_network => true) do
+  #   WebMock.enable!
+  # end
 end
 
 def sign_in(user)

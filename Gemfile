@@ -66,6 +66,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'travis-lint'
   gem 'foreman'
+  gem 'pry'
 end
 
 group :test do
@@ -75,4 +76,6 @@ group :test do
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
   gem 'simplecov', require: false
+  # gem 'webmock'
+  # gem 'vcr'
 end

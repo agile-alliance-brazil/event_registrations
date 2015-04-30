@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/VALID-NOTIFICATION-CODE?charset=UTF-8&email=alexandra.martins@agilealliance.org&token=4C7157623D554340996998DECB83BDD8
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Aitch/0.4.1 (http://rubygems.org/gems/aitch)
+      Accept-Encoding:
+      - gzip,deflate
+      Lib-Description:
+      - ruby:2.1.1
+      Language-Engine-Description:
+      - ruby:1.9.3
+      Accept-Charset:
+      - UTF-8
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 30 Apr 2015 09:18:48 GMT
+      Server:
+      - Apache-Coyote/1.1
+      Cache-Control:
+      - public, no-transform, no-cache, max-age=180
+      Content-Type:
+      - application/xml;charset=ISO-8859-1
+      Expires:
+      - Thu, 30 Apr 2015 09:21:47 GMT
+      Vary:
+      - Accept-Encoding,User-Agent
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '663'
+      Connection:
+      - close
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAA3VU23KbMBD9FcbvgDAiNhmFFF86404aMrm0zwpsHWZAopKc
+        xn/flTA2dhs/GO1Ne/bsrtjtR9t476B0LcXNJArIxANRyqoW25vJ5qnw5/Mk
+        9aOJpw0XFW+kgJvJHvTkNmNGcaF5aTA0YxU3kE1JlPiE+jF5JtF1HF8TGhBC
+        fIInwkLnw/B2yGarWZKvFokfxSTy6XpB/DSJcz9Z0uk0ulrSeLZgoXNlCn6B
+        QlSQRSw8CczsO6dyX4YAzU5nMQsPJ9ZwbdbvIMzqX2yUXk+TMbZzZ9bxfYvC
+        dzBvsrpM5WBFJBoAhhfeWyW1zlu5EwbdSGDvH+tYVevSng5y73GhZKWCqjZS
+        fQXAYmqBZTWNTYOKs8D/mjDAgGrxCm4b9IhVHYOoC/rEfBF4ujEO0vQybpQv
+        PMcrYCgkTYIrpOqkYPCBo3NWwljDQJdK/lmLatS35LO+nTuPaVr2/J/xszyU
+        aKA9mY+C0+v+g/+Vs2I/K5uk7tyg/6ybpubCO3yxbSMj+73jwtRmbyOPZ8bP
+        R4EPjPV5wkNWDaIChczxFrKlbDvFK6m8Crxn0AY0UmgtDFpeN1k5n83pLIrT
+        hM6v0nhGKI3iLxqX9FV+BB3fatjulAxK2QavCnlyUax7ww1GRAr40k0xAj0K
+        TOzaV4SQHn6YsVfghPdx4QBSv9Vdh48EXlVVCrTFbxSAyR5fcu9bkRdefv9c
+        3G8Kb7X2irvNj/XmMbe76ZyGTAmlpyQItWvAtslO00jAzTCqLk32XcqSu03p
+        ZVZafp8w2UP+cldglOPbPgCQPT30T4FbWCRc7bOFhTAIrJN2LlzlJI4iXGhs
+        zkiJzAy1ub2PT/uvh8F1R8xzpCMcv4p/ASoVBNZfBQAA
+    http_version: 
+  recorded_at: Thu, 30 Apr 2015 09:12:09 GMT
+recorded_with: VCR 2.9.3

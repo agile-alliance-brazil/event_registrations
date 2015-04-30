@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20150424001453) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.string   "notes"
+    t.decimal  "event_price"
     t.integer  "registration_quota_id"
     t.decimal  "registration_value"
   end
@@ -153,9 +154,10 @@ ActiveRecord::Schema.define(version: 20150424001453) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.integer  "roles_mask"
-    t.string   "default_locale", default: "pt"
+    t.string   "default_locale",        default: "pt"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "registration_group_id"
   end
 
 end

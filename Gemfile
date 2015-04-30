@@ -66,6 +66,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'travis-lint'
   gem 'foreman'
+  gem 'pry'
 end
 
 group :test do

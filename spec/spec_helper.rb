@@ -8,7 +8,6 @@ require 'rspec/rails'
 require 'mocha/api'
 require 'cancan/matchers'
 require 'shoulda-matchers'
-# require 'webmock/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -22,8 +21,6 @@ end
 
 require 'simplecov'
 SimpleCov.start 'rails'
-
-WebMock.disable_net_connect!(allow_localhost: true, allow: /codeclimate.com/)
 
 RSpec.configure do |config|
   config.include(ControllerMacros, type: :controller)
@@ -59,6 +56,14 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  config.before do
+    WebMock.disable!
+  end
+
+  config.before(:each, :block_network => true) do
+    WebMock.enable!
+  end
 end
 
 def sign_in(user)

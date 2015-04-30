@@ -9,7 +9,6 @@ class PagSeguroService
   end
 
   def self.checkout(invoice, payment_request)
-
     payment_request.reference = invoice.id
 
     payment_request.items << {

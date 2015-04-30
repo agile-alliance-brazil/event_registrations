@@ -11,5 +11,4 @@ class RegistrationType < ActiveRecord::Base
     period = event.registration_periods.for(datetime).first
     period.price_for_registration_type(self)
   end
-
 end

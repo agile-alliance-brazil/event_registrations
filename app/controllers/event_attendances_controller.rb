@@ -1,5 +1,7 @@
 # encoding: UTF-8
 class EventAttendancesController < ApplicationController
+  include Concerns::Initiation
+
   before_filter :event
   before_filter :load_registration_types, only: [:new, :create]
 
@@ -10,6 +12,16 @@ class EventAttendancesController < ApplicationController
       format.csv do
         response.headers['Content-Disposition'] = "attachment; filename=\"#{event.name.parameterize.underscore}.csv\""
       end
+    end
+  end
+
+  def attendances_list
+    if params[:search].present?
+      @attendances_list = Attendance.for_event(event)
+        .active.where('first_name LIKE :query OR last_name LIKE :query OR organization LIKE :query OR email LIKE :query',
+                     query: "%#{params[:search]}%")
+    else
+      @attendances_list = Attendance.for_event(event).active.all
     end
   end
 
@@ -61,37 +73,12 @@ class EventAttendancesController < ApplicationController
     end
   end
 
-  def resource_class
-    Attendance
-  end
-
-  def resource
-    Attendance.find_by_id(params[:id])
-  end
-
-  def build_attributes
-    attributes = attendance_params || {}
-    attributes = current_user.attendance_attributes.merge(attributes)
-    attributes[:email_confirmation] ||= current_user.email
-    attributes[:event_id] = event.id
-    attributes[:user_id] = current_user.id
-    if @registration_types.size == 1
-      attributes[:registration_type_id] = @registration_types.first.id
-    end
-    attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.zone.now].min
-    attributes
-  end
-
   def attendance_params
     params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
                                                                         :registration_group_id, :registration_date, :first_name, :last_name, :email,
                                                                         :email_confirmation, :organization, :phone, :country, :state, :city,
                                                                         :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
                                                                         :zipcode, :notes)
-  end
-
-  def load_registration_types
-    @registration_types ||= valid_registration_types
   end
 
   def valid_registration_types
@@ -107,10 +94,6 @@ class EventAttendancesController < ApplicationController
       render :new and return false
     end
     true
-  end
-
-  def event
-    @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
   end
 
   def notify(attendance)

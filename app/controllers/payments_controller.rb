@@ -27,7 +27,7 @@ class PaymentsController < ApplicationController
 
   def notification_url
     payment_notifications_url(
-      type: "pag_seguro",
+      type: 'pag_seguro',
       pedido: @invoice.id,
       store_code: APP_CONFIG[:pag_seguro][:store_code]
     )

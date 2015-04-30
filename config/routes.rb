@@ -10,7 +10,7 @@ Current::Application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   resources :events, only: [:index, :show] do
-    resources :attendances, only: [:new, :create, :index], controller: :event_attendances
+    resources :attendances, only: [:new, :create, :index, :edit, :update], controller: :event_attendances
     resources :registration_groups, only: [:index, :destroy, :show, :create] do
       member do
         put :renew_invoice

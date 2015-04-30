@@ -61,6 +61,10 @@ class EventAttendancesController < ApplicationController
     end
   end
 
+  def resource_class
+    Attendance
+  end
+
   def resource
     Attendance.find_by_id(params[:id])
   end

@@ -1,9 +1,7 @@
 class PagSeguroService
   ENVIRONMENT = Rails.env.production? ? :production : :sandbox
 
-  def self.config(mode = ENVIRONMENT)
-    PagSeguro.environment = mode
-
+  def self.config
     PagSeguro.configure do |config|
       config.token = APP_CONFIG[:pag_seguro][:token]
       config.email = APP_CONFIG[:pag_seguro][:email]
@@ -11,6 +9,7 @@ class PagSeguroService
   end
 
   def self.checkout(invoice, payment_request)
+
     payment_request.reference = invoice.id
 
     payment_request.items << {

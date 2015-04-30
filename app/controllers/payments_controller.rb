@@ -4,11 +4,7 @@ class PaymentsController < ApplicationController
   before_action :find_event, :find_invoice
 
   def checkout
-    PagSeguro.configure do |config|
-      config.token = APP_CONFIG[:pag_seguro][:token]
-      config.email = APP_CONFIG[:pag_seguro][:email]
-    end
-
+    PagSeguroService.config
     payment = PagSeguro::PaymentRequest.new
     response = PagSeguroService.checkout(@invoice, payment)
 

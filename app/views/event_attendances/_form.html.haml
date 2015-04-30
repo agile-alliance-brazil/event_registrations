@@ -28,20 +28,6 @@
 
 :javascript
   (function($) {
-    function countryTriggered() {
-      if ($(this).val() != "BR") {
-        $('#attendance_state').val('').attr('disabled', 'disabled');
-        $('#attendance_state_input').find('label abbr').hide();
-        $("#attendance_cpf").attr('disabled', 'disabled');
-        $('#attendance_cpf_input').hide();      
-      } else {
-        $('#attendance_state').removeAttr('disabled');
-        $('#attendance_state_input').find('label abbr').show();
-        $("#attendance_cpf").removeAttr('disabled');
-        $('#attendance_cpf_input').show();      
-      }
-    }
-    
     function registrationTypeTriggered() {
       var checked_type = $("#attendance_registration_type_id_input input:radio:checked");
       if(checked_type.length == 0) {

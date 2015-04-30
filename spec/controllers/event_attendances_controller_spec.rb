@@ -272,7 +272,7 @@ describe EventAttendancesController, type: :controller do
       end
     end
 
-    describe "for speaker registration" do
+    context 'for speaker registration' do
       before do
         User.any_instance.stubs(:has_approved_session?).returns(true)
         @user = FactoryGirl.create(:user)
@@ -280,22 +280,85 @@ describe EventAttendancesController, type: :controller do
         disable_authorization
       end
 
-      it "should allow free registration type only its email" do
+      it 'allows free registration type only its email' do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
         expect(response).to redirect_to(attendance_path(5))
       end
 
-      it "should not send pending registration e-mail for free registration" do
+      it 'not send pending registration e-mail for free registration' do
         EmailNotifications.expects(:registration_pending).never
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
         post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
-
         expect(response).to redirect_to(attendance_path(5))
       end
     end
   end
 
+  describe '#edit' do
+    before do
+      User.any_instance.stubs(:has_approved_session?).returns(true)
+      user = FactoryGirl.create(:user)
+      sign_in user
+      disable_authorization
+    end
+
+    context 'with a valid attendance' do
+      let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
+      let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      it 'assigns the attendance and render edit' do
+        get :edit, event_id: event.id, id: attendance.id
+        expect(response).to render_template :edit
+        expect(assigns(:attendance)).to eq attendance
+      end
+    end
+  end
+
+  describe '#update' do
+    let(:user) { FactoryGirl.create(:user) }
+    before do
+      User.any_instance.stubs(:has_approved_session?).returns(true)
+      sign_in user
+      disable_authorization
+    end
+
+    context 'with a valid attendance' do
+      let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
+      let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      let(:valid_attendance) do
+        {
+            event_id: event.id,
+            user_id: user.id,
+            registration_type_id: registration_type.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: 'bla@foo.bar',
+            email_confirmation: 'bla@foo.bar',
+            organization: 'sbrubbles',
+            phone: user.phone,
+            country: user.country,
+            state: user.state,
+            city: user.city,
+            badge_name: user.badge_name,
+            cpf: user.cpf,
+            gender: user.gender,
+            twitter_user: user.twitter_user,
+            address: user.address,
+            neighbourhood: user.neighbourhood,
+            zipcode: user.zipcode
+        }
+      end
+
+      it 'assigns the attendance and render edit' do
+        put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance
+        expect(Attendance.last.email).to eq 'bla@foo.bar'
+        expect(Attendance.last.organization).to eq 'sbrubbles'
+        expect(response).to redirect_to attendances_path event
+      end
+    end
+  end
 end

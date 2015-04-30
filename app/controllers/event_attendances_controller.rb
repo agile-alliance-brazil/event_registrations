@@ -43,6 +43,16 @@ class EventAttendancesController < ApplicationController
     save_attendance!
   end
 
+  def edit
+    @attendance = Attendance.find(params[:id])
+  end
+
+  def update
+    @attendance = Attendance.find(params[:id])
+    @attendance.update_attributes!(attendance_params)
+    redirect_to attendances_path(event_id: @event)
+  end
+
   private
 
   def save_attendance!
@@ -61,14 +71,8 @@ class EventAttendancesController < ApplicationController
     end
   end
 
-  private
-
   def resource
     Attendance.find_by_id(params[:id])
-  end
-
-  def resource_class
-    Attendance
   end
 
   def build_attributes

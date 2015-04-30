@@ -22,3 +22,4 @@
           %p= button_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put
         - if attendance.cancellable?
           %p= button_to t('actions.cancel'), attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name ) }
+        %p= button_to t('actions.edit'), edit_event_attendance_path(event_id: @event.id, id: attendance.id), method: :get

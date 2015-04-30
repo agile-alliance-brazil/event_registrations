@@ -357,7 +357,7 @@ describe EventAttendancesController, type: :controller do
         put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance
         expect(Attendance.last.email).to eq 'bla@foo.bar'
         expect(Attendance.last.organization).to eq 'sbrubbles'
-        expect(response).to redirect_to attendances_path event
+        expect(response).to redirect_to attendances_path(event_id: event)
       end
     end
   end

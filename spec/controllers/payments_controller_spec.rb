@@ -16,6 +16,10 @@ describe PaymentsController, type: :controller do
     end
 
     context 'with errors from service' do
+      before(:each) do
+        request.env["HTTP_REFERER"] = event_registration_groups_path(event)
+      end
+
       let!(:group) { FactoryGirl.create :registration_group, event: event }
       let(:invoice) { FactoryGirl.create :invoice, registration_group: group }
 

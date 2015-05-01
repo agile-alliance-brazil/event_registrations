@@ -24,6 +24,8 @@ class Attendance < ActiveRecord::Base
   delegate :token, to: :registration_group
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
 
+  scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
+
   usar_como_cpf :cpf
 
   state_machine :status, initial: :pending do

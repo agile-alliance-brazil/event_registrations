@@ -68,23 +68,7 @@ describe AttendancesController, type: :controller do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
       before { get :show, id: attendance.id }
       it { expect(assigns[:attendance]).to eq attendance }
-      it { expect(assigns[:last_attendance]).to eq attendance }
       it { expect(response).to be_success }
-    end
-
-    context 'with two valid attendances, the first cancelled and second pending' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user, status: 'cancelled') }
-      let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
-      before { get :show, id: attendance.id }
-      it { expect(assigns[:last_attendance]).to eq other_attendance }
-    end
-
-    context 'with two valid attendances, one in an event and the second in other event' do
-      let(:other_event) { FactoryGirl.create(:event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
-      let!(:other_attendance) { FactoryGirl.create(:attendance, event: other_event, user: user) }
-      before { get :show, id: attendance.id }
-      it { expect(assigns[:last_attendance]).to eq attendance }
     end
   end
 

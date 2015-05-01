@@ -1,6 +1,6 @@
 Dear #{h(@attendance.full_name)},
 
-Your request for registration as #{I18n.t(@attendance.registration_type.title)} priced #{number_to_currency(@attendance.registration_fee, :locale => :pt)} at #{@attendance.event.name} was received successfully.
+Your request for registration as #{I18n.t(@attendance.registration_type.title)} priced #{number_to_currency(@attendance.registration_value, :locale => :pt)} at #{@attendance.event.name} was received successfully.
 
 
 In order to complete the registration process, please follow the instructions on the page:

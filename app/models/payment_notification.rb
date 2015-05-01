@@ -74,6 +74,6 @@ class PaymentNotification < ActiveRecord::Base
     params[:secret] == hash[:secret] &&
     params[:receiver_email] == hash[:email] &&
     params[:mc_currency] == hash[:currency] &&
-    BigDecimal.new(params[:mc_gross].to_s) == BigDecimal.new(invoicer.registration_fee.to_s)
+    BigDecimal.new(params[:mc_gross].to_s) == BigDecimal.new(invoicer.registration_value.to_s)
   end
 end

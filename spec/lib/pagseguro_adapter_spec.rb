@@ -5,7 +5,7 @@ describe PagSeguroAdapter do
   before(:each) do
     event = FactoryGirl.create(:event)
     @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
-    @attendance.stubs(:registration_fee).returns(399)
+    @attendance.stubs(:registration_value).returns(399)
   end
 
   describe '.from_invoice' do

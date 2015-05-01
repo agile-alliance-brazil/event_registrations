@@ -36,7 +36,7 @@
           - if attendee.registration_group.present?
             = attendee.registration_group.name
         %td= l(attendee.registration_date, :format => :short)
-        %td= number_to_currency(attendee.registration_fee, :locale => :pt)
+        %td= number_to_currency(attendee.registration_value, :locale => :pt)
 
 - if @attendees.total_pages > 1
   #pagination= will_paginate(@attendees)

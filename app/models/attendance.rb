@@ -70,11 +70,6 @@ class Attendance < ActiveRecord::Base
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
 
-  def base_price
-    Rails.logger.warn('Attendance#base_price is deprecated. It was called from ' + caller[1..5].join('\n'))
-    registration_fee
-  end
-
   def cancellable?
     pending?
   end

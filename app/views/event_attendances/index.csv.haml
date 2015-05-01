@@ -1,4 +1,4 @@
-- inscritos = @attendances.map{|a| [a.id, a.full_name, a.cpf, a.email, a.phone, a.state, a.country, a.organization, I18n.t(a.registration_type.title), a.registration_fee, a.status]}
+- inscritos = @attendances.map{|a| [a.id, a.full_name, a.cpf, a.email, a.phone, a.state, a.country, a.organization, I18n.t(a.registration_type.title), a.registration_value, a.status]}
 
 = CSV.generate do |csv|
   - csv << ['ID', 'Nome Completo', 'CPF', 'Email', 'Telefone', 'Estado', 'País', 'Organização', 'Tipo de inscrição', 'Valor da Inscrição', 'Status']

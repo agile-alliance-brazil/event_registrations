@@ -16,13 +16,13 @@ describe PaymentNotification, type: :model do
         event = FactoryGirl.create(:event)
         @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
         expect(@attendance).to be_pending
-        @attendance.stubs(:registration_fee).returns(399)
+        @attendance.stubs(:registration_value).returns(399)
 
         @valid_params = {
           type: 'paypal',
           secret: APP_CONFIG[:paypal][:secret],
           receiver_email: APP_CONFIG[:paypal][:email],
-          mc_gross: @attendance.registration_fee.to_s,
+          mc_gross: @attendance.registration_value.to_s,
           mc_currency: APP_CONFIG[:paypal][:currency]
         }
         @valid_args = {

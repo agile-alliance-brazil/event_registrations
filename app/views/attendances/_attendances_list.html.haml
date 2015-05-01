@@ -10,7 +10,7 @@
 
   - attendances_list.each do |attendance|
     %tr
-      %td= "#{attendance.last_name}, #{attendance.first_name}"
+      %td= link_to "#{attendance.last_name}, #{attendance.first_name}", attendance_path(attendance), method: :get
       %td= attendance.organization
       %td= attendance.group_name
       %td= attendance.email

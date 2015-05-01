@@ -20,10 +20,15 @@ describe EventsController, type: :controller do
       end
 
       context 'with two valid attendances, the first cancelled and second pending' do
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user, status: 'cancelled') }
-        let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
-        before { get :show, id: event.id }
-        it { expect(assigns[:last_attendance_for_user]).to eq other_attendance }
+        it 'returns the last created' do
+          now = Time.zone.local(2015, 4, 30, 0, 0, 0)
+          Timecop.freeze(now)
+          attendance = FactoryGirl.create(:attendance, event: event, user: user, status: 'cancelled')
+          Timecop.return
+          other_attendance = FactoryGirl.create(:attendance, event: event, user: user)
+          get :show, id: event.id
+          expect(assigns[:last_attendance_for_user]).to eq other_attendance
+        end
       end
 
       context 'with two valid attendances, one in an event and the second in other event' do

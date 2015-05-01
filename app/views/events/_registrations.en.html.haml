@@ -1,5 +1,5 @@
-- if !current_user.try(:organizer?) && current_user.try(:registrations_for_event, event).present?
-  %p Click #{link_to "here", attendance_path(current_user.registrations_for_event(event).first)} to check the status of your registration to #{event.name}.
+- if current_user.present? && !current_user.try(:organizer?) && current_user.try(:registrations_for_event, event).present?
+  %p Click #{link_to "here", attendance_path(@last_attendance_for_user) } to check the status of your registration to #{event.name}.
 
 - if current_user.try(:organizer?) || (event.can_add_attendance? && current_user.try(:registrations_for_event, event).blank?)
   %p Click #{link_to "here", new_event_attendance_path(event)} to register for #{event.name}.

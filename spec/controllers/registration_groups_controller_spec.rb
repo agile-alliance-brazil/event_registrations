@@ -42,7 +42,7 @@ describe RegistrationGroupsController, type: :controller do
   describe '#show' do
     let(:event) { FactoryGirl.create :event }
     let!(:group) { FactoryGirl.create :registration_group, event: event }
-    let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID }
+    let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID, amount: group.total_price }
     before { get :show, event_id: event.id, id: group.id }
     it { expect(assigns(:group)).to eq group }
     it { expect(assigns(:invoice)).to eq invoice }

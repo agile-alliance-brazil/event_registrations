@@ -122,37 +122,43 @@ describe PaymentNotification, type: :model do
     end
   end
 
-  it "should translate params from paypal into attributes" do
-    paypal_params = {
-      payment_status: "Completed",
-      txn_id: "AAABBBCCC",
-      invoice: 2,
-      mc_gross: 10.5,
-      mc_currency: "USD",
-      receiver_email: "payer@paypal.com",
-      memo: "Some notes from the buyer",
-      custom: 'Attendance'
-    }
-    expect(PaymentNotification.from_paypal_params(paypal_params)).to eq({
-      params: paypal_params,
-      status: "Completed",
-      transaction_id:  "AAABBBCCC",
-      invoicer_id: 2,
-      notes: "Some notes from the buyer"
-    })
-  end
+  context "should translate params into attributes" do
+    before do
+      @invoice = FactoryGirl.create(:invoice)
+    end
 
-  it "should translate params from bcash into attributes" do
-    bcash_params = {
-      status: "Aprovada",
-      transacao_id: "1234567890",
-      pedido: 2
-    }
-    expect(PaymentNotification.from_bcash_params(bcash_params)).to eq({
-      params: bcash_params,
-      status: "Completed",
-      transaction_id: "1234567890",
-      invoicer_id: 2
-    })
+    it "from paypal" do
+      paypal_params = {
+        payment_status: "Completed",
+        txn_id: "AAABBBCCC",
+        invoice: @invoice.id,
+        mc_gross: 10.5,
+        mc_currency: "USD",
+        receiver_email: "payer@paypal.com",
+        memo: "Some notes from the buyer",
+        custom: 'Attendance'
+      }
+      expect(PaymentNotification.from_paypal_params(paypal_params)).to eq({
+        params: paypal_params,
+        status: "Completed",
+        transaction_id:  "AAABBBCCC",
+        invoicer: @invoice,
+        notes: "Some notes from the buyer"
+      })
+    end
+
+    it "from bcash" do
+      bcash_params = {
+        status: "Aprovada",
+        transacao_id: "1234567890",
+        pedido: @invoice.id
+      }
+      expect(PaymentNotification.from_bcash_params(bcash_params)).to eq({
+        params: bcash_params,
+        status: "Completed",
+        transaction_id: "1234567890",
+        invoicer: @invoice
+      })
+    end
   end
 end

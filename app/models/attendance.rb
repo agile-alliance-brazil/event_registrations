@@ -41,11 +41,11 @@ class Attendance < ActiveRecord::Base
     event :cancel do
       transition pending: :cancelled
     end
-    
+
     state :confirmed do
       validates_acceptance_of :payment_agreement
     end
-    
+
     after_transition any => :confirmed do |attendance|
       begin
         EmailNotifications.registration_confirmed(attendance).deliver_now
@@ -65,14 +65,10 @@ class Attendance < ActiveRecord::Base
   scope :active, -> { where('status != (?)', :cancelled) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
   scope :search_for_list, lambda { |param|
-    active.where('first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ?',
-                 "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%")
+    where('first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ?',
+    "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%")
   }
-
-  def base_price
-    Rails.logger.warn('Attendance#base_price is deprecated. It was called from ' + caller[1..5].join('\n'))
-    registration_fee
-  end
+  scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
 
   def cancellable?
     pending?

@@ -14,5 +14,6 @@ class EventsController < ApplicationController
 
   def show
     @event = Event.find(params[:id])
+    @last_attendance_for_user = @event.attendances_for(current_user).last if current_user.present?
   end
 end

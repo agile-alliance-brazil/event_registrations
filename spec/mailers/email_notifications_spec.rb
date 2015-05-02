@@ -7,7 +7,7 @@ describe EmailNotifications, type: :mailer do
     @old_locale = I18n.locale
     I18n.locale = :en
     @event = Event.last || FactoryGirl.create(:event)
-    Attendance.any_instance.stubs(:registration_fee).returns(499)
+    Attendance.any_instance.stubs(:registration_value).returns(499)
   end
 
   after do

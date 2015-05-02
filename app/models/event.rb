@@ -6,6 +6,8 @@ class Event < ActiveRecord::Base
 
   has_many :registration_groups
 
+  delegate :attendances_for, to: :attendances
+
   def can_add_attendance?
     attendance_limit.nil? || attendance_limit == 0 || (attendance_limit > attendances.active.size)
   end

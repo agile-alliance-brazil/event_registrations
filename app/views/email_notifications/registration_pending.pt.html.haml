@@ -1,6 +1,6 @@
 %p Car#{@attendance.male? ? 'o' : 'a'} #{h(@attendance.full_name)},
 
-%p Seu pedido de inscrição de tipo <strong>#{I18n.t(@attendance.registration_type.title)}</strong> no valor de #{number_to_currency(@attendance.registration_fee, :locale => :pt)} na #{@attendance.event.name} foi realizado com sucesso.
+%p Seu pedido de inscrição de tipo <strong>#{I18n.t(@attendance.registration_type.title)}</strong> no valor de #{number_to_currency(@attendance.registration_value, :locale => :pt)} na #{@attendance.event.name} foi realizado com sucesso.
 
 %p Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:
 

@@ -15,16 +15,6 @@ class EventAttendancesController < ApplicationController
     end
   end
 
-  def attendances_list
-    if params[:search].present?
-      @attendances_list = Attendance.for_event(event)
-        .active.where('first_name LIKE :query OR last_name LIKE :query OR organization LIKE :query OR email LIKE :query',
-                     query: "%#{params[:search]}%")
-    else
-      @attendances_list = Attendance.for_event(event).active.all
-    end
-  end
-
   def new
     @attendance = Attendance.new(build_attributes)
   end
@@ -97,7 +87,6 @@ class EventAttendancesController < ApplicationController
   end
 
   def notify(attendance)
-    return unless attendance.registration_fee > 0
     EmailNotifications.registration_pending(attendance).deliver
     attendance.email_sent = true
     attendance.save

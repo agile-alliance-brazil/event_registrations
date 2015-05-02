@@ -13,12 +13,6 @@ describe EventAttendancesController, type: :controller do
 
     now = Time.zone.local(2013, 5, 1)
     Timecop.freeze(now)
-
-    Attendance.any_instance.stubs(:registration_fee).with(@individual).returns(399)
-    Attendance.any_instance.stubs(:registration_fee).with(@free).returns(0)
-    Attendance.any_instance.stubs(:registration_fee).with(@speaker).returns(0)
-    Attendance.any_instance.stubs(:registration_fee).with(@manual).returns(0)
-    Attendance.any_instance.stubs(:registration_fee).with.returns(399)
   end
 
   after :each do

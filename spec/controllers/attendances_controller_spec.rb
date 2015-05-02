@@ -64,7 +64,8 @@ describe AttendancesController, type: :controller do
 
   describe '#show' do
     context 'with a valid attendance' do
-      let!(:attendance) { FactoryGirl.create(:attendance) }
+      let!(:event) { FactoryGirl.create(:event) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
       before { get :show, id: attendance.id }
       it { expect(assigns[:attendance]).to eq attendance }
       it { expect(response).to be_success }

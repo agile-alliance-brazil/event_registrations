@@ -160,5 +160,8 @@ describe PaymentNotification, type: :model do
         invoicer: @invoice
       })
     end
+
+    # Pag Seguro needs to do a request on its WebService
+    pending "from pag_seguro"
   end
 end

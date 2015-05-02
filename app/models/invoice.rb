@@ -20,6 +20,15 @@ class Invoice < ActiveRecord::Base
     Invoice.create!(registration_group: group, user: group.leader, amount: group.total_price, status: Invoice::PENDING)
   end
 
+  def registration_value
+    amount
+  end
+
+  def pay
+    pay_it
+    save!
+  end
+
   def pay_it
     self.status = Invoice::PAID
   end

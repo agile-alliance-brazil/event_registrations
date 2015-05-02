@@ -29,9 +29,9 @@ class EventAttendancesController < ApplicationController
 
     group = @event.registration_groups.find_by_token(params['registration_token'])
     @attendance.registration_group = group if group.present? && group.accept_members?
+    @attendance.registration_value = @event.registration_price_for(@attendance)
 
     return unless validate_free_registration(@attendance)
-    @attendance.registration_value = @event.registration_price_for(@attendance)
     save_attendance!
   end
 

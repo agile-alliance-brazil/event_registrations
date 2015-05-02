@@ -11,7 +11,7 @@ before_script:
   - cp ./certs/paypal_cert.{example,pem}
   - mysql -e 'create database registrations_test;'
 script:
-  - RAILS_ENV=test bundle exec rake db:migrate
+  - RAILS_ENV=test bundle exec rake db:migrate db:test:prepare
   - bundle exec rake spec
 bundler_args: --without development production
 

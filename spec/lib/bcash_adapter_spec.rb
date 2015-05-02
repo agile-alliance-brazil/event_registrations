@@ -11,7 +11,7 @@ describe BcashAdapter do
       adapter = BcashAdapter.from_invoice(invoice)
 
       expect(adapter.items.size).to eq 1
-      expect(adapter.items[0].amount).to eq attendance.event.registration_price_for(attendance)
+      expect(adapter.items[0].amount).to eq attendance.registration_value
       expect(adapter.items[0].name).to eq attendance.full_name
       expect(adapter.items[0].quantity).to eq 1
       expect(adapter.items[0].number).to eq invoice.id

@@ -20,6 +20,7 @@ module Concerns
         attributes[:registration_type_id] = @registration_types.first.id
       end
       attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.zone.now].min
+
       attributes
     end
 

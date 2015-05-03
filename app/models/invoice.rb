@@ -22,6 +22,10 @@ class Invoice < ActiveRecord::Base
     Invoice.create!(registration_group: group, user: group.leader, amount: group.total_price, status: Invoice::PENDING)
   end
 
+  def add_attendances(*items)
+    attendances.concat *(items - attendances)
+  end
+
   def registration_value
     amount
   end

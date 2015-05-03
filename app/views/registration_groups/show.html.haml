@@ -9,7 +9,7 @@
 
 = render partial: 'attendances/attendances_list', locals: {attendances_list: @group.attendances}
 
-- if @group.price?
+- if @group.price? && !@group.paid?
   = render 'shared/payment_request'
 
 = render partial: 'shared/invoices'

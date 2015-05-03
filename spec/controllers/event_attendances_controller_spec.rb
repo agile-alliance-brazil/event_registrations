@@ -146,7 +146,7 @@ describe EventAttendancesController, type: :controller do
       expect(assigns(:attendance).event).to eq(@event)
     end
 
-    it 'should ignore airbrake errors if cannot send email' do
+    it 'ignores airbrake errors if cannot send email' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       exception = StandardError.new
       EmailNotifications.expects(:registration_pending).raises(exception)
@@ -194,11 +194,13 @@ describe EventAttendancesController, type: :controller do
         let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
         subject(:attendance) { assigns(:attendance) }
 
-        it 'keeps registration token when form is invalid' do
-          user.phone = nil
-          post :create, event_id: @event.id, registration_token: 'xpto', attendance: {event_id: @event.id}
-          expect(response).to render_template(:new)
-          expect(response.body).to have_field('registration_token', type: 'text', with: 'xpto')
+        context 'form validations' do
+          it 'keeps registration token when form is invalid' do
+            user.phone = nil
+            post :create, event_id: @event.id, registration_token: 'xpto', attendance: {event_id: @event.id}
+            expect(response).to render_template(:new)
+            expect(response.body).to have_field('registration_token', type: 'text', with: 'xpto')
+          end
         end
 
         context 'an invalid' do
@@ -217,9 +219,10 @@ describe EventAttendancesController, type: :controller do
 
           context 'and with a registration token with invalid invoice status' do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, registration_group: group, status: 'paid') }
             let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID }
             before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
-            it { expect(attendance.registration_group).to be_nil }
+            it { expect(Attendance.last.registration_group).to be_nil }
           end
         end
 
@@ -230,7 +233,6 @@ describe EventAttendancesController, type: :controller do
             it { expect(attendance.registration_group).to eq group }
           end
 
-          # Regression test (Issue #???): Logged User should be able to register a friend attendance on a group
           context 'and different email from current user' do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
             before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: "warantesbr@gmail.com", email_confirmation: "warantesbr@gmail.com" } }

@@ -9,6 +9,10 @@ describe Invoice, type: :model do
     it { should have_and_belong_to_many :attendances }
   end
 
+  # describe '#add_attendances' do
+  #   let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
+  # end
+
   describe '.from_attendance' do
     let(:individual) { event.registration_types.first }
     let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now) }
@@ -19,6 +23,7 @@ describe Invoice, type: :model do
     context 'with no pending invoice already existent' do
       subject(:invoice) { Invoice.from_attendance(attendance) }
       it { expect(invoice.user).to eq attendance.user }
+      it { expect(invoice.attendances).to eq [attendance] }
       it { expect(invoice.amount).to eq attendance.event.registration_price_for(attendance) }
     end
 
@@ -28,6 +33,7 @@ describe Invoice, type: :model do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance) }
       it { expect(other_invoice.user).to eq attendance.user }
+      it { expect(other_invoice.attendances).to eq [attendance] }
       it { expect(other_invoice.amount).to eq 100 }
     end
 
@@ -43,6 +49,7 @@ describe Invoice, type: :model do
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: attendance.user, registration_value: 200) }
 
         subject!(:other_invoice) { Invoice.from_attendance(other_attendance) }
+        it { expect(other_invoice.attendances).to eq [other_attendance] }
         it { expect(other_invoice.amount).to eq 200 }
         it { expect(Invoice.count).to eq 1 }
       end
@@ -56,6 +63,7 @@ describe Invoice, type: :model do
     context 'with no pending invoice already existent' do
       subject(:invoice) { Invoice.from_registration_group(group) }
       it { expect(invoice.registration_group).to eq group }
+      it { expect(invoice.attendances).to eq group.attendances }
       it { expect(invoice.user).to eq group.leader }
     end
 
@@ -65,6 +73,7 @@ describe Invoice, type: :model do
       let!(:other_group) { FactoryGirl.create(:registration_group, leader: other_user) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: other_user, registration_group: other_group, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance) }
+      it { expect(other_invoice.attendances).to eq other_group.attendances }
       it { expect(other_invoice.user).to eq other_group.leader }
       it { expect(other_invoice.amount).to eq 100 }
     end
@@ -82,6 +91,7 @@ describe Invoice, type: :model do
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: user, registration_group: group, registration_value: 200) }
 
         subject!(:other_invoice) { Invoice.from_registration_group(group) }
+        it { expect(other_invoice.attendances).to eq group.attendances }
         it { expect(other_invoice.amount).to eq 200 }
         it { expect(Invoice.count).to eq 1 }
       end

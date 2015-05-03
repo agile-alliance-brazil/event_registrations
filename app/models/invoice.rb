@@ -12,14 +12,25 @@ class Invoice < ActiveRecord::Base
     invoice = find_by(user: attendance.user)
     return invoice if invoice.present? && invoice.amount == attendance.registration_value
     invoice.destroy if invoice.present?
-    Invoice.create!(user: attendance.user, amount: attendance.registration_value, status: Invoice::PENDING)
+    Invoice.create!(
+      user: attendance.user,
+      amount: attendance.registration_value,
+      status: Invoice::PENDING,
+      attendances: [attendance]
+    )
   end
 
   def self.from_registration_group(group)
     invoice = find_by(registration_group: group)
     return invoice if invoice.present? && invoice.amount == group.total_price
     invoice.destroy if invoice.present?
-    Invoice.create!(registration_group: group, user: group.leader, amount: group.total_price, status: Invoice::PENDING)
+    Invoice.create!(
+      registration_group: group,
+      user: group.leader,
+      amount: group.total_price,
+      status: Invoice::PENDING,
+      attendances: group.attendances
+    )
   end
 
   def add_attendances(*items)

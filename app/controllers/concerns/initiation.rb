@@ -19,7 +19,7 @@ module Concerns
       if @registration_types.size == 1
         attributes[:registration_type_id] = @registration_types.first.id
       end
-      attributes[:registration_date] ||= [event.registration_periods.last.end_at, Time.zone.now].min
+      attributes[:registration_date] ||= [event.end_date, Time.zone.now].min
 
       attributes
     end

@@ -29,9 +29,10 @@ class EventAttendancesController < ApplicationController
 
     group = @event.registration_groups.find_by_token(params['registration_token'])
     @attendance.registration_group = group if group.present? && group.accept_members?
-    @attendance.registration_value = @event.registration_price_for(@attendance)
+    put_band
+    @attendance.registration_value = @event.registration_price_for @attendance
 
-    return unless validate_free_registration(@attendance)
+    return unless validate_free_registration @attendance
     save_attendance!
   end
 
@@ -63,6 +64,12 @@ class EventAttendancesController < ApplicationController
       flash.now[:error] = t('flash.failure')
       render :new
     end
+  end
+
+  def put_band
+    @attendance.registration_period = @event.period_for
+    quota = @event.find_quota
+    @attendance.registration_quota = quota if quota.present?
   end
 
   def attendance_params

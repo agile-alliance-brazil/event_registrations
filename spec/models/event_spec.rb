@@ -43,7 +43,8 @@ describe Event, type: :model do
       let!(:registration_period) { FactoryGirl.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: registration_period, value: 100.00) }
 
-      it { expect(event.registration_price_for(attendance)).to eq price.value }
+      subject!(:event_value) { event.registration_price_for(attendance) }
+      it { expect(event_value).to eq price.value }
     end
 
     context 'with two registrations periods, one passed and one current' do

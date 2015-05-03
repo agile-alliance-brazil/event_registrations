@@ -5,6 +5,7 @@ describe Attendance, type: :model do
     it { should belong_to :registration_type }
     it { should belong_to :registration_group }
     it { should belong_to :registration_quota }
+    it { should have_and_belong_to_many :invoices }
   end
 
   context "validations" do

@@ -46,15 +46,6 @@ ActiveRecord::Schema.define(version: 20150503001731) do
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
 
-  create_table "attendances_invoices", force: :cascade do |t|
-    t.integer  "attendance_id"
-    t.integer  "invoice_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "attendances_invoices", ["attendance_id", "invoice_id"], name: "index_attendances_invoices_on_attendance_id_and_invoice_id", unique: true
-
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "provider"
@@ -74,6 +65,15 @@ ActiveRecord::Schema.define(version: 20150503001731) do
     t.integer  "attendance_limit"
     t.decimal  "full_price"
   end
+
+  create_table "invoice_attendances", force: :cascade do |t|
+    t.integer  "invoice_id"
+    t.integer  "attendance_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "invoice_attendances", ["invoice_id", "attendance_id"], name: "index_invoice_attendances_on_invoice_id_and_attendance_id", unique: true
 
   create_table "invoices", force: :cascade do |t|
     t.integer  "frete"

@@ -4,7 +4,8 @@ class Invoice < ActiveRecord::Base
   belongs_to :user
   belongs_to :registration_group
 
-  has_and_belongs_to_many :attendances, -> { uniq }
+  has_many :invoice_attendances
+  has_many :attendances, -> { uniq }, through: :invoice_attendances
 
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
@@ -34,7 +35,8 @@ class Invoice < ActiveRecord::Base
   end
 
   def add_attendances(*items)
-    attendances.concat *(items - attendances)
+    offset = items - attendances
+    attendances.concat(*offset)
   end
 
   def registration_value

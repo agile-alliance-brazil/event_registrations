@@ -6,7 +6,8 @@ describe Invoice, type: :model do
   context 'associations' do
     it { should belong_to :user }
     it { should belong_to :registration_group }
-    it { should have_and_belong_to_many :attendances }
+    it { should have_many :invoice_attendances }
+    it { should have_many(:attendances).through(:invoice_attendances) }
   end
 
   # describe '#add_attendances' do

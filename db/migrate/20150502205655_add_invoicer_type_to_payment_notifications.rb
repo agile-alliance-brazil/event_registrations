@@ -1,6 +1,6 @@
 class AddInvoicerTypeToPaymentNotifications < ActiveRecord::Migration
   def change
-    add_column :payment_notifications, :invoicer_type, :string
+    add_column(:payment_notifications, :invoicer_type, :string) unless column_exists?(:payment_notifications, :invoicer_type)
 
     PaymentNotification.all.each do |payment_notification|
       payment_notification.invoicer_type = "Attendance"

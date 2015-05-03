@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150502205655) do
+ActiveRecord::Schema.define(version: 20150503001731) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -45,6 +45,15 @@ ActiveRecord::Schema.define(version: 20150502205655) do
   end
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
+
+  create_table "attendances_invoices", force: :cascade do |t|
+    t.integer  "attendance_id"
+    t.integer  "invoice_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attendances_invoices", ["attendance_id", "invoice_id"], name: "index_attendances_invoices_on_attendance_id_and_invoice_id", unique: true
 
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id"

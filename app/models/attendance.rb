@@ -10,6 +10,8 @@ class Attendance < ActiveRecord::Base
   belongs_to :registration_quota
   has_many :payment_notifications, as: :invoicer
 
+  has_and_belongs_to_many :invoices, -> { uniq }
+
   validates_confirmation_of :email
   validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
   validates_presence_of :state, if: ->(a) {a.in_brazil?}

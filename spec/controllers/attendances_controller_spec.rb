@@ -50,6 +50,13 @@ describe AttendancesController, type: :controller do
           before { get :index, event_id: event.id }
           it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
         end
+        context 'and one attendance in one event and other in other event' do
+          let!(:other_attendance) { FactoryGirl.create(:attendance) }
+          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+          let!(:other_event) { FactoryGirl.create(:event, attendances: [other_attendance]) }
+          before { get :index, event_id: event.id }
+          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+        end
       end
     end
 

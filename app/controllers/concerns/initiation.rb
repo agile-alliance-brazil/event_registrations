@@ -12,7 +12,7 @@ module Concerns
 
     def build_attributes
       attributes = attendance_params || {}
-      attributes = current_user.attendance_attributes.merge(attributes)
+      attributes = current_user.attendance_attributes.merge(attributes.symbolize_keys)
       attributes[:email_confirmation] ||= current_user.email
       attributes[:event_id] = event.id
       attributes[:user_id] = current_user.id

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 class PaymentNotification < ActiveRecord::Base
-  belongs_to :invoicer, class_name: 'Attendance', foreign_key: 'invoicer_id'
+  belongs_to :invoicer, polymorphic: true
   serialize :params
   
   validates_existence_of :invoicer
@@ -10,7 +10,7 @@ class PaymentNotification < ActiveRecord::Base
   def self.from_paypal_params(params)
     {
       params: params,
-      invoicer_id: params[:invoice],
+      invoicer: Invoice.find(params[:invoice]),
       status: params[:payment_status],
       transaction_id: params[:txn_id],
       notes: params[:memo]
@@ -20,7 +20,7 @@ class PaymentNotification < ActiveRecord::Base
   def self.from_bcash_params(params)
     {
       params: params,
-      invoicer_id: params[:pedido],
+      invoicer: Invoice.find(params[:pedido]),
       status: params[:status] == "Aprovada" ? "Completed" : params[:status],
       transaction_id: params[:transacao_id]
     }
@@ -32,7 +32,7 @@ class PaymentNotification < ActiveRecord::Base
 
     {
       params: params,
-      invoicer_id: params[:pedido],
+      invoicer: Invoice.find(params[:pedido]),
       status: transaction.status.paid? ? "Completed" : transaction.status.status,
       transaction_id: transaction.code,
       notes: transaction.inspect
@@ -46,7 +46,7 @@ class PaymentNotification < ActiveRecord::Base
 
   private
   def mark_invoicer_as_paid
-    if params_valid?
+    if params_valid? && invoicer.respond_to?(:pay)
       invoicer.pay
     else
       Airbrake.notify(

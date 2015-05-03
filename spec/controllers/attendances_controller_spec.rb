@@ -148,7 +148,6 @@ describe AttendancesController, type: :controller do
         expect(response).to redirect_to attendances_path(event_id: event.id)
         expect(flash[:notice]).to eq I18n.t('flash.attendance.payment.success')
         expect(Attendance.last.status).to eq 'paid'
-        expect(Invoice.last.status).to eq 'paid'
       end
     end
 

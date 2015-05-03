@@ -8,7 +8,10 @@ class Attendance < ActiveRecord::Base
   belongs_to :registration_period
   belongs_to :registration_group
   belongs_to :registration_quota
-  has_many :payment_notifications, foreign_key: :invoicer_id
+  has_many :payment_notifications, as: :invoicer
+
+  has_many :invoice_attendances
+  has_many :invoices, -> { uniq }, through: :invoice_attendances
 
   validates_confirmation_of :email
   validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
@@ -27,7 +30,6 @@ class Attendance < ActiveRecord::Base
   usar_como_cpf :cpf
 
   state_machine :status, initial: :pending do
-    after_transition on: :pay, do: :pay_invoice!
     after_transition on: :cancel, do: :cancel_invoice!
 
     event :confirm do
@@ -102,13 +104,6 @@ class Attendance < ActiveRecord::Base
     attendances = event.attendances
     attendances = attendances.where('id < ?', id) unless new_record?
     attendances.count < SUPER_EARLY_LIMIT
-  end
-
-  def pay_invoice!
-    invoice = user.invoices.where(status: 'pending').last
-    return unless invoice.present?
-    invoice.pay_it
-    invoice.save!
   end
 
   def cancel_invoice!

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424001453) do
+ActiveRecord::Schema.define(version: 20150503001731) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -66,6 +66,15 @@ ActiveRecord::Schema.define(version: 20150424001453) do
     t.decimal  "full_price"
   end
 
+  create_table "invoice_attendances", force: :cascade do |t|
+    t.integer  "invoice_id"
+    t.integer  "attendance_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "invoice_attendances", ["invoice_id", "attendance_id"], name: "index_invoice_attendances_on_invoice_id_and_attendance_id", unique: true
+
   create_table "invoices", force: :cascade do |t|
     t.integer  "frete"
     t.decimal  "amount"
@@ -87,6 +96,7 @@ ActiveRecord::Schema.define(version: 20150424001453) do
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "invoicer_type"
   end
 
   create_table "registration_groups", force: :cascade do |t|

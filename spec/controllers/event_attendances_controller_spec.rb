@@ -217,9 +217,18 @@ describe EventAttendancesController, type: :controller do
         end
 
         context 'a valid' do
-          let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-          before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
-          it { expect(attendance.registration_group).to eq group }
+          context 'and same email as current user' do
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
+            it { expect(attendance.registration_group).to eq group }
+          end
+
+          # Regression test (Issue #???): Logged User should be able to register a friend attendance on a group
+          context 'and different email from current user' do
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: "warantesbr@gmail.com", email_confirmation: "warantesbr@gmail.com" } }
+            it { expect(attendance).to be_valid }
+          end
         end
       end
 

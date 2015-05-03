@@ -6,7 +6,13 @@ describe Invoice, type: :model do
   context 'associations' do
     it { should belong_to :user }
     it { should belong_to :registration_group }
+    it { should have_many :invoice_attendances }
+    it { should have_many(:attendances).through(:invoice_attendances) }
   end
+
+  # describe '#add_attendances' do
+  #   let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
+  # end
 
   describe '.from_attendance' do
     let(:individual) { event.registration_types.first }
@@ -18,6 +24,7 @@ describe Invoice, type: :model do
     context 'with no pending invoice already existent' do
       subject(:invoice) { Invoice.from_attendance(attendance) }
       it { expect(invoice.user).to eq attendance.user }
+      it { expect(invoice.attendances).to eq [attendance] }
       it { expect(invoice.amount).to eq attendance.event.registration_price_for(attendance) }
     end
 
@@ -27,6 +34,7 @@ describe Invoice, type: :model do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance) }
       it { expect(other_invoice.user).to eq attendance.user }
+      it { expect(other_invoice.attendances).to eq [attendance] }
       it { expect(other_invoice.amount).to eq 100 }
     end
 
@@ -42,6 +50,7 @@ describe Invoice, type: :model do
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: attendance.user, registration_value: 200) }
 
         subject!(:other_invoice) { Invoice.from_attendance(other_attendance) }
+        it { expect(other_invoice.attendances).to eq [other_attendance] }
         it { expect(other_invoice.amount).to eq 200 }
         it { expect(Invoice.count).to eq 1 }
       end
@@ -55,6 +64,7 @@ describe Invoice, type: :model do
     context 'with no pending invoice already existent' do
       subject(:invoice) { Invoice.from_registration_group(group) }
       it { expect(invoice.registration_group).to eq group }
+      it { expect(invoice.attendances).to eq group.attendances }
       it { expect(invoice.user).to eq group.leader }
     end
 
@@ -64,6 +74,7 @@ describe Invoice, type: :model do
       let!(:other_group) { FactoryGirl.create(:registration_group, leader: other_user) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: other_user, registration_group: other_group, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance) }
+      it { expect(other_invoice.attendances).to eq other_group.attendances }
       it { expect(other_invoice.user).to eq other_group.leader }
       it { expect(other_invoice.amount).to eq 100 }
     end
@@ -81,9 +92,31 @@ describe Invoice, type: :model do
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: user, registration_group: group, registration_value: 200) }
 
         subject!(:other_invoice) { Invoice.from_registration_group(group) }
+        it { expect(other_invoice.attendances).to eq group.attendances }
         it { expect(other_invoice.amount).to eq 200 }
         it { expect(Invoice.count).to eq 1 }
       end
+    end
+  end
+
+  describe '#pay' do
+    context 'an attendance invoice' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
+      subject(:invoice) { Invoice.from_attendance(attendance) }
+      before { invoice.pay }
+      it { expect(invoice.status).to eq Invoice::PAID }
+      it { expect(invoice).to be_persisted }
+      it { expect(attendance).to be_paid }
+    end
+
+    context 'a group invoice' do
+      let(:user) { FactoryGirl.create :user }
+      let(:group) { FactoryGirl.create :registration_group, leader: user }
+      subject(:invoice) { Invoice.from_registration_group(group) }
+      before { invoice.pay }
+      it { expect(invoice.status).to eq Invoice::PAID }
+      it { expect(invoice).to be_persisted }
+      it { expect(invoice.attendances.paid.count).to eq invoice.attendances.count }
     end
   end
 

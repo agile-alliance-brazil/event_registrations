@@ -5,6 +5,8 @@ describe Attendance, type: :model do
     it { should belong_to :registration_type }
     it { should belong_to :registration_group }
     it { should belong_to :registration_quota }
+    it { should have_many :invoice_attendances }
+    it { should have_many(:invoices).through(:invoice_attendances) }
   end
 
   context "validations" do
@@ -210,7 +212,6 @@ describe Attendance, type: :model do
             Invoice.from_attendance(attendance)
             attendance.pay
             expect(attendance.status).to eq 'paid'
-            expect(Invoice.last.status).to eq 'paid'
           end
         end
       end

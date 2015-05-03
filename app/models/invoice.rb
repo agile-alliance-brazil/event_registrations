@@ -4,20 +4,49 @@ class Invoice < ActiveRecord::Base
   belongs_to :user
   belongs_to :registration_group
 
+  has_many :invoice_attendances
+  has_many :attendances, -> { uniq }, through: :invoice_attendances
+
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
   def self.from_attendance(attendance)
     invoice = find_by(user: attendance.user)
     return invoice if invoice.present? && invoice.amount == attendance.registration_value
     invoice.destroy if invoice.present?
-    Invoice.create!(user: attendance.user, amount: attendance.registration_value, status: Invoice::PENDING)
+    Invoice.create!(
+      user: attendance.user,
+      amount: attendance.registration_value,
+      status: Invoice::PENDING,
+      attendances: [attendance]
+    )
   end
 
   def self.from_registration_group(group)
     invoice = find_by(registration_group: group)
     return invoice if invoice.present? && invoice.amount == group.total_price
     invoice.destroy if invoice.present?
-    Invoice.create!(registration_group: group, user: group.leader, amount: group.total_price, status: Invoice::PENDING)
+    Invoice.create!(
+      registration_group: group,
+      user: group.leader,
+      amount: group.total_price,
+      status: Invoice::PENDING,
+      attendances: group.attendances
+    )
+  end
+
+  def add_attendances(*items)
+    offset = items - attendances
+    attendances.concat(*offset)
+  end
+
+  def registration_value
+    amount
+  end
+
+  def pay
+    return unless attendances.map(&:pay).reduce(true, &:&)
+    pay_it
+    save!
   end
 
   def pay_it

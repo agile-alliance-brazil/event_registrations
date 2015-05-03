@@ -5,7 +5,7 @@ describe Ability, type: :model do
   before(:each) do
     @user = FactoryGirl.build(:user)
     @event = FactoryGirl.build(:event)
-    @deadline = @event.registration_periods.last.end_at
+    @deadline = @event.end_date
   end
   
   shared_examples_for "all users" do

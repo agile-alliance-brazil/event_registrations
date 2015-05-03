@@ -8,7 +8,7 @@
   = form.input :city, input_html: {tabindex: autotab}
   = form.input :organization, input_html: {tabindex: autotab}
   = form.input :twitter_user, input_html: {tabindex: autotab}
-  = form.input :default_locale,as: :select, collection: [['Português', 'pt'], ['English', 'en']], input_html: {tabindex: autotab}
+  = form.input :default_locale, as: :select, collection: [['Português', 'pt'], ['English', 'en']], include_blank: false, input_html: {tabindex: autotab}
 
 :javascript
   $(document).ready(function() {

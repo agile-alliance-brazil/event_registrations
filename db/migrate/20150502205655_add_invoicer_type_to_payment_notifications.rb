@@ -4,7 +4,7 @@ class AddInvoicerTypeToPaymentNotifications < ActiveRecord::Migration
 
     PaymentNotification.all.each do |payment_notification|
       payment_notification.invoicer_type = "Attendance"
-      payment_notification.save!
+      payment_notification.save(validate: false)
     end
   end
 end

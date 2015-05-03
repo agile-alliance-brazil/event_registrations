@@ -194,6 +194,13 @@ describe EventAttendancesController, type: :controller do
         let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
         subject(:attendance) { assigns(:attendance) }
 
+        it 'keeps registration token when form is invalid' do
+          user.phone = nil
+          post :create, event_id: @event.id, registration_token: 'xpto', attendance: {event_id: @event.id}
+          expect(response).to render_template(:new)
+          expect(response.body).to have_field('registration_token', type: 'text', with: 'xpto')
+        end
+
         context 'an invalid' do
           context 'and one event' do
             before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: { registration_type_id: @individual.id } }
@@ -311,11 +318,20 @@ describe EventAttendancesController, type: :controller do
     context 'with a valid attendance' do
       let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
       let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
+      let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      let!(:attendance_with_group) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+
       it 'assigns the attendance and render edit' do
         get :edit, event_id: event.id, id: attendance.id
         expect(response).to render_template :edit
         expect(assigns(:attendance)).to eq attendance
+      end
+
+      it 'keeps group token and email confirmation' do
+        get :edit, event_id: event.id, id: attendance_with_group.id
+        expect(response.body).to have_field("registration_token", type: "text", with: group.token)
+        expect(response.body).to have_field("attendance_email_confirmation", type: "text", with: attendance_with_group.email_confirmation)
       end
     end
   end

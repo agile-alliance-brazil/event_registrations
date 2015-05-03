@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    locale = params[:user][:default_locale].to_sym
+    locale = params[:user][:default_locale].to_sym if params[:user][:default_locale]
     I18n.locale = locale if locale
 
     @user = resource

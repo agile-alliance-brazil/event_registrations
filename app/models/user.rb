@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
 
   has_many :invoices
 
+  validates_inclusion_of :default_locale, in: %w(en pt)
   validates_presence_of [:first_name, :last_name]
   validates_length_of [:first_name, :last_name], maximum: 100, allow_blank: true
   validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true

@@ -37,6 +37,8 @@ class EventAttendancesController < ApplicationController
 
   def edit
     @attendance = Attendance.find(params[:id])
+    @attendance.email_confirmation = @attendance.email
+    @registration_token = @attendance.registration_group.token if @attendance.registration_group
   end
 
   def update

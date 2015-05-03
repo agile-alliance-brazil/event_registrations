@@ -8,6 +8,8 @@ class Event < ActiveRecord::Base
 
   delegate :attendances_for, to: :attendances
 
+  scope :active_for, ->(date) { where('end_date > ?', date) }
+
   def can_add_attendance?
     attendance_limit.nil? || attendance_limit == 0 || (attendance_limit > attendances.active.size)
   end

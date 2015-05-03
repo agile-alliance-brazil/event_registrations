@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150503001731) do
+ActiveRecord::Schema.define(version: 20150503072125) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -39,9 +39,9 @@ ActiveRecord::Schema.define(version: 20150503001731) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.string   "notes"
-    t.decimal  "event_price"
     t.integer  "registration_quota_id"
     t.decimal  "registration_value"
+    t.decimal  "event_price"
   end
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
@@ -64,6 +64,8 @@ ActiveRecord::Schema.define(version: 20150503001731) do
     t.boolean  "allow_voting"
     t.integer  "attendance_limit"
     t.decimal  "full_price"
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
   create_table "invoice_attendances", force: :cascade do |t|

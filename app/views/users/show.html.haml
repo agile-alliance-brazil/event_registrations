@@ -24,7 +24,7 @@
               = link_to t('event.attendance.enable_voting'), voting_instructions_attendance_path(attendance)
           - if attendance.cancellable?
             = link_to 'X', attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: event.name) }
-  - (Event.all - @user.events).each do |event|
+  - (@events_for_today - @user.events).each do |event|
     %ul.event
       %li= link_to t('event.attendance.add', name: event.name), new_event_attendance_path(event), class: 'add_attendance'
 .clear

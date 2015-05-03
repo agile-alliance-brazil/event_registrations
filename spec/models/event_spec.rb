@@ -126,4 +126,25 @@ describe Event, type: :model do
       it { expect(event.free?(attendance)).to be_truthy }
     end
   end
+
+  describe '.active_for' do
+    context 'with one event available and other with null at end date' do
+      let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+      let!(:other_event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: nil }
+      it { expect(Event.active_for(Time.zone.today)).to match_array [event] }
+    end
+
+    context 'with one event available and other with end date at past year' do
+      let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+      let!(:other_event) { FactoryGirl.create :event, start_date: 1.year.ago, end_date: 1.year.ago }
+      it { expect(Event.active_for(Time.zone.today)).to match_array [event] }
+    end
+
+    context 'with two events available and other with end date at past year' do
+      let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+      let!(:other_event_valid) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+      let!(:other_event) { FactoryGirl.create :event, start_date: 1.year.ago, end_date: 1.year.ago }
+      it { expect(Event.active_for(Time.zone.today)).to match_array [event, other_event_valid] }
+    end
+  end
 end

@@ -5,9 +5,20 @@ describe UsersController, type: :controller do
 
     describe '#show' do
       context 'with an existent user' do
-        before { get :show, id: user.id }
-        it { expect(assigns(:user)).to eq user }
-        it { expect(response).to render_template :show }
+        context 'with only one event available for date' do
+          let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+          before { get :show, id: user.id }
+          it { expect(assigns(:user)).to eq user }
+          it { expect(assigns(:events_for_today)).to match_array [event] }
+          it { expect(response).to render_template :show }
+        end
+
+        context 'with one event available and other with null at end date' do
+          let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+          let!(:other_event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: nil }
+          before { get :show, id: user.id }
+          it { expect(assigns(:events_for_today)).to match_array [event] }
+        end
       end
 
       context 'with an inexistent user' do

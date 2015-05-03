@@ -33,7 +33,11 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def accept_members?
-    invoices.present? ? invoices.last.pending? : true
+    !paid?
+  end
+
+  def paid?
+    attendances.map(&:paid?).any?
   end
 
   private

@@ -122,18 +122,38 @@ describe RegistrationGroup, type: :model do
     let(:group) { RegistrationGroup.create! event: event, discount: 100 }
 
     context 'with a pending invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PENDING }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
       it { expect(group.accept_members?).to be_truthy }
     end
 
-    context 'with a paid invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID }
+    context 'with a paid group' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'paid') }
       it { expect(group.accept_members?).to be_falsey }
     end
+  end
 
-    context 'with a sent invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::SENT }
-      it { expect(group.accept_members?).to be_falsey }
+  describe '#payment_pendent?' do
+    context 'consistent data' do
+      context 'with one pendent' do
+        let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
+        it { expect(group.paid?).to be_falsey }
+      end
+
+      context 'with one paid' do
+        let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'paid') }
+        it { expect(group.paid?).to be_truthy }
+      end
+    end
+
+    context 'with inconsistent data' do
+      context 'with one paid and one pendent' do
+        let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'paid') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
+        it { expect(group.paid?).to be_truthy }
+      end
     end
   end
 end

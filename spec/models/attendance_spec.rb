@@ -147,6 +147,22 @@ describe Attendance, type: :model do
               it { expect(Attendance.search_for_list('RUblEs')).to match_array [attendance, other_attendance] }
             end
           end
+
+          context 'with three attendances, all matching' do
+            let!(:event) { FactoryGirl.create :event }
+            it 'will order by created at descending' do
+              now = Time.zone.local(2015, 4, 30, 0, 0, 0)
+              Timecop.freeze(now)
+              attendance = FactoryGirl.create(:attendance, event: event, first_name: 'April event')
+              now = Time.zone.local(2014, 4, 30, 0, 0, 0)
+              Timecop.freeze(now)
+              other_attendance = FactoryGirl.create(:attendance, event: event, first_name: '2014 event')
+              Timecop.return
+              another_attendance = FactoryGirl.create(:attendance, event: event, first_name: 'Today event')
+
+              expect(Attendance.search_for_list('event')).to eq [another_attendance, attendance, other_attendance]
+            end
+          end
         end
       end
     end

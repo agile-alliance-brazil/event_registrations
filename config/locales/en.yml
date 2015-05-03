@@ -117,6 +117,7 @@ en:
         notes: "Leave any notes or observations that you think are relevant, for future reference (e.g. payment confirmation number, or any special information about this participant)"
     actions:
       new_registration: "Submit registration"
+      edit_registration: "Update registration"
       confirm_registered_attendance: "Confirm Payment"
       update_pending_attendance: "Update Price"
       paid_pending_attendance: "Payment Received"

@@ -253,6 +253,7 @@ pt:
     actions:
       edit_profile: "Atualizar perfil"
       new_registration: "Submeter inscrição"
+      edit_registration: "Atualizar inscrição"
       confirm_registered_attendance: "Confirmar Pagamento"
       update_pending_attendance: "Atualizar preço"
       paid_pending_attendance: "Pagamento recebido"

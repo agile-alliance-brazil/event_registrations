@@ -33,7 +33,7 @@ en:
       search:
         placeholder: 'search in name, organization or email'
       token:
-        placeholder: 'enter your registration token if you have one'
+        placeholder: 'to register within a group, please enter the token provided by the event administration'
     labels:
       attendance:
         id: "Registration Number"

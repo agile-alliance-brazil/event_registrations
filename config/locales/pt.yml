@@ -170,7 +170,7 @@ pt:
       search:
         placeholder: 'procurar por nome, organização ou email'
       token:
-        placeholder: 'entre com o seu token de inscrição se você possuir um'
+        placeholder: 'para se registrar através de um grupo, por favor entre com o token fornecido pela administração do evento'
     labels:
       attendance:
         id: "Número de inscrição"

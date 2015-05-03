@@ -42,6 +42,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def pay
+    return unless attendances.map(&:pay).reduce(true, &:&)
     pay_it
     save!
   end

@@ -98,6 +98,27 @@ describe Invoice, type: :model do
     end
   end
 
+  describe '#pay' do
+    context 'an attendance invoice' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
+      subject(:invoice) { Invoice.from_attendance(attendance) }
+      before { invoice.pay }
+      it { expect(invoice.status).to eq Invoice::PAID }
+      it { expect(invoice).to be_persisted }
+      it { expect(attendance).to be_paid }
+    end
+
+    context 'a group invoice' do
+      let(:user) { FactoryGirl.create :user }
+      let(:group) { FactoryGirl.create :registration_group, leader: user }
+      subject(:invoice) { Invoice.from_registration_group(group) }
+      before { invoice.pay }
+      it { expect(invoice.status).to eq Invoice::PAID }
+      it { expect(invoice).to be_persisted }
+      it { expect(invoice.attendances.paid.count).to eq invoice.attendances.count }
+    end
+  end
+
   describe '#pay_it' do
     let(:invoice) { FactoryGirl.create :invoice }
     before { invoice.pay_it }

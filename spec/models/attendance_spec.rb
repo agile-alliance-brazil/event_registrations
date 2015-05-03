@@ -211,7 +211,6 @@ describe Attendance, type: :model do
             Invoice.from_attendance(attendance)
             attendance.pay
             expect(attendance.status).to eq 'paid'
-            expect(Invoice.last.status).to eq 'paid'
           end
         end
       end

@@ -7,7 +7,7 @@ namespace :edition_2015 do
   task :seeds => :environment do
     print 'Generating seeds '
 
-    event = Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00)
+    event = Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00, start_date: Date.new(2015, 10, 23), end_date: Date.new(2015, 10, 23))
     registration_type = RegistrationType.create!(title: 'registration_type.individual', event: event)
 
     # Period

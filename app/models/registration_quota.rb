@@ -5,7 +5,7 @@ class RegistrationQuota < ActiveRecord::Base
   has_many :attendances
 
   def vacancy?
-    attendances.size < quota
+    attendances.active.size < quota
   end
 
   def price

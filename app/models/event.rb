@@ -18,8 +18,8 @@ class Event < ActiveRecord::Base
     quota = find_quota
     if period_for.present?
       period_for.price_for_registration_type(attendance.registration_type) * attendance.discount
-    elsif quota.present?
-      quota.price * attendance.discount
+    elsif quota.first.present?
+      quota.first.price * attendance.discount
     else
       full_price * attendance.discount
     end
@@ -30,7 +30,7 @@ class Event < ActiveRecord::Base
   end
 
   def find_quota
-    registration_quotas.order(order: :asc).each { |quota| return quota if quota.vacancy? }
+    registration_quotas.order(order: :asc).select(&:vacancy?)
   end
 
   def free?(attendance)

@@ -69,7 +69,7 @@ class EventAttendancesController < ApplicationController
   def put_band
     @attendance.registration_period = @event.period_for
     quota = @event.find_quota
-    @attendance.registration_quota = quota if quota.present?
+    @attendance.registration_quota = quota.first if quota.present?
   end
 
   def attendance_params

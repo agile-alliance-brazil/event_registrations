@@ -9,8 +9,17 @@ class RegistrationGroup < ActiveRecord::Base
 
   before_create :generate_token
 
+  before_destroy do |record|
+    group_attendances = Attendance.where(registration_group_id: record.id)
+    if group_attendances.map(&:can_cancel?).all?
+      group_attendances.map(&:cancel)
+    else
+      false
+    end
+  end
+
   def qtd_attendances
-    attendances.size
+    attendances.active.size
   end
 
   def total_price

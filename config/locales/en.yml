@@ -283,6 +283,7 @@ en:
 
   registration_group:
     list: 'Groups list of %{event_name}'
+    destroy_confirmation: "Are you sure you want to delete the group named '%{registration_group}'?\nAll registrations associated to this group will be automatically canceled."
     destroy:
       success: 'Group deleted.'
       error: 'An error occurred. The group was not deleted.'

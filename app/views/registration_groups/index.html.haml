@@ -24,4 +24,4 @@
       %td= group.minimum_size
       %td= group.token
       %td= group.qtd_attendances
-      %td= link_to t('actions.destroy'), event_registration_group_path(@event, group), method: :delete
+      %td= link_to t('actions.destroy'), event_registration_group_path(@event, group), method: :delete, class: 'remove', data: { confirm: t('registration_group.destroy_confirmation', registration_group: group.name ) }

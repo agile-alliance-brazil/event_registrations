@@ -19,7 +19,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def qtd_attendances
-    attendances.size
+    attendances.active.size
   end
 
   def total_price

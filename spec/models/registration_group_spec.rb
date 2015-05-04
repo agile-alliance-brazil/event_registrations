@@ -48,9 +48,20 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#qtd_attendances' do
-    let(:group) { RegistrationGroup.create! event: event }
-    before { 2.times { FactoryGirl.create :attendance, registration_group: group } }
-    it { expect(group.qtd_attendances).to eq 2 }
+    context 'just pending attendances' do
+      let(:group) { RegistrationGroup.create! event: event }
+      before { 2.times { FactoryGirl.create :attendance, registration_group: group } }
+      it { expect(group.qtd_attendances).to eq 2 }
+    end
+
+    context 'with cancelled attendances' do
+      let(:group) { RegistrationGroup.create! event: event }
+      before do
+        2.times { @last_attendance = FactoryGirl.create(:attendance, registration_group: group) }
+        @last_attendance.cancel
+      end
+      it { expect(group.qtd_attendances).to eq 1 }
+    end
   end
 
   describe '#total_price' do

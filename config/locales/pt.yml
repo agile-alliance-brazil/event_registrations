@@ -423,6 +423,7 @@ pt:
 
   registration_group:
     list: 'Lista dos grupos de %{event_name}'
+    destroy_confirmation: "Tem certeza que deseja remover o grupo '%{registration_group}'?\nTodas as inscrições associadas a este grupo serão automaticamente canceladas."
     destroy:
       success: 'Grupo excluído com sucesso.'
       error: 'Falha ao excluir o grupo.'

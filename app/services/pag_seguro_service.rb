@@ -24,7 +24,7 @@ class PagSeguroService
 
   def self.responds(response)
     response_hash = {}
-    if response.present? && response.errors.any?
+    if response.present? && response.errors.present?
       response_hash[:errors] = response.errors.join('\n')
     elsif response.blank?
       response_hash[:errors] = 'Internal server error'

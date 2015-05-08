@@ -12,7 +12,7 @@ class AttendancesController < ApplicationController
 
   def show
     @attendance = resource
-    @invoice = @attendance.invoices.last
+    @invoice = Invoice.where(user: @attendance.user).last
     respond_to do |format|
       format.html
       format.json

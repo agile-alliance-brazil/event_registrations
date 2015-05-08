@@ -26,7 +26,7 @@ describe Invoice, type: :model do
 
     context 'with an already registered invoice for another user' do
       let(:user) { FactoryGirl.create :user }
-      let!(:invoice) { FactoryGirl.create(:invoice, user: user, amount: 200) }
+      let!(:invoice) { FactoryGirl.create(:invoice, user: user, amount: 200, payment_type: Invoice::GATEWAY) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       it { expect(other_invoice.user).to eq attendance.user }
@@ -36,13 +36,13 @@ describe Invoice, type: :model do
 
     context 'with an already existent pending invoice' do
       context 'with same registration value' do
-        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, amount: 100) }
+        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, amount: 100, payment_type: Invoice::GATEWAY) }
         subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
         it { expect(other_invoice).to eq invoice }
         it { expect(Invoice.count).to eq 1 }
       end
       context 'with different registration_value' do
-        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, amount: 100) }
+        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, amount: 100, payment_type: Invoice::GATEWAY) }
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: attendance.user, registration_value: 200) }
 
         subject!(:other_invoice) { Invoice.from_attendance(other_attendance, Invoice::GATEWAY) }
@@ -66,7 +66,7 @@ describe Invoice, type: :model do
 
     context 'with an already registered invoice for another user' do
       let(:other_user) { FactoryGirl.create :user }
-      let!(:invoice) { FactoryGirl.create(:invoice, user: group.leader, registration_group: group, amount: 200) }
+      let!(:invoice) { FactoryGirl.create(:invoice, user: group.leader, registration_group: group, amount: 200, payment_type: Invoice::GATEWAY) }
       let!(:other_group) { FactoryGirl.create(:registration_group, leader: other_user) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: other_user, registration_group: other_group, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
@@ -77,14 +77,14 @@ describe Invoice, type: :model do
 
     context 'with an already existent invoice' do
       context 'with same total price' do
-        let!(:invoice) { FactoryGirl.create(:invoice, registration_group: group, amount: group.total_price) }
+        let!(:invoice) { FactoryGirl.create(:invoice, registration_group: group, amount: group.total_price, payment_type: Invoice::GATEWAY) }
         subject!(:other_invoice) { Invoice.from_registration_group(group, Invoice::GATEWAY) }
         it { expect(other_invoice).to eq invoice }
         it { expect(Invoice.count).to eq 1 }
       end
 
       context 'with different total price' do
-        let!(:invoice) { FactoryGirl.create(:invoice, registration_group: group, amount: 100) }
+        let!(:invoice) { FactoryGirl.create(:invoice, registration_group: group, amount: 100, payment_type: Invoice::GATEWAY) }
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: user, registration_group: group, registration_value: 200) }
 
         subject!(:other_invoice) { Invoice.from_registration_group(group, Invoice::GATEWAY) }

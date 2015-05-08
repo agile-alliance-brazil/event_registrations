@@ -202,6 +202,7 @@ pt:
         only_with_notes: "Exibir apenas resultados com anotações"
         total: "Valor"
         price: 'Preço (R$)'
+        payment_type: "Tipo de Pagamento"
         actions: 'Ações'
       payment_notification:
         transaction_id: "Código da transação"

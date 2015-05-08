@@ -48,13 +48,11 @@ describe RegistrationGroupsController, type: :controller do
   describe '#show' do
     let(:event) { FactoryGirl.create :event }
     let!(:group) { FactoryGirl.create :registration_group, event: event }
-    let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID, amount: group.total_price }
+    let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID, amount: group.total_price, payment_type: Invoice::GATEWAY }
     before { get :show, event_id: event.id, id: group.id }
     it { expect(assigns(:group)).to eq group }
     it { expect(assigns(:invoice)).to eq invoice }
     it { expect(response).to render_template :show }
-
-    pending 'check if is possible to renew or cancel a paid or sent invoice.'
   end
 
   describe '#destroy' do

@@ -99,7 +99,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def payment_type
-    invoices.last.payment_type
+    invoices.last.payment_type if invoices.present?
   end
 
   private

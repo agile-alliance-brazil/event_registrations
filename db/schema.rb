@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150503212201) do
+ActiveRecord::Schema.define(version: 20150507201703) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -39,9 +39,9 @@ ActiveRecord::Schema.define(version: 20150503212201) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.string   "notes"
-    t.decimal  "event_price"
     t.integer  "registration_quota_id"
     t.decimal  "registration_value"
+    t.decimal  "event_price"
     t.integer  "registration_period_id"
   end
 
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20150503212201) do
     t.integer  "user_id"
     t.integer  "registration_group_id"
     t.string   "status"
+    t.string   "payment_type"
   end
 
   create_table "payment_notifications", force: :cascade do |t|

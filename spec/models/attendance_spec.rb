@@ -225,7 +225,7 @@ describe Attendance, type: :model do
         context 'with an invoice' do
           it 'move to paid upon payment and check as paid the related invoice' do
             attendance = FactoryGirl.create :attendance
-            Invoice.from_attendance(attendance)
+            Invoice.from_attendance(attendance, Invoice::GATEWAY)
             attendance.pay
             expect(attendance.status).to eq 'paid'
           end

@@ -99,7 +99,7 @@ describe AttendancesController, type: :controller do
 
     context 'with invoice' do
       it 'cancel the attendance and the invoice' do
-        Invoice.from_attendance(attendance)
+        Invoice.from_attendance(attendance, Invoice::GATEWAY)
         delete :destroy, id: attendance.id
         expect(Attendance.last.status).to eq 'cancelled'
         expect(Invoice.last.status).to eq 'cancelled'
@@ -149,7 +149,7 @@ describe AttendancesController, type: :controller do
 
     context 'pending attendance' do
       let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
-      let!(:invoice) { Invoice.from_attendance(attendance) }
+      let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
         put :pay_it, id: attendance.id
         expect(response).to redirect_to attendances_path(event_id: event.id)

@@ -1,5 +1,8 @@
 - @registration_token ||= params[:registration_token]
 = text_field_tag :registration_token, @registration_token, placeholder: I18n.t('formtastic.fields.token.placeholder'), size: 100
+%p Choose the payment type
+%p= select_tag :payment_type, options_for_select(Invoice::TYPES)
+
 = form.inputs :attendance_personal do
   = form.input :first_name, required: true, input_html: {tabindex: autotab}
   = form.input :last_name, required: true, input_html: {tabindex: autotab}
@@ -19,12 +22,6 @@
   = form.input :state, required: true, as: :select, collection: ActionView::Helpers::FormOptionsHelper::ESTADOS_BRASILEIROS, input_html: {tabindex: autotab}
   = form.input :zipcode, input_html: {tabindex: autotab}
 
-%div.total
-  %h6= t('registration_total.title')
-  %table
-    %tr
-      %td= number_to_currency @event.registration_price_for(@attendance)
-
 #flash_notice= t('flash.registration.attendance')
 
 :javascript
@@ -34,11 +31,6 @@
       if(checked_type.length == 0) {
         return;
       }
-    
-      var price = #{@event.registration_price_for(@attendance).to_json};
-
-      $("td#registration_price").text(price);
-      updateTotal();
       
       $("#attendance_email_input input").trigger('change');
     }

@@ -7,7 +7,7 @@ describe PaypalAdapter do
     let!(:attendance) { FactoryGirl.create :attendance, event: event }
 
     it 'should add item for base registration price' do
-      invoice = Invoice.from_attendance(attendance)
+      invoice = Invoice.from_attendance(attendance, Invoice::GATEWAY)
 
       I18n.with_locale(:en) do
         adapter = PaypalAdapter.from_invoice(invoice)
@@ -21,7 +21,7 @@ describe PaypalAdapter do
     end
     
     it 'should add invoice id' do
-      invoice = Invoice.from_attendance(attendance)
+      invoice = Invoice.from_attendance(attendance, Invoice::GATEWAY)
       adapter = PaypalAdapter.from_invoice(invoice)
       expect(adapter.invoice).to eq invoice
     end

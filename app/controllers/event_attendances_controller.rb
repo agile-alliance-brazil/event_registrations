@@ -30,7 +30,7 @@ class EventAttendancesController < ApplicationController
     group = @event.registration_groups.find_by_token(params['registration_token'])
     @attendance.registration_group = group if group.present? && group.accept_members?
     put_band
-    @attendance.registration_value = @event.registration_price_for @attendance
+    @attendance.registration_value = @event.registration_price_for(@attendance, params['payment_type'])
 
     return unless validate_free_registration @attendance
     save_attendance!
@@ -51,6 +51,7 @@ class EventAttendancesController < ApplicationController
   private
 
   def save_attendance!
+    @invoice = Invoice.from_attendance(@attendance, params['payment_type'])
     if @attendance.save
       begin
         flash[:notice] = t('flash.attendance.create.success')

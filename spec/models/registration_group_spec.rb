@@ -192,4 +192,17 @@ describe RegistrationGroup, type: :model do
       end
     end
   end
+
+  describe '#leader_name' do
+    let(:user) { FactoryGirl.create :user }
+    context 'with a defined leader' do
+      let(:group) { RegistrationGroup.create! event: event, discount: 20, leader: user }
+      it { expect(group.leader_name).to eq user.full_name }
+    end
+
+    context 'with a defined leader' do
+      let(:group) { RegistrationGroup.create! event: event }
+      it { expect(group.leader_name).to eq nil }
+    end
+  end
 end

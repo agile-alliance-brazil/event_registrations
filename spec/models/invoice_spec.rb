@@ -95,6 +95,8 @@ describe Invoice, type: :model do
     end
   end
 
+  pending 'isolated test to for_user scope'
+
   describe '#pay' do
     context 'an attendance invoice' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }

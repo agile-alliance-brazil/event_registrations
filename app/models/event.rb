@@ -14,9 +14,12 @@ class Event < ActiveRecord::Base
     attendance_limit.nil? || attendance_limit == 0 || (attendance_limit > attendances.active.size)
   end
 
-  def registration_price_for(attendance)
+  def registration_price_for(attendance, payment_type)
     quota = find_quota
-    if period_for.present?
+
+    if payment_type == Invoice::STATEMENT
+      full_price
+    elsif period_for.present?
       period_for.price_for_registration_type(attendance.registration_type) * attendance.discount
     elsif quota.first.present?
       quota.first.price * attendance.discount

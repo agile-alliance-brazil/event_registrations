@@ -98,6 +98,10 @@ class Attendance < ActiveRecord::Base
     amount
   end
 
+  def payment_type
+    invoices.last.payment_type
+  end
+
   private
 
   def entitled_super_early_bird?

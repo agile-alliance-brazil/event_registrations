@@ -5,7 +5,7 @@ describe BcashAdapter do
     let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link', full_price: 930.00) }
     let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
     let!(:attendance) { FactoryGirl.create :attendance, event: event }
-    let(:invoice) { Invoice.from_attendance(attendance) }
+    let(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
 
     it 'will add item for base registration price' do
       adapter = BcashAdapter.from_invoice(invoice)
@@ -27,7 +27,7 @@ describe BcashAdapter do
     let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link', full_price: 930.00) }
     let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
     let!(:attendance) { FactoryGirl.create :attendance, event: event }
-    let(:invoice) { Invoice.from_attendance(attendance) }
+    let(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
 
     it 'map each item variable' do
       adapter = BcashAdapter.new([BcashAdapter::BcashItem.new('item 1', 2, 10.50), BcashAdapter::BcashItem.new('item 2', 3, 9.99, 2)], invoice)

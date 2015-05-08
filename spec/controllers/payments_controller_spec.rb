@@ -31,5 +31,18 @@ describe PaymentsController, type: :controller do
         expect(flash[:alert]).to eq 'xpto'
       end
     end
+
+    context 'with invalid event' do
+      let(:invoice) { FactoryGirl.create :invoice }
+      before { post :checkout, event_id: 'foo', id: invoice.id }
+      it { expect(response).to redirect_to events_path }
+      it { expect(flash[:alert]).to eq I18n.t('event.not_found') }
+    end
+
+    context 'with invalid invoice' do
+      before { post :checkout, event_id: event.id, id: 'foo' }
+      it { expect(response).to redirect_to event_registration_groups_path event }
+      it { expect(flash[:alert]).to eq I18n.t('invoice.not_found') }
+    end
   end
 end

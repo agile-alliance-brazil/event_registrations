@@ -1,28 +1,30 @@
 class Invoice < ActiveRecord::Base
   STATUSES = [PENDING = 'pending', SENT = 'sent', PAID = 'paid', CANCELLED = 'cancelled']
+  TYPES = [GATEWAY = 'gateway', DEPOSIT = 'bank_deposit', STATEMENT = 'statement_agreement']
 
   belongs_to :user
   belongs_to :registration_group
 
-  has_many :invoice_attendances
+  has_many :invoice_attendances, dependent: :destroy
   has_many :attendances, -> { uniq }, through: :invoice_attendances
 
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
-  def self.from_attendance(attendance)
-    invoice = find_by(user: attendance.user)
+  def self.from_attendance(attendance, payment_type)
+    invoice = find_by(user: attendance.user, payment_type: payment_type)
     return invoice if invoice.present? && invoice.amount == attendance.registration_value
     invoice.destroy if invoice.present?
-    Invoice.create!(
+    Invoice.create(
       user: attendance.user,
       amount: attendance.registration_value,
       status: Invoice::PENDING,
-      attendances: [attendance]
+      attendances: [attendance],
+      payment_type: payment_type
     )
   end
 
-  def self.from_registration_group(group)
-    invoice = find_by(registration_group: group)
+  def self.from_registration_group(group, payment_type)
+    invoice = find_by(registration_group: group, payment_type: payment_type)
     return invoice if invoice.present? && invoice.amount == group.total_price
     invoice.destroy if invoice.present?
     Invoice.create!(
@@ -30,7 +32,8 @@ class Invoice < ActiveRecord::Base
       user: group.leader,
       amount: group.total_price,
       status: Invoice::PENDING,
-      attendances: group.attendances
+      attendances: group.attendances,
+      payment_type: payment_type
     )
   end
 

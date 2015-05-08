@@ -121,6 +121,7 @@ describe EventAttendancesController, type: :controller do
 
     context 'event value for attendance' do
       before { Timecop.return }
+
       context 'with no period, quotas or groups' do
         before { post :create, event_id: @event.id, attendance: valid_attendance }
         it { expect(assigns(:attendance).registration_value).to eq @event.full_price }
@@ -151,6 +152,18 @@ describe EventAttendancesController, type: :controller do
         before { post :create, event_id: quota_event.id, attendance: valid_attendance }
         it { expect(assigns(:attendance).registration_quota).to eq quota }
         it { expect(assigns(:attendance).registration_value).to eq 350.00 }
+      end
+
+      context 'with statement_agreement as payment type, even with configured quotas and periods' do
+        let(:event) { Event.create!(valid_event) }
+        let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
+        let!(:quota_price) { RegistrationPrice.create!(registration_type: registration_type, value: 350.00) }
+        let!(:quota) { FactoryGirl.create :registration_quota, event: event, registration_price: quota_price, quota: 40, order: 1 }
+        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event) }
+        let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: full_registration_period, value: 740.00) }
+
+        before { post :create, event_id: event.id, payment_type: Invoice::STATEMENT, attendance: valid_attendance }
+        it { expect(Attendance.last.registration_value).to eq event.full_price }
       end
     end
 

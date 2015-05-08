@@ -10,7 +10,7 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def show
-    @invoice = Invoice.from_registration_group @group
+    @invoice = Invoice.from_registration_group(@group, Invoice::GATEWAY)
   end
 
   def destroy

@@ -335,4 +335,21 @@ describe Attendance, type: :model do
       it { expect(attendance.group_name).to eq nil }
     end
   end
+
+  describe '#payment_type' do
+    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    context 'with an invoice' do
+      let(:user) { FactoryGirl.create :user }
+      let!(:invoice) { FactoryGirl.create(:invoice, user: user, amount: 100, payment_type: Invoice::GATEWAY) }
+      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, invoices: [invoice]) }
+      it { expect(attendance.payment_type).to eq Invoice::GATEWAY }
+    end
+
+    context 'with no invoice' do
+      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      it { expect(attendance.payment_type).to eq nil }
+    end
+  end
 end

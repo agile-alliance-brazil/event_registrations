@@ -17,7 +17,8 @@ class PaymentGatewayAdapter
   attr_reader :items, :invoice
 
   def initialize(items, target)
-    @items, @invoice = items, target
+    @items = items
+    @invoice = target
   end
 
   def to_variables
@@ -33,7 +34,10 @@ class PaymentGatewayAdapter
     attr_reader :name, :number, :amount, :quantity
 
     def initialize(name, number, amount, quantity = 1)
-      @name, @number, @amount, @quantity = name, number, amount, quantity
+      @name = name
+      @number = number
+      @amount = amount
+      @quantity = quantity
     end
   end
 end

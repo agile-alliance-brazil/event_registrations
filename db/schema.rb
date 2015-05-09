@@ -39,9 +39,9 @@ ActiveRecord::Schema.define(version: 20150507201703) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.string   "notes"
+    t.decimal  "event_price"
     t.integer  "registration_quota_id"
     t.decimal  "registration_value"
-    t.decimal  "event_price"
     t.integer  "registration_period_id"
   end
 

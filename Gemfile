@@ -36,6 +36,8 @@ gem 'sass-rails', '=5.0.3'
 
 gem 'coffee-rails', '=4.1.0'
 gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
+gem 'bootstrap-sass', '~> 3.2.0'
+gem 'autoprefixer-rails'
 
 group :production, :travis do
   gem 'mysql2', '=0.3.18'

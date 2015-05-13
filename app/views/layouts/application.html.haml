@@ -1,5 +1,5 @@
 !!! 5
-%html{ html_attrs => I18n.locale }
+%html{html_attrs(I18n.locale)}
 
   %head
     %title
@@ -10,12 +10,11 @@
     = csrf_meta_tag
     = stylesheet_link_tag :application
     = javascript_include_tag :application
-
     = yield(:head)
 
   %body
-    #container
-      #header
+    #header
+      .container
         = link_to image_tag("#{@event.name.parameterize}-logo.png"), @event
         .logo
           %h1= @event.name
@@ -27,7 +26,8 @@
           %li= link_to "English", "?locale=en"
         = render partial: 'layouts/menu'
 
-      #content{ class: 'grid_12' }
+    #content
+      .container
         - flash.each do |name, msg|
           = content_tag :div, msg, id: "flash_#{name}"
 
@@ -36,7 +36,9 @@
 
         = yield
 
-      #footer Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
+    #footer
+      .container
+        Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
 
     - unless APP_CONFIG[:google].nil?
       :javascript

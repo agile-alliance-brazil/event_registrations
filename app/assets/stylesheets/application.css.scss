@@ -107,6 +107,7 @@ form fieldset.inputs ol {
       &.last {
         color: #333;
         font-size: 2em;
+        font-weight: bold;
         padding-bottom: 10px;
       }
 
@@ -125,6 +126,20 @@ form fieldset.inputs ol {
   margin: 40px 0;
   tr.last {
     font-size: 1.2em;
+  }
+}
+
+.alert-notice {
+  @extend .alert-success;
+}
+
+.payments {
+  margin: 30px 0;
+  .payment_type {
+    input {
+      width: auto;
+      height: auto;
+    }
   }
 }
 
@@ -191,11 +206,15 @@ form fieldset.inputs ol {
       color: $color4;
       text-decoration: underline; } } }
 
-// #footer {
-//   color: #999999;
-//   text-align: center;
-//   font-size: 8pt;
-//   margin-bottom: 20px; }
+#footer {
+  color: #333333;
+  background-color: #c0c0c0;
+  text-align: center;
+  font-size: 1em;
+  min-height: 200px;
+  padding: 30px 0;
+  margin-top: 20px;
+}
 //
 //
 // #flash_notice, #flash_error, #flash_news, #flash_alert {

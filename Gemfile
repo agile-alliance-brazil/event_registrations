@@ -23,7 +23,7 @@ gem 'cancan', '=1.6.10'
 gem 'rake'
 gem 'will_paginate', '=3.0.7'
 gem 'omniauth', '=1.2.2'
-gem 'omniauth-twitter', '=1.1.0'
+gem 'omniauth-twitter', '=1.2.0'
 gem 'omniauth-facebook', '=2.0.1'
 gem 'omniauth-github', '=1.1.2'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
@@ -52,8 +52,7 @@ group :development, :test do
   gem 'rb-inotify', require: linux_only('rb-inotify')
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'konacha'
-  gem 'sprockets', '< 3.0' # Konacha 3.3.0 cannot handle sprockets 3.0 yet
+  gem 'konacha', '3.4.0'
   gem 'guard-konacha-rails'
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'selenium-webdriver'

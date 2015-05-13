@@ -16,7 +16,7 @@ class Invoice < ActiveRecord::Base
     invoice = find_by(user: attendance.user, payment_type: payment_type)
     return invoice if invoice.present? && invoice.amount == attendance.registration_value
     invoice.destroy if invoice.present?
-    Invoice.create!(
+    Invoice.create(
       user: attendance.user,
       amount: attendance.registration_value,
       status: Invoice::PENDING,

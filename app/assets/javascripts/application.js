@@ -1,7 +1,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require_self
+//= require bootstrap-sprockets
 //= require_tree .
+
 
 (function($) {
   $.fn.bindSelectUpdated = function() {

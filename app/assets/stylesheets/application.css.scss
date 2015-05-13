@@ -83,6 +83,51 @@ form fieldset.inputs ol {
 }
 
 
+.badge-container {
+  @extend .row;
+  margin: 30px 0;
+  .badge-item {
+    @extend .col-lg-4;
+    padding-top: 15px;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+    div {
+      background-color: #f2f2f2;
+      padding-right: 20px;
+      padding-left: 20px;
+      &.first {
+        font-size: 1.2em;
+        padding-top: 10px;
+        color: #666;
+      }
+      &.last {
+        color: #333;
+        font-size: 2em;
+        padding-bottom: 10px;
+      }
+
+    }
+  }
+}
+
+.attendances-actions {
+  margin: 40px 0;
+  .button_to {
+    display: inline;
+  }
+}
+
+.attendance-table {
+  margin: 40px 0;
+  tr.last {
+    font-size: 1.2em;
+  }
+}
+
 #header {
   height: 120px;
   color: $font-color-light;

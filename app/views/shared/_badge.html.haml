@@ -1,9 +1,10 @@
-%ul.spaced
-  %li.first #{t('formtastic.labels.attendance.full_name')}:
-  %li.full_name= attendance.full_name
-%ul.spaced
-  %li.first #{t('formtastic.labels.attendance.id')}:
-  %li.id= attendance.id
-%ul.spaced
-  %li.first #{t('formtastic.labels.attendance.status')}:
-  %li.status= t("attendance.status.#{attendance.status}") if attendance.status.present?
+%div.badge-container
+  %div.badge-item
+    %div.first #{t('formtastic.labels.attendance.full_name')}:
+    %div.last= attendance.full_name
+  %div.badge-item
+    %div.first #{t('formtastic.labels.attendance.id')}:
+    %div.last= attendance.id
+  %div.badge-item
+    %div.first #{t('formtastic.labels.attendance.status')}:
+    %div.last= t("attendance.status.#{attendance.status}") if attendance.status.present?

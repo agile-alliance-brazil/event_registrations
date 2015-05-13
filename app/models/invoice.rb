@@ -5,7 +5,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :user
   belongs_to :registration_group
 
-  has_many :invoice_attendances, dependent: :destroy
+  has_many :invoice_attendances
   has_many :attendances, -> { uniq }, through: :invoice_attendances
 
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
@@ -16,7 +16,7 @@ class Invoice < ActiveRecord::Base
     invoice = find_by(user: attendance.user, payment_type: payment_type)
     return invoice if invoice.present? && invoice.amount == attendance.registration_value
     invoice.destroy if invoice.present?
-    Invoice.create(
+    Invoice.create!(
       user: attendance.user,
       amount: attendance.registration_value,
       status: Invoice::PENDING,

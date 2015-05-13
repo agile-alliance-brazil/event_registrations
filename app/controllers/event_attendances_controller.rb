@@ -51,7 +51,8 @@ class EventAttendancesController < ApplicationController
   private
 
   def save_attendance!
-    Invoice.from_attendance(@attendance, params['payment_type'])
+    invoice = Invoice.from_attendance(@attendance, params['payment_type'])
+    @attendance.invoices << invoice
     if @attendance.save
       begin
         flash[:notice] = t('flash.attendance.create.success')

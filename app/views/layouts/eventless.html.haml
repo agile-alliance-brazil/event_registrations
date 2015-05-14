@@ -13,14 +13,12 @@
 
   %body
     #header
+      = render partial: 'layouts/aa'
       .container
-        %h1= content_for?(:title) ? yield(:title) : t('title.events')
-        %ul#languages
-          - if current_user
+        -if current_user
+          %ul#user
             %li= link_to current_user.full_name, current_user
-          %li= link_to "Português", "?locale=pt"
-          %li= link_to "English", "?locale=en"
-        = render :partial => 'layouts/menu'
+        = render partial: 'layouts/menu'
 
     #content
       .container

@@ -5,7 +5,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :user
   belongs_to :registration_group
 
-  has_many :invoice_attendances, dependent: :destroy
+  has_many :invoice_attendances
   has_many :attendances, -> { uniq }, through: :invoice_attendances
 
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user

@@ -9,6 +9,7 @@
 @import 'mixins/text';
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "aa";
 
 $primary-color: #218CCB;
 $font-color-light: #FFFFFF;
@@ -133,6 +134,14 @@ form fieldset.inputs ol {
   @extend .alert-success;
 }
 
+.alert-error {
+  @extend .alert-danger;
+}
+
+p.inline-errors {
+  @extend .text-danger;
+}
+
 .payments {
   margin: 30px 0;
   .payment_type {
@@ -143,8 +152,20 @@ form fieldset.inputs ol {
   }
 }
 
+.events {
+  .event {
+    padding: 10px 0 20px 0;
+    border-bottom: 1px solid #ccc;
+    &:last-child {
+      border: none;
+    }
+    .btn:first-child {
+      padding-left: 0;
+    }
+  }
+}
+
 #header {
-  height: 120px;
   color: $font-color-light;
   position: relative;
   background-color: $primary-color;
@@ -158,40 +179,29 @@ form fieldset.inputs ol {
       display: none; }
     strong {
       color: #999999; } }
-  ul#languages {
-
-    float: right;
-    overflow: hidden;
-
+  ul#user {
+    padding-left: 0;
     li {
-      float: left;
+      display: inline-block;
       list-style: none;
-
-      &:before {
-        content: "\00a0|\00a0"; }
-      &:first-child:before {
-        content: ""; }
     }
     a {
       color: $font-color-light;
-      text-decoration: none; }
-    a:hover {
-      color: $font-color-light - #222222;
-      text-decoration: underline; } }
+      text-decoration: none;
+      &:hover {
+        color: $font-color-light - #222222;
+        text-decoration: underline;
+      }
+    }
+  }
 
   ul#menu {
-    overflow: hidden;
-    display: block;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin-bottom: 6px;
-
+    padding: 0;
+    margin: 10px 0 0 0;
     li {
-      float: left;
+      display: inline-block;
       list-style: none;
       background-color: #FFFFFF;
-      margin: 2px;
       &.selected {
         background-color: $color1 + #222222;
         a {
@@ -199,11 +209,11 @@ form fieldset.inputs ol {
     a {
       color: $primary-color;
       padding: 10px;
-      line-height: 25px;
+      line-height: 26px;
       text-decoration: none;
       display: inline-block; }
     a:hover {
-      color: $color4;
+      color: $primary-color + #222222;
       text-decoration: underline; } } }
 
 #content {

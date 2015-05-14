@@ -14,16 +14,11 @@
 
   %body
     #header
+      = render partial: 'layouts/aa'
       .container
-        = link_to image_tag("#{@event.name.parameterize}-logo.png"), @event
-        .logo
-          %h1= @event.name
-          %strong= @event.location_and_date
-        %ul#languages
-          -if current_user
+        -if current_user
+          %ul#user
             %li= link_to current_user.full_name, current_user
-          %li= link_to "Português", "?locale=pt"
-          %li= link_to "English", "?locale=en"
         = render partial: 'layouts/menu'
 
     #content

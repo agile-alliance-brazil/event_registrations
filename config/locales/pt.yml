@@ -288,8 +288,8 @@ pt:
     remove_authentication_option: "remover essa opção de autenticação"
     login: "Acessar"
     logout: "Sair"
-    list_attendances: "para listar os inscritos"
-    list_groups: "para listar os grupos"
+    list_attendances: "Lista de inscritos"
+    list_groups: "Lista de Grupos"
     click: 'Clique'
     renew: 'renovar'
     pay: 'Marcar com pago'
@@ -414,7 +414,7 @@ pt:
       summary: "Veja o relatório de inscrições para %{name}"
       enable_voting: "Habilitar votação"
     register:
-      to_register_message: 'para se inscrever em'
+      to_register_message: 'Faça sua inscrição'
     not_found: 'Evento não encontrado.'
   registration_group:
     list: 'Lista dos grupos de %{event_name}'

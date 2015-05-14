@@ -1,0 +1,8 @@
+%nav.headerAa-menu
+  %ul.headerAa-menu-list
+    %li.headerAa-menu-list-item= link_to "Agile Alliance", "http://agilealliance.org/pt/"
+    %li.headerAa-menu-list-item= link_to "Membros", "http://agilealliance.org/pt/membresia"
+    %li{ :class => "headerAa-menu-list-item logo" }
+      =link_to "http://agilealliance.org/pt" do
+        =image_tag "logoAgileAlliance.png"
+    %li.headerAa-menu-list-item= link_to "English Version", "?locale=en"

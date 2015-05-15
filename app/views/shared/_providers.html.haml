@@ -1,6 +1,6 @@
-.auth_providers
+.auth_providers.row
   - providers.each do |provider|
-    %div.auth_provider
-      = link_to "/auth/#{provider}" do
+    %div.auth_provider.col-lg-2
+      = link_to "/auth/#{provider}", :class => 'thumbnail' do
         = image_tag("#{provider}_64.png", :size => "64x64", :alt => t("authentication.providers.#{provider}"))
-        = t("authentication.providers.#{provider}")
+        %span #{t("authentication.providers.#{provider}")}

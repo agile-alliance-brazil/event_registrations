@@ -1,7 +1,8 @@
 - @registration_token ||= params[:registration_token]
 = text_field_tag :registration_token, @registration_token, placeholder: I18n.t('formtastic.fields.token.placeholder'), size: 100
-%p Choose the payment type
-%p= select_tag :payment_type, options_for_select(Invoice::TYPES)
+- if can? :payment_type, Attendance
+  %p Choose the payment type
+  %p= select_tag :payment_type, options_for_select(Invoice::TYPES)
 
 = form.inputs :attendance_personal do
   = form.input :first_name, required: true, input_html: {tabindex: autotab}

@@ -1,5 +1,5 @@
 %h3= link_to event.name, event
-%p #{ l(event.start_date.to_date) } #{ t('title.until')} #{l(event.end_date.to_date) }
+%p #{ l(event.start_date.to_date) } #{ t('title.until')} #{l(event.end_date.to_date) if event.start_date.present? && event.end_date.present? }
 
 %p #{ t('actions.click') } #{link_to t('generic.here'), new_event_attendance_path(event)} #{ t('event.register.to_register_message') } #{ event.name }.
 

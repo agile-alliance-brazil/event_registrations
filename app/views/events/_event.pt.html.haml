@@ -1,10 +1,8 @@
-%div.event
-  %h3= link_to event.name, event
-  %p.text-muted #{ l(event.start_date.to_date) } #{ t('title.until')} #{l(event.end_date.to_date) }
+%h3= link_to event.name, event
+%p #{ l(event.start_date.to_date) } #{ t('title.until')} #{l(event.end_date.to_date) if event.start_date.present? && event.end_date.present? }
 
-  %div.btn-group
-    = link_to t('event.register.to_register_message'), new_event_attendance_path(event), :class => 'btn btn-link'
+%p #{ t('actions.click') } #{link_to t('generic.here'), new_event_attendance_path(event)} #{ t('event.register.to_register_message') } #{event.name}.
 
-    - if can? :attendances_list, Attendance
-      = link_to t('actions.list_attendances'), attendances_path(event_id: event), :class => 'btn btn-link'
-      = link_to t('actions.list_groups'), event_registration_groups_path(event), :class => 'btn btn-link'
+- if can? :attendances_list, Attendance
+  %p #{ t('actions.click') } #{ link_to t('generic.here'), attendances_path(event_id: event) } #{ t('actions.list_attendances') }
+  %p #{ t('actions.click') } #{ link_to t('generic.here'), event_registration_groups_path(event) } #{ t('actions.list_groups') }

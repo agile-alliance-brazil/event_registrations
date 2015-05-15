@@ -2,7 +2,7 @@
 class Ability
   include CanCan::Ability
   
-  REGISTRATION_DEADLINE = Time.zone.local(2013, 6, 28, 23, 59, 59)
+  REGISTRATION_DEADLINE = Time.zone.local(2015, 10, 21, 23, 59, 59)
 
   def initialize(user, event)
     @user = user || User.new # guest

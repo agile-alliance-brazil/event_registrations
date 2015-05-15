@@ -1,9 +1,8 @@
 - title I18n.t('title.login')
 
-%p
+%h3
   %strong= I18n.t('authentication.new')
 
-%small.attention= I18n.t('authentication.notice')
+%p.text-muted= I18n.t('authentication.notice')
 
 = render :partial => 'shared/providers', locals: { providers: Authentication::PROVIDERS }
-

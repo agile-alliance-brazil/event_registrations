@@ -2,10 +2,11 @@
 
 %p= t('registration.status', date: l(Time.zone.now))
 
-= form_for attendances_path, method: 'get' do
+= form_for attendances_path, method: 'get', html: {class: "form-inline"} do
   = hidden_field_tag :event_id, @event.id
-  %p= text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50
-  %p= submit_tag 'Search', :name => nil
+  %div.form-group
+    = text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50, :class => 'form-control'
+    = submit_tag 'Search', :name => nil, :class => 'btn btn-primary'
 
 <br />
 

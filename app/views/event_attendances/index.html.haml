@@ -6,7 +6,7 @@
   = link_to image_tag('icon-csv.png'), event_attendances_path(event_id: @event.id, format: :csv)
   = link_to t('registration.details.csv'), event_attendances_path(event_id: @event.id, format: :csv)
 
-%table.summary
+%table.table
   %tr
     %th{rowspan: 2}= t('formtastic.labels.attendee.status')
     %th{colspan: 2}= t('attendee.status.pending')

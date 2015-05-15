@@ -1,6 +1,5 @@
 - title t('actions.registration')
-
 = render partial: 'registrations', locals: { :event => @event }
 
 - if can? :index, Attendance
-  %p= link_to t('event.attendance.summary', name: @event.name), event_attendances_path(@event) 
+  %p= link_to t('event.attendance.summary', name: @event.name), event_attendances_path(@event)

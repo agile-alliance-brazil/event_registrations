@@ -2,4 +2,5 @@
   = t('event.no_upcoming')
 - else
   %h3= t('title.events')
-  = render partial: 'event', collection: @events
+  %div.events
+    = render partial: 'event', collection: @events

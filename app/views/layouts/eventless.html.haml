@@ -12,24 +12,24 @@
     = yield(:head)
 
   %body
-    #container
-      #header
-        %h1= content_for?(:title) ? yield(:title) : t('title.events')
-        %ul#languages
-          - if current_user
+    #header
+      = render partial: 'layouts/aa'
+      .container
+        -if current_user
+          %ul#user
             %li= link_to current_user.full_name, current_user
-          %li= link_to "Português", "?locale=pt"
-          %li= link_to "English", "?locale=en"
-        = render :partial => 'layouts/menu'
+        = render partial: 'layouts/menu'
 
-
-      #content{ :class => 'grid_12' }
+    #content
+      .container
         - flash.each do |name, msg|
           = content_tag :div, msg, :id => "flash_#{name}"
 
         = yield
 
-      #footer Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
+    #footer
+      .container
+        Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
 
     - unless APP_CONFIG[:google].nil?
       :javascript

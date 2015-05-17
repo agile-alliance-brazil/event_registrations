@@ -75,6 +75,16 @@ a {
   }
 }
 
+.attendances {
+  .badge {
+    float: right;
+    a {
+      color: #fff;
+    }
+
+  }
+}
+
 .attendances-actions {
   margin: 40px 0;
   .button_to {

@@ -2,26 +2,26 @@
 
 .profile
   %h3= t('formtastic.titles.attendance_personal')
-  %ul
+  %ul.list-group
     - [:first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale].each do |attribute|
-      %li
-        %strong= t("formtastic.labels.user.#{attribute}") + ': '
-        = @user.send(attribute)
+      %li.list-group-item
+        = t("formtastic.labels.user.#{attribute}") + ': '
+        %strong= @user.send(attribute)
   = link_to t('formtastic.actions.edit_profile'), edit_user_path(@user), :class=> 'btn btn-primary'
 
 .attendances
   %h3= t('event.attendance.list')
   - @user.events.each do |event|
-    %ul.event
+    %ul.event.list-group
       - @user.registrations_for_event(event).each do |attendance|
-        %li
+        %li.list-group-item
           .status
             = link_to "#{event.name}: #{t("attendance.status.#{attendance.status}")}", attendance_path(attendance)
             - if attendance.can_vote?
               \-
               = link_to t('event.attendance.enable_voting'), voting_instructions_attendance_path(attendance)
             - if attendance.cancellable?
-              = link_to 'X', attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: event.name) }
+              %span.badge= link_to 'X', attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: event.name) }
   - (@events_for_today - @user.events).each do |event|
     %ul.event
       %li= link_to t('event.attendance.add', name: event.name), new_event_attendance_path(event), class: 'add_attendance'

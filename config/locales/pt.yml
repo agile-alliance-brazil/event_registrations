@@ -399,7 +399,7 @@ pt:
     list: "Serviços de autenticação registrados"
     add: "Adicione outro serviço de autenticação:"
     new: "Autentique-se por um desses serviços:"
-    notice: "Atenção: caso você já tenha acessado o sistema anteriormente, use o mesmo serviço de autenticação para evitar criar contas duplicadas. Uma vez autenticado com sua conta existente, você pode associar outros serviços de autenticação."
+    notice: "Atenção: caso você já tenha acessado o sistema anteriormente, use o mesmo serviço de autenticação para evitar criar contas duplicadas. Uma vez autenticado com sua conta existente, você pode associar outros serviços de autenticação. Se você quer criar uma nova conta sem usar o Github, Facebook ou Twitter, por favor use a opção 'Sistema de Submissões'."
     providers:
       github: "Github"
       twitter: "Twitter"

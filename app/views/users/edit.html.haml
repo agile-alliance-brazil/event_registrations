@@ -4,4 +4,4 @@
 = semantic_form_for @user, as: :user, url: user_path(@user), html: {method: :put} do |form|
   = render 'form', form: form
   = form.actions do
-    = form.action :submit, label: :edit_profile, button_html: {tabindex: autotab}
+    = form.action :submit, label: :edit_profile, button_html: {tabindex: autotab, class: 'btn btn-primary'}

@@ -49,11 +49,14 @@
     li {
       display: inline-block;
       list-style: none;
-      background-color: #FFFFFF;
+      background-color: $color1 + #222222;
+      a {
+        color: #fff;
+      }
       &.selected {
-        background-color: $color1 + #222222;
+        background-color: #f2f2f2;
         a {
-          color: $color4;
+          color: #333;
         }
       }
     }

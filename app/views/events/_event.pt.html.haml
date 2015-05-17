@@ -3,8 +3,15 @@
   %p.text-muted #{ l(event.start_date.to_date) } #{ t('title.until')} #{l(event.end_date.to_date) if event.start_date.present? && event.end_date.present? }
 
   %div.btn-group
-    = link_to t('event.register.to_register_message'), new_event_attendance_path(event), :class => 'btn btn-link'
+    = link_to new_event_attendance_path(event), :class => 'btn btn-link' do
+      %span{:class => 'glyphicon glyphicon-pencil'}
+      = t('event.register.to_register_message')
 
     - if can? :attendances_list, Attendance
-      = link_to t('actions.list_attendances'), attendances_path(event_id: event), :class => 'btn btn-link'
-      = link_to t('actions.list_groups'), event_registration_groups_path(event), :class => 'btn btn-link'
+      = link_to attendances_path(event_id: event), :class => 'btn btn-link' do
+        %span{:class => 'glyphicon glyphicon-th-list'}
+        = t('actions.list_attendances')
+
+      = link_to event_registration_groups_path(event), :class => 'btn btn-link' do
+        %span{:class => 'glyphicon glyphicon-book'}
+        = t('actions.list_groups')

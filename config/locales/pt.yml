@@ -1,4 +1,4 @@
-# encoding: UTF-8
+  # encoding: UTF-8
 pt:
   # formatos de data e hora
   date:
@@ -293,6 +293,7 @@ pt:
     click: 'Clique'
     renew: 'renovar'
     pay: 'Marcar com pago'
+    account: 'Minha conta'
 
   flash:
     failure: "Por favor verifique os campos em destaque"

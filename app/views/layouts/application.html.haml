@@ -16,9 +16,9 @@
     #header
       = render partial: 'layouts/aa'
       .container
-        -if current_user
-          %ul#user
-            %li= link_to current_user.full_name, current_user
+        %div.logo
+          =link_to "http://agilebrazil.com" do
+            =image_tag "agile-brazil-2015-logo.png"
         = render partial: 'layouts/menu'
 
     #content
@@ -33,7 +33,9 @@
 
     #footer
       .container
-        Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
+        %p #{t('footer.help').html_safe}
+        %p
+          %strong Copyleft - Agile Brazil 2010 - 2015
 
     - unless APP_CONFIG[:google].nil?
       :javascript

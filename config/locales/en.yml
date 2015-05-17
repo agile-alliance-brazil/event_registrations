@@ -157,6 +157,7 @@ en:
     click: 'Click'
     renew: 'renew'
     pay: 'Check as paid'
+    account: 'My account'
 
 
   flash:

@@ -49,27 +49,28 @@
     li {
       display: inline-block;
       list-style: none;
-      background-color: $color1 + #222222;
-      a {
-        color: #fff;
-      }
+      background-color: $primary-color;
       &.selected {
         background-color: #f2f2f2;
         a {
           color: #333;
+          &:hover {
+            background-color: #f2f2f2;
+            color: #666;
+          }
         }
       }
     }
 
     a {
-      color: $primary-color;
+      color: #fff;
       padding: 10px;
       line-height: 26px;
       text-decoration: none;
       display: inline-block;
       &:hover {
-        color: $primary-color + #222222;
-        text-decoration: underline;
+        color: #fff + #222222;
+        background-color: $primary-color  + #222222;
       }
     }
 

@@ -157,6 +157,7 @@ en:
     click: 'Click'
     renew: 'renew'
     pay: 'Check as paid'
+    account: 'My account'
 
 
   flash:
@@ -264,7 +265,7 @@ en:
     list: "Registered authentications"
     add: "Add another service to sign in with:"
     new: "Sign in through one of these services:"
-    notice: "Attention: if you have already accessed the system before, use the same authentication service to avoid creating duplicate accounts. Once authenticated with your existing account, you can associate it with other authentication providers."
+    notice: "Attention: if you have already accessed the system before, use the same authentication service to avoid creating duplicate accounts. Once authenticated with your existing account, you can associate it with other authentication providers. If you want to create a new account without Github, Facebook or Twitter, please use the 'Submission System' option."
     providers:
       github: "Github"
       twitter: "Twitter"

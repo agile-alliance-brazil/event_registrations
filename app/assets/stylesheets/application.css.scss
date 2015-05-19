@@ -9,17 +9,14 @@
 @import 'mixins/text';
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+@import "colors";
+@import "form";
+
 @import "aa";
+@import "header";
+@import "footer";
 
-$primary-color: #218CCB;
-$font-color-light: #FFFFFF;
-$font-color-dark: #333333;
-
-$color1: $primary-color;
-$color2: #5ad295;
-$color3: #b0dff5;
-$color4: #ffffe0;
-$color5: #336699;
 
 html {
   background-color: #FFFFFF;
@@ -27,48 +24,9 @@ html {
 }
 
 a {
-  color: $color5; }
-
-a:hover {
-  color: $color5 + #333333; }
-
-.auto_focus {
-  display: none; }
-
-input:not([type='submit']) {
-  @extend .form-control;
-}
-
-
-select {
-  @extend .form-control;
-}
-
-.label {
-  display: block;
-  padding: 0;
-  font-size: 1em;
-  font-weight: bold;
-  line-height: 1em;
-  color: $font-color-dark;
-  text-align: left;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: none;
-}
-
-form fieldset.inputs ol {
-  padding: 0;
-
-  >li {
-    @extend .form-group;
-    @extend .col-lg-6;
-    padding: 10px 30px 0 0;
-    &.country, &#attendance_organization_input {
-      clear: both;
-      width: auto;
-      float: none;
-    }
+  color: $color5;
+  &:hover {
+    color: $color5 + #333333;
   }
 }
 
@@ -97,13 +55,14 @@ form fieldset.inputs ol {
       padding-right: 0;
     }
     div {
-      background-color: #f2f2f2;
+      background-color: #fff;
       padding-right: 20px;
       padding-left: 20px;
+
       &.first {
         font-size: 1.2em;
         padding-top: 10px;
-        color: #666;
+        color: #999;
       }
       &.last {
         color: #333;
@@ -113,6 +72,16 @@ form fieldset.inputs ol {
       }
 
     }
+  }
+}
+
+.attendances {
+  .badge {
+    float: right;
+    a {
+      color: #fff;
+    }
+
   }
 }
 
@@ -173,67 +142,8 @@ p.inline-errors {
   }
 }
 
-#header {
-  color: $font-color-light;
-  position: relative;
-  background-color: $primary-color;
-  img {
-    float: left;
-    padding-right: 5px; }
-  > h1 {
-    padding: 30px;}
-  .logo {
-    h1 {
-      display: none; }
-    strong {
-      color: #999999; } }
-  ul#user {
-    padding-left: 0;
-    li {
-      display: inline-block;
-      list-style: none;
-    }
-    a {
-      color: $font-color-light;
-      text-decoration: none;
-      &:hover {
-        color: $font-color-light - #222222;
-        text-decoration: underline;
-      }
-    }
-  }
-
-  ul#menu {
-    padding: 0;
-    margin: 10px 0 0 0;
-    li {
-      display: inline-block;
-      list-style: none;
-      background-color: #FFFFFF;
-      &.selected {
-        background-color: $color1 + #222222;
-        a {
-          color: $color4; } } }
-    a {
-      color: $primary-color;
-      padding: 10px;
-      line-height: 26px;
-      text-decoration: none;
-      display: inline-block; }
-    a:hover {
-      color: $primary-color + #222222;
-      text-decoration: underline; } } }
-
 #content {
-  min-height: 500px;
-}
-
-#footer {
-  color: #333333;
-  background-color: #c0c0c0;
-  text-align: center;
-  font-size: 1em;
-  min-height: 200px;
-  padding: 30px 0;
-  margin-top: 50px;
+  min-height: 700px;
+  background-color: #f2f2f2;
+  padding: 30px 0 50px 0;
 }

@@ -27,18 +27,19 @@
       %li= link_to t('event.attendance.add', name: event.name), new_event_attendance_path(event), class: 'add_attendance'
 .clear
 
-.authentications
+.user-auth.providers
   %h3= t('authentication.list')
-  - @user.authentications.each do |authentication|
-    .authentication
-      = image_tag "#{authentication.provider}_32.png", size: "32x32"
-      .provider= t("authentication.providers.#{authentication.provider}")
-      .uid= authentication.uid
+  .auth_providers
+    - @user.authentications.each do |authentication|
+      %div.thumbnail
+        = image_tag "#{authentication.provider}_64.png", size: "64x64"
+        %span= t("authentication.providers.#{authentication.provider}")
+        .uuid
+          %strong= authentication.uid
 .clear
 
 - providers = Authentication::PROVIDERS - @user.authentications.map(&:provider)
 - unless providers.empty?
   .providers
-    %p
-      %strong= t('authentication.add')
+    %h3= t('authentication.add')
     = render partial: 'shared/providers', locals: { providers: providers }

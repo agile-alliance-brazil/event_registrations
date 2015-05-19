@@ -456,3 +456,6 @@ pt:
     hide: "Esconder %{target}"
     registration_id: "Número da inscrição"
     here: 'aqui'
+
+  aa:
+    members: "Membros"

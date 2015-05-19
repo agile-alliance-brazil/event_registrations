@@ -14,7 +14,7 @@
     float: right;
     list-style: none;
 }
-.headerAa-menu-list-item:not(:last-child) {
+.headerAa-menu-list-item:not(.locale) {
     float: left;
     margin-right: 15px;
 }
@@ -25,26 +25,28 @@
     float: left;
     width: 80px;
 }
-.headerAa-menu-list-item:last-child {
+.headerAa-menu-list-item.locale {
     float: right;
-    clear: left;
+    clear: both;
     font-size: 0.73em;
+		line-height: 1.5em;
+		padding-right: 7px;
 }
-.headerAa-menu-list-item:last-child a {
+.headerAa-menu-list-item.locale a {
     color: #333;
     text-decoration: none;
 }
-[lang=en] .headerAa-menu-list-item:last-child {
+[lang=en] .headerAa-menu-list-item.locale {
     font-size: 0.95em;
 }
-.headerAa-menu-list-item:not(:last-child) a {
+.headerAa-menu-list-item:not(.locale) a {
     text-decoration: none;
     color: #E6EFF4;
     font-size: 0.85714em;
     font-weight: 600;
     display: block;
 }
-.headerAa-menu-list-item:not(:last-child) a:hover {
+.headerAa-menu-list-item:not(.locale) a:hover {
     color: #FFF;
 }
 @media(min-width: 340px) {
@@ -57,7 +59,7 @@
     .headerAa-menu-list-item img {
         width: 96px;
     }
-    .headerAa-menu-list-item:last-child {
+    .headerAa-menu-list-item.locale {
         font-size: 0.87em;
     }
 }

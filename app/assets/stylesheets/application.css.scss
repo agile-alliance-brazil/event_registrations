@@ -17,6 +17,9 @@
 @import "header";
 @import "footer";
 
+.clear {
+  clear: both;
+}
 
 html {
   background-color: #FFFFFF;
@@ -132,6 +135,9 @@ p.inline-errors {
       padding-left: 0;
     }
   }
+  .btn span {
+    padding-right: 5px;
+  }
 }
 
 
@@ -141,6 +147,14 @@ p.inline-errors {
     text-align: center;
   }
 }
+
+.user-auth .auth_providers {
+  float: left;
+  .thumbnail {
+    padding: 10px;
+  }
+}
+
 
 #content {
   min-height: 700px;

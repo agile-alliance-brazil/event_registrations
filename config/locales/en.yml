@@ -152,8 +152,8 @@ en:
     remove_authentication_option: "remove authentication option"
     login: "Log in"
     logout: "Log out"
-    list_attendances: "to list attendances"
-    list_groups: "to list groups"
+    list_attendances: "List attendances"
+    list_groups: "List groups"
     click: 'Click'
     renew: 'renew'
     pay: 'Check as paid'
@@ -280,7 +280,7 @@ en:
       summary: "Check the registration summary for %{name}"
       enable_voting: "Enable voting"
     register:
-      to_register_message: 'to register for'
+      to_register_message: 'Buy your ticket'
     not_found: 'Event not found'
 
   registration_group:
@@ -315,3 +315,6 @@ en:
     hide: "Hide %{target}"
     registration_id: "Registration number"
     here: 'here'
+
+  aa:
+    members: "Members"

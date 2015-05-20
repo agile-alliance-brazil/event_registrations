@@ -156,11 +156,35 @@ p.inline-errors {
 }
 
 
-.profile, .attendances {
+.profile {
+  .list-group {
+    margin: 20px 0;
+    @extend .row;
+  }
   .list-group-item {
-    background-color: #eee;
+    @extend .col-lg-6;
+    border: none;
+    padding: 15px;
   }
 }
+
+.attendances {
+  .list-group {
+    margin: 20px 0;
+    @extend .row;
+  }
+  .list-group-item {
+    @extend .col-lg-6;
+  }
+  .badge {
+    background-color: $brand-danger;
+    &:hover {
+      background-color: $brand-danger - #333;
+    }
+  }
+}
+
+
 
 #content {
   min-height: 700px;

@@ -244,7 +244,7 @@ en:
       csv: 'Download CSV attendee list'
     payment:
       request:
-        option_one: 'OPTION 1: Pay with PayPal'
+        option_one: 'OPTION 1: Pay with PagSeguro'
         option_two: 'OPTION 2: If you can understand Portuguese, pay with PagSeguro for different payment types'
         text: 'Pay the total amount of %{value}'
 

@@ -7,14 +7,14 @@ namespace :edition_2015 do
   task :seeds => :environment do
     print 'Generating seeds '
 
-    event = Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00, start_date: Date.new(2015, 10, 23), end_date: Date.new(2015, 10, 23))
+    event = Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00, start_date: Date.new(2015, 10, 21), end_date: Date.new(2015, 10, 23))
     registration_type = RegistrationType.create!(title: 'registration_type.individual', event: event)
 
     # Period
     full_registration_period = RegistrationPeriod.create!(start_at: Date.new(2015, 10, 8), end_at: Date.new(2015, 10, 15), event: event)
     RegistrationPrice.create!(registration_type: registration_type, registration_period: full_registration_period, value: 740.00)
 
-    last_minute_period = RegistrationPeriod.create!(start_at: Date.new(2015, 10, 15), end_at: Date.new(2015, 10, 23), event: event)
+    last_minute_period = RegistrationPeriod.create!(start_at: Date.new(2015, 10, 15), end_at: Date.new(2015, 10, 21), event: event)
     RegistrationPrice.create!(registration_type: registration_type, registration_period: last_minute_period, value: 840.00)
 
     # Quotes

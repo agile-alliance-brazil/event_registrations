@@ -36,8 +36,7 @@ gem 'sass-rails', '=5.0.3'
 
 gem 'coffee-rails', '=4.1.0'
 gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
-gem 'bootstrap-sass', '~> 3.2.0'
-gem 'autoprefixer-rails'
+gem 'bootstrap-sass', '~> 3.3'
 
 group :production, :travis do
   gem 'mysql2', '=0.3.18'
@@ -52,7 +51,7 @@ group :development, :test do
   gem 'rb-inotify', require: linux_only('rb-inotify')
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'konacha', '3.4.0'
+  gem 'konacha'
   gem 'guard-konacha-rails'
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'selenium-webdriver'

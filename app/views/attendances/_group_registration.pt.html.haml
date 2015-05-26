@@ -1,5 +1,5 @@
 %h5 Você se registrou através do grupo #{@attendance.registration_group.name}
-- if @attendance.event.registration_price_for(attendance) > 0
+- if @attendance.event.registration_price_for(attendance, Invoice::GATEWAY) > 0
   %h6 Assim que o grupo atingir o número mínimo de participantes o líder poderá realizar o pagamento.
 - else
   %h6 Você realizou a inscrição através de um grupo gratuito. Aguarde até o administrador confirmar a sua inscrição.

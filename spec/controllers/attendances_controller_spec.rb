@@ -94,7 +94,7 @@ describe AttendancesController, type: :controller do
 
     it 'redirects back to status' do
       delete :destroy, id: attendance.id
-      expect(response).to redirect_to(attendances_path(event_id: attendance.event.id))
+      expect(response).to redirect_to(attendance_path(attendance))
     end
 
     context 'with invoice' do

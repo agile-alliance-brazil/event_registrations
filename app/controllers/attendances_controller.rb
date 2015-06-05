@@ -23,7 +23,7 @@ class AttendancesController < ApplicationController
     attendance = resource
     attendance.cancel
 
-    redirect_to attendances_path(event_id: attendance.event.id)
+    redirect_to attendance_path(attendance)
   end
 
   def confirm

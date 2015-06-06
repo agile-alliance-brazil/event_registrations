@@ -75,8 +75,12 @@ describe Attendance, type: :model do
       end
 
       it 'should have scope pending' do
-        Attendance.first.tap(&:pay).save
-        expect(Attendance.pending).not_to include(Attendance.first)
+        expect(Attendance.pending).to include(Attendance.first)
+      end
+
+      it 'should have scope accepted' do
+        Attendance.first.tap(&:accept).save
+        expect(Attendance.accepted).to include Attendance.first
       end
 
       it 'should have scope paid' do

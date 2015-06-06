@@ -8,6 +8,12 @@ class AttendancesController < ApplicationController
 
   def index
     @attendances_list = event_for_index.attendances.search_for_list(params[:search])
+    @pending_total = event_for_index.attendances.pending.count
+    @accepted_total = event_for_index.attendances.accepted.count
+    @paid_total = event_for_index.attendances.paid.count
+    @cancelled_total = event_for_index.attendances.cancelled.count
+    @total = event_for_index.attendances.count
+    @total_without_cancelled = event_for_index.attendances.where.not(status: :cancelled).count
   end
 
   def show

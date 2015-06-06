@@ -7,6 +7,7 @@ class AttendancesController < ApplicationController
   protect_from_forgery except: [:callback]
 
   def index
+    return unless can? :attendances_list, Attendance
     @attendances_list = event_for_index.attendances.search_for_list(params[:search])
     @pending_total = event_for_index.attendances.pending.count
     @accepted_total = event_for_index.attendances.accepted.count

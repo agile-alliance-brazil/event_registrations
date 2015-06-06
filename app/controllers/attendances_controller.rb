@@ -18,7 +18,7 @@ class AttendancesController < ApplicationController
 
   def show
     @attendance = resource
-    @invoice = Invoice.for_user(@attendance.id).last
+    @invoice = Invoice.find_by(user: @attendance.user, payment_type: Invoice::GATEWAY)
     respond_to do |format|
       format.html
       format.json

@@ -243,6 +243,14 @@ describe Attendance, type: :model do
           expect(attendance.status).to eq 'paid'
         end
       end
+
+      context 'from accepted' do
+        it 'move to paid upon payment' do
+          attendance = FactoryGirl.create :attendance, status: 'accepted'
+          attendance.pay
+          expect(attendance.status).to eq 'paid'
+        end
+      end
     end
 
     it 'changes to confirmed on confirmation' do

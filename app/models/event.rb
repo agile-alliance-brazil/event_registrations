@@ -46,5 +46,4 @@ class Event < ActiveRecord::Base
       full_price * attendance.discount
     end
   end
-
 end

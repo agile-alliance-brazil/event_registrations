@@ -97,6 +97,7 @@ FactoryGirl.define do
     user
     status Invoice::PENDING
     amount 1.00
+    payment_type Invoice::GATEWAY
   end
 
   factory :invoice_group do

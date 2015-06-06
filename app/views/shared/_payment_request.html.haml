@@ -1,6 +1,9 @@
 - if @invoice.payment_type == Invoice::GATEWAY || @invoice.payment_type.blank?
   .payments
-    %h4= "#{t(:'registration.payment.request.text', value: number_to_currency(@invoice.amount, locale: :pt)) }"
+    - if @attendance.present?
+      %h4= "#{t(:'registration.payment.request.text', value: number_to_currency(@attendance.registration_value, locale: :pt)) }"
+    - else
+      %h4= "#{t(:'registration.payment.request.text', value: number_to_currency(@invoice.amount, locale: :pt)) }"
 
     .payment_type.left
       %p

@@ -12,6 +12,8 @@ class Invoice < ActiveRecord::Base
 
   scope :for_user, ->(user_id) { includes(:attendances).where('attendances.id = ?', user_id).references(:attendances) }
 
+  validates :payment_type, presence: true
+
   def self.from_attendance(attendance, payment_type)
     invoice = find_by(user: attendance.user, payment_type: payment_type)
     return invoice if invoice.present? && invoice.amount == attendance.registration_value

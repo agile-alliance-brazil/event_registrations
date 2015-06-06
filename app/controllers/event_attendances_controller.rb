@@ -30,7 +30,7 @@ class EventAttendancesController < ApplicationController
     group = @event.registration_groups.find_by_token(params['registration_token'])
     @attendance.registration_group = group if group.present? && group.accept_members?
     put_band
-    @attendance.registration_value = @event.registration_price_for(@attendance, params['payment_type'])
+    @attendance.registration_value = @event.registration_price_for(@attendance, payment_type_params)
 
     return unless validate_free_registration @attendance
     save_attendance!
@@ -51,7 +51,7 @@ class EventAttendancesController < ApplicationController
   private
 
   def save_attendance!
-    invoice = Invoice.from_attendance(@attendance, params['payment_type'])
+    invoice = Invoice.from_attendance(@attendance, payment_type_params)
     @attendance.invoices << invoice unless @attendance.invoices.include? invoice
     if @attendance.save
       begin
@@ -108,5 +108,9 @@ class EventAttendancesController < ApplicationController
   rescue
     Rails.logger.error('Airbrake notification failed. Logging error locally only')
     Rails.logger.error(ex.message)
+  end
+
+  def payment_type_params
+    params['payment_type'] || Invoice::GATEWAY
   end
 end

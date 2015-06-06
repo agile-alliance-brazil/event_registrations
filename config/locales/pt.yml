@@ -203,6 +203,13 @@ pt:
         total: "Valor"
         price: 'Preço (R$)'
         payment_type: "Tipo de Pagamento"
+        pending: 'Total pendentes'
+        accepted: 'Total aceitas'
+        paid: 'Total pagas'
+        confirmed: 'Total confirmadas'
+        cancelled: 'Total canceladas'
+        registration_total: 'Total de inscrições'
+        total_without_cancelled: 'Total sem as canceladas'
         actions: 'Ações'
       payment_notification:
         transaction_id: "Código da transação"
@@ -231,7 +238,7 @@ pt:
         token: 'Token para inscrição'
         leader: 'Líder'
         event: 'Evento'
-        qtd_attendances: 'Total de registrados'
+        qtd_attendances: 'Total de inscritos'
         index:
           actions: 'Ações'
       invoice:

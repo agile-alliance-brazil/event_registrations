@@ -4,6 +4,8 @@ module Concerns
 
     included do
       scope :pending, -> { where(status: :pending) }
+      scope :accepted, -> { where(status: :accepted) }
+      scope :cancelled, -> { where(status: :cancelled) }
       scope :paid, -> { where(status: [:paid, :confirmed]) }
 
       state_machine :status, initial: :pending do

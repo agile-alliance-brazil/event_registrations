@@ -66,6 +66,13 @@ en:
         total: "Amount"
         price: 'Price (R$)'
         payment_type: "Payment Type"
+        pending: 'Pending total'
+        accepted: 'Accepted total'
+        paid: 'Paid total'
+        confirmed: 'Confirmed total'
+        cancelled: 'Cancelled total'
+        registration_total: 'Registration total'
+        total_without_cancelled: 'Total without cancelled'
         actions: 'Actions'
       payment_notification:
         transaction_id: "Transaction ID"

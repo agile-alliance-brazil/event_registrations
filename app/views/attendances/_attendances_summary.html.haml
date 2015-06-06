@@ -1,0 +1,15 @@
+%table.table
+  %th= t('formtastic.labels.attendance.pending')
+  %th= t('formtastic.labels.attendance.accepted')
+  %th= t('formtastic.labels.attendance.paid')
+  %th= t('formtastic.labels.attendance.cancelled')
+  %th= t('formtastic.labels.attendance.registration_total')
+  %th= t('formtastic.labels.attendance.total_without_cancelled')
+
+  %tr
+    %td= @pending_total
+    %td= @accepted_total
+    %td= @paid_total
+    %td= @cancelled_total
+    %td= @total
+    %td= @total_without_cancelled

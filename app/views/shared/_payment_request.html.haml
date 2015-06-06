@@ -3,7 +3,6 @@
     %h4= "#{t(:'registration.payment.request.text', value: number_to_currency(@invoice.amount, locale: :pt)) }"
 
     .payment_type.left
-      %h5= t(:'registration.payment.request.option_one')
       %p
         = form_tag checkout_event_payment_path(event_id: @event, id: @invoice), method: :post do
           = image_submit_tag 'https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif', alt: 'Pague com PagSeguro', class: 'pagseguro'

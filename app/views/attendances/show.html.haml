@@ -4,7 +4,7 @@
 
 = render partial: 'shared/registration_details', locals: {attendance: @attendance}
 
-- if @attendance.registration_group.present?
+- if @attendance.grouped? && @attendance.pending?
   = render partial: 'group_registration', locals: {attendance: @attendance}
 - else
   = render partial: @attendance.status, locals: {attendance: @attendance}

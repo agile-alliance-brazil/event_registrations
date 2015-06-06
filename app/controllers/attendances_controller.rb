@@ -70,6 +70,12 @@ class AttendancesController < ApplicationController
     redirect_to attendances_path(event_id: @event.id)
   end
 
+  def accept_it
+    resource.accept
+    flash[:notice] = t('flash.attendance.accepted.success')
+    redirect_to attendances_path(event_id: @event.id)
+  end
+
   private
 
   def resource_class

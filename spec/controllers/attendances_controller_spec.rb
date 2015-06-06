@@ -168,4 +168,27 @@ describe AttendancesController, type: :controller do
       end
     end
   end
+
+  describe '#accept_it' do
+    let!(:event) { FactoryGirl.create(:event) }
+
+    context 'pending attendance' do
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+      it 'accepts attendance' do
+        put :accept_it, id: attendance.id
+        expect(response).to redirect_to attendances_path(event_id: event.id)
+        expect(flash[:notice]).to eq I18n.t('flash.attendance.accepted.success')
+        expect(Attendance.last.status).to eq 'accepted'
+      end
+    end
+
+    context 'cancelled attendance' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'cancelled') }
+      it 'keeps cancelled' do
+        put :accept_it, id: attendance.id
+        expect(response).to redirect_to attendances_path(event_id: event.id)
+        expect(Attendance.last.status).to eq 'cancelled'
+      end
+    end
+  end
 end

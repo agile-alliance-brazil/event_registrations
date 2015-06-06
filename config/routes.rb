@@ -32,6 +32,7 @@ Current::Application.routes.draw do
       get :voting_instructions
       put :confirm
       put :pay_it
+      put :accept_it
       delete :destroy
     end
   end

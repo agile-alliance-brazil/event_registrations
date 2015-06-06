@@ -15,17 +15,9 @@ class Event < ActiveRecord::Base
   end
 
   def registration_price_for(attendance, payment_type)
-    quota = find_quota
-
-    if payment_type == Invoice::STATEMENT
-      full_price
-    elsif period_for.present?
-      period_for.price_for_registration_type(attendance.registration_type) * attendance.discount
-    elsif quota.first.present?
-      quota.first.price * attendance.discount
-    else
-      full_price * attendance.discount
-    end
+    group = attendance.registration_group
+    return group.amount if group.present? && group.amount.present? && group.amount > 0
+    not_amounted_group(attendance, payment_type)
   end
 
   def period_for(today = Time.zone.today)
@@ -39,4 +31,20 @@ class Event < ActiveRecord::Base
   def free?(attendance)
     !registration_types.paid.include?(attendance.registration_type)
   end
+
+  private
+
+  def not_amounted_group(attendance, payment_type)
+    quota = find_quota
+    if payment_type == Invoice::STATEMENT
+      full_price
+    elsif period_for.present?
+      period_for.price_for_registration_type(attendance.registration_type) * attendance.discount
+    elsif quota.first.present?
+      quota.first.price * attendance.discount
+    else
+      full_price * attendance.discount
+    end
+  end
+
 end

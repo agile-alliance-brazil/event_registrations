@@ -293,6 +293,7 @@ pt:
     click: 'Clique'
     renew: 'renovar'
     pay: 'Marcar com pago'
+    accept: 'Aceitar no grupo'
     account: 'Minha conta'
 
   flash:
@@ -312,6 +313,8 @@ pt:
       payment:
         success: 'Conferencista marcado como pago.'
         error: 'Não foi possível marcar como pago.'
+      accepted:
+        success: 'Inscrição no grupo aceita.'
     registration:
       attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
     registered_attendances:
@@ -342,6 +345,8 @@ pt:
   email:
     registration_pending:
       subject: "Pedido de inscrição na %{event_name} enviado"
+    registration_accepted:
+      subject: "Pedido de inscrição na %{event_name} aceito"
     registration_confirmed:
       subject: "Inscrição na %{event_name} confirmada"
     cancelling_registration:

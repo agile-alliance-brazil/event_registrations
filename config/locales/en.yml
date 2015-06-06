@@ -157,6 +157,7 @@ en:
     click: 'Click'
     renew: 'renew'
     pay: 'Check as paid'
+    accept: 'Accept in Group'
     account: 'My account'
 
 
@@ -177,6 +178,8 @@ en:
       payment:
         success: 'Attendee check as paid.'
         error: 'Could not check attendee as paid.'
+      accepted:
+        success: 'Group registration accepted.'
     registration:
       attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
     registered_attendances:
@@ -207,6 +210,8 @@ en:
   email:
     registration_pending:
       subject: "Registration request to %{event_name} sent"
+    registration_accepted:
+      subject: "Registration request to %{event_name} accepted"
     registration_confirmed:
       subject: "Registration confirmed for %{event_name}"
     cancelling_registration:

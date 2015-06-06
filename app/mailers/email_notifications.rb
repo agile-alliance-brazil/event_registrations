@@ -4,6 +4,10 @@ class EmailNotifications < ActionMailer::Base
     mail_attendance(attendance, sent_at, 'email.registration_pending.subject')
   end
 
+  def registration_group_accepted(attendance, sent_at = Time.zone.now)
+    mail_attendance(attendance, sent_at, 'email.registration_accepted.subject')
+  end
+
   def registration_confirmed(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.registration_confirmed.subject')
   end
@@ -17,6 +21,7 @@ class EmailNotifications < ActionMailer::Base
   end
 
   private
+
   def mail_attendance(attendance, sent_at, title)
     @attendance = attendance
     I18n.locale = attendance.country == 'BR' ? :pt : :en

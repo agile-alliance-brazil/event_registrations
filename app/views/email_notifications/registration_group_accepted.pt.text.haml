@@ -1,0 +1,14 @@
+Oi #{h(@attendance.full_name)},
+
+
+Sua inscrição na #{@attendance.event.name} foi confirmada no grupo #{@attendance.registration_group.name}.
+
+Proceda com o pagamento em
+
+%p= link_to attendance_url(@attendance, :locale => 'pt'), attendance_url(@attendance, :locale => 'pt')
+
+
+Qualquer dúvida, entre em contato através do email #{APP_CONFIG[:organizer][:contact_email]}
+
+
+[Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]

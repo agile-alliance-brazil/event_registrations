@@ -32,6 +32,10 @@ class Attendance < ActiveRecord::Base
   state_machine :status, initial: :pending do
     after_transition on: :cancel, do: :cancel_invoice!
 
+    event :accept do
+      transition [:pending] => :accepted
+    end
+
     event :confirm do
       transition [:pending, :paid] => :confirmed
     end
@@ -51,6 +55,14 @@ class Attendance < ActiveRecord::Base
     after_transition any => :confirmed do |attendance|
       begin
         EmailNotifications.registration_confirmed(attendance).deliver_now
+      rescue => ex
+        Airbrake.notify(ex)
+      end
+    end
+
+    after_transition any => :accepted do |attendance|
+      begin
+        EmailNotifications.registration_group_accepted(attendance).deliver_now
       rescue => ex
         Airbrake.notify(ex)
       end
@@ -100,6 +112,10 @@ class Attendance < ActiveRecord::Base
 
   def payment_type
     invoices.last.payment_type if invoices.present?
+  end
+
+  def grouped?
+    registration_group.present?
   end
 
   private

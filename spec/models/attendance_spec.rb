@@ -273,6 +273,32 @@ describe Attendance, type: :model do
       end
     end
 
+    describe '#accepted' do
+      context 'when is pending' do
+        it 'accept the attendance' do
+          attendance = FactoryGirl.create :attendance
+          attendance.accept
+          expect(attendance.status).to eq 'accepted'
+        end
+      end
+
+      context 'when is cancelled' do
+        it 'keep it cancelled' do
+          attendance = FactoryGirl.create :attendance, status: :cancelled
+          attendance.accept
+          expect(attendance.status).to eq 'cancelled'
+        end
+      end
+
+      context 'when is paid' do
+        it 'keep it paid' do
+          attendance = FactoryGirl.create :attendance, status: :paid
+          attendance.accept
+          expect(attendance.status).to eq 'paid'
+        end
+      end
+    end
+
     it "should email upon after confirmed"
     it "should validate payment agreement when confirmed"
   end
@@ -350,6 +376,24 @@ describe Attendance, type: :model do
       let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
       it { expect(attendance.payment_type).to eq nil }
+    end
+  end
+
+  describe '#grouped?' do
+    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
+
+    context 'when belongs to a group' do
+      let(:group) { RegistrationGroup.create! event: event }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_type: individual) }
+
+      it { expect(attendance.grouped?).to be_truthy }
+    end
+
+    context 'when not belonging to a group' do
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+
+      it { expect(attendance.grouped?).to be_falsey }
     end
   end
 end

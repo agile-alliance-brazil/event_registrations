@@ -20,6 +20,8 @@
       %td= attendance.registration_value
       %td= attendance.status
       %td
+        - if attendance.pending? && attendance.grouped?
+          %p= button_to t('actions.accept'), accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success'
         - unless attendance.paid? || attendance.cancelled?
           %p= button_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success'
         - if attendance.cancellable?

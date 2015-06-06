@@ -1,5 +1,7 @@
 # encoding: UTF-8
 class Attendance < ActiveRecord::Base
+  include Concerns::LifeCycle
+
   SUPER_EARLY_LIMIT = 150
 
   belongs_to :event
@@ -29,53 +31,11 @@ class Attendance < ActiveRecord::Base
 
   usar_como_cpf :cpf
 
-  state_machine :status, initial: :pending do
-    after_transition on: :cancel, do: :cancel_invoice!
-
-    event :accept do
-      transition [:pending] => :accepted
-    end
-
-    event :confirm do
-      transition [:pending, :paid] => :confirmed
-    end
-
-    event :pay do
-      transition [:pending, :confirmed] => :paid
-    end
-
-    event :cancel do
-      transition pending: :cancelled
-    end
-
-    state :confirmed do
-      validates_acceptance_of :payment_agreement
-    end
-
-    after_transition any => :confirmed do |attendance|
-      begin
-        EmailNotifications.registration_confirmed(attendance).deliver_now
-      rescue => ex
-        Airbrake.notify(ex)
-      end
-    end
-
-    after_transition any => :accepted do |attendance|
-      begin
-        EmailNotifications.registration_group_accepted(attendance).deliver_now
-      rescue => ex
-        Airbrake.notify(ex)
-      end
-    end
-  end
-
   validates_presence_of :registration_type_id, :registration_date, :user_id, :event_id
 
   scope :for_event, ->(e) { where(event_id: e.id) }
   scope :for_registration_type, ->(t) { where(registration_type_id: t.id) }
   scope :without_registration_type, ->(t) { where("#{table_name}.registration_type_id != (?)", t.id) }
-  scope :pending, -> { where(status: :pending) }
-  scope :paid, -> { where(status: [:paid, :confirmed]) }
   scope :active, -> { where('status != (?)', :cancelled) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
   scope :search_for_list, lambda { |param|
@@ -83,10 +43,6 @@ class Attendance < ActiveRecord::Base
     "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%").order(created_at: :desc)
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
-
-  def cancellable?
-    pending?
-  end
 
   def can_vote?
     (self.confirmed? || self.paid?) && event.registration_periods.for(self.registration_date).any?(&:allow_voting?)

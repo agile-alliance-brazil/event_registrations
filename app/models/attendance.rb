@@ -16,7 +16,7 @@ class Attendance < ActiveRecord::Base
   has_many :invoices, -> { uniq }, through: :invoice_attendances
 
   validates_confirmation_of :email
-  validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city]
+  validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city, :registration_type_id, :registration_date, :user_id, :event_id]
   validates_presence_of :state, if: ->(a) {a.in_brazil?}
   validates_presence_of :cpf, if: ->(a) {a.in_brazil?}
 
@@ -30,8 +30,6 @@ class Attendance < ActiveRecord::Base
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
 
   usar_como_cpf :cpf
-
-  validates_presence_of :registration_type_id, :registration_date, :user_id, :event_id
 
   scope :for_event, ->(e) { where(event_id: e.id) }
   scope :for_registration_type, ->(t) { where(registration_type_id: t.id) }

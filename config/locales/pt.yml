@@ -391,6 +391,7 @@ pt:
   attendance:
     status:
       pending: "Pendente"
+      accepted: "Aceito no grupo"
       confirmed: "Confirmado"
       paid: "Pagamento efetuado"
       cancelled: "Cancelado"

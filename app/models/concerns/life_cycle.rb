@@ -20,7 +20,7 @@ module Concerns
         end
 
         event :pay do
-          transition [:pending, :confirmed] => :paid
+          transition [:pending, :confirmed, :accepted] => :paid
         end
 
         event :cancel do

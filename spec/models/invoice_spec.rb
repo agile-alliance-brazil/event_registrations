@@ -36,17 +36,16 @@ describe Invoice, type: :model do
 
     context 'with an already existent pending invoice' do
       context 'with same registration value' do
-        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, amount: 100, payment_type: Invoice::GATEWAY) }
+        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, attendances: [attendance], amount: 100, payment_type: Invoice::GATEWAY) }
         subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
         it { expect(other_invoice).to eq invoice }
         it { expect(Invoice.count).to eq 1 }
       end
       context 'with different registration_value' do
-        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, amount: 100, payment_type: Invoice::GATEWAY) }
-        let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: attendance.user, registration_value: 200) }
-
-        subject!(:other_invoice) { Invoice.from_attendance(other_attendance, Invoice::GATEWAY) }
-        it { expect(other_invoice.attendances).to eq [other_attendance] }
+        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, attendances: [attendance], amount: 100, payment_type: Invoice::GATEWAY) }
+        before { attendance.registration_value = 200}
+        subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        it { expect(other_invoice.attendances).to eq [attendance] }
         it { expect(other_invoice.amount).to eq 200 }
         it { expect(Invoice.count).to eq 1 }
       end
@@ -95,7 +94,9 @@ describe Invoice, type: :model do
     end
   end
 
-  pending 'isolated test to for_user scope'
+  pending 'isolated test to for_attendance scope'
+  pending 'isolated test to active scope'
+  pending 'isolated test to active_individual scope'
 
   describe '#pay' do
     context 'an attendance invoice' do

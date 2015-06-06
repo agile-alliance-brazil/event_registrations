@@ -10,12 +10,15 @@ class Invoice < ActiveRecord::Base
 
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
-  scope :for_user, ->(user_id) { includes(:attendances).where('attendances.id = ?', user_id).references(:attendances) }
+  scope :active, -> { where.not(status: :cancelled) }
+  scope :active_individual, -> { active.where(registration_group: nil) }
+  scope :for_attendance, ->(attendance_id) { active_individual.includes(:attendances).where('attendances.id = ?', attendance_id).references(:attendances) }
 
   validates :payment_type, presence: true
 
   def self.from_attendance(attendance, payment_type)
-    invoice = find_by(user: attendance.user, payment_type: payment_type)
+    invoice = for_attendance(attendance.id).first
+
     return invoice if invoice.present? && invoice.amount == attendance.registration_value
     invoice.destroy if invoice.present?
     Invoice.create(

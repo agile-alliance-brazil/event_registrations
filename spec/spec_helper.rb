@@ -22,16 +22,11 @@ end
 require 'simplecov'
 SimpleCov.start 'rails'
 
-require 'webmock/rspec'
-
 RSpec.configure do |config|
   config.include(ControllerMacros, type: :controller)
   config.include(DisableAuthorization, type: :controller)
   config.include(TrimmerMacros)
   config.include(ValidatesExistenceMacros)
-
-  WebMock.disable_net_connect!(allow_localhost: true)
-  WebMock.disable!
 
   # == Mock Framework
   #

@@ -5,6 +5,7 @@ describe EventAttendancesController, type: :controller do
   render_views
 
   before :each do
+    WebMock.disable_net_connect!(allow: true)
     @event = FactoryGirl.create(:event)
     @individual = @event.registration_types.first
     @free = FactoryGirl.create(:registration_type, title: 'registration_type.free', event: @event)

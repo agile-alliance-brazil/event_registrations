@@ -30,7 +30,7 @@ RSpec.configure do |config|
   config.include(TrimmerMacros)
   config.include(ValidatesExistenceMacros)
 
-  WebMock.disable_net_connect!(allow_localhost: true)
+  WebMock.disable_net_connect!(allow: %w{codeclimate.com})
 
   # == Mock Framework
   #

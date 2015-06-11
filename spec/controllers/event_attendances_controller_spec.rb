@@ -13,10 +13,12 @@ describe EventAttendancesController, type: :controller do
 
     now = Time.zone.local(2013, 5, 1)
     Timecop.freeze(now)
+    WebMock.enable!
   end
 
   after :each do
     Timecop.return
+    WebMock.disable!
   end
 
   describe "GET new" do

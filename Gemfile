@@ -76,6 +76,6 @@ group :test do
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
   gem 'simplecov', require: false
-  gem 'webmock'
+  # gem 'webmock'
   # gem 'vcr'
 end

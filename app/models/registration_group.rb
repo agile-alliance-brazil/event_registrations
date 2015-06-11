@@ -49,10 +49,6 @@ class RegistrationGroup < ActiveRecord::Base
     attendances.map(&:paid?).any?
   end
 
-  def free?
-    discount == 100
-  end
-
   private
 
   def generate_token

@@ -205,16 +205,4 @@ describe RegistrationGroup, type: :model do
       it { expect(group.leader_name).to eq nil }
     end
   end
-
-  describe '#free?' do
-    context 'with a free' do
-      let(:group) { RegistrationGroup.create! event: event, discount: 100 }
-      it { expect(group.free?).to be_truthy }
-    end
-
-    context 'with a non free' do
-      let(:group) { RegistrationGroup.create! event: event, discount: 99 }
-      it { expect(group.free?).to be_falsey }
-    end
-  end
 end

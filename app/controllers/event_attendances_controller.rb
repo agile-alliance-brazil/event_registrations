@@ -1,6 +1,7 @@
 # encoding: UTF-8
 class EventAttendancesController < ApplicationController
   include Concerns::Initiation
+  include Concerns::Groupable
 
   before_filter :event
   before_filter :load_registration_types, only: [:new, :create]
@@ -26,9 +27,7 @@ class EventAttendancesController < ApplicationController
     end
     attributes = build_attributes
     @attendance = Attendance.new(attributes)
-
-    group = @event.registration_groups.find_by_token(params['registration_token'])
-    @attendance.registration_group = group if group.present? && group.accept_members?
+    perform_group_check!
     put_band
     @attendance.registration_value = @event.registration_price_for(@attendance, payment_type_params)
 

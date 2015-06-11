@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require 'spec_helper'
+require 'webmock/rspec'
 
 describe EventAttendancesController, type: :controller do
   render_views
@@ -97,6 +97,8 @@ describe EventAttendancesController, type: :controller do
       @email = stub(deliver: true)
       controller.current_user = user
       EmailNotifications.stubs(:registration_pending).returns(@email)
+      Net::HTTP.stubs(:post).returns('<nil>')
+      stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(:status => 200, :body => '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', :headers => {})
     end
 
     it 'renders new template when model is invalid' do
@@ -267,6 +269,18 @@ describe EventAttendancesController, type: :controller do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
             before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: "warantesbr@gmail.com", email_confirmation: "warantesbr@gmail.com" } }
             it { expect(attendance).to be_valid }
+          end
+        end
+      end
+
+      context 'when agile alliance member' do
+        context 'and not in any group' do
+          let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event) }
+          it 'uses the AA group as attendance group and accept the entrance' do
+            RegistrationGroup.stubs(:find_by).returns(aa_group)
+            post :create, event_id: @event.id, attendance: valid_attendance
+            attendance = Attendance.last
+            expect(attendance.registration_group).to eq aa_group
           end
         end
       end

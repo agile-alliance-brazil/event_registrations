@@ -287,6 +287,109 @@ describe EventAttendancesController, type: :controller do
         end
       end
 
+      context 'when attempt to register again to the same event' do
+        context 'with a pending attendance existent' do
+          context 'in the same event' do
+            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :pending) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 1
+              expect(response).to redirect_to attendance_path(attendance)
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+            end
+          end
+
+          context 'in other event' do
+            let(:other_event) { FactoryGirl.create(:event) }
+            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :pending) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 2
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+            end
+          end
+        end
+
+        context 'with an accepted attendance existent' do
+          context 'in the same event' do
+            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :accepted) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 1
+              expect(response).to redirect_to attendance_path(attendance)
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+            end
+          end
+
+          context 'in other event' do
+            let(:other_event) { FactoryGirl.create(:event) }
+            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :accepted) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 2
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+            end
+          end
+        end
+        context 'with a paid attendance existent' do
+          context 'in the same event' do
+            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :paid) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 1
+              expect(response).to redirect_to attendance_path(attendance)
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+            end
+          end
+          context 'in other event' do
+            let(:other_event) { FactoryGirl.create(:event) }
+            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :paid) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 2
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+            end
+          end
+        end
+        context 'with a confirmed attendance existent' do
+          context 'in the same event' do
+            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :confirmed) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 1
+              expect(response).to redirect_to attendance_path(attendance)
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+            end
+          end
+          context 'in other event' do
+            let(:other_event) { FactoryGirl.create(:event) }
+            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :confirmed) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 2
+              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+            end
+          end
+        end
+        context 'with a cancelled attendance existent' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :cancelled) }
+          it 'does not include the new attendance and send the user to show of attendance' do
+            AgileAllianceService.stubs(:check_member).returns(false)
+            post :create, event_id: @event.id, attendance: valid_attendance
+            expect(Attendance.count).to eq 2
+            expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+          end
+        end
+      end
+
       it "should send pending registration e-mail" do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)

@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 20150606203438) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "leader_id"
+    t.integer  "invoice_id"
     t.integer  "minimum_size"
     t.decimal  "amount"
   end

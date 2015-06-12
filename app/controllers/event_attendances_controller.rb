@@ -26,6 +26,8 @@ class EventAttendancesController < ApplicationController
       return
     end
     attributes = build_attributes
+    attendance = @event.attendances.find_by(email: attendance_params[:email], status: [:pending, :accepted, :paid, :confirmed])
+    return redirect_to(attendance_path(attendance), notice: I18n.t('flash.attendance.create.already_existent')) if attendance.present?
     @attendance = Attendance.new(attributes)
     perform_group_check!
     put_band

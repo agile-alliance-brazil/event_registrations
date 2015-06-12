@@ -42,7 +42,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def accept_members?
-    !paid?
+    true
   end
 
   def paid?

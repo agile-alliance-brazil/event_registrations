@@ -161,11 +161,6 @@ describe RegistrationGroup, type: :model do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
       it { expect(group.accept_members?).to be_truthy }
     end
-
-    context 'with a paid group' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'paid') }
-      it { expect(group.accept_members?).to be_falsey }
-    end
   end
 
   describe '#payment_pendent?' do

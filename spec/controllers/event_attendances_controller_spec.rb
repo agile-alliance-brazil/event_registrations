@@ -250,14 +250,6 @@ describe EventAttendancesController, type: :controller do
             before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: { registration_type_id: @individual.id } }
             it { expect(attendance.registration_group).to be_nil }
           end
-
-          context 'and with a registration token with invalid invoice status' do
-            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, registration_group: group, status: 'paid') }
-            let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID }
-            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
-            it { expect(Attendance.last.registration_group).to be_nil }
-          end
         end
 
         context 'a valid' do

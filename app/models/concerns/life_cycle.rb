@@ -24,7 +24,7 @@ module Concerns
         end
 
         event :cancel do
-          transition pending: :cancelled
+          transition [:pending, :accepted] => :cancelled
         end
 
         state :confirmed do

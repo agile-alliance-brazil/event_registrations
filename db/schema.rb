@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150606203438) do
+ActiveRecord::Schema.define(version: 20150616193824) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -144,6 +144,7 @@ ActiveRecord::Schema.define(version: 20150606203438) do
     t.integer  "event_id"
     t.integer  "registration_price_id"
     t.integer  "order"
+    t.boolean  "closed",                default: false
   end
 
   create_table "registration_types", force: :cascade do |t|

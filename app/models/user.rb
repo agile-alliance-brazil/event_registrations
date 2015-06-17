@@ -29,10 +29,6 @@ class User < ActiveRecord::Base
 
   usar_como_cpf :cpf
 
-  def approved_author_at?(_event)
-    false
-  end
-
   def registrations_for_event(event)
     attendances.select{ |attendance| attendance.event_id == event.id }
   end

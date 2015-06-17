@@ -5,10 +5,16 @@ class RegistrationQuota < ActiveRecord::Base
   has_many :attendances
 
   def vacancy?
-    attendances.active.size < quota
+    open? && attendances.active.size < quota
   end
 
   def price
     registration_price.value
+  end
+
+  private
+
+  def open?
+    !closed
   end
 end

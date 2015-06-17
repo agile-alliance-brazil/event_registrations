@@ -56,14 +56,21 @@ describe Event, type: :model do
       it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq price.value }
     end
 
-    context 'with one registration quota with vacancy' do
+    context 'with one registration quota with vacancy and opened' do
       let!(:price) { RegistrationPrice.create!(registration_type: registration_type, value: 430.00) }
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, registration_price: price, quota: 25 }
 
       it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq price.value }
     end
 
-    context 'with one passed period and one registration quota with vacancy' do
+    context 'with one registration quota with vacancy and closed' do
+      let!(:price) { RegistrationPrice.create!(registration_type: registration_type, value: 430.00) }
+      let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, registration_price: price, quota: 25, closed: true }
+
+      it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq event.full_price }
+    end
+
+    context 'with one passed period and one registration quota with vacancy and opened' do
       let!(:period_passed) { FactoryGirl.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
       let!(:price_passed) { RegistrationPrice.create!(registration_type: registration_type, registration_period: period_passed, value: 50.00) }
       let!(:price) { RegistrationPrice.create!(registration_type: registration_type, value: 430.00) }
@@ -72,7 +79,7 @@ describe Event, type: :model do
       it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq price.value }
     end
 
-    context 'with one period and one registration quota with vacancy' do
+    context 'with one period and one registration quota with vacancy and opened' do
       let!(:registration_period) { FactoryGirl.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:period_price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: registration_period, value: 100.00) }
       let!(:quota_price) { RegistrationPrice.create!(registration_type: registration_type, value: 430.00) }
@@ -81,7 +88,7 @@ describe Event, type: :model do
       it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq period_price.value }
     end
 
-    context 'with one passed period and no quota' do
+    context 'with one passed period and no quota vacancy' do
       let!(:period_passed) { FactoryGirl.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
       let!(:price_passed) { RegistrationPrice.create!(registration_type: registration_type, registration_period: period_passed, value: 50.00) }
 
@@ -138,7 +145,7 @@ describe Event, type: :model do
       it { expect(event.free?(attendance)).to be_falsey }
     end
 
-    context 'with a non free registration' do
+    context 'with a free registration' do
       let!(:registration_type) { FactoryGirl.create :registration_type, event: event, title: 'bla-xpto' }
       let(:attendance) { FactoryGirl.build(:attendance, event: event, registration_type: registration_type) }
       it { expect(event.free?(attendance)).to be_truthy }

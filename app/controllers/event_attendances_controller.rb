@@ -6,16 +6,6 @@ class EventAttendancesController < ApplicationController
   before_filter :event
   before_filter :load_registration_types, only: [:new, :create]
 
-  def index
-    @attendances = Attendance.for_event(event).active.includes(:payment_notifications, :event, :registration_type).all
-    respond_to do |format|
-      format.html
-      format.csv do
-        response.headers['Content-Disposition'] = "attachment; filename=\"#{event.name.parameterize.underscore}.csv\""
-      end
-    end
-  end
-
   def new
     @attendance = Attendance.new(build_attributes)
   end

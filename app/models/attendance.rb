@@ -47,7 +47,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def full_name
-    [first_name, last_name].join(" ")
+    [first_name, last_name].join(' ')
   end
 
   def male?
@@ -55,7 +55,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def in_brazil?
-    self.country == "BR"
+    self.country == 'BR'
   end
 
   def discount
@@ -73,12 +73,6 @@ class Attendance < ActiveRecord::Base
   end
 
   private
-
-  def entitled_super_early_bird?
-    attendances = event.attendances
-    attendances = attendances.where('id < ?', id) unless new_record?
-    attendances.count < SUPER_EARLY_LIMIT
-  end
 
   def cancel_invoice!
     invoice = user.invoices.where(status: 'pending').last

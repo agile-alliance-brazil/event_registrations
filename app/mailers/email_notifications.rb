@@ -61,6 +61,5 @@ class EmailNotifications < ActionMailer::Base
   end
 
   def log_mail_informations
-
   end
 end

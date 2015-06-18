@@ -9,7 +9,7 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=4.2.1'
+gem 'rails', '=4.2.2'
 gem 'seed-fu', '=2.3.5'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
@@ -30,12 +30,12 @@ gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 gem 'faker'
 gem 'pagseguro-oficial'
 
-gem 'jquery-rails', '=4.0.3'
-gem 'therubyracer', '=0.12.2', platforms: :ruby
-gem 'sass-rails', '=5.0.3'
+gem 'jquery-rails', '~> 4.0'
+gem 'therubyracer', '~> 0.12', platforms: :ruby
+gem 'sass-rails', '~> 5.0'
 
-gem 'coffee-rails', '=4.1.0'
-gem 'yui-compressor', '=0.12.0', require: 'yui/compressor'
+gem 'coffee-rails', '~> 4.1'
+gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
 gem 'bootstrap-sass', '~> 3.3'
 
 group :production, :travis do

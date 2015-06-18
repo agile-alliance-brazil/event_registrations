@@ -25,7 +25,9 @@ class EmailNotifications < ActionMailer::Base
   def mail_attendance(attendance, sent_at, title)
     @attendance = attendance
     I18n.locale = attendance.country == 'BR' ? :pt : :en
+    Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { locale: #{I18n.locale}, host: #{host}, title: #{title}, attendance_id: #{attendance.id} } }")
     subject = "[#{host}] #{I18n.t(title, event_name: attendance.event.name, attendance_id: attendance.id)}"
+    Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
     mail subject: subject, cc: event_organizer, date: sent_at
   end
   
@@ -47,6 +49,7 @@ class EmailNotifications < ActionMailer::Base
   end
 
   def host
+    Rails.logger.info("[EmailNotifications:host] { mail informations: { #{APP_CONFIG[:host]} } }")
     APP_CONFIG[:host]
   end
   
@@ -55,5 +58,9 @@ class EmailNotifications < ActionMailer::Base
       "\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>",
       "\"#{APP_CONFIG[:organizer][:cced]}\" <#{APP_CONFIG[:organizer][:cced_email]}>"
     ]
+  end
+
+  def log_mail_informations
+
   end
 end

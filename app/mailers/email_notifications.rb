@@ -59,7 +59,4 @@ class EmailNotifications < ActionMailer::Base
       "\"#{APP_CONFIG[:organizer][:cced]}\" <#{APP_CONFIG[:organizer][:cced_email]}>"
     ]
   end
-
-  def log_mail_informations
-  end
 end

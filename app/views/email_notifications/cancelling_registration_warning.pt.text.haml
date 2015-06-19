@@ -2,15 +2,15 @@ Oi #{h(@attendance.full_name)},
 
 
 
-Existe uma pendência no pagamento da sua inscrição na #{@attendance.event.name}. Caso não seja regularizada até o próximo dia 14/06, sua inscrição será automaticamente cancelada.
+Existe uma pendência no pagamento da sua inscrição na #{@attendance.event.name}. Caso não seja regularizada até #{7.days.from_now}, sua inscrição será automaticamente cancelada.
 
 
 
-Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do paypal ou do bcash.
+Caso a pendência já tenha sido regularizada, favor entrar em contato com a organização - #{mail_to APP_CONFIG[:organizer][:contact_email]}
 
 
 
-Esperamos encontrá-lo em Brasília entre os dias 26 e 28 de Junho.
+Esperamos encontrá-lo no #{@attendance.event.name} entre os dias #{l(@attendance.event.start_date)} e #{l(@attendance.event.end_date)}.
 
 
 

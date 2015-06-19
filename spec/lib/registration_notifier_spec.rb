@@ -63,10 +63,9 @@ describe RegistrationNotifier do
       end
     end
 
-    context "pending attendances" do
-      it "should have pending attendances without manual registrations" do
+    context 'pending attendances' do
+      it 'have pending attendances with manual registrations' do
         event = FactoryGirl.create(:event)
-        manual_type = FactoryGirl.create(:registration_type, title: 'registration_type.manual.title', event: event)
 
         cancelled = FactoryGirl.create(:attendance, event: event)
         cancelled.cancel
@@ -75,8 +74,6 @@ describe RegistrationNotifier do
         paid.pay
         confirmed = FactoryGirl.create(:attendance, event: event)
         confirmed.confirm
-
-        manual = FactoryGirl.create(:attendance, event: event, registration_type: manual_type)
 
         Event.stubs(:find).returns(event)
 

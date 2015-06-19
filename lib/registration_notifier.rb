@@ -24,8 +24,7 @@ class RegistrationNotifier
   end
 
   def pending_attendances(event)
-    manual = event.registration_types.where('title like "%manual%"').first
-    event.attendances.pending.without_registration_type(manual)
+    event.attendances.pending
   end
 
   private

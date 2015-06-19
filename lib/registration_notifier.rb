@@ -1,28 +1,30 @@
 # encoding: UTF-8
 class RegistrationNotifier
   def cancel
-    pending_attendances.older_than(30.days.ago).each do |attendance|
-      Rails.logger.info("[Attendance] #{attendance.to_param}")
-      try_with("CANCEL") do
-        EmailNotifications.cancelling_registration(attendance).deliver_now
-        attendance.cancel
+    Event.active_for(Time.zone.now).each do |event|
+      pending_attendances(event).older_than(30.days.ago).each do |attendance|
+        Rails.logger.info("[Attendance] #{attendance.to_param}")
+        try_with('CANCEL') do
+          EmailNotifications.cancelling_registration(attendance).deliver_now
+          attendance.cancel
+        end
       end
     end
   end
 
   def cancel_warning
-    pending_attendances.older_than(7.days.ago).each do |attendance|
-      Rails.logger.info("[Attendance] #{attendance.to_param}")
-      try_with("WARN") do
-        EmailNotifications.cancelling_registration_warning(attendance).deliver_now
+    Event.active_for(Time.zone.now).each do |event|
+      pending_attendances(event).older_than(7.days.ago).each do |attendance|
+        Rails.logger.info("[Attendance] #{attendance.to_param}")
+        try_with('WARN') do
+          EmailNotifications.cancelling_registration_warning(attendance).deliver_now
+        end
       end
     end
   end
 
-  def pending_attendances
-    event = Event.find 1
+  def pending_attendances(event)
     manual = event.registration_types.where('title like "%manual%"').first
-
     event.attendances.pending.without_registration_type(manual)
   end
 

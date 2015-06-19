@@ -18,10 +18,11 @@ describe RegistrationNotifier do
     context "older than 30 days" do
       before do
         Timecop.freeze(Time.zone.now)
+        event = FactoryGirl.create :event
         deadline = 30.days.ago
         @attendance = FactoryGirl.build(
           :attendance,
-          event: @event,
+          event: event,
           registration_date: deadline
         )
 
@@ -51,6 +52,7 @@ describe RegistrationNotifier do
     context "newer than 30 days" do
       it "should not notify attendance created less than 30 days ago" do
         Timecop.freeze(Time.zone.now) do
+          FactoryGirl.create :event
           query_relation = mock
           query_relation.expects(:older_than).with(30.days.ago).returns([])
           @notifier.expects(:pending_attendances).returns(query_relation)
@@ -78,7 +80,7 @@ describe RegistrationNotifier do
 
         Event.stubs(:find).returns(event)
 
-        expect(@notifier.pending_attendances).to eq([pending])
+        expect(@notifier.pending_attendances(event)).to eq([pending])
       end
     end
   end

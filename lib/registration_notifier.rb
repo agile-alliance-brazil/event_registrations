@@ -13,10 +13,13 @@ class RegistrationNotifier
   end
 
   def cancel_warning
+    Rails.logger.info("Perform cancellation warning to #{Event.active_for(Time.zone.now).count} events")
     Event.active_for(Time.zone.now).each do |event|
+      Rails.logger.info("Warning #{pending_attendances(event).older_than(7.days.ago).count} attendances")
       pending_attendances(event).older_than(7.days.ago).each do |attendance|
-        Rails.logger.info("[Attendance] #{attendance.to_param}")
+        Rails.logger.info("[Warning attendance] #{attendance.to_param}")
         try_with('WARN') do
+          Rails.logger.info('[Send warning]')
           EmailNotifications.cancelling_registration_warning(attendance).deliver_now
         end
       end

@@ -3,7 +3,3 @@
 %h3 Instructions:
 
 %p We have received your payment. After reviewing your registration details, we will send a confirmation e-mail.
-
-- if can? :transfer, Attendance
-  %div.actions
-    = link_to 'Transfer registration', new_transfer_path(transfer: {origin_id: attendance.id})

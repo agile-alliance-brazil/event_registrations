@@ -8,3 +8,5 @@
   = render partial: 'group_registration', locals: {attendance: @attendance}
 - else
   = render partial: @attendance.status, locals: {attendance: @attendance}
+
+= render partial: 'attendance_actions', locals: {attendance: @attendance}

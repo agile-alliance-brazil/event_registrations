@@ -1,5 +1,1 @@
 - flash.now[:notice] ||= 'Your registration is confirmed!'
-
-- if can? :transfer, Attendance
-  %div.actions
-    = link_to 'Transfer registration', new_transfer_path(transfer: {origin_id: attendance.id}), :class => 'btn btn-success'

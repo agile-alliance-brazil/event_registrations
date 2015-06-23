@@ -32,25 +32,37 @@ module Concerns
         end
 
         after_transition any => :confirmed do |attendance|
-          begin
+          try_user_notify do
             EmailNotifications.registration_confirmed(attendance).deliver_now
-          rescue => ex
-            Airbrake.notify(ex)
           end
         end
 
         after_transition any => :accepted do |attendance|
-          begin
+          try_user_notify do
             EmailNotifications.registration_group_accepted(attendance).deliver_now
-          rescue => ex
-            Airbrake.notify(ex)
           end
+        end
+
+        def try_user_notify
+          yield
+        rescue => ex
+          Airbrake.notify(ex)
+        ensure
+          Rails.logger.flush
         end
       end
     end
 
     def cancellable?
-      pending?
+      pending? || accepted?
+    end
+
+    def transferrable?
+      paid? || confirmed?
+    end
+
+    def confirmable?
+      paid? || pending? || accepted?
     end
   end
 end

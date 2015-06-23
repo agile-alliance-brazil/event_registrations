@@ -7,8 +7,3 @@
 %h4 Importante
 
 %p O valor da inscrição será atualizado conforme a tabela disponível em #{link_to price_table_link(attendance.event, :pt), price_table_link(attendance.event, :pt)}.
-
-%div.attendances-actions
-  - if can? :confirm, Attendance
-    = button_to 'Confirmar inscrição', confirm_attendance_path(attendance), method: :put, class: 'confirm btn btn-primary', data: { confirm: t('attendance.confirm_confirmation', event: attendance.event.name) }
-  = button_to 'Cancelar inscrição', attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name) }

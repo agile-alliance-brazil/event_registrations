@@ -327,9 +327,10 @@ describe Attendance, type: :model do
       end
     end
 
-    describe '#accepted' do
+    describe '#accept' do
       context 'when is pending' do
         it 'accept the attendance' do
+          EmailNotifications.expects(:registration_group_accepted).once
           attendance = FactoryGirl.create :attendance
           attendance.accept
           expect(attendance.status).to eq 'accepted'
@@ -338,6 +339,7 @@ describe Attendance, type: :model do
 
       context 'when is cancelled' do
         it 'keep it cancelled' do
+          EmailNotifications.expects(:registration_group_accepted).never
           attendance = FactoryGirl.create :attendance, status: :cancelled
           attendance.accept
           expect(attendance.status).to eq 'cancelled'
@@ -346,34 +348,141 @@ describe Attendance, type: :model do
 
       context 'when is paid' do
         it 'keep it paid' do
+          EmailNotifications.expects(:registration_group_accepted).never
           attendance = FactoryGirl.create :attendance, status: :paid
           attendance.accept
           expect(attendance.status).to eq 'paid'
         end
       end
+
+      context 'when is already accepted' do
+        it 'keep it accepted' do
+          EmailNotifications.expects(:registration_group_accepted).never
+          attendance = FactoryGirl.create :attendance, status: :accepted
+          attendance.accept
+          expect(attendance.status).to eq 'accepted'
+        end
+      end
+    end
+
+    describe '#confirm' do
+      context 'when is pending' do
+        it 'confirm the attendance' do
+          EmailNotifications.expects(:registration_confirmed).once
+          attendance = FactoryGirl.create :attendance
+          attendance.confirm
+          expect(attendance.status).to eq 'confirmed'
+        end
+      end
+
+      context 'when is accepted' do
+        it 'confirm the attendance' do
+          EmailNotifications.expects(:registration_confirmed).once
+          attendance = FactoryGirl.create :attendance
+          attendance.confirm
+          expect(attendance.status).to eq 'confirmed'
+        end
+      end
+
+      context 'when is cancelled' do
+        it 'keep it cancelled' do
+          EmailNotifications.expects(:registration_confirmed).never
+          attendance = FactoryGirl.create :attendance, status: :cancelled
+          attendance.confirm
+          expect(attendance.status).to eq 'cancelled'
+        end
+      end
+
+      context 'when is paid' do
+        it 'keep it paid' do
+          EmailNotifications.expects(:registration_confirmed).once
+          attendance = FactoryGirl.create :attendance, status: :paid
+          attendance.confirm
+          expect(attendance.status).to eq 'confirmed'
+        end
+      end
     end
 
     it "should email upon after confirmed"
-    it "should validate payment agreement when confirmed"
   end
 
-  context "cancelling" do
+  describe '#cancellable?' do
     let(:attendance) { FactoryGirl.build(:attendance) }
-    it "should be cancellable if pending" do
-      expect(attendance).to be_cancellable
+    context 'when is pending' do
+      it { expect(attendance).to be_cancellable }
     end
-    it "should not be cancellable if paid" do
-      attendance.pay
-      expect(attendance).not_to be_cancellable
+
+    context 'when is accepted' do
+      before { attendance.accept }
+      it { expect(attendance).to be_cancellable }
     end
-    it "should not be cancellable if confirmed" do
-      attendance.pay
-      attendance.confirm
-      expect(attendance).not_to be_cancellable
+
+    context 'when is paid' do
+      before { attendance.pay }
+      it { expect(attendance).not_to be_cancellable }
     end
-    it "should not be cancellable if cancelled already" do
-      attendance.cancel
-      expect(attendance).not_to be_cancellable
+
+    context 'when is confirmed' do
+      before do
+        attendance.pay
+        attendance.confirm
+      end
+      it { expect(attendance).not_to be_cancellable }
+    end
+
+    context 'when is already cancelled' do
+      before { attendance.cancel }
+      it { expect(attendance).not_to be_cancellable }
+    end
+  end
+
+  describe '#transferrable?' do
+    let(:attendance) { FactoryGirl.build(:attendance) }
+    context 'when is pending' do
+      it { expect(attendance).not_to be_transferrable }
+    end
+
+    context 'when is accepted' do
+      before { attendance.accept }
+      it { expect(attendance).not_to be_transferrable }
+    end
+
+    context 'when is paid' do
+      before { attendance.pay }
+      it { expect(attendance).to be_transferrable }
+    end
+
+    context 'when is confirmed' do
+      before do
+        attendance.pay
+        attendance.confirm
+      end
+      it { expect(attendance).to be_transferrable }
+    end
+  end
+
+  describe '#confirmable?' do
+    let(:attendance) { FactoryGirl.build(:attendance) }
+    context 'when is pending' do
+      it { expect(attendance).to be_confirmable }
+    end
+
+    context 'when is accepted' do
+      before { attendance.accept }
+      it { expect(attendance).to be_confirmable }
+    end
+
+    context 'when is paid' do
+      before { attendance.pay }
+      it { expect(attendance).to be_confirmable }
+    end
+
+    context 'when already is confirmed' do
+      before do
+        attendance.pay
+        attendance.confirm
+      end
+      it { expect(attendance).not_to be_confirmable }
     end
   end
 

@@ -7,8 +7,3 @@
 %h3 Important
 
 %p The registration amount will be updated according to the table available at #{link_to price_table_link(attendance.event, :en), price_table_link(attendance.event, :en)}.
-
-%div.actions
-  - if can? :confirm, Attendance
-    = button_to 'Confirm registration', confirm_attendance_path(attendance), method: :put, data: { confirm: t('attendance.confirm_confirmation', event: attendance.event.name) }
-  = button_to 'Cancel registration', attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name ) }

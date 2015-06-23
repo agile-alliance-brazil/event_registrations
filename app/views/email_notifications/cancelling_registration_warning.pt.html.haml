@@ -1,10 +1,14 @@
 %p Oi #{h(@attendance.full_name)},
 
-%p Existe uma pendência no pagamento da sua inscrição na #{@attendance.event.name}. Caso não seja regularizada até #{l(7.days.from_now.to_date)}, sua inscrição será automaticamente cancelada.
+%p Existe uma pendência no pagamento da sua inscrição na #{@attendance.event.name}. Caso não seja regularizada até #{7.days.from_now.to_date.strftime('%d/%m/%Y')}, sua inscrição será automaticamente cancelada.
+
+%p Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:
+
+%p= link_to attendance_url(@attendance, :locale => 'pt'), attendance_url(@attendance, :locale => 'pt')
 
 %p Caso a pendência já tenha sido regularizada, favor entrar em contato com a organização - #{mail_to APP_CONFIG[:organizer][:contact_email]}
 
-%p Esperamos encontrá-lo no #{@attendance.event.name} entre os dias #{l(@attendance.event.start_date.to_date)} e #{l(@attendance.event.end_date.to_date)}.
+%p Esperamos encontrá-lo no #{@attendance.event.name} entre os dias #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} e #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
 
 %p
   Sinceramente,

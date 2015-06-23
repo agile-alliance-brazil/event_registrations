@@ -490,7 +490,8 @@ describe EventAttendancesController, type: :controller do
     context 'with a valid attendance' do
       let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
       let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       let(:valid_attendance) do
         {
             event_id: event.id,
@@ -516,9 +517,10 @@ describe EventAttendancesController, type: :controller do
       end
 
       it 'assigns the attendance and render edit' do
-        put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance
+        put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance, payment_type: Invoice::DEPOSIT
         expect(Attendance.last.email).to eq 'bla@foo.bar'
         expect(Attendance.last.organization).to eq 'sbrubbles'
+        expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
         expect(response).to redirect_to attendances_path(event_id: event)
       end
     end

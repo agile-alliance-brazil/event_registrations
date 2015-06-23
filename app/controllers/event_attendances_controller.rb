@@ -31,11 +31,15 @@ class EventAttendancesController < ApplicationController
     @attendance = Attendance.find(params[:id])
     @attendance.email_confirmation = @attendance.email
     @registration_token = @attendance.registration_group.token if @attendance.registration_group
+    @payment_type = @attendance.payment_type
   end
 
   def update
     @attendance = Attendance.find(params[:id])
     @attendance.update_attributes!(attendance_params)
+    invoice = @attendance.invoices.last
+    invoice.payment_type = payment_type_params
+    invoice.save!
     redirect_to attendances_path(event_id: @event)
   end
 

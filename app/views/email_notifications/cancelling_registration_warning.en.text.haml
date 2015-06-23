@@ -2,15 +2,20 @@ Dear #{h(@attendance.full_name)},
 
 
 
-We noticed that you have a pending payment for #{@attendance.event.name}. If that payment is not realized until #{7.days.from_now} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
+We noticed that you have a pending payment for #{@attendance.event.name}. If that payment is not realized until #{7.days.from_now.to_date.strftime('%d/%m/%Y')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
 
+
+In order to complete the registration process, please follow the instructions on the page:
+
+
+= attendance_url(@attendance, :locale => 'en')
 
 
 If you already settled your registration payment, please contact us - #{mail_to APP_CONFIG[:organizer][:contact_email]}.
 
 
 
-We hope to meet you in Brasília between #{l(@attendance.event.start_date)} and #{l(@attendance.event.end_date)}.
+We hope to meet you in Brasília between #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} and #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
 
 
 

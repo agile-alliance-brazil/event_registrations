@@ -27,7 +27,7 @@ class RegistrationNotifier
   end
 
   def pending_attendances(event)
-    event.attendances.pending
+    event.attendances.pending_gateway
   end
 
   private

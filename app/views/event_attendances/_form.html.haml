@@ -7,7 +7,7 @@
 - if can? :payment_type, Attendance
   %div.payment-type
     %label Choose the payment type
-    = select_tag :payment_type, options_for_select(Invoice::TYPES)
+    = select_tag :payment_type, options_for_select(Invoice::TYPES, @payment_type)
 
 = form.inputs :attendance_personal do
   = form.input :first_name, required: true, input_html: {tabindex: autotab}

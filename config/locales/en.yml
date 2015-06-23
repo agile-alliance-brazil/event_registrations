@@ -290,7 +290,6 @@ en:
     attendance:
       list: "Event registrations"
       add: "Add Registration to %{name}"
-      summary: "Check the registration summary for %{name}"
       enable_voting: "Enable voting"
     register:
       to_register_message: 'Buy your ticket'

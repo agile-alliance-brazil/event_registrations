@@ -51,10 +51,6 @@ class Attendance < ActiveRecord::Base
     [first_name, last_name].join(' ')
   end
 
-  def male?
-    gender == 'M'
-  end
-
   def in_brazil?
     self.country == 'BR'
   end

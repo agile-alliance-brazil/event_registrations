@@ -36,17 +36,6 @@ class User < ActiveRecord::Base
   def gender=(value)
     self[:gender] = value.nil? ? nil : value == 'M'
   end
-
-  def gender
-    value = self[:gender]
-    if value.nil?
-      nil
-    elsif value
-      'M'
-    else
-      'F'
-    end
-  end
   
   def twitter_user=(value)
     self[:twitter_user] = value.try(:start_with?, "@") ? value[1..-1] : value
@@ -72,10 +61,6 @@ class User < ActiveRecord::Base
 
   def full_name
     [first_name, last_name].join(" ")
-  end
-
-  def male?
-    gender == 'M'
   end
 
   def allowed_free_registration?

@@ -426,7 +426,6 @@ pt:
     attendance:
       list: "Inscrições em eventos"
       add: "Adicionar inscrição para %{name}"
-      summary: "Veja o relatório de inscrições para %{name}"
       enable_voting: "Habilitar votação"
     register:
       to_register_message: 'Faça sua inscrição'

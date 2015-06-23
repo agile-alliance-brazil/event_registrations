@@ -9,7 +9,7 @@ describe Attendance, type: :model do
     it { should have_many(:invoices).through(:invoice_attendances) }
   end
 
-  context "validations" do
+  context 'validations' do
     it { should validate_presence_of :first_name }
     it { should validate_presence_of :last_name }
     it { should validate_presence_of :email }
@@ -56,9 +56,7 @@ describe Attendance, type: :model do
     context 'with five attendances created' do
       before { 5.times { FactoryGirl.create(:attendance) } }
 
-      it 'should have scope for_event' do
-        expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first])
-      end
+      it { expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first]) }
 
       it 'should have scope for_registration_type' do
         rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
@@ -74,9 +72,7 @@ describe Attendance, type: :model do
         expect(Attendance.without_registration_type(rt)).not_to include(Attendance.first)
       end
 
-      it 'should have scope pending' do
-        expect(Attendance.pending).to include(Attendance.first)
-      end
+      it { expect(Attendance.pending).to include(Attendance.first) }
 
       it 'should have scope accepted' do
         Attendance.first.tap(&:accept).save
@@ -166,6 +162,52 @@ describe Attendance, type: :model do
 
               expect(Attendance.search_for_list('event')).to eq [another_attendance, attendance, other_attendance]
             end
+          end
+        end
+      end
+
+      describe '.pending_gateway' do
+        context 'with one pending and gateway as payment type' do
+          it 'returns the attendance' do
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+            expect(Attendance.pending_gateway).to eq [pending_gateway]
+          end
+        end
+
+        context 'with two pending and gateway as payment type' do
+          it 'returns the both attendances' do
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+
+            other_pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            Invoice.from_attendance(other_pending_gateway, Invoice::GATEWAY)
+
+            expect(Attendance.pending_gateway).to eq [pending_gateway, other_pending_gateway]
+          end
+        end
+
+        context 'with one pending and gateway as payment type and other bank deposit' do
+          it 'returns the attendance pending gateway' do
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+
+            pending_deposit = FactoryGirl.create(:attendance, status: :pending)
+            Invoice.from_attendance(pending_deposit, Invoice::DEPOSIT)
+
+            expect(Attendance.pending_gateway).to eq [pending_gateway]
+          end
+        end
+
+        context 'with one pending and gateway as payment type and other statement of agreement' do
+          it 'returns the attendance pending gateway' do
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+
+            pending_statement = FactoryGirl.create(:attendance, status: :pending)
+            Invoice.from_attendance(pending_statement, Invoice::STATEMENT)
+
+            expect(Attendance.pending_gateway).to eq [pending_gateway]
           end
         end
       end

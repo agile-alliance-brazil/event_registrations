@@ -13,24 +13,24 @@ class CreateEventRegistrationBaseline < ActiveRecord::Migration
       t.string		:title
       t.datetime	:start_at
       t.datetime	:end_at
-      
+
       t.timestamps
     end
 
     create_table :registration_types do |t|
       t.references :event
-      
+
       t.string :title
-      
+
       t.timestamps
     end
 
     create_table :registration_prices do |t|
       t.references :registration_type
       t.references :registration_period
-      
+
       t.decimal :value
-      
+
       t.timestamps
     end
 
@@ -39,12 +39,12 @@ class CreateEventRegistrationBaseline < ActiveRecord::Migration
       t.references :user
       t.references :registration_type
       t.references :registration_group
-      
+
       t.datetime :registration_date
       t.string :status
-      
+
       t.boolean :email_sent, :default => false
-      
+
       t.timestamps
     end
 
@@ -60,7 +60,7 @@ class CreateEventRegistrationBaseline < ActiveRecord::Migration
       t.string :settle_currency
 
       t.text :notes
-      
+
       t.timestamps
     end
   end

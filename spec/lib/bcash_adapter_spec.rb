@@ -68,21 +68,21 @@ describe BcashAdapter do
   describe BcashAdapter::BcashItem do
     it { expect(BcashAdapter::BcashItem.new('item', 2, 10.50).name).to eq('item') }
 
-    it "should have number" do
+    it 'should have number' do
       expect(BcashAdapter::BcashItem.new('item', 2, 10.50).number).to eq(2)
     end
 
-    it "should have amount" do
+    it 'should have amount' do
       expect(BcashAdapter::BcashItem.new('item', 2, 10.50).amount).to eq(10.50)
     end
 
-    it "should have optional quantity" do
+    it 'should have optional quantity' do
       expect(BcashAdapter::BcashItem.new('item', 2, 10.50).quantity).to eq(1)
       expect(BcashAdapter::BcashItem.new('item', 2, 10.50, 3).quantity).to eq(3)
     end
 
-    describe "to_variables" do
-      it "should map item name, number, amount, and quantity for given index" do
+    describe 'to_variables' do
+      it 'should map item name, number, amount, and quantity for given index' do
         item = BcashAdapter::BcashItem.new('item', 2, 10.50)
         expect(item.to_variables(1)).to eq({
                                                'produto_valor_1' => 10.50,

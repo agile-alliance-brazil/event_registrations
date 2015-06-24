@@ -2,11 +2,11 @@
 class PaymentNotification < ActiveRecord::Base
   belongs_to :invoicer, polymorphic: true
   serialize :params
-  
+
   validates_existence_of :invoicer
-  
-  after_create :mark_invoicer_as_paid, if: ->(n) {n.status == "Completed"}
-  
+
+  after_create :mark_invoicer_as_paid, if: ->(n) { n.status == 'Completed' }
+
   def self.from_paypal_params(params)
     {
       params: params,
@@ -16,12 +16,12 @@ class PaymentNotification < ActiveRecord::Base
       notes: params[:memo]
     }
   end
-  
+
   def self.from_bcash_params(params)
     {
       params: params,
       invoicer: Invoice.find(params[:pedido]),
-      status: params[:status] == "Aprovada" ? "Completed" : params[:status],
+      status: params[:status] == 'Aprovada' ? 'Completed' : params[:status],
       transaction_id: params[:transacao_id]
     }
   end
@@ -33,30 +33,31 @@ class PaymentNotification < ActiveRecord::Base
     {
       params: params,
       invoicer: Invoice.find(params[:pedido]),
-      status: transaction.status.paid? ? "Completed" : transaction.status.status,
+      status: transaction.status.paid? ? 'Completed' : transaction.status.status,
       transaction_id: transaction.code,
       notes: transaction.inspect
     }
   end
 
-  scope :paypal, -> { where('params LIKE ?', '%type: paypal%')}
-  scope :bcash, -> { where('params LIKE ?', '%type: bcash%')}
-  scope :pag_seguro, -> { where('params LIKE ?', '%type: pag_seguro%')}
-  scope :completed, -> { where('status = ?', 'Completed')}
+  scope :paypal, -> { where('params LIKE ?', '%type: paypal%') }
+  scope :bcash, -> { where('params LIKE ?', '%type: bcash%') }
+  scope :pag_seguro, -> { where('params LIKE ?', '%type: pag_seguro%') }
+  scope :completed, -> { where('status = ?', 'Completed') }
 
   private
+
   def mark_invoicer_as_paid
     if params_valid? && invoicer.respond_to?(:pay)
       invoicer.pay
     else
       Airbrake.notify(
-        error_class:   "Failed Payment Notification",
+        error_class:   'Failed Payment Notification',
         error_message: "Failed Payment Notification for invoicer: #{invoicer.inspect}",
         parameters:    params
       )
     end
   end
-  
+
   def params_valid?
     type = params[:type]
     send "#{type}_valid?", APP_CONFIG[type]

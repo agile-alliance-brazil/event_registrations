@@ -58,7 +58,7 @@ class AttendancesController < ApplicationController
         flash[:error] = t('flash.attendance.enable_voting.missing_authentication')
       end
     end
-    
+
     redirect_to :back
   end
 

@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 
   def new
   end
-  
+
   def create
     auth = Authentication.find_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
     if auth
@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
   end
 
   def resource_name
-    "user"
+    'user'
   end
 
   helper_method :resource
@@ -51,6 +51,7 @@ class SessionsController < ApplicationController
   end
 
   protected
+
   def log_in_with(auth)
     if logged_in? && auth.user != current_user
       flash[:error] = I18n.t('flash.user.authentication.already_in_use')

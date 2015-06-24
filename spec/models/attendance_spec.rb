@@ -17,23 +17,23 @@ describe Attendance, type: :model do
     it { should validate_presence_of :country }
     it { should validate_presence_of :city }
 
-    it { should allow_value("1234-2345").for(:phone) }
-    it { should allow_value("+55 11 5555 2234").for(:phone) }
-    it { should allow_value("+1 (304) 543.3333").for(:phone) }
-    it { should allow_value("07753423456").for(:phone) }
-    it { should_not allow_value("a").for(:phone) }
-    it { should_not allow_value("1234-bfd").for(:phone) }
-    it { should_not allow_value(")(*&^%$@!").for(:phone) }
-    it { should_not allow_value("[=+]").for(:phone) }
+    it { should allow_value('1234-2345').for(:phone) }
+    it { should allow_value('+55 11 5555 2234').for(:phone) }
+    it { should allow_value('+1 (304) 543.3333').for(:phone) }
+    it { should allow_value('07753423456').for(:phone) }
+    it { should_not allow_value('a').for(:phone) }
+    it { should_not allow_value('1234-bfd').for(:phone) }
+    it { should_not allow_value(')(*&^%$@!').for(:phone) }
+    it { should_not allow_value('[=+]').for(:phone) }
 
-    context "brazilians" do
-      subject { FactoryGirl.build(:attendance, :country => "BR") }
+    context 'brazilians' do
+      subject { FactoryGirl.build(:attendance, :country => 'BR') }
       it { should validate_presence_of :state }
       it { should validate_presence_of :cpf }
     end
 
-    context "foreigners" do
-      subject { FactoryGirl.build(:attendance, :country => "US") }
+    context 'foreigners' do
+      subject { FactoryGirl.build(:attendance, :country => 'US') }
       it { should_not validate_presence_of :state }
       it { should_not validate_presence_of :cpf }
     end
@@ -44,12 +44,12 @@ describe Attendance, type: :model do
     it { should validate_length_of(:city).is_at_most(100) }
     it { should validate_length_of(:organization).is_at_most(100) }
 
-    it { should allow_value("user@domain.com.br").for(:email) }
-    it { should allow_value("test_user.name@a.co.uk").for(:email) }
-    it { should_not allow_value("a").for(:email) }
-    it { should_not allow_value("a@").for(:email) }
-    it { should_not allow_value("a@a").for(:email) }
-    it { should_not allow_value("@12.com").for(:email) }
+    it { should allow_value('user@domain.com.br').for(:email) }
+    it { should allow_value('test_user.name@a.co.uk').for(:email) }
+    it { should_not allow_value('a').for(:email) }
+    it { should_not allow_value('a@').for(:email) }
+    it { should_not allow_value('a@a').for(:email) }
+    it { should_not allow_value('@12.com').for(:email) }
   end
 
   context 'scopes' do
@@ -60,14 +60,14 @@ describe Attendance, type: :model do
 
       it 'should have scope for_registration_type' do
         rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
-        Attendance.first.tap{|a| a.registration_type = rt}.save
+        Attendance.first.tap { |a| a.registration_type = rt }.save
 
         expect(Attendance.for_registration_type(rt)).to eq([Attendance.first])
       end
 
       it 'should have scope without_registration_type' do
         rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
-        Attendance.first.tap{|a| a.registration_type = rt}.save
+        Attendance.first.tap { |a| a.registration_type = rt }.save
 
         expect(Attendance.without_registration_type(rt)).not_to include(Attendance.first)
       end
@@ -90,7 +90,7 @@ describe Attendance, type: :model do
       end
 
       it 'should have scope older_than that selects old attendances' do
-        Attendance.first.tap{|a| a.registration_date = 10.days.ago}.save
+        Attendance.first.tap { |a| a.registration_date = 10.days.ago }.save
         expect(Attendance.older_than(5.days.ago)).to eq([Attendance.first])
       end
     end
@@ -214,10 +214,10 @@ describe Attendance, type: :model do
     end
   end
 
-  describe "can_vote?" do
+  describe 'can_vote?' do
     let(:attendance) { FactoryGirl.build(:attendance) }
 
-    it "should be true if attendance paid" do
+    it 'should be true if attendance paid' do
       period = FactoryGirl.build(:registration_period)
       period.stubs(:allow_voting?).returns(true)
 
@@ -228,7 +228,7 @@ describe Attendance, type: :model do
       expect(attendance).to be_can_vote
     end
 
-    it "should be true if attendance confirmed" do
+    it 'should be true if attendance confirmed' do
       period = FactoryGirl.build(:registration_period)
       period.stubs(:allow_voting?).returns(true)
 
@@ -239,7 +239,7 @@ describe Attendance, type: :model do
       expect(attendance).to be_can_vote
     end
 
-    it "should be true if registration period allows voting" do
+    it 'should be true if registration period allows voting' do
       period = FactoryGirl.build(:registration_period)
       period.expects(:allow_voting?).twice.returns(false, true)
 
@@ -403,7 +403,7 @@ describe Attendance, type: :model do
       end
     end
 
-    it "should email upon after confirmed"
+    it 'should email upon after confirmed'
   end
 
   describe '#cancellable?' do

@@ -14,13 +14,13 @@ describe EmailNotifications, type: :mailer do
     ActionMailer::Base.deliveries.clear
     I18n.locale = @old_locale
   end
-  
-  context "registration pending" do
+
+  context 'registration pending' do
     before(:each) do
       @attendance = FactoryGirl.create(:attendance, event: @event)
       @attendance.id = 435
     end
-    
+
     it "should be sent to attendee cc'ed to event organizer" do
       mail = EmailNotifications.registration_pending(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
@@ -31,8 +31,8 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
       expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Pedido de inscrição na #{@event.name} enviado")
     end
-    
-    it "should be sent to attendee according to country" do
+
+    it 'should be sent to attendee according to country' do
       @attendance.country = 'US'
       mail = EmailNotifications.registration_pending(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
@@ -45,13 +45,13 @@ describe EmailNotifications, type: :mailer do
     end
   end
 
-  context "registration confirmed" do
+  context 'registration confirmed' do
     before(:each) do
       @attendance = FactoryGirl.create(:attendance, event: @event, registration_date: Time.zone.local(2013, 05, 01, 12, 0, 0))
       @event.id = 1
     end
-    
-    it "should be sent to attendee" do
+
+    it 'should be sent to attendee' do
       mail = EmailNotifications.registration_confirmed(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       expect(mail.to).to eq([@attendance.email])
@@ -60,8 +60,8 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
       expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Inscrição na #{@event.name} confirmada")
     end
-    
-    it "should be sent to attendee according to country" do
+
+    it 'should be sent to attendee according to country' do
       @attendance.country = 'US'
       mail = EmailNotifications.registration_confirmed(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
@@ -72,7 +72,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Registration confirmed for #{@event.name}")
     end
 
-    it "should be sent according to event id" do
+    it 'should be sent according to event id' do
       @event.id = 4
       mail = EmailNotifications.registration_confirmed(@attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq(1)
@@ -84,7 +84,7 @@ describe EmailNotifications, type: :mailer do
   context 'when cancelling registration' do
     let(:event) { FactoryGirl.create :event }
     let(:attendance) { FactoryGirl.create :attendance, event: event }
-    
+
     it 'sends to pending attendee' do
       mail = EmailNotifications.cancelling_registration(attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq 1
@@ -93,7 +93,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
       expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Aviso de cancelamento da inscrição #{attendance.id} na #{event.name}")
     end
-    
+
     it 'sends to attendee according to country' do
       attendance.country = 'US'
       mail = EmailNotifications.cancelling_registration(attendance).deliver_now
@@ -108,7 +108,7 @@ describe EmailNotifications, type: :mailer do
   context 'when warning attendance about cancelation' do
     let(:event) { FactoryGirl.create :event }
     let(:attendance) { FactoryGirl.create :attendance, event: event }
-    
+
     it 'should be sent to pending attendee' do
       mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
       expect(ActionMailer::Base.deliveries.size).to eq 1
@@ -117,7 +117,7 @@ describe EmailNotifications, type: :mailer do
       expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
       expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Lembrete de pagamento da inscrição #{attendance.id} na #{event.name}")
     end
-    
+
     it 'sends to attendee according to country' do
       attendance.country = 'US'
       mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now

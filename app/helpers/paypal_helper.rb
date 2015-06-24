@@ -23,7 +23,7 @@ module PaypalHelper
       vars[:cert_id] = APP_CONFIG[:paypal][:cert_id]
     end
   end
-  
+
   def paypal_encrypted_registration_group(registration_group, return_url, notify_url)
     encrypt_for_paypal(
       add_paypal_config_vars(
@@ -32,13 +32,13 @@ module PaypalHelper
       )
     )
   end
-  
+
   PAYPAL_CERT_PEM = File.read("#{Rails.root}/certs/paypal_cert.pem")
   APP_CERT_PEM = File.read("#{Rails.root}/certs/app_cert.pem")
   APP_KEY_PEM = File.read("#{Rails.root}/certs/app_key.pem")
-  
+
   def encrypt_for_paypal(values)
     signed = OpenSSL::PKCS7.sign(OpenSSL::X509::Certificate.new(APP_CERT_PEM), OpenSSL::PKey::RSA.new(APP_KEY_PEM, ''), values.map { |k, v| "#{k}=#{v}" }.join("\n"), [], OpenSSL::PKCS7::BINARY)
-    OpenSSL::PKCS7.encrypt([OpenSSL::X509::Certificate.new(PAYPAL_CERT_PEM)], signed.to_der, OpenSSL::Cipher::Cipher.new("DES3"), OpenSSL::PKCS7::BINARY).to_s.gsub("\n", "")
+    OpenSSL::PKCS7.encrypt([OpenSSL::X509::Certificate.new(PAYPAL_CERT_PEM)], signed.to_der, OpenSSL::Cipher::Cipher.new('DES3'), OpenSSL::PKCS7::BINARY).to_s.gsub("\n", '')
   end
 end

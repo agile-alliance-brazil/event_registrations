@@ -1,7 +1,7 @@
 # encoding: UTF-8
 class Ability
   include CanCan::Ability
-  
+
   REGISTRATION_DEADLINE = Time.zone.local(2015, 10, 21, 23, 59, 59)
 
   def initialize(user, event)
@@ -37,6 +37,6 @@ class Ability
   def organizer_privileges
     can(:manage, Attendance)
 
-    can(:manage, "transfers")
+    can(:manage, 'transfers')
   end
 end

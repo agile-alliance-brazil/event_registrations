@@ -2,8 +2,8 @@
 require 'spec_helper'
 
 describe BcashHelper, type: :helper do
-  describe "add_config_vars" do
-    it "should add return url and notification url" do
+  describe 'add_config_vars' do
+    it 'should add return url and notification url' do
       params = {}
       helper.add_bcash_config_vars(params, 'return_url', 'notify_url')
 

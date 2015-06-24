@@ -24,7 +24,7 @@ describe RegistrationGroup, type: :model do
         @attendances = Attendance.where(registration_group: group.id)
       end
       it { expect(RegistrationGroup.all).not_to include(group) }
-      it { expect(@attendances.map(&:status).uniq).to eq(["cancelled"]) }
+      it { expect(@attendances.map(&:status).uniq).to eq(['cancelled']) }
     end
 
     context 'do not destroy when attendance could not be cancelled' do

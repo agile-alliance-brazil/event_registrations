@@ -6,4 +6,4 @@ cmd = "cd /srv/apps/registrations/current && /usr/local/bin/bundle exec #{File.b
 
 env.vms[:dev].channel.execute(cmd) do |_, data|
   print data
-end 
+end

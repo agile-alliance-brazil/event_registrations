@@ -21,30 +21,30 @@ describe EventAttendancesController, type: :controller do
     WebMock.disable!
   end
 
-  describe "GET new" do
+  describe 'GET new' do
     before do
       controller.current_user = FactoryGirl.create(:user)
     end
 
-    it "should render new template" do
+    it 'should render new template' do
       get :new, event_id: @event.id
       expect(response).to render_template(:new)
     end
 
-    it "should assign current event to attendance" do
+    it 'should assign current event to attendance' do
       get :new, event_id: @event.id
       expect(assigns(:attendance).event).to eq(@event)
     end
 
-    describe "for individual registration" do
-      it "should load registration types without groups or free" do
+    describe 'for individual registration' do
+      it 'should load registration types without groups or free' do
         get :new, event_id: @event.id
         expect(assigns(:registration_types)).to include(@individual)
         expect(assigns(:registration_types).size).to eq(1)
       end
     end
 
-    describe "for organizers" do
+    describe 'for organizers' do
       before do
         @user = FactoryGirl.create(:user)
         @user.add_role :organizer
@@ -53,7 +53,7 @@ describe EventAttendancesController, type: :controller do
         disable_authorization
       end
 
-      it "should load registration types without groups but with free" do
+      it 'should load registration types without groups but with free' do
         get :new, event_id: @event.id
         expect(assigns(:registration_types)).to include(@individual)
         expect(assigns(:registration_types)).to include(@free)
@@ -65,7 +65,7 @@ describe EventAttendancesController, type: :controller do
   end
 
   describe '#create' do
-    let(:user){ FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create(:user) }
     let(:valid_attendance) do
       {
           event_id: @event.id,
@@ -106,7 +106,7 @@ describe EventAttendancesController, type: :controller do
     it 'renders new template when model is invalid' do
       user.phone = nil # User cannot have everything or we will just pick from there.
       # I think we need to consolidate all user and attendee information
-      post :create, event_id: @event.id, attendance: {event_id: @event.id}
+      post :create, event_id: @event.id, attendance: { event_id: @event.id }
       expect(response).to render_template(:new)
     end
 
@@ -194,7 +194,7 @@ describe EventAttendancesController, type: :controller do
         before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
 
         it 'redirects to home page with error message when cannot add more attendances' do
-          post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
+          post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
           expect(response).to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
@@ -209,7 +209,7 @@ describe EventAttendancesController, type: :controller do
           sign_in user
           disable_authorization
 
-          post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
+          post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
 
           expect(response).to redirect_to(attendance_path(5))
         end
@@ -231,7 +231,7 @@ describe EventAttendancesController, type: :controller do
         context 'form validations' do
           it 'keeps registration token when form is invalid' do
             user.phone = nil
-            post :create, event_id: @event.id, registration_token: 'xpto', attendance: {event_id: @event.id}
+            post :create, event_id: @event.id, registration_token: 'xpto', attendance: { event_id: @event.id }
             expect(response).to render_template(:new)
             expect(response.body).to have_field('registration_token', type: 'text', with: 'xpto')
           end
@@ -261,7 +261,7 @@ describe EventAttendancesController, type: :controller do
 
           context 'and different email from current user' do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: "warantesbr@gmail.com", email_confirmation: "warantesbr@gmail.com" } }
+            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: 'warantesbr@gmail.com', email_confirmation: 'warantesbr@gmail.com' } }
             it { expect(attendance).to be_valid }
           end
         end
@@ -382,22 +382,22 @@ describe EventAttendancesController, type: :controller do
         end
       end
 
-      it "should send pending registration e-mail" do
+      it 'should send pending registration e-mail' do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)
-        post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
+        post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
       end
 
-      it "should not allow free registration type" do
+      it 'should not allow free registration type' do
         Attendance.any_instance.stubs(:valid?).returns(true)
         controller.stubs(:valid_registration_types).returns([@individual, @manual])
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id}
+        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id }
         expect(response).to render_template(:new)
         expect(flash[:error]).to eq(I18n.t('flash.attendance.create.free_not_allowed'))
       end
     end
 
-    describe "for sponsor registration" do
+    describe 'for sponsor registration' do
       before do
         @user = FactoryGirl.create(:user)
         @user.add_role :organizer
@@ -406,20 +406,20 @@ describe EventAttendancesController, type: :controller do
         disable_authorization
       end
 
-      it "should allow free registration type no matter the email" do
+      it 'should allow free registration type no matter the email' do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
 
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: "another#{@user.email}"}
+        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: "another#{@user.email}" }
         expect(response).to redirect_to(attendance_path(5))
       end
 
-      it "should not send pending registration e-mail for free registration" do
+      it 'should not send pending registration e-mail for free registration' do
         EmailNotifications.expects(:registration_pending).never
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
 
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
+        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: @user.email }
 
         expect(response).to redirect_to(attendance_path(5))
       end
@@ -436,7 +436,7 @@ describe EventAttendancesController, type: :controller do
       it 'allows free registration type only its email' do
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
+        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: @user.email }
         expect(response).to redirect_to(attendance_path(5))
       end
 
@@ -444,7 +444,7 @@ describe EventAttendancesController, type: :controller do
         EmailNotifications.expects(:registration_pending).never
         Attendance.any_instance.stubs(:valid?).returns(true)
         Attendance.any_instance.stubs(:id).returns(5)
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id, email: @user.email}
+        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: @user.email }
         expect(response).to redirect_to(attendance_path(5))
       end
     end
@@ -473,8 +473,8 @@ describe EventAttendancesController, type: :controller do
 
       it 'keeps group token and email confirmation' do
         get :edit, event_id: event.id, id: attendance_with_group.id
-        expect(response.body).to have_field("registration_token", type: "text", with: group.token)
-        expect(response.body).to have_field("attendance_email_confirmation", type: "text", with: attendance_with_group.email_confirmation)
+        expect(response.body).to have_field('registration_token', type: 'text', with: group.token)
+        expect(response.body).to have_field('attendance_email_confirmation', type: 'text', with: attendance_with_group.email_confirmation)
       end
     end
   end

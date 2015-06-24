@@ -30,7 +30,7 @@ class EmailNotifications < ActionMailer::Base
     Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
     mail subject: subject, cc: event_organizer, date: sent_at
   end
-  
+
   def mail_with_default(params)
     mail_without_default default_mail_preferences.merge(params)
   end
@@ -52,7 +52,7 @@ class EmailNotifications < ActionMailer::Base
     Rails.logger.info("[EmailNotifications:host] { mail informations: { #{APP_CONFIG[:host]} } }")
     APP_CONFIG[:host]
   end
-  
+
   def event_organizer
     [
       "\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>",

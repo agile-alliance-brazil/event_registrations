@@ -14,8 +14,8 @@ describe RegistrationNotifier do
     @notifier = RegistrationNotifier.new
   end
 
-  context "cancel" do
-    context "older than 30 days" do
+  context 'cancel' do
+    context 'older than 30 days' do
       before do
         Timecop.freeze(Time.zone.now)
         event = FactoryGirl.create :event
@@ -35,22 +35,22 @@ describe RegistrationNotifier do
         Timecop.return
       end
 
-      it "should notify pending attendance older than 30 days ago" do
+      it 'should notify pending attendance older than 30 days ago' do
         EmailNotifications.expects(:cancelling_registration)
           .with(@attendance).returns(mock(deliver_now: true))
 
         @notifier.cancel
       end
 
-      it "should cancel attendance created 30 days ago" do
+      it 'should cancel attendance created 30 days ago' do
         @attendance.expects(:cancel)
 
         @notifier.cancel
       end
     end
 
-    context "newer than 30 days" do
-      it "should not notify attendance created less than 30 days ago" do
+    context 'newer than 30 days' do
+      it 'should not notify attendance created less than 30 days ago' do
         Timecop.freeze(Time.zone.now) do
           FactoryGirl.create :event
           query_relation = mock

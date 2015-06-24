@@ -24,7 +24,7 @@ require 'capistrano/rails/migrations'
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
 
-before "bundler:install", "deploy:puppet"
+before 'bundler:install', 'deploy:puppet'
 
 namespace :deploy do
   %w(start restart).each do |name|

@@ -12,7 +12,7 @@ module LayoutHelper
   def show_title?
     @show_title || false
   end
-  
+
   def show_actions!
     @show_actions = true
   end
@@ -20,11 +20,11 @@ module LayoutHelper
   def show_actions?
     @show_actions || false
   end
-  
+
   def stylesheet(*args)
     content_for(:head) { stylesheet_link_tag(*args) }
   end
-  
+
   def javascript(*args)
     content_for(:head) { javascript_include_tag(*args) }
   end

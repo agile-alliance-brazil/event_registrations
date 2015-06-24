@@ -17,8 +17,8 @@ class Attendance < ActiveRecord::Base
 
   validates_confirmation_of :email
   validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city, :registration_type_id, :registration_date, :user_id, :event_id]
-  validates_presence_of :state, if: ->(a) {a.in_brazil?}
-  validates_presence_of :cpf, if: ->(a) {a.in_brazil?}
+  validates_presence_of :state, if: ->(a) { a.in_brazil? }
+  validates_presence_of :cpf, if: ->(a) { a.in_brazil? }
 
   validates_length_of [:first_name, :last_name, :phone, :city, :organization], maximum: 100, allow_blank: true
   validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
@@ -41,7 +41,7 @@ class Attendance < ActiveRecord::Base
     "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%").order(created_at: :desc)
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
-  scope :pending_gateway, -> { pending.joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY)}
+  scope :pending_gateway, -> { pending.joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY) }
 
   def can_vote?
     (self.confirmed? || self.paid?) && event.registration_periods.for(self.registration_date).any?(&:allow_voting?)
@@ -62,7 +62,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def payment_type
-    invoices.last.payment_type if invoices.present?
+    invoices.individual.last.payment_type if invoices.present?
   end
 
   def grouped?

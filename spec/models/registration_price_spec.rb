@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe RegistrationPrice, type: :model do
-  context "associations" do
+  context 'associations' do
     it { should belong_to :registration_type }
     it { should belong_to :registration_period }
   end

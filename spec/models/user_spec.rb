@@ -22,7 +22,7 @@ describe User, type: :model do
   it_should_trim_attributes User, :first_name, :last_name, :email, :organization, :phone,
                                   :country, :state, :city, :badge_name, :twitter_user,
                                   :address, :neighbourhood, :zipcode
-  
+
   context 'validations' do
     it { should validate_presence_of :first_name }
     it { should validate_presence_of :last_name }
@@ -41,7 +41,7 @@ describe User, type: :model do
     end
   end
 
-  context 'virtual attributes' do                
+  context 'virtual attributes' do
     context 'twitter user' do
       it 'removes @ from start if present' do
         user = FactoryGirl.build(:user, :twitter_user => '@agilebrazil')
@@ -81,7 +81,7 @@ describe User, type: :model do
 
   context 'new from auth hash' do
     it 'initializes user with names and email' do
-      hash = {info: {name: 'John Doe', email: 'john@doe.com'}}
+      hash = { info: { name: 'John Doe', email: 'john@doe.com' } }
       user = User.new_from_auth_hash(hash)
       expect(user.first_name).to eq('John')
       expect(user.last_name).to eq('Doe')
@@ -89,7 +89,7 @@ describe User, type: :model do
     end
 
     it 'works without name and email' do
-      hash = {info: {email: 'john@doe.com'}}
+      hash = { info: { email: 'john@doe.com' } }
       user = User.new_from_auth_hash(hash)
       expect(user.first_name).to be_nil
       expect(user.last_name).to be_nil
@@ -97,7 +97,7 @@ describe User, type: :model do
     end
 
     it 'prefers first and last name rather than name' do
-      hash = {info: {email: 'john@doe.com', name: 'John of Doe', first_name: 'John', last_name: 'of Doe'}}
+      hash = { info: { email: 'john@doe.com', name: 'John of Doe', first_name: 'John', last_name: 'of Doe' } }
       user = User.new_from_auth_hash(hash)
       expect(user.first_name).to eq('John')
       expect(user.last_name).to eq('of Doe')
@@ -105,13 +105,13 @@ describe User, type: :model do
     end
 
     it 'assigns twitter_user if using twitter as provider' do
-      hash = {info: {name: 'John Doe', email: 'john@doe.com', nickname: 'johndoe'}, provider: 'twitter'}
+      hash = { info: { name: 'John Doe', email: 'john@doe.com', nickname: 'johndoe' }, provider: 'twitter' }
       user = User.new_from_auth_hash(hash)
       expect(user.twitter_user).to eq('johndoe')
     end
 
     it 'works when more information is passed' do
-      hash = {info: {
+      hash = { info: {
         :first_name => 'John',
         :last_name => 'Doe',
         :email => 'john@doe.com',
@@ -121,7 +121,7 @@ describe User, type: :model do
         :country => 'BR',
         :state => 'SP',
         :city => 'São Paulo'
-      }}
+      } }
       user = User.new_from_auth_hash(hash)
       expect(user.first_name).to eq('John')
       expect(user.last_name).to eq('Doe')

@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
                   :badge_name, :twitter_user, :address, :neighbourhood, :zipcode
 
   has_many :authentications
-  
+
   has_many :attendances
   has_many :events, -> { uniq }, through: :attendances
   has_many :payment_notifications, through: :attendances
@@ -30,15 +30,15 @@ class User < ActiveRecord::Base
   usar_como_cpf :cpf
 
   def registrations_for_event(event)
-    attendances.select{ |attendance| attendance.event_id == event.id }
+    attendances.select { |attendance| attendance.event_id == event.id }
   end
 
   def gender=(value)
     self[:gender] = value.nil? ? nil : value == 'M'
   end
-  
+
   def twitter_user=(value)
-    self[:twitter_user] = value.try(:start_with?, "@") ? value[1..-1] : value
+    self[:twitter_user] = value.try(:start_with?, '@') ? value[1..-1] : value
   end
 
   def self.new_from_auth_hash(hash)
@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    [first_name, last_name].join(" ")
+    [first_name, last_name].join(' ')
   end
 
   def allowed_free_registration?
@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
 
   def self.extract_names(hash)
     if hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?)
-      hash[:name].split(" ")
+      hash[:name].split(' ')
     else
       [hash[:first_name], hash[:last_name]]
     end

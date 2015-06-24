@@ -10,7 +10,7 @@ class PaypalAdapter < PaymentGatewayAdapter
   def add_variables(vars)
     vars['invoice'] = @invoice.id
   end
-  
+
   class PaypalItem < Item
     def to_variables(index)
       {

@@ -19,7 +19,7 @@ describe PaypalAdapter do
         expect(adapter.items[0].number).to eq invoice.id
       end
     end
-    
+
     it 'should add invoice id' do
       invoice = Invoice.from_attendance(attendance, Invoice::GATEWAY)
       adapter = PaypalAdapter.from_invoice(invoice)
@@ -27,14 +27,14 @@ describe PaypalAdapter do
     end
   end
 
-  describe "to_variables" do
+  describe 'to_variables' do
     it "should map each item's variables" do
       attendance = FactoryGirl.create(:attendance)
       adapter = PaypalAdapter.new([
         PaypalAdapter::PaypalItem.new('item 1', 2, 10.50),
         PaypalAdapter::PaypalItem.new('item 2', 3, 9.99, 2)
       ], attendance)
-      
+
       expect(adapter.to_variables).to include({
         'amount_1' => 10.50,
         'item_name_1' => 'item 1',
@@ -46,8 +46,8 @@ describe PaypalAdapter do
         'item_number_2' => 3
       })
     end
-    
-    it "should add invoice id" do
+
+    it 'should add invoice id' do
       attendance = FactoryGirl.create(:attendance)
       adapter = PaypalAdapter.new([
         PaypalAdapter::PaypalItem.new('item 1', 2, 10.50),
@@ -59,27 +59,27 @@ describe PaypalAdapter do
       })
     end
   end
-  
+
   describe PaypalAdapter::PaypalItem do
-    it "should have name" do
+    it 'should have name' do
       expect(PaypalAdapter::PaypalItem.new('item', 2, 10.50).name).to eq('item')
     end
 
-    it "should have number" do
+    it 'should have number' do
       expect(PaypalAdapter::PaypalItem.new('item', 2, 10.50).number).to eq(2)
     end
-    
-    it "should have amount" do
+
+    it 'should have amount' do
       expect(PaypalAdapter::PaypalItem.new('item', 2, 10.50).amount).to eq(10.50)
     end
-    
-    it "should have optional quantity" do
+
+    it 'should have optional quantity' do
       expect(PaypalAdapter::PaypalItem.new('item', 2, 10.50).quantity).to eq(1)
       expect(PaypalAdapter::PaypalItem.new('item', 2, 10.50, 3).quantity).to eq(3)
     end
-    
-    describe "to_variables" do
-      it "should map item name, number, amount, and quantity for given index" do
+
+    describe 'to_variables' do
+      it 'should map item name, number, amount, and quantity for given index' do
         item = PaypalAdapter::PaypalItem.new('item', 2, 10.50)
         expect(item.to_variables(1)).to eq({
           'amount_1' => 10.50,

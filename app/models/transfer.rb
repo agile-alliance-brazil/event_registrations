@@ -32,9 +32,10 @@ class Transfer
   end
 
   protected
+
   def self.initialize_attendance(id)
     if id.nil?
-      Attendance.new.tap{|a| a.status = ''}
+      Attendance.new.tap { |a| a.status = '' }
     else
       Attendance.find id
     end

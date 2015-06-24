@@ -15,7 +15,7 @@ describe Transfer, type: :model do
 
     Attendance.stubs(:find).with(3).returns @origin
     Attendance.stubs(:find).with(5).returns @destination
-    
+
     @origin.stubs(:save).returns(true)
     @destination.stubs(:save).returns(true)
 
@@ -29,12 +29,12 @@ describe Transfer, type: :model do
     end
     it 'should not be valid with pending origin' do
       @origin.status = 'pending'
-      
+
       expect(@transfer).not_to be_valid
     end
     it 'should not be valid with cancelled origin' do
       @origin.status = 'cancel'
-      
+
       expect(@transfer).not_to be_valid
     end
 
@@ -44,17 +44,17 @@ describe Transfer, type: :model do
     end
     it 'should not be valid with paid destination' do
       @destination.status = 'paid'
-      
+
       expect(@transfer).not_to be_valid
     end
     it 'should not be valid with confirmed destination' do
       @destination.status = 'confirmed'
-      
+
       expect(@transfer).not_to be_valid
     end
     it 'should not be valid with cancelled destination' do
       @destination.status = 'cancelled'
-      
+
       expect(@transfer).not_to be_valid
     end
 

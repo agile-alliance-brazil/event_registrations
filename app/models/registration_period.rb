@@ -1,7 +1,7 @@
 # encoding: UTF-8
 class RegistrationPeriod < ActiveRecord::Base
   belongs_to :event
-  
+
   scope :for, ->(datetime) { where('? BETWEEN start_at AND end_at', datetime).order('id desc') }
   scope :ending_after, ->(datetime) { where('? < end_at', datetime).order('id desc') }
 
@@ -13,11 +13,11 @@ class RegistrationPeriod < ActiveRecord::Base
   end
 
   def super_early_bird?
-    title == "registration_period.super_early_bird"
+    title == 'registration_period.super_early_bird'
   end
 
   def early_bird?
-    title == "registration_period.early_bird"
+    title == 'registration_period.early_bird'
   end
 
   def allow_voting?
@@ -25,6 +25,7 @@ class RegistrationPeriod < ActiveRecord::Base
   end
 
   private
+
   def prices_for(registration_type)
     RegistrationPrice.for(self, registration_type)
   end

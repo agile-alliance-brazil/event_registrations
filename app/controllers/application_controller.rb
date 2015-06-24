@@ -24,9 +24,9 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    redirect_to login_path unless current_user    
+    redirect_to login_path unless current_user
   end
-  
+
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
     @current_user
@@ -50,6 +50,7 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
   def set_locale
     I18n.locale = params[:locale] || current_user.try(:default_locale)
   end

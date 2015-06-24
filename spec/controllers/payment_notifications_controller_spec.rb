@@ -10,8 +10,8 @@ describe PaymentNotificationsController, type: :controller, block_network: true 
 
     it 'creates PaymentNotification with paypal type' do
       expect do
-        post :create, type: 'paypal', txn_id: "ABCABC", secret: APP_CONFIG[:paypal][:secret],
-                      invoice: @invoice.id, custom: 'Attendance', payment_status: "Completed",
+        post :create, type: 'paypal', txn_id: 'ABCABC', secret: APP_CONFIG[:paypal][:secret],
+                      invoice: @invoice.id, custom: 'Attendance', payment_status: 'Completed',
                       receiver_email: APP_CONFIG[:paypal][:email], mc_gross: @invoice.registration_value.to_s,
                       mc_currency: APP_CONFIG[:paypal][:currency]
       end.to change(PaymentNotification, :count).by(1)

@@ -43,7 +43,7 @@ describe Invoice, type: :model do
       end
       context 'with different registration_value' do
         let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, attendances: [attendance], amount: 100, payment_type: Invoice::GATEWAY) }
-        before { attendance.registration_value = 200}
+        before { attendance.registration_value = 200 }
         subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
         it { expect(other_invoice.attendances).to eq [attendance] }
         it { expect(other_invoice.amount).to eq 200 }
@@ -96,7 +96,7 @@ describe Invoice, type: :model do
 
   pending 'isolated test to for_attendance scope'
   pending 'isolated test to active scope'
-  pending 'isolated test to active_individual scope'
+  pending 'isolated test to individual scope'
 
   describe '#pay' do
     context 'an attendance invoice' do

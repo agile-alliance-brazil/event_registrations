@@ -45,42 +45,42 @@ describe TransfersController, type: :controller do
     end
     context 'with origin' do
       it 'should set event' do
-        get :new, transfer: {origin_id: 3}
+        get :new, transfer: { origin_id: 3 }
 
         expect(assigns[:event]).to eq(@origin.event)
       end
       it 'should set transfer origin' do
-        get :new, transfer: {origin_id: 3}
+        get :new, transfer: { origin_id: 3 }
 
         expect(assigns[:transfer].origin).to eq(@origin)
       end
     end
     context 'with destination' do
       it 'should set event' do
-        get :new, transfer: {destination_id: 5}
+        get :new, transfer: { destination_id: 5 }
 
         expect(assigns[:event]).to eq(@destination.event)
       end
       it 'should set transfer destination' do
-        get :new, transfer: {destination_id: 5}
+        get :new, transfer: { destination_id: 5 }
 
         expect(assigns[:transfer].destination).to eq(@destination)
       end
     end
     context 'with origin and destination' do
       it 'should set event according to origin' do
-        get :new, transfer: {origin_id: 3, destination_id: 5}
+        get :new, transfer: { origin_id: 3, destination_id: 5 }
 
         expect(assigns[:event]).to eq(@origin.event)
       end
       it 'should set transfer origin and destination' do
-        get :new, transfer: {origin_id: 3, destination_id: 5}
+        get :new, transfer: { origin_id: 3, destination_id: 5 }
 
         expect(assigns[:transfer].origin).to eq(@origin)
         expect(assigns[:transfer].destination).to eq(@destination)
       end
     end
-    
+
     context 'as an organizer' do
       before do
         @user.add_role :organizer
@@ -98,7 +98,7 @@ describe TransfersController, type: :controller do
         continuation = mock
         @user.expects(:attendances).returns(continuation)
         continuation.expects(:paid).returns([@origin, @destination])
-        
+
         get :new
 
         expect(assigns[:origins]).to eq([@origin, @destination])
@@ -111,7 +111,7 @@ describe TransfersController, type: :controller do
       transfer = Transfer.build(origin_id: '3', destination_id: '5')
       Transfer.expects(:build).with('origin_id' => '3', 'destination_id' => '5').returns(transfer)
 
-      post :create, transfer: {origin_id: 3, destination_id: 5}
+      post :create, transfer: { origin_id: 3, destination_id: 5 }
     end
     context 'successful transfer' do
       before do
@@ -119,12 +119,12 @@ describe TransfersController, type: :controller do
         @destination.stubs(:save).returns(true)
       end
       it 'should set success flash message' do
-        post :create, transfer: {origin_id: 3, destination_id: 5}
+        post :create, transfer: { origin_id: 3, destination_id: 5 }
 
         expect(flash[:notice]).to eq(I18n.t('flash.transfer.success'))
       end
       it 'should redirect to new confirmed (or paid) attendance' do
-        post :create, transfer: {origin_id: 3, destination_id: 5}
+        post :create, transfer: { origin_id: 3, destination_id: 5 }
 
         expect(response).to redirect_to(attendance_path(id: 3))
       end
@@ -133,7 +133,7 @@ describe TransfersController, type: :controller do
         Transfer.expects(:build).with('origin_id' => '3', 'destination_id' => '5').returns(transfer)
         transfer.expects(:save)
 
-        post :create, transfer: {origin_id: 3, destination_id: 5}
+        post :create, transfer: { origin_id: 3, destination_id: 5 }
       end
     end
     context 'forbidden transfer' do
@@ -142,12 +142,12 @@ describe TransfersController, type: :controller do
         @destination.stubs(:save).returns(false)
       end
       it 'should render transfer form again' do
-        post :create, transfer: {origin_id: 3, destination_id: 5}
+        post :create, transfer: { origin_id: 3, destination_id: 5 }
 
         expect(response).to render_template(:new)
       end
       it 'should show flash error message' do
-        post :create, transfer: {origin_id: 3, destination_id: 5}
+        post :create, transfer: { origin_id: 3, destination_id: 5 }
 
         expect(flash[:error]).to eq(I18n.t('flash.transfer.failure'))
       end

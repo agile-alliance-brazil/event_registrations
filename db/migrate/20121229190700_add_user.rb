@@ -9,7 +9,7 @@ class AddUser < ActiveRecord::Migration
       t.string     :country
       t.string     :state
       t.string     :city
-          
+
       t.string     :badge_name
       t.string     :cpf
       t.string     :gender
@@ -20,7 +20,7 @@ class AddUser < ActiveRecord::Migration
 
       t.integer    :roles_mask
 
-      t.string     :default_locale, :default => "pt"
+      t.string     :default_locale, :default => 'pt'
 
       t.timestamps
     end

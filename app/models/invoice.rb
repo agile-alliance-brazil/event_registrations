@@ -11,8 +11,8 @@ class Invoice < ActiveRecord::Base
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
   scope :active, -> { where.not(status: :cancelled) }
-  scope :active_individual, -> { active.where(registration_group: nil) }
-  scope :for_attendance, ->(attendance_id) { active_individual.includes(:attendances).where('attendances.id = ?', attendance_id).references(:attendances) }
+  scope :individual, -> { where(registration_group: nil) }
+  scope :for_attendance, ->(attendance_id) { active.individual.includes(:attendances).where('attendances.id = ?', attendance_id).references(:attendances) }
 
   validates :payment_type, presence: true
 

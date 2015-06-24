@@ -11,5 +11,5 @@ begin
   Current::Application.config.secret_token = config[:secret_token]
   Current::Application.config.secret_key_base = config[:secret_key_base]
 rescue
-  raise "config/config.yml file not found. Please check config/config.example for a sample"
+  raise 'config/config.yml file not found. Please check config/config.example for a sample'
 end

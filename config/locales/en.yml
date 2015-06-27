@@ -31,7 +31,7 @@ en:
       attendances_list: 'Attendances List'
     fields:
       search:
-        placeholder: 'search in name, organization or email'
+        placeholder: 'search by ID, name, organization or email'
       token:
         placeholder: 'to register within a group, please enter the token provided by the event administration'
     labels:
@@ -138,6 +138,7 @@ en:
     registration: "New registration"
     transfer: "Transfer registration"
     attendance: "Registration details"
+    attendances_list: "Attendances list"
     login: "Log in"
     profile: "Profile for %{username}"
     user: "New user"

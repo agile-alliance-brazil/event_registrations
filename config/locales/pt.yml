@@ -168,7 +168,7 @@ pt:
       attendance_payment: "Dados de Pagamento"
     fields:
       search:
-        placeholder: 'procurar por nome, organização ou email'
+        placeholder: 'procurar por ID, nome, organização ou email'
       token:
         placeholder: 'para se registrar através de um grupo, por favor entre com o token fornecido pela administração do evento'
     labels:
@@ -273,7 +273,6 @@ pt:
     registration: "Nova inscrição"
     transfer: "Transferir inscrição"
     attendance: "Detalhes da inscrição"
-    attendances_summary: "Resumo das inscrições"
     attendances_list: "Lista dos inscritos"
     login: "Acessar"
     profile: "Perfil de %{username}"

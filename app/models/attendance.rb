@@ -37,8 +37,8 @@ class Attendance < ActiveRecord::Base
   scope :active, -> { where('status != (?)', :cancelled) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
   scope :search_for_list, lambda { |param|
-    where('first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ?',
-    "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%").order(created_at: :desc)
+    where('first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?',
+    "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%", "#{param}").order(created_at: :desc)
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
   scope :pending_gateway, -> { pending.joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY) }

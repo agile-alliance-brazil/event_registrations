@@ -4,7 +4,7 @@
 
 %p= t('registration.status', date: l(Time.zone.now))
 
-= form_for attendances_path, method: 'get', html: {class: "form-inline"} do
+= form_for attendances_path, method: 'get', html: {class: 'form-inline'} do
   = hidden_field_tag :event_id, @event.id
   %div.form-group
     = text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50, :class => 'form-control'

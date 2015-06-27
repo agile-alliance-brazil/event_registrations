@@ -138,6 +138,7 @@ describe Attendance, type: :model do
               it { expect(Attendance.search_for_list('bLa')).to match_array [attendance, other_attendance] }
               it { expect(Attendance.search_for_list('FoO')).to match_array [attendance, other_attendance] }
               it { expect(Attendance.search_for_list('sbRUblEs')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list(attendance.id)).to match_array [attendance] }
             end
 
             context 'field part' do

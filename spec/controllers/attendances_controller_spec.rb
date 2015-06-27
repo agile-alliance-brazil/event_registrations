@@ -61,11 +61,63 @@ describe AttendancesController, type: :controller do
     end
 
     context 'with search parameters, insensitive case' do
-      let!(:event) { FactoryGirl.create(:event) }
+      let!(:event) { FactoryGirl.create :event }
       context 'and no attendances' do
         before { get :index, event_id: event, search: 'bla' }
         it { expect(assigns(:attendances_list)).to eq [] }
       end
+
+      context 'with attendances' do
+        context 'and searching by first_name' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
+          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'foO') }
+          before { get :index, event_id: event, search: 'bla' }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
+
+        context 'and searching by last_name' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'bLa') }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'bLaXPTO') }
+          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'foO') }
+          before { get :index, event_id: event, search: 'Bla' }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
+
+        context 'and searching by organization' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLa') }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLaXPTO') }
+          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'foO') }
+          before { get :index, event_id: event, search: 'BLA' }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
+
+        context 'and searching by email' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
+          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
+          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'foO@xpto.com.br', email_confirmation: 'foO@xpto.com.br') }
+          before { get :index, event_id: event, search: 'BLA' }
+          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+        end
+
+        context 'and searching by ID' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+          before { get :index, event_id: event, search: attendance.id }
+          it { expect(assigns(:attendances_list)).to eq [attendance] }
+        end
+      end
+    end
+
+    context 'with cancelled registrations' do
+      let!(:event) { FactoryGirl.create :event }
+      let!(:pending_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+      let!(:accepted_attendance) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
+      let!(:paid_attendance) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+      let!(:confirmed_attendance) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
+      let!(:cancelled_attendance) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+      before { get :index, event_id: event }
+      it { expect(assigns(:attendances_list)).to match_array [pending_attendance, accepted_attendance, paid_attendance, confirmed_attendance] }
     end
   end
 

@@ -4,10 +4,12 @@ Oi #{h(@attendance.full_name)},
 Agradecemos o seu interesse pela #{@attendance.event.name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
 
 
-Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do paypal ou do bcash que restauraremos sua inscrição.
+Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do PagSeguro ou da transferência bancária que restauraremos sua inscrição.
 
 
-No entanto, você poderá se inscrever novamente e completar esse novo registro. Esperamos encontrá-lo em Brasília entre os dias 26 e 28 de Junho ou em algum dos cursos da Virada Ágil.
+Lembre-se que você poderá se inscrever novamente e completar esse novo registro.
+
+Esperamos encontrá-lo no #{@attendance.event.name} entre os dias #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} e #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
 
 
 Sinceramente,

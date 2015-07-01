@@ -42,11 +42,11 @@ class Attendance < ActiveRecord::Base
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
   scope :for_cancelation_warning, lambda {
-    older_than(7.days.ago).where("attendances.status IN ('pending', 'accepted') AND advised = 'f'")
+    older_than(7.days.ago).where("attendances.status IN ('pending', 'accepted') AND advised = ?", false)
       .joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY)
   }
 
-  scope :for_cancelation, -> { where("attendances.status IN ('pending', 'accepted') AND advised = 't' AND advised_at < (?)", 7.days.ago) }
+  scope :for_cancelation, -> { where("attendances.status IN ('pending', 'accepted') AND advised = ? AND advised_at < (?)", true, 7.days.ago) }
 
   def can_vote?
     (self.confirmed? || self.paid?) && event.registration_periods.for(self.registration_date).any?(&:allow_voting?)

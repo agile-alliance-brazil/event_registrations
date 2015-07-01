@@ -41,7 +41,12 @@ class Attendance < ActiveRecord::Base
     "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%", "#{param}").order(created_at: :desc)
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
-  scope :pending_gateway, -> { pending.joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY) }
+  scope :for_cancelation_warning, lambda {
+    older_than(7.days.ago).where("attendances.status IN ('pending', 'accepted') AND advised = 'f'")
+      .joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY)
+  }
+
+  scope :for_cancelation, -> { where("attendances.status IN ('pending', 'accepted') AND advised = 't' AND advised_at < (?)", 7.days.ago) }
 
   def can_vote?
     (self.confirmed? || self.paid?) && event.registration_periods.for(self.registration_date).any?(&:allow_voting?)
@@ -67,6 +72,10 @@ class Attendance < ActiveRecord::Base
 
   def grouped?
     registration_group.present?
+  end
+
+  def advise!
+    update_attributes(advised: true, advised_at: Time.zone.now)
   end
 
   private

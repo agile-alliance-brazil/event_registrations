@@ -278,7 +278,7 @@ pt:
     profile: "Perfil de %{username}"
     user: "Novo usuário"
     events: "Próximos eventos"
-    until: "até"
+    until: "a"
 
   actions:
     edit: "Editar"

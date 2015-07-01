@@ -101,8 +101,8 @@ describe AttendancesController, type: :controller do
         end
 
         context 'and searching by ID' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
+          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'foo', last_name: 'bar', status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
           before { get :index, event_id: event, search: attendance.id }
           it { expect(assigns(:attendances_list)).to eq [attendance] }
         end

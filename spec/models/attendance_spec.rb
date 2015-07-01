@@ -167,51 +167,55 @@ describe Attendance, type: :model do
         end
       end
 
-      describe '.pending_gateway' do
-        context 'with one pending and gateway as payment type' do
+      describe '.for_cancelation_warning' do
+        context 'with valid status and gateway as payment type' do
           it 'returns the attendance' do
-            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending, registration_date: 7.days.ago)
+            accepted_gateway = FactoryGirl.create(:attendance, status: :accepted, registration_date: 7.days.ago)
             Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
-            expect(Attendance.pending_gateway).to eq [pending_gateway]
+            Invoice.from_attendance(accepted_gateway, Invoice::GATEWAY)
+            expect(Attendance.for_cancelation_warning).to match_array [pending_gateway, accepted_gateway]
           end
         end
 
         context 'with two pending and gateway as payment type' do
           it 'returns the both attendances' do
-            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending, registration_date: 7.days.ago)
             Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
 
-            other_pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            other_pending_gateway = FactoryGirl.create(:attendance, status: :pending, registration_date: 7.days.ago)
             Invoice.from_attendance(other_pending_gateway, Invoice::GATEWAY)
 
-            expect(Attendance.pending_gateway).to eq [pending_gateway, other_pending_gateway]
+            expect(Attendance.for_cancelation_warning).to eq [pending_gateway, other_pending_gateway]
           end
         end
 
         context 'with one pending and gateway as payment type and other bank deposit' do
           it 'returns the attendance pending gateway' do
-            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending, registration_date: 7.days.ago)
             Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
 
-            pending_deposit = FactoryGirl.create(:attendance, status: :pending)
+            pending_deposit = FactoryGirl.create(:attendance, status: :pending, registration_date: 7.days.ago)
             Invoice.from_attendance(pending_deposit, Invoice::DEPOSIT)
 
-            expect(Attendance.pending_gateway).to eq [pending_gateway]
+            expect(Attendance.for_cancelation_warning).to eq [pending_gateway]
           end
         end
 
         context 'with one pending and gateway as payment type and other statement of agreement' do
           it 'returns the attendance pending gateway' do
-            pending_gateway = FactoryGirl.create(:attendance, status: :pending)
+            pending_gateway = FactoryGirl.create(:attendance, status: :pending, registration_date: 7.days.ago)
             Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
 
-            pending_statement = FactoryGirl.create(:attendance, status: :pending)
+            pending_statement = FactoryGirl.create(:attendance, status: :pending, registration_date: 7.days.ago)
             Invoice.from_attendance(pending_statement, Invoice::STATEMENT)
 
-            expect(Attendance.pending_gateway).to eq [pending_gateway]
+            expect(Attendance.for_cancelation_warning).to eq [pending_gateway]
           end
         end
       end
+
+      pending '.for_cancel'
     end
   end
 
@@ -558,6 +562,16 @@ describe Attendance, type: :model do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
 
       it { expect(attendance.grouped?).to be_falsey }
+    end
+  end
+
+  describe '#advise!' do
+    context 'with a valid attendance' do
+      let(:event) { FactoryGirl.create :event }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      before { attendance.advise! }
+      it { expect(Attendance.last.advised).to be_truthy }
+      it { expect(Attendance.last.advised_at).to be_within(30.seconds).of Time.zone.now }
     end
   end
 end

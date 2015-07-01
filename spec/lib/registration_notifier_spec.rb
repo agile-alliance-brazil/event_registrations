@@ -3,90 +3,144 @@ require 'spec_helper'
 require File.join(File.dirname(__FILE__), '../../lib/registration_notifier')
 
 describe RegistrationNotifier do
-  before(:each) do
+  let(:notifier) { RegistrationNotifier.new }
+  before do
     ::Rails.logger.stubs(:info)
     ::Rails.logger.stubs(:flush)
     Airbrake.stubs(:notify)
-
-    @event = FactoryGirl.build(:event)
-    Event.stubs(:find).returns(@event)
-
-    @notifier = RegistrationNotifier.new
   end
 
-  context 'cancel' do
-    context 'older than 30 days' do
-      before do
-        Timecop.freeze(Time.zone.now)
-        event = FactoryGirl.create :event
-        deadline = 30.days.ago
-        @attendance = FactoryGirl.build(
-          :attendance,
-          event: event,
-          registration_date: deadline
-        )
+  describe '#cancel' do
+    context 'when having one active event for today' do
+      let!(:event) { FactoryGirl.create :event, start_date: 1.month.from_now, end_date: 2.months.from_now }
+      context 'and one attendance pending' do
+        context 'advised more than 7 days ago' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised: true, advised_at: 8.days.ago) }
+          it 'notifies and cancel the pending attendance' do
+            EmailNotifications.expects(:cancelling_registration).once
+            notifier.cancel
+            expect(Attendance.last.status).to eq 'cancelled'
+          end
+        end
 
-        query_relation = mock
-        query_relation.expects(:older_than).with(deadline).returns([@attendance])
-        @notifier.expects(:pending_attendances).returns(query_relation)
+        context 'advised less than 7 days ago' do
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised: true, advised_at: 6.days.ago) }
+          it 'not send the notification and keep the attendance pending' do
+            EmailNotifications.expects(:cancelling_registration).never
+            notifier.cancel
+            expect(Attendance.last.status).to eq 'pending'
+          end
+        end
       end
 
-      after do
-        Timecop.return
-      end
-
-      it 'should notify pending attendance older than 30 days ago' do
-        EmailNotifications.expects(:cancelling_registration)
-          .with(@attendance).returns(mock(deliver_now: true))
-
-        @notifier.cancel
-      end
-
-      it 'should cancel attendance created 30 days ago' do
-        @attendance.expects(:cancel)
-
-        @notifier.cancel
-      end
-    end
-
-    context 'newer than 30 days' do
-      it 'should not notify attendance created less than 30 days ago' do
-        Timecop.freeze(Time.zone.now) do
-          FactoryGirl.create :event
-          query_relation = mock
-          query_relation.expects(:older_than).with(30.days.ago).returns([])
-          @notifier.expects(:pending_attendances).returns(query_relation)
+      context 'not advised' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised: false) }
+        it 'not send the notification and keep the attendance pending' do
           EmailNotifications.expects(:cancelling_registration).never
+          notifier.cancel
+          expect(Attendance.last.status).to eq 'pending'
+        end
+      end
 
-          @notifier.cancel
+      context 'and one attendance accepted and advised 7 days ago with gateway as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :accepted, advised: true, advised_at: 7.days.ago) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        it 'notifies the accepted attendance about the cancellation and cancel the registration' do
+          EmailNotifications.expects(:cancelling_registration).once
+          notifier.cancel
+          expect(Attendance.last.status).to eq 'cancelled'
+        end
+      end
+
+      context 'and one attendance older than 13 days with gateway as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 10.days.ago, advised: false) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        it 'notifies the pending attendance' do
+          EmailNotifications.expects(:cancelling_registration).never
+          notifier.cancel
+        end
+      end
+
+      context 'and one attendance older than 15 days with bank_deposit as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 15.days.ago) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::DEPOSIT) }
+        it 'notifies the pending attendance' do
+          EmailNotifications.expects(:cancelling_registration).never
+          notifier.cancel
+        end
+      end
+
+      context 'and one attendance older than 15 days with statement of agreement as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 15.days.ago) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::STATEMENT) }
+        it 'notifies the pending attendance' do
+          EmailNotifications.expects(:cancelling_registration).never
+          notifier.cancel
         end
       end
     end
+  end
 
-    context 'pending attendances with gateway invoice' do
-      it 'have pending attendances with gateway as payment type' do
-        event = FactoryGirl.create(:event)
+  describe '#cancel_warning' do
+    context 'when having one active event for today' do
+      let!(:event) { FactoryGirl.create :event, start_date: 1.month.from_now, end_date: 2.months.from_now }
+      context 'and one attendance older than 7 days' do
+        context 'with gateway as payment type' do
+          context 'and not advised' do
+            let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago, advised: false) }
+            let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+            it 'notifies the pending attendance and mark as advised' do
+              EmailNotifications.expects(:cancelling_registration_warning).once
+              notifier.cancel_warning
+              expect(Attendance.last.advised).to be_truthy
+              expect(Attendance.last.advised_at).to be_within(30.seconds).of Time.zone.now
+            end
+          end
+          context 'and has been already advised' do
+            let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago, advised: true, advised_at: Time.zone.today) }
+            let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+            it 'notifies the pending attendance and mark as advised' do
+              EmailNotifications.expects(:cancelling_registration_warning).never
+              notifier.cancel_warning
+            end
+          end
+        end
+      end
 
-        cancelled = FactoryGirl.create(:attendance, event: event)
-        cancelled.cancel
+      context 'and one accepted attendance older than 14 days with gateway as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago, status: :accepted) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        it 'notifies the accepted attendance' do
+          EmailNotifications.expects(:cancelling_registration_warning).once
+          notifier.cancel_warning
+        end
+      end
 
-        pending_gateway = FactoryGirl.create(:attendance, event: event)
-        Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+      context 'and one attendance older than 13 days with gateway as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 6.days.ago) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        it 'notifies the pending attendance' do
+          EmailNotifications.expects(:cancelling_registration_warning).never
+          notifier.cancel_warning
+        end
+      end
 
-        pending_deposit = FactoryGirl.create(:attendance, event: event)
-        Invoice.from_attendance(pending_deposit, Invoice::DEPOSIT)
+      context 'and one attendance older than 15 days with bank_deposit as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::DEPOSIT) }
+        it 'notifies the pending attendance' do
+          EmailNotifications.expects(:cancelling_registration_warning).never
+          notifier.cancel_warning
+        end
+      end
 
-        pending_statement = FactoryGirl.create(:attendance, event: event)
-        Invoice.from_attendance(pending_statement, Invoice::STATEMENT)
-
-        paid = FactoryGirl.create(:attendance, event: event)
-        paid.pay
-        confirmed = FactoryGirl.create(:attendance, event: event)
-        confirmed.confirm
-
-        Event.stubs(:find).returns(event)
-
-        expect(@notifier.pending_attendances(event)).to eq [pending_gateway]
+      context 'and one attendance older than 15 days with statement of agreement as payment type' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 8.days.ago) }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::STATEMENT) }
+        it 'notifies the pending attendance' do
+          EmailNotifications.expects(:cancelling_registration_warning).never
+          notifier.cancel_warning
+        end
       end
     end
   end

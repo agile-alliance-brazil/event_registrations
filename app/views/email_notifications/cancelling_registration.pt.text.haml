@@ -1,7 +1,7 @@
 Oi #{h(@attendance.full_name)},
 
 
-Agradecemos o seu interesse pela #{@attendance.event.name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
+Agradecemos o seu interesse pelo #{@attendance.event.name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
 
 
 Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do PagSeguro ou da transferência bancária que restauraremos sua inscrição.
@@ -9,11 +9,12 @@ Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do
 
 Lembre-se que você poderá se inscrever novamente e completar esse novo registro.
 
-Esperamos encontrá-lo no #{@attendance.event.name} entre os dias #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} e #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
+
+Esperamos encontrá-lo na maior conferência de métodos ágeis da América Latina, entre os dias #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} e #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
 
 
 Sinceramente,
-Comitê de organização do Agile Brazil.
+Comitê de organização do #{@attendance.event.name}
 
 
 Qualquer dúvida, entre em contato através do email #{APP_CONFIG[:organizer][:contact_email]}

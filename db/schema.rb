@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150628062128) do
+ActiveRecord::Schema.define(version: 20150702015254) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20150628062128) do
     t.decimal  "full_price"
     t.datetime "start_date"
     t.datetime "end_date"
+    t.string   "characteristic"
   end
 
   create_table "invoice_attendances", force: :cascade do |t|

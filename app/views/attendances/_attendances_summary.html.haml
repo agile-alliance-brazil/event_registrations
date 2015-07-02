@@ -13,3 +13,21 @@
     %td= @cancelled_total
     %td= @total
     %td= @total_without_cancelled
+
+%table.table
+  %th= 'Estado'
+  %th= 'Total de Inscritos'
+
+  - @attendances_state_grouped.each do |key, value|
+    %tr
+      %td= key
+      %td= value
+
+%table.table
+  %th= 'Cidade'
+  %th= 'Total de Inscritos'
+
+  - @attendances_city_grouped.each do |key, value|
+    %tr
+      %td= "#{key[0]} - #{key[1]}"
+      %td= value

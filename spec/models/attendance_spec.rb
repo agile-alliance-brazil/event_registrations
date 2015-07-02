@@ -383,7 +383,7 @@ describe Attendance, type: :model do
       context 'when is accepted' do
         it 'confirm the attendance' do
           EmailNotifications.expects(:registration_confirmed).once
-          attendance = FactoryGirl.create :attendance
+          attendance = FactoryGirl.create :attendance, status: :accepted
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
         end

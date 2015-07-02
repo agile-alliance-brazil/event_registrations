@@ -14,8 +14,8 @@ class AttendancesController < ApplicationController
     @paid_total = event_for_index.attendances.paid.count
     @cancelled_total = event_for_index.attendances.cancelled.count
     @total = event_for_index.attendances.count
-    @attendances_state_grouped = event_for_index.attendances.active.group(:state).count
-    @attendances_city_grouped = event_for_index.attendances.active.group(:city, :state).count
+    @attendances_state_grouped = event_for_index.attendances.active.group(:state).order('count_id desc').count('id')
+    @attendances_city_grouped = event_for_index.attendances.active.group(:city, :state).order('count_id desc').count('id')
     @total_without_cancelled = event_for_index.attendances.where.not(status: :cancelled).count
   end
 

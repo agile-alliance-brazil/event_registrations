@@ -133,7 +133,10 @@ describe EventAttendancesController, type: :controller do
 
       context 'with no period or quotas, but with a valid group' do
         let(:group) { FactoryGirl.create(:registration_group, event: @event, discount: 30) }
-        before { post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
+        before do
+          Invoice.from_registration_group(group, Invoice::GATEWAY)
+          post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+        end
         it { expect(assigns(:attendance).registration_value).to eq @event.full_price * 0.7 }
       end
 
@@ -255,13 +258,19 @@ describe EventAttendancesController, type: :controller do
         context 'a valid' do
           context 'and same email as current user' do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id } }
+            before do
+              Invoice.from_registration_group(group, Invoice::GATEWAY)
+              post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id }
+            end
             it { expect(attendance.registration_group).to eq group }
           end
 
           context 'and different email from current user' do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-            before { post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: 'warantesbr@gmail.com', email_confirmation: 'warantesbr@gmail.com' } }
+            before do
+              Invoice.from_registration_group(group, Invoice::GATEWAY)
+              post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: 'warantesbr@gmail.com', email_confirmation: 'warantesbr@gmail.com' }
+            end
             it { expect(attendance).to be_valid }
           end
         end
@@ -271,6 +280,7 @@ describe EventAttendancesController, type: :controller do
         context 'and not in any group' do
           let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event) }
           it 'uses the AA group as attendance group and accept the entrance' do
+            Invoice.from_registration_group(aa_group, Invoice::GATEWAY)
             RegistrationGroup.stubs(:find_by).returns(aa_group)
             post :create, event_id: @event.id, attendance: valid_attendance
             attendance = Attendance.last

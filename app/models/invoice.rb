@@ -18,9 +18,8 @@ class Invoice < ActiveRecord::Base
 
   def self.from_attendance(attendance, payment_type)
     invoice = for_attendance(attendance.id).first
+    return invoice if invoice.present?
 
-    return invoice if invoice.present? && invoice.amount == attendance.registration_value
-    invoice.destroy if invoice.present?
     Invoice.create(
       user: attendance.user,
       amount: attendance.registration_value,
@@ -31,9 +30,13 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.from_registration_group(group, payment_type)
-    invoice = find_by(registration_group: group, payment_type: payment_type)
-    return invoice if invoice.present? && invoice.amount == group.total_price
-    invoice.destroy if invoice.present?
+    invoice = find_by(registration_group: group)
+    if invoice.present?
+      invoice.update_attributes(amount: group.total_price, payment_type: payment_type)
+      invoice.attendances << group.attendances
+      return invoice
+    end
+
     Invoice.create!(
       registration_group: group,
       user: group.leader,

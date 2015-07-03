@@ -35,6 +35,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def update_invoice
+    return if invoices.blank?
     invoice = invoices.last
     return unless invoice.pending?
     invoice.amount = total_price

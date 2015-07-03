@@ -35,20 +35,10 @@ describe Invoice, type: :model do
     end
 
     context 'with an already existent pending invoice' do
-      context 'with same registration value' do
-        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, attendances: [attendance], amount: 100, payment_type: Invoice::GATEWAY) }
-        subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
-        it { expect(other_invoice).to eq invoice }
-        it { expect(Invoice.count).to eq 1 }
-      end
-      context 'with different registration_value' do
-        let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, attendances: [attendance], amount: 100, payment_type: Invoice::GATEWAY) }
-        before { attendance.registration_value = 200 }
-        subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
-        it { expect(other_invoice.attendances).to eq [attendance] }
-        it { expect(other_invoice.amount).to eq 200 }
-        it { expect(Invoice.count).to eq 1 }
-      end
+      let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, attendances: [attendance], amount: 100, payment_type: Invoice::GATEWAY) }
+      subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+      it { expect(other_invoice).to eq invoice }
+      it { expect(Invoice.count).to eq 1 }
     end
   end
 
@@ -80,6 +70,7 @@ describe Invoice, type: :model do
         subject!(:other_invoice) { Invoice.from_registration_group(group, Invoice::GATEWAY) }
         it { expect(other_invoice).to eq invoice }
         it { expect(Invoice.count).to eq 1 }
+        it { expect(Invoice.last.amount).to eq group.total_price }
       end
 
       context 'with different total price' do

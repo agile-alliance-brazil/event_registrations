@@ -33,10 +33,10 @@ describe RegistrationGroup, type: :model do
         2.times { @last_attendance = FactoryGirl.create(:attendance, registration_group: group) }
         @last_attendance.pay
         group.destroy
-        @attendances = Attendance.where(registration_group: group.id)
       end
+      subject(:attendances) { Attendance.where(registration_group: group.id) }
       it { expect(RegistrationGroup.all).to include(group) }
-      it { expect(@attendances.map(&:status)).to eq %w(pending paid) }
+      it { expect(attendances.map(&:status)).to eq %w(pending paid) }
     end
   end
 

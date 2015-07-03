@@ -26,6 +26,8 @@ class Attendance < ActiveRecord::Base
 
   validates_format_of :phone, with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true
 
+  after_save :update_group_invoice
+
   delegate :token, to: :registration_group
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
 
@@ -85,5 +87,9 @@ class Attendance < ActiveRecord::Base
     return unless invoice.present?
     invoice.cancel_it
     invoice.save!
+  end
+
+  def update_group_invoice
+    registration_group.update_invoice if registration_group.present?
   end
 end

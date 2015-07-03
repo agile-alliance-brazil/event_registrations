@@ -1,4 +1,6 @@
 describe RegistrationGroupsController, type: :controller do
+  render_views
+
   let(:user) { FactoryGirl.create :user }
   before do
     user.add_role(:admin)
@@ -75,6 +77,8 @@ describe RegistrationGroupsController, type: :controller do
     it { expect(new_group.discount).to eq 5 }
     it { expect(new_group.minimum_size).to eq 10 }
     it { expect(new_group.token).not_to be_blank }
+    it { expect(new_group.invoices.count).to eq 1 }
+    it { expect(new_group.invoices.last.amount).to eq 0 }
   end
 
   describe '#renew_invoice' do

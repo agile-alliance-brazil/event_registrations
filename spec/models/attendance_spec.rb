@@ -52,6 +52,27 @@ describe Attendance, type: :model do
     it { should_not allow_value('@12.com').for(:email) }
   end
 
+  context 'callbacks' do
+    let!(:event) { FactoryGirl.create :event }
+    describe '#update_group_invoice' do
+      context 'having a registration group' do
+        let(:group) { RegistrationGroup.create! event: event }
+        let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 50.00 }
+        it 'updates the group invoice when add attendace to the group' do
+          RegistrationGroup.any_instance.expects(:update_invoice).once
+          FactoryGirl.create(:attendance, registration_group: group, registration_value: 100)
+        end
+      end
+
+      context 'without a registration group' do
+        it 'updates the group invoice when add attendace to the group' do
+          RegistrationGroup.any_instance.expects(:update_invoice).never
+          FactoryGirl.create(:attendance, registration_value: 100)
+        end
+      end
+    end
+  end
+
   context 'scopes' do
     context 'with five attendances created' do
       before { 5.times { FactoryGirl.create(:attendance) } }

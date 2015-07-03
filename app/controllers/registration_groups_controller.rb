@@ -10,7 +10,7 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def show
-    @invoice = Invoice.from_registration_group(@group, Invoice::GATEWAY)
+    @invoice = @group.invoices.last
   end
 
   def destroy
@@ -23,6 +23,7 @@ class RegistrationGroupsController < ApplicationController
     new_group.event = @event
     new_group.leader = current_user
     new_group.save!
+    create_invoice(new_group)
     redirect_to event_registration_groups_path(@event)
   end
 
@@ -45,5 +46,9 @@ class RegistrationGroupsController < ApplicationController
 
   def find_group
     @group = RegistrationGroup.find_by(id: params[:id])
+  end
+
+  def create_invoice(group)
+    Invoice.from_registration_group(group, Invoice::GATEWAY)
   end
 end

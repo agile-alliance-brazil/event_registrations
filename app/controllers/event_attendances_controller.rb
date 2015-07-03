@@ -37,7 +37,7 @@ class EventAttendancesController < ApplicationController
   def update
     @attendance = Attendance.find(params[:id])
     @attendance.update_attributes!(attendance_params)
-    invoice = @attendance.invoices.last
+    invoice = @attendance.invoices.individual.last
     invoice.payment_type = payment_type_params
     invoice.save!
     redirect_to attendances_path(event_id: @event)

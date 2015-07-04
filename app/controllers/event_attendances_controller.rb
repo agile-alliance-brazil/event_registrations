@@ -37,6 +37,10 @@ class EventAttendancesController < ApplicationController
   def update
     @attendance = Attendance.find(params[:id])
     @attendance.update_attributes!(attendance_params)
+    perform_group_check!
+    @attendance.registration_value = @event.registration_price_for(@attendance, payment_type_params)
+    @attendance.save!
+
     invoice = @attendance.invoices.individual.last
     invoice.payment_type = payment_type_params
     invoice.save!

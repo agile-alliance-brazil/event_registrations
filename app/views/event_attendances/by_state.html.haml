@@ -1,0 +1,8 @@
+%table.table
+  %th= 'Estado'
+  %th= 'Total de Inscritos'
+
+  - @attendances_state_grouped.each do |key, value|
+    %tr
+      %td= key
+      %td= value

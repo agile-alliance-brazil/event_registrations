@@ -1,0 +1,8 @@
+%table.table
+  %th= 'Cidade'
+  %th= 'Total de Inscritos'
+
+  - @attendances_city_grouped.each do |key, value|
+    %tr
+      %td= "#{key[0]} - #{key[1]}"
+      %td= value

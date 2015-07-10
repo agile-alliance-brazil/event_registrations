@@ -617,4 +617,85 @@ describe EventAttendancesController, type: :controller do
       end
     end
   end
+
+  context 'reports' do
+    let(:user) { FactoryGirl.create(:user) }
+
+    before do
+      user.add_role :organizer
+      user.save
+      disable_authorization
+      sign_in user
+    end
+
+    describe '#by_state' do
+      let(:event) { FactoryGirl.create(:event) }
+
+      context 'with no attendances' do
+        before { get :by_state, event_id: event.id }
+        it { expect(assigns(:attendances_state_grouped)).to eq({}) }
+      end
+
+      context 'with attendances' do
+        let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
+        context 'with one attendance' do
+          before { get :by_state, event_id: event.id }
+          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 1 }) }
+        end
+
+        context 'with two attendances on same state' do
+          let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
+          before { get :by_state, event_id: event.id }
+          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 2 }) }
+        end
+
+        context 'with two attendances in different states' do
+          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP') }
+          before { get :by_state, event_id: event.id }
+          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 1, 'SP' => 1 }) }
+        end
+
+        context 'with two attendances one active and other not' do
+          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', status: 'cancelled') }
+          before { get :by_state, event_id: event.id }
+          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 1 }) }
+        end
+      end
+    end
+
+    describe '#by_city' do
+      let(:event) { FactoryGirl.create(:event) }
+
+      context 'with no attendances' do
+        before { get :by_city, event_id: event.id }
+        it { expect(assigns(:attendances_city_grouped)).to eq({}) }
+      end
+
+      context 'with attendances' do
+        let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
+        context 'with one attendance' do
+          before { get :by_city, event_id: event.id }
+          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 1 }) }
+        end
+
+        context 'with two attendances on same state' do
+          let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
+          before { get :by_city, event_id: event.id }
+          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 2 }) }
+        end
+
+        context 'with two attendances in different states' do
+          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo') }
+          before { get :by_city, event_id: event.id }
+          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 1, ['Sao Paulo', 'SP'] => 1 }) }
+        end
+
+        context 'with two attendances one active and other not' do
+          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo', status: 'cancelled') }
+          before { get :by_city, event_id: event.id }
+          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 1 }) }
+        end
+      end
+    end
+  end
 end

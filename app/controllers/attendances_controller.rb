@@ -14,8 +14,6 @@ class AttendancesController < ApplicationController
     @paid_total = event_for_index.attendances.paid.count
     @cancelled_total = event_for_index.attendances.cancelled.count
     @total = event_for_index.attendances.count
-    @attendances_state_grouped = event_for_index.attendances.active.group(:state).order('count_id desc').count('id')
-    @attendances_city_grouped = event_for_index.attendances.active.group(:city, :state).order('count_id desc').count('id')
     @total_without_cancelled = event_for_index.attendances.where.not(status: :cancelled).count
   end
 
@@ -70,19 +68,13 @@ class AttendancesController < ApplicationController
   end
 
   def pay_it
-    if resource.cancelled?
-      flash[:alert] = t('flash.attendance.payment.error')
-    else
-      resource.pay
-      flash[:notice] = t('flash.attendance.payment.success')
-    end
-    redirect_to attendances_path(event_id: @event.id)
+    resource.pay
+    responds_js
   end
 
   def accept_it
     resource.accept
-    flash[:notice] = t('flash.attendance.accepted.success')
-    redirect_to attendances_path(event_id: @event.id)
+    responds_js
   end
 
   private
@@ -101,5 +93,12 @@ class AttendancesController < ApplicationController
 
   def event_for_index
     @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
+  end
+
+  def responds_js
+    respond_to do |format|
+      @attendance = resource
+      format.js { render :attendance }
+    end
   end
 end

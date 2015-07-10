@@ -1,33 +1,17 @@
-%table.table
-  %th= t('formtastic.labels.attendance.name')
-  %th= t('formtastic.labels.attendance.organization')
-  %th= t('formtastic.labels.attendance.group')
-  %th= t('formtastic.labels.attendance.email')
-  %th= t('formtastic.labels.attendance.city')
-  %th= t('formtastic.labels.attendance.state')
-  %th= t('formtastic.labels.attendance.payment_type')
-  %th= t('formtastic.labels.attendance.registration_date')
-  %th= t('formtastic.labels.attendance.registration_value')
-  %th= t('formtastic.labels.attendance.status')
-  %th= t('formtastic.labels.attendance.actions')
+%div{id: 'attendances_list'}
+  %table.table
+    %th= t('formtastic.labels.attendance.name')
+    %th= t('formtastic.labels.attendance.organization')
+    %th= t('formtastic.labels.attendance.group')
+    %th= t('formtastic.labels.attendance.email')
+    %th= t('formtastic.labels.attendance.city')
+    %th= t('formtastic.labels.attendance.state')
+    %th= t('formtastic.labels.attendance.payment_type')
+    %th= t('formtastic.labels.attendance.registration_date')
+    %th= t('formtastic.labels.attendance.registration_value')
+    %th= t('formtastic.labels.attendance.status')
+    %th= t('formtastic.labels.attendance.actions')
 
-  - attendances_list.each do |attendance|
-    %tr
-      %td= link_to "#{attendance.last_name}, #{attendance.first_name}", attendance_path(attendance), method: :get
-      %td= attendance.organization
-      %td= attendance.group_name
-      %td= attendance.email
-      %td= attendance.city
-      %td= attendance.state
-      %td= attendance.payment_type
-      %td= l(attendance.registration_date)
-      %td= attendance.registration_value
-      %td= attendance.status
-      %td
-        - if attendance.pending? && attendance.grouped?
-          %p= button_to t('actions.accept'), accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success'
-        - unless attendance.paid? || attendance.cancelled?
-          %p= button_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success'
-        - if attendance.cancellable?
-          %p= button_to t('actions.cancel'), attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name ) }
-        %p= button_to t('actions.edit'), edit_event_attendance_path(event_id: @event.id, id: attendance.id), method: :get , :class => 'btn btn-primary'
+    - attendances_list.each do |attendance|
+      = render partial: 'attendances/attendance', locals: { attendance: attendance }
+

@@ -1,4 +1,8 @@
+%h3 Resumo
+
 = render partial: 'attendances_summary'
+
+%h3 Inscritos ativos
 
 - title t('title.attendances_list')
 
@@ -12,4 +16,4 @@
 
 <br />
 
-= render partial: 'attendances_list', locals: {attendances_list: @attendances_list}
+= render partial: 'attendances_list', locals: { attendances_list: @attendances_list }

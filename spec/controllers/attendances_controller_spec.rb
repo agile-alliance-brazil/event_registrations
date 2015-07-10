@@ -203,9 +203,8 @@ describe AttendancesController, type: :controller do
       let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
       let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
-        put :pay_it, id: attendance.id
-        expect(response).to redirect_to attendances_path(event_id: event.id)
-        expect(flash[:notice]).to eq I18n.t('flash.attendance.payment.success')
+        xhr :put, :pay_it, id: attendance.id
+        expect(assigns(:attendance)).to eq attendance
         expect(Attendance.last.status).to eq 'paid'
       end
     end
@@ -213,9 +212,8 @@ describe AttendancesController, type: :controller do
     context 'cancelled attendance' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'cancelled') }
       it 'doesnt mark as paid and redirect to attendances index with alert' do
-        put :pay_it, id: attendance.id
-        expect(response).to redirect_to attendances_path(event_id: event.id)
-        expect(flash[:alert]).to eq I18n.t('flash.attendance.payment.error')
+        xhr :put, :pay_it, id: attendance.id
+        expect(assigns(:attendance)).to eq attendance
         expect(Attendance.last.status).to eq 'cancelled'
       end
     end
@@ -227,9 +225,8 @@ describe AttendancesController, type: :controller do
     context 'pending attendance' do
       let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
       it 'accepts attendance' do
-        put :accept_it, id: attendance.id
-        expect(response).to redirect_to attendances_path(event_id: event.id)
-        expect(flash[:notice]).to eq I18n.t('flash.attendance.accepted.success')
+        xhr :put, :accept_it, id: attendance.id
+        expect(assigns(:attendance)).to eq attendance
         expect(Attendance.last.status).to eq 'accepted'
       end
     end
@@ -237,8 +234,8 @@ describe AttendancesController, type: :controller do
     context 'cancelled attendance' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'cancelled') }
       it 'keeps cancelled' do
-        put :accept_it, id: attendance.id
-        expect(response).to redirect_to attendances_path(event_id: event.id)
+        xhr :put, :accept_it, id: attendance.id
+        expect(assigns(:attendance)).to eq attendance
         expect(Attendance.last.status).to eq 'cancelled'
       end
     end

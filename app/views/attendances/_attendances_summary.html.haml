@@ -14,20 +14,7 @@
     %td= @total
     %td= @total_without_cancelled
 
-%table.table
-  %th= 'Estado'
-  %th= 'Total de Inscritos'
-
-  - @attendances_state_grouped.each do |key, value|
-    %tr
-      %td= key
-      %td= value
-
-%table.table
-  %th= 'Cidade'
-  %th= 'Total de Inscritos'
-
-  - @attendances_city_grouped.each do |key, value|
-    %tr
-      %td= "#{key[0]} - #{key[1]}"
-      %td= value
+%h3 Relatórios
+%ul
+  %li= link_to 'Total de ativos por estado', by_state_event_attendances_path(@event)
+  %li= link_to 'Total de ativos por cidade', by_city_event_attendances_path(@event)

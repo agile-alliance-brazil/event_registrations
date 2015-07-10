@@ -47,6 +47,14 @@ class EventAttendancesController < ApplicationController
     redirect_to attendances_path(event_id: @event)
   end
 
+  def by_state
+    @attendances_state_grouped = event.attendances.active.group(:state).order('count_id desc').count('id')
+  end
+
+  def by_city
+    @attendances_city_grouped = event.attendances.active.group(:city, :state).order('count_id desc').count('id')
+  end
+
   private
 
   def save_attendance!
@@ -74,11 +82,9 @@ class EventAttendancesController < ApplicationController
   end
 
   def attendance_params
-    params[:attendance].nil? ? nil : params.require(:attendance).permit(:event_id, :user_id, :registration_type_id,
-                                                                        :registration_group_id, :registration_date, :first_name, :last_name, :email,
-                                                                        :email_confirmation, :organization, :phone, :country, :state, :city,
-                                                                        :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-                                                                        :zipcode, :notes)
+    params[:attendance].nil? ? nil : params.require(:attendance).permit(
+      :event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date, :first_name, :last_name, :email,
+      :email_confirmation, :organization, :phone, :country, :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood, :zipcode, :notes)
   end
 
   def valid_registration_types

@@ -90,6 +90,6 @@ class Attendance < ActiveRecord::Base
   end
 
   def update_group_invoice
-    registration_group.update_invoice if registration_group.present?
+    registration_group.update_invoice if registration_group.present? && registration_value.present?
   end
 end

@@ -23,9 +23,9 @@ gem 'cancan', '=1.6.10'
 gem 'rake'
 gem 'will_paginate', '=3.0.7'
 gem 'omniauth', '=1.2.2'
-gem 'omniauth-twitter', '=1.2.0'
-gem 'omniauth-facebook', '=2.0.1'
-gem 'omniauth-github', '=1.1.2'
+gem 'omniauth-twitter', '~>1.2'
+gem 'omniauth-facebook', '~>2.0'
+gem 'omniauth-github', '~>1.1'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 gem 'faker'
 gem 'pagseguro-oficial'
@@ -39,7 +39,7 @@ gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
 gem 'bootstrap-sass', '~> 3.3'
 
 group :production, :travis do
-  gem 'mysql2', '=0.3.18'
+  gem 'mysql2', '~>0.3'
 end
 
 group :development, :test do

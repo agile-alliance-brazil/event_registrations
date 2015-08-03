@@ -245,7 +245,7 @@ GEM
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
-    net-ssh (2.10.0)
+    net-ssh (2.9.2)
     netrc (0.10.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
@@ -488,6 +488,7 @@ DEPENDENCIES
   metric_fu
   mocha
   mysql2 (~> 0.3)
+  net-ssh (< 2.10)
   omniauth (= 1.2.2)
   omniauth-facebook (~> 2.0)
   omniauth-github (~> 1.1)

@@ -141,7 +141,7 @@ describe PaymentNotification, type: :model do
       expect(PaymentNotification.from_paypal_params(paypal_params)).to eq({
         params: paypal_params,
         status: 'Completed',
-        transaction_id:  'AAABBBCCC',
+        transaction_id: 'AAABBBCCC',
         invoicer: @invoice,
         notes: 'Some notes from the buyer'
       })

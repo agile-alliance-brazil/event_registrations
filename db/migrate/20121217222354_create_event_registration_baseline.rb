@@ -8,11 +8,10 @@ class CreateEventRegistrationBaseline < ActiveRecord::Migration
     end
 
     create_table :registration_periods do |t|
-      t.references	:event
-
-      t.string		:title
-      t.datetime	:start_at
-      t.datetime	:end_at
+      t.references  :event
+      t.string      :title
+      t.datetime    :start_at
+      t.datetime    :end_at
 
       t.timestamps
     end

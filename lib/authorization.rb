@@ -36,6 +36,8 @@ module Authorization
   private
 
   def role_index(role)
-    2**ROLES.index(role) rescue 0
+    2**ROLES.index(role)
+  rescue
+    0
   end
 end

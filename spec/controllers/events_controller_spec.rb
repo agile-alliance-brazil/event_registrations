@@ -63,7 +63,7 @@ describe EventsController, type: :controller do
         it { expect(assigns(:events)).to match_array [event, other_event] }
       end
 
-      context  'and one at the right period and other not' do
+      context 'and one at the right period and other not' do
         let!(:out) { Event.create name: 'Bar' }
         let!(:other_period) { RegistrationPeriod.create!(event: out, start_at: 2.years.ago, end_at: 1.year.ago) }
         before { get :index }

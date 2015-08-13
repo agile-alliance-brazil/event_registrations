@@ -3,7 +3,7 @@ module Concerns
     extend ActiveSupport::Concern
 
     def perform_group_check!
-      group = @event.registration_groups.find_by_token(params['registration_token'])
+      group = @event.registration_groups.find_by(token: params['registration_token'])
 
       if group.present? && group.accept_members?
         @attendance.registration_group = group

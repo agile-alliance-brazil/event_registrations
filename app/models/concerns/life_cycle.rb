@@ -10,6 +10,7 @@ module Concerns
 
       state_machine :status, initial: :pending do
         after_transition on: :cancel, do: :cancel_invoice!
+        after_transition on: :recover, do: :recover_invoice!
 
         event :accept do
           transition [:pending] => :accepted
@@ -24,7 +25,11 @@ module Concerns
         end
 
         event :cancel do
-          transition [:pending, :accepted] => :cancelled
+          transition [:pending, :accepted, :paid] => :cancelled
+        end
+
+        event :recover do
+          transition [:cancelled] => :pending
         end
 
         state :confirmed do
@@ -54,7 +59,7 @@ module Concerns
     end
 
     def cancellable?
-      pending? || accepted?
+      pending? || accepted? || paid?
     end
 
     def transferrable?
@@ -63,6 +68,10 @@ module Concerns
 
     def confirmable?
       paid? || pending? || accepted?
+    end
+
+    def recoverable?
+      cancelled?
     end
   end
 end

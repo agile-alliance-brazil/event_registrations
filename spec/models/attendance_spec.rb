@@ -336,6 +336,14 @@ describe Attendance, type: :model do
         end
       end
 
+      context 'when is accepted' do
+        it 'cancel the attendance' do
+          attendance = FactoryGirl.create :attendance, status: 'accepted'
+          attendance.cancel
+          expect(attendance.status).to eq 'cancelled'
+        end
+      end
+
       context 'when is confirmed' do
         it 'dont change the attendance status' do
           attendance = FactoryGirl.create :attendance, status: 'confirmed'
@@ -345,10 +353,10 @@ describe Attendance, type: :model do
       end
 
       context 'when is paid' do
-        it 'dont change the attendance status' do
+        it 'cancel the attendance' do
           attendance = FactoryGirl.create :attendance, status: 'paid'
           attendance.cancel
-          expect(attendance.status).to eq 'paid'
+          expect(attendance.status).to eq 'cancelled'
         end
       end
     end
@@ -445,7 +453,7 @@ describe Attendance, type: :model do
 
     context 'when is paid' do
       before { attendance.pay }
-      it { expect(attendance).not_to be_cancellable }
+      it { expect(attendance).to be_cancellable }
     end
 
     context 'when is confirmed' do
@@ -503,12 +511,34 @@ describe Attendance, type: :model do
       it { expect(attendance).to be_confirmable }
     end
 
-    context 'when already is confirmed' do
+    context 'when it is already confirmed' do
       before do
         attendance.pay
         attendance.confirm
       end
       it { expect(attendance).not_to be_confirmable }
+    end
+  end
+
+  describe '#recoverable?' do
+    let(:attendance) { FactoryGirl.build(:attendance) }
+    context 'when is pending' do
+      it { expect(attendance).not_to be_recoverable }
+    end
+
+    context 'when it is accepted' do
+      before { attendance.accept }
+      it { expect(attendance).not_to be_recoverable }
+    end
+
+    context 'when it is paid' do
+      before { attendance.pay }
+      it { expect(attendance).not_to be_recoverable }
+    end
+
+    context 'when it is cancelled' do
+      before { attendance.cancel }
+      it { expect(attendance).to be_recoverable }
     end
   end
 

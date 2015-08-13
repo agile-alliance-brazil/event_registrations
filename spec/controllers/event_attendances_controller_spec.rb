@@ -281,6 +281,7 @@ describe EventAttendancesController, type: :controller do
           let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event) }
           it 'uses the AA group as attendance group and accept the entrance' do
             Invoice.from_registration_group(aa_group, Invoice::GATEWAY)
+            AgileAllianceService.stubs(:check_member).returns(true)
             RegistrationGroup.stubs(:find_by).returns(aa_group)
             post :create, event_id: @event.id, attendance: valid_attendance
             attendance = Attendance.last
@@ -610,8 +611,8 @@ describe EventAttendancesController, type: :controller do
           expect(Attendance.last.email).to eq 'bla@foo.bar'
           expect(Attendance.last.organization).to eq 'sbrubbles'
           expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
-          expect(Attendance.last.registration_group).to eq aa_group
-          expect(Attendance.last.registration_value).to eq 756
+          expect(Attendance.last.registration_group).to eq group
+          expect(Attendance.last.registration_value).to eq 420
           expect(response).to redirect_to attendances_path(event_id: event)
         end
       end

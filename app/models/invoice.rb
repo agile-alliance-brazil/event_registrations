@@ -74,6 +74,10 @@ class Invoice < ActiveRecord::Base
     self.status = Invoice::CANCELLED
   end
 
+  def recover_it
+    self.status = Invoice::PENDING
+  end
+
   def name
     return user.full_name unless registration_group.present?
     registration_group.name

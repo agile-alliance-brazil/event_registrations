@@ -240,4 +240,19 @@ describe AttendancesController, type: :controller do
       end
     end
   end
+
+  describe '#recover_it' do
+    let!(:event) { FactoryGirl.create(:event) }
+    context 'when is an individual registration' do
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+      before do
+        Invoice.from_attendance(attendance, Invoice::GATEWAY)
+        attendance.cancel
+        put :recover_it, id: attendance.id
+      end
+
+      it { expect(Attendance.last.status).to eq 'pending' }
+      it { expect(Invoice.last.status).to eq 'pending' }
+    end
+  end
 end

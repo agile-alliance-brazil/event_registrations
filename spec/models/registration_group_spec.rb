@@ -26,18 +26,6 @@ describe RegistrationGroup, type: :model do
       it { expect(RegistrationGroup.all).not_to include(group) }
       it { expect(@attendances.map(&:status).uniq).to eq(['cancelled']) }
     end
-
-    context 'do not destroy when attendance could not be cancelled' do
-      let(:group) { RegistrationGroup.create! event: event }
-      before do
-        2.times { @last_attendance = FactoryGirl.create(:attendance, registration_group: group) }
-        @last_attendance.pay
-        group.destroy
-      end
-      subject(:attendances) { Attendance.where(registration_group: group.id) }
-      it { expect(RegistrationGroup.all).to include(group) }
-      it { expect(attendances.map(&:status)).to eq %w(pending paid) }
-    end
   end
 
   describe '#generate_token' do

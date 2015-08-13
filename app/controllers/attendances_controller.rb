@@ -46,27 +46,6 @@ class AttendancesController < ApplicationController
     redirect_to attendance_path(attendance)
   end
 
-  def enable_voting
-    attendance = resource
-    if attendance.can_vote?
-      authentication = current_user.authentications.where(provider: :submission_system).first
-      result = authentication ? authentication.token.post('/api/user/make_voter').parsed : {}
-
-      if result['success']
-        flash[:notice] = t('flash.attendance.enable_voting.success', url: result['vote_url']).html_safe
-      else
-        flash[:error] = t('flash.attendance.enable_voting.missing_authentication')
-      end
-    end
-
-    redirect_to :back
-  end
-
-  def voting_instructions
-    @attendance = resource
-    @submission_system_authentication = current_user.authentications.find_by_provider('submission_system')
-  end
-
   def pay_it
     resource.pay
     responds_js
@@ -75,6 +54,11 @@ class AttendancesController < ApplicationController
   def accept_it
     resource.accept
     responds_js
+  end
+
+  def recover_it
+    resource.recover
+    redirect_to attendance_path(resource)
   end
 
   private

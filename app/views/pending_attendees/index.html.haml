@@ -8,7 +8,6 @@
     %tr
       %th= 'ID'
       %th= t('formtastic.labels.attendee.full_name')
-      %th= t('formtastic.labels.attendee.registration_type_id')
       %th= t('formtastic.labels.attendee.group')
       %th= t('formtastic.labels.attendee.registration_date')
       %th
@@ -18,7 +17,6 @@
       = content_tag_for(:tr, attendee, :class => cycle(:odd, :even)) do
         %td= attendee.id
         %td= h(attendee.full_name)
-        %td= t(attendee.registration_type.title)
         %td= attendee.registration_group.try(:name)
         %td= l(attendee.registration_date, :format => :short)
         %td

@@ -1,4 +1,17 @@
 # encoding: UTF-8
+# == Schema Information
+#
+# Table name: authentications
+#
+#  id            :integer          not null, primary key
+#  user_id       :integer
+#  provider      :string
+#  uid           :string
+#  created_at    :datetime
+#  updated_at    :datetime
+#  refresh_token :string
+#
+
 class Authentication < ActiveRecord::Base
   PROVIDERS = %w(twitter facebook github submission_system)
   PROVIDERS << 'developer' unless Rails.env.production?

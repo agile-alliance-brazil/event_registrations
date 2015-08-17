@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: registration_groups
+#
+#  id           :integer          not null, primary key
+#  event_id     :integer
+#  name         :string
+#  capacity     :integer
+#  discount     :integer
+#  token        :string
+#  created_at   :datetime
+#  updated_at   :datetime
+#  leader_id    :integer
+#  invoice_id   :integer
+#  minimum_size :integer
+#  amount       :decimal(, )
+#
+
 class RegistrationGroup < ActiveRecord::Base
   belongs_to :event
   belongs_to :leader, class_name: 'User', inverse_of: :led_groups

@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id                :integer          not null, primary key
+#  name              :string
+#  location_and_date :string
+#  created_at        :datetime
+#  updated_at        :datetime
+#  price_table_link  :string
+#  allow_voting      :boolean
+#  attendance_limit  :integer
+#  full_price        :decimal(, )
+#  start_date        :datetime
+#  end_date          :datetime
+#  characteristic    :string
+#
+
 class Event < ActiveRecord::Base
   has_many :attendances
   has_many :registration_periods

@@ -1,4 +1,17 @@
 # encoding: UTF-8
+# == Schema Information
+#
+# Table name: registration_periods
+#
+#  id         :integer          not null, primary key
+#  event_id   :integer
+#  title      :string
+#  start_at   :datetime
+#  end_at     :datetime
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 require 'spec_helper'
 
 describe RegistrationPeriod, type: :model do

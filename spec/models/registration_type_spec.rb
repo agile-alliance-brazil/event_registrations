@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: registration_types
+#
+#  id         :integer          not null, primary key
+#  event_id   :integer
+#  title      :string
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 describe RegistrationType, type: :model do
   context 'associations' do
     it { should belong_to :event }

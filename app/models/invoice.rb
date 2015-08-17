@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: invoices
+#
+#  id                    :integer          not null, primary key
+#  frete                 :integer
+#  amount                :decimal(, )
+#  created_at            :datetime
+#  updated_at            :datetime
+#  user_id               :integer
+#  registration_group_id :integer
+#  status                :string
+#  payment_type          :string
+#
+
 class Invoice < ActiveRecord::Base
   STATUSES = [PENDING = 'pending', SENT = 'sent', PAID = 'paid', CANCELLED = 'cancelled']
   TYPES = [GATEWAY = 'gateway', DEPOSIT = 'bank_deposit', STATEMENT = 'statement_agreement']

@@ -58,6 +58,7 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'guard-rubocop'
   gem 'metric_fu'
+  gem 'annotate'
 end
 
 group :development do

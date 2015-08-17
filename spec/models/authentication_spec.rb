@@ -1,4 +1,17 @@
 # encoding: UTF-8
+# == Schema Information
+#
+# Table name: authentications
+#
+#  id            :integer          not null, primary key
+#  user_id       :integer
+#  provider      :string
+#  uid           :string
+#  created_at    :datetime
+#  updated_at    :datetime
+#  refresh_token :string
+#
+
 require 'spec_helper'
 
 describe Authentication, type: :model do

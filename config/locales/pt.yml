@@ -307,8 +307,8 @@ pt:
     remove_authentication_option: "remover essa opção de autenticação"
     login: "Acessar"
     logout: "Sair"
-    list_attendances: "Lista de inscritos"
-    list_groups: "Lista de Grupos"
+    list_attendances: "Inscritos"
+    list_groups: "Grupos"
     click: 'Clique'
     renew: 'renovar'
     pay: 'Marcar com pago'

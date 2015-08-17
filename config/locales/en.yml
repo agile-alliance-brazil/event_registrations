@@ -113,6 +113,19 @@ en:
         status: 'Status'
         index:
           actions: 'Actions'
+      registration_period:
+        title: 'Registration periods'
+        id: 'ID'
+        start_at: 'Start at'
+        end_at: 'End at'
+        value: 'Value'
+        active_attendances: 'Active Attendances'
+      registration_quota:
+        title: 'Registration Quotas'
+        id: 'ID'
+        quota: 'Quota'
+        value: 'Value'
+        active_attendances: 'Active Attendances'
 
     hints:
       attendance:

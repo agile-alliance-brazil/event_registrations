@@ -34,13 +34,13 @@ describe RegistrationPeriod, type: :model do
       it 'should delegate to RegistrationPrice' do
         price = RegistrationPrice.new
         price.value = 250
-        RegistrationPrice.stubs(:for).with(@super_early_bird, @individual).returns([price])
-        expect(@super_early_bird.price_for_registration_type(@individual)).to eq(250.00)
+        RegistrationPrice.stubs(:for).returns([price])
+        expect(@super_early_bird.price_for).to eq(250.00)
       end
 
       it 'should throw an InvalidPrice error if no registration price can be found' do
-        RegistrationPrice.stubs(:for).with(@super_early_bird, @individual).returns([])
-        expect(-> { @super_early_bird.price_for_registration_type(@individual) }).to raise_error(InvalidPrice)
+        RegistrationPrice.stubs(:for).returns([])
+        expect(-> { @super_early_bird.price_for }).to raise_error(InvalidPrice)
       end
     end
   end

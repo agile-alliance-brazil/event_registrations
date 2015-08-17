@@ -248,6 +248,19 @@ pt:
         created_at: 'Criada em'
         user: 'Usuário'
         status: 'Status'
+      registration_period:
+        title: 'Faixas de inscrições por períodos'
+        id: 'ID'
+        start_at: 'Inicio em'
+        end_at: 'Termina em'
+        value: 'Valor'
+        active_attendances: 'Inscritos Ativos'
+      registration_quota:
+        title: 'Faixas de incrições por cotas'
+        id: 'ID'
+        quota: 'Cota'
+        value: 'Valor'
+        active_attendances: 'Inscritos Ativos'
 
     hints:
       attendance:

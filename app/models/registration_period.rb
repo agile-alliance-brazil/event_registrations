@@ -5,11 +5,10 @@ class RegistrationPeriod < ActiveRecord::Base
   scope :for, ->(datetime) { where('? BETWEEN start_at AND end_at', datetime).order('id desc') }
   scope :ending_after, ->(datetime) { where('? < end_at', datetime).order('id desc') }
 
-  def price_for_registration_type(registration_type)
-    prices_for(registration_type).first.value
-  rescue => e
-    Rails.logger.error("Error fetching price for registration type #{registration_type.inspect}: #{e.message}")
-    raise InvalidPrice, "Invalid price for registration type #{registration_type.inspect}"
+  def price_for
+    prices_for.first.value
+  rescue
+    raise InvalidPrice, 'Invalid price for registration period'
   end
 
   def super_early_bird?
@@ -26,8 +25,8 @@ class RegistrationPeriod < ActiveRecord::Base
 
   private
 
-  def prices_for(registration_type)
-    RegistrationPrice.for(self, registration_type)
+  def prices_for
+    RegistrationPrice.for(self)
   end
 end
 

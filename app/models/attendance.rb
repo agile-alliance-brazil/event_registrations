@@ -16,7 +16,7 @@ class Attendance < ActiveRecord::Base
   has_many :invoices, -> { uniq }, through: :invoice_attendances
 
   validates_confirmation_of :email
-  validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city, :registration_type_id, :registration_date, :user_id, :event_id]
+  validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city, :registration_date, :user_id, :event_id]
   validates_presence_of :state, if: ->(a) { a.in_brazil? }
   validates_presence_of :cpf, if: ->(a) { a.in_brazil? }
 

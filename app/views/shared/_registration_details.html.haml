@@ -1,12 +1,10 @@
-%table{:class => "attendance-table table table-bordered"}
+%table.table
   %tr
-    %th
     %th= t('formtastic.labels.attendance.registration_date')
     %th= t('formtastic.labels.attendance.total')
   %tr
-    %td #{t('formtastic.labels.attendance.registration_type_id')}: #{t(attendance.registration_type.title)}
     %td= l(attendance.registration_date.to_date)
     %td= number_to_currency(attendance.registration_value, :locale => :pt)
   %tr.last
-    %th{:colspan => 2}= t('registration_total.total')
+    %th= t('registration_total.total')
     %th= number_to_currency(attendance.registration_value, :locale => :pt)

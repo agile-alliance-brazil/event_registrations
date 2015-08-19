@@ -32,10 +32,6 @@ class RegistrationPeriod < ActiveRecord::Base
     title == 'registration_period.early_bird'
   end
 
-  def allow_voting?
-    event.allow_voting? && (super_early_bird? || early_bird?)
-  end
-
   private
 
   def prices_for

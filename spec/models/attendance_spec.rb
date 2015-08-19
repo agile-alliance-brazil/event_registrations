@@ -278,43 +278,6 @@ describe Attendance, type: :model do
     end
   end
 
-  describe 'can_vote?' do
-    let(:attendance) { FactoryGirl.build(:attendance) }
-
-    it 'should be true if attendance paid' do
-      period = FactoryGirl.build(:registration_period)
-      period.stubs(:allow_voting?).returns(true)
-
-      attendance.event.registration_periods.stubs(:for).returns([period])
-
-      expect(attendance).not_to be_can_vote
-      attendance.pay
-      expect(attendance).to be_can_vote
-    end
-
-    it 'should be true if attendance confirmed' do
-      period = FactoryGirl.build(:registration_period)
-      period.stubs(:allow_voting?).returns(true)
-
-      attendance.event.registration_periods.stubs(:for).returns([period])
-
-      expect(attendance).not_to be_can_vote
-      attendance.confirm
-      expect(attendance).to be_can_vote
-    end
-
-    it 'should be true if registration period allows voting' do
-      period = FactoryGirl.build(:registration_period)
-      period.expects(:allow_voting?).twice.returns(false, true)
-
-      attendance.event.registration_periods.stubs(:for).returns([period])
-      attendance.confirm
-
-      expect(attendance).not_to be_can_vote
-      expect(attendance).to be_can_vote
-    end
-  end
-
   context 'state machine' do
     it 'starts pending' do
       attendance = Attendance.new

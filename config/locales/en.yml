@@ -194,9 +194,6 @@ en:
       news: "<a href='/registration_groups/new?locale=en'>Click here</a> for company registration."
       mail:
         fail: "There was a problem while sending your confirmation email. Your registration was received but we could not deliver the confirmation email. We will try later but if you do not receive it in 24 hours, please contact us at inscricoes@agilebrazil.com."
-      enable_voting:
-        missing_authentication: "Submission system is not registered as an authentication service. Add the service below and try again."
-        success: "Access granted to start voting. Click <a href='%{url}' target='blank'>here</a> to vote on your favorite sessions."
       payment:
         success: 'Attendee check as paid.'
         error: 'Could not check attendee as paid.'
@@ -304,7 +301,6 @@ en:
     attendance:
       list: "Event registrations"
       add: "Add Registration to %{name}"
-      enable_voting: "Enable voting"
     register:
       to_register_message: 'Buy your ticket'
     not_found: 'Event not found'

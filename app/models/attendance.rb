@@ -88,10 +88,6 @@ class Attendance < ActiveRecord::Base
 
   scope :for_cancelation, -> { where("attendances.status IN ('pending', 'accepted') AND advised = ? AND advised_at < (?)", true, 7.days.ago) }
 
-  def can_vote?
-    (self.confirmed? || self.paid?) && event.registration_periods.for(self.registration_date).any?(&:allow_voting?)
-  end
-
   def full_name
     [first_name, last_name].join(' ')
   end

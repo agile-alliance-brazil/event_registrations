@@ -64,20 +64,6 @@ describe Ability, type: :model do
         end
       end
     end
-
-    it 'can enable voting if when user match' do
-      attendance = FactoryGirl.build(:attendance)
-      expect(@ability).not_to be_able_to(:enable_voting, attendance)
-      attendance.user = @user
-      expect(@ability).to be_able_to(:enable_voting, attendance)
-    end
-
-    it 'can read voting instructions when user match' do
-      attendance = FactoryGirl.build(:attendance)
-      expect(@ability).not_to be_able_to(:voting_instructions, attendance)
-      attendance.user = @user
-      expect(@ability).to be_able_to(:voting_instructions, attendance)
-    end
   end
 
   context '- admin' do

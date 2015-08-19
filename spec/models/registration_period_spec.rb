@@ -95,7 +95,6 @@ describe RegistrationPeriod, type: :model do
 
     it { should_not be_super_early_bird }
     it { should_not be_early_bird }
-    it { should_not be_allow_voting }
 
     context 'super early bird' do
       before { subject.title = 'registration_period.super_early_bird' }
@@ -105,27 +104,6 @@ describe RegistrationPeriod, type: :model do
     context 'early bird' do
       before { subject.title = 'registration_period.early_bird' }
       it { should be_early_bird }
-    end
-
-    context 'allow voting' do
-      it 'should be false when event does not allow voting' do
-        subject.event.allow_voting = false
-        expect(subject).not_to be_allow_voting
-      end
-
-      it 'should be true for super early bird' do
-        subject.event.allow_voting = true
-        expect(subject).not_to be_allow_voting
-        subject.title = 'registration_period.super_early_bird'
-        expect(subject).to be_allow_voting
-      end
-
-      it 'should be true for early bird' do
-        subject.event.allow_voting = true
-        expect(subject).not_to be_allow_voting
-        subject.title = 'registration_period.early_bird'
-        expect(subject).to be_allow_voting
-      end
     end
   end
 end

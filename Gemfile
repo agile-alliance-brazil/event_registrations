@@ -29,6 +29,7 @@ gem 'omniauth-github', '~>1.1'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 gem 'faker'
 gem 'pagseguro-oficial'
+gem 'sprockets', '< 3.3.2' # 3.3.3 is causing deploy to fail
 
 gem 'jquery-rails', '~> 4.0'
 gem 'therubyracer', '~> 0.12', platforms: :ruby

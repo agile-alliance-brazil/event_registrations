@@ -33,6 +33,7 @@ gem 'pagseguro-oficial'
 gem 'jquery-rails', '~> 4.0'
 gem 'therubyracer', '~> 0.12', platforms: :ruby
 gem 'sass-rails', '~> 5.0'
+gem 'sass', '3.4.16' # Seems like 3.4.17 breaks the deploy with formtastic
 
 gem 'coffee-rails', '~> 4.1'
 gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'

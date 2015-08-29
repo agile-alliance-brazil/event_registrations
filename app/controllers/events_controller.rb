@@ -7,9 +7,7 @@ class EventsController < ApplicationController
   skip_before_filter :authorize_action
 
   def index
-    @events = Event.includes(:registration_periods).all.select do |event|
-      event.registration_periods.ending_after(Time.zone.now).present?
-    end
+    @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date > Time.zone.now }
   end
 
   def show

@@ -1,6 +1,10 @@
 %div.event
   %h3= link_to event.name, event
-  %p.text-muted #{ l(event.start_date.to_date) } #{ t('title.until')} #{l(event.end_date.to_date) if event.start_date.present? && event.end_date.present? }
+  - if event.start_date.present? && event.end_date.present?
+    - if event.start_date == event.end_date
+      %p.text-muted #{ l(event.start_date.to_date) }
+    - else
+      %p.text-muted #{ l(event.start_date.to_date) } #{ t('title.until')} #{l(event.end_date.to_date) }
 
   %div.btn-group
     = link_to new_event_attendance_path(event), :class => 'btn btn-link' do

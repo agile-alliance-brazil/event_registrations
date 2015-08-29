@@ -48,8 +48,7 @@ describe EventsController, type: :controller do
     end
 
     context 'with events' do
-      let!(:event) { Event.create name: 'Foo' }
-      let!(:registration_period) { RegistrationPeriod.create!(event: event, start_at: Time.zone.today - 1, end_at: Time.zone.today + 1.months) }
+      let!(:event) { Event.create name: 'Foo', start_date: Time.zone.today - 1, end_date: Time.zone.today + 1.months }
 
       context 'and one event at the right period' do
         before { get :index }
@@ -57,24 +56,20 @@ describe EventsController, type: :controller do
       end
 
       context 'and two at the right period' do
-        let!(:other_event) { FactoryGirl.create :event }
-        let!(:other_period) { RegistrationPeriod.create!(event: other_event, start_at: Time.zone.today - 1, end_at: Time.zone.today + 2.months) }
+        let!(:other_event) { Event.create start_date: Time.zone.today - 1, end_date: Time.zone.today + 2.months }
         before { get :index }
         it { expect(assigns(:events)).to match_array [event, other_event] }
       end
 
       context 'and one at the right period and other not' do
-        let!(:out) { Event.create name: 'Bar' }
-        let!(:other_period) { RegistrationPeriod.create!(event: out, start_at: 2.years.ago, end_at: 1.year.ago) }
+        let!(:out) { Event.create start_date: 2.years.ago, end_date: 1.year.ago }
         before { get :index }
         it { expect(assigns(:events)).to match_array [event] }
       end
 
       context 'and two at the right period and other not' do
-        let!(:other_event) { FactoryGirl.create :event }
-        let!(:other_period) { RegistrationPeriod.create!(event: other_event, start_at: Time.zone.today - 1, end_at: Time.zone.today + 2.months) }
-        let!(:out) { Event.create name: 'Bar' }
-        let!(:other_period) { RegistrationPeriod.create!(event: out, start_at: 2.years.ago, end_at: 1.year.ago) }
+        let!(:other_event) { Event.create start_date: Time.zone.today - 1, end_date: Time.zone.today + 2.months }
+        let!(:out) { Event.create start_date: 2.years.ago, end_date: 1.year.ago }
 
         before { get :index }
         it { expect(assigns(:events)).to match_array [event, other_event] }

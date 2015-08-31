@@ -3,9 +3,6 @@
   %h4 Instruções para completar o processo de inscrição
   = render partial: 'shared/payment_request', locals: { attendance: @attendance }
 
-  %h4 Importante
-  %p O valor da inscrição será atualizado conforme a tabela disponível em #{link_to price_table_link(attendance.event, :pt), price_table_link(attendance.event, :pt)}.
-
 - else
   %h6 Você realizou a inscrição através de um grupo gratuito. Sua inscrição está confirmada.
 %hr/

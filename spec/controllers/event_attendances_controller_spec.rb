@@ -278,11 +278,11 @@ describe EventAttendancesController, type: :controller do
 
       context 'when agile alliance member' do
         context 'and not in any group' do
-          let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event) }
+          let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
           it 'uses the AA group as attendance group and accept the entrance' do
-            Invoice.from_registration_group(aa_group, Invoice::GATEWAY)
+            Invoice.from_registration_group(aa_group, Invoice::GATEWAY) 
             AgileAllianceService.stubs(:check_member).returns(true)
-            RegistrationGroup.stubs(:find_by).returns(aa_group)
+            RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
             post :create, event_id: @event.id, attendance: valid_attendance
             attendance = Attendance.last
             expect(attendance.registration_group).to eq aa_group

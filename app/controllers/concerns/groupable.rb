@@ -9,7 +9,7 @@ module Concerns
         @attendance.registration_group = group
         group.save!
       elsif AgileAllianceService.check_member(@attendance.email)
-        aa_group = RegistrationGroup.find_by(name: 'Membros da Agile Alliance')
+        aa_group = @event.registration_groups.where(name: 'Membros da Agile Alliance').first
         if aa_group.present?
           @attendance.registration_group = aa_group
           @attendance.accept

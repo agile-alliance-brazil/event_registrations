@@ -22,8 +22,6 @@ class EventAttendancesController < ApplicationController
     perform_group_check!
     put_band
     @attendance.registration_value = @event.registration_price_for(@attendance, payment_type_params)
-
-    return unless validate_free_registration @attendance
     save_attendance!
   end
 
@@ -91,15 +89,6 @@ class EventAttendancesController < ApplicationController
     registration_types = event.registration_types.paid.without_group.to_a
     registration_types += event.registration_types.without_group.to_a if current_user.organizer?
     registration_types.flatten.uniq.compact
-  end
-
-  def validate_free_registration(attendance)
-    if @event.free?(attendance) && !current_user.allowed_free_registration?
-      attendance.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
-      flash.now[:error] = t('flash.attendance.create.free_not_allowed')
-      render :new and return false
-    end
-    true
   end
 
   def notify(attendance)

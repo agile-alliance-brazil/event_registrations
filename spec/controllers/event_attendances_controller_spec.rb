@@ -280,7 +280,7 @@ describe EventAttendancesController, type: :controller do
         context 'and not in any group' do
           let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
           it 'uses the AA group as attendance group and accept the entrance' do
-            Invoice.from_registration_group(aa_group, Invoice::GATEWAY) 
+            Invoice.from_registration_group(aa_group, Invoice::GATEWAY)
             AgileAllianceService.stubs(:check_member).returns(true)
             RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
             post :create, event_id: @event.id, attendance: valid_attendance
@@ -397,14 +397,6 @@ describe EventAttendancesController, type: :controller do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)
         post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
-      end
-
-      it 'should not allow free registration type' do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        controller.stubs(:valid_registration_types).returns([@individual, @manual])
-        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id }
-        expect(response).to render_template(:new)
-        expect(flash[:error]).to eq(I18n.t('flash.attendance.create.free_not_allowed'))
       end
     end
 

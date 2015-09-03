@@ -53,6 +53,10 @@ class EventAttendancesController < ApplicationController
     @attendances_city_grouped = event.attendances.active.group(:city, :state).order('count_id desc').count('id')
   end
 
+  def last_biweekly_active
+    @attendances_biweekly_grouped = event.attendances.last_biweekly_active.group('date(created_at)').count(:id)
+  end
+
   private
 
   def save_attendance!

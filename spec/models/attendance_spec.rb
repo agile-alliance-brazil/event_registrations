@@ -274,6 +274,15 @@ describe Attendance, type: :model do
         end
       end
 
+      describe '.last_biweekly_active' do
+        let!(:last_week) { FactoryGirl.create(:attendance, created_at: 7.days.ago) }
+        let!(:other_last_week) { FactoryGirl.create(:attendance, created_at: 7.days.ago) }
+        let!(:today) { FactoryGirl.create(:attendance) }
+        let!(:out) { FactoryGirl.create(:attendance, created_at: 21.days.ago) }
+
+        it { expect(Attendance.last_biweekly_active).to eq [last_week, other_last_week, today] }
+      end
+
       pending '.for_cancel'
     end
   end

@@ -15,6 +15,7 @@ Current::Application.routes.draw do
         get :by_state
         get :by_city
         get :pending_attendances
+        get :last_biweekly_active
       end
     end
     resources :registration_groups, only: [:index, :destroy, :show, :create] do

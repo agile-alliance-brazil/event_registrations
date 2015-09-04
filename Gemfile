@@ -9,7 +9,7 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=4.2.3'
+gem 'rails', '=4.2.4'
 gem 'seed-fu', '=2.3.5'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
@@ -17,7 +17,7 @@ gem 'validates_existence', '=0.9.2'
 gem 'state_machine', '=1.2.0'
 gem 'haml', '~> 4.0'
 gem 'formtastic', '=3.1.3'
-gem 'airbrake', '=4.3.0'
+gem 'airbrake', '~> 4.3'
 gem 'localized_country_select', '=0.9.11'
 gem 'cancan', '=1.6.10'
 gem 'rake'
@@ -33,7 +33,7 @@ gem 'pagseguro-oficial'
 gem 'jquery-rails', '~> 4.0'
 gem 'therubyracer', '~> 0.12', platforms: :ruby
 gem 'sass-rails', '~> 5.0'
-gem 'sass', '3.4.16' # Seems like 3.4.17 breaks the deploy with formtastic
+gem 'sass', '~> 3.4'
 
 gem 'coffee-rails', '~> 4.1'
 gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'

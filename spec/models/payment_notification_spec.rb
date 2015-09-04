@@ -51,36 +51,36 @@ describe PaymentNotification, type: :model do
       end
 
       it 'succeed if status is Completed and params are valid' do
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        expect(@attendance).to be_paid
+        FactoryGirl.create(:payment_notification, @valid_args)
+        expect(@attendance).to be_confirmed
       end
 
       it "fails if secret doesn't match" do
         @valid_params.merge!(secret: 'wrong_secret')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
+        FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it 'fails if status is not Completed' do
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(status: 'Failed'))
+        FactoryGirl.create(:payment_notification, @valid_args.merge(status: 'Failed'))
         expect(@attendance).to be_pending
       end
 
       it "fails if receiver address doesn't match" do
         @valid_params.merge!(receiver_email: 'wrong@email.com')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
+        FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it "fails if paid amount doesn't match" do
         @valid_params.merge!(mc_gross: '1.00')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
+        FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it "fails if currency doesn't match" do
         @valid_params.merge!(mc_currency: 'GBP')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
+        FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
     end
@@ -105,18 +105,18 @@ describe PaymentNotification, type: :model do
       end
 
       it 'succeed if status is Aprovada and params are valid' do
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
-        expect(@attendance).to be_paid
+        FactoryGirl.create(:payment_notification, @valid_args)
+        expect(@attendance).to be_confirmed
       end
 
       it "fails if secret doesn't match" do
         @valid_params.merge!(secret: 'wrong_secret')
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args)
+        FactoryGirl.create(:payment_notification, @valid_args)
         expect(@attendance).to be_pending
       end
 
       it 'fails if status is not Aprovada' do
-        payment_notification = FactoryGirl.create(:payment_notification, @valid_args.merge(status: 'Cancelada'))
+        FactoryGirl.create(:payment_notification, @valid_args.merge(status: 'Cancelada'))
         expect(@attendance).to be_pending
       end
     end

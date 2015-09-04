@@ -106,12 +106,13 @@ describe Invoice, type: :model do
 
   describe '#pay' do
     context 'an attendance invoice' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
+      let(:group) { FactoryGirl.create :registration_group }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 100) }
       subject(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       before { invoice.pay }
       it { expect(invoice.status).to eq Invoice::PAID }
       it { expect(invoice).to be_persisted }
-      it { expect(attendance).to be_paid }
+      it { expect(attendance.status).to satisfy { |s| %w(paid confirmed).include?(s) } }
     end
 
     context 'a group invoice' do
@@ -121,7 +122,6 @@ describe Invoice, type: :model do
       before { invoice.pay }
       it { expect(invoice.status).to eq Invoice::PAID }
       it { expect(invoice).to be_persisted }
-      it { expect(invoice.attendances.paid.count).to eq invoice.attendances.count }
     end
   end
 

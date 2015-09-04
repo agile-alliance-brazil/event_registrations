@@ -209,13 +209,96 @@ describe RegistrationGroup, type: :model do
 
   describe '#free?' do
     context 'with a free' do
-      let(:group) { RegistrationGroup.create! event: event, discount: 100 }
+      let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 100) }
       it { expect(group.free?).to be_truthy }
     end
 
     context 'with a non free' do
-      let(:group) { RegistrationGroup.create! event: event, discount: 99 }
+      let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 99) }
       it { expect(group.free?).to be_falsey }
+    end
+  end
+
+  describe '#floor?' do
+    context 'with minimun_size of 0' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 0) }
+      it { expect(group.floor?).to be_falsey }
+    end
+
+    context 'with minimun_size of 1' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 1) }
+      it { expect(group.floor?).to be_falsey }
+    end
+
+    context 'with minimun_size of 2' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 2) }
+      it { expect(group.floor?).to be_truthy }
+    end
+
+    context 'with minimun_size greather than 2' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 10) }
+      it { expect(group.floor?).to be_truthy }
+    end
+  end
+
+  describe '#complete?' do
+    context 'with minimun_size of 0' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 0) }
+      it { expect(group.complete?).to be_truthy }
+    end
+
+    context 'with minimum size of 1' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 1) }
+      context 'and one attendance pending' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'pending') }
+        it { expect(group.complete?).to be_falsey }
+      end
+      context 'and one attendance accepted' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'accepted') }
+        it { expect(group.complete?).to be_falsey }
+      end
+      context 'and one attendance paid' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'paid') }
+        it { expect(group.complete?).to be_truthy }
+      end
+      context 'and one attendance confirmed' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'confirmed') }
+        it { expect(group.complete?).to be_truthy }
+      end
+    end
+
+    context 'with minimun_size of 2' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 2) }
+      context 'and two attendances pending' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'pending') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'pending') }
+        it { expect(group.complete?).to be_falsey }
+      end
+      context 'and one attendance paid and other pending' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'paid') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'pending') }
+        it { expect(group.complete?).to be_falsey }
+      end
+      context 'and one attendance paid and other accepted' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'paid') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'accepted') }
+        it { expect(group.complete?).to be_falsey }
+      end
+      context 'and two attendances paid' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'paid') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'paid') }
+        it { expect(group.complete?).to be_truthy }
+      end
+      context 'and one attendance paid and other confirmed' do
+        let!(:attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'paid') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, registration_group: group, status: 'confirmed') }
+        it { expect(group.complete?).to be_truthy }
+      end
+    end
+
+    context 'with minimun_size greather than 2' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 10) }
+      it { expect(group.floor?).to be_truthy }
     end
   end
 end

@@ -200,12 +200,28 @@ describe AttendancesController, type: :controller do
     let!(:event) { FactoryGirl.create(:event) }
 
     context 'pending attendance' do
-      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
-      let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
-      it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
-        xhr :put, :pay_it, id: attendance.id
-        expect(assigns(:attendance)).to eq attendance
-        expect(Attendance.last.status).to eq 'paid'
+      context 'grouped attendance' do
+        let(:group) { FactoryGirl.create :registration_group }
+        let(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
+          xhr :put, :pay_it, id: attendance.id
+          expect(assigns(:attendance)).to eq attendance
+          expect(Attendance.last.status).to eq 'paid'
+          expect(Invoice.last.status).to eq 'paid'
+        end
+      end
+
+      context 'individual attendance' do
+        let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        it 'marks attendance as confirmed and related invoice as paid and redirect to attendances index' do
+          EmailNotifications.expects(:registration_confirmed).once
+          xhr :put, :pay_it, id: attendance.id
+          expect(assigns(:attendance)).to eq attendance
+          expect(Attendance.last.status).to eq 'confirmed'
+          expect(Invoice.last.status).to eq 'paid'
+        end
       end
     end
 

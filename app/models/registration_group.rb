@@ -72,6 +72,14 @@ class RegistrationGroup < ActiveRecord::Base
     discount == 100
   end
 
+  def floor?
+    minimum_size > 1
+  end
+
+  def complete?
+    attendances.paid.count >= minimum_size
+  end
+
   private
 
   def generate_token

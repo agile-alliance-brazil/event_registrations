@@ -12,7 +12,7 @@
   %td
     - if attendance.pending? && attendance.grouped?
       %p= link_to t('actions.accept'), accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success', remote: true
-    - unless attendance.paid? || attendance.cancelled?
+    - if attendance.payable?
       %p= link_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success', remote: true
     - if attendance.cancellable?
       %p= button_to t('actions.cancel'), attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name ) }

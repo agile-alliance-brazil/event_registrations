@@ -117,20 +117,6 @@ class Attendance < ActiveRecord::Base
 
   private
 
-  def cancel_invoice!
-    invoice = user.invoices.where(status: 'pending').last
-    return unless invoice.present?
-    invoice.cancel_it
-    invoice.save!
-  end
-
-  def recover_invoice!
-    invoice = user.invoices.individual.where(status: 'cancelled').last
-    return unless invoice.present?
-    invoice.recover_it
-    invoice.save!
-  end
-
   def update_group_invoice
     registration_group.update_invoice if registration_group.present? && registration_value.present?
   end

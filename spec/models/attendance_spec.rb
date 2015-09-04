@@ -294,47 +294,97 @@ describe Attendance, type: :model do
     end
 
     describe '#pay' do
-      context 'from pending' do
-        context 'without invoice' do
-          it 'move to paid upon payment' do
-            attendance = FactoryGirl.create :attendance
-            attendance.pay
-            expect { attendance.pay }.not_to raise_error
-            expect(attendance.status).to eq 'paid'
+      context 'when is group member' do
+        context 'and the group has a floor' do
+          let(:group) { FactoryGirl.create(:registration_group, minimum_size: 10) }
+
+          context 'from pending' do
+            let(:attendance) { FactoryGirl.create(:attendance, registration_group: group) }
+            context 'without invoice' do
+              it 'move to paid upon payment' do
+                attendance.pay
+                expect { attendance.pay }.not_to raise_error
+                expect(attendance.status).to eq 'paid'
+              end
+            end
+
+            context 'with an invoice' do
+              it 'move both attendance and invoice to paid upon payment' do
+                Invoice.from_attendance(attendance, Invoice::GATEWAY)
+                attendance.pay
+                expect(attendance.status).to eq 'paid'
+                expect(Invoice.last.status).to eq 'paid'
+              end
+            end
+          end
+
+          context 'from accepted' do
+            it 'move to paid upon payment' do
+              attendance = FactoryGirl.create :attendance, status: 'accepted', registration_group: group
+              attendance.pay
+              expect(attendance.status).to eq 'paid'
+            end
+          end
+
+          context 'from cancelled' do
+            it 'stay cancelled' do
+              attendance = FactoryGirl.create :attendance, status: 'cancelled', registration_group: group
+              attendance.pay
+              expect(attendance.status).to eq 'cancelled'
+            end
           end
         end
 
-        context 'with an invoice' do
-          it 'move to paid upon payment and check as paid the related invoice' do
-            attendance = FactoryGirl.create :attendance
-            Invoice.from_attendance(attendance, Invoice::GATEWAY)
-            attendance.pay
-            expect(attendance.status).to eq 'paid'
+        context 'and the group having no floor' do
+          let(:group) { FactoryGirl.create(:registration_group, minimum_size: 1) }
+
+          context 'from pending' do
+            let(:attendance) { FactoryGirl.create(:attendance, registration_group: group) }
+            context 'without invoice' do
+              it 'move to paid upon payment' do
+                EmailNotifications.expects(:registration_confirmed).once
+                attendance.pay
+                expect { attendance.pay }.not_to raise_error
+                expect(attendance.status).to eq 'confirmed'
+              end
+            end
+
+            context 'with an invoice' do
+              it 'move both attendance and invoice to paid upon payment' do
+                EmailNotifications.expects(:registration_confirmed).once
+                Invoice.from_attendance(attendance, Invoice::GATEWAY)
+                attendance.pay
+                expect(attendance.status).to eq 'confirmed'
+                expect(Invoice.last.status).to eq 'paid'
+              end
+            end
           end
         end
       end
 
-      context 'from confirmed' do
-        it 'move to paid upon payment' do
-          attendance = FactoryGirl.create :attendance, status: 'confirmed'
-          attendance.pay
-          expect(attendance.status).to eq 'paid'
+      context 'when is individual' do
+        context 'from pending' do
+          let(:attendance) { FactoryGirl.create(:attendance) }
+
+          context 'without invoice' do
+            it 'move to paid upon payment' do
+              attendance.pay
+              expect { attendance.pay }.not_to raise_error
+              expect(attendance.status).to eq 'confirmed'
+            end
+          end
+
+          context 'with invoice' do
+            it 'move attendance to CONFIRMED upon payment and keep invoice as paid' do
+              Invoice.from_attendance(attendance, Invoice::GATEWAY)
+              EmailNotifications.expects(:registration_confirmed).once
+              attendance.pay
+              expect(attendance.status).to eq 'confirmed'
+              expect(Invoice.last.status).to eq 'paid'
+            end
+          end
         end
       end
-
-      context 'from accepted' do
-        it 'move to paid upon payment' do
-          attendance = FactoryGirl.create :attendance, status: 'accepted'
-          attendance.pay
-          expect(attendance.status).to eq 'paid'
-        end
-      end
-    end
-
-    it 'changes to confirmed on confirmation' do
-      attendance = FactoryGirl.create :attendance
-      attendance.confirm
-      expect(attendance.status).to eq 'confirmed'
     end
 
     describe '#cancel' do
@@ -471,7 +521,7 @@ describe Attendance, type: :model do
         attendance.pay
         attendance.confirm
       end
-      it { expect(attendance).not_to be_cancellable }
+      it { expect(attendance).to be_cancellable }
     end
 
     context 'when is already cancelled' do
@@ -517,8 +567,17 @@ describe Attendance, type: :model do
     end
 
     context 'when is paid' do
-      before { attendance.pay }
-      it { expect(attendance).to be_confirmable }
+      context 'and grouped' do
+        let(:group) { FactoryGirl.create(:registration_group) }
+        let(:grouped_attendance) { FactoryGirl.create(:attendance, registration_group: group) }
+        before { grouped_attendance.pay }
+        it { expect(grouped_attendance).to be_confirmable }
+      end
+
+      context 'and individual the attendance is automatically confirmed' do
+        before { attendance.pay }
+        it { expect(attendance).not_to be_confirmable }
+      end
     end
 
     context 'when it is already confirmed' do
@@ -549,6 +608,33 @@ describe Attendance, type: :model do
     context 'when it is cancelled' do
       before { attendance.cancel }
       it { expect(attendance).to be_recoverable }
+    end
+  end
+
+  describe '#payable?' do
+    let(:attendance) { FactoryGirl.build(:attendance) }
+    context 'when is pending' do
+      it { expect(attendance).to be_payable }
+    end
+
+    context 'when it is accepted' do
+      before { attendance.accept }
+      it { expect(attendance).to be_payable }
+    end
+
+    context 'when it is paid' do
+      before { attendance.pay }
+      it { expect(attendance).not_to be_payable }
+    end
+
+    context 'when it is cancelled' do
+      before { attendance.cancel }
+      it { expect(attendance).not_to be_payable }
+    end
+
+    context 'when it is confirmed' do
+      before { attendance.confirm }
+      it { expect(attendance).not_to be_payable }
     end
   end
 

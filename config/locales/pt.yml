@@ -309,6 +309,7 @@ pt:
     logout: "Sair"
     list_attendances: "Inscritos"
     list_groups: "Grupos"
+    to_approval: "Aguardando Aprovação"
     click: 'Clique'
     renew: 'renovar'
     pay: 'Marcar com pago'

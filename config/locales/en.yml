@@ -175,6 +175,7 @@ en:
     logout: "Log out"
     list_attendances: "List attendances"
     list_groups: "List groups"
+    to_approval: "Waiting for Approval"
     click: 'Click'
     renew: 'renew'
     pay: 'Check as paid'

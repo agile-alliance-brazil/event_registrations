@@ -29,11 +29,7 @@ class RegistrationGroup < ActiveRecord::Base
 
   before_destroy do |record|
     group_attendances = Attendance.where(registration_group_id: record.id)
-    if group_attendances.map(&:can_cancel?).all?
-      group_attendances.map(&:cancel)
-    else
-      false
-    end
+    group_attendances.map(&:cancel)
   end
 
   def qtd_attendances

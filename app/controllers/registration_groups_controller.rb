@@ -11,6 +11,7 @@ class RegistrationGroupsController < ApplicationController
 
   def show
     @invoice = @group.invoices.last
+    @attendance_list = @group.attendances.active.order(created_at: :desc)
   end
 
   def destroy

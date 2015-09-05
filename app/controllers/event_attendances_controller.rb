@@ -57,6 +57,10 @@ class EventAttendancesController < ApplicationController
     @attendances_biweekly_grouped = event.attendances.last_biweekly_active.group('date(created_at)').count(:id)
   end
 
+  def to_approval
+    @attendances_to_approval = event.attendances.waiting_approval
+  end
+
   private
 
   def save_attendance!

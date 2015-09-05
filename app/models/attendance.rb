@@ -88,6 +88,7 @@ class Attendance < ActiveRecord::Base
 
   scope :for_cancelation, -> { where("attendances.status IN ('pending', 'accepted') AND advised = ? AND advised_at < (?)", true, 7.days.ago) }
   scope :last_biweekly_active, -> { active.where('created_at > ?', 15.days.ago) }
+  scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
 
   def full_name
     [first_name, last_name].join(' ')

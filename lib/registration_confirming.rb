@@ -8,22 +8,8 @@ class RegistrationConfirming
       attendances_to_confirm.all.each do |attendance|
         next if attendance.grouped? && !attendance.registration_group.complete?
         Rails.logger.info("[Confirming Attendance] #{attendance.to_param}")
-        try_with('CONFIRM') do
-          attendance.confirm
-        end
+        attendance.confirm
       end
     end
-  end
-
-  private
-
-  def try_with(action)
-    yield
-    Rails.logger.info("  [#{action}] OK")
-  rescue => e
-    Airbrake.notify(e)
-    Rails.logger.info("  [FAILED #{action}] #{e.message}")
-  ensure
-    Rails.logger.flush
   end
 end

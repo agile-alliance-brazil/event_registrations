@@ -45,10 +45,6 @@ class ApplicationController < ActionController::Base
     options.merge(locale_options)
   end
 
-  def sanitize(text)
-    text.gsub(/[\s;'\"]/, '')
-  end
-
   private
 
   def set_locale

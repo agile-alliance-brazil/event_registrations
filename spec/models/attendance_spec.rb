@@ -283,7 +283,22 @@ describe Attendance, type: :model do
         it { expect(Attendance.last_biweekly_active).to eq [last_week, other_last_week, today] }
       end
 
-      pending '.for_cancel'
+      describe '.waiting_approval' do
+        let(:group) { FactoryGirl.create(:registration_group) }
+        let!(:pending) { FactoryGirl.create(:attendance, registration_group: group, status: :pending) }
+        let!(:out_pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, registration_group: group, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, registration_group: group, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, registration_group: group, status: :confirmed) }
+        it { expect(Attendance.waiting_approval).to eq [pending] }
+      end
+
+      describe '.for_cancelation' do
+        let!(:to_cancel) { FactoryGirl.create(:attendance, advised_at: 8.days.ago, advised: true) }
+        let!(:out) { FactoryGirl.create(:attendance, advised_at: 5.days.ago, advised: true) }
+        let!(:other_out) { FactoryGirl.create(:attendance, advised_at: nil, advised: false, created_at: 15.days.ago) }
+        it { expect(Attendance.for_cancelation).to eq [to_cancel] }
+      end
     end
   end
 
@@ -496,8 +511,6 @@ describe Attendance, type: :model do
         end
       end
     end
-
-    it 'should email upon after confirmed'
   end
 
   describe '#cancellable?' do

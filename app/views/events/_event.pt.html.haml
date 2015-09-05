@@ -19,3 +19,7 @@
       = link_to event_registration_groups_path(event), :class => 'btn btn-link' do
         %span{:class => 'glyphicon glyphicon-book'}
         = "#{t('actions.list_groups')} (#{event.registration_groups.count})"
+
+      = link_to to_approval_event_attendances_path(event), :class => 'btn btn-link' do
+        %span{:class => 'glyphicon glyphicon-th-list'}
+        = "#{t('actions.to_approval')} (#{event.attendances.waiting_approval.count})"

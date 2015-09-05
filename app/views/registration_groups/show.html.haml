@@ -7,7 +7,7 @@
 
 %h5= t('registration_group.show.attendances', count: @group.attendances.count)
 
-= render partial: 'attendances/attendances_list', locals: {attendances_list: @group.attendances}
+= render partial: 'attendances/attendances_list', locals: { attendances_list: @attendance_list }
 
 - if @group.price? && !@group.paid?
   = render 'shared/payment_request'

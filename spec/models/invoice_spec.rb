@@ -100,9 +100,30 @@ describe Invoice, type: :model do
     end
   end
 
-  pending 'isolated test to for_attendance scope'
-  pending 'isolated test to active scope'
-  pending 'isolated test to individual scope'
+  describe '.for_attendance' do
+    let(:attendance) { FactoryGirl.create(:attendance) }
+    let(:other_attendance) { FactoryGirl.create(:attendance) }
+    let(:invoice) { FactoryGirl.create(:invoice, status: :pending, registration_group: nil, attendances: [attendance]) }
+    let(:other_invoice) { FactoryGirl.create(:invoice, status: :pending, registration_group: nil, attendances: [other_attendance]) }
+
+    it { expect(Invoice.for_attendance(attendance.id)).to eq [invoice] }
+  end
+
+  describe '.active' do
+    let(:invoice) { FactoryGirl.create(:invoice, status: :pending) }
+    let(:paid_invoice) { FactoryGirl.create(:invoice, status: :paid) }
+    let(:other_invoice) { FactoryGirl.create(:invoice, status: :cancelled) }
+
+    it { expect(Invoice.active).to match_array [invoice, paid_invoice] }
+  end
+
+  describe '.individual' do
+    let!(:group) { FactoryGirl.create(:registration_group) }
+    let(:invoice) { FactoryGirl.create(:invoice, status: :pending) }
+    let(:grouped_invoice) { FactoryGirl.create(:invoice, registration_group: group) }
+
+    it { expect(Invoice.individual).to match_array [invoice] }
+  end
 
   describe '#pay' do
     context 'an attendance invoice' do

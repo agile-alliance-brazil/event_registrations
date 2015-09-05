@@ -90,10 +90,6 @@ class User < ActiveRecord::Base
     [first_name, last_name].join(' ')
   end
 
-  def allowed_free_registration?
-    organizer?
-  end
-
   def self.extract_names(hash)
     if hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?)
       hash[:name].split(' ')

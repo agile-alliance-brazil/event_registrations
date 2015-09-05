@@ -705,16 +705,28 @@ describe EventAttendancesController, type: :controller do
         let!(:today) { FactoryGirl.create(:attendance, event: event) }
         let!(:out) { FactoryGirl.create(:attendance, event: event, created_at: 21.days.ago) }
         let!(:out_of_event) { FactoryGirl.create(:attendance) }
-        context 'with one attendance' do
-          before { get :last_biweekly_active, event_id: event.id }
-          it 'returns just the attendances within two weeks ago' do
-            expect(assigns(:attendances_biweekly_grouped)).to eq({
-                                                                   last_week.created_at.strftime('%Y-%m-%d') => 2,
-                                                                   today.created_at.strftime('%Y-%m-%d') => 1
-                                                                 })
-          end
+
+        before { get :last_biweekly_active, event_id: event.id }
+        it 'returns just the attendances within two weeks ago' do
+          expect(assigns(:attendances_biweekly_grouped)).to eq({
+                                                                 last_week.created_at.strftime('%Y-%m-%d') => 2,
+                                                                 today.created_at.strftime('%Y-%m-%d') => 1
+                                                               })
         end
       end
+    end
+
+    describe '#to_approval' do
+      let(:event) { FactoryGirl.create(:event) }
+      let(:group) { FactoryGirl.create(:registration_group, event: event) }
+      let!(:pending) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :pending) }
+      let!(:other_pending) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :pending) }
+      let!(:out_pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+      let!(:accepted) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :accepted) }
+      let!(:paid) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :paid) }
+      let!(:confirmed) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :confirmed) }
+      before { get :to_approval, event_id: event.id }
+      it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
     end
   end
 end

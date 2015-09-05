@@ -37,27 +37,49 @@ describe EmailNotifications, type: :mailer do
     let(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: Time.zone.local(2013, 05, 01, 12, 0, 0)) }
 
     context 'when the attendance is brazilian' do
-      it 'sends the confirmation' do
-        mail = EmailNotifications.registration_confirmed(attendance).deliver_now
-        expect(ActionMailer::Base.deliveries.size).to eq 1
-        expect(mail.to).to eq [attendance.email]
-        expect(mail.encoded).to match(/Oi #{attendance.full_name},/)
-        expect(mail.encoded).to match(/Data: #{ I18n.l(attendance.event.start_date.to_date) } #{ I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}/)
-        expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-        expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Inscrição na #{event.name} confirmada")
+      context 'and event start date before end date' do
+        it 'sends the confirmation' do
+          mail = EmailNotifications.registration_confirmed(attendance).deliver_now
+          expect(ActionMailer::Base.deliveries.size).to eq 1
+          expect(mail.to).to eq [attendance.email]
+          expect(mail.encoded).to match(/Oi #{attendance.full_name},/)
+          expect(mail.encoded).to match(/Quando: #{ I18n.l(attendance.event.start_date.to_date) } #{ I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}/)
+          expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
+          expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Inscrição na #{event.name} confirmada")
+        end
+      end
+
+      context 'and with start date equals end date' do
+        let(:today_event) { FactoryGirl.create(:event, start_date: Time.zone.today, end_date: Time.zone.today) }
+        let(:today_attendance) { FactoryGirl.create(:attendance, event: today_event) }
+        it 'show the start date only' do
+          mail = EmailNotifications.registration_confirmed(today_attendance).deliver_now
+          expect(mail.encoded).to match(/Quando: #{ I18n.l(today_attendance.event.start_date.to_date) }/)
+        end
       end
     end
 
     context 'when the attendance is from other coutry' do
-      it 'sends the confirmation in english' do
-        attendance.country = 'US'
-        mail = EmailNotifications.registration_confirmed(attendance).deliver_now
-        expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(mail.to).to eq([attendance.email])
-        expect(mail.encoded).to match(/Dear #{attendance.full_name},/)
-        expect(mail.encoded).to match(/When: #{ I18n.l(attendance.event.start_date.to_date) } #{ I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}/)
-        expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
-        expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Registration confirmed for #{event.name}")
+      context 'and event start date before end date' do
+        it 'sends the confirmation in english' do
+          attendance.country = 'US'
+          mail = EmailNotifications.registration_confirmed(attendance).deliver_now
+          expect(ActionMailer::Base.deliveries.size).to eq(1)
+          expect(mail.to).to eq([attendance.email])
+          expect(mail.encoded).to match(/Dear #{attendance.full_name},/)
+          expect(mail.encoded).to match(/When: #{ I18n.l(attendance.event.start_date.to_date) } #{ I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}/)
+          expect(mail.encoded).to match(/#{APP_CONFIG[:organizer][:contact_email]}/)
+          expect(mail.subject).to eq("[#{APP_CONFIG[:host]}] Registration confirmed for #{event.name}")
+        end
+      end
+      context 'and with start date equals end date' do
+        let(:today_event) { FactoryGirl.create(:event, start_date: Time.zone.today, end_date: Time.zone.today) }
+        let(:today_attendance) { FactoryGirl.create(:attendance, event: today_event) }
+        it 'show the start date only' do
+          today_attendance.country = 'US'
+          mail = EmailNotifications.registration_confirmed(today_attendance).deliver_now
+          expect(mail.encoded).to match(/When: #{ I18n.l(today_attendance.event.start_date.to_date) }/)
+        end
       end
     end
   end

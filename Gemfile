@@ -41,7 +41,7 @@ gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
 gem 'bootstrap-sass', '~> 3.3'
 
 group :production, :travis do
-  gem 'mysql2', '~>0.4'
+  gem 'mysql2', '< 0.4' # Rails 4 doesn't support mysql2 0.4
 end
 
 group :development, :test do

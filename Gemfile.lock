@@ -244,7 +244,7 @@ GEM
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.4.1)
+    mysql2 (0.3.20)
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -491,7 +491,7 @@ DEPENDENCIES
   localized_country_select (= 0.9.11)
   metric_fu
   mocha
-  mysql2 (~> 0.4)
+  mysql2 (< 0.4)
   net-ssh (< 2.10)
   omniauth (= 1.2.2)
   omniauth-facebook (~> 2.0)

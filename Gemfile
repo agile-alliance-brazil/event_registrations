@@ -4,6 +4,7 @@ ruby '1.9.3'
 def linux_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /linux/ ? require_as : false
 end
+
 # Mac OS X
 def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
@@ -40,7 +41,7 @@ gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
 gem 'bootstrap-sass', '~> 3.3'
 
 group :production, :travis do
-  gem 'mysql2', '~>0.3'
+  gem 'mysql2', '~>0.4'
 end
 
 group :development, :test do

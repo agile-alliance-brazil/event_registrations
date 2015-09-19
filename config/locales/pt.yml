@@ -249,6 +249,8 @@ pt:
         created_at: 'Criada em'
         user: 'Usuário'
         status: 'Status'
+        index:
+          actions: 'ações'
       registration_period:
         title: 'Faixas de inscrições por períodos'
         id: 'ID'
@@ -293,6 +295,7 @@ pt:
     user: "Novo usuário"
     events: "Próximos eventos"
     until: "a"
+    untitled: 'Untitled'
 
   actions:
     edit: "Editar"

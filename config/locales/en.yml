@@ -158,6 +158,7 @@ en:
     user: "New user"
     events: "Upcoming events"
     until: "until"
+    untitled: 'Sem título'
 
   actions:
     edit: "Edit"

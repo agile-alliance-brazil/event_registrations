@@ -195,7 +195,7 @@ pt:
         neighbourhood: "Bairro"
         zipcode: "CEP"
         status: "Status"
-        registration_date: "Data de Inscrição"
+        registration_date: "Data"
         registration_value: "Valor da Inscrição"
         payment_agreement: "Confirmo que o participante realizou o pagamento no valor acima. O sistema notificará o participante por email de que sua inscrição foi confirmada."
         notes: "Anotações"
@@ -233,6 +233,7 @@ pt:
         destination_id: "Destino"
       registration_group:
         name: 'Nome'
+        created_at: 'Criado em'
         discount: 'Desconto (%)'
         minimum_size: 'Tamanho mínimo'
         amount: 'Valor'

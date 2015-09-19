@@ -11,6 +11,7 @@
 
 %table.table
   %th= t('formtastic.labels.registration_group.name')
+  %th= t('formtastic.labels.registration_group.created_at')
   %th= t('formtastic.labels.registration_group.leader')
   %th= t('formtastic.labels.registration_group.discount')
   %th= t('formtastic.labels.registration_group.minimum_size')
@@ -21,10 +22,11 @@
   - @groups.each do |group|
     %tr
       %td= link_to group.name, event_registration_group_path(@event, group)
+      %td= l group.created_at.to_date
       %td= group.leader_name
       %td= group.discount
       %td= group.minimum_size
-      %td= group.amount
+      %td= number_with_precision(group.amount, precision: 2)
       %td= group.token
       %td= group.qtd_attendances
       %td= link_to t('actions.destroy'), event_registration_group_path(@event, group), method: :delete, class: 'remove', data: { confirm: t('registration_group.destroy_confirmation', registration_group: group.name ) }

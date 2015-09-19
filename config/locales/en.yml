@@ -58,7 +58,7 @@ en:
         neighbourhood: "Address 2"
         zipcode: "Zip Code"
         status: "Status"
-        registration_date: "Registration Date"
+        registration_date: "Date"
         registration_value: "Registration Value"
         payment_agreement: "I confirm that the participant made the payment of the above mentioned amount. The system will notify the participant that his/her registration to the conference is confirmed."
         notes: "Notes"
@@ -96,6 +96,7 @@ en:
         destination_id: "Destination"
       registration_group:
         name: 'Name'
+        created_at: 'Created at'
         discount: 'Discount (%)'
         minimum_size: 'Minimum size'
         amount: 'Amount'

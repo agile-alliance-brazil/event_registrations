@@ -6,8 +6,8 @@
   %td= attendance.city
   %td= attendance.state
   %td= attendance.payment_type
-  %td= l(attendance.registration_date)
-  %td= attendance.registration_value
+  %td= attendance.registration_date.strftime('%d/%m/%Y %H:%M')
+  %td= number_to_currency(attendance.registration_value, locale: :pt)
   %td= attendance.status
   %td
     - if attendance.pending? && attendance.grouped?

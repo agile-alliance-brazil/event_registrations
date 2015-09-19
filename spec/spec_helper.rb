@@ -3,6 +3,21 @@ require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 
 ENV['RAILS_ENV'] ||= 'test'
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter '/test/'
+  add_filter '/spec/'
+  add_filter 'app/controllers/sessions_controller.rb'
+
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Models', 'app/models'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Mailers', 'app/mailers'
+  add_group 'Views', 'app/views'
+  add_group 'Library', 'lib/'
+
+  minimum_coverage 99
+end
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'mocha/api'
@@ -19,10 +34,9 @@ module Airbrake
   end
 end
 
-require 'simplecov'
-SimpleCov.start 'rails'
-
 RSpec.configure do |config|
+  Rails.application.eager_load!
+
   config.include(ControllerMacros, type: :controller)
   config.include(DisableAuthorization, type: :controller)
   config.include(TrimmerMacros)
@@ -33,9 +47,6 @@ RSpec.configure do |config|
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
   #
   config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-  # config.mock_with :rspec
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -56,14 +67,6 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-
-  # config.before do
-  #   WebMock.disable!
-  # end
-
-  # config.before(:each, :block_network => true) do
-  #   WebMock.enable!
-  # end
 end
 
 def sign_in(user)

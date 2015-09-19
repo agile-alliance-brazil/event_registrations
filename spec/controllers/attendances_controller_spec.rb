@@ -125,6 +125,7 @@ describe AttendancesController, type: :controller do
     context 'with a valid attendance' do
       let!(:event) { FactoryGirl.create(:event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
+      let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       before { get :show, id: attendance.id }
       it { expect(assigns[:attendance]).to eq attendance }
       it { expect(response).to be_success }

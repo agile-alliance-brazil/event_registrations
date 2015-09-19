@@ -3,15 +3,15 @@ require 'spec_helper'
 
 describe TransfersController, type: :controller do
   before do
-    @origin = FactoryGirl.build(:attendance)
+    @origin = FactoryGirl.create(:attendance)
     @origin.id = 3
-    @destination = FactoryGirl.build(:attendance)
+    @destination = FactoryGirl.create(:attendance)
     @destination.id = 5
 
     Attendance.stubs(:find).with('3').returns(@origin)
     Attendance.stubs(:find).with('5').returns(@destination)
 
-    @user = FactoryGirl.build(:user)
+    @user = FactoryGirl.create(:user)
     disable_authorization
     sign_in @user
   end

@@ -307,6 +307,7 @@ en:
     register:
       to_register_message: 'Buy your ticket'
     not_found: 'Event not found'
+    no_upcoming: 'No upcoming event'
 
   registration_group:
     list: 'Groups list of %{event_name}'

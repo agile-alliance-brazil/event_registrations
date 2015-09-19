@@ -1,6 +1,4 @@
 describe RegistrationGroupsController, type: :controller do
-  render_views
-
   let(:user) { FactoryGirl.create :user }
   before do
     user.add_role(:admin)

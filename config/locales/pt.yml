@@ -442,6 +442,7 @@ pt:
     register:
       to_register_message: 'Faça sua inscrição'
     not_found: 'Evento não encontrado.'
+    no_upcoming: 'Sem eventos cadastrados'
   registration_group:
     list: 'Lista dos grupos de %{event_name}'
     destroy:

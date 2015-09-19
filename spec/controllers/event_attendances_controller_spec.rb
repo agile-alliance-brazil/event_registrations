@@ -2,8 +2,6 @@
 require 'webmock/rspec'
 
 describe EventAttendancesController, type: :controller do
-  render_views
-
   before :each do
     @event = FactoryGirl.create(:event)
     @individual = @event.registration_types.first

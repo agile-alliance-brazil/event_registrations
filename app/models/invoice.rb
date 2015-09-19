@@ -62,15 +62,6 @@ class Invoice < ActiveRecord::Base
     )
   end
 
-  def add_attendances(*items)
-    offset = items - attendances
-    attendances.concat(*offset)
-  end
-
-  def registration_value
-    amount
-  end
-
   def pay
     return unless attendances.map(&:pay).reduce(true, &:&)
     pay_it

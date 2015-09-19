@@ -32,8 +32,8 @@ class RegistrationNotifier
   private
 
   def try_with(action)
+    Rails.logger.info(" processing [#{action}]")
     yield
-    Rails.logger.info("  [#{action}] OK")
   rescue => e
     Airbrake.notify(e)
     Rails.logger.info("  [FAILED #{action}] #{e.message}")

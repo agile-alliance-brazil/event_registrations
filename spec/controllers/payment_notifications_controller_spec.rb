@@ -1,38 +1,38 @@
-# encoding: UTF-8
 require 'spec_helper'
-# require 'vcr_setup'
 
 describe PaymentNotificationsController, type: :controller, block_network: true do
   describe '#create' do
-    before do
-      @invoice = FactoryGirl.create(:invoice)
-    end
+    let(:attendance) { FactoryGirl.create(:attendance) }
+    let(:invoice) { FactoryGirl.create(:invoice, attendances: [attendance]) }
 
-    it 'creates PaymentNotification with paypal type' do
-      expect do
-        post :create, type: 'paypal', txn_id: 'ABCABC', secret: APP_CONFIG[:paypal][:secret],
-                      invoice: @invoice.id, custom: 'Attendance', payment_status: 'Completed',
-                      receiver_email: APP_CONFIG[:paypal][:email], mc_gross: @invoice.registration_value.to_s,
-                      mc_currency: APP_CONFIG[:paypal][:currency]
-      end.to change(PaymentNotification, :count).by(1)
-    end
+    context 'when pagseguro' do
+      context 'and the invoice is paid' do
+        it 'creates PaymentNotification with pag seguro type' do
+          status = PagSeguro::PaymentStatus.new('3')
+          transaction = PagSeguro::Transaction.new(status: status)
+          PagSeguro::Transaction.expects(:find_by_notification_code).returns transaction
+          post :create,
+               type: 'pag_seguro', status: 'Aprovada', transacao_id: '12345678',
+               pedido: invoice.id, store_code: APP_CONFIG[:pag_seguro][:store_code]
+          expect(PaymentNotification.count).to eq 1
+          expect(Invoice.last.status).to eq 'paid'
+          expect(Attendance.last.status).to eq 'confirmed'
+        end
+      end
 
-    it 'creates PaymentNotification with bcash type' do
-      expect do
-        post :create, type: 'bcash', status: 'Aprovada', transacao_id: '12345678',
-                      pedido: @invoice.id, secret: APP_CONFIG[:bcash][:secret]
-      end.to change(PaymentNotification, :count).by(1)
+      context 'and the invoice is not paid' do
+        it 'creates PaymentNotification with pag seguro type' do
+          status = PagSeguro::PaymentStatus.new('7')
+          transaction = PagSeguro::Transaction.new(status: status)
+          PagSeguro::Transaction.expects(:find_by_notification_code).returns transaction
+          post :create,
+               type: 'pag_seguro', status: 'Aprovada', transacao_id: '12345678',
+               pedido: invoice.id, store_code: APP_CONFIG[:pag_seguro][:store_code]
+          expect(PaymentNotification.count).to eq 1
+          expect(Invoice.last.status).to eq 'pending'
+          expect(Attendance.last.status).to eq 'pending'
+        end
+      end
     end
-
-    pending 'creates PaymentNotification with pag_seguro type'
-    # it "should create PaymentNotification with pag_seguro type" do
-    #   VCR.use_cassette('pag_seguro_notification_paid', :record => :once, :match_requests_on => [:path]) do
-    #     expect do
-    #       post :create, type: 'pag_seguro', pedido: @invoice.id, :"notificationType" => "transaction",
-    #                     :"notificationCode" => "VALID-NOTIFICATION-CODE",
-    #                     store_code: APP_CONFIG[:bcash][:store_code]
-    #     end.to change(PaymentNotification, :count).by(1)
-    #   end
-    # end
   end
 end

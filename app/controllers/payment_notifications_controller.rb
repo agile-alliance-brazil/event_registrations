@@ -5,8 +5,14 @@ class PaymentNotificationsController < ApplicationController
   protect_from_forgery :except => [:create]
 
   def create
-    attributes = PaymentNotification.send "from_#{params[:type]}_params", params
-    PaymentNotification.create!(attributes)
+    transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
+
+    # p transaction
+    transaction_params = params
+    transaction_params[:status] = transaction.status.paid? ? 'Completed' : transaction.status.status
+    transaction_params[:transaction_code] = transaction.code
+    transaction_params[:transaction_inspect] = transaction.inspect
+    PaymentNotification.create_for_pag_seguro(transaction_params)
     render :nothing => true
   end
 end

@@ -1,7 +1,7 @@
 describe PagSeguroService do
   describe '.checkout' do
+    let(:invoice) { FactoryGirl.create :invoice }
     context 'with a valid invoice' do
-      let(:invoice) { FactoryGirl.create :invoice }
       it 'returns an empty hash if no errors' do
         PagSeguro::PaymentRequest.any_instance.expects(:register).once.returns PagSeguro::PaymentRequest::Response.new(nil)
         PagSeguro::PaymentRequest::Response.any_instance.expects(:url).once.returns 'xpto.foo.bar'
@@ -23,6 +23,16 @@ describe PagSeguroService do
       end
     end
 
-    pending 'when errors in response'
+    context 'when errors in response' do
+      it 'will answer with the errors' do
+        pag_seguro_response = PagSeguro::PaymentRequest::Response.new(nil)
+        pag_seguro_response.instance_variable_set(:@errors, %w(bla foo))
+        PagSeguro::PaymentRequest.any_instance.expects(:register).returns pag_seguro_response
+
+        payment = PagSeguro::PaymentRequest.new
+        response = PagSeguroService.checkout(invoice, payment)
+        expect(response).to eq({ errors: 'bla\\nfoo' })
+      end
+    end
   end
 end

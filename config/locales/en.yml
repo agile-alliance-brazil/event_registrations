@@ -77,7 +77,6 @@ en:
       payment_notification:
         transaction_id: "Transaction ID"
         paid_at: "Payment date"
-        payer_email: "PayPal e-mail"
         settle_amount: "Total amount paid"
         notes: "Notes"
       user:

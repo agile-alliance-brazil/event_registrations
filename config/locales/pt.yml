@@ -214,7 +214,6 @@ pt:
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"
-        payer_email: "E-mail do PayPal"
         settle_amount: "Total pago"
         notes: "Notas"
       user:
@@ -408,7 +407,6 @@ pt:
     payment:
       request:
         option_one: 'OPÇÃO 1: Pague com PagSeguro'
-        option_two: 'OPÇÃO 2: Pague com PayPal'
         text: 'Efetue o pagamento no valor de %{value}'
 
   attendance:

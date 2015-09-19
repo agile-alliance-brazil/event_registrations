@@ -98,6 +98,7 @@ en:
         name: 'Name'
         discount: 'Discount (%)'
         minimum_size: 'Minimum size'
+        amount: 'Amount'
         token: 'Registration token'
         leader: 'Leader'
         event: 'Event'

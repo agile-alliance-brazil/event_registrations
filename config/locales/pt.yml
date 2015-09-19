@@ -235,6 +235,7 @@ pt:
         name: 'Nome'
         discount: 'Desconto (%)'
         minimum_size: 'Tamanho mínimo'
+        amount: 'Valor'
         token: 'Token para inscrição'
         leader: 'Líder'
         event: 'Evento'

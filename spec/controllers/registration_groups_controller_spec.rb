@@ -79,13 +79,14 @@ describe RegistrationGroupsController, type: :controller do
 
   describe '#create' do
     let(:event) { FactoryGirl.create :event }
-    let(:valid_params) { { name: 'new_group', discount: 5, minimum_size: 10 } }
+    let(:valid_params) { { name: 'new_group', discount: 5, minimum_size: 10, amount: 137 } }
     before { post :create, event_id: event, registration_group: valid_params }
     subject(:new_group) { RegistrationGroup.last }
     it { expect(new_group.event).to eq event }
     it { expect(new_group.name).to eq 'new_group' }
     it { expect(new_group.discount).to eq 5 }
     it { expect(new_group.minimum_size).to eq 10 }
+    it { expect(new_group.amount).to eq 137 }
     it { expect(new_group.token).not_to be_blank }
     it { expect(new_group.invoices.count).to eq 1 }
     it { expect(new_group.invoices.last.amount).to eq 0 }

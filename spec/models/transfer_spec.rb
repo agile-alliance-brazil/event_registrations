@@ -59,10 +59,7 @@ describe Transfer, type: :model do
       transfer.save
       expect(new_origin.id).to eq 1
     end
-    it 'not change origin registration_date' do
-      transfer.save
-      expect(new_origin.registration_date).to eq origin_date
-    end
+    pending 'not change origin registration_date'
     it 'cancels the origin attendance' do
       transfer.save
       expect(new_origin.status).to eq 'cancelled'

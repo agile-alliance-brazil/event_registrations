@@ -18,10 +18,10 @@ describe TransfersController, type: :controller do
     end
 
     context 'destination' do
-      let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+      let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
       let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
       before { get :new }
-      it { expect(assigns[:destinations]).to match_array [destination, pending] }
+      it { expect(assigns[:destinations]).to match_array [destination, accepted] }
     end
 
     context 'empty' do
@@ -102,8 +102,18 @@ describe TransfersController, type: :controller do
       let!(:origin) { FactoryGirl.create(:attendance, status: :confirmed, registration_value: 420) }
       before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
       it 'changes the status and the registration value for an attendances and save them' do
-        expect(Attendance.find(origin.id).status).to eq 'cancelled'
+        expect(new_origin.status).to eq 'cancelled'
         expect(new_destination.status).to eq 'confirmed'
+        expect(new_destination.registration_value).to eq 420
+      end
+    end
+
+    context 'when destination is accepted' do
+      let!(:destination) { FactoryGirl.create(:attendance, status: :accepted) }
+      before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      it 'changes the status and the registration value for an attendances and save them' do
+        expect(new_origin.status).to eq 'cancelled'
+        expect(new_destination.status).to eq 'paid'
         expect(new_destination.registration_value).to eq 420
       end
     end

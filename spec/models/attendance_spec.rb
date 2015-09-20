@@ -299,6 +299,15 @@ describe Attendance, type: :model do
         let!(:other_out) { FactoryGirl.create(:attendance, advised_at: nil, advised: false, created_at: 15.days.ago) }
         it { expect(Attendance.for_cancelation).to eq [to_cancel] }
       end
+
+      describe '.pending_accepted' do
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
+        it { expect(Attendance.pending_accepted).to eq [pending, accepted] }
+      end
     end
   end
 

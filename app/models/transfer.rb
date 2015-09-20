@@ -14,7 +14,7 @@ class Transfer
 
   def valid?
     !origin.new_record? && !destination.new_record? &&
-      (origin.paid? || origin.confirmed?) && (destination.pending?)
+      (origin.paid? || origin.confirmed?) && (destination.pending? || destination.accepted?)
   end
 
   def save

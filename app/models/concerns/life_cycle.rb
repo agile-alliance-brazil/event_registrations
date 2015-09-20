@@ -4,6 +4,7 @@ module Concerns
 
     included do
       scope :pending, -> { where(status: :pending) }
+      scope :pending_accepted, -> { where("status IN ('pending', 'accepted')") }
       scope :accepted, -> { where(status: :accepted) }
       scope :cancelled, -> { where(status: :cancelled) }
       scope :paid, -> { where(status: [:paid, :confirmed]) }

@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Transfer, type: :model do
-  let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid, registration_value: 420) }
+  let(:origin_date) { 1.month.from_now }
+  let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }
   let!(:destination) { FactoryGirl.create(:attendance, id: 2, status: :pending, registration_value: 540) }
   let(:transfer) { Transfer.build(origin_id: origin.id, destination_id: destination.id) }
   subject(:new_origin) { Attendance.find(origin.id) }
@@ -59,10 +60,8 @@ describe Transfer, type: :model do
       expect(new_origin.id).to eq 1
     end
     it 'not change origin registration_date' do
-      date = Time.zone.now
-      origin.update(registration_date: date)
       transfer.save
-      expect(new_origin.registration_date).to eq date
+      expect(new_origin.registration_date).to eq origin_date
     end
     it 'cancels the origin attendance' do
       transfer.save

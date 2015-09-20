@@ -60,8 +60,7 @@ describe Transfer, type: :model do
     end
     it 'not change origin registration_date' do
       date = Time.zone.now
-      origin.registration_date = date
-      origin.save
+      origin.update(registration_date: date)
       transfer.save
       expect(new_origin.registration_date).to eq date
     end

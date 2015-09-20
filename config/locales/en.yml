@@ -164,8 +164,7 @@ en:
     edit: "Edit"
     destroy: "Remove"
     cancel: "Cancel"
-    section:
-      registration: "Registration"
+    registration: "Registration"
     new_registration: "Individual"
     new_speaker_registration: "Speaker"
     new_sponsor_group: "Sponsor"

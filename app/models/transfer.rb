@@ -18,8 +18,9 @@ class Transfer
   end
 
   def save
-    destination.status = origin.status
     destination.registration_value = origin.registration_value
+    destination.pay if origin.paid?
+    destination.confirm if origin.confirmed?
 
     origin.cancel
     origin.save && destination.save

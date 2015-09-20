@@ -92,7 +92,7 @@ describe TransfersController, type: :controller do
       it 'changes the status and the registration value for an attendances and save them' do
         expect(flash[:notice]).to eq I18n.t('flash.transfer.success')
         expect(new_origin.status).to eq 'cancelled'
-        expect(new_destination.status).to eq 'paid'
+        expect(new_destination.status).to eq 'confirmed'
         expect(new_destination.registration_value).to eq 420
         expect(response).to redirect_to attendance_path(id: origin.id)
       end
@@ -113,7 +113,7 @@ describe TransfersController, type: :controller do
       before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
       it 'changes the status and the registration value for an attendances and save them' do
         expect(new_origin.status).to eq 'cancelled'
-        expect(new_destination.status).to eq 'paid'
+        expect(new_destination.status).to eq 'confirmed'
         expect(new_destination.registration_value).to eq 420
       end
     end

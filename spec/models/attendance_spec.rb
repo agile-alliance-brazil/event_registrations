@@ -413,8 +413,9 @@ describe Attendance, type: :model do
 
     describe '#cancel' do
       context 'when is pending' do
-        it 'cancel the attendance' do
+        it 'cancel the attendance and the invoice' do
           attendance = FactoryGirl.create :attendance
+
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
         end

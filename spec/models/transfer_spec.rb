@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe Transfer, type: :model do
-  let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid) }
-  let!(:destination) { FactoryGirl.create(:attendance, id: 2, status: :pending) }
+  let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid, registration_value: 420) }
+  let!(:destination) { FactoryGirl.create(:attendance, id: 2, status: :pending, registration_value: 540) }
   let(:transfer) { Transfer.build(origin_id: origin.id, destination_id: destination.id) }
+  subject(:new_origin) { Attendance.find(origin.id) }
+  subject(:new_destination) { Attendance.find(destination.id) }
 
   it { expect(transfer).not_to be_persisted }
 
@@ -54,22 +56,33 @@ describe Transfer, type: :model do
   context 'saving' do
     it 'not try to change origin id' do
       transfer.save
-      expect(origin.reload.id).to eq 1
+      expect(new_origin.id).to eq 1
     end
     it 'not change origin registration_date' do
       date = Time.zone.now
       origin.registration_date = date
+      origin.save
       transfer.save
-      expect(origin.registration_date).to eq date
-    end
-    it 'not change origin email_sent' do
-      origin.email_sent = true
-      transfer.save
-      expect(origin.email_sent).to be true
+      expect(new_origin.registration_date).to eq date
     end
     it 'cancels the origin attendance' do
       transfer.save
-      expect(Attendance.find(origin.id).status).to eq 'cancelled'
+      expect(new_origin.status).to eq 'cancelled'
+    end
+
+    it 'change the destination status and registration value' do
+      transfer.save
+      expect(new_destination.status).to eq 'confirmed'
+      expect(new_destination.registration_value).to eq 420
+    end
+
+    it 'also changes the related invoice' do
+      Invoice.from_attendance(origin, Invoice::GATEWAY)
+      Invoice.from_attendance(destination, Invoice::GATEWAY)
+      transfer.save
+      expect(new_origin.invoices.last.status).to eq 'cancelled'
+      expect(new_destination.invoices.last.status).to eq 'paid'
+      expect(new_destination.invoices.last.amount).to eq 420
     end
   end
 

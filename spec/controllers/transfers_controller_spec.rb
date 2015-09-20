@@ -2,154 +2,118 @@
 require 'spec_helper'
 
 describe TransfersController, type: :controller do
+  let(:user) { FactoryGirl.create(:user) }
   before do
-    @origin = FactoryGirl.create(:attendance)
-    @origin.id = 3
-    @destination = FactoryGirl.create(:attendance)
-    @destination.id = 5
-
-    Attendance.stubs(:find).with('3').returns(@origin)
-    Attendance.stubs(:find).with('5').returns(@destination)
-
-    @user = FactoryGirl.create(:user)
     disable_authorization
-    sign_in @user
+    sign_in user
   end
-  describe 'GET new' do
-    it 'should be successful' do
-      get :new
 
-      expect(response.code).to eq('200')
+  describe '#new' do
+    let!(:origin) { FactoryGirl.create(:attendance, status: :paid) }
+    let!(:destination) { FactoryGirl.create(:attendance, status: :pending) }
+
+    context 'response' do
+      before { get :new }
+      it { expect(response.code).to eq '200' }
     end
-    it 'should set potential destinations as all pending attendances' do
-      Attendance.stubs(:pending).returns([@origin, @destination])
 
-      get :new
-
-      expect(assigns[:destinations]).to eq([@origin, @destination])
+    context 'destination' do
+      let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+      let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+      before { get :new }
+      it { expect(assigns[:destinations]).to match_array [destination, pending] }
     end
 
     context 'empty' do
-      it 'should set event to fake event' do
-        get :new
-
-        expect(assigns[:event]).to be_new_record
-      end
+      before { get :new }
+      it { expect(assigns[:event]).to be_new_record }
       it 'should set empty transfer' do
-        get :new
-
         expect(assigns[:transfer]).to be_new_record
         expect(assigns[:transfer].origin_id).to be_nil
         expect(assigns[:transfer].destination_id).to be_nil
       end
     end
     context 'with origin' do
-      it 'should set event' do
-        get :new, transfer: { origin_id: 3 }
-
-        expect(assigns[:event]).to eq(@origin.event)
-      end
-      it 'should set transfer origin' do
-        get :new, transfer: { origin_id: 3 }
-
-        expect(assigns[:transfer].origin).to eq(@origin)
-      end
+      before { get :new, transfer: { origin_id: origin.id } }
+      it { expect(assigns[:event]).to eq origin.event }
+      it { expect(assigns[:transfer].origin).to eq origin }
     end
     context 'with destination' do
-      it 'should set event' do
-        get :new, transfer: { destination_id: 5 }
-
-        expect(assigns[:event]).to eq(@destination.event)
-      end
-      it 'should set transfer destination' do
-        get :new, transfer: { destination_id: 5 }
-
-        expect(assigns[:transfer].destination).to eq(@destination)
-      end
+      before { get :new, transfer: { destination_id: destination.id } }
+      it { expect(assigns[:event]).to eq destination.event }
+      it { expect(assigns[:transfer].destination).to eq destination }
     end
     context 'with origin and destination' do
-      it 'should set event according to origin' do
-        get :new, transfer: { origin_id: 3, destination_id: 5 }
-
-        expect(assigns[:event]).to eq(@origin.event)
-      end
-      it 'should set transfer origin and destination' do
-        get :new, transfer: { origin_id: 3, destination_id: 5 }
-
-        expect(assigns[:transfer].origin).to eq(@origin)
-        expect(assigns[:transfer].destination).to eq(@destination)
+      before { get :new, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      it { expect(assigns[:event]).to eq origin.event }
+      it 'set transfer origin and destination' do
+        expect(assigns[:transfer].origin).to eq origin
+        expect(assigns[:transfer].destination).to eq destination
       end
     end
 
     context 'as an organizer' do
-      before do
-        @user.add_role :organizer
-      end
-      it 'should set potential transfer origins as all paid or confirmed attendances' do
-        Attendance.expects(:paid).returns([@origin, @destination])
-
+      before { user.add_role :organizer }
+      after { user.remove_role :organizer }
+      it 'set potential transfer origins as all paid or confirmed attendances' do
         get :new
-
-        expect(assigns[:origins]).to eq([@origin, @destination])
+        expect(assigns[:origins]).to match_array [origin]
       end
     end
+
     context 'as a guest' do
-      it 'should set potential transfer origins as its own paid or confirmed attendances' do
-        continuation = mock
-        @user.expects(:attendances).returns(continuation)
-        continuation.expects(:paid).returns([@origin, @destination])
+      let!(:paid) { FactoryGirl.create(:attendance, status: :paid, user: user) }
+      let!(:other_paid) { FactoryGirl.create(:attendance, status: :paid, user: user) }
+      let!(:out_paid) { FactoryGirl.create(:attendance, status: :paid) }
+      before { get :new }
+      it { expect(assigns[:origins]).to eq [paid, other_paid] }
+    end
 
+    context 'as a admin' do
+      let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+      let!(:other_paid) { FactoryGirl.create(:attendance, status: :paid) }
+      before { user.add_role(:admin) }
+      after { user.remove_role(:admin) }
+      it 'shows all paid as origin' do
         get :new
-
-        expect(assigns[:origins]).to eq([@origin, @destination])
+        expect(assigns[:origins]).to match_array [origin, paid, other_paid]
       end
     end
   end
 
-  describe 'POST create' do
-    it 'should set transfer according to post parameters' do
-      transfer = Transfer.build(origin_id: '3', destination_id: '5')
-      Transfer.expects(:build).with('origin_id' => '3', 'destination_id' => '5').returns(transfer)
+  describe '#create' do
+    let!(:origin) { FactoryGirl.create(:attendance, status: :paid, registration_value: 420) }
+    let!(:destination) { FactoryGirl.create(:attendance, status: :pending, registration_value: 540) }
+    subject(:new_origin) { Attendance.find(origin.id) }
+    subject(:new_destination) { Attendance.find(destination.id) }
 
-      post :create, transfer: { origin_id: 3, destination_id: 5 }
-    end
-    context 'successful transfer' do
-      before do
-        @origin.stubs(:save).returns(true)
-        @destination.stubs(:save).returns(true)
-      end
-      it 'should set success flash message' do
-        post :create, transfer: { origin_id: 3, destination_id: 5 }
-
-        expect(flash[:notice]).to eq(I18n.t('flash.transfer.success'))
-      end
-      it 'should redirect to new confirmed (or paid) attendance' do
-        post :create, transfer: { origin_id: 3, destination_id: 5 }
-
-        expect(response).to redirect_to(attendance_path(id: 3))
-      end
-      it 'should save the transfer' do
-        transfer = Transfer.new(@origin, @destination)
-        Transfer.expects(:build).with('origin_id' => '3', 'destination_id' => '5').returns(transfer)
-        transfer.expects(:save)
-
-        post :create, transfer: { origin_id: 3, destination_id: 5 }
+    context 'when origin is paid' do
+      before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      it 'changes the status and the registration value for an attendances and save them' do
+        expect(flash[:notice]).to eq I18n.t('flash.transfer.success')
+        expect(new_origin.status).to eq 'cancelled'
+        expect(new_destination.status).to eq 'paid'
+        expect(new_destination.registration_value).to eq 420
+        expect(response).to redirect_to attendance_path(id: origin.id)
       end
     end
+
+    context 'when origin is confirmed' do
+      let!(:origin) { FactoryGirl.create(:attendance, status: :confirmed, registration_value: 420) }
+      before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      it 'changes the status and the registration value for an attendances and save them' do
+        expect(Attendance.find(origin.id).status).to eq 'cancelled'
+        expect(new_destination.status).to eq 'confirmed'
+        expect(new_destination.registration_value).to eq 420
+      end
+    end
+
     context 'forbidden transfer' do
-      before do
-        @origin.stubs(:save).returns(false)
-        @destination.stubs(:save).returns(false)
-      end
-      it 'should render transfer form again' do
-        post :create, transfer: { origin_id: 3, destination_id: 5 }
-
-        expect(response).to render_template(:new)
-      end
-      it 'should show flash error message' do
-        post :create, transfer: { origin_id: 3, destination_id: 5 }
-
-        expect(flash[:error]).to eq(I18n.t('flash.transfer.failure'))
+      let!(:paid) { FactoryGirl.create(:attendance, status: :paid, user: user) }
+      it 'renders transfer form again' do
+        post :create, transfer: { origin_id: origin.id, destination_id: paid.id }
+        expect(response).to render_template :new
+        expect(flash[:error]).to eq I18n.t('flash.transfer.failure')
       end
     end
   end

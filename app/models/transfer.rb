@@ -18,12 +18,10 @@ class Transfer
   end
 
   def save
-    original_attributes = assignable_attributes(origin)
-    destination_attributes = assignable_attributes(destination)
+    destination.status = origin.status
+    destination.registration_value = origin.registration_value
 
-    origin.attributes = destination_attributes
-    destination.attributes = original_attributes
-
+    origin.cancel
     origin.save && destination.save
   end
 
@@ -46,11 +44,5 @@ class Transfer
     @origin_id = origin.id
     @destination = destination
     @destination_id = destination.id
-  end
-
-  def assignable_attributes(attendance)
-    attendance.attributes.reject do |key, _value|
-      PROTECTED_ATTRIBUTES.include?(key.to_sym)
-    end
   end
 end

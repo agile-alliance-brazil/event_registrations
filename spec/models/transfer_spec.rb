@@ -1,117 +1,75 @@
 require 'spec_helper'
 
 describe Transfer, type: :model do
-  subject { Transfer.build({}) }
-  it { should_not be_persisted }
+  let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid) }
+  let!(:destination) { FactoryGirl.create(:attendance, id: 2, status: :pending) }
+  let(:transfer) { Transfer.build(origin_id: origin.id, destination_id: destination.id) }
 
-  before do
-    @origin = FactoryGirl.build(:attendance)
-    @origin.id = 3
-    @origin.stubs(:new_record?).returns(false)
-    @origin.status = 'paid'
-    @destination = FactoryGirl.build(:attendance)
-    @destination.id = 5
-    @destination.stubs(:new_record?).returns(false)
-
-    Attendance.stubs(:find).with(3).returns @origin
-    Attendance.stubs(:find).with(5).returns @destination
-
-    @origin.stubs(:save).returns(true)
-    @destination.stubs(:save).returns(true)
-
-    @transfer = Transfer.build(origin_id: 3, destination_id: 5)
-  end
+  it { expect(transfer).not_to be_persisted }
 
   context 'validations' do
-    it 'should not be valid without origin' do
-      transfer = Transfer.build(destination_id: 5)
+    it { expect(transfer).to be_valid }
+
+    it 'not be valid without origin' do
+      transfer = Transfer.build(destination_id: destination.id)
       expect(transfer).not_to be_valid
     end
-    it 'should not be valid with pending origin' do
-      @origin.status = 'pending'
-
-      expect(@transfer).not_to be_valid
-    end
-    it 'should not be valid with cancelled origin' do
-      @origin.status = 'cancel'
-
-      expect(@transfer).not_to be_valid
-    end
-
-    it 'should not be valid without destination' do
-      transfer = Transfer.build(origin_id: 3)
+    it 'not be valid with pending origin' do
+      origin = FactoryGirl.create(:attendance, status: :pending)
+      transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
       expect(transfer).not_to be_valid
     end
-    it 'should not be valid with paid destination' do
-      @destination.status = 'paid'
-
-      expect(@transfer).not_to be_valid
-    end
-    it 'should not be valid with confirmed destination' do
-      @destination.status = 'confirmed'
-
-      expect(@transfer).not_to be_valid
-    end
-    it 'should not be valid with cancelled destination' do
-      @destination.status = 'cancelled'
-
-      expect(@transfer).not_to be_valid
+    it 'not be valid with cancelled origin' do
+      origin = FactoryGirl.create(:attendance, status: :cancelled)
+      transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
+      expect(transfer).not_to be_valid
     end
 
-    it 'should be valid with paid origin and pending destination' do
-      expect(@transfer).to be_valid
+    it 'not be valid without destination' do
+      transfer = Transfer.build(origin_id: origin.id)
+      expect(transfer).not_to be_valid
     end
-    it 'should be valid with confirmed origin and pending destination' do
-      @origin.status = 'confirmed'
-
-      expect(@transfer).to be_valid
+    it 'not be valid with paid destination' do
+      destination = FactoryGirl.create(:attendance, status: :paid)
+      transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
+      expect(transfer).not_to be_valid
+    end
+    it 'not be valid with confirmed destination' do
+      destination = FactoryGirl.create(:attendance, status: :confirmed)
+      transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
+      expect(transfer).not_to be_valid
+    end
+    it 'not be valid with cancelled destination' do
+      destination = FactoryGirl.create(:attendance, status: :cancelled)
+      transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
+      expect(transfer).not_to be_valid
+    end
+    it 'be valid with confirmed origin and pending destination' do
+      origin = FactoryGirl.create(:attendance, status: :confirmed)
+      transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
+      expect(transfer).to be_valid
     end
   end
 
   context 'saving' do
-    it 'should not try to change origin id and timestamps' do
-      timestamp = Time.zone.now
-      @origin.created_at = timestamp
-      @origin.updated_at = timestamp
-
-      @transfer.save
-
-      expect(@origin.id).to eq(3)
-      expect(@origin.created_at).to eq(timestamp)
-      expect(@origin.updated_at).to eq(timestamp)
+    it 'not try to change origin id' do
+      transfer.save
+      expect(origin.reload.id).to eq 1
     end
-    it 'should not change origin registration_date' do
+    it 'not change origin registration_date' do
       date = Time.zone.now
-      @origin.registration_date = date
-
-      @transfer.save
-
-      expect(@origin.registration_date).to eq(date)
+      origin.registration_date = date
+      transfer.save
+      expect(origin.registration_date).to eq date
     end
-    it 'should not change origin email_sent' do
-      @origin.email_sent = true
-
-      @transfer.save
-
-      expect(@origin.email_sent).to be true
+    it 'not change origin email_sent' do
+      origin.email_sent = true
+      transfer.save
+      expect(origin.email_sent).to be true
     end
-    it 'should not change origin status' do
-      @transfer.save
-
-      expect(@origin.status).to eq('paid')
-    end
-    it 'should switch all other attributes with destination' do
-      destination_name = @destination.last_name
-      destination_email = @destination.email
-      destination_badge_name = @destination.badge_name
-      destination_twitter_user = @destination.twitter_user
-
-      @transfer.save
-
-      expect(@origin.last_name).to eq(destination_name)
-      expect(@origin.email).to eq(destination_email)
-      expect(@origin.badge_name).to eq(destination_badge_name)
-      expect(@origin.twitter_user).to eq(destination_twitter_user)
+    it 'cancels the origin attendance' do
+      transfer.save
+      expect(Attendance.find(origin.id).status).to eq 'cancelled'
     end
   end
 
@@ -125,14 +83,14 @@ describe Transfer, type: :model do
       expect(transfer.destination.id).to be_nil
     end
     it 'should create transfer with origin if hash has origin_id' do
-      transfer = Transfer.build(origin_id: 3)
+      transfer = Transfer.build(origin_id: origin.id)
 
-      expect(transfer.origin).to eq(@origin)
+      expect(transfer.origin).to eq(origin)
     end
     it 'should create transfer with destination if hash has destination_id' do
-      transfer = Transfer.build(destination_id: 5)
+      transfer = Transfer.build(destination_id: destination.id)
 
-      expect(transfer.destination).to eq(@destination)
+      expect(transfer.destination).to eq destination
     end
   end
 end

@@ -420,10 +420,10 @@ describe Attendance, type: :model do
       end
 
       context 'when is confirmed' do
-        it 'dont change the attendance status' do
+        it 'cancel the attendance' do
           attendance = FactoryGirl.create :attendance, status: 'confirmed'
           attendance.cancel
-          expect(attendance.status).to eq 'confirmed'
+          expect(attendance.status).to eq 'cancelled'
         end
       end
 

@@ -26,7 +26,7 @@ module Concerns
         end
 
         event :cancel do
-          transition [:pending, :accepted, :paid] => :cancelled
+          transition [:pending, :accepted, :paid, :confirmed] => :cancelled
         end
 
         event :recover do

@@ -42,10 +42,12 @@ Current::Application.routes.draw do
       delete :destroy
       put :recover_it
     end
+
+    resources :transfers, only: [:new]
   end
-  resources :transfers, only: [:new, :create]
 
   resources :payment_notifications, only: :create
+  resources :transfers, only: [:create]
 
   root to: 'events#index'
 end

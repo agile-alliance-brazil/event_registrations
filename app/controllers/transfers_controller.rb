@@ -1,11 +1,13 @@
 # encoding: UTF-8
 class TransfersController < ApplicationController
   before_filter :transfer
+  before_filter :attendance, only: [:new]
   layout 'eventless'
 
   def new
-    @origins = ((current_user.organizer? || current_user.admin?) ? Attendance : current_user.attendances).paid
-    @destinations = Attendance.pending_accepted
+    event = @attendance.event
+    @origins = ((current_user.organizer? || current_user.admin?) ? event.attendances : current_user.attendances).paid
+    @destinations = event.attendances.pending_accepted
     @event = transfer.origin.event || transfer.destination.event || Event.new.tap { |e| e.name = 'missing' }
   end
 
@@ -23,5 +25,9 @@ class TransfersController < ApplicationController
 
   def transfer
     @transfer ||= Transfer.build(params[:transfer] || {})
+  end
+
+  def attendance
+    @attendance = Attendance.find(params[:attendance_id])
   end
 end

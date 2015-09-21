@@ -4,7 +4,7 @@
   - if can?(:cancel, Attendance) && (attendance.cancellable?)
     = button_to 'Cancelar inscrição', attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name) }
   - if can?(:transfer, Attendance) && (attendance.transferrable?)
-    = link_to 'Transferir inscrição', new_transfer_path(transfer: { origin_id: attendance.id }), :class => 'btn btn-success'
+    = link_to 'Transferir inscrição', new_attendance_transfer_path(attendance, transfer: { origin_id: attendance.id }), :class => 'btn btn-success'
   - if can?(:recover, Attendance) && (attendance.recoverable?)
     = link_to 'Recuperar inscrição', recover_it_attendance_path(attendance), method: :put, :class => 'btn btn-success'
 

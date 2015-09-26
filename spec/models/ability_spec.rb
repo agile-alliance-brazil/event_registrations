@@ -35,6 +35,12 @@ describe Ability, type: :model do
       expect(@ability).to be_able_to(:show, attendance)
     end
 
+    it 'can view their attendance even when other user created it' do
+      other_user = FactoryGirl.build(:user)
+      attendance = FactoryGirl.build(:attendance, user: other_user, email: @user.email)
+      expect(@ability).to be_able_to(:show, attendance)
+    end
+
     it 'can cancel (destroy) their attendances' do
       attendance = FactoryGirl.build(:attendance)
       expect(@ability).not_to be_able_to(:destroy, attendance)

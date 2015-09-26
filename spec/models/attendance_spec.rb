@@ -744,4 +744,16 @@ describe Attendance, type: :model do
       it { expect(Attendance.last.advised_at).to be_within(30.seconds).of Time.zone.now }
     end
   end
+
+  describe '#to_csv' do
+    context 'with attendances' do
+      let(:event) { FactoryGirl.create :event }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
+      let(:expected) do
+        "first_name,email\n#{attendance.first_name},#{attendance.email}\n"
+      end
+      subject(:attendances_list) { Attendance.all }
+      it { expect(attendances_list.to_csv).to eq expected }
+    end
+  end
 end

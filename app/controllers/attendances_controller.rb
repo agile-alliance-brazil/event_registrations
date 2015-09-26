@@ -15,6 +15,12 @@ class AttendancesController < ApplicationController
     @cancelled_total = event_for_index.attendances.cancelled.count
     @total = event_for_index.attendances.count
     @total_without_cancelled = event_for_index.attendances.where.not(status: :cancelled).count
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data @attendances_list.to_csv, filename: 'attendances_list.csv'
+      end
+    end
   end
 
   def show

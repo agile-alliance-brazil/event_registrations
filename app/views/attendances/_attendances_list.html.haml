@@ -1,3 +1,5 @@
+%p= link_to t('actions.download_csv'), attendances_path(event_id: @event, format: 'csv')
+
 %div{id: 'attendances_list'}
   %table.table
     %th= t('formtastic.labels.attendance.name')

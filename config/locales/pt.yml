@@ -319,6 +319,7 @@ pt:
     pay: 'Marcar com pago'
     accept: 'Aceitar no grupo'
     account: 'Minha conta'
+    download_csv: "Download do arquivo CSV"
 
   flash:
     failure: "Por favor verifique os campos em destaque"

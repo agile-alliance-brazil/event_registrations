@@ -116,6 +116,15 @@ class Attendance < ActiveRecord::Base
     update_attributes(advised: true, advised_at: Time.zone.now)
   end
 
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << [:first_name, :email]
+      all.find_each do |attendance|
+        csv << [attendance.first_name, attendance.email]
+      end
+    end
+  end
+
   private
 
   def update_group_invoice

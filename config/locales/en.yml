@@ -182,7 +182,7 @@ en:
     pay: 'Check as paid'
     accept: 'Accept in Group'
     account: 'My account'
-
+    download_csv: "Download CSV file"
 
   flash:
     failure: "Please check the highlighted fields"

@@ -125,7 +125,7 @@ describe AttendancesController, type: :controller do
       let!(:other) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
       before { get :index, event_id: event, format: :csv }
       it 'returns the attendances in the csv format' do
-        expected_body = "first_name,email\n#{attendance.first_name},#{attendance.email}\n#{other.first_name},#{other.email}\n"
+        expected_body = "first_name,last_name,organization,email\n#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email}\n#{other.first_name},#{other.last_name},#{other.organization},#{other.email}\n"
         expected_disposition = "attachment; filename=\"attendances_list.csv\""
         expect(response.body).to eq expected_body
         expect(response.headers['Content-Disposition']).to eq expected_disposition

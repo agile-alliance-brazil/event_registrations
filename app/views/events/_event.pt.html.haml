@@ -12,7 +12,7 @@
       = t('event.register.to_register_message')
 
     - if can? :attendances_list, Attendance
-      = link_to attendances_path(event_id: event), :class => 'btn btn-link' do
+      = link_to attendances_path(event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed'), :class => 'btn btn-link' do
         %span{:class => 'glyphicon glyphicon-th-list'}
         = "#{t('actions.list_attendances')} (#{event.attendances.active.count})"
 

@@ -68,6 +68,7 @@ class Attendance < ActiveRecord::Base
 
   delegate :token, to: :registration_group
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
+  delegate :name, to: :event, prefix: :event, allow_nil: true
 
   usar_como_cpf :cpf
 

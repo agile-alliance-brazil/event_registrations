@@ -680,18 +680,24 @@ describe Attendance, type: :model do
   end
 
   describe '#group_name' do
-    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:event) { Event.create!(name: Faker::Company.name) }
     context 'with a registration group' do
       let!(:group) { FactoryGirl.create :registration_group, event: event }
-      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
       it { expect(attendance.group_name).to eq group.name }
     end
 
     context 'with no registration group' do
-      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
       it { expect(attendance.group_name).to eq nil }
+    end
+  end
+
+  describe '#event_name' do
+    context 'with an event' do
+      let(:event) { Event.create!(name: Faker::Company.name) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      it { expect(attendance.event_name).to eq event.name }
     end
   end
 

@@ -264,6 +264,8 @@ pt:
         quota: 'Cota'
         value: 'Valor'
         active_attendances: 'Inscritos Ativos'
+      event:
+        name: 'Nome do evento'
 
     hints:
       attendance:

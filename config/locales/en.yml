@@ -127,6 +127,8 @@ en:
         quota: 'Quota'
         value: 'Value'
         active_attendances: 'Active Attendances'
+      event:
+        name: 'Event name'
 
     hints:
       attendance:

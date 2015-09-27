@@ -22,7 +22,7 @@ describe AttendancesController, type: :controller do
     context 'with no search parameter' do
       context 'and no attendances' do
         let!(:event) { FactoryGirl.create(:event) }
-        before { get :index, event_id: event }
+        before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
         it { expect(assigns(:attendances_list)).to eq [] }
       end
 
@@ -30,31 +30,31 @@ describe AttendancesController, type: :controller do
         let!(:attendance) { FactoryGirl.create(:attendance) }
         context 'and one attendance, but no association with event' do
           let!(:event) { FactoryGirl.create(:event) }
-          before { get :index, event_id: event }
+          before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
           it { expect(assigns(:attendances_list)).to eq [] }
         end
         context 'and one attendance associated' do
           let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
-          before { get :index, event_id: event.id }
+          before { get :index, event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
           it { expect(assigns(:attendances_list)).to match_array [attendance] }
         end
         context 'and one associated and other not' do
           let!(:other_attendance) { FactoryGirl.create(:attendance) }
           let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
-          before { get :index, event_id: event.id }
+          before { get :index, event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
           it { expect(assigns(:attendances_list)).to match_array [attendance] }
         end
         context 'and two associated' do
           let!(:other_attendance) { FactoryGirl.create(:attendance) }
           let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
-          before { get :index, event_id: event.id }
+          before { get :index, event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
           it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
         end
         context 'and one attendance in one event and other in other event' do
           let!(:other_attendance) { FactoryGirl.create(:attendance) }
           let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
           let!(:other_event) { FactoryGirl.create(:event, attendances: [other_attendance]) }
-          before { get :index, event_id: event.id }
+          before { get :index, event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
           it { expect(assigns(:attendances_list)).to match_array [attendance] }
         end
       end
@@ -69,61 +69,89 @@ describe AttendancesController, type: :controller do
 
       context 'with attendances' do
         context 'and searching by first_name' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
-          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
-          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'foO') }
-          before { get :index, event_id: event, search: 'bla' }
-          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
+          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted, first_name: 'bLaXPTO') }
+          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, first_name: 'bLa') }
+          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, first_name: 'bLa') }
+          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, first_name: 'bLa') }
+
+          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'foO') }
+          context 'including all statuses' do
+            before { get :index, event_id: event, search: 'bla', pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
+            it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, cancelled] }
+          end
+
+          context 'without all statuses' do
+            context 'without cancelled' do
+              before { get :index, event_id: event, search: 'bla', pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed' }
+              it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed] }
+            end
+            context 'without cancelled and confirmed' do
+              before { get :index, event_id: event, search: 'bla', pending: 'pending', accepted: 'accepted', paid: 'paid' }
+              it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid] }
+            end
+            context 'without cancelled, confirmed and paid' do
+              before { get :index, event_id: event, search: 'bla', pending: 'pending', accepted: 'accepted' }
+              it { expect(assigns(:attendances_list)).to match_array [pending, accepted] }
+            end
+            context 'without cancelled, confirmed, paid and accepted' do
+              before { get :index, event_id: event, search: 'bla', pending: 'pending' }
+              it { expect(assigns(:attendances_list)).to match_array [pending] }
+            end
+            context 'without statuses' do
+              before { get :index, event_id: event, search: 'bla' }
+              it { expect(assigns(:attendances_list)).to match_array [] }
+            end
+          end
+        end
+
+        context 'including all statuses' do
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
+          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
+          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+          before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' }
+          it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, cancelled] }
         end
 
         context 'and searching by last_name' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'bLa') }
-          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'bLaXPTO') }
-          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'foO') }
-          before { get :index, event_id: event, search: 'Bla' }
-          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'bLa') }
+          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted, last_name: 'bLaXPTO') }
+          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'foO') }
+          before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled', search: 'Bla' }
+          it { expect(assigns(:attendances_list)).to match_array [pending, accepted] }
         end
 
         context 'and searching by organization' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLa') }
-          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLaXPTO') }
-          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'foO') }
-          before { get :index, event_id: event, search: 'BLA' }
-          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLa') }
+          let!(:other_pending) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLaXPTO') }
+          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'foO') }
+          before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled', search: 'BLA' }
+          it { expect(assigns(:attendances_list)).to match_array [pending, other_pending] }
         end
 
         context 'and searching by email' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
-          let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
-          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'foO@xpto.com.br', email_confirmation: 'foO@xpto.com.br') }
-          before { get :index, event_id: event, search: 'BLA' }
-          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
+          let!(:other_pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
+          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'foO@xpto.com.br', email_confirmation: 'foO@xpto.com.br') }
+          before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled', search: 'BLA' }
+          it { expect(assigns(:attendances_list)).to match_array [pending, other_pending] }
         end
 
         context 'and searching by ID' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
-          let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'foo', last_name: 'bar', status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
-          before { get :index, event_id: event, search: attendance.id }
-          it { expect(assigns(:attendances_list)).to eq [attendance] }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
+          let!(:out) { FactoryGirl.create(:attendance, event: event, first_name: 'foo', last_name: 'bar', status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
+          before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled', search: pending.id }
+          it { expect(assigns(:attendances_list)).to eq [pending] }
         end
       end
-    end
-
-    context 'with cancelled registrations' do
-      let!(:event) { FactoryGirl.create :event }
-      let!(:pending_attendance) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-      let!(:accepted_attendance) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
-      let!(:paid_attendance) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-      let!(:confirmed_attendance) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-      let!(:cancelled_attendance) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
-      before { get :index, event_id: event }
-      it { expect(assigns(:attendances_list)).to match_array [pending_attendance, accepted_attendance, paid_attendance, confirmed_attendance] }
     end
 
     context 'with csv format' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa', created_at: 1.day.ago) }
       let!(:other) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
-      before { get :index, event_id: event, format: :csv }
+      before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled', format: :csv }
       it 'returns the attendances in the csv format' do
         expected_body = "first_name,last_name,organization,email\n#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email}\n#{other.first_name},#{other.last_name},#{other.organization},#{other.email}\n"
         expected_disposition = "attachment; filename=\"attendances_list.csv\""

@@ -157,33 +157,28 @@ describe Attendance, type: :model do
     context 'with specific seed' do
       describe '.search_for_list' do
         context 'and no attendances' do
-          it { expect(Attendance.search_for_list('bla')).to eq [] }
+          it { expect(Attendance.search_for_list('bla', [])).to eq [] }
         end
 
         context 'and having attendances' do
           let!(:attendance) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
 
-          context 'active' do
-            context 'and one active and other inactive' do
-              let!(:other_attendance) { FactoryGirl.create(:attendance, status: 'cancelled') }
-              it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance] }
-            end
-          end
+          let(:all_statuses) { %w(pending accepted paid confirmed cancelled) }
 
           context 'with one attendance' do
             context 'and matching fields' do
               context 'entire field' do
-                it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance] }
-                it { expect(Attendance.search_for_list('bLa')).to match_array [attendance] }
-                it { expect(Attendance.search_for_list('FoO')).to match_array [attendance] }
-                it { expect(Attendance.search_for_list('sbRUblEs')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('xPTo', all_statuses)).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('bLa', all_statuses)).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('FoO', all_statuses)).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('sbRUblEs', all_statuses)).to match_array [attendance] }
               end
 
               context 'field part' do
-                it { expect(Attendance.search_for_list('PT')).to match_array [attendance] }
-                it { expect(Attendance.search_for_list('bL')).to match_array [attendance] }
-                it { expect(Attendance.search_for_list('oO')).to match_array [attendance] }
-                it { expect(Attendance.search_for_list('RUblEs')).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('PT', all_statuses)).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('bL', all_statuses)).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('oO', all_statuses)).to match_array [attendance] }
+                it { expect(Attendance.search_for_list('RUblEs', all_statuses)).to match_array [attendance] }
               end
             end
           end
@@ -193,18 +188,18 @@ describe Attendance, type: :model do
             let!(:out_attendance) { FactoryGirl.create(:attendance, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
 
             context 'entire field' do
-              it { expect(Attendance.search_for_list('xPTo')).to match_array [attendance, other_attendance] }
-              it { expect(Attendance.search_for_list('bLa')).to match_array [attendance, other_attendance] }
-              it { expect(Attendance.search_for_list('FoO')).to match_array [attendance, other_attendance] }
-              it { expect(Attendance.search_for_list('sbRUblEs')).to match_array [attendance, other_attendance] }
-              it { expect(Attendance.search_for_list(attendance.id)).to match_array [attendance] }
+              it { expect(Attendance.search_for_list('xPTo', all_statuses)).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('bLa', all_statuses)).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('FoO', all_statuses)).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('sbRUblEs', all_statuses)).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list(attendance.id, all_statuses)).to match_array [attendance] }
             end
 
             context 'field part' do
-              it { expect(Attendance.search_for_list('PT')).to match_array [attendance, other_attendance] }
-              it { expect(Attendance.search_for_list('bL')).to match_array [attendance, other_attendance] }
-              it { expect(Attendance.search_for_list('oO')).to match_array [attendance, other_attendance] }
-              it { expect(Attendance.search_for_list('RUblEs')).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('PT', all_statuses)).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('bL', all_statuses)).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('oO', all_statuses)).to match_array [attendance, other_attendance] }
+              it { expect(Attendance.search_for_list('RUblEs', all_statuses)).to match_array [attendance, other_attendance] }
             end
           end
 
@@ -220,7 +215,7 @@ describe Attendance, type: :model do
               Timecop.return
               another_attendance = FactoryGirl.create(:attendance, event: event, first_name: 'Today event')
 
-              expect(Attendance.search_for_list('event')).to eq [another_attendance, attendance, other_attendance]
+              expect(Attendance.search_for_list('event', all_statuses)).to eq [another_attendance, attendance, other_attendance]
             end
           end
         end

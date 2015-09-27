@@ -3,7 +3,7 @@
   display: none;
 }
 
-input:not([type='submit']) {
+input:not([type='submit'][type='checkbox']) {
   @extend .form-control;
 }
 

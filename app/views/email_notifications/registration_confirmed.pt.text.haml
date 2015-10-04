@@ -12,7 +12,7 @@ Sua inscrição na #{@attendance.event.name} foi confirmada.
     Quando: #{ l(@attendance.event.start_date.to_date) } #{ t('title.until')} #{l(@attendance.event.end_date.to_date) }
 
 
-Informações sobre como chegar: http://www.agilebrazil.com/2015/localizacao.html
+Informações sobre como chegar: #{@attendance.event.location_and_date}
 
 
 

@@ -488,3 +488,13 @@ pt:
 
   aa:
     members: "Membros"
+
+  report:
+    title:
+      total: 'Total de inscritos'
+      payment_type: 'Tipo de pagamento'
+    payment_type:
+      description: 'Este relatório mostra a soma do valor da inscrição de todos os participantes pagos e confirmados'
+      gateway: 'Gateway'
+      bank_deposit: 'Bank Deposit'
+      statement_agreement: 'Statement of Agreement'

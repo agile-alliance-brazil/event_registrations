@@ -1,0 +1,10 @@
+%h4= t('report.payment_type.description')
+%br
+%table.table
+  %th= t('report.title.payment_type')
+  %th= t('report.title.total')
+
+  - @payment_type_report.each do |key, value|
+    %tr
+      %td= t("report.payment_type.#{key}")
+      %td= number_to_currency(value, locale: :pt)

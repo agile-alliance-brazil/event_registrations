@@ -61,6 +61,10 @@ class EventAttendancesController < ApplicationController
     @attendances_to_approval = event.attendances.waiting_approval
   end
 
+  def payment_type_report
+    @payment_type_report = GeneratePaymentTypeReport.run_for event
+  end
+
   private
 
   def save_attendance!

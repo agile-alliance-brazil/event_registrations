@@ -66,31 +66,31 @@ describe EventAttendancesController, type: :controller do
     let(:user) { FactoryGirl.create(:user) }
     let(:valid_attendance) do
       {
-          event_id: @event.id,
-          user_id: user.id,
-          registration_type_id: @individual.id,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-          email_confirmation: user.email,
-          organization: user.organization,
-          phone: user.phone,
-          country: user.country,
-          state: user.state,
-          city: user.city,
-          badge_name: user.badge_name,
-          cpf: user.cpf,
-          gender: user.gender,
-          twitter_user: user.twitter_user,
-          address: user.address,
-          neighbourhood: user.neighbourhood,
-          zipcode: user.zipcode
+        event_id: @event.id,
+        user_id: user.id,
+        registration_type_id: @individual.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        email_confirmation: user.email,
+        organization: user.organization,
+        phone: user.phone,
+        country: user.country,
+        state: user.state,
+        city: user.city,
+        badge_name: user.badge_name,
+        cpf: user.cpf,
+        gender: user.gender,
+        twitter_user: user.twitter_user,
+        address: user.address,
+        neighbourhood: user.neighbourhood,
+        zipcode: user.zipcode
       }
     end
     let(:valid_event) do
       {
-          name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link',
-          full_price: 840.00, start_date: 1.month.from_now, end_date: 2.months.from_now
+        name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link',
+        full_price: 840.00, start_date: 1.month.from_now, end_date: 2.months.from_now
       }
     end
     before(:each) do
@@ -497,25 +497,25 @@ describe EventAttendancesController, type: :controller do
       context 'and no group token informed' do
         let(:valid_attendance) do
           {
-              event_id: event.id,
-              user_id: user.id,
-              registration_type_id: registration_type.id,
-              first_name: user.first_name,
-              last_name: user.last_name,
-              email: 'bla@foo.bar',
-              email_confirmation: 'bla@foo.bar',
-              organization: 'sbrubbles',
-              phone: user.phone,
-              country: user.country,
-              state: user.state,
-              city: user.city,
-              badge_name: user.badge_name,
-              cpf: user.cpf,
-              gender: user.gender,
-              twitter_user: user.twitter_user,
-              address: user.address,
-              neighbourhood: user.neighbourhood,
-              zipcode: user.zipcode
+            event_id: event.id,
+            user_id: user.id,
+            registration_type_id: registration_type.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: 'bla@foo.bar',
+            email_confirmation: 'bla@foo.bar',
+            organization: 'sbrubbles',
+            phone: user.phone,
+            country: user.country,
+            state: user.state,
+            city: user.city,
+            badge_name: user.badge_name,
+            cpf: user.cpf,
+            gender: user.gender,
+            twitter_user: user.twitter_user,
+            address: user.address,
+            neighbourhood: user.neighbourhood,
+            zipcode: user.zipcode
           }
         end
 
@@ -725,6 +725,44 @@ describe EventAttendancesController, type: :controller do
       let!(:confirmed) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :confirmed) }
       before { get :to_approval, event_id: event.id }
       it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
+    end
+
+    describe '#payment_type_report' do
+      let(:event) { FactoryGirl.create(:event) }
+
+      context 'with no attendances' do
+        before { get :payment_type_report, event_id: event.id }
+        it { expect(assigns(:payment_type_report)).to eq({}) }
+      end
+
+      context 'with attendances' do
+        let(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+        let!(:gateway) { Invoice.from_attendance(pending, Invoice::GATEWAY) }
+
+        let(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+        let!(:other_gateway) { Invoice.from_attendance(paid, Invoice::GATEWAY) }
+
+        let(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+        let!(:grouped_gateway) { Invoice.from_attendance(grouped, Invoice::GATEWAY) }
+
+        let(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
+        let!(:deposit) { Invoice.from_attendance(confirmed, Invoice::DEPOSIT) }
+
+        let(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
+        let!(:statement) { Invoice.from_attendance(other_confirmed, Invoice::STATEMENT) }
+
+        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+        let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid) }
+
+        before { get :payment_type_report, event_id: event.id }
+        it 'returns just the attendances within two weeks ago' do
+          expect(assigns(:payment_type_report)).to eq({
+                                                        'gateway' => 800.0,
+                                                        'bank_deposit' => 400.0,
+                                                        'statement_agreement' => 400.0
+                                                      })
+        end
+      end
     end
   end
 end

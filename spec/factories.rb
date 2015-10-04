@@ -92,16 +92,4 @@ FactoryGirl.define do
     minimum_size 13
     discount 15
   end
-
-  factory :invoice do
-    user
-    status Invoice::PENDING
-    amount 1.00
-    payment_type Invoice::GATEWAY
-  end
-
-  factory :invoice_group do
-    registration_group
-    status Invoice::PENDING
-  end
 end

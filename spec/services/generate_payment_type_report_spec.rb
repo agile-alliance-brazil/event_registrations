@@ -17,4 +17,23 @@ describe GeneratePaymentTypeReport, type: :service do
       end
     end
   end
+
+  describe '.count_for' do
+    context 'with invalid parameter' do
+      it 'does not generate' do
+        expect(GeneratePaymentTypeReport.run_for(nil)).to be {}
+      end
+    end
+
+    context 'with valid parameter' do
+      let(:event) { FactoryGirl.create :event }
+      let(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+      let!(:gateway) { Invoice.from_attendance(paid, Invoice::GATEWAY) }
+
+      it 'generates the hash with the report' do
+        result = GeneratePaymentTypeReport.count_for(event)
+        expect(result).to eq({ 'gateway' => 1 })
+      end
+    end
+  end
 end

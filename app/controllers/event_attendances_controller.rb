@@ -12,8 +12,7 @@ class EventAttendancesController < ApplicationController
 
   def create
     if !current_user.organizer? && !event.can_add_attendance?
-      redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
-      return
+      return redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
     end
     attributes = build_attributes
     attendance = @event.attendances.find_by(email: attendance_params[:email], status: [:pending, :accepted, :paid, :confirmed])
@@ -63,6 +62,7 @@ class EventAttendancesController < ApplicationController
 
   def payment_type_report
     @payment_type_report = GeneratePaymentTypeReport.run_for event
+    @payment_type_report_count = GeneratePaymentTypeReport.count_for event
   end
 
   private

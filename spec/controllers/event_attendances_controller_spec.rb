@@ -761,6 +761,12 @@ describe EventAttendancesController, type: :controller do
                                                         'bank_deposit' => 400.0,
                                                         'statement_agreement' => 400.0
                                                       })
+
+          expect(assigns(:payment_type_report_count)).to eq({
+                                                              'gateway' => 2,
+                                                              'bank_deposit' => 1,
+                                                              'statement_agreement' => 1
+                                                            })
         end
       end
     end

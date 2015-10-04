@@ -353,5 +353,7 @@ en:
     payment_type:
       description: 'This report shows all paid and confirmed attendances'
       gateway: 'Gateway'
-      bank_deposit: 'Depósito Bancário'
-      statement_agreement: 'Empenho'
+      bank_deposit: 'Bank Deposit'
+      statement_agreement: 'Statement of Agreement'
+      total: 'Total value'
+      count: 'Total of attendances'

@@ -736,23 +736,14 @@ describe EventAttendancesController, type: :controller do
       end
 
       context 'with attendances' do
-        let(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-        let!(:gateway) { Invoice.from_attendance(pending, Invoice::GATEWAY) }
+        let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, payment_type: Invoice::GATEWAY) }
+        let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
+        let!(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::DEPOSIT) }
+        let!(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::STATEMENT) }
 
-        let(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-        let!(:other_gateway) { Invoice.from_attendance(paid, Invoice::GATEWAY) }
-
-        let(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-        let!(:grouped_gateway) { Invoice.from_attendance(grouped, Invoice::GATEWAY) }
-
-        let(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-        let!(:deposit) { Invoice.from_attendance(confirmed, Invoice::DEPOSIT) }
-
-        let(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-        let!(:statement) { Invoice.from_attendance(other_confirmed, Invoice::STATEMENT) }
-
-        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
-        let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, payment_type: Invoice::GATEWAY) }
+        let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid, payment_type: Invoice::GATEWAY) }
 
         before { get :payment_type_report, event_id: event.id }
         it 'returns just the attendances within two weeks ago' do

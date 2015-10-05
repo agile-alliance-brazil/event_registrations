@@ -66,7 +66,7 @@ class Attendance < ActiveRecord::Base
 
   after_save :update_group_invoice
 
-  delegate :token, to: :registration_group
+  delegate :token, to: :registration_group, allow_nil: true
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
   delegate :name, to: :event, prefix: :event, allow_nil: true
 

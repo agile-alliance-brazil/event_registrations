@@ -1,6 +1,6 @@
 describe AttendancesController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
-  let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link', full_price: 930.00) }
+  let(:event) { FactoryGirl.create(:event, full_price: 930.00) }
   let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
   let!(:free) { FactoryGirl.create(:registration_type, title: 'registration_type.free', event: event) }
   let!(:manual) { FactoryGirl.create(:registration_type, title: 'registration_type.manual', event: event) }

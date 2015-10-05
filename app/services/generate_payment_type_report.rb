@@ -1,15 +1,11 @@
 class GeneratePaymentTypeReport
   def self.run_for(event)
     return {} unless event.present?
-    report(event).sum(:registration_value)
+    event.attendances.already_paid.group('payment_type').sum(:registration_value)
   end
 
   def self.count_for(event)
     return {} unless event.present?
-    report(event).count(:id)
-  end
-
-  def self.report(event)
-    event.attendances.already_paid.group('payment_type')
+    event.attendances.already_paid.group('payment_type').count(:id)
   end
 end

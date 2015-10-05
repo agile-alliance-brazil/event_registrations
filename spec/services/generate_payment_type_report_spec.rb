@@ -1,7 +1,6 @@
 describe GeneratePaymentTypeReport, type: :service do
   let(:event) { FactoryGirl.create :event }
   describe '.run_for' do
-
     context 'with invalid parameter' do
       it 'does not generate' do
         expect(GeneratePaymentTypeReport.run_for(nil)).to be {}

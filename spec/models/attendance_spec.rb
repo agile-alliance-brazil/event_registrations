@@ -672,7 +672,7 @@ describe Attendance, type: :model do
   end
 
   describe '#discount' do
-    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:event) { FactoryGirl.create(:event) }
     context 'when is not member of a group' do
       let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
@@ -695,7 +695,7 @@ describe Attendance, type: :model do
   end
 
   describe '#group_name' do
-    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:event) { FactoryGirl.create(:event) }
     context 'with a registration group' do
       let!(:group) { FactoryGirl.create :registration_group, event: event }
       let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
@@ -712,14 +712,14 @@ describe Attendance, type: :model do
 
   describe '#event_name' do
     context 'with an event' do
-      let(:event) { Event.create!(name: Faker::Company.name) }
+      let(:event) { FactoryGirl.create(:event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
       it { expect(attendance.event_name).to eq event.name }
     end
   end
 
   describe '#grouped?' do
-    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link') }
+    let(:event) { FactoryGirl.create(:event) }
     let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
 
     context 'when belongs to a group' do
@@ -777,4 +777,6 @@ describe Attendance, type: :model do
       it { expect(attendance.due_date.to_date).to eq event.start_date.to_date }
     end
   end
+
+  pending 'delegates'
 end

@@ -83,12 +83,8 @@ describe AttendancesController, type: :controller do
 
           context 'without all statuses' do
             context 'without cancelled' do
-              before { get :index, event_id: event, search: 'bla', pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed' }
-              it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed] }
-            end
-            context 'without cancelled and confirmed' do
               before { get :index, event_id: event, search: 'bla', pending: 'pending', accepted: 'accepted', paid: 'paid' }
-              it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid] }
+              it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed] }
             end
             context 'without cancelled, confirmed and paid' do
               before { get :index, event_id: event, search: 'bla', pending: 'pending', accepted: 'accepted' }

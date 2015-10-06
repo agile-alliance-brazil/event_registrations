@@ -698,18 +698,20 @@ describe EventAttendancesController, type: :controller do
       end
 
       context 'with attendances' do
-        let!(:last_week) { FactoryGirl.create(:attendance, event: event, created_at: 7.days.ago) }
-        let!(:other_last_week) { FactoryGirl.create(:attendance, event: event, created_at: 7.days.ago) }
-        let!(:today) { FactoryGirl.create(:attendance, event: event) }
-        let!(:out) { FactoryGirl.create(:attendance, event: event, created_at: 21.days.ago) }
-        let!(:out_of_event) { FactoryGirl.create(:attendance) }
-
-        before { get :last_biweekly_active, event_id: event.id }
         it 'returns just the attendances within two weeks ago' do
+          now = Time.zone.local(2015, 4, 30, 0, 0, 0)
+          Timecop.freeze(now)
+          last_week = FactoryGirl.create(:attendance, event: event, created_at: 7.days.ago)
+          FactoryGirl.create(:attendance, event: event, created_at: 7.days.ago)
+          today = FactoryGirl.create(:attendance, event: event)
+          FactoryGirl.create(:attendance, event: event, created_at: 21.days.ago)
+          FactoryGirl.create(:attendance)
+          get :last_biweekly_active, event_id: event.id
           expect(assigns(:attendances_biweekly_grouped)).to eq({
                                                                  last_week.created_at.strftime('%Y-%m-%d') => 2,
                                                                  today.created_at.strftime('%Y-%m-%d') => 1
                                                                })
+          Timecop.return
         end
       end
     end

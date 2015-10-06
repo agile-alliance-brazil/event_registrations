@@ -380,7 +380,7 @@ describe EventAttendancesController, type: :controller do
     end
 
     context 'with a valid attendance' do
-      let(:event) { FactoryGirl.create(:event,full_price: 840.00) }
+      let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
       let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
       let(:attendance) { FactoryGirl.create(:attendance, event: event) }
       let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }

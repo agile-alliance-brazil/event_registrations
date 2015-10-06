@@ -14,7 +14,7 @@
   %div.form-group
     = text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50, :class => 'form-control'
     = submit_tag 'Search', :name => nil, :class => 'btn btn-primary'
-    = link_to t('actions.download_csv'), attendances_path(event_id: @event, format: 'csv', confirmed: 'confirmed'), class: 'btn btn-success'
+    = link_to t('actions.download_csv'), attendances_path(event_id: @event, format: 'csv', paid: 'paid'), class: 'btn btn-success'
 
 <br />
 

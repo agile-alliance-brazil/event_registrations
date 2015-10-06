@@ -70,6 +70,7 @@ class EventAttendancesController < ApplicationController
   def save_attendance!
     invoice = Invoice.from_attendance(@attendance, payment_type_params)
     @attendance.invoices << invoice unless @attendance.invoices.include? invoice
+    @attendance.payment_type = invoice.payment_type
     if @attendance.save
       begin
         flash[:notice] = t('flash.attendance.create.success')
@@ -105,8 +106,6 @@ class EventAttendancesController < ApplicationController
 
   def notify(attendance)
     EmailNotifications.registration_pending(attendance).deliver
-    attendance.email_sent = true
-    attendance.save
   end
 
   def notify_or_log(ex)

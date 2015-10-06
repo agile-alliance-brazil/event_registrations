@@ -106,10 +106,6 @@ class Attendance < ActiveRecord::Base
     amount
   end
 
-  def payment_type
-    invoices.individual.last.payment_type if invoices.present?
-  end
-
   def grouped?
     registration_group.present?
   end

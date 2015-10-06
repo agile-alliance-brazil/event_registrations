@@ -115,10 +115,11 @@ describe EventAttendancesController, type: :controller do
       expect(response).to redirect_to(attendance_path(5))
     end
 
-    it 'assigns current event to attendance' do
+    it 'assigns current event to attendance and the payment type' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq @event
+      expect(assigns(:attendance).payment_type).to eq Invoice.last.payment_type
     end
 
     context 'event value for attendance' do

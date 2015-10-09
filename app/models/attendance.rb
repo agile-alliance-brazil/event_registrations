@@ -91,6 +91,7 @@ class Attendance < ActiveRecord::Base
   scope :last_biweekly_active, -> { active.where('created_at > ?', 15.days.ago) }
   scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
   scope :already_paid, -> { where("attendances.status IN ('paid', 'confirmed')") }
+  scope :non_free, -> { where('registration_value > 0') }
 
   def full_name
     [first_name, last_name].join(' ')

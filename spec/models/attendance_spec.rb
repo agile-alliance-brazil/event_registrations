@@ -303,6 +303,21 @@ describe Attendance, type: :model do
         let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
         it { expect(Attendance.pending_accepted).to eq [pending, accepted] }
       end
+
+      describe '.already_paid' do
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
+        it { expect(Attendance.already_paid).to eq [paid, confirmed] }
+      end
+
+      describe '.non_free' do
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending, registration_value: 100) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted, registration_value: 0) }
+        it { expect(Attendance.non_free).to eq [pending] }
+      end
     end
   end
 

@@ -744,12 +744,13 @@ describe EventAttendancesController, type: :controller do
         let!(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
         let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::DEPOSIT) }
         let!(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::STATEMENT) }
+        let!(:free) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::STATEMENT, registration_value: 0) }
 
         let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, payment_type: Invoice::GATEWAY) }
         let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid, payment_type: Invoice::GATEWAY) }
 
         before { get :payment_type_report, event_id: event.id }
-        it 'returns just the attendances within two weeks ago' do
+        it 'returns the attendances with non free registration value grouped by payment type' do
           expect(assigns(:payment_type_report)).to eq({
                                                         'gateway' => 800.0,
                                                         'bank_deposit' => 400.0,

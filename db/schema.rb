@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150702015254) do
+ActiveRecord::Schema.define(version: 20151005170325) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20150702015254) do
     t.integer  "registration_period_id"
     t.boolean  "advised",                default: false
     t.datetime "advised_at"
+    t.string   "payment_type"
   end
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
@@ -69,7 +70,6 @@ ActiveRecord::Schema.define(version: 20150702015254) do
     t.decimal  "full_price"
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "characteristic"
   end
 
   create_table "invoice_attendances", force: :cascade do |t|

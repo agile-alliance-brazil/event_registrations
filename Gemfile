@@ -75,7 +75,7 @@ end
 
 group :test do
   gem 'mocha', require: false
-  gem 'shoulda-matchers', require: false
+  gem 'shoulda-matchers', '< 3.0.0', require: false # 3.x requires ruby 2+
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil

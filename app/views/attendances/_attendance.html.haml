@@ -5,7 +5,7 @@
   %td= attendance.email
   %td= attendance.city
   %td= attendance.state
-  %td= attendance.payment_type
+  %td= t("report.payment_type.#{attendance.payment_type || 'nil'}")
   %td= attendance.registration_date.strftime('%d/%m/%Y %H:%M')
   %td= number_to_currency(attendance.registration_value, locale: :pt)
   %td= attendance.status

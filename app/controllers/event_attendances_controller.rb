@@ -62,7 +62,6 @@ class EventAttendancesController < ApplicationController
 
   def payment_type_report
     @payment_type_report = GeneratePaymentTypeReport.run_for event
-    @payment_type_report_count = GeneratePaymentTypeReport.count_for event
   end
 
   private

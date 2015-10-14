@@ -2,18 +2,13 @@
 %br
 %table.table
   %th= t('report.title.payment_type')
+  %th= t('report.title.value_grouped')
+  %th= t('report.title.quantity')
   %th= t('report.payment_type.total')
 
   - @payment_type_report.each do |key, value|
     %tr
-      %td= t("report.payment_type.#{key}")
-      %td= number_to_currency(value, locale: :pt)
-
-%table.table
-  %th= t('report.title.payment_type')
-  %th= t('report.payment_type.count')
-
-  - @payment_type_report_count.each do |key, value|
-    %tr
-      %td= t("report.payment_type.#{key}")
+      %td= t("report.payment_type.#{key[0] || 'nil'}")
+      %td= number_to_currency(key[1], locale: :pt)
       %td= value
+      %td= number_to_currency(key[1] * value, locale: :pt)

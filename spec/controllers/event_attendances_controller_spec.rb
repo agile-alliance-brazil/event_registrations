@@ -741,6 +741,7 @@ describe EventAttendancesController, type: :controller do
       context 'with attendances' do
         let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, payment_type: Invoice::GATEWAY) }
         let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
+        let!(:valued) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY, registration_value: 123) }
         let!(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
         let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::DEPOSIT) }
         let!(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::STATEMENT) }
@@ -752,16 +753,11 @@ describe EventAttendancesController, type: :controller do
         before { get :payment_type_report, event_id: event.id }
         it 'returns the attendances with non free registration value grouped by payment type' do
           expect(assigns(:payment_type_report)).to eq({
-                                                        'gateway' => 800.0,
-                                                        'bank_deposit' => 400.0,
-                                                        'statement_agreement' => 400.0
+                                                        ['bank_deposit', 400.0] => 1,
+                                                        ['gateway', 400.0] => 2,
+                                                        ['statement_agreement', 400.0] => 1,
+                                                        ['gateway', 123.0] => 1
                                                       })
-
-          expect(assigns(:payment_type_report_count)).to eq({
-                                                              'gateway' => 2,
-                                                              'bank_deposit' => 1,
-                                                              'statement_agreement' => 1
-                                                            })
         end
       end
     end

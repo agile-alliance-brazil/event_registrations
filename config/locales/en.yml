@@ -350,6 +350,8 @@ en:
     title:
       total: 'Attendances total'
       payment_type: 'Payment type'
+      quantity: "Quantity"
+      value_grouped: "Grouped value"
     payment_type:
       description: 'This report shows all paid and confirmed attendances'
       gateway: 'Gateway'
@@ -357,3 +359,4 @@ en:
       statement_agreement: 'Statement of Agreement'
       total: 'Total value'
       count: 'Total of attendances'
+      nil: "No payment type"

@@ -493,6 +493,8 @@ pt:
     title:
       total: 'Total de inscritos'
       payment_type: 'Tipo de pagamento'
+      quantity: "Quantidade"
+      value_grouped: "Valor agrupado"
     payment_type:
       description: 'Este relatório mostra a soma do valor da inscrição de todos os participantes pagos e confirmados'
       gateway: 'Gateway'
@@ -500,3 +502,4 @@ pt:
       statement_agreement: 'Empenho'
       total: 'Valor total'
       count: 'Total de inscritos'
+      nil: "Sem tipo de pagamento"

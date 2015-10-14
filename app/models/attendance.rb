@@ -115,6 +115,11 @@ class Attendance < ActiveRecord::Base
     update_attributes(advised: true, advised_at: Time.zone.now)
   end
 
+  def due_date
+    return event.start_date if !advised_due_date.present? || advised_due_date > event.start_date
+    advised_due_date
+  end
+
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
       csv << [:first_name, :last_name, :organization, :email]
@@ -125,6 +130,10 @@ class Attendance < ActiveRecord::Base
   end
 
   private
+
+  def advised_due_date
+    advised_at + 7.days if advised_at.present?
+  end
 
   def update_group_invoice
     registration_group.update_invoice if registration_group.present? && registration_value.present?

@@ -746,7 +746,7 @@ describe Attendance, type: :model do
     end
   end
 
-  describe '#to_csv' do
+  describe '.to_csv' do
     context 'with attendances' do
       let(:event) { FactoryGirl.create :event }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
@@ -755,6 +755,26 @@ describe Attendance, type: :model do
       end
       subject(:attendances_list) { Attendance.all }
       it { expect(attendances_list.to_csv).to eq expected }
+    end
+  end
+
+  describe '#due_date' do
+    context 'when the attendance was not advised yet' do
+      let(:event) { FactoryGirl.create(:event, start_date: 3.days.from_now) }
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, advised_at: nil) }
+      it { expect(attendance.due_date.to_date).to eq event.start_date.to_date }
+    end
+
+    context 'when event start date is after event due date' do
+      let(:event) { FactoryGirl.create(:event, start_date: 3.days.from_now) }
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, advised_at: 7.days.ago) }
+      it { expect(attendance.due_date.to_date).to eq Time.zone.today }
+    end
+
+    context 'when event start date is before event due date' do
+      let(:event) { FactoryGirl.create(:event, start_date: 3.days.from_now) }
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, advised_at: Time.zone.today) }
+      it { expect(attendance.due_date.to_date).to eq event.start_date.to_date }
     end
   end
 end

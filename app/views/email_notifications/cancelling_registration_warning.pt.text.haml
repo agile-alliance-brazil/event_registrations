@@ -2,7 +2,7 @@ Oi #{h(@attendance.full_name)},
 
 
 
-Existe uma pendência no pagamento da sua inscrição na #{@attendance.event.name}. Caso não seja regularizada até #{7.days.from_now.to_date.strftime('%d/%m/%Y')}, sua inscrição será automaticamente cancelada.
+Existe uma pendência no pagamento da sua inscrição na #{@attendance.event.name}. Caso não seja regularizada até #{@attendance.due_date.to_date.strftime('%d/%m/%Y')}, sua inscrição será automaticamente cancelada.
 
 
 Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:

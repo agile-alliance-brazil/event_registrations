@@ -149,7 +149,7 @@ describe AttendancesController, type: :controller do
       let!(:other) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
       before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled', format: :csv }
       it 'returns the attendances in the csv format' do
-        expected_body = "first_name,last_name,organization,email\n#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email}\n#{other.first_name},#{other.last_name},#{other.organization},#{other.email}\n"
+        expected_body = "first_name,last_name,organization,email,payment_type\n#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email},#{attendance.payment_type}\n#{other.first_name},#{other.last_name},#{other.organization},#{other.email},#{attendance.payment_type}\n"
         expected_disposition = "attachment; filename=\"attendances_list.csv\""
         expect(response.body).to eq expected_body
         expect(response.headers['Content-Disposition']).to eq expected_disposition

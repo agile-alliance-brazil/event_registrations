@@ -751,7 +751,7 @@ describe Attendance, type: :model do
       let(:event) { FactoryGirl.create :event }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
       let(:expected) do
-        "first_name,last_name,organization,email\n#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email}\n"
+        "first_name,last_name,organization,email,payment_type\n#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email},#{attendance.payment_type}\n"
       end
       subject(:attendances_list) { Attendance.all }
       it { expect(attendances_list.to_csv).to eq expected }

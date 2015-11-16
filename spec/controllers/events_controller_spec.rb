@@ -48,7 +48,7 @@ describe EventsController, type: :controller do
     end
 
     context 'with events' do
-      let!(:event) { Event.create name: 'Foo', start_date: Time.zone.today - 1, end_date: Time.zone.today + 1.months }
+      let!(:event) { Event.create name: 'Foo', start_date: Time.zone.today - 1, end_date: Time.zone.today + 1.month }
 
       context 'and one event at the right period' do
         before { get :index }

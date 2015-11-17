@@ -749,9 +749,19 @@ describe Attendance, type: :model do
   describe '.to_csv' do
     context 'with attendances' do
       let(:event) { FactoryGirl.create :event }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
+      let(:group) { FactoryGirl.create :registration_group, event: event }
+      let!(:attendance) do
+        FactoryGirl.create(:attendance,
+                           event: event,
+                           status: :pending,
+                           first_name: 'bLa',
+                           registration_group: group)
+      end
+
       let(:expected) do
-        "first_name,last_name,organization,email,payment_type\n#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email},#{attendance.payment_type}\n"
+        title = "first_name,last_name,organization,email,payment_type,group_name\n"
+        body = "#{attendance.first_name},#{attendance.last_name},#{attendance.organization},#{attendance.email},#{attendance.payment_type},#{attendance.group_name}\n"
+        title + body
       end
       subject(:attendances_list) { Attendance.all }
       it { expect(attendances_list.to_csv).to eq expected }

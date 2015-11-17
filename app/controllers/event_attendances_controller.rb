@@ -1,4 +1,3 @@
-# encoding: UTF-8
 class EventAttendancesController < ApplicationController
   include Concerns::Initiation
 

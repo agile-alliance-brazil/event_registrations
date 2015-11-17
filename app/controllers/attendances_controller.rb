@@ -1,10 +1,9 @@
-# encoding: UTF-8
 class AttendancesController < ApplicationController
   before_filter :load_event, except: :index
-  skip_before_filter :attendance, only: :index
-  skip_before_filter :authenticate_user!, only: :callback
-  skip_before_filter :authorize_action, only: [:callback, :index]
-  protect_from_forgery except: [:callback]
+
+  skip_before_filter :authorize_action, only: [:index]
+
+  protect_from_forgery
 
   def index
     return unless can? :attendances_list, Attendance

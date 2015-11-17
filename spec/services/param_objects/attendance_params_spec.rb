@@ -47,8 +47,8 @@ describe AttendanceParams, type: :param_object do
                                                    'zipcode' => user.zipcode,
                                                    'registration_group_id' => nil,
                                                    :email_confirmation => user.email,
-                                                   :event_id => 12,
-                                                   :user_id => 1,
+                                                   :event_id => event.id,
+                                                   :user_id => user.id,
                                                    :registration_date => now })
       expect(params_object.event).to eq event
       expect(params_object.user).to eq user

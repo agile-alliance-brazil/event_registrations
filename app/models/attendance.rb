@@ -122,14 +122,17 @@ class Attendance < ActiveRecord::Base
 
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
-      csv << [:first_name, :last_name, :organization, :email, :payment_type, :group_name]
+      csv << [:first_name, :last_name, :organization, :email, :payment_type, :group_name, :city, :state, :value]
       all.find_each do |attendance|
         csv << [attendance.first_name,
                 attendance.last_name,
                 attendance.organization,
                 attendance.email,
                 attendance.payment_type,
-                attendance.group_name]
+                attendance.group_name,
+                attendance.city,
+                attendance.state,
+                attendance.registration_value]
       end
     end
   end

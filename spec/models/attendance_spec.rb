@@ -155,6 +155,16 @@ describe Attendance, type: :model do
     end
 
     context 'with specific seed' do
+      describe '.active' do
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
+        let!(:no_show) { FactoryGirl.create(:attendance, status: :no_show) }
+        it { expect(Attendance.active).to eq [pending, accepted, paid, confirmed] }
+      end
+
       describe '.search_for_list' do
         context 'and no attendances' do
           it { expect(Attendance.search_for_list('bla', [])).to eq [] }
@@ -317,6 +327,15 @@ describe Attendance, type: :model do
         let!(:pending) { FactoryGirl.create(:attendance, status: :pending, registration_value: 100) }
         let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted, registration_value: 0) }
         it { expect(Attendance.non_free).to eq [pending] }
+      end
+
+      describe '.pending' do
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
+        it { expect(Attendance.pending).to eq [pending, accepted] }
       end
     end
   end
@@ -527,6 +546,53 @@ describe Attendance, type: :model do
           EmailNotifications.expects(:registration_confirmed).once
           attendance = FactoryGirl.create :attendance, status: :paid
           attendance.confirm
+          expect(attendance.status).to eq 'confirmed'
+        end
+      end
+    end
+
+    describe '#mark_no_show' do
+      context 'when is pending' do
+        it 'mark as no show' do
+          attendance = FactoryGirl.create :attendance
+          attendance.expects(:cancel_invoice!).once
+          attendance.mark_no_show
+          expect(attendance.status).to eq 'no_show'
+        end
+      end
+
+      context 'when is accepted' do
+        it 'mark as no show' do
+          attendance = FactoryGirl.create :attendance, status: :accepted
+          attendance.expects(:cancel_invoice!).once
+          attendance.mark_no_show
+          expect(attendance.status).to eq 'no_show'
+        end
+      end
+
+      context 'when is cancelled' do
+        it 'keep it cancelled' do
+          attendance = FactoryGirl.create :attendance, status: :cancelled
+          attendance.expects(:cancel_invoice!).never
+          attendance.mark_no_show
+          expect(attendance.status).to eq 'cancelled'
+        end
+      end
+
+      context 'when is paid' do
+        it 'keep it paid' do
+          attendance = FactoryGirl.create :attendance, status: :paid
+          attendance.expects(:cancel_invoice!).never
+          attendance.mark_no_show
+          expect(attendance.status).to eq 'paid'
+        end
+      end
+
+      context 'when is confirmed' do
+        it 'keep it paid' do
+          attendance = FactoryGirl.create :attendance, status: :confirmed
+          attendance.expects(:cancel_invoice!).never
+          attendance.mark_no_show
           expect(attendance.status).to eq 'confirmed'
         end
       end
@@ -749,7 +815,7 @@ describe Attendance, type: :model do
   describe '.to_csv' do
     context 'with attendances' do
       let(:event) { FactoryGirl.create :event }
-      let(:group) { FactoryGirl.create :registration_group, event: event }
+      let(:group) { FactoryGirl.create :registration_group, event: event, name: 'Group for to csv test' }
       let!(:attendance) do
         FactoryGirl.create(:attendance,
                            event: event,

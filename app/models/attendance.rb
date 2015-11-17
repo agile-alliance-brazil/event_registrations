@@ -75,7 +75,7 @@ class Attendance < ActiveRecord::Base
   scope :for_event, ->(e) { where(event_id: e.id) }
   scope :for_registration_type, ->(t) { where(registration_type_id: t.id) }
   scope :without_registration_type, ->(t) { where("#{table_name}.registration_type_id != (?)", t.id) }
-  scope :active, -> { where('attendances.status != (?)', :cancelled) }
+  scope :active, -> { where('status NOT IN (?)', [:cancelled, :no_show]) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
   scope :search_for_list, lambda { |param, status|
     where('(first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?)',
@@ -92,6 +92,7 @@ class Attendance < ActiveRecord::Base
   scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
   scope :already_paid, -> { where("attendances.status IN ('paid', 'confirmed')") }
   scope :non_free, -> { where('registration_value > 0') }
+  scope :pending, -> { where("attendances.status IN ('pending', 'accepted')") }
 
   def full_name
     [first_name, last_name].join(' ')

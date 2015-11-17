@@ -10,7 +10,7 @@ module Concerns
       scope :paid, -> { where(status: [:paid, :confirmed]) }
 
       state_machine :status, initial: :pending do
-        after_transition on: :cancel, do: :cancel_invoice!
+        after_transition on: [:cancel, :mark_no_show], do: :cancel_invoice!
         after_transition on: :recover, do: :recover_invoice!
         after_transition on: :pay, do: [:check_confirmation, :pay_invoice!]
 
@@ -32,6 +32,10 @@ module Concerns
 
         event :recover do
           transition [:cancelled] => :pending
+        end
+
+        event :mark_no_show do
+          transition [:pending, :accepted] => :no_show
         end
 
         state :confirmed do

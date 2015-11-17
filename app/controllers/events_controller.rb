@@ -16,7 +16,7 @@ class EventsController < ApplicationController
   end
 
   def list_archived
-    @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date < Time.zone.now }
+    @events = Event.includes(:registration_periods).ended
     render :index
   end
 end

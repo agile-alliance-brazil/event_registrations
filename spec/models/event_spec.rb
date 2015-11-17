@@ -170,18 +170,29 @@ describe Event, type: :model do
     end
   end
 
-  describe '.active_for' do
-    context 'with one event available and other with end date at past year' do
-      let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-      let!(:other_event) { FactoryGirl.create :event, start_date: 1.year.ago, end_date: 1.year.ago }
-      it { expect(Event.active_for(Time.zone.today)).to match_array [event] }
+  context 'scopes' do
+    describe '.active_for' do
+      context 'with one event available and other with end date at past year' do
+        let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+        let!(:other_event) { FactoryGirl.create :event, start_date: 1.year.ago, end_date: 1.year.ago }
+        it { expect(Event.active_for(Time.zone.today)).to match_array [event] }
+      end
+
+      context 'with two events available and other with end date at past year' do
+        let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+        let!(:other_event_valid) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+        let!(:other_event) { FactoryGirl.create :event, start_date: 1.year.ago, end_date: 1.year.ago }
+        it { expect(Event.active_for(Time.zone.today)).to match_array [event, other_event_valid] }
+      end
     end
 
-    context 'with two events available and other with end date at past year' do
-      let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-      let!(:other_event_valid) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-      let!(:other_event) { FactoryGirl.create :event, start_date: 1.year.ago, end_date: 1.year.ago }
-      it { expect(Event.active_for(Time.zone.today)).to match_array [event, other_event_valid] }
+    describe '.ended' do
+      context 'and one at the right period and other not' do
+        let!(:event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
+        let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
+
+        it { expect(Event.ended).to eq [event] }
+      end
     end
   end
 

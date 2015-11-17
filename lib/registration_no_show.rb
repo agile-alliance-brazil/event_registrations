@@ -6,7 +6,6 @@ class RegistrationNoShow
     events.each do |event|
       attendances_to_no_show = event.attendances.pending
       attendances_to_no_show.all.each do |attendance|
-        next if attendance.grouped? && !attendance.registration_group.complete?
         Rails.logger.info("[Marking as No Show Attendance] #{attendance.to_param}")
         attendance.mark_no_show
       end

@@ -9,56 +9,24 @@ describe EventAttendancesController, type: :controller do
     @manual = FactoryGirl.create(:registration_type, title: 'registration_type.manual', event: @event)
     @speaker = FactoryGirl.create(:registration_type, title: 'registration_type.speaker', event: @event)
 
-    now = Time.zone.local(2013, 5, 1)
-    Timecop.freeze(now)
     WebMock.enable!
   end
 
   after :each do
-    Timecop.return
     WebMock.disable!
   end
 
   describe 'GET new' do
-    before do
-      controller.current_user = FactoryGirl.create(:user)
-    end
+    before { controller.current_user = FactoryGirl.create(:user) }
 
-    it 'should render new template' do
+    it 'renders new template' do
       get :new, event_id: @event.id
       expect(response).to render_template(:new)
     end
 
-    it 'should assign current event to attendance' do
+    it 'assigns current event to attendance' do
       get :new, event_id: @event.id
-      expect(assigns(:attendance).event).to eq(@event)
-    end
-
-    describe 'for individual registration' do
-      it 'should load registration types without groups or free' do
-        get :new, event_id: @event.id
-        expect(assigns(:registration_types)).to include(@individual)
-        expect(assigns(:registration_types).size).to eq(1)
-      end
-    end
-
-    describe 'for organizers' do
-      before do
-        @user = FactoryGirl.create(:user)
-        @user.add_role :organizer
-        @user.save!
-        sign_in @user
-        disable_authorization
-      end
-
-      it 'should load registration types without groups but with free' do
-        get :new, event_id: @event.id
-        expect(assigns(:registration_types)).to include(@individual)
-        expect(assigns(:registration_types)).to include(@free)
-        expect(assigns(:registration_types)).to include(@speaker)
-        expect(assigns(:registration_types)).to include(@manual)
-        expect(assigns(:registration_types).size).to eq(4)
-      end
+      expect(assigns(:attendance).event).to eq @event
     end
   end
 
@@ -109,14 +77,11 @@ describe EventAttendancesController, type: :controller do
     end
 
     it 'redirects when model is valid' do
-      Attendance.any_instance.stubs(:valid?).returns(true)
-      Attendance.any_instance.stubs(:id).returns(5)
       post :create, event_id: @event.id, attendance: valid_attendance
-      expect(response).to redirect_to(attendance_path(5))
+      expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
     end
 
-    it 'assigns current event to attendance and the payment type' do
-      Attendance.any_instance.stubs(:valid?).returns(true)
+    it 'assigns current event to attendance' do
       post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq @event
       expect(assigns(:attendance).payment_type).to eq Invoice.last.payment_type
@@ -177,7 +142,7 @@ describe EventAttendancesController, type: :controller do
       Attendance.any_instance.stubs(:valid?).returns(true)
       exception = StandardError.new
       EmailNotifications.expects(:registration_pending).raises(exception)
-      controller.expects(:notify_airbrake).with(exception)
+      Airbrake.expects(:notify).with(exception)
       post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq(@event)
     end
@@ -186,7 +151,7 @@ describe EventAttendancesController, type: :controller do
       Attendance.any_instance.stubs(:valid?).returns(true)
       exception = StandardError.new
       EmailNotifications.expects(:registration_pending).raises(exception)
-      controller.expects(:notify_airbrake).with(exception).raises(exception)
+      Airbrake.expects(:notify).with(exception).raises(exception)
       post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq(@event)
     end
@@ -199,21 +164,6 @@ describe EventAttendancesController, type: :controller do
           post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
           expect(response).to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
-        end
-
-        it 'allows attendance creation if user is organizer' do
-          Attendance.any_instance.stubs(:valid?).returns(true)
-          Attendance.any_instance.stubs(:id).returns(5)
-
-          user = FactoryGirl.create(:user)
-          user.add_role :organizer
-          user.save!
-          sign_in user
-          disable_authorization
-
-          post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
-
-          expect(response).to redirect_to(attendance_path(5))
         end
       end
 
@@ -229,15 +179,6 @@ describe EventAttendancesController, type: :controller do
         let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
         let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
         subject(:attendance) { assigns(:attendance) }
-
-        context 'form validations' do
-          it 'keeps registration token when form is invalid' do
-            user.phone = nil
-            post :create, event_id: @event.id, registration_token: 'xpto', attendance: { event_id: @event.id }
-            expect(response).to render_template(:new)
-            expect(response.body).to have_field('registration_token', type: 'text', with: 'xpto')
-          end
-        end
 
         context 'an invalid' do
           context 'and one event' do
@@ -297,8 +238,8 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to redirect_to attendance_path(attendance)
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+              expect(response).to render_template :new
+              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
 
@@ -309,7 +250,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -321,8 +262,8 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to redirect_to attendance_path(attendance)
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+              expect(response).to render_template :new
+              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
 
@@ -333,7 +274,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -344,8 +285,8 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to redirect_to attendance_path(attendance)
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+              expect(response).to render_template :new
+              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
           context 'in other event' do
@@ -355,7 +296,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -366,8 +307,8 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to redirect_to attendance_path(attendance)
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.already_existent'))
+              expect(response).to render_template :new
+              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
           context 'in other event' do
@@ -377,7 +318,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -387,7 +328,7 @@ describe EventAttendancesController, type: :controller do
             AgileAllianceService.stubs(:check_member).returns(false)
             post :create, event_id: @event.id, attendance: valid_attendance
             expect(Attendance.count).to eq 2
-            expect(flash[:notice]).to eq(I18n.t('flash.attendance.create.success'))
+            expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
           end
         end
       end
@@ -396,58 +337,6 @@ describe EventAttendancesController, type: :controller do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)
         post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
-      end
-    end
-
-    describe 'for sponsor registration' do
-      before do
-        @user = FactoryGirl.create(:user)
-        @user.add_role :organizer
-        @user.save!
-        sign_in @user
-        disable_authorization
-      end
-
-      it 'should allow free registration type no matter the email' do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
-
-        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: "another#{@user.email}" }
-        expect(response).to redirect_to(attendance_path(5))
-      end
-
-      it 'should not send pending registration e-mail for free registration' do
-        EmailNotifications.expects(:registration_pending).never
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
-
-        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: @user.email }
-
-        expect(response).to redirect_to(attendance_path(5))
-      end
-    end
-
-    context 'for speaker registration' do
-      before do
-        User.any_instance.stubs(:has_approved_session?).returns(true)
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-        disable_authorization
-      end
-
-      it 'allows free registration type only its email' do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
-        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: @user.email }
-        expect(response).to redirect_to(attendance_path(5))
-      end
-
-      it 'not send pending registration e-mail for free registration' do
-        EmailNotifications.expects(:registration_pending).never
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        Attendance.any_instance.stubs(:id).returns(5)
-        post :create, event_id: @event.id, attendance: { registration_type_id: @free.id, email: @user.email }
-        expect(response).to redirect_to(attendance_path(5))
       end
     end
   end
@@ -461,7 +350,7 @@ describe EventAttendancesController, type: :controller do
     end
 
     context 'with a valid attendance' do
-      let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
+      let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
       let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
       let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
@@ -491,7 +380,7 @@ describe EventAttendancesController, type: :controller do
     end
 
     context 'with a valid attendance' do
-      let(:event) { Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00) }
+      let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
       let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
       let(:attendance) { FactoryGirl.create(:attendance, event: event) }
       let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }

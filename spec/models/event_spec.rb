@@ -54,7 +54,7 @@ describe Event, type: :model do
   end
 
   describe '#registration_price_for' do
-    let(:event) { Event.create!(name: Faker::Company.name, price_table_link: 'http://localhost:9292/link', full_price: 930.00) }
+    let(:event) { FactoryGirl.create(:event, full_price: 930.00) }
     let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
     let!(:attendance) { FactoryGirl.create :attendance, event: event }
     context 'with one registration period' do
@@ -171,12 +171,6 @@ describe Event, type: :model do
   end
 
   describe '.active_for' do
-    context 'with one event available and other with null at end date' do
-      let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-      let!(:other_event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: nil }
-      it { expect(Event.active_for(Time.zone.today)).to match_array [event] }
-    end
-
     context 'with one event available and other with end date at past year' do
       let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
       let!(:other_event) { FactoryGirl.create :event, start_date: 1.year.ago, end_date: 1.year.ago }

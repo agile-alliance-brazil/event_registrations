@@ -24,6 +24,8 @@ class Event < ActiveRecord::Base
 
   has_many :registration_groups
 
+  validates :start_date, :end_date, :full_price, :name, presence: true
+
   delegate :attendances_for, to: :attendances
 
   scope :active_for, ->(date) { where('end_date > ?', date) }

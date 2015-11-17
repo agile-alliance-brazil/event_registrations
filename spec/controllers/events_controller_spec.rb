@@ -1,5 +1,5 @@
 describe EventsController, type: :controller do
-  describe '#show' do
+  describe 'GET #show' do
     let!(:event) { FactoryGirl.create :event }
     context 'with an existent user' do
       before { get :show, id: event.id }
@@ -41,7 +41,7 @@ describe EventsController, type: :controller do
     end
   end
 
-  describe '#index' do
+  describe 'GET #index' do
     context 'without events at the right period' do
       before { get :index }
       it { expect(assigns(:events)).to match_array [] }
@@ -72,6 +72,42 @@ describe EventsController, type: :controller do
         let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
 
         before { get :index }
+        it { expect(assigns(:events)).to match_array [event, other_event] }
+      end
+    end
+  end
+
+  describe 'GET #list_archived' do
+    context 'without events' do
+      before { get :list_archived }
+      it { expect(assigns(:events)).to match_array [] }
+    end
+
+    context 'with events' do
+      let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: 2.months.ago, end_date: 1.month.ago) }
+
+      context 'and one event at the right period' do
+        before { get :list_archived }
+        it { expect(assigns(:events)).to match_array [event] }
+      end
+
+      context 'and two at the right period' do
+        let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
+        before { get :list_archived }
+        it { expect(assigns(:events)).to match_array [event, other_event] }
+      end
+
+      context 'and one at the right period and other not' do
+        let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
+        before { get :list_archived }
+        it { expect(assigns(:events)).to match_array [event] }
+      end
+
+      context 'and two at the right period and other not' do
+        let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
+        let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
+
+        before { get :list_archived }
         it { expect(assigns(:events)).to match_array [event, other_event] }
       end
     end

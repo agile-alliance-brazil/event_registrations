@@ -162,6 +162,7 @@ en:
     until: "until"
     untitled: 'Sem título'
 
+    archived_events: "Archived events"
   actions:
     edit: "Edit"
     destroy: "Remove"

@@ -1,4 +1,3 @@
-# encoding: UTF-8
 Current::Application.routes.draw do
   post '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/:provider/callback', to: 'sessions#create' # due problems without dev backdoor
@@ -10,6 +9,10 @@ Current::Application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   resources :events, only: [:index, :show] do
+    collection do
+      get :list_archived
+    end
+
     resources :attendances, only: [:new, :create, :edit, :update], controller: :event_attendances do
       collection do
         get :by_state

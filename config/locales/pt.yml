@@ -299,6 +299,7 @@ pt:
     until: "a"
     untitled: 'Untitled'
 
+    archived_events: "Eventos arquivados"
   actions:
     edit: "Editar"
     destroy: "Remover"

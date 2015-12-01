@@ -39,6 +39,7 @@ gem 'sass', '~> 3.4'
 gem 'coffee-rails', '~> 4.1'
 gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
 gem 'bootstrap-sass', '~> 3.3'
+gem 'autoprefixer-rails', '< 6.1.2' # This is a loose dependency from bootstrap-sass. 6.1.2 requires ruby 2+
 
 group :production, :travis do
   gem 'mysql2', '< 0.4' # Rails 4 doesn't support mysql2 0.4

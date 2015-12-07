@@ -8,10 +8,9 @@ before_script:
   - cp ./config/database.{travis,yml}
   - cp ./certs/app_cert.{example,pem}
   - cp ./certs/app_key.{example,pem}
-  - cp ./certs/paypal_cert.{example,pem}
   - mysql -e 'create database registrations_test;'
 script:
-  - RAILS_ENV=test bundle exec rake db:migrate db:test:prepare
-  - bundle exec rake spec
+  - RAILS_ENV=test bundle exec rake db:drop db:create db:migrate db:test:prepare
+  - bundle exec rake ci
 bundler_args: --without development production
 

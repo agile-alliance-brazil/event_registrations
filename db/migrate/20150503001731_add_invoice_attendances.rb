@@ -7,6 +7,6 @@ class AddInvoiceAttendances < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :invoice_attendances, [:invoice_id, :attendance_id], :unique => true
+    add_index :invoice_attendances, %i(invoice_id attendance_id), unique: true
   end
 end

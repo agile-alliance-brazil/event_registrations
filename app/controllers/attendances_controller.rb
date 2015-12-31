@@ -95,7 +95,7 @@ class AttendancesController < ApplicationController
     statuses = []
     statuses << :pending if params[:pending].present?
     statuses << :accepted if params[:accepted].present?
-    statuses += [:paid, :confirmed] if params[:paid].present?
+    statuses += %i(paid confirmed) if params[:paid].present?
     # statuses << :confirmed if params[:paid].present?
     statuses << :cancelled if params[:cancelled].present?
     statuses

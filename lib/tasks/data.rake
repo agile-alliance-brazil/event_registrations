@@ -45,7 +45,7 @@ namespace :data do
     end
 
     desc 'Generates all'
-    task :all => [:clean, :seeds]
+    task :all => %i(clean seeds)
 
     private
 

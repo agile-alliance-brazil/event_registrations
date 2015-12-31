@@ -54,11 +54,11 @@ class Attendance < ActiveRecord::Base
   has_many :invoices, -> { uniq }, through: :invoice_attendances
 
   validates_confirmation_of :email
-  validates_presence_of [:first_name, :last_name, :email, :phone, :country, :city, :registration_date, :user_id, :event_id]
+  validates_presence_of %i(first_name last_name email phone country city registration_date user_id event_id)
   validates_presence_of :state, if: ->(a) { a.in_brazil? }
   validates_presence_of :cpf, if: ->(a) { a.in_brazil? }
 
-  validates_length_of [:first_name, :last_name, :phone, :city, :organization], maximum: 100, allow_blank: true
+  validates_length_of %i(first_name last_name phone city organization), maximum: 100, allow_blank: true
   validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
   validates_length_of :email, within: 6..100, allow_blank: true
 
@@ -75,7 +75,7 @@ class Attendance < ActiveRecord::Base
   scope :for_event, ->(e) { where(event_id: e.id) }
   scope :for_registration_type, ->(t) { where(registration_type_id: t.id) }
   scope :without_registration_type, ->(t) { where("#{table_name}.registration_type_id != (?)", t.id) }
-  scope :active, -> { where('status NOT IN (?)', [:cancelled, :no_show]) }
+  scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show)) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
   scope :search_for_list, lambda { |param, status|
     where('(first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?)',
@@ -123,7 +123,7 @@ class Attendance < ActiveRecord::Base
 
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
-      csv << [:first_name, :last_name, :organization, :email, :payment_type, :group_name, :city, :state, :value]
+      csv << %i(first_name last_name organization email payment_type group_name city state value)
       all.find_each do |attendance|
         csv << [attendance.first_name,
                 attendance.last_name,

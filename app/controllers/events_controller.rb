@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  layout 'eventless', only: [:index, :list_archived]
+  layout 'eventless', only: %i(index list_archived)
 
   before_filter :event, only: [:show]
 

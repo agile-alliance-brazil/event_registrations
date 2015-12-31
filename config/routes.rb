@@ -6,14 +6,14 @@ Current::Application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
 
-  resources :users, only: [:show, :edit, :update]
+  resources :users, only: %i(show edit update)
 
-  resources :events, only: [:index, :show] do
+  resources :events, only: %i(index show) do
     collection do
       get :list_archived
     end
 
-    resources :attendances, only: [:new, :create, :edit, :update], controller: :event_attendances do
+    resources :attendances, only: %i(new create edit update), controller: :event_attendances do
       collection do
         get :by_state
         get :by_city
@@ -23,13 +23,13 @@ Current::Application.routes.draw do
         get :payment_type_report
       end
     end
-    resources :registration_groups, only: [:index, :destroy, :show, :create] do
+    resources :registration_groups, only: %i(index destroy show create) do
       member do
         put :renew_invoice
       end
     end
 
-    resources :payments, only: [:checkout] do
+    resources :payments, only: :checkout do
       member do
         post :checkout
       end
@@ -38,7 +38,7 @@ Current::Application.routes.draw do
 
   get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
   post '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
-  resources :attendances, only: [:show, :index] do
+  resources :attendances, only: %i(show index) do
     member do
       put :confirm
       put :pay_it
@@ -47,11 +47,11 @@ Current::Application.routes.draw do
       put :recover_it
     end
 
-    resources :transfers, only: [:new]
+    resources :transfers, only: :new
   end
 
   resources :payment_notifications, only: :create
-  resources :transfers, only: [:create]
+  resources :transfers, only: :create
 
   root to: 'events#index'
 end

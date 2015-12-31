@@ -48,8 +48,8 @@ class User < ActiveRecord::Base
   has_many :invoices
 
   validates_inclusion_of :default_locale, in: %w(en pt)
-  validates_presence_of [:first_name, :last_name]
-  validates_length_of [:first_name, :last_name], maximum: 100, allow_blank: true
+  validates_presence_of %i(first_name last_name)
+  validates_length_of %i(first_name last_name), maximum: 100, allow_blank: true
   validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
 
   validates_uniqueness_of :email, case_sensitive: false, allow_blank: true
@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
       user.first_name = names[0]
       user.last_name = names[-1]
       user.twitter_user = extract_twitter_user(hash)
-      [:email, :organization, :phone, :country, :state, :city]. each do |attribute|
+      %i(email organization phone country state city). each do |attribute|
         user.send("#{attribute}=", hash[:info][attribute])
       end
     end

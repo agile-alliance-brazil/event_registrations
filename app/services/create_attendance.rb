@@ -4,7 +4,7 @@ class CreateAttendance
     @attendance = Attendance.new attributes
     @event = create_params.event
     @params = create_params.request_params
-    find_attendance = @event.attendances.find_by(email: attributes[:email], status: [:pending, :accepted, :paid, :confirmed])
+    find_attendance = @event.attendances.find_by(email: attributes[:email], status: %i(pending accepted paid confirmed))
     if find_attendance.present?
       @attendance.errors.add(:email, I18n.t('flash.attendance.create.already_existent'))
     else

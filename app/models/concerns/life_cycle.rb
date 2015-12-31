@@ -7,35 +7,35 @@ module Concerns
       scope :pending_accepted, -> { where("status IN ('pending', 'accepted')") }
       scope :accepted, -> { where(status: :accepted) }
       scope :cancelled, -> { where(status: :cancelled) }
-      scope :paid, -> { where(status: [:paid, :confirmed]) }
+      scope :paid, -> { where(status: %i(paid confirmed)) }
 
       state_machine :status, initial: :pending do
-        after_transition on: [:cancel, :mark_no_show], do: :cancel_invoice!
+        after_transition on: %i(cancel mark_no_show), do: :cancel_invoice!
         after_transition on: :recover, do: :recover_invoice!
-        after_transition on: :pay, do: [:check_confirmation, :pay_invoice!]
+        after_transition on: :pay, do: %i(check_confirmation pay_invoice!)
 
         event :accept do
-          transition [:pending] => :accepted
+          transition %i(pending) => :accepted
         end
 
         event :confirm do
-          transition [:pending, :accepted, :paid] => :confirmed
+          transition %i(pending accepted paid) => :confirmed
         end
 
         event :pay do
-          transition [:pending, :accepted] => :paid
+          transition %i(pending accepted) => :paid
         end
 
         event :cancel do
-          transition [:pending, :accepted, :paid, :confirmed] => :cancelled
+          transition %i(pending accepted paid confirmed) => :cancelled
         end
 
         event :recover do
-          transition [:cancelled] => :pending
+          transition %i(cancelled) => :pending
         end
 
         event :mark_no_show do
-          transition [:pending, :accepted] => :no_show
+          transition %i(pending accepted) => :no_show
         end
 
         state :confirmed do

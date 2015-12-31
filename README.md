@@ -21,5 +21,6 @@ If you have a bug or a feature request, please create a issue here:
 
 Thanks to everyone involved in building and maintaining this system:
 
-* [Hugo Corbucci](http://hugocorbucci.com) (Core Developer)
+* [Celso Martins](https://github.com/celsoMartins) (Core Developer)
+* [Hugo Corbucci](https://hugocorbucci.com) (Core Developer)
 * [Danilo Sato](http://www.dtsato.com) (Collaborator)

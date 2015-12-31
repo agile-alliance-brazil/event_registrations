@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: registration_quota
+# Table name: registration_quotas
 #
 #  id                    :integer          not null, primary key
 #  quota                 :integer

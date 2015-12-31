@@ -148,7 +148,7 @@ describe EventAttendancesController, type: :controller do
         before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
 
         it 'redirects to home page with error message when cannot add more attendances' do
-          post :create, event_id: @event.id, attendance: { }
+          post :create, event_id: @event.id, attendance: {}
           expect(response).to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end

@@ -1,7 +1,6 @@
 # encoding : utf-8
 
 MoneyRails.configure do |config|
-
   # To set the default currency
   #
   config.default_currency = :brl
@@ -50,7 +49,6 @@ MoneyRails.configure do |config|
   #   :priority            => 1,
   #   :iso_code            => "EU4",
   #   :name                => "Euro with subunit of 4 digits",
-  #   :symbol              => "€",
   #   :symbol_first        => true,
   #   :subunit             => "Subcent",
   #   :subunit_to_unit     => 10000,

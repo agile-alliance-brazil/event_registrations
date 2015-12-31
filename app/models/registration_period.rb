@@ -21,5 +21,4 @@ class RegistrationPeriod < ActiveRecord::Base
 
   scope :for, ->(datetime) { where('? BETWEEN start_at AND end_at', datetime).order('id desc') }
   scope :ending_after, ->(datetime) { where('? < end_at', datetime).order('id desc') }
-
 end

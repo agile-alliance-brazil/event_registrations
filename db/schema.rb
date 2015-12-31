@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151231201454) do
+ActiveRecord::Schema.define(version: 20151231050931) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(version: 20151231201454) do
     t.string   "price_currency", default: "BRL", null: false
   end
 
-  create_table "registration_quotas", force: :cascade do |t|
+  create_table "registration_quota", force: :cascade do |t|
     t.integer  "quota"
     t.datetime "created_at"
     t.datetime "updated_at"

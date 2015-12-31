@@ -1,4 +1,22 @@
 # encoding: UTF-8
+# == Schema Information
+#
+# Table name: payment_notifications
+#
+#  id              :integer          not null, primary key
+#  params          :text
+#  status          :string
+#  transaction_id  :string
+#  invoicer_id     :integer
+#  payer_email     :string
+#  settle_amount   :decimal(, )
+#  settle_currency :string
+#  notes           :text
+#  created_at      :datetime
+#  updated_at      :datetime
+#  invoicer_type   :string
+#
+
 class PaymentNotificationsController < ApplicationController
   skip_before_filter :authenticate_user!
   skip_before_filter :authorize_action

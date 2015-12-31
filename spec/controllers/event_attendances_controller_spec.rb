@@ -107,8 +107,7 @@ describe EventAttendancesController, type: :controller do
       context 'with period and no quotas or group' do
         let(:event) { Event.create!(valid_event) }
         let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
-        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event) }
-        let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: full_registration_period, value: 740.00) }
+        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
 
         before { post :create, event_id: event.id, attendance: valid_attendance }
         it { expect(assigns(:attendance).registration_period).to eq full_registration_period }
@@ -118,8 +117,7 @@ describe EventAttendancesController, type: :controller do
       context 'with no period and one quota' do
         let(:quota_event) { Event.create!(valid_event) }
         let!(:registration_type) { FactoryGirl.create :registration_type, event: quota_event }
-        let!(:quota_price) { RegistrationPrice.create!(registration_type: registration_type, value: 350.00) }
-        let!(:quota) { FactoryGirl.create :registration_quota, event: quota_event, registration_price: quota_price, quota: 40, order: 1 }
+        let!(:quota) { FactoryGirl.create :registration_quota, event: quota_event, quota: 40, order: 1, price: 350 }
         before { post :create, event_id: quota_event.id, attendance: valid_attendance }
         it { expect(assigns(:attendance).registration_quota).to eq quota }
         it { expect(assigns(:attendance).registration_value).to eq 350.00 }
@@ -128,10 +126,8 @@ describe EventAttendancesController, type: :controller do
       context 'with statement_agreement as payment type, even with configured quotas and periods' do
         let(:event) { Event.create!(valid_event) }
         let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
-        let!(:quota_price) { RegistrationPrice.create!(registration_type: registration_type, value: 350.00) }
-        let!(:quota) { FactoryGirl.create :registration_quota, event: event, registration_price: quota_price, quota: 40, order: 1 }
-        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event) }
-        let!(:price) { RegistrationPrice.create!(registration_type: registration_type, registration_period: full_registration_period, value: 740.00) }
+        let!(:quota) { FactoryGirl.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
+        let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
 
         before { post :create, event_id: event.id, payment_type: Invoice::STATEMENT, attendance: valid_attendance }
         it { expect(Attendance.last.registration_value).to eq event.full_price }
@@ -168,16 +164,14 @@ describe EventAttendancesController, type: :controller do
       end
 
       context 'with no token' do
-        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
-        let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
+        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
         subject(:attendance) { assigns(:attendance) }
         before { post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id } }
         it { expect(attendance.registration_group).to be_nil }
       end
 
       context 'with registration token' do
-        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now) }
-        let!(:price) { RegistrationPrice.create!(registration_type: @individual, registration_period: period, value: 100.00) }
+        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
         subject(:attendance) { assigns(:attendance) }
 
         context 'an invalid' do

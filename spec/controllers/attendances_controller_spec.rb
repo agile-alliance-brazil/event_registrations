@@ -1,3 +1,42 @@
+# == Schema Information
+#
+# Table name: attendances
+#
+#  id                     :integer          not null, primary key
+#  event_id               :integer
+#  user_id                :integer
+#  registration_type_id   :integer
+#  registration_group_id  :integer
+#  registration_date      :datetime
+#  status                 :string
+#  email_sent             :boolean          default(FALSE)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  first_name             :string
+#  last_name              :string
+#  email                  :string
+#  organization           :string
+#  phone                  :string
+#  country                :string
+#  state                  :string
+#  city                   :string
+#  badge_name             :string
+#  cpf                    :string
+#  gender                 :string
+#  twitter_user           :string
+#  address                :string
+#  neighbourhood          :string
+#  zipcode                :string
+#  notes                  :string
+#  event_price            :decimal(, )
+#  registration_quota_id  :integer
+#  registration_value     :decimal(, )
+#  registration_period_id :integer
+#  advised                :boolean          default(FALSE)
+#  advised_at             :datetime
+#  payment_type           :string
+#
+
 describe AttendancesController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:event) { FactoryGirl.create(:event, full_price: 930.00) }

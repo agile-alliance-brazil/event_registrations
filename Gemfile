@@ -30,6 +30,7 @@ gem 'omniauth-github', '~>1.1'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 gem 'faker'
 gem 'pagseguro-oficial'
+gem 'money-rails'
 
 gem 'jquery-rails', '~> 4.0'
 gem 'therubyracer', '~> 0.12', platforms: :ruby
@@ -78,7 +79,7 @@ end
 
 group :test do
   gem 'mocha', require: false
-  gem 'shoulda-matchers', '< 3.0.0', require: false # 3.x requires ruby 2+
+  gem 'shoulda-matchers', '< 3.0.0' # shoulda above 3.0 has no important matchers
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil

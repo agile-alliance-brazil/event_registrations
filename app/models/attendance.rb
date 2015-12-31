@@ -35,6 +35,7 @@
 #  registration_period_id :integer
 #  advised                :boolean          default(FALSE)
 #  advised_at             :datetime
+#  payment_type           :string
 #
 
 class Attendance < ActiveRecord::Base

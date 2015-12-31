@@ -27,6 +27,7 @@ FactoryGirl.define do
     title 'registration_period.regular'
     start_at Time.zone.now
     end_at 1.day.from_now.end_of_day
+    price 100
   end
 
   factory :attendance do

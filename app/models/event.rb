@@ -13,7 +13,6 @@
 #  full_price        :decimal(, )
 #  start_date        :datetime
 #  end_date          :datetime
-#  characteristic    :string
 #
 
 class Event < ActiveRecord::Base
@@ -60,7 +59,7 @@ class Event < ActiveRecord::Base
     if payment_type == Invoice::STATEMENT
       full_price
     elsif period_for.present?
-      period_for.price_for * attendance.discount
+      period_for.price * attendance.discount
     elsif quota.first.present?
       quota.first.price * attendance.discount
     else

@@ -12,7 +12,6 @@
 describe RegistrationType, type: :model do
   context 'associations' do
     it { should belong_to :event }
-    it { should have_many :registration_prices }
   end
 
   context 'scopes' do

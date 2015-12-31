@@ -96,8 +96,7 @@ describe RegistrationGroup, type: :model do
 
   describe '#price?' do
     let(:individual) { event.registration_types.first }
-    let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now) }
-    let!(:price) { RegistrationPrice.create!(registration_type: individual, registration_period: period, value: 100.00) }
+    let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
     let(:group) { RegistrationGroup.create! event: event, discount: 20 }
 
     context 'without attendances' do

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: registration_quota
+# Table name: registration_quotas
 #
 #  id                    :integer          not null, primary key
 #  quota                 :integer
@@ -17,7 +17,7 @@
 class RegistrationQuota < ActiveRecord::Base
   belongs_to :event
 
-  monetize :price_cents
+  monetize :price_centsr
 
   has_many :attendances
 

@@ -19,7 +19,6 @@ describe Event, type: :model do
   context 'associations' do
     it { should have_many :attendances }
     it { should have_many :registration_periods }
-    it { should have_many :registration_types }
   end
 
   describe '#attendance limit' do
@@ -135,21 +134,6 @@ describe Event, type: :model do
     context 'when payment type is statement of agreement' do
       subject!(:event_value) { event.registration_price_for(attendance, Invoice::STATEMENT) }
       it { expect(event_value).to eq 930 }
-    end
-  end
-
-  describe '#free?' do
-    let(:event) { FactoryGirl.build(:event) }
-    context 'with a non free registration' do
-      let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
-      let(:attendance) { FactoryGirl.build(:attendance, event: event, registration_type: registration_type) }
-      it { expect(event.free?(attendance)).to be_falsey }
-    end
-
-    context 'with a free registration' do
-      let!(:registration_type) { FactoryGirl.create :registration_type, event: event, title: 'bla-xpto' }
-      let(:attendance) { FactoryGirl.build(:attendance, event: event, registration_type: registration_type) }
-      it { expect(event.free?(attendance)).to be_truthy }
     end
   end
 

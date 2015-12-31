@@ -15,11 +15,8 @@ namespace :learning_3_0_2015 do
       event = Event.create!(name: 'Learning 3.0 Experience', price_table_link: 'http://localhost:9292/link', full_price: 1500.00, start_date: Date.new(2015, 10, 16), end_date: Date.new(2015, 10, 17))
 
       # Quota
-      seb_price = RegistrationPrice.create!(registration_type: RegistrationType.first, value: 1000.00)
-      RegistrationQuota.create!(event: event, registration_price: seb_price, quota: 10)
-
-      eb_price = RegistrationPrice.create!(registration_type: RegistrationType.first, value: 1150.00)
-      RegistrationQuota.create!(event: event, registration_price: eb_price, quota: 10)
+      RegistrationQuota.create!(event: event, quota: 10, price: 1000)
+      RegistrationQuota.create!(event: event, quota: 10, price: 1150.00)
 
       puts '√'
     end

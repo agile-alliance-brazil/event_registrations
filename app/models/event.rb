@@ -19,7 +19,6 @@ class Event < ActiveRecord::Base
   has_many :attendances
   has_many :registration_periods
   has_many :registration_quotas
-  has_many :registration_types
 
   has_many :registration_groups
 
@@ -46,10 +45,6 @@ class Event < ActiveRecord::Base
 
   def find_quota
     registration_quotas.order(order: :asc).select(&:vacancy?)
-  end
-
-  def free?(attendance)
-    !registration_types.paid.include?(attendance.registration_type)
   end
 
   private

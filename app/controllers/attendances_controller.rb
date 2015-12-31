@@ -5,7 +5,6 @@
 #  id                     :integer          not null, primary key
 #  event_id               :integer
 #  user_id                :integer
-#  registration_type_id   :integer
 #  registration_group_id  :integer
 #  registration_date      :datetime
 #  status                 :string
@@ -120,7 +119,7 @@ class AttendancesController < ApplicationController
   end
 
   def event_for_index
-    @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
+    @event ||= Event.includes(registration_periods: [:event]).find_by_id(params.require(:event_id))
   end
 
   def responds_js

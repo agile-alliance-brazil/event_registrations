@@ -11,7 +11,7 @@ module Concerns
     end
 
     def event
-      @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
+      @event ||= Event.includes(registration_periods: [:event]).find_by_id(params.require(:event_id))
     end
   end
 end

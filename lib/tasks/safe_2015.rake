@@ -15,14 +15,9 @@ namespace :safe_2015 do
       event = Event.create!(name: 'Certificação SAFe Agilist (SA)', price_table_link: 'http://localhost:9292/link', full_price: 1470.00, start_date: Date.new(2015, 10, 19), end_date: Date.new(2015, 10, 20))
 
       # Period
-      first_registration_period = RegistrationPeriod.create!(start_at: Date.new(2015, 8, 17), end_at: Date.new(2015, 8, 31), event: event)
-      RegistrationPrice.create!(registration_type: RegistrationType.first, registration_period: first_registration_period, value: 1050.00)
-
-      second_registration_period = RegistrationPeriod.create!(start_at: Date.new(2015, 9, 1), end_at: Date.new(2015, 9, 30), event: event)
-      RegistrationPrice.create!(registration_type: RegistrationType.first, registration_period: second_registration_period, value: 1260.00)
-
-      last_minute_period = RegistrationPeriod.create!(start_at: Date.new(2015, 10, 01), end_at: Date.new(2015, 10, 19), event: event)
-      RegistrationPrice.create!(registration_type: RegistrationType.first, registration_period: last_minute_period, value: 1470.00)
+      RegistrationPeriod.create!(start_at: Date.new(2015, 8, 17), end_at: Date.new(2015, 8, 31), event: event, price: 1050)
+      RegistrationPeriod.create!(start_at: Date.new(2015, 9, 1), end_at: Date.new(2015, 9, 30), event: event, price: 1260)
+      RegistrationPeriod.create!(start_at: Date.new(2015, 10, 01), end_at: Date.new(2015, 10, 19), event: event, price: 1470)
 
       puts '√'
     end

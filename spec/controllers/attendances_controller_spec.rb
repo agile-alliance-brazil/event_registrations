@@ -5,7 +5,6 @@
 #  id                     :integer          not null, primary key
 #  event_id               :integer
 #  user_id                :integer
-#  registration_type_id   :integer
 #  registration_group_id  :integer
 #  registration_date      :datetime
 #  status                 :string
@@ -40,9 +39,6 @@
 describe AttendancesController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:event) { FactoryGirl.create(:event, full_price: 930.00) }
-  let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
-  let!(:free) { FactoryGirl.create(:registration_type, title: 'registration_type.free', event: event) }
-  let!(:manual) { FactoryGirl.create(:registration_type, title: 'registration_type.manual', event: event) }
 
   before :each do
     user.add_role :organizer

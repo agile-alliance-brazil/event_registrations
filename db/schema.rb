@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151231024432) do
+ActiveRecord::Schema.define(version: 20151231050931) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
     t.integer  "user_id"
-    t.integer  "registration_type_id"
     t.integer  "registration_group_id"
     t.datetime "registration_date"
     t.string   "status"
@@ -141,13 +140,6 @@ ActiveRecord::Schema.define(version: 20151231024432) do
     t.boolean  "closed",                default: false
     t.integer  "price_cents",           default: 0,     null: false
     t.string   "price_currency",        default: "BRL", null: false
-  end
-
-  create_table "registration_types", force: :cascade do |t|
-    t.integer  "event_id"
-    t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "users", force: :cascade do |t|

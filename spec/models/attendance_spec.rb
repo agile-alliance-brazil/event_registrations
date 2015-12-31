@@ -5,7 +5,6 @@
 #  id                     :integer          not null, primary key
 #  event_id               :integer
 #  user_id                :integer
-#  registration_type_id   :integer
 #  registration_group_id  :integer
 #  registration_date      :datetime
 #  status                 :string
@@ -41,7 +40,6 @@ describe Attendance, type: :model do
   context 'associations' do
     it { should belong_to :event }
     it { should belong_to :user }
-    it { should belong_to :registration_type }
     it { should belong_to :registration_group }
     it { should belong_to :registration_quota }
     it { should have_many :invoice_attendances }
@@ -117,20 +115,6 @@ describe Attendance, type: :model do
       before { 5.times { FactoryGirl.create(:attendance) } }
 
       it { expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first]) }
-
-      it 'should have scope for_registration_type' do
-        rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
-        Attendance.first.tap { |a| a.registration_type = rt }.save
-
-        expect(Attendance.for_registration_type(rt)).to eq([Attendance.first])
-      end
-
-      it 'should have scope without_registration_type' do
-        rt = FactoryGirl.create(:registration_type, :event => Attendance.first.event)
-        Attendance.first.tap { |a| a.registration_type = rt }.save
-
-        expect(Attendance.without_registration_type(rt)).not_to include(Attendance.first)
-      end
 
       it { expect(Attendance.pending).to include(Attendance.first) }
 
@@ -741,22 +725,19 @@ describe Attendance, type: :model do
   describe '#discount' do
     let(:event) { FactoryGirl.create(:event) }
     context 'when is not member of a group' do
-      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
       it { expect(attendance.discount).to eq 1 }
     end
 
     context 'when is member of a 30% group' do
-      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
       let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 30) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
       it { expect(attendance.discount).to eq 0.7 }
     end
 
     context 'when is member of a 100% group' do
-      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
       let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 100) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
       it { expect(attendance.discount).to eq 0 }
     end
   end
@@ -765,14 +746,12 @@ describe Attendance, type: :model do
     let(:event) { FactoryGirl.create(:event) }
     context 'with a registration group' do
       let!(:group) { FactoryGirl.create :registration_group, event: event }
-      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual, registration_group: group) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
       it { expect(attendance.group_name).to eq group.name }
     end
 
     context 'with no registration group' do
-      let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
       it { expect(attendance.group_name).to eq nil }
     end
   end
@@ -787,17 +766,16 @@ describe Attendance, type: :model do
 
   describe '#grouped?' do
     let(:event) { FactoryGirl.create(:event) }
-    let(:individual) { RegistrationType.create!(title: 'registration_type.individual', event: event) }
 
     context 'when belongs to a group' do
       let(:group) { RegistrationGroup.create! event: event }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_type: individual) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
 
       it { expect(attendance.grouped?).to be_truthy }
     end
 
     context 'when not belonging to a group' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_type: individual) }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
 
       it { expect(attendance.grouped?).to be_falsey }
     end

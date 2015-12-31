@@ -4,11 +4,6 @@ require 'webmock/rspec'
 describe EventAttendancesController, type: :controller do
   before :each do
     @event = FactoryGirl.create(:event)
-    @individual = @event.registration_types.first
-    @free = FactoryGirl.create(:registration_type, title: 'registration_type.free', event: @event)
-    @manual = FactoryGirl.create(:registration_type, title: 'registration_type.manual', event: @event)
-    @speaker = FactoryGirl.create(:registration_type, title: 'registration_type.speaker', event: @event)
-
     WebMock.enable!
   end
 
@@ -36,7 +31,6 @@ describe EventAttendancesController, type: :controller do
       {
         event_id: @event.id,
         user_id: user.id,
-        registration_type_id: @individual.id,
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
@@ -106,7 +100,6 @@ describe EventAttendancesController, type: :controller do
 
       context 'with period and no quotas or group' do
         let(:event) { Event.create!(valid_event) }
-        let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
         let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
 
         before { post :create, event_id: event.id, attendance: valid_attendance }
@@ -116,7 +109,6 @@ describe EventAttendancesController, type: :controller do
 
       context 'with no period and one quota' do
         let(:quota_event) { Event.create!(valid_event) }
-        let!(:registration_type) { FactoryGirl.create :registration_type, event: quota_event }
         let!(:quota) { FactoryGirl.create :registration_quota, event: quota_event, quota: 40, order: 1, price: 350 }
         before { post :create, event_id: quota_event.id, attendance: valid_attendance }
         it { expect(assigns(:attendance).registration_quota).to eq quota }
@@ -125,7 +117,6 @@ describe EventAttendancesController, type: :controller do
 
       context 'with statement_agreement as payment type, even with configured quotas and periods' do
         let(:event) { Event.create!(valid_event) }
-        let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
         let!(:quota) { FactoryGirl.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
         let!(:full_registration_period) { RegistrationPeriod.create!(start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
 
@@ -157,7 +148,7 @@ describe EventAttendancesController, type: :controller do
         before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
 
         it 'redirects to home page with error message when cannot add more attendances' do
-          post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
+          post :create, event_id: @event.id, attendance: { }
           expect(response).to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
@@ -166,7 +157,7 @@ describe EventAttendancesController, type: :controller do
       context 'with no token' do
         let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
         subject(:attendance) { assigns(:attendance) }
-        before { post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id } }
+        before { post :create, event_id: @event.id, attendance: valid_attendance }
         it { expect(attendance.registration_group).to be_nil }
       end
 
@@ -176,7 +167,7 @@ describe EventAttendancesController, type: :controller do
 
         context 'an invalid' do
           context 'and one event' do
-            before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: { registration_type_id: @individual.id } }
+            before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: valid_attendance }
             it { expect(attendance.registration_group).to be_nil }
           end
 
@@ -184,17 +175,17 @@ describe EventAttendancesController, type: :controller do
             let(:other_event) { FactoryGirl.create :event }
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
             let!(:other_group) { FactoryGirl.create(:registration_group, event: other_event) }
-            before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: { registration_type_id: @individual.id } }
+            before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: valid_attendance }
             it { expect(attendance.registration_group).to be_nil }
           end
         end
 
-        context 'a valid' do
+        context 'a valid attendance' do
           context 'and same email as current user' do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
             before do
               Invoice.from_registration_group(group, Invoice::GATEWAY)
-              post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id }
+              post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
             end
             it { expect(attendance.registration_group).to eq group }
           end
@@ -203,7 +194,7 @@ describe EventAttendancesController, type: :controller do
             let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
             before do
               Invoice.from_registration_group(group, Invoice::GATEWAY)
-              post :create, event_id: @event.id, registration_token: group.token, attendance: { registration_type_id: @individual.id, email: 'warantesbr@gmail.com', email_confirmation: 'warantesbr@gmail.com' }
+              post :create, event_id: @event.id, registration_token: group.token, attendance: { email: 'warantesbr@gmail.com', email_confirmation: 'warantesbr@gmail.com' }
             end
             it { expect(attendance).to be_valid }
           end
@@ -330,7 +321,7 @@ describe EventAttendancesController, type: :controller do
       it 'should send pending registration e-mail' do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)
-        post :create, event_id: @event.id, attendance: { registration_type_id: @individual.id }
+        post :create, event_id: @event.id, attendance: valid_attendance
       end
     end
   end
@@ -345,7 +336,6 @@ describe EventAttendancesController, type: :controller do
 
     context 'with a valid attendance' do
       let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
-      let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
       let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
       let!(:attendance_with_group) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
@@ -375,7 +365,6 @@ describe EventAttendancesController, type: :controller do
 
     context 'with a valid attendance' do
       let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
-      let!(:registration_type) { FactoryGirl.create :registration_type, event: event }
       let(:attendance) { FactoryGirl.create(:attendance, event: event) }
       let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       context 'and no group token informed' do
@@ -383,7 +372,6 @@ describe EventAttendancesController, type: :controller do
           {
             event_id: event.id,
             user_id: user.id,
-            registration_type_id: registration_type.id,
             first_name: user.first_name,
             last_name: user.last_name,
             email: 'bla@foo.bar',
@@ -418,7 +406,6 @@ describe EventAttendancesController, type: :controller do
           {
             event_id: event.id,
             user_id: user.id,
-            registration_type_id: registration_type.id,
             first_name: user.first_name,
             last_name: user.last_name,
             email: 'bla@foo.bar',
@@ -459,7 +446,6 @@ describe EventAttendancesController, type: :controller do
           {
             event_id: event.id,
             user_id: user.id,
-            registration_type_id: registration_type.id,
             first_name: user.first_name,
             last_name: user.last_name,
             email: 'bla@foo.bar',

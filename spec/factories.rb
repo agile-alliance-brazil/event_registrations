@@ -11,15 +11,9 @@ FactoryGirl.define do
     end_date 2.months.from_now
 
     after(:build) do |event|
-      event.registration_types << FactoryGirl.build(:registration_type, :event => event)
       event.registration_periods << FactoryGirl.build(:registration_period, :event => event)
       event
     end
-  end
-
-  factory :registration_type do
-    association :event
-    title 'registration_type.individual'
   end
 
   factory :registration_period do
@@ -51,7 +45,6 @@ FactoryGirl.define do
     zipcode { |a| a.user.zipcode }
     registration_value 400.00
 
-    registration_type { |a| a.event.registration_types.find_by_title('registration_type.individual') }
     registration_date { Time.zone.now }
   end
 

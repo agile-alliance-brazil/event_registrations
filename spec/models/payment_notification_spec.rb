@@ -17,15 +17,13 @@
 #  invoicer_type   :string
 #
 
-require 'spec_helper'
-
 describe PaymentNotification, type: :model do
   context 'associations' do
     it { should belong_to :invoicer }
   end
 
   context 'validations' do
-    should_validate_existence_of :invoicer
+    it { is_expected.to validate_presence_of :invoicer }
   end
 
   context 'callbacks' do

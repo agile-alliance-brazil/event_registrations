@@ -41,7 +41,6 @@ RSpec.configure do |config|
   config.include(ControllerMacros, type: :controller)
   config.include(DisableAuthorization, type: :controller)
   config.include(TrimmerMacros)
-  config.include(ValidatesExistenceMacros)
 
   # == Mock Framework
   #

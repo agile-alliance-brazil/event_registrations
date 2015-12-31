@@ -21,7 +21,7 @@ class PaymentNotification < ActiveRecord::Base
   belongs_to :invoicer, polymorphic: true
   serialize :params
 
-  validates_existence_of :invoicer
+  validates :invoicer, presence: true
 
   after_create :mark_invoicer_as_paid, if: ->(n) { n.status == 'Completed' }
 

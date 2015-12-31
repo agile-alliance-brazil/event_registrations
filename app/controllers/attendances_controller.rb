@@ -1,3 +1,41 @@
+# == Schema Information
+#
+# Table name: attendances
+#
+#  id                     :integer          not null, primary key
+#  event_id               :integer
+#  user_id                :integer
+#  registration_group_id  :integer
+#  registration_date      :datetime
+#  status                 :string
+#  email_sent             :boolean          default(FALSE)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  first_name             :string
+#  last_name              :string
+#  email                  :string
+#  organization           :string
+#  phone                  :string
+#  country                :string
+#  state                  :string
+#  city                   :string
+#  badge_name             :string
+#  cpf                    :string
+#  gender                 :string
+#  twitter_user           :string
+#  address                :string
+#  neighbourhood          :string
+#  zipcode                :string
+#  notes                  :string
+#  event_price            :decimal(, )
+#  registration_quota_id  :integer
+#  registration_value     :decimal(, )
+#  registration_period_id :integer
+#  advised                :boolean          default(FALSE)
+#  advised_at             :datetime
+#  payment_type           :string
+#
+
 class AttendancesController < ApplicationController
   before_filter :load_event, except: :index
 
@@ -81,7 +119,7 @@ class AttendancesController < ApplicationController
   end
 
   def event_for_index
-    @event ||= Event.includes(registration_types: [:event], registration_periods: [:event]).find_by_id(params.require(:event_id))
+    @event ||= Event.includes(registration_periods: [:event]).find_by_id(params.require(:event_id))
   end
 
   def responds_js

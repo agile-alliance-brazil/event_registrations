@@ -13,14 +13,12 @@
 #  full_price        :decimal(, )
 #  start_date        :datetime
 #  end_date          :datetime
-#  characteristic    :string
 #
 
 class Event < ActiveRecord::Base
   has_many :attendances
   has_many :registration_periods
   has_many :registration_quotas
-  has_many :registration_types
 
   has_many :registration_groups
 
@@ -49,10 +47,6 @@ class Event < ActiveRecord::Base
     registration_quotas.order(order: :asc).select(&:vacancy?)
   end
 
-  def free?(attendance)
-    !registration_types.paid.include?(attendance.registration_type)
-  end
-
   private
 
   def not_amounted_group(attendance, payment_type)
@@ -60,7 +54,7 @@ class Event < ActiveRecord::Base
     if payment_type == Invoice::STATEMENT
       full_price
     elsif period_for.present?
-      period_for.price_for * attendance.discount
+      period_for.price * attendance.discount
     elsif quota.first.present?
       quota.first.price * attendance.discount
     else

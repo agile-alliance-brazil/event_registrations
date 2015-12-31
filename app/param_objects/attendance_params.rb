@@ -9,7 +9,7 @@ class AttendanceParams
 
   def attributes_hash
     @request_params[:attendance].nil? ? nil : @request_params.require(:attendance).permit(
-      :event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date, :first_name, :last_name, :email,
+      :event_id, :user_id, :registration_group_id, :registration_date, :first_name, :last_name, :email,
       :email_confirmation, :organization, :phone, :country, :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood, :zipcode, :notes)
   end
 

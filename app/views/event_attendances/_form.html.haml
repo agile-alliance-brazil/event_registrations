@@ -32,14 +32,6 @@
 
 :javascript
   (function($) {
-    function registrationTypeTriggered() {
-      var checked_type = $("#attendance_registration_type_id_input input:radio:checked");
-      if(checked_type.length == 0) {
-        return;
-      }
-
-      $("#attendance_email_input input").trigger('change');
-    }
 
     function updateTotal() {
       var total = toFloat($("td#registration_price").text());
@@ -58,11 +50,9 @@
 
     $(document).ready(function() {
       $("#attendance_country").bind('change', countryTriggered);
-      $("#attendance_registration_type_id_input input:radio").bind('change', registrationTypeTriggered);
 
       $("#attendance_email_input input").trigger('change');
       $("#attendance_country").trigger('change');
-      $("#attendance_registration_type_id_input input:radio").trigger('change');
 
       $(".total").show();
     })

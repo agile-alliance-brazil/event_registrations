@@ -6,7 +6,6 @@
 #  id                     :integer          not null, primary key
 #  event_id               :integer
 #  user_id                :integer
-#  registration_type_id   :integer
 #  registration_group_id  :integer
 #  registration_date      :datetime
 #  status                 :string
@@ -35,6 +34,7 @@
 #  registration_period_id :integer
 #  advised                :boolean          default(FALSE)
 #  advised_at             :datetime
+#  payment_type           :string
 #
 
 class Attendance < ActiveRecord::Base
@@ -44,7 +44,6 @@ class Attendance < ActiveRecord::Base
 
   belongs_to :event
   belongs_to :user
-  belongs_to :registration_type
   belongs_to :registration_period
   belongs_to :registration_group
   belongs_to :registration_quota
@@ -73,8 +72,6 @@ class Attendance < ActiveRecord::Base
   usar_como_cpf :cpf
 
   scope :for_event, ->(e) { where(event_id: e.id) }
-  scope :for_registration_type, ->(t) { where(registration_type_id: t.id) }
-  scope :without_registration_type, ->(t) { where("#{table_name}.registration_type_id != (?)", t.id) }
   scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show)) }
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
   scope :search_for_list, lambda { |param, status|

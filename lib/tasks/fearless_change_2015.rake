@@ -15,8 +15,7 @@ namespace :fearless_change_2015 do
       event = Event.create!(name: 'Fearless Change: Patterns for Introducing New Ideas', price_table_link: 'http://localhost:9292/link', full_price: 840.00, start_date: Date.new(2015, 10, 19), end_date: Date.new(2015, 10, 19))
 
       # Quota
-      seb_price = RegistrationPrice.create!(registration_type: RegistrationType.first, value: 700.00)
-      RegistrationQuota.create!(event: event, registration_price: seb_price, quota: 10)
+      RegistrationQuota.create!(event: event, quota: 10, price: 700)
 
       puts '√'
     end

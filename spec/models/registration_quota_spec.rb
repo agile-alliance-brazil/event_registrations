@@ -10,13 +10,14 @@
 #  registration_price_id :integer
 #  order                 :integer
 #  closed                :boolean          default(FALSE)
+#  price_cents           :integer          default(0), not null
+#  price_currency        :string           default("BRL"), not null
 #
 
 describe RegistrationQuota, type: :model do
   context 'associations' do
     it { should have_many :attendances }
     it { should belong_to :event }
-    it { should belong_to :registration_price }
   end
 
   describe '#vacancy?' do

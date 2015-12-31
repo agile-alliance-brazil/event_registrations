@@ -11,16 +11,14 @@ def darwin_only(require_as)
 end
 
 gem 'rails', '=4.2.5'
-gem 'seed-fu', '=2.3.5'
 gem 'brhelper', '=3.3.0'
 gem 'brcpfcnpj', '=3.3.0'
-gem 'validates_existence', '=0.9.2'
 gem 'state_machine', '=1.2.0'
 gem 'haml', '~> 4.0'
 gem 'formtastic', '=3.1.3'
 gem 'airbrake', '~> 4.3'
 gem 'localized_country_select', '=0.9.11'
-gem 'cancan', '=1.6.10'
+gem 'cancancan', '~> 1.10'
 gem 'rake'
 gem 'will_paginate', '=3.0.7'
 gem 'omniauth', '~>1.3'
@@ -30,6 +28,7 @@ gem 'omniauth-github', '~>1.1'
 gem 'aws-ses', '=0.6.0', require: 'aws/ses'
 gem 'faker'
 gem 'pagseguro-oficial'
+gem 'money-rails'
 
 gem 'jquery-rails', '~> 4.0'
 gem 'therubyracer', '~> 0.12', platforms: :ruby
@@ -78,7 +77,7 @@ end
 
 group :test do
   gem 'mocha', require: false
-  gem 'shoulda-matchers', '< 3.0.0', require: false # 3.x requires ruby 2+
+  gem 'shoulda-matchers', '< 3.0.0' # shoulda above 3.0 has no important matchers
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil

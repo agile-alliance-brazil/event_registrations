@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151005170325) do
+ActiveRecord::Schema.define(version: 20151231050931) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
     t.integer  "user_id"
-    t.integer  "registration_type_id"
     t.integer  "registration_group_id"
     t.datetime "registration_date"
     t.string   "status"
@@ -127,18 +126,9 @@ ActiveRecord::Schema.define(version: 20151005170325) do
     t.datetime "end_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "price_cents",    default: 0,     null: false
+    t.string   "price_currency", default: "BRL", null: false
   end
-
-  create_table "registration_prices", force: :cascade do |t|
-    t.integer  "registration_type_id"
-    t.integer  "registration_period_id"
-    t.decimal  "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "registration_quota_id"
-  end
-
-  add_index "registration_prices", ["registration_quota_id"], name: "index_registration_prices_on_registration_quota_id"
 
   create_table "registration_quota", force: :cascade do |t|
     t.integer  "quota"
@@ -148,13 +138,8 @@ ActiveRecord::Schema.define(version: 20151005170325) do
     t.integer  "registration_price_id"
     t.integer  "order"
     t.boolean  "closed",                default: false
-  end
-
-  create_table "registration_types", force: :cascade do |t|
-    t.integer  "event_id"
-    t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "price_cents",           default: 0,     null: false
+    t.string   "price_currency",        default: "BRL", null: false
   end
 
   create_table "users", force: :cascade do |t|

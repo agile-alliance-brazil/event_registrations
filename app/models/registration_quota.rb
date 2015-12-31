@@ -17,7 +17,7 @@
 class RegistrationQuota < ActiveRecord::Base
   belongs_to :event
 
-  monetize :price_centsr
+  monetize :price_cents
 
   has_many :attendances
 

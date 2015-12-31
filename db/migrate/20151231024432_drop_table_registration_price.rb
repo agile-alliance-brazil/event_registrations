@@ -1,6 +1,5 @@
 class DropTableRegistrationPrice < ActiveRecord::Migration
   def change
-
     add_money :registration_periods, :price, default: 0, null: false
     add_money :registration_quota, :price, default: 0, null: false
 

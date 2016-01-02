@@ -20,6 +20,7 @@ require 'capistrano/deploy'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
+require 'rvm1/capistrano3'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
@@ -40,14 +41,11 @@ namespace :deploy do
 
   task :puppet do
     on roles(:all) do
-      within release_path.join('puppet') do
-        execute :'librarian-puppet', :install
-      end
       within release_path do
         execute :sudo, '/usr/bin/env',
           "FACTER_server_url='#{fetch(:server_url)}'",
-          :sh, "-c '/usr/local/bin/puppet apply\
-          --modulepath /etc/puppet/modules:puppet/modules\
+          :sh, "-c '/opt/puppetlabs/bin/puppet apply\
+          --modulepath /opt/puppetlabs/puppet/modules:puppet/modules\
           puppet/manifests/#{fetch(:manifest)}.pp'"
       end
     end

@@ -1,4 +1,5 @@
-class swap( $ensure = 'present', $swapfile = '/swapfile', $swapsize = 1M ) {
+class swap( $ensure = 'present', $swapfile = '/swapfile', $swapsize = 1048576 ) {
+  include stdlib
   $swapsizes = split("${swapsize}",'[.]')
   $swapfilesize = $swapsizes[0]
 
@@ -24,7 +25,7 @@ class swap( $ensure = 'present', $swapfile = '/swapfile', $swapsize = 1M ) {
     file { $swapfile:
       owner => 'root',
       group => 'root',
-      mode => 0600,
+      mode => '0600',
       require => Exec['Create swap file'],
     }
   } elsif $ensure == 'absent' {

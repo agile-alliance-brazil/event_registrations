@@ -1,25 +1,27 @@
 node default {
-	exec { 'update':
-	    command => "echo updated",
-	    path => "/bin",
-	}
+  include stdlib
+
+  exec { 'update':
+    command => "echo updated",
+    path => "/bin",
+  }
 
   class { 'swap':
-    swapsize => 1M,
+    swapsize => to_bytes('1 MB'),
   }
 
   $app_name = "registrations"
   $use_ssl = true
 
-	class { 'web-server':
+  class { 'webserver':
     server_url => $server_url,
   }
-	class { 'db-server': 
+  class { 'dbserver':
     app_name => $app_name,
   }
 
   $user = "ubuntu"
-  class { 'rails-app':
+  class { 'railsapp':
     user => $user,
     app_name => $app_name,
   }

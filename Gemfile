@@ -67,6 +67,7 @@ end
 
 group :development do
   gem 'capistrano', '=3.4.0', require: false
+  gem 'rvm1-capistrano3', require: false
   gem 'net-ssh', '< 2.10' # 2.10 requires ruby 2+
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false

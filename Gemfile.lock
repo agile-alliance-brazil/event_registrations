@@ -397,6 +397,9 @@ GEM
     ruby_parser (3.7.2)
       sexp_processor (~> 4.1)
     rubyzip (1.1.7)
+    rvm1-capistrano3 (1.4.0)
+      capistrano (~> 3.0)
+      sshkit (>= 1.2)
     safe_yaml (1.0.4)
     sass (3.4.20)
     sass-rails (5.0.4)
@@ -520,6 +523,7 @@ DEPENDENCIES
   rspec-collection_matchers
   rspec-rails
   rubocop
+  rvm1-capistrano3
   sass (~> 3.4)
   sass-rails (~> 5.0)
   selenium-webdriver
@@ -539,4 +543,4 @@ DEPENDENCIES
   yui-compressor (~> 0.12)
 
 BUNDLED WITH
-   1.11.2
+   1.10.6

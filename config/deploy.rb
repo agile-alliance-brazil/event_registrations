@@ -40,3 +40,15 @@ set :linked_dirs, %w{bin log certs tmp/pids tmp/cache tmp/sockets vendor/bundle 
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+namespace :git do
+  desc 'Copy repo to releases'
+  task create_release: :'git:update' do
+    on roles(:all) do
+      with fetch(:git_environmental_variables) do
+        within repo_path do
+          execute :git, :clone, '-b', fetch(:branch), '--recursive', '.', release_path
+        end
+      end
+    end
+  end
+end

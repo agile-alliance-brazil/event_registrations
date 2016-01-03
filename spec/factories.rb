@@ -3,7 +3,6 @@
 require 'faker'
 
 FactoryGirl.define do
-
   factory :registration_period do
     association :event
     title 'registration_period.regular'

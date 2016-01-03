@@ -1,6 +1,5 @@
 # encoding: UTF-8
 describe RegistrationPeriod, type: :model do
-
   describe '.for' do
     let(:event) { FactoryGirl.create :event }
     let!(:first_period) { FactoryGirl.create :registration_period, start_at: 1.day.ago, end_at: 1.day.from_now.end_of_day, event: event }

@@ -5,7 +5,7 @@ set -e -x
 export DEBIAN_FRONTEND=noninteractive
 SUDO_COMMAND=sudo
 
-if [ ${USER} == root ] && [ -z $(getent passwd ubuntu) ]; then
+if [ 'root' == ${USER} ] && [ -z $(getent passwd ubuntu) ]; then
   USER=ubuntu
   useradd -m -G sudo ${USER} -s /bin/bash
   echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER}
@@ -13,41 +13,42 @@ if [ ${USER} == root ] && [ -z $(getent passwd ubuntu) ]; then
   mkdir -p /home/${USER}/.ssh/
   cp ~/.ssh/authorized_keys /home/${USER}/.ssh/authorized_keys
   chown ubuntu:ubuntu /home/${USER}/.ssh/authorized_keys
+else
+  cd /home/${USER}
 fi
 
-if [ -e /usr/local/bin/puppet ]; then
-  echo This puppet theatre is ready!
+PUPPET_HOME=/opt/puppetlabs
+if [ -e ${PUPPET_HOME}/bin/puppet ]; then
+  echo "This puppet theatre is ready!"
   exit 0
 fi
 
 
 su ${USER} <<EOF
-sudo apt-get update
+sudo su -c "cd ~ && gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
 
-sudo apt-get install -y git-core ruby1.9 ruby1.9.1-dev \
-                        rubygems1.9 irb1.9 ri1.9 rdoc1.9 \
-                        build-essential libopenssl-ruby1.9.1 \
-                        libssl-dev zlib1g-dev libicu48 \
-                        ruby-odbc-dbg ruby-odbc
+wget https://apt.puppetlabs.com/puppetlabs-release-pc1-trusty.deb -O /tmp/puppetlabs.deb
+${SUDO_COMMAND} dpkg -i /tmp/puppetlabs.deb
+${SUDO_COMMAND} apt-get update
 
-sudo update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.3 400 \
-                         --slave   /usr/bin/ri ri /usr/bin/ri1.9.3 \
-                         --slave   /usr/bin/irb irb /usr/bin/irb1.9.3 \
-                         --slave   /usr/bin/rdoc rdoc /usr/bin/rdoc1.9.3
-
-sudo update-alternatives --install /usr/bin/gem gem /usr/bin/gem1.9.3 400
-
-echo Finally... installing puppet
-sudo gem sources -u
-sudo gem install puppet -v 3.4.2 --no-ri --no-rdoc
-sudo gem install librarian-puppet -v 0.9.10 --no-ri --no-rdoc
-sudo gem install bundler -v 1.5.2 --no-ri --no-rdoc
+${SUDO_COMMAND} apt-get install -y git-core build-essential libssl-dev zlib1g-dev puppet-agent
 
 # Puppet needs the puppet group to exist. Pretty dumb
 if [ -z `cat /etc/group | cut -f 1 -d':' | grep puppet` ]; then
-  sudo groupadd puppet
+  ${SUDO_COMMAND} groupadd puppet
 fi
 
-sudo mkdir -p /srv/apps
-sudo chown ${USER}:root /srv/apps
+${SUDO_COMMAND} mkdir -p /srv/apps
+${SUDO_COMMAND} chown ${USER}:root /srv/apps
+if [ -z `cat /etc/profile | grep puppet` ]; then
+  echo "export PATH=${PUPPET_HOME}/bin:$PATH" | ${SUDO_COMMAND} tee --append /etc/profile
+fi
 EOF
+
+if [ 'root' != ${USER} ]; then
+  cd -
+fi
+
+echo "Please reload your shell script if this is an interactive shell. Just run"
+echo "source /etc/profile"
+

@@ -15,8 +15,8 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'default', user: 'vagrant', roles: %w{web app db}
-set :manifest, 'vagrant-dev'
+server '127.0.0.1', port: 2203, user: 'vagrant', roles: %w{web app db}
+set :manifest, 'vagrant'
 set :server_url, 'inscricoes.localhost'
 
 # you can set custom ssh options

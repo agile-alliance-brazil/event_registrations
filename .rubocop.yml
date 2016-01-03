@@ -1,6 +1,9 @@
 AllCops:
   Exclude:
     - 'puppet/modules/stdlib/**/*' # Pulled from Puppetfile
+    - 'puppet/modules/apache/**/*' # Pulled from Puppetfile
+    - 'puppet/modules/concat/**/*' # Pulled from Puppetfile
+    - 'puppet/modules/rvm/**/*' # Pulled from Puppetfile
     - 'puppet/.tmp/**/*' # Temporary files
     - 'vendor/**/*' # Pulled from Gemfile
     - 'db/schema.rb' # Auto-generated file

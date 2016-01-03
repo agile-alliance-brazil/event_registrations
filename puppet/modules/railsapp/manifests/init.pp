@@ -10,19 +10,6 @@ class railsapp( $user, $app_name ) {
         build_opts  => '--disable-binary',
         default_use => true;
     }
-    #
-    # rvm_system_ruby {
-    #   'ruby-1.9.3-p448':
-    #     ensure      => 'present';
-    # }
-    #
-    # rvm_gem {
-    #   'bundler19':
-    #     name         => 'bundler',
-    #     ruby_version => 'ruby-1.9.3-p448',
-    #     ensure       => latest,
-    #     require      => Rvm_system_ruby['ruby-1.9.3-p448'];
-    # }
 
     rvm_gem { 'bundler22':
         name         => 'bundler',

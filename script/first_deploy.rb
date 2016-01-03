@@ -12,7 +12,8 @@ END
 end
 
 @user = ARGV[0]
-@target = ARGV[1]
+@target, @port = ARGV[1].split(':')
+@port ||= 22
 @key_path = ARGV[2] if ARGV.size > 2
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..')
 REMOTE_SHARED_FOLDER = '/srv/apps/registrations/shared'
@@ -54,11 +55,11 @@ def execute(command)
 end
 
 def key_param
-  @key_path.nil? ? '' : "-i #{@key_path}"
+  @key_path.nil? ? '' : "-i #{File.expand_path(@key_path)}"
 end
 
-execute "scp #{key_param} #{RAILS_ROOT}/puppet/script/kickstart-server.sh #{@user}@#{@target}:~"
-execute "ssh #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/kickstart-server.sh && /bin/bash ~/kickstart-server.sh'"
+execute "scp -P #{@port} #{key_param} #{File.expand_path(File.join(RAILS_ROOT, '/puppet/script/server_bootstrap.sh'))} #{@user}@#{@target}:~/server_bootstrap.sh"
+execute "ssh -p #{@port} #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/server_bootstrap.sh && /bin/bash ~/server_bootstrap.sh #{@user}'"
 unless File.exist?("config/deploy/#{@target}.rb")
   deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
   File.open("config/deploy/#{@target}.rb", 'w+') do |file|
@@ -69,6 +70,7 @@ end
 execute 'bundle'
 execute "bundle exec cap #{@target} deploy:check:directories deploy:check:make_linked_dirs"
 files_to_upload.each do |file|
-  execute "scp #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
+  execute "scp -P #{@port} #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
 end
+execute "bundle exec cap #{@target} deploy"
 execute "bundle exec cap #{@target} deploy"

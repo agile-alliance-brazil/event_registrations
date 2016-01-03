@@ -578,8 +578,8 @@ describe EventAttendancesController, type: :controller do
           FactoryGirl.create(:attendance)
           get :last_biweekly_active, event_id: event.id
           expect(assigns(:attendances_biweekly_grouped)).to eq({
-                                                                 last_week.created_at.strftime('%Y-%m-%d') => 2,
-                                                                 today.created_at.strftime('%Y-%m-%d') => 1
+                                                                 last_week.created_at.to_date => 2,
+                                                                 today.created_at.to_date => 1
                                                                })
           Timecop.return
         end
@@ -622,10 +622,10 @@ describe EventAttendancesController, type: :controller do
         before { get :payment_type_report, event_id: event.id }
         it 'returns the attendances with non free registration value grouped by payment type' do
           expect(assigns(:payment_type_report)).to eq({
-                                                        ['bank_deposit', 400.0] => 1,
-                                                        ['gateway', 400.0] => 2,
-                                                        ['statement_agreement', 400.0] => 1,
-                                                        ['gateway', 123.0] => 1
+                                                        ['bank_deposit', 400] => 1,
+                                                        ['gateway', 400] => 2,
+                                                        ['statement_agreement', 400] => 1,
+                                                        ['gateway', 123] => 1
                                                       })
         end
       end

@@ -4,23 +4,23 @@
 # Table name: users
 #
 #  id                    :integer          not null, primary key
-#  first_name            :string
-#  last_name             :string
-#  email                 :string
-#  organization          :string
-#  phone                 :string
-#  country               :string
-#  state                 :string
-#  city                  :string
-#  badge_name            :string
-#  cpf                   :string
-#  gender                :string
-#  twitter_user          :string
-#  address               :string
-#  neighbourhood         :string
-#  zipcode               :string
+#  first_name            :string(255)
+#  last_name             :string(255)
+#  email                 :string(255)
+#  organization          :string(255)
+#  phone                 :string(255)
+#  country               :string(255)
+#  state                 :string(255)
+#  city                  :string(255)
+#  badge_name            :string(255)
+#  cpf                   :string(255)
+#  gender                :string(255)
+#  twitter_user          :string(255)
+#  address               :string(255)
+#  neighbourhood         :string(255)
+#  zipcode               :string(255)
 #  roles_mask            :integer
-#  default_locale        :string           default("pt")
+#  default_locale        :string(255)      default("pt")
 #  created_at            :datetime
 #  updated_at            :datetime
 #  registration_group_id :integer

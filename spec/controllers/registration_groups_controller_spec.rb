@@ -4,16 +4,16 @@
 #
 #  id           :integer          not null, primary key
 #  event_id     :integer
-#  name         :string
+#  name         :string(255)
 #  capacity     :integer
 #  discount     :integer
-#  token        :string
+#  token        :string(255)
 #  created_at   :datetime
 #  updated_at   :datetime
 #  leader_id    :integer
 #  invoice_id   :integer
 #  minimum_size :integer
-#  amount       :decimal(, )
+#  amount       :decimal(10, )
 #
 
 describe RegistrationGroupsController, type: :controller do

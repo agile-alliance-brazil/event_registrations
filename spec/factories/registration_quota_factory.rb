@@ -11,7 +11,7 @@
 #  order                 :integer
 #  closed                :boolean          default(FALSE)
 #  price_cents           :integer          default(0), not null
-#  price_currency        :string           default("BRL"), not null
+#  price_currency        :string(255)      default("BRL"), not null
 #
 
 FactoryGirl.define do

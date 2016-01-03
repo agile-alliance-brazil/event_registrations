@@ -7,33 +7,33 @@
 #  user_id                :integer
 #  registration_group_id  :integer
 #  registration_date      :datetime
-#  status                 :string
+#  status                 :string(255)
 #  email_sent             :boolean          default(FALSE)
 #  created_at             :datetime
 #  updated_at             :datetime
-#  first_name             :string
-#  last_name              :string
-#  email                  :string
-#  organization           :string
-#  phone                  :string
-#  country                :string
-#  state                  :string
-#  city                   :string
-#  badge_name             :string
-#  cpf                    :string
-#  gender                 :string
-#  twitter_user           :string
-#  address                :string
-#  neighbourhood          :string
-#  zipcode                :string
-#  notes                  :string
-#  event_price            :decimal(, )
+#  first_name             :string(255)
+#  last_name              :string(255)
+#  email                  :string(255)
+#  organization           :string(255)
+#  phone                  :string(255)
+#  country                :string(255)
+#  state                  :string(255)
+#  city                   :string(255)
+#  badge_name             :string(255)
+#  cpf                    :string(255)
+#  gender                 :string(255)
+#  twitter_user           :string(255)
+#  address                :string(255)
+#  neighbourhood          :string(255)
+#  zipcode                :string(255)
+#  notes                  :string(255)
+#  event_price            :decimal(10, )
 #  registration_quota_id  :integer
-#  registration_value     :decimal(, )
+#  registration_value     :decimal(10, )
 #  registration_period_id :integer
 #  advised                :boolean          default(FALSE)
 #  advised_at             :datetime
-#  payment_type           :string
+#  payment_type           :string(255)
 #
 
 describe AttendancesController, type: :controller do

@@ -3,6 +3,7 @@
 require 'json'
 require 'net/https'
 require 'uri'
+require 'English'
 
 unless ENV['TOKEN']
   puts "Ensure you've set the Digital ocean token using \"export TOKEN='your_token'\""
@@ -44,13 +45,13 @@ def post_json(uri, body)
 end
 
 droplets = get_json('https://api.digitalocean.com/v2/droplets')
-machine_id = (JSON.parse(droplets.body)['droplets'].select do |d|
+machine_id = (JSON.parse(droplets.body)['droplets'].count do |d|
   d['name'].match(/inscricoes#{POSTFIX}/)
-end.count + 1)
+end + 1)
 
 bootstrap_info = File.read(File.join(ROOT, 'puppet/script/server_bootstrap.sh'))
 body = {
-  names: ["inscricoes-#{'%02d' % machine_id}#{POSTFIX}.agilebrazil.com"],
+  names: ["inscricoes-#{format('%02d', machine_id)}#{POSTFIX}.agilebrazil.com"],
   region: 'nyc3',
   size: '1gb',
   image: 'ubuntu-14-04-x64',
@@ -104,14 +105,14 @@ if response.code.to_i < 400
         ln -s #{TYPE}_app_key.pem #{droplet[:ipv4]}_app_key.pem"
       puts "Executing: #{setup}"
       result = `#{setup}`
-      if $?.to_i == 0
-        key_path = "#{ROOT}/certs/digital_ocean#{POSTFIX.gsub('-','_')}"
-        ssh_command = "ssh -i #{key_path} -o StrictHostKeyChecking=no ubuntu@#{droplet[:ipv4]} 'echo \"SSH Successful!\"'"
-        puts "Adding #{droplet[:ipv4]} to known hosts: #{`#{ssh_command}`}"
-        first_deploy = "bundle exec ruby script/first_deploy.rb ubuntu #{droplet[:ipv4]} #{key_path}"
-        puts "Executing: #{first_deploy}"
-        system(first_deploy)
-      end
+      next unless $CHILD_STATUS.to_i == 0
+
+      key_path = "#{ROOT}/certs/digital_ocean#{POSTFIX.tr('-', '_')}"
+      ssh_command = "ssh -i #{key_path} -o StrictHostKeyChecking=no ubuntu@#{droplet[:ipv4]} 'echo \"SSH Successful!\"'"
+      puts "Adding #{droplet[:ipv4]} to known hosts: #{`#{ssh_command}`}"
+      first_deploy = "bundle exec ruby script/first_deploy.rb ubuntu #{droplet[:ipv4]} #{key_path}"
+      puts "Executing: #{first_deploy}"
+      system(first_deploy)
     end
   end
 else

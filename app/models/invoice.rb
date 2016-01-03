@@ -4,13 +4,13 @@
 #
 #  id                    :integer          not null, primary key
 #  frete                 :integer
-#  amount                :decimal(, )
+#  amount                :decimal(10, )
 #  created_at            :datetime
 #  updated_at            :datetime
 #  user_id               :integer
 #  registration_group_id :integer
-#  status                :string
-#  payment_type          :string
+#  status                :string(255)
+#  payment_type          :string(255)
 #
 
 class Invoice < ActiveRecord::Base

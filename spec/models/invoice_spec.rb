@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: invoices
-#
-#  id                    :integer          not null, primary key
-#  frete                 :integer
-#  amount                :decimal(, )
-#  created_at            :datetime
-#  updated_at            :datetime
-#  user_id               :integer
-#  registration_group_id :integer
-#  status                :string
-#  payment_type          :string
-#
-
 describe Invoice, type: :model do
   let(:event) { FactoryGirl.create :event }
 

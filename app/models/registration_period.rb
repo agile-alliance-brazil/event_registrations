@@ -5,13 +5,13 @@
 #
 #  id             :integer          not null, primary key
 #  event_id       :integer
-#  title          :string
+#  title          :string(255)
 #  start_at       :datetime
 #  end_at         :datetime
 #  created_at     :datetime
 #  updated_at     :datetime
 #  price_cents    :integer          default(0), not null
-#  price_currency :string           default("BRL"), not null
+#  price_currency :string(255)      default("BRL"), not null
 #
 
 class RegistrationPeriod < ActiveRecord::Base
@@ -19,6 +19,6 @@ class RegistrationPeriod < ActiveRecord::Base
 
   monetize :price_cents
 
-  scope :for, ->(datetime) { where('? BETWEEN start_at AND end_at', datetime).order('id desc') }
+  scope :for, ->(datetime) { where('CAST(? AS DATE) BETWEEN CAST(start_at AS DATE) AND CAST(end_at AS DATE)', datetime).order('id desc') }
   scope :ending_after, ->(datetime) { where('? < end_at', datetime).order('id desc') }
 end

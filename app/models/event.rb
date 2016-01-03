@@ -3,14 +3,14 @@
 # Table name: events
 #
 #  id                :integer          not null, primary key
-#  name              :string
-#  location_and_date :string
+#  name              :string(255)
+#  location_and_date :string(255)
 #  created_at        :datetime
 #  updated_at        :datetime
-#  price_table_link  :string
+#  price_table_link  :string(255)
 #  allow_voting      :boolean
 #  attendance_limit  :integer
-#  full_price        :decimal(, )
+#  full_price        :decimal(10, )
 #  start_date        :datetime
 #  end_date          :datetime
 #

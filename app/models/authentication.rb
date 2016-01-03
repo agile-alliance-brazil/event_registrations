@@ -5,11 +5,11 @@
 #
 #  id            :integer          not null, primary key
 #  user_id       :integer
-#  provider      :string
-#  uid           :string
+#  provider      :string(255)
+#  uid           :string(255)
 #  created_at    :datetime
 #  updated_at    :datetime
-#  refresh_token :string
+#  refresh_token :string(255)
 #
 
 class Authentication < ActiveRecord::Base

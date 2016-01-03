@@ -3,17 +3,17 @@
 # Table name: payment_notifications
 #
 #  id              :integer          not null, primary key
-#  params          :text
-#  status          :string
-#  transaction_id  :string
+#  params          :text(65535)
+#  status          :string(255)
+#  transaction_id  :string(255)
 #  invoicer_id     :integer
-#  payer_email     :string
-#  settle_amount   :decimal(, )
-#  settle_currency :string
-#  notes           :text
+#  payer_email     :string(255)
+#  settle_amount   :decimal(10, )
+#  settle_currency :string(255)
+#  notes           :text(65535)
 #  created_at      :datetime
 #  updated_at      :datetime
-#  invoicer_type   :string
+#  invoicer_type   :string(255)
 #
 
 require 'spec_helper'

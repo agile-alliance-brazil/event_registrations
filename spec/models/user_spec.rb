@@ -1,31 +1,4 @@
 # encoding: UTF-8
-# == Schema Information
-#
-# Table name: users
-#
-#  id                    :integer          not null, primary key
-#  first_name            :string
-#  last_name             :string
-#  email                 :string
-#  organization          :string
-#  phone                 :string
-#  country               :string
-#  state                 :string
-#  city                  :string
-#  badge_name            :string
-#  cpf                   :string
-#  gender                :string
-#  twitter_user          :string
-#  address               :string
-#  neighbourhood         :string
-#  zipcode               :string
-#  roles_mask            :integer
-#  default_locale        :string           default("pt")
-#  created_at            :datetime
-#  updated_at            :datetime
-#  registration_group_id :integer
-#
-
 require 'spec_helper'
 
 describe User, type: :model do

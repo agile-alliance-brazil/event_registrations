@@ -40,9 +40,7 @@ gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
 gem 'bootstrap-sass', '~> 3.3'
 gem 'autoprefixer-rails', '< 6.1.2' # This is a loose dependency from bootstrap-sass. 6.1.2 requires ruby 2+
 
-group :production, :travis do
-  gem 'mysql2', '< 0.4' # Rails 4 doesn't support mysql2 0.4
-end
+gem 'mysql2', '< 0.4' # Rails 4 doesn't support mysql2 0.4
 
 group :development, :test do
   gem 'sqlite3'
@@ -63,6 +61,7 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'metric_fu'
   gem 'annotate'
+  gem 'database_cleaner'
 end
 
 group :development do

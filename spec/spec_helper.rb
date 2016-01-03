@@ -35,8 +35,25 @@ module Airbrake
   end
 end
 
+ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+
 RSpec.configure do |config|
   Rails.application.eager_load!
+
+  config.before(:suite) do
+    # GC.disable
+    ActionMailer::Base.deliveries.clear
+    DatabaseCleaner.clean_with(:truncation, except: %w(public.schema_migrations))
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 
   config.include(ControllerMacros, type: :controller)
   config.include(DisableAuthorization, type: :controller)

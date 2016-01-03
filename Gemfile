@@ -10,22 +10,22 @@ def darwin_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
 end
 
-gem 'rails', '=4.2.5'
-gem 'brhelper', '=3.3.0'
-gem 'brcpfcnpj', '=3.3.0'
-gem 'state_machine', '=1.2.0'
+gem 'rails', '~> 4.2'
+gem 'brhelper', '~> 3.3.0'
+gem 'brcpfcnpj', '~> 3.3.0'
+gem 'state_machine', '~> 1.2.0'
 gem 'haml', '~> 4.0'
-gem 'formtastic', '=3.1.3'
+gem 'formtastic', '~> 3.1.3'
 gem 'airbrake', '~> 4.3'
-gem 'localized_country_select', '=0.9.11'
+gem 'localized_country_select', '~> 0.9.11'
 gem 'cancancan', '~> 1.10'
 gem 'rake'
-gem 'will_paginate', '=3.0.7'
+gem 'will_paginate', '~> 3.0.7'
 gem 'omniauth', '~>1.3'
 gem 'omniauth-twitter', '~>1.2'
 gem 'omniauth-facebook', '~>3.0'
 gem 'omniauth-github', '~>1.1'
-gem 'aws-ses', '=0.6.0', require: 'aws/ses'
+gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
 gem 'faker'
 gem 'pagseguro-oficial'
 gem 'money-rails'
@@ -38,9 +38,9 @@ gem 'sass', '~> 3.4'
 gem 'coffee-rails', '~> 4.1'
 gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
 gem 'bootstrap-sass', '~> 3.3'
-gem 'autoprefixer-rails', '< 6.1.2' # This is a loose dependency from bootstrap-sass. 6.1.2 requires ruby 2+
+gem 'autoprefixer-rails', '~> 6.2'
 
-gem 'mysql2', '< 0.4' # Rails 4 doesn't support mysql2 0.4
+gem 'mysql2', '~> 0.4'
 
 group :development, :test do
   gem 'sqlite3'
@@ -65,9 +65,9 @@ group :development, :test do
 end
 
 group :development do
-  gem 'capistrano', '=3.4.0', require: false
+  gem 'capistrano', '~> 3.4', require: false
   gem 'rvm1-capistrano3', require: false
-  gem 'net-ssh', '< 2.10' # 2.10 requires ruby 2+
+  gem 'net-ssh', '~> 3.0'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'travis-lint'
@@ -77,7 +77,7 @@ end
 
 group :test do
   gem 'mocha', require: false
-  gem 'shoulda-matchers', '< 3.0.0' # shoulda above 3.0 has no important matchers
+  gem 'shoulda-matchers', '< 3.0.0' # shoulda above 3.0 lacks of some important matchers
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil

@@ -51,7 +51,7 @@ end
 
 def execute(command)
   puts "Running: #{command}"
-  puts `#{command}`
+  system(command)
 end
 
 def key_param
@@ -59,11 +59,11 @@ def key_param
 end
 
 execute "scp -P #{@port} #{key_param} #{File.expand_path(File.join(RAILS_ROOT, '/puppet/script/server_bootstrap.sh'))} #{@user}@#{@target}:~/server_bootstrap.sh"
-execute "ssh -p #{@port} #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/server_bootstrap.sh && /bin/bash ~/server_bootstrap.sh #{@user}'"
+execute "ssh -t -t -p #{@port} #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/server_bootstrap.sh && /bin/bash ~/server_bootstrap.sh #{@user}'"
 unless File.exist?("config/deploy/#{@target}.rb")
   deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
   File.open("config/deploy/#{@target}.rb", 'w+') do |file|
-    file.write deploy_configs.gsub(/set :domain,\s*"[^"]*"/, "set :domain, \"#{@target}\"")
+    file.write deploy_configs.gsub(/server '[^']+'/, "server '#{@target}'")
   end
 end
 @deployed_user = File.read("config/deploy/#{@target}.rb").match(/user[^']+'([^']+)'/)[1]

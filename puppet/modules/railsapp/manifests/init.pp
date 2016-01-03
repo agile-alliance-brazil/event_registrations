@@ -58,7 +58,7 @@ class railsapp( $user, $app_name ) {
     file { "self-signed.config":
       ensure => "present",
       path => "/srv/apps/$app_name/shared/certs/self-signed.config",
-      source => "puppet:///modules/rails-app/self-signed.config",
+      source => "puppet:///modules/railsapp/self-signed.config",
       require => File["/srv/apps/$app_name/shared"],
     }
 

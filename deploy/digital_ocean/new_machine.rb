@@ -44,6 +44,10 @@ def post_json(uri, body)
   http.request(request)
 end
 
+def link_files(ip, file_name)
+  "rm -f #{ip}_#{file_name} && ln -s #{TYPE}_#{file_name} #{ip}_#{file_name}"
+end
+
 droplets = get_json('https://api.digitalocean.com/v2/droplets')
 machine_id = (JSON.parse(droplets.body)['droplets'].count do |d|
   d['name'].match(/inscricoes#{POSTFIX}/)
@@ -93,16 +97,14 @@ if response.code.to_i < 400
     end
     droplets.each do |droplet|
       puts "Deploying to #{droplet[:id]} at #{droplet[:ipv4]}"
-      setup = "cd #{ROOT}/config && rm -f #{droplet[:ipv4]}_config.yml &&\
-        ln -s #{TYPE}_config.yml #{droplet[:ipv4]}_config.yml &&\
-        rm -f #{droplet[:ipv4]}_database.yml &&\
-        ln -s #{TYPE}_database.yml #{droplet[:ipv4]}_database.yml &&\
-        cd #{ROOT}/certs && rm -f #{droplet[:ipv4]}_paypal_cert.pem &&\
-        ln -s #{TYPE}_paypal_cert.pem #{droplet[:ipv4]}_paypal_cert.pem &&\
-        rm -f #{droplet[:ipv4]}_app_cert.pem &&\
-        ln -s #{TYPE}_app_cert.pem #{droplet[:ipv4]}_app_cert.pem &&\
-        rm -f #{droplet[:ipv4]}_app_key.pem &&\
-        ln -s #{TYPE}_app_key.pem #{droplet[:ipv4]}_app_key.pem"
+      setup = "cd #{ROOT}/config && #{link_files(droplet[:ipv4], 'config.yml')} &&\
+        #{link_files(droplet[:ipv4], 'database.yml')} &&\
+        cd #{ROOT}/certs && #{link_files(droplet[:ipv4], 'paypal_cert.pem')} &&\
+        #{link_files(droplet[:ipv4], 'app_cert.pem')} &&\
+        #{link_files(droplet[:ipv4], 'app_key.pem')} &&\
+        #{link_files(droplet[:ipv4], 'server.crt')} &&\
+        #{link_files(droplet[:ipv4], 'server_key.pem')} &&\
+        #{link_files(droplet[:ipv4], 'intermediate.crt')}"
       puts "Executing: #{setup}"
       result = `#{setup}`
       next unless $CHILD_STATUS.to_i == 0

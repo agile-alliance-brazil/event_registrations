@@ -28,6 +28,14 @@ def files_to_upload
   ]
 end
 
+def optional_files
+  [
+    'certs/server.crt',
+    'certs/server_key.pem',
+    'certs/intermediate.crt'
+  ]
+end
+
 def tag_with_target(file)
   File.expand_path File.join(RAILS_ROOT, file.reverse.sub('/', "/#{@target}_".reverse).reverse)
 end
@@ -71,6 +79,11 @@ execute 'bundle'
 execute "bundle exec cap #{@target} deploy:check:directories deploy:check:make_linked_dirs"
 files_to_upload.each do |file|
   execute "scp -P #{@port} #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
+end
+optional_files.each do |file|
+  if File.exist? tag_with_target(file)
+    execute "scp -P #{@port} #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
+  end
 end
 execute "bundle exec cap #{@target} deploy"
 execute "bundle exec cap #{@target} deploy"

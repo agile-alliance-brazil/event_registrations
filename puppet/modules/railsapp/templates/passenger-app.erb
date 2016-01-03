@@ -4,8 +4,7 @@
    Redirect permanent / https://<%= @server_url%>/
 </VirtualHost>
 
-NameVirtualHost *:443
-
+Listen 443
 <VirtualHost *:443>
     DocumentRoot <%= @path %>
 

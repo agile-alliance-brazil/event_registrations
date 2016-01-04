@@ -33,9 +33,9 @@ You can set up `config/deploy/127.0.0.1.rb` to use a different branch with `set 
 
 ### Deploying to a cloud
 
-If you're deploying to any cloud, after you've created your virtual machine, add `config/<vms_ip>_config.yml`, `config/<vms_ip>_database.yml` and `config/deploy/<vms_ip>.rb` then run:
+If you're deploying to any cloud, after you've created your virtual machine, add `config/<vms_ip>_config.yml`, `config/<vms_ip>_database.yml`, `certs/<vms_ip>_app_key.pem`, `certs/<vms_ip>_app_cert.pem` and `certs/<vms_ip>_paypal_cert.pem`. You can, optionally, also add `certs/<vms_ip>_server.crt`, `certs/<vms_ip>_server_key.pem` and `certs/<vms_ip>_server_key.pem` to set up apache to work with SSL. Then run:
 ```sh
-bundle exec ruby script/first\_deploy.rb <configured_sudoer_user> <vms_ip> <ssh_key_to_access_vm>
+bundle exec ruby script/first_deploy.rb <configured_sudoer_user> <vms_ip> <ssh_key_to_access_vm>
 ```
 
 #### Digital Ocean
@@ -47,7 +47,7 @@ export TOKEN=<your_token>
 
 From then on, you can use:
 ```sh
-bundle exec ruby deploy/digital\_ocean/new\_machine.rb
+bundle exec ruby deploy/digital_ocean/new_machine.rb
 ```
 
 # Feedback

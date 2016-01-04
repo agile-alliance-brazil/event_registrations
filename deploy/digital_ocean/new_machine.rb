@@ -66,10 +66,34 @@ body = {
   private_networking: nil
 }
 
+def setup_droplet(droplet)
+  setup = "cd #{ROOT}/config && #{link_files(droplet[:ipv4], 'config.yml')} &&\
+    #{link_files(droplet[:ipv4], 'database.yml')} &&\
+    cd #{ROOT}/certs && #{link_files(droplet[:ipv4], 'paypal_cert.pem')} &&\
+    #{link_files(droplet[:ipv4], 'app_cert.pem')} &&\
+    #{link_files(droplet[:ipv4], 'app_key.pem')} &&\
+    #{link_files(droplet[:ipv4], 'server.crt')} &&\
+    #{link_files(droplet[:ipv4], 'server_key.pem')} &&\
+    #{link_files(droplet[:ipv4], 'intermediate.crt')}"
+  result = `#{setup}`
+  return "ERROR: Cannot generate config files and certs for #{droplet[:ipv4]}.\n#{result}" unless $CHILD_STATUS.to_i == 0
+
+  key_path = "#{ROOT}/certs/digital_ocean#{POSTFIX.tr('-', '_')}"
+  ssh_command = "ssh -i #{key_path} -o LogLevel=quiet -o StrictHostKeyChecking=no ubuntu@#{droplet[:ipv4]} 'echo \"SSH Successful!\"'"
+  `#{ssh_command}` # Adding new machine to known hosts
+  first_deploy = "bundle exec ruby script/first_deploy.rb ubuntu #{droplet[:ipv4]} #{key_path}"
+  deploy_result = `first_deploy`
+  return "ERROR: Deploy failed on #{droplet[:ipv4]}\n\#{deploy_result}" unless $CHILD_STATUS.to_i == 0
+
+  url = "https://#{droplet[:ipv4]}"
+  `curl -k "#{url}"`
+  return "ERROR: Deploy successful on #{url} but HTTPS is not working.\n#{deploy_result}" unless $CHILD_STATUS.to_i == 0
+
+  "SUCCESS: #{url} is up an running!"
+end
+
 response = post_json('https://api.digitalocean.com/v2/droplets', body.to_json)
 if response.code.to_i < 400
-  puts 'Droplets created'
-  puts response.body
   droplet_response = JSON.parse(response.body)
   ids = droplet_response['droplets'].map { |d| d['id'] }
   sleep(120 * (ids.size.to_f / 10).ceil) # wait for droplets to get network data & run the bootstrap
@@ -83,11 +107,10 @@ if response.code.to_i < 400
   end
   errors, successes = droplet_infos.partition { |i| i.is_a? String }
   if errors.size > 0
-    puts 'Unknown droplets:'
+    puts 'ERRORS: The following are unknown droplets'
     puts errors
   end
   if successes.size > 0
-    puts 'Successes:'
     droplets = successes.map do |d|
       {
         id: d['droplet']['id'],
@@ -95,29 +118,9 @@ if response.code.to_i < 400
         ipv6: d['droplet']['networks']['v6'].map { |i| i['ip_address'] }.first
       }
     end
-    droplets.each do |droplet|
-      puts "Deploying to #{droplet[:id]} at #{droplet[:ipv4]}"
-      setup = "cd #{ROOT}/config && #{link_files(droplet[:ipv4], 'config.yml')} &&\
-        #{link_files(droplet[:ipv4], 'database.yml')} &&\
-        cd #{ROOT}/certs && #{link_files(droplet[:ipv4], 'paypal_cert.pem')} &&\
-        #{link_files(droplet[:ipv4], 'app_cert.pem')} &&\
-        #{link_files(droplet[:ipv4], 'app_key.pem')} &&\
-        #{link_files(droplet[:ipv4], 'server.crt')} &&\
-        #{link_files(droplet[:ipv4], 'server_key.pem')} &&\
-        #{link_files(droplet[:ipv4], 'intermediate.crt')}"
-      puts "Executing: #{setup}"
-      result = `#{setup}`
-      next unless $CHILD_STATUS.to_i == 0
-
-      key_path = "#{ROOT}/certs/digital_ocean#{POSTFIX.tr('-', '_')}"
-      ssh_command = "ssh -i #{key_path} -o StrictHostKeyChecking=no ubuntu@#{droplet[:ipv4]} 'echo \"SSH Successful!\"'"
-      puts "Adding #{droplet[:ipv4]} to known hosts: #{`#{ssh_command}`}"
-      first_deploy = "bundle exec ruby script/first_deploy.rb ubuntu #{droplet[:ipv4]} #{key_path}"
-      puts "Executing: #{first_deploy}"
-      system(first_deploy)
-    end
+    puts droplets.map { |d| setup_droplet(d) }.join("\n\n")
   end
 else
-  puts 'Droplets failed'
+  puts 'ERROR: Droplets failed'
   puts response.body
 end

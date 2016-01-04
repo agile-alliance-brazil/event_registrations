@@ -326,7 +326,6 @@ pt:
     account: 'Minha conta'
     download_csv: "Download do arquivo CSV"
 
-    reistration_periods: "Periodos para Inscrição"
   flash:
     failure: "Por favor verifique os campos em destaque"
     unauthorised: "Você não está autorizado a acessar esta página"
@@ -508,3 +507,7 @@ pt:
   layouts:
     alert:
       message_prefix: "Atenção!"
+  reistration_quotas:
+    list: "Cotas para inscricão"
+  reistration_periods:
+    list: "Períodos para inscrição"

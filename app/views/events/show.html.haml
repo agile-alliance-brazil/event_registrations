@@ -1,6 +1,10 @@
 %div
-  %h1= t('actions.reistration_periods')
+  %h1= t('reistration_periods.list')
   = render partial: 'registration_periods', locals: { event: @event }
+
+%div
+  %h1= t('reistration_quotas.list')
+  = render partial: 'registration_quotas', locals: { event: @event }
 
 %div
   %h1= t('actions.registration')

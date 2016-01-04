@@ -195,8 +195,6 @@ en:
     accept: 'Accept in Group'
     account: 'My account'
     download_csv: "Download CSV file"
-
-    reistration_periods: "Periods for registration"
   flash:
     failure: "Please check the highlighted fields"
     unauthorised: "You are not authorized to access this page"
@@ -373,3 +371,7 @@ en:
   layouts:
     alert:
       message_prefix: "Attention!"
+  reistration_quotas:
+    list: "Registration quotas"
+  reistration_periods:
+    list: "Periods for registration"

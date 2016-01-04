@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
-  before_filter :load_event, except: :index
+  before_action :load_event, except: :index
 
-  skip_before_filter :authorize_action, only: [:index]
+  skip_before_action :authorize_action, only: [:index]
 
   protect_from_forgery
 

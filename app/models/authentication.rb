@@ -18,8 +18,7 @@ class Authentication < ActiveRecord::Base
 
   belongs_to :user
 
-  validates_presence_of :provider
-  validates_presence_of :uid
+  validates :provider, :uid, presence: true
 
   def token
     return nil unless provider == 'submission_system' && refresh_token.present?
@@ -36,7 +35,7 @@ class Authentication < ActiveRecord::Base
       :refresh_token => refresh_token
     )
     new_token = token.refresh!
-    self.update_attribute(:refresh_token, new_token.refresh_token)
+    update_attribute(:refresh_token, new_token.refresh_token)
     new_token
   end
 end

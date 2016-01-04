@@ -40,7 +40,7 @@ describe EventsController, type: :controller do
         it 'returns the last created' do
           now = Time.zone.local(2015, 4, 30, 0, 0, 0)
           Timecop.freeze(now)
-          attendance = FactoryGirl.create(:attendance, event: event, user: user, status: 'cancelled')
+          FactoryGirl.create(:attendance, event: event, user: user, status: 'cancelled')
           Timecop.return
           other_attendance = FactoryGirl.create(:attendance, event: event, user: user)
           get :show, id: event.id

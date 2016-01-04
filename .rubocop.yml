@@ -8,6 +8,7 @@ AllCops:
     - 'vendor/**/*' # Pulled from Gemfile
     - 'db/schema.rb' # Auto-generated file
     - 'config/locales/localized_country_select*'
+    - 'deploy/**/*'
   RunRailsCops: true
 
 Style/SymbolArray:
@@ -18,16 +19,10 @@ Style/MultilineOperationIndentation:
   EnforcedStyle: aligned
   Enabled: false # 10 violations
 
-Style/RedundantSelf:
-  Enabled: false # 10 violations
-
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
   Max: 10
   Enabled: false # 10 violations
-
-Lint/UselessAssignment:
-  Enabled: false # 12 violations
 
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
@@ -38,32 +33,6 @@ Metrics/AbcSize:
   # a Float.
   Max: 15
   Enabled: false # 15 violations
-
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%':  ()
-    '%i': ()
-    '%q': ()
-    '%Q': ()
-    '%r': '{}'
-    '%s': ()
-    '%w': ()
-    '%W': ()
-    '%x': ()
-  Enabled: false # 16 violations
-
-Rails/Validation:
-  Include:
-    - app/models/**/*.rb
-  Enabled: false # 16 violations
-
-Rails/ActionFilter:
-  EnforcedStyle: action
-  Enabled: false # 18 violations
-
-Style/TrailingBlankLines:
-  EnforcedStyle: final_newline
-  Enabled: false # 20 violations
 
 Style/BracesAroundHashParameters:
   EnforcedStyle: no_braces

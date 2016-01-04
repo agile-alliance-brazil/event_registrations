@@ -1,10 +1,10 @@
 class EventsController < ApplicationController
   layout 'eventless', only: %i(index list_archived)
 
-  before_filter :event, only: [:show]
+  before_action :event, only: [:show]
 
-  skip_before_filter :authenticate_user!
-  skip_before_filter :authorize_action
+  skip_before_action :authenticate_user!
+  skip_before_action :authorize_action
 
   def index
     @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date > Time.zone.now }

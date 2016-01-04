@@ -55,12 +55,10 @@ class User < ActiveRecord::Base
 
   has_many :invoices
 
-  validates_inclusion_of :default_locale, in: %w(en pt)
-  validates_presence_of %i(first_name last_name)
-  validates_length_of %i(first_name last_name), maximum: 100, allow_blank: true
-  validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
-
-  validates_uniqueness_of :email, case_sensitive: false, allow_blank: true
+  validates :default_locale, inclusion: %w(en pt)
+  validates :first_name, :last_name, presence: true, length: { maximum: 100 }
+  validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true }
+  validates :email, uniqueness: { case_sensitive: false, allow_blank: true }
 
   usar_como_cpf :cpf
 

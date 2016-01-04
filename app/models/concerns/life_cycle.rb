@@ -39,7 +39,7 @@ module Concerns
         end
 
         state :confirmed do
-          validates_acceptance_of :payment_agreement
+          validates :payment_agreement, acceptance: true
         end
 
         after_transition any => :confirmed do |attendance|
@@ -87,7 +87,7 @@ module Concerns
     private
 
     def check_confirmation
-      self.confirm unless grouped? && registration_group.floor?
+      confirm unless grouped? && registration_group.floor?
     end
 
     def cancel_invoice!
@@ -107,7 +107,7 @@ module Concerns
     def pay_invoice!
       invoice = user.invoices.active.last
       return unless invoice.present?
-      invoice.amount = self.registration_value
+      invoice.amount = registration_value
       invoice.pay_it
       invoice.save!
     end

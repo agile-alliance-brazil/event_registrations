@@ -4,7 +4,7 @@ require 'faker'
 
 namespace :learning_3_0_2015 do
   desc 'Generates seeds'
-  task :seeds => :environment do
+  task seeds: :environment do
     event = Event.where('name like ?', '%Learning 3.0 Experience%').first
     if event.present?
       puts 'There is an event with the same name already'
@@ -23,7 +23,7 @@ namespace :learning_3_0_2015 do
   end
 
   desc 'Generates all'
-  task :all => [:seeds]
+  task all: [:seeds]
 
   private
 

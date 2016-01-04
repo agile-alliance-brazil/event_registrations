@@ -25,13 +25,13 @@ describe Attendance, type: :model do
     it { is_expected.not_to allow_value('[=+]').for(:phone) }
 
     context 'brazilians' do
-      subject { FactoryGirl.build(:attendance, :country => 'BR') }
+      subject { FactoryGirl.build(:attendance, country: 'BR') }
       it { is_expected.to validate_presence_of :state }
       it { is_expected.to validate_presence_of :cpf }
     end
 
     context 'foreigners' do
-      subject { FactoryGirl.build(:attendance, :country => 'US') }
+      subject { FactoryGirl.build(:attendance, country: 'US') }
       it { is_expected.not_to validate_presence_of :state }
       it { is_expected.not_to validate_presence_of :cpf }
     end

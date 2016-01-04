@@ -1,7 +1,7 @@
 class EventAttendancesController < ApplicationController
   include Concerns::Initiation
 
-  before_filter :event
+  before_action :event
 
   def new
     @attendance = Attendance.new(event: @event)

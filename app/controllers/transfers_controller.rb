@@ -1,7 +1,7 @@
 # encoding: UTF-8
 class TransfersController < ApplicationController
-  before_filter :transfer
-  before_filter :attendance, only: [:new]
+  before_action :transfer
+  before_action :attendance, only: [:new]
   layout 'eventless'
 
   def new

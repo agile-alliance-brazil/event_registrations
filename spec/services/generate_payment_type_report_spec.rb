@@ -12,7 +12,7 @@ describe GeneratePaymentTypeReport, type: :service do
 
       it 'generates the hash with the report' do
         result = GeneratePaymentTypeReport.run_for(event)
-        expect(result).to eq({ ['gateway', 400] => 1 })
+        expect(result).to eq(['gateway', 400] => 1)
       end
     end
   end

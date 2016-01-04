@@ -4,7 +4,7 @@ require 'faker'
 
 namespace :fearless_change_2015 do
   desc 'Generates seeds'
-  task :seeds => :environment do
+  task seeds: :environment do
     event = Event.where('name like ?', '%Fearless Change%').first
     if event.present?
       puts 'There is an event with the same name already'
@@ -22,7 +22,7 @@ namespace :fearless_change_2015 do
   end
 
   desc 'Generates all'
-  task :all => [:seeds]
+  task all: [:seeds]
 
   private
 

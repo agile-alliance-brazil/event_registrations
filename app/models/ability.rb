@@ -26,7 +26,7 @@ class Ability
     can(%i(show destroy), Attendance, user_id: @user.id)
     can do |action, subject_class, _subject|
       expand_actions([:create]).include?(action) && [Attendance].include?(subject_class) &&
-      Time.zone.now <= @event.end_date
+        Time.zone.now <= @event.end_date
     end
   end
 

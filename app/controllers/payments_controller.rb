@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-  skip_before_filter :authenticate_user!, :authorize_action
+  skip_before_action :authenticate_user!, :authorize_action
 
   before_action :find_event, :find_invoice
 

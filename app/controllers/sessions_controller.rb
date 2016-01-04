@@ -1,8 +1,8 @@
 # encoding: UTF-8
 class SessionsController < ApplicationController
-  skip_before_filter :authenticate_user!
-  skip_before_filter :authorize_action
-  skip_before_filter :verify_authenticity_token
+  skip_before_action :authenticate_user!
+  skip_before_action :authorize_action
+  skip_before_action :verify_authenticity_token
 
   layout 'eventless'
 
@@ -22,15 +22,15 @@ class SessionsController < ApplicationController
       add_authentication(auth_hash)
     else
       flash[:error] = I18n.t('flash.user.invalid') + "#{user.errors.inspect} with #{auth_hash}"
-      redirect_to(login_path) and return
+      return redirect_to(login_path)
     end
 
     origin = request.env['omniauth.origin']
-    redirect_to origin == login_url ? self.current_user : origin
+    redirect_to origin == login_url ? current_user : origin
   end
 
   def resource
-    self.current_user
+    current_user
   end
 
   def resource_name
@@ -61,7 +61,7 @@ class SessionsController < ApplicationController
   end
 
   def add_authentication(auth_hash)
-    self.current_user.authentications.create(
+    current_user.authentications.create(
       uid: auth_hash['uid'],
       provider: auth_hash['provider'],
       refresh_token: auth_hash['credentials']['refresh_token']
@@ -73,7 +73,7 @@ class SessionsController < ApplicationController
   end
 
   def logged_in?
-    !self.current_user.nil?
+    !current_user.nil?
   end
 
   def auth_hash

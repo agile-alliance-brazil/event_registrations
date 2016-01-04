@@ -43,8 +43,8 @@ namespace :deploy do
     on roles(:all) do
       within release_path do
         execute :sudo, '/usr/bin/env',
-          "FACTER_server_url='#{fetch(:server_url)}'",
-          :sh, "-c '/opt/puppetlabs/bin/puppet apply\
+                "FACTER_server_url='#{fetch(:server_url)}'",
+                :sh, "-c '/opt/puppetlabs/bin/puppet apply\
           --modulepath /opt/puppetlabs/puppet/modules:puppet/modules\
           puppet/manifests/#{fetch(:manifest)}.pp'"
       end

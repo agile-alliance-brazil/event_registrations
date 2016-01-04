@@ -1,5 +1,4 @@
-# encoding: UTF-8
-require 'spec_helper'
+
 require File.join(Rails.root, '/lib/authorization.rb')
 
 class SampleUser
@@ -7,7 +6,6 @@ class SampleUser
   attr_accessor :roles_mask
 
   def initialize
-    roles_mask = 0
   end
 end
 

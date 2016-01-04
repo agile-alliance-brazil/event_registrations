@@ -21,13 +21,13 @@ describe Event, type: :model do
     it { expect(event.can_add_attendance?).to be true }
 
     it 'not adds more attendance after reaching limit' do
-      attendance = FactoryGirl.build(:attendance, :event => event)
+      attendance = FactoryGirl.build(:attendance, event: event)
       event.attendances.expects(:active).returns([attendance])
       expect(event.can_add_attendance?).to be false
     end
 
     it 'adds more attendance after reaching cancelling attendance' do
-      attendance = FactoryGirl.build(:attendance, :event => event)
+      attendance = FactoryGirl.build(:attendance, event: event)
       attendance.cancel
       event.attendances.expects(:active).returns([])
       expect(event.can_add_attendance?).to be true

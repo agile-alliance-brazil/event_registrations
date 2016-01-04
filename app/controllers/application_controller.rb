@@ -3,10 +3,10 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery
 
-  before_filter :set_locale
-  before_filter :set_timezone
-  before_filter :authenticate_user!
-  before_filter :authorize_action
+  before_action :set_locale
+  before_action :set_timezone
+  before_action :authenticate_user!
+  before_action :authorize_action
 
   rescue_from CanCan::AccessDenied do |exception|
     Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"

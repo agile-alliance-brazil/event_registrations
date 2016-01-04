@@ -55,16 +55,15 @@ class Attendance < ActiveRecord::Base
 
   has_many :invoices, as: :invoiceable
 
-  validates_confirmation_of :email
-  validates_presence_of %i(first_name last_name email phone country city registration_date user_id event_id)
-  validates_presence_of :state, if: ->(a) { a.in_brazil? }
-  validates_presence_of :cpf, if: ->(a) { a.in_brazil? }
+  validates :email, confirmation: true
+  validates :first_name, :last_name, :email, :phone, :country, :city, :registration_date, :user_id, :event_id, presence: true
+  validates :state, :cpf, presence: true, if: ->(a) { a.in_brazil? }
 
-  validates_length_of %i(first_name last_name phone city organization), maximum: 100, allow_blank: true
-  validates_format_of :email, with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true
-  validates_length_of :email, within: 6..100, allow_blank: true
+  validates :first_name, :last_name, presence: true, length: { maximum: 100 }
+  validates :phone, :city, :organization, length: { maximum: 100, allow_blank: true }
 
-  validates_format_of :phone, with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true
+  validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, length: { minimum: 6, maximum: 100 }
+  validates :phone, format: { with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true }
 
   after_save :update_group_invoice
 
@@ -79,7 +78,7 @@ class Attendance < ActiveRecord::Base
   scope :older_than, ->(date) { where('registration_date < (?)', date) }
   scope :search_for_list, lambda { |param, status|
     where('(first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?)',
-    "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%", "#{param}", status).order(created_at: :desc)
+          "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%", "#{param}", status).order(created_at: :desc)
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
   scope :for_cancelation_warning, lambda {
@@ -99,7 +98,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def in_brazil?
-    self.country == 'BR'
+    country == 'BR'
   end
 
   def discount

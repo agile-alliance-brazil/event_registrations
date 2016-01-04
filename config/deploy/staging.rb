@@ -15,7 +15,7 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'inscricoes-staging.agilebrazil.com', user: 'ubuntu', roles: %w{web app db}
+server 'inscricoes-staging.agilebrazil.com', user: 'ubuntu', roles: %w(web app db)
 set :manifest, 'default'
 set :server_url, 'inscricoes-staging.agilebrazil.com'
 
@@ -41,4 +41,3 @@ set :ssh_options, {
 #     # password: 'please use keys'
 #   }
 # setting per server overrides global ssh_options
-

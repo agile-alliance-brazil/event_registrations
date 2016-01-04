@@ -34,10 +34,10 @@ set :bundle_path, -> { shared_path.join('vendor/bundle') }
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/config.yml certs/paypal_cert.pem certs/app_cert.pem certs/app_key.pem}
+set :linked_files, %w(config/database.yml config/config.yml certs/paypal_cert.pem certs/app_cert.pem certs/app_key.pem)
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log certs tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w(bin log certs tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

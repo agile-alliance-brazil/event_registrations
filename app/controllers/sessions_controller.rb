@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
       add_authentication(auth_hash)
     else
       flash[:error] = I18n.t('flash.user.invalid') + "#{user.errors.inspect} with #{auth_hash}"
-      redirect_to(login_path) and return
+      return redirect_to(login_path)
     end
 
     origin = request.env['omniauth.origin']

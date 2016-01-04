@@ -60,7 +60,7 @@ describe EventAttendancesController, type: :controller do
       controller.current_user = user
       EmailNotifications.stubs(:registration_pending).returns(@email)
       Net::HTTP.stubs(:post).returns('<nil>')
-      stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(:status => 200, :body => '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', :headers => {})
+      stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', headers: {})
     end
 
     it 'renders new template when model is invalid' do
@@ -360,7 +360,7 @@ describe EventAttendancesController, type: :controller do
       User.any_instance.stubs(:has_approved_session?).returns(true)
       sign_in user
       disable_authorization
-      stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(:status => 200, :body => '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', :headers => {})
+      stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', headers: {})
     end
 
     context 'with a valid attendance' do
@@ -438,7 +438,7 @@ describe EventAttendancesController, type: :controller do
 
       context 'and with a group token informed and the attendance is an AA member' do
         before do
-          stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(:status => 200, :body => '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>1</result></data>', :headers => {})
+          stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>1</result></data>', headers: {})
         end
         let!(:aa_group) { FactoryGirl.create(:registration_group, event: event, discount: 10) }
         let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
@@ -501,25 +501,25 @@ describe EventAttendancesController, type: :controller do
         let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
         context 'with one attendance' do
           before { get :by_state, event_id: event.id }
-          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 1 }) }
+          it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
         end
 
         context 'with two attendances on same state' do
           let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
           before { get :by_state, event_id: event.id }
-          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 2 }) }
+          it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 2) }
         end
 
         context 'with two attendances in different states' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP') }
           before { get :by_state, event_id: event.id }
-          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 1, 'SP' => 1 }) }
+          it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1, 'SP' => 1) }
         end
 
         context 'with two attendances one active and other not' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', status: 'cancelled') }
           before { get :by_state, event_id: event.id }
-          it { expect(assigns(:attendances_state_grouped)).to eq({ 'RJ' => 1 }) }
+          it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
         end
       end
     end
@@ -536,25 +536,25 @@ describe EventAttendancesController, type: :controller do
         let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
         context 'with one attendance' do
           before { get :by_city, event_id: event.id }
-          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 1 }) }
+          it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
         end
 
         context 'with two attendances on same state' do
           let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
           before { get :by_city, event_id: event.id }
-          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 2 }) }
+          it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 2) }
         end
 
         context 'with two attendances in different states' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo') }
           before { get :by_city, event_id: event.id }
-          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 1, ['Sao Paulo', 'SP'] => 1 }) }
+          it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1, ['Sao Paulo', 'SP'] => 1) }
         end
 
         context 'with two attendances one active and other not' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo', status: 'cancelled') }
           before { get :by_city, event_id: event.id }
-          it { expect(assigns(:attendances_city_grouped)).to eq({ ['Rio de Janeiro', 'RJ'] => 1 }) }
+          it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
         end
       end
     end
@@ -577,10 +577,8 @@ describe EventAttendancesController, type: :controller do
           FactoryGirl.create(:attendance, event: event, created_at: 21.days.ago)
           FactoryGirl.create(:attendance)
           get :last_biweekly_active, event_id: event.id
-          expect(assigns(:attendances_biweekly_grouped)).to eq({
-                                                                 last_week.created_at.to_date => 2,
-                                                                 today.created_at.to_date => 1
-                                                               })
+          expect(assigns(:attendances_biweekly_grouped)).to eq(last_week.created_at.to_date => 2,
+                                                               today.created_at.to_date => 1)
           Timecop.return
         end
       end
@@ -621,12 +619,10 @@ describe EventAttendancesController, type: :controller do
 
         before { get :payment_type_report, event_id: event.id }
         it 'returns the attendances with non free registration value grouped by payment type' do
-          expect(assigns(:payment_type_report)).to eq({
-                                                        ['bank_deposit', 400] => 1,
-                                                        ['gateway', 400] => 2,
-                                                        ['statement_agreement', 400] => 1,
-                                                        ['gateway', 123] => 1
-                                                      })
+          expect(assigns(:payment_type_report)).to eq(['bank_deposit', 400] => 1,
+                                                      ['gateway', 400] => 2,
+                                                      ['statement_agreement', 400] => 1,
+                                                      ['gateway', 123] => 1)
         end
       end
     end

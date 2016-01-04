@@ -12,10 +12,10 @@ class PagSeguroService
     payment_request.reference = invoice.id
 
     payment_request.items << {
-        id: invoice.id,
-        description: invoice.name,
-        amount: invoice.amount,
-        weight: 0
+      id: invoice.id,
+      description: invoice.name,
+      amount: invoice.amount,
+      weight: 0
     }
 
     response = payment_request.register

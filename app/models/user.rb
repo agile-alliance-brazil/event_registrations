@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
   include Trimmer
   include Authorization
 
-  attr_trimmed    :first_name, :last_name, :email, :organization, :phone, :country, :state, :city,
-                  :badge_name, :twitter_user, :address, :neighbourhood, :zipcode
+  attr_trimmed :first_name, :last_name, :email, :organization, :phone, :country, :state, :city,
+               :badge_name, :twitter_user, :address, :neighbourhood, :zipcode
 
   has_many :authentications
 

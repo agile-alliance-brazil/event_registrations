@@ -39,6 +39,6 @@ class UsersController < ApplicationController
 
   def update_user_params
     params.require(:user).permit(:first_name, :last_name, :email, :phone,
-      :country, :state, :city, :organization, :twitter_user, :default_locale)
+                                 :country, :state, :city, :organization, :twitter_user, :default_locale)
   end
 end

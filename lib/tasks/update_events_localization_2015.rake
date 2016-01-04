@@ -2,7 +2,7 @@
 
 namespace :update_events_localization_2015 do
   desc 'Generates seeds'
-  task :seeds => :environment do
+  task seeds: :environment do
     Event.find_by(id: 12).try { update(location_and_date: 'http://www.agilebrazil.com/2015/localizacao.html') }
     Event.find_by(id: 13).try { update(location_and_date: 'http://www.agilebrazil.com/2015/virada-safe.html') }
     Event.find_by(id: 15).try { update(location_and_date: 'http://www.agilebrazil.com/2015/virada-fearless-change.html') }
@@ -12,5 +12,5 @@ namespace :update_events_localization_2015 do
   end
 
   desc 'Generates all'
-  task :all => [:seeds]
+  task all: [:seeds]
 end

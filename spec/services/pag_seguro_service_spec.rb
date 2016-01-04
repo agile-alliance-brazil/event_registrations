@@ -12,14 +12,14 @@ describe PagSeguroService do
         expect(payment.items.first.description).to eq invoice.name
         expect(payment.items.first.amount).to eq invoice.amount
         expect(payment.items.first.weight).to eq 0
-        expect(response).to eq({ url: 'xpto.foo.bar' })
+        expect(response).to eq(url: 'xpto.foo.bar')
       end
 
       it 'returns internal server error when response is nil' do
         PagSeguro::PaymentRequest.any_instance.expects(:register).once.returns
         payment = PagSeguro::PaymentRequest.new
         response = PagSeguroService.checkout(invoice, payment)
-        expect(response).to eq({ errors: 'Internal server error' })
+        expect(response).to eq(errors: 'Internal server error')
       end
     end
 
@@ -31,7 +31,7 @@ describe PagSeguroService do
 
         payment = PagSeguro::PaymentRequest.new
         response = PagSeguroService.checkout(invoice, payment)
-        expect(response).to eq({ errors: 'bla\\nfoo' })
+        expect(response).to eq(errors: 'bla\\nfoo')
       end
     end
   end

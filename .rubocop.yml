@@ -8,25 +8,14 @@ AllCops:
     - 'vendor/**/*' # Pulled from Gemfile
     - 'db/schema.rb' # Auto-generated file
     - 'config/locales/localized_country_select*'
+    - 'config/deploy/**/*'
     - 'deploy/**/*'
   RunRailsCops: true
-
-Style/SymbolArray:
-  Enabled: true
-
-# TODO: FIX
-Style/MultilineOperationIndentation:
-  EnforcedStyle: aligned
-  Enabled: false # 10 violations
 
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
   Max: 10
   Enabled: false # 10 violations
-
-Style/AlignParameters:
-  EnforcedStyle: with_fixed_indentation
-  Enabled: false # 13 violations
 
 Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be a Fixnum or
@@ -34,27 +23,9 @@ Metrics/AbcSize:
   Max: 15
   Enabled: false # 15 violations
 
-Style/BracesAroundHashParameters:
-  EnforcedStyle: no_braces
-  Enabled: false # 32 violations
-
-Style/IndentHash:
-  EnforcedStyle: special_inside_parentheses
-  Enabled: false # 33 violations
-
-Style/AndOr:
-  EnforcedStyle: always
-  Enabled: false # 37 violations
-
-Style/Encoding:
-  Enabled: false # 42 violations
-
 Style/Documentation:
   Description: 'Document classes and non-namespace modules.'
   Enabled: false # 59 violations
-
-Style/SingleSpaceBeforeFirstArg:
-  Enabled: false # 87 violations
 
 Metrics/LineLength:
   Max: 80
@@ -62,11 +33,3 @@ Metrics/LineLength:
   # contaning a URI to be longer than Max.
   AllowURI: true
   Enabled: false # 263 violations
-
-Style/HashSyntax:
-  EnforcedStyle: ruby19
-  SupportedStyles:
-    - ruby19
-    - ruby19_no_mixed_keys
-    - hash_rockets
-  Enabled: false # 620 violations

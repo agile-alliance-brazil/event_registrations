@@ -26,13 +26,13 @@ class Authentication < ActiveRecord::Base
     client = OAuth2::Client.new(
       APP_CONFIG[:submission_system][:key],
       APP_CONFIG[:submission_system][:secret],
-      :site => APP_CONFIG[:submission_system][:url],
-      :parse_json => true
+      site: APP_CONFIG[:submission_system][:url],
+      parse_json: true
     )
     token = OAuth2::AccessToken.new(
       client,
       nil,
-      :refresh_token => refresh_token
+      refresh_token: refresh_token
     )
     new_token = token.refresh!
     update_attribute(:refresh_token, new_token.refresh_token)

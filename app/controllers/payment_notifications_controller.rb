@@ -2,7 +2,7 @@
 class PaymentNotificationsController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :authorize_action
-  protect_from_forgery :except => [:create]
+  protect_from_forgery except: [:create]
 
   def create
     transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
@@ -11,6 +11,6 @@ class PaymentNotificationsController < ApplicationController
     transaction_params[:transaction_code] = transaction.code
     transaction_params[:transaction_inspect] = transaction.inspect
     PaymentNotification.create_for_pag_seguro(transaction_params)
-    render :nothing => true
+    render nothing: true
   end
 end

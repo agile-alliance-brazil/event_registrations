@@ -17,8 +17,8 @@ describe User, type: :model do
   end
 
   it_should_trim_attributes User, :first_name, :last_name, :email, :organization, :phone,
-                                  :country, :state, :city, :badge_name, :twitter_user,
-                                  :address, :neighbourhood, :zipcode
+                            :country, :state, :city, :badge_name, :twitter_user,
+                            :address, :neighbourhood, :zipcode
 
   context 'validations' do
     it { is_expected.to validate_presence_of :first_name }
@@ -43,12 +43,12 @@ describe User, type: :model do
   context 'virtual attributes' do
     context 'twitter user' do
       it 'removes @ from start if present' do
-        user = FactoryGirl.build(:user, :twitter_user => '@agilebrazil')
+        user = FactoryGirl.build(:user, twitter_user: '@agilebrazil')
         expect(user.twitter_user).to eq('agilebrazil')
       end
 
       it 'keeps as given if doesnt start with @' do
-        user = FactoryGirl.build(:user, :twitter_user => 'agilebrazil')
+        user = FactoryGirl.build(:user, twitter_user: 'agilebrazil')
         expect(user.twitter_user).to eq('agilebrazil')
       end
     end
@@ -111,15 +111,15 @@ describe User, type: :model do
 
     it 'works when more information is passed' do
       hash = { info: {
-        :first_name => 'John',
-        :last_name => 'Doe',
-        :email => 'john@doe.com',
-        :twitter_user => '@jdoe',
-        :organization => 'Company',
-        :phone => '12342',
-        :country => 'BR',
-        :state => 'SP',
-        :city => 'São Paulo'
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john@doe.com',
+        twitter_user: '@jdoe',
+        organization: 'Company',
+        phone: '12342',
+        country: 'BR',
+        state: 'SP',
+        city: 'São Paulo'
       } }
       user = User.new_from_auth_hash(hash)
       expect(user.first_name).to eq('John')

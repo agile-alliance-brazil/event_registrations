@@ -4,7 +4,7 @@ require 'faker'
 
 namespace :edition_2015 do
   desc 'Generates seeds'
-  task :seeds => :environment do
+  task seeds: :environment do
     print 'Generating seeds '
 
     event = Event.create!(name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link', full_price: 840.00, start_date: Date.new(2015, 10, 21), end_date: Date.new(2015, 10, 23))
@@ -21,7 +21,7 @@ namespace :edition_2015 do
   end
 
   desc 'Generates all'
-  task :all => [:seeds]
+  task all: [:seeds]
 
   private
 

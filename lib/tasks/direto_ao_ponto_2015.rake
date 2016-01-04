@@ -4,7 +4,7 @@ require 'faker'
 
 namespace :direto_ao_ponto_2015 do
   desc 'Generates seeds'
-  task :seeds => :environment do
+  task seeds: :environment do
     print 'Generating seeds '
 
     event = Event.create!(name: 'Direto Ao Ponto; criando produtos de forma enxuta', price_table_link: 'http://localhost:9292/link', full_price: 699.00, start_date: Date.new(2015, 10, 16), end_date: Date.new(2015, 10, 16))
@@ -17,7 +17,7 @@ namespace :direto_ao_ponto_2015 do
   end
 
   desc 'Generates all'
-  task :all => [:seeds]
+  task all: [:seeds]
 
   private
 

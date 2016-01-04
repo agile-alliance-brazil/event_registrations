@@ -1,18 +1,15 @@
-# encoding: UTF-8
-require 'spec_helper'
-
 describe User, type: :model do
   context 'associations' do
-    it { should have_many :authentications }
-    it { should have_many :attendances }
-    it { should have_many :events }
-    it { should have_many :payment_notifications }
+    it { is_expected.to have_many :authentications }
+    it { is_expected.to have_many :attendances }
+    it { is_expected.to have_many :events }
+    it { is_expected.to have_many :payment_notifications }
 
     context 'events uniqueness' do
       it 'only show event once if user has multiple attendances' do
         user = FactoryGirl.create(:user)
         first_attendance = FactoryGirl.create(:attendance, user: user)
-        second_attendance = FactoryGirl.create(:attendance, user: user, event: first_attendance.event)
+        FactoryGirl.create(:attendance, user: user, event: first_attendance.event)
 
         expect(user.events.size).to eq(1)
       end
@@ -24,20 +21,22 @@ describe User, type: :model do
                                   :address, :neighbourhood, :zipcode
 
   context 'validations' do
-    it { should validate_presence_of :first_name }
-    it { should validate_presence_of :last_name }
+    it { is_expected.to validate_presence_of :first_name }
+    it { is_expected.to validate_presence_of :last_name }
 
-    it { should allow_value('').for(:email) }
-    it { should allow_value('a@a.com').for(:email) }
-    it { should allow_value('user@domain.com.br').for(:email) }
-    it { should allow_value('test_user.name@a.co.uk').for(:email) }
-    it { should_not allow_value('a').for(:email) }
-    it { should_not allow_value('a@').for(:email) }
-    it { should_not allow_value('a@a').for(:email) }
-    it { should_not allow_value('@12.com').for(:email) }
+    it { is_expected.to allow_value('').for(:email) }
+    it { is_expected.to allow_value('a@a.com').for(:email) }
+    it { is_expected.to allow_value('user@domain.com.br').for(:email) }
+    it { is_expected.to allow_value('test_user.name@a.co.uk').for(:email) }
+    it { is_expected.not_to allow_value('a').for(:email) }
+    it { is_expected.not_to allow_value('a@').for(:email) }
+    it { is_expected.not_to allow_value('a@a').for(:email) }
+    it { is_expected.not_to allow_value('@12.com').for(:email) }
 
     context 'uniqueness' do
-      it { should validate_uniqueness_of(:email) }
+      let!(:user) { FactoryGirl.create :user }
+      let!(:other_user) { FactoryGirl.build :user, email: user.email }
+      it { expect(other_user).not_to be_valid }
     end
   end
 

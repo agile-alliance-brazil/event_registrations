@@ -18,12 +18,20 @@ SimpleCov.start 'rails' do
 
   minimum_coverage 99
 end
+
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'mocha/api'
 require 'cancan/matchers'
 require 'shoulda-matchers'
 require 'rspec/collection_matchers'
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

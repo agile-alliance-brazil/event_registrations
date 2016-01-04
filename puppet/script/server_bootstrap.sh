@@ -42,7 +42,7 @@ else
   fi
 
   if [ -z `cat /etc/profile | grep puppet` ]; then
-    echo "export PATH=/opt/puppetlabs/bin:$PATH" | ${SUDO_COMMAND} tee --append /etc/profile
+    echo "export PATH=\"/opt/puppetlabs/bin:${PATH}:\$PATH\"" | ${SUDO_COMMAND} tee --append /etc/profile
   fi
 fi
 

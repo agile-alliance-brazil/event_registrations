@@ -3,16 +3,15 @@ describe RegistrationGroup, type: :model do
   let(:group) { RegistrationGroup.create! event: event }
 
   context 'associations' do
-    it { should have_many :attendances }
-    it { should have_many :invoices }
-    pending 'Actually should have one invoice and not many. Change prior test and behaviour.'
+    it { is_expected.to have_many :attendances }
+    it { is_expected.to have_many :invoices }
 
-    it { should belong_to :event }
+    it { is_expected.to belong_to :event }
     it { expect(group).to belong_to(:leader).class_name('User') }
   end
 
   context 'validations' do
-    it { should validate_presence_of :event }
+    it { is_expected.to validate_presence_of :event }
   end
 
   describe '#destroy' do
@@ -100,7 +99,7 @@ describe RegistrationGroup, type: :model do
   describe '#update_invoice' do
     let(:group) { RegistrationGroup.create! event: event, discount: 100 }
     context 'with a pending invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 100.00 }
+      let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 100.00 }
       it 'will change the invoice amount' do
         group.stubs(:total_price).returns 200.00
         group.update_invoice
@@ -109,7 +108,7 @@ describe RegistrationGroup, type: :model do
     end
 
     context 'with a not pending invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 100.00, status: Invoice::PAID }
+      let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 100.00, status: Invoice::PAID }
       it 'will not change the invoice amount' do
         group.stubs(:total_price).returns 200.00
         group.update_invoice
@@ -121,7 +120,7 @@ describe RegistrationGroup, type: :model do
   describe '#update_invoice' do
     let(:group) { RegistrationGroup.create! event: event, discount: 100 }
     context 'with a pending invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 100.00 }
+      let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 100.00 }
       it 'will change the invoice amount' do
         group.stubs(:total_price).returns 200.00
         group.update_invoice
@@ -130,7 +129,7 @@ describe RegistrationGroup, type: :model do
     end
 
     context 'with a not pending invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 100.00, status: Invoice::PAID }
+      let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 100.00, status: Invoice::PAID }
       it 'will not change the invoice amount' do
         group.stubs(:total_price).returns 200.00
         group.update_invoice
@@ -279,5 +278,10 @@ describe RegistrationGroup, type: :model do
       let(:group) { FactoryGirl.create(:registration_group, minimum_size: 10) }
       it { expect(group.floor?).to be_truthy }
     end
+  end
+
+  describe '#to_s' do
+    let(:group) { FactoryGirl.create :registration_group }
+    it { expect(group.to_s).to eq group.name }
   end
 end

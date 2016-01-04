@@ -1,54 +1,53 @@
 describe Attendance, type: :model do
   context 'associations' do
-    it { should belong_to :event }
-    it { should belong_to :user }
-    it { should belong_to :registration_group }
-    it { should belong_to :registration_quota }
-    it { should have_many :invoice_attendances }
-    it { should have_many(:invoices).through(:invoice_attendances) }
+    it { is_expected.to belong_to :event }
+    it { is_expected.to belong_to :user }
+    it { is_expected.to belong_to :registration_group }
+    it { is_expected.to belong_to :registration_quota }
+    it { is_expected.to have_many(:invoices) }
   end
 
   context 'validations' do
-    it { should validate_presence_of :first_name }
-    it { should validate_presence_of :last_name }
-    it { should validate_presence_of :email }
-    it { should validate_presence_of :phone }
-    it { should validate_presence_of :country }
-    it { should validate_presence_of :city }
+    it { is_expected.to validate_presence_of :first_name }
+    it { is_expected.to validate_presence_of :last_name }
+    it { is_expected.to validate_presence_of :email }
+    it { is_expected.to validate_presence_of :phone }
+    it { is_expected.to validate_presence_of :country }
+    it { is_expected.to validate_presence_of :city }
 
-    it { should allow_value('1234-2345').for(:phone) }
-    it { should allow_value('+55 11 5555 2234').for(:phone) }
-    it { should allow_value('+1 (304) 543.3333').for(:phone) }
-    it { should allow_value('07753423456').for(:phone) }
-    it { should_not allow_value('a').for(:phone) }
-    it { should_not allow_value('1234-bfd').for(:phone) }
-    it { should_not allow_value(')(*&^%$@!').for(:phone) }
-    it { should_not allow_value('[=+]').for(:phone) }
+    it { is_expected.to allow_value('1234-2345').for(:phone) }
+    it { is_expected.to allow_value('+55 11 5555 2234').for(:phone) }
+    it { is_expected.to allow_value('+1 (304) 543.3333').for(:phone) }
+    it { is_expected.to allow_value('07753423456').for(:phone) }
+    it { is_expected.not_to allow_value('a').for(:phone) }
+    it { is_expected.not_to allow_value('1234-bfd').for(:phone) }
+    it { is_expected.not_to allow_value(')(*&^%$@!').for(:phone) }
+    it { is_expected.not_to allow_value('[=+]').for(:phone) }
 
     context 'brazilians' do
       subject { FactoryGirl.build(:attendance, :country => 'BR') }
-      it { should validate_presence_of :state }
-      it { should validate_presence_of :cpf }
+      it { is_expected.to validate_presence_of :state }
+      it { is_expected.to validate_presence_of :cpf }
     end
 
     context 'foreigners' do
       subject { FactoryGirl.build(:attendance, :country => 'US') }
-      it { should_not validate_presence_of :state }
-      it { should_not validate_presence_of :cpf }
+      it { is_expected.not_to validate_presence_of :state }
+      it { is_expected.not_to validate_presence_of :cpf }
     end
 
-    it { should validate_length_of(:email).is_at_least(6).is_at_most(100) }
-    it { should validate_length_of(:first_name).is_at_most(100) }
-    it { should validate_length_of(:last_name).is_at_most(100) }
-    it { should validate_length_of(:city).is_at_most(100) }
-    it { should validate_length_of(:organization).is_at_most(100) }
+    it { is_expected.to validate_length_of(:email).is_at_least(6).is_at_most(100) }
+    it { is_expected.to validate_length_of(:first_name).is_at_most(100) }
+    it { is_expected.to validate_length_of(:last_name).is_at_most(100) }
+    it { is_expected.to validate_length_of(:city).is_at_most(100) }
+    it { is_expected.to validate_length_of(:organization).is_at_most(100) }
 
-    it { should allow_value('user@domain.com.br').for(:email) }
-    it { should allow_value('test_user.name@a.co.uk').for(:email) }
-    it { should_not allow_value('a').for(:email) }
-    it { should_not allow_value('a@').for(:email) }
-    it { should_not allow_value('a@a').for(:email) }
-    it { should_not allow_value('@12.com').for(:email) }
+    it { is_expected.to allow_value('user@domain.com.br').for(:email) }
+    it { is_expected.to allow_value('test_user.name@a.co.uk').for(:email) }
+    it { is_expected.not_to allow_value('a').for(:email) }
+    it { is_expected.not_to allow_value('a@').for(:email) }
+    it { is_expected.not_to allow_value('a@a').for(:email) }
+    it { is_expected.not_to allow_value('@12.com').for(:email) }
   end
 
   context 'callbacks' do
@@ -56,7 +55,7 @@ describe Attendance, type: :model do
     describe '#update_group_invoice' do
       context 'having a registration group' do
         let(:group) { RegistrationGroup.create! event: event }
-        let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, amount: 50.00 }
+        let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 50.00 }
         it 'updates the group invoice when add attendace to the group' do
           RegistrationGroup.any_instance.expects(:update_invoice).once
           FactoryGirl.create(:attendance, registration_group: group, registration_value: 100)
@@ -804,5 +803,19 @@ describe Attendance, type: :model do
     end
   end
 
-  pending 'delegates'
+  context 'delegates' do
+    describe '#token' do
+      let(:group) { FactoryGirl.create :registration_group }
+      let(:attendance) { FactoryGirl.create :attendance, registration_group: group }
+
+      it { expect(attendance.token).to eq group.token }
+      it { expect(attendance.group_name).to eq group.name }
+      it { expect(attendance.event_name).to eq attendance.event.name }
+    end
+  end
+
+  describe '#to_s' do
+    let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar' }
+    it { expect(attendance.to_s).to eq 'bar, foo' }
+  end
 end

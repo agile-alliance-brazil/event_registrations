@@ -24,6 +24,14 @@
 #  updated_at            :datetime
 #  registration_group_id :integer
 #
+# Indexes
+#
+#  fk_rails_ebe9fba698  (registration_group_id)
+#
+# Foreign Keys
+#
+#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id)
+#
 
 require File.join(Rails.root, 'lib/authorization.rb')
 require File.join(Rails.root, 'lib/trimmer.rb')

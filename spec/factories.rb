@@ -35,13 +35,6 @@ FactoryGirl.define do
     registration_date { Time.zone.now }
   end
 
-  factory :payment_notification do
-    params { { some: 'params', type: 'pagseguro' } }
-    status 'Completed'
-    transaction_id '9JU83038HS278211W'
-    association :invoicer, factory: :attendance
-  end
-
   factory :user do
     first_name 'User'
     sequence(:last_name) { |n| "Name#{n}" }

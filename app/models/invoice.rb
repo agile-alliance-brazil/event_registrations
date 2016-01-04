@@ -11,6 +11,12 @@
 #  registration_group_id :integer
 #  status                :string(255)
 #  payment_type          :string(255)
+#  invoiceable_id        :integer
+#  invoiceable_type      :string(255)
+#
+# Indexes
+#
+#  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 
 class Invoice < ActiveRecord::Base
@@ -18,16 +24,12 @@ class Invoice < ActiveRecord::Base
   TYPES = [GATEWAY = 'gateway', DEPOSIT = 'bank_deposit', STATEMENT = 'statement_agreement']
 
   belongs_to :user
-  belongs_to :registration_group
-
-  has_many :invoice_attendances
-  has_many :attendances, -> { uniq }, through: :invoice_attendances
+  belongs_to :invoiceable, polymorphic: true
 
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
   scope :active, -> { where.not(status: :cancelled) }
-  scope :individual, -> { where(registration_group: nil) }
-  scope :for_attendance, ->(attendance_id) { active.individual.includes(:attendances).where('attendances.id = ?', attendance_id).references(:attendances) }
+  scope :for_attendance, ->(attendance_id) { active.where(invoiceable_id: attendance_id, invoiceable_type: 'Attendance') }
 
   validates :payment_type, presence: true
 
@@ -39,31 +41,28 @@ class Invoice < ActiveRecord::Base
       user: attendance.user,
       amount: attendance.registration_value,
       status: Invoice::PENDING,
-      attendances: [attendance],
+      invoiceable: attendance,
       payment_type: payment_type
     )
   end
 
   def self.from_registration_group(group, payment_type)
-    invoice = find_by(registration_group: group)
+    invoice = find_by(invoiceable: group)
     if invoice.present?
       invoice.update_attributes(amount: group.total_price, payment_type: payment_type)
-      invoice.attendances << group.attendances
       return invoice
     end
 
     Invoice.create!(
-      registration_group: group,
+      invoiceable: group,
       user: group.leader,
       amount: group.total_price,
       status: Invoice::PENDING,
-      attendances: group.attendances,
       payment_type: payment_type
     )
   end
 
   def pay
-    return unless attendances.map(&:pay).reduce(true, &:&)
     pay_it
     save!
   end
@@ -85,8 +84,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def name
-    return user.full_name unless registration_group.present?
-    registration_group.name
+    invoiceable.to_s if invoiceable.present?
   end
 
   def pending?

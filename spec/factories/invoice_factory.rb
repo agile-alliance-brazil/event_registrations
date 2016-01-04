@@ -11,6 +11,12 @@
 #  registration_group_id :integer
 #  status                :string(255)
 #  payment_type          :string(255)
+#  invoiceable_id        :integer
+#  invoiceable_type      :string(255)
+#
+# Indexes
+#
+#  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 
 FactoryGirl.define do
@@ -22,7 +28,7 @@ FactoryGirl.define do
   end
 
   factory :invoice_group, class: Invoice do
-    registration_group
+    invoiceable registration_group
     status Invoice::PENDING
   end
 end

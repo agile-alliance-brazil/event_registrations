@@ -4,7 +4,7 @@ describe PaymentsController, type: :controller do
 
     context 'with an invoice for group' do
       let!(:group) { FactoryGirl.create :registration_group, event: event }
-      let(:invoice) { FactoryGirl.create :invoice, registration_group: group }
+      let(:invoice) { FactoryGirl.create :invoice, invoiceable: group }
 
       it 'call the register, changes the status of invoice and redirect to groups index' do
         PagSeguroService.expects(:checkout).with(invoice, anything).once.returns({ url: 'xpto.foo.bar' })
@@ -21,7 +21,7 @@ describe PaymentsController, type: :controller do
       end
 
       let!(:group) { FactoryGirl.create :registration_group, event: event }
-      let(:invoice) { FactoryGirl.create :invoice, registration_group: group }
+      let(:invoice) { FactoryGirl.create :invoice, invoiceable: group }
 
       it 'redirects to event with the proper message if any errors' do
         PagSeguroService.expects(:checkout).with(invoice, anything).once.returns({ errors: 'xpto' })

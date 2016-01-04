@@ -1,17 +1,17 @@
-# encoding: UTF-8
 describe PaymentNotification, type: :model do
   context 'associations' do
-    it { should belong_to :invoicer }
+    it { is_expected.to belong_to :invoice }
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of :invoicer }
+    it { is_expected.to validate_presence_of :invoice }
   end
 
   context 'callbacks' do
     describe 'pagseguro payment' do
       before(:each) do
         @attendance = FactoryGirl.create(:attendance, registration_date: Time.zone.now)
+        @invoice = Invoice.from_attendance(@attendance, Invoice::GATEWAY)
         expect(@attendance).to be_pending
 
         @valid_params = {
@@ -19,30 +19,30 @@ describe PaymentNotification, type: :model do
           secret: APP_CONFIG[:pag_seguro][:token],
           transacao_id: '12345678',
           status: 'Aprovada',
-          pedido: @attendance.id,
+          pedido: @invoice.id,
           store_code: APP_CONFIG[:pag_seguro][:store_code]
         }
         @valid_args = {
           status: 'Completed',
-          invoicer: @attendance,
+          invoice: @invoice,
           params: @valid_params
         }
       end
 
       it 'succeed if status is Aprovada and params are valid' do
         FactoryGirl.create(:payment_notification, @valid_args)
-        expect(@attendance).to be_confirmed
+        expect(@invoice.status).to eq Invoice::PAID
       end
 
       it "fails if secret doesn't match" do
         @valid_params.merge!(store_code: 'wrong_secret')
         FactoryGirl.create(:payment_notification, @valid_args)
-        expect(@attendance).to be_pending
+        expect(@invoice).to be_pending
       end
 
       it 'fails if status is not Aprovada' do
         FactoryGirl.create(:payment_notification, @valid_args.merge(status: 'Cancelada'))
-        expect(@attendance).to be_pending
+        expect(@invoice).to be_pending
       end
     end
   end
@@ -67,7 +67,7 @@ describe PaymentNotification, type: :model do
 
       expected_params = {
         params: pag_seguro_params,
-        invoicer: @invoice,
+        invoice: @invoice,
         status: 'Aprovada',
         transaction_id: '1234567890',
         notes: 'bla'

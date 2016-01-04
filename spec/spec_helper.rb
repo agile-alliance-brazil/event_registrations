@@ -35,8 +35,6 @@ module Airbrake
   end
 end
 
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
-
 RSpec.configure do |config|
   Rails.application.eager_load!
 

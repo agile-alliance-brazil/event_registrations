@@ -91,21 +91,21 @@ module Concerns
     end
 
     def cancel_invoice!
-      invoice = user.invoices.individual.where(status: 'pending').last
+      invoice = user.invoices.where(status: 'pending').last
       return unless invoice.present?
       invoice.cancel_it
       invoice.save!
     end
 
     def recover_invoice!
-      invoice = user.invoices.individual.where(status: 'cancelled').last
+      invoice = user.invoices.where(status: 'cancelled').last
       return unless invoice.present?
       invoice.recover_it
       invoice.save!
     end
 
     def pay_invoice!
-      invoice = user.invoices.individual.active.last
+      invoice = user.invoices.active.last
       return unless invoice.present?
       invoice.amount = self.registration_value
       invoice.pay_it

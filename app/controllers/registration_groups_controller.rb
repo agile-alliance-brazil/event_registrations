@@ -1,22 +1,4 @@
 # encoding: UTF-8
-# == Schema Information
-#
-# Table name: registration_groups
-#
-#  id           :integer          not null, primary key
-#  event_id     :integer
-#  name         :string(255)
-#  capacity     :integer
-#  discount     :integer
-#  token        :string(255)
-#  created_at   :datetime
-#  updated_at   :datetime
-#  leader_id    :integer
-#  invoice_id   :integer
-#  minimum_size :integer
-#  amount       :decimal(10, )
-#
-
 class RegistrationGroupsController < ApplicationController
   before_action :find_event
   before_action :find_group, except: %i(index create)

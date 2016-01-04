@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160103200312) do
+ActiveRecord::Schema.define(version: 20160104003728) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id",               limit: 4
@@ -71,15 +71,6 @@ ActiveRecord::Schema.define(version: 20160103200312) do
     t.datetime "end_date"
   end
 
-  create_table "invoice_attendances", force: :cascade do |t|
-    t.integer  "invoice_id",    limit: 4
-    t.integer  "attendance_id", limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "invoice_attendances", ["invoice_id", "attendance_id"], name: "index_invoice_attendances_on_invoice_id_and_attendance_id", unique: true, using: :btree
-
   create_table "invoices", force: :cascade do |t|
     t.integer  "frete",                 limit: 4
     t.decimal  "amount",                            precision: 10
@@ -89,21 +80,26 @@ ActiveRecord::Schema.define(version: 20160103200312) do
     t.integer  "registration_group_id", limit: 4
     t.string   "status",                limit: 255
     t.string   "payment_type",          limit: 255
+    t.integer  "invoiceable_id",        limit: 4
+    t.string   "invoiceable_type",      limit: 255
   end
+
+  add_index "invoices", ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id", using: :btree
 
   create_table "payment_notifications", force: :cascade do |t|
     t.text     "params",          limit: 65535
     t.string   "status",          limit: 255
     t.string   "transaction_id",  limit: 255
-    t.integer  "invoicer_id",     limit: 4
     t.string   "payer_email",     limit: 255
     t.decimal  "settle_amount",                 precision: 10
     t.string   "settle_currency", limit: 255
     t.text     "notes",           limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "invoicer_type",   limit: 255
+    t.integer  "invoice_id",      limit: 4
   end
+
+  add_index "payment_notifications", ["invoice_id"], name: "fk_rails_92030b1506", using: :btree
 
   create_table "registration_groups", force: :cascade do |t|
     t.integer  "event_id",     limit: 4
@@ -169,6 +165,7 @@ ActiveRecord::Schema.define(version: 20160103200312) do
 
   add_index "users", ["registration_group_id"], name: "fk_rails_ebe9fba698", using: :btree
 
+  add_foreign_key "payment_notifications", "invoices"
   add_foreign_key "registration_groups", "invoices"
   add_foreign_key "users", "registration_groups"
 end

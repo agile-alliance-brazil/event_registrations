@@ -13,7 +13,7 @@ class railsapp( $user, $app_name ) {
 
     rvm_gem { 'bundler22':
         name         => 'bundler',
-        ruby_version => 'ruby-2.2.3',
+        ruby_version => 'ruby-2.2.3@global',
         ensure       => latest,
         require      => Rvm_system_ruby['ruby-2.2.3'];
     }

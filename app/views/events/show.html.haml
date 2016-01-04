@@ -1,2 +1,7 @@
-- title t('actions.registration')
-= render partial: 'registrations', locals: { :event => @event }
+%div
+  %h1= t('actions.reistration_periods')
+  = render partial: 'registration_periods', locals: { event: @event }
+
+%div
+  %h1= t('actions.registration')
+  = render partial: 'registrations', locals: { event: @event }

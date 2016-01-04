@@ -20,4 +20,8 @@ FactoryGirl.define do
     neighbourhood 'Vila Perdida'
     zipcode '12345000'
   end
+
+  factory :admin, parent: :user do
+    roles [:admin]
+  end
 end

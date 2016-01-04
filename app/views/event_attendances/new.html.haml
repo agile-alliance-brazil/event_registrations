@@ -1,7 +1,9 @@
+
+
 - title t('title.registration')
 .auto_focus
 
 = semantic_form_for([@event, @attendance]) do |form|
   = render 'form', form: form
   = form.actions do
-    = form.action(:submit, label: :new_registration, button_html: {tabindex: autotab, :class => "btn btn-primary"})
+    = form.action(:submit, label: :new_registration, button_html: { tabindex: autotab, class: 'btn btn-primary' })

@@ -1,0 +1,15 @@
+- if current_user.try(:organizer?) || current_user.try(:admin?)
+  - if event.registration_periods.present?
+    %table.table
+      %th= t('formtastic.labels.registration_period.id')
+      %th= t('formtastic.labels.registration_period.start_at')
+      %th= t('formtastic.labels.registration_period.end_at')
+      %th= t('formtastic.labels.registration_period.value')
+      - @event.registration_periods.each do |period|
+        %tr{ id: "period_#{period.id}" }
+          %td= period.id
+          %td= l(period.start_at)
+          %td= l(period.end_at)
+          %td= period.price_for
+  - else
+    %h3= t('events.show.no_periods_message')

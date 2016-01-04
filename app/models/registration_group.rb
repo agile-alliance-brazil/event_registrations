@@ -15,13 +15,21 @@
 #  minimum_size :integer
 #  amount       :decimal(10, )
 #
+# Indexes
+#
+#  fk_rails_9544e3707e  (invoice_id)
+#
+# Foreign Keys
+#
+#  fk_rails_9544e3707e  (invoice_id => invoices.id)
+#
 
 class RegistrationGroup < ActiveRecord::Base
   belongs_to :event
   belongs_to :leader, class_name: 'User', inverse_of: :led_groups
 
   has_many :attendances
-  has_many :invoices
+  has_many :invoices, as: :invoiceable
 
   validates :event, presence: true
 
@@ -30,6 +38,10 @@ class RegistrationGroup < ActiveRecord::Base
   before_destroy do |record|
     group_attendances = Attendance.where(registration_group_id: record.id)
     group_attendances.map(&:cancel)
+  end
+
+  def to_s
+    name
   end
 
   def qtd_attendances

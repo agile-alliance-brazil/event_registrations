@@ -15,6 +15,14 @@
 #  minimum_size :integer
 #  amount       :decimal(10, )
 #
+# Indexes
+#
+#  fk_rails_9544e3707e  (invoice_id)
+#
+# Foreign Keys
+#
+#  fk_rails_9544e3707e  (invoice_id => invoices.id)
+#
 
 describe RegistrationGroupsController, type: :controller do
   let(:user) { FactoryGirl.create :user }
@@ -66,7 +74,7 @@ describe RegistrationGroupsController, type: :controller do
   describe '#show' do
     let(:event) { FactoryGirl.create :event }
     let(:group) { FactoryGirl.create :registration_group, event: event }
-    let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PAID, amount: group.total_price, payment_type: Invoice::GATEWAY }
+    let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: Invoice::GATEWAY }
     context 'without attendances' do
       before { get :show, event_id: event.id, id: group.id }
       it { expect(assigns(:group)).to eq group }
@@ -112,7 +120,7 @@ describe RegistrationGroupsController, type: :controller do
     let(:event) { FactoryGirl.create :event }
     let(:group) { FactoryGirl.create :registration_group, event: event }
     context 'with a pending invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, registration_group: group, status: Invoice::PENDING, amount: 120.00 }
+      let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, status: Invoice::PENDING, amount: 120.00 }
       context 'and the group total price is different from current amount in invoice' do
         it 'will update the invoice amount' do
           RegistrationGroup.any_instance.stubs(:total_price).returns(240.00)

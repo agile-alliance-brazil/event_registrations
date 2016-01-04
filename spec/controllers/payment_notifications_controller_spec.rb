@@ -16,12 +16,10 @@
 #  invoicer_type   :string(255)
 #
 
-require 'spec_helper'
-
 describe PaymentNotificationsController, type: :controller, block_network: true do
   describe '#create' do
     let(:attendance) { FactoryGirl.create(:attendance) }
-    let(:invoice) { FactoryGirl.create(:invoice, attendances: [attendance]) }
+    let(:invoice) { FactoryGirl.create(:invoice, invoiceable: attendance) }
 
     context 'when pagseguro' do
       context 'and the invoice is paid' do

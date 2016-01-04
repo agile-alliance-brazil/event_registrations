@@ -1,9 +1,8 @@
-require 'spec_helper'
 require File.join(File.dirname(__FILE__), '../../lib/payment_gateway_adapter')
 
 describe PaymentGatewayAdapter do
   let(:attendance) { FactoryGirl.create(:attendance) }
-  let(:invoice) { FactoryGirl.create(:invoice, attendances: [attendance]) }
+  let(:invoice) { FactoryGirl.create(:invoice, invoiceable: attendance) }
 
   context 'from invoice' do
     it 'should generate list of items from invoice' do

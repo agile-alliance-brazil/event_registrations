@@ -1,12 +1,11 @@
-require 'spec_helper'
 require File.join(File.dirname(__FILE__), '../../lib/pag_seguro_adapter')
 
 describe PagSeguroAdapter do
   let(:attendance) { FactoryGirl.create(:attendance) }
-  let(:invoice) { FactoryGirl.create(:invoice, attendances: [attendance]) }
+  let(:invoice) { FactoryGirl.create(:invoice, invoiceable: attendance) }
 
   context 'from invoice' do
-    it 'should generate list of items from invoice' do
+    it 'generates list of items from invoice' do
       adapter = PagSeguroAdapter.from_invoice(invoice)
 
       variables = adapter.to_variables

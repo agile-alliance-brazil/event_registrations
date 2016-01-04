@@ -35,6 +35,10 @@
 #  advised_at             :datetime
 #  payment_type           :string(255)
 #
+# Indexes
+#
+#  index_attendances_on_registration_quota_id  (registration_quota_id)
+#
 
 describe AttendancesController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }

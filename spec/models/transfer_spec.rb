@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Transfer, type: :model do
   let(:origin_date) { 1.month.from_now }
   let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }
@@ -59,14 +57,13 @@ describe Transfer, type: :model do
       transfer.save
       expect(new_origin.id).to eq 1
     end
-    pending 'not change origin registration_date'
-    it 'cancels the origin attendance' do
+    it 'do the transfer and keep the dates' do
+      destination_date = destination.registration_date
+      origin_date = origin.registration_date
       transfer.save
       expect(new_origin.status).to eq 'cancelled'
-    end
-
-    it 'change the destination status and registration value' do
-      transfer.save
+      expect(new_origin.registration_date.to_i).to eq origin_date.to_i
+      expect(new_destination.registration_date.to_i).to eq destination_date.to_i
       expect(new_destination.status).to eq 'confirmed'
       expect(new_destination.registration_value).to eq 420
     end

@@ -2,10 +2,8 @@ describe Invoice, type: :model do
   let(:event) { FactoryGirl.create :event }
 
   context 'associations' do
-    it { should belong_to :user }
-    it { should belong_to :registration_group }
-    it { should have_many :invoice_attendances }
-    it { should have_many(:attendances).through(:invoice_attendances) }
+    it { is_expected.to belong_to :user }
+    it { is_expected.to belong_to :invoiceable }
   end
 
   describe '.from_attendance' do
@@ -16,7 +14,7 @@ describe Invoice, type: :model do
     context 'with no pending invoice already existent' do
       subject(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       it { expect(invoice.user).to eq attendance.user }
-      it { expect(invoice.attendances).to eq [attendance] }
+      it { expect(invoice.invoiceable).to eq attendance }
       it { expect(invoice.amount).to eq attendance.event.registration_price_for(attendance, Invoice::GATEWAY) }
     end
 
@@ -26,12 +24,12 @@ describe Invoice, type: :model do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       it { expect(other_invoice.user).to eq attendance.user }
-      it { expect(other_invoice.attendances).to eq [attendance] }
+      it { expect(other_invoice.invoiceable).to eq attendance }
       it { expect(other_invoice.amount).to eq 100 }
     end
 
     context 'with an already existent pending invoice' do
-      let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, attendances: [attendance], amount: 100, payment_type: Invoice::GATEWAY) }
+      let!(:invoice) { FactoryGirl.create(:invoice, user: attendance.user, invoiceable: attendance, amount: 100, payment_type: Invoice::GATEWAY) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       it { expect(other_invoice).to eq invoice }
       it { expect(Invoice.count).to eq 1 }
@@ -44,25 +42,23 @@ describe Invoice, type: :model do
 
     context 'with no pending invoice already existent' do
       subject(:invoice) { Invoice.from_registration_group(group, Invoice::GATEWAY) }
-      it { expect(invoice.registration_group).to eq group }
-      it { expect(invoice.attendances).to eq group.attendances }
+      it { expect(invoice.invoiceable).to eq group }
       it { expect(invoice.user).to eq group.leader }
     end
 
     context 'with an already registered invoice for another user' do
       let(:other_user) { FactoryGirl.create :user }
-      let!(:invoice) { FactoryGirl.create(:invoice, user: group.leader, registration_group: group, amount: 200, payment_type: Invoice::GATEWAY) }
+      let!(:invoice) { FactoryGirl.create(:invoice, user: group.leader, invoiceable: group, amount: 200, payment_type: Invoice::GATEWAY) }
       let!(:other_group) { FactoryGirl.create(:registration_group, leader: other_user) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: other_user, registration_group: other_group, registration_value: 100) }
       subject!(:other_invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
-      it { expect(other_invoice.attendances).to eq other_group.attendances }
       it { expect(other_invoice.user).to eq other_group.leader }
       it { expect(other_invoice.amount).to eq 100 }
     end
 
     context 'with an already existent invoice' do
       context 'with same total price' do
-        let!(:invoice) { FactoryGirl.create(:invoice, registration_group: group, amount: group.total_price, payment_type: Invoice::GATEWAY) }
+        let!(:invoice) { FactoryGirl.create(:invoice, invoiceable: group, amount: group.total_price, payment_type: Invoice::GATEWAY) }
         subject!(:other_invoice) { Invoice.from_registration_group(group, Invoice::GATEWAY) }
         it { expect(other_invoice).to eq invoice }
         it { expect(Invoice.count).to eq 1 }
@@ -70,11 +66,10 @@ describe Invoice, type: :model do
       end
 
       context 'with different total price' do
-        let!(:invoice) { FactoryGirl.create(:invoice, registration_group: group, amount: 100, payment_type: Invoice::GATEWAY) }
+        let!(:invoice) { FactoryGirl.create(:invoice, invoiceable: group, amount: 100, payment_type: Invoice::GATEWAY) }
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: user, registration_group: group, registration_value: 200) }
 
         subject!(:other_invoice) { Invoice.from_registration_group(group, Invoice::GATEWAY) }
-        it { expect(other_invoice.attendances).to eq group.attendances }
         it { expect(other_invoice.amount).to eq 200 }
         it { expect(Invoice.count).to eq 1 }
       end
@@ -84,8 +79,8 @@ describe Invoice, type: :model do
   describe '.for_attendance' do
     let(:attendance) { FactoryGirl.create(:attendance) }
     let(:other_attendance) { FactoryGirl.create(:attendance) }
-    let(:invoice) { FactoryGirl.create(:invoice, status: :pending, registration_group: nil, attendances: [attendance]) }
-    let(:other_invoice) { FactoryGirl.create(:invoice, status: :pending, registration_group: nil, attendances: [other_attendance]) }
+    let(:invoice) { FactoryGirl.create(:invoice, status: :pending, invoiceable: attendance) }
+    let(:other_invoice) { FactoryGirl.create(:invoice, status: :pending, invoiceable: other_attendance) }
 
     it { expect(Invoice.for_attendance(attendance.id)).to eq [invoice] }
   end
@@ -98,14 +93,6 @@ describe Invoice, type: :model do
     it { expect(Invoice.active).to match_array [invoice, paid_invoice] }
   end
 
-  describe '.individual' do
-    let!(:group) { FactoryGirl.create(:registration_group) }
-    let(:invoice) { FactoryGirl.create(:invoice, status: :pending) }
-    let(:grouped_invoice) { FactoryGirl.create(:invoice, registration_group: group) }
-
-    it { expect(Invoice.individual).to match_array [invoice] }
-  end
-
   describe '#pay' do
     context 'an attendance invoice' do
       let(:group) { FactoryGirl.create :registration_group }
@@ -114,7 +101,6 @@ describe Invoice, type: :model do
       before { invoice.pay }
       it { expect(invoice.status).to eq Invoice::PAID }
       it { expect(invoice).to be_persisted }
-      it { expect(attendance.status).to satisfy { |s| %w(paid confirmed).include?(s) } }
     end
 
     context 'a group invoice' do

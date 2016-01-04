@@ -8,7 +8,7 @@ class UpdateAttendance
     @attendance.registration_value = @event.registration_price_for(@attendance, update_params.payment_type_params)
     @attendance.save!
 
-    invoice = @attendance.invoices.individual.last
+    invoice = @attendance.invoices.last
     invoice.payment_type = update_params.payment_type_params
     invoice.save!
   end

@@ -7,23 +7,29 @@
 #  params          :text(65535)
 #  status          :string(255)
 #  transaction_id  :string(255)
-#  invoicer_id     :integer
 #  payer_email     :string(255)
 #  settle_amount   :decimal(10, )
 #  settle_currency :string(255)
 #  notes           :text(65535)
 #  created_at      :datetime
 #  updated_at      :datetime
-#  invoicer_type   :string(255)
+#  invoice_id      :integer
+#
+# Indexes
+#
+#  fk_rails_92030b1506  (invoice_id)
+#
+# Foreign Keys
+#
+#  fk_rails_92030b1506  (invoice_id => invoices.id)
 #
 
 class PaymentNotification < ActiveRecord::Base
-  belongs_to :invoicer, polymorphic: true
+  belongs_to :invoice
   serialize :params
 
-  validates :invoicer, presence: true
-
   after_create :mark_invoicer_as_paid, if: ->(n) { n.status == 'Completed' }
+  validates :invoice, presence: true
 
   scope :pag_seguro, -> { where('params LIKE ?', '%type: pag_seguro%') }
   scope :completed, -> { where('status = ?', 'Completed') }
@@ -36,12 +42,16 @@ class PaymentNotification < ActiveRecord::Base
   private
 
   def mark_invoicer_as_paid
-    if params_valid? && invoicer.respond_to?(:pay)
-      invoicer.pay
+    if params_valid?
+      invoice.pay
+      if invoice.invoiceable_type == 'Attendance'
+        attendance = Attendance.where(id: invoice.invoiceable_id).last
+        attendance.pay if attendance.present?
+      end
     else
       Airbrake.notify(
         error_class:   'Failed Payment Notification',
-        error_message: "Failed Payment Notification for invoicer: #{invoicer.inspect}",
+        error_message: "Failed Payment Notification for invoice: #{invoice.name}",
         parameters:    params
       )
     end
@@ -60,7 +70,7 @@ class PaymentNotification < ActiveRecord::Base
     PagSeguroService.config
     {
       params: params,
-      invoicer: Invoice.find(params[:pedido]),
+      invoice: Invoice.find(params[:pedido]),
       status: params[:status],
       transaction_id: params[:transaction_code],
       notes: params[:transaction_inspect]

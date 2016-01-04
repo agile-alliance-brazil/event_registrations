@@ -36,6 +36,10 @@
 #  advised_at             :datetime
 #  payment_type           :string(255)
 #
+# Indexes
+#
+#  index_attendances_on_registration_quota_id  (registration_quota_id)
+#
 
 class Attendance < ActiveRecord::Base
   include Concerns::LifeCycle
@@ -49,8 +53,7 @@ class Attendance < ActiveRecord::Base
   belongs_to :registration_quota
   has_many :payment_notifications, as: :invoicer
 
-  has_many :invoice_attendances
-  has_many :invoices, -> { uniq }, through: :invoice_attendances
+  has_many :invoices, as: :invoiceable
 
   validates_confirmation_of :email
   validates_presence_of %i(first_name last_name email phone country city registration_date user_id event_id)
@@ -107,6 +110,10 @@ class Attendance < ActiveRecord::Base
 
   def grouped?
     registration_group.present?
+  end
+
+  def to_s
+    "#{last_name}, #{first_name}"
   end
 
   def advise!

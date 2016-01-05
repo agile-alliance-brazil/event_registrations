@@ -1,8 +1,10 @@
-- if can? :create, Event
-  = link_to t('events.new.title'), new_event_path, class: 'btn btn-primary'
-
+%div
+  - if can? :create, Event
+    = link_to t('events.new.title'), new_event_path, class: 'btn btn-primary'
+%hr
+  
 - if @events.empty?
-  = t('event.no_upcoming')
+  %div= t('event.no_upcoming')
 - else
   %h3= t('title.events')
   %div.events

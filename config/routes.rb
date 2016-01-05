@@ -36,6 +36,7 @@ Current::Application.routes.draw do
     end
 
     resources :registration_periods, only: [:new, :create]
+    resources :registration_quotas, only: [:new, :create]
   end
 
   get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')

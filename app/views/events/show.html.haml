@@ -17,7 +17,8 @@
   %hr
 
   %div
-    = render partial: 'registration_quotas', locals: { event: @event }
+    = render partial: 'registration_quotas/quotas_list', locals: { event: @event }
+    = link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn btn-primary'
 
   %hr
 

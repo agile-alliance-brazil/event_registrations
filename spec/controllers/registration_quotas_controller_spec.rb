@@ -1,0 +1,93 @@
+describe RegistrationQuotasController, type: :controller do
+  context 'unauthenticated' do
+    describe 'GET #new' do
+      it 'redirects to login' do
+        get :new, event_id: 'foo'
+        expect(response).to redirect_to login_path
+      end
+    end
+    describe 'POST #create' do
+      it 'redirects to login' do
+        post :create, event_id: 'foo'
+        expect(response).to redirect_to login_path
+      end
+    end
+  end
+
+  context 'logged as normal user' do
+    let(:user) { FactoryGirl.create(:user) }
+    before { sign_in user }
+
+    describe 'GET #new' do
+      it 'redirects to login' do
+        get :new, event_id: 'foo'
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe 'POST #create' do
+      it 'redirects to login' do
+        post :create, event_id: 'foo'
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  context 'logged as admin user' do
+    let(:admin) { FactoryGirl.create(:admin) }
+    before { sign_in admin }
+
+    describe 'GET #new' do
+      context 'with a valid event' do
+        let!(:event) { FactoryGirl.create :event }
+        it 'assigns the variables and render the template' do
+          get :new, event_id: event
+          expect(assigns(:event)).to eq event
+          expect(assigns(:registration_quota)).to be_a_new RegistrationQuota
+          expect(response).to render_template :new
+        end
+      end
+      context 'with an invalid event' do
+        it 'renders 404' do
+          get :new, event_id: 'foo'
+          expect(response).to have_http_status 404
+        end
+      end
+    end
+
+    describe 'POST #create' do
+      let(:event) { FactoryGirl.create :event }
+      context 'with valid parameters' do
+        it 'creates the quota and redirects to event' do
+          post :create, event_id: event, registration_quota: { order: 1, price: 100, quota: 45 }
+          quota_persisted = RegistrationQuota.last
+          registration_quota = assigns(:registration_quota)
+          expect(quota_persisted.order).to eq 1
+          expect(quota_persisted.price).to eq 100
+          expect(quota_persisted.quota).to eq 45
+          expect(response).to redirect_to new_event_registration_quota_path(event, registration_quota)
+        end
+      end
+
+      context 'with invalid parameters' do
+        context 'and invalid quota params' do
+          it 'renders form with the errors' do
+            post :create, event_id: event, registration_quota: { bla: 0 }
+            quota = assigns(:registration_quota)
+
+            expect(quota).to be_a RegistrationQuota
+            expect(quota.errors.full_messages).to eq ['Order não pode ficar em branco', 'Quota não pode ficar em branco']
+            expect(response).to render_template :new
+          end
+        end
+
+        context 'and invalid event' do
+          it 'renders 404' do
+            post :create, event_id: 'foo', registration_quota: { order: 0 }
+            expect(response).to have_http_status 404
+          end
+        end
+      end
+    end
+  end
+end

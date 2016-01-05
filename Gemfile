@@ -62,7 +62,8 @@ group :development, :test do
   gem 'metric_fu'
   gem 'annotate'
   gem 'database_cleaner'
-  gem 'byebug'
+  gem 'byebug', require: false
+  gem 'dotenv-rails', require: false
 end
 
 group :development do

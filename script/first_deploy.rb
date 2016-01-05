@@ -2,11 +2,12 @@
 
 if ARGV.count < 2
   puts <<-END
-Usage: #{File.basename(__FILE__)} <user> <target_machine> <optional_ssh_key>
+Usage: #{File.basename(__FILE__)} <user> <target_machine> [<machine_type>] [<optional_ssh_key>]
 
 <user>: The user that will be used to ssh into the machine. Either root for Digital Ocean machines or ubuntu for AWS EC2 machines. It MUST have an ssh key already set up to ssh into.
 <target_machine>: The public DNS or public IP address of the machine to be deployed
-<optional_ssh_key>: The path to the ssh key to be used to log in with the specified user on the specified machine
+[<machine_type]: Either 'production' or 'staging'. Anything other than 'production' is considered staging. Used for deploy configurations.
+[<optional_ssh_key>]: The path to the ssh key to be used to log in with the specified user on the specified machine
 END
   exit(1)
 end
@@ -14,8 +15,9 @@ end
 @user = ARGV[0]
 @target, @port = ARGV[1].split(':')
 @port ||= 22
-@key_path = ARGV[2] if ARGV.size > 2
+@type = ARGV[2].to_sym if ARGV.size > 2
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..')
+@key_path = ARGV[3] if ARGV.size > 3
 REMOTE_SHARED_FOLDER = '/srv/apps/registrations/shared'
 
 def files_to_upload
@@ -69,7 +71,7 @@ end
 execute "scp -P #{@port} #{key_param} #{File.expand_path(File.join(RAILS_ROOT, '/puppet/script/server_bootstrap.sh'))} #{@user}@#{@target}:~/server_bootstrap.sh"
 execute "ssh -t -t -p #{@port} #{key_param} #{@user}@#{@target} '/bin/chmod +x ~/server_bootstrap.sh && /bin/bash ~/server_bootstrap.sh #{@user}'"
 unless File.exist?("config/deploy/#{@target}.rb")
-  deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/staging.rb'))
+  deploy_configs = File.read(File.join(RAILS_ROOT, 'config/deploy/#{@type}.rb'))
   File.open("config/deploy/#{@target}.rb", 'w+') do |file|
     file.write deploy_configs.gsub(/server '[^']+'/, "server '#{@target}'")
   end

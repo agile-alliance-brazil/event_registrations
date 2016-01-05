@@ -56,7 +56,7 @@ describe EventAttendancesController, type: :controller do
       }
     end
     before(:each) do
-      @email = stub(deliver: true)
+      @email = stub(deliver_now: true)
       controller.current_user = user
       EmailNotifications.stubs(:registration_pending).returns(@email)
       Net::HTTP.stubs(:post).returns('<nil>')
@@ -128,8 +128,9 @@ describe EventAttendancesController, type: :controller do
     it 'notifies airbrake if cannot send email' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       exception = StandardError.new
-      EmailNotifications.expects(:registration_pending).raises(exception)
-      Airbrake.expects(:notify).with(exception)
+      action = :registration_pending
+      EmailNotifications.expects(action).raises(exception)
+      Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] })
       post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq(@event)
     end
@@ -137,8 +138,9 @@ describe EventAttendancesController, type: :controller do
     it 'ignores airbrake errors if cannot send email' do
       Attendance.any_instance.stubs(:valid?).returns(true)
       exception = StandardError.new
-      EmailNotifications.expects(:registration_pending).raises(exception)
-      Airbrake.expects(:notify).with(exception).raises(exception)
+      action = :registration_pending
+      EmailNotifications.expects(action).raises(exception)
+      Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] }).raises(exception)
       post :create, event_id: @event.id, attendance: valid_attendance
       expect(assigns(:attendance).event).to eq(@event)
     end

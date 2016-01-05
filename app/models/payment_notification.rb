@@ -49,11 +49,7 @@ class PaymentNotification < ActiveRecord::Base
         attendance.pay if attendance.present?
       end
     else
-      Airbrake.notify(
-        error_class:   'Failed Payment Notification',
-        error_message: "Failed Payment Notification for invoice: #{invoice.name}",
-        parameters:    params
-      )
+      Airbrake.notify("Failed Payment Notification for invoicer: #{invoice.name}", params)
     end
   end
 

@@ -30,9 +30,9 @@ class CreateAttendance
   def self.save_attendance!
     if @attendance.save
       begin
-        EmailNotifications.registration_pending(@attendance).deliver
+        EmailNotifications.registration_pending(@attendance).deliver_now
       rescue => ex
-        NotifyAirbrake.run_for(ex)
+        NotifyAirbrake.run_for(ex, action: :registration_pending, attendance: { event: @event, email: @attendance.email })
       end
     end
   end

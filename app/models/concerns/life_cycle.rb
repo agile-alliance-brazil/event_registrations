@@ -43,21 +43,21 @@ module Concerns
         end
 
         after_transition any => :confirmed do |attendance|
-          try_user_notify do
+          try_user_notify(action: :registration_confirmed, attendance: attendance) do
             EmailNotifications.registration_confirmed(attendance).deliver_now
           end
         end
 
         after_transition any => :accepted do |attendance|
-          try_user_notify do
+          try_user_notify(action: :registration_group_accepted, attendance: attendance) do
             EmailNotifications.registration_group_accepted(attendance).deliver_now
           end
         end
 
-        def try_user_notify
+        def try_user_notify(params)
           yield
         rescue => ex
-          Airbrake.notify(ex)
+          Airbrake.notify(ex.message, params)
         ensure
           Rails.logger.flush
         end

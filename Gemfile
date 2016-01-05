@@ -16,7 +16,7 @@ gem 'brcpfcnpj', '~> 3.3.0'
 gem 'state_machine', '~> 1.2.0'
 gem 'haml', '~> 4.0'
 gem 'formtastic', '~> 3.1.3'
-gem 'airbrake', '~> 4.3'
+gem 'airbrake', '~> 5.0'
 gem 'localized_country_select', '~> 0.9.11'
 gem 'cancancan', '~> 1.10'
 gem 'rake'
@@ -62,6 +62,7 @@ group :development, :test do
   gem 'metric_fu'
   gem 'annotate'
   gem 'database_cleaner'
+  gem 'byebug'
 end
 
 group :development do

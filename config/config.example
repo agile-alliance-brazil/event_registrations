@@ -14,7 +14,9 @@
     contact: Registration Help
     contact_email: help@domain.com
   airbrake:
-    access_key: xxx111xxx
+    project_id: '12345'
+    project_key: '093239928ab2837fe239'
+    environment: 'development'
   google:
     tracker_id: 365434-1
     conversion_id: 736473

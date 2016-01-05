@@ -38,7 +38,7 @@ end
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 module Airbrake
-  def self.notify(_thing)
+  def self.notify(*_args)
     # do nothing.
   end
 end

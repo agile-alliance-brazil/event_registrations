@@ -251,9 +251,11 @@ describe AttendancesController, type: :controller do
 
     it 'notifies airbrake if cannot send email' do
       exception = StandardError.new
-      EmailNotifications.expects(:registration_confirmed).raises(exception)
+      action = :registration_confirmed
+      EmailNotifications.expects(action).raises(exception)
 
-      Airbrake.expects(:notify).with(exception)
+      Airbrake.expects(:notify)
+        .with(exception.message, action: action, attendance: attendance)
 
       put :confirm, id: attendance.id
 
@@ -262,8 +264,11 @@ describe AttendancesController, type: :controller do
 
     it 'ignores airbrake errors if cannot send email' do
       exception = StandardError.new
-      EmailNotifications.expects(:registration_confirmed).raises(exception)
-      Airbrake.expects(:notify).with(exception).raises(exception)
+      action = :registration_confirmed
+      EmailNotifications.expects(action).raises(exception)
+      Airbrake.expects(:notify)
+        .with(exception.message, action: action, attendance: attendance)
+        .raises(exception)
 
       put :confirm, id: attendance.id
 

@@ -35,7 +35,7 @@ class RegistrationNotifier
     Rails.logger.info(" processing [#{action}]")
     yield
   rescue => e
-    Airbrake.notify(e)
+    Airbrake.notify(e.message, action: action)
     Rails.logger.info("  [FAILED #{action}] #{e.message}")
   ensure
     Rails.logger.flush

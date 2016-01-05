@@ -1,4 +1,11 @@
 describe RegistrationPeriod, type: :model do
+  context 'validations' do
+    it { is_expected.to validate_presence_of :event }
+    it { is_expected.to validate_presence_of :title }
+    it { is_expected.to validate_presence_of :start_at }
+    it { is_expected.to validate_presence_of :end_at }
+  end
+
   describe '.for' do
     let(:event) { FactoryGirl.create :event }
     let!(:first_period) { FactoryGirl.create :registration_period, start_at: 2.days.ago, end_at: 1.day.from_now.end_of_day, event: event }

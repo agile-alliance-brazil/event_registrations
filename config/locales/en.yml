@@ -11,6 +11,9 @@ en:
     formats:
       default: "%m/%d/%Y"
       long: ! '%B %d, %Y'
+  time:
+    formats:
+      date: "%m/%d/%Y"
 
   # ActiveRecord
   activerecord:
@@ -120,12 +123,13 @@ en:
         index:
           actions: 'Actions'
       registration_period:
-        title: 'Registration periods'
+        title: 'Title'
         id: 'ID'
         start_at: 'Start at'
         end_at: 'End at'
         value: 'Value'
         active_attendances: 'Active Attendances'
+        price: 'Price for period'
       registration_quota:
         title: 'Registration Quotas'
         id: 'ID'
@@ -309,6 +313,9 @@ en:
     not_found: 'Event not found'
     no_upcoming: 'No upcoming event'
 
+    show:
+      attendance_limit: "Max capacity: %{value}"
+      full_price: "Full price: %{value}"
   registration_group:
     list: 'Groups list of %{event_name}'
     destroy_confirmation: "Are you sure you want to delete the group named '%{registration_group}'?\nAll registrations associated to this group will be automatically canceled."
@@ -368,6 +375,8 @@ en:
       success_message: "Event registered."
     show:
       no_periods_message: "There is no periods registered for this event."
+      no_quotas_message: "There is no quotas registered for this event."
+    no_limit: "This event has no capacity limit"
   layouts:
     alert:
       message_prefix: "Attention!"
@@ -375,3 +384,10 @@ en:
     list: "Registration quotas"
   reistration_periods:
     list: "Periods for registration"
+  registration_periods:
+    new:
+      title: "New period"
+      submit: "Submit period"
+  commons:
+    button:
+      cancel: "Cancel"

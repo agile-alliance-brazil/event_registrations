@@ -1,4 +1,6 @@
 - if current_user.try(:organizer?) || current_user.try(:admin?)
+  %h4= t('reistration_quotas.list')
+
   - if event.registration_quotas.present?
     %table.table
       %th= t('formtastic.labels.registration_quota.id')
@@ -9,5 +11,7 @@
         %tr{ id: "quota_#{quota.id}" }
           %td= quota.id
           %td= quota.quota
-          %td= quota.price
+          %td= number_to_currency quota.price
           %td= quota.attendances.active.count
+  - else
+    %h3= t('events.show.no_periods_message')

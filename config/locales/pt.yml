@@ -21,6 +21,7 @@ pt:
       default: "%A, %d de %B de %Y, %H:%M h"
       short: "%d/%m, %H:%M h"
       long: "%A, %d de %B de %Y, %H:%M h"
+      date: "%d/%m/%Y"
     am: ''
     pm: ''
 
@@ -249,12 +250,13 @@ pt:
         index:
           actions: 'ações'
       registration_period:
-        title: 'Faixas de inscrições por períodos'
+        title: 'Título do período'
         id: 'ID'
         start_at: 'Inicio em'
         end_at: 'Termina em'
         value: 'Valor'
         active_attendances: 'Inscritos Ativos'
+        price: 'Preço da faixa'
       registration_quota:
         title: 'Faixas de incrições por cotas'
         id: 'ID'
@@ -438,6 +440,9 @@ pt:
       to_register_message: 'Faça sua inscrição'
     not_found: 'Evento não encontrado.'
     no_upcoming: 'Sem eventos cadastrados'
+    show:
+      attendance_limit: "Capacidade máxima: %{value}"
+      full_price: "Preço cheio: %{value}"
   registration_group:
     list: 'Lista dos grupos de %{event_name}'
     destroy:
@@ -504,6 +509,8 @@ pt:
       success_message: "Evento cadastrado."
     show:
       no_periods_message: "Não existem períodos registrados para esse evento."
+      no_quotas_message: "Não existem cotas registradas para esse evento."
+    no_limit: "Este evento não tem limite de capacidade"
   layouts:
     alert:
       message_prefix: "Atenção!"
@@ -511,3 +518,10 @@ pt:
     list: "Cotas para inscricão"
   reistration_periods:
     list: "Períodos para inscrição"
+  registration_periods:
+    new:
+      title: "Novo período"
+      submit: "Submeter período"
+  commons:
+    button:
+      cancel: "Cancelar"

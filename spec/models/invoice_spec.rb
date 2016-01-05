@@ -7,7 +7,7 @@ describe Invoice, type: :model do
   end
 
   describe '.from_attendance' do
-    let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
+    let!(:period) { FactoryGirl.create(:registration_period, event: event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
     let(:group) { RegistrationGroup.create! event: event, discount: 20 }
     let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_value: 100) }
 

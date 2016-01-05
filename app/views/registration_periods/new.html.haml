@@ -1,0 +1,20 @@
+= stylesheet_link_tag 'registration_periods/new'
+
+%h1= t('registration_periods.new.title')
+
+= semantic_form_for([@event, @registration_period]) do |form|
+  = form.inputs :event_basics do
+    = form.input :title, required: true, input_html: { tabindex: autotab }
+    = form.input :price, as: :number, required: true
+    = form.input :start_at, as: :string, required: true, input_html: { class: 'datepicker' }
+    = form.input :end_at, as: :string, required: true, input_html: { class: 'datepicker' }
+
+  = form.actions do
+    = form.action(:submit, label: t('registration_periods.new.submit'), button_html: { tabindex: autotab, class: 'col-lg-2 btn btn-success' })
+    = form.action(:cancel, label: t('commons.button.cancel'), :button_html => { class: 'col-lg-2 cancel btn btn-danger' })
+
+%hr
+
+%section
+  %div
+    = render partial: 'registration_periods/periods_list', locals: { event: @event }

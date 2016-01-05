@@ -1,9 +1,9 @@
 - if current_user.present? && !current_user.try(:organizer?) && current_user.try(:registrations_for_event, event).present?
-  %p Clique #{link_to "aqui", attendance_path(@last_attendance_for_user)} para verificar o status de sua inscrição em #{event.name}.
+  %p Clique #{link_to 'aqui', attendance_path(@last_attendance_for_user)} para verificar o status de sua inscrição em #{event.name}.
 
 - if current_user.try(:organizer?) || (event.can_add_attendance? && current_user.try(:registrations_for_event, event).blank?)
-  %p Clique #{link_to "aqui", new_event_attendance_path(event.id)} para se inscrever para #{event.name}.
+  %p Clique #{link_to 'aqui', new_event_attendance_path(event.id)} para se inscrever para #{event.name}.
 - elsif event.can_add_attendance?
-  %p Caso deseje adicionar outra inscrição para outra pessoa, preencha o formulário #{link_to "aqui", new_event_attendance_path(event)}.
+  %p Caso deseje adicionar outra inscrição para outra pessoa, preencha o formulário #{link_to 'aqui', new_event_attendance_path(event)}.
 - else
   %p Inscrições encerradas. O evento chegou no limite máximo de participantes.

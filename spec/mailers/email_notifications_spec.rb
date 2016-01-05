@@ -1,5 +1,4 @@
 # encoding: UTF-8
-require 'spec_helper'
 
 describe EmailNotifications, type: :mailer do
   let(:event) { FactoryGirl.create :event }

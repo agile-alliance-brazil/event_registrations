@@ -136,6 +136,7 @@ en:
         quota: 'Quota'
         value: 'Value'
         active_attendances: 'Active Attendances'
+        order: "Order"
       event:
         name: 'Event name'
         attendance_limit: 'Limit of attendances'
@@ -391,3 +392,7 @@ en:
   commons:
     button:
       cancel: "Cancel"
+  registration_quotas:
+    new:
+      title: "New quota"
+      submit: "Submit quota"

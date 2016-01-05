@@ -15,13 +15,13 @@
 #
 
 class RegistrationQuota < ActiveRecord::Base
-  self.table_name = 'registration_quotas'
-
   belongs_to :event
 
   monetize :price_cents
 
   has_many :attendances
+
+  validates :order, :quota, presence: true
 
   def vacancy?
     open? && attendances.active.size < quota

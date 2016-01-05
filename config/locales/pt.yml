@@ -260,9 +260,10 @@ pt:
       registration_quota:
         title: 'Faixas de incrições por cotas'
         id: 'ID'
-        quota: 'Cota'
+        quota: 'Cota (qtd de inscritos)'
         value: 'Valor'
         active_attendances: 'Inscritos Ativos'
+        order: "Ordem"
       event:
         name: 'Nome do evento'
         attendance_limit: 'Limite de participantes'
@@ -525,3 +526,7 @@ pt:
   commons:
     button:
       cancel: "Cancelar"
+  registration_quotas:
+    new:
+      title: "Nova cota"
+      submit: "Submeter cota"

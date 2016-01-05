@@ -4,12 +4,14 @@
   - if event.registration_quotas.present?
     %table.table
       %th= t('formtastic.labels.registration_quota.id')
+      %th= t('formtastic.labels.registration_quota.order')
       %th= t('formtastic.labels.registration_quota.quota')
       %th= t('formtastic.labels.registration_quota.value')
       %th= t('formtastic.labels.registration_quota.active_attendances')
       - @event.registration_quotas.each do |quota|
         %tr{ id: "quota_#{quota.id}" }
           %td= quota.id
+          %td= quota.order
           %td= quota.quota
           %td= number_to_currency quota.price
           %td= quota.attendances.active.count

@@ -1,0 +1,19 @@
+= stylesheet_link_tag 'registration_periods/new'
+
+%h1= t('registration_quotas.new.title')
+
+= semantic_form_for([@event, @registration_quota]) do |form|
+  = form.inputs :quota_basics do
+    = form.input :order, required: true, input_html: { tabindex: autotab }
+    = form.input :price, as: :number, required: true
+    = form.input :quota, required: true
+
+  = form.actions do
+    = form.action(:submit, label: t('registration_quotas.new.submit'), button_html: { tabindex: autotab, class: 'col-lg-2 btn btn-success' })
+    = form.action(:cancel, label: t('commons.button.cancel'), url: event_path(@event), button_html: { class: 'col-lg-2 cancel btn btn-danger' })
+
+%hr
+
+%section
+  %div
+    = render partial: 'registration_quotas/quotas_list', locals: { event: @event }

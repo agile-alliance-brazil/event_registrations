@@ -6,6 +6,7 @@ require 'uri'
 require 'English'
 require 'dotenv'
 
+Dotenv.load
 unless ENV['TOKEN']
   puts "Ensure you've set the Digital ocean token using \"export TOKEN='your_token'\" or added it to your .env file"
   exit 1

@@ -263,6 +263,12 @@ pt:
         active_attendances: 'Inscritos Ativos'
       event:
         name: 'Nome do evento'
+        attendance_limit: 'Limite de participantes'
+        start_date: 'Inicia em'
+        end_date: 'Termina em'
+        full_price: 'Preço cheio do evento'
+        price_table_link: 'Link para a tabela de preços'
+
 
     hints:
       attendance:
@@ -489,3 +495,19 @@ pt:
       total: 'Valor total'
       count: 'Total de inscritos'
       nil: "Sem tipo de pagamento"
+  events:
+    new:
+      title: "Novo evento"
+      submit: "Submeter evento"
+      cancel: "Cancelar"
+    create:
+      success_message: "Evento cadastrado."
+    show:
+      no_periods_message: "Não existem períodos registrados para esse evento."
+  layouts:
+    alert:
+      message_prefix: "Atenção!"
+  reistration_quotas:
+    list: "Cotas para inscricão"
+  reistration_periods:
+    list: "Períodos para inscrição"

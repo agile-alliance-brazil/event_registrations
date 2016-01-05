@@ -4,6 +4,14 @@
 
 en:
 
+  date:
+    datepicker:
+      default: "mm/dd/yyyy"
+      long: "MM dd, yyyy"
+    formats:
+      default: "%m/%d/%Y"
+      long: ! '%B %d, %Y'
+
   # ActiveRecord
   activerecord:
     errors:
@@ -126,6 +134,11 @@ en:
         active_attendances: 'Active Attendances'
       event:
         name: 'Event name'
+        attendance_limit: 'Limit of attendances'
+        start_date: 'Start date'
+        end_date: 'End date'
+        full_price: 'Full price'
+        price_table_link: 'Link for the price table'
 
     hints:
       attendance:
@@ -182,7 +195,6 @@ en:
     accept: 'Accept in Group'
     account: 'My account'
     download_csv: "Download CSV file"
-
   flash:
     failure: "Please check the highlighted fields"
     unauthorised: "You are not authorized to access this page"
@@ -347,3 +359,19 @@ en:
       total: 'Total value'
       count: 'Total of attendances'
       nil: "No payment type"
+  events:
+    new:
+      title: "New event"
+      submit: "Submit event"
+      cancel: "Cancel"
+    create:
+      success_message: "Event registered."
+    show:
+      no_periods_message: "There is no periods registered for this event."
+  layouts:
+    alert:
+      message_prefix: "Attention!"
+  reistration_quotas:
+    list: "Registration quotas"
+  reistration_periods:
+    list: "Periods for registration"

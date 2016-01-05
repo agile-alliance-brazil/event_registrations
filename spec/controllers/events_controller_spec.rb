@@ -16,6 +16,84 @@
 #
 
 describe EventsController, type: :controller do
+  context 'unauthenticated' do
+    describe 'GET #new' do
+      it 'redirects to login' do
+        get :new
+        expect(response).to redirect_to login_path
+      end
+    end
+
+    describe 'POST #create' do
+      it 'redirects to login' do
+        post :create
+        expect(response).to redirect_to login_path
+      end
+    end
+  end
+
+  context 'logged as normal user' do
+    let(:user) { FactoryGirl.create(:user) }
+    before { sign_in user }
+
+    describe 'GET #new' do
+      it 'redirects to login' do
+        get :new
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe 'POST #create' do
+      it 'redirects to login' do
+        post :create
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  context 'logged as admin' do
+    let(:admin) { FactoryGirl.create(:admin) }
+    before { sign_in admin }
+
+    describe 'GET #new' do
+      it 'assigns the event and render the new template' do
+        get :new
+        expect(assigns(:event)).to be_a_new Event
+        expect(response).to render_template :new
+      end
+    end
+
+    describe 'POST #create' do
+      context 'with valid parameters' do
+        it 'creates the event and redirects to index of events' do
+          start_date = Time.zone.now
+          end_date = 1.week.from_now
+          post :create, event: { name: 'foo', attendance_limit: 10, start_date: start_date, end_date: end_date, full_price: 100, price_table_link: 'http://bla' }
+          expect(Event.count).to eq 1
+          event_persisted = Event.last
+          expect(event_persisted.name).to eq 'foo'
+          expect(event_persisted.attendance_limit).to eq 10
+          expect(event_persisted.start_date.utc.to_i).to eq start_date.to_i
+          expect(event_persisted.end_date.utc.to_i).to eq end_date.to_i
+          expect(event_persisted.full_price).to eq 100
+          expect(event_persisted.price_table_link).to eq 'http://bla'
+
+          expect(response).to redirect_to event_path(event_persisted)
+        end
+      end
+
+      context 'with invalid parameters' do
+        subject(:event) { assigns(:event) }
+        it 'renders form with the errors' do
+          post :create, event: { name: '' }
+          expect(event).to be_a Event
+          expect(event.errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco']
+          expect(response).to render_template :new
+        end
+      end
+    end
+  end
+
   describe 'GET #show' do
     let!(:event) { FactoryGirl.create :event }
     context 'with an existent user' do
@@ -37,7 +115,7 @@ describe EventsController, type: :controller do
       end
 
       context 'with two valid attendances, the first cancelled and second pending' do
-        it 'returns the last created' do
+        it 'returns the event_persisted created' do
           now = Time.zone.local(2015, 4, 30, 0, 0, 0)
           Timecop.freeze(now)
           FactoryGirl.create(:attendance, event: event, user: user, status: 'cancelled')

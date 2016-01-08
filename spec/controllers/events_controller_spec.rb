@@ -17,6 +17,13 @@
 
 describe EventsController, type: :controller do
   context 'unauthenticated' do
+    describe 'GET #list_archived' do
+      it 'redirects to login' do
+        get :list_archived
+        expect(response).to redirect_to login_path
+      end
+    end
+
     describe 'GET #new' do
       it 'redirects to login' do
         get :new
@@ -27,6 +34,13 @@ describe EventsController, type: :controller do
     describe 'POST #create' do
       it 'redirects to login' do
         post :create
+        expect(response).to redirect_to login_path
+      end
+    end
+
+    describe 'DELETE destroy' do
+      it 'redirects to login' do
+        delete :destroy, id: 'foo'
         expect(response).to redirect_to login_path
       end
     end
@@ -36,6 +50,13 @@ describe EventsController, type: :controller do
     let(:user) { FactoryGirl.create(:user) }
     before { sign_in user }
 
+    describe 'GET #list_archived' do
+      it 'redirects to login' do
+        get :list_archived
+        expect(response).to redirect_to root_path
+      end
+    end
+
     describe 'GET #new' do
       it 'redirects to login' do
         get :new
@@ -49,11 +70,55 @@ describe EventsController, type: :controller do
         expect(response).to redirect_to root_path
       end
     end
+
+    describe 'DELETE #destroy' do
+      it 'redirects to login' do
+        delete :destroy, id: 'foo'
+        expect(response).to redirect_to root_path
+      end
+    end
   end
 
   context 'logged as admin' do
     let(:admin) { FactoryGirl.create(:admin) }
     before { sign_in admin }
+
+    describe 'GET #list_archived' do
+      context 'without events' do
+        before { get :list_archived }
+        it { expect(assigns(:events)).to match_array [] }
+        it { expect(response).to render_template :index }
+      end
+
+      context 'with events' do
+        let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: 2.months.ago, end_date: 1.month.ago) }
+
+        context 'and one event at the right period' do
+          before { get :list_archived }
+          it { expect(assigns(:events)).to match_array [event] }
+        end
+
+        context 'and two at the right period' do
+          let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
+          before { get :list_archived }
+          it { expect(assigns(:events)).to match_array [event, other_event] }
+        end
+
+        context 'and one at the right period and other not' do
+          let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
+          before { get :list_archived }
+          it { expect(assigns(:events)).to match_array [event] }
+        end
+
+        context 'and two at the right period and other not' do
+          let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
+          let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
+
+          before { get :list_archived }
+          it { expect(assigns(:events)).to match_array [event, other_event] }
+        end
+      end
+    end
 
     describe 'GET #new' do
       it 'assigns the event and render the new template' do
@@ -92,6 +157,36 @@ describe EventsController, type: :controller do
         end
       end
     end
+
+    describe 'DELETE #destroy' do
+      context 'with valid parameters' do
+        context 'and responding to HTML' do
+          let!(:event) { FactoryGirl.create :event }
+          it 'deletes the event and redirects to events index' do
+            delete :destroy, id: event.id
+            expect(response).to redirect_to events_path
+            expect(Event.count).to eq 0
+          end
+        end
+
+        context 'and responding to JS' do
+          let!(:event) { FactoryGirl.create :event }
+          it 'deletes the event and redirects to events index' do
+            xhr :delete, :destroy, id: event.id
+            expect(response.status).to eq 200
+            expect(response).to render_template 'events/destroy'
+            expect(Event.count).to eq 0
+          end
+        end
+      end
+
+      context 'with invalid parameters' do
+        it 'responds 404' do
+          delete :destroy, id: 'foo'
+          expect(response.status).to eq 404
+        end
+      end
+    end
   end
 
   describe 'GET #show' do
@@ -103,8 +198,11 @@ describe EventsController, type: :controller do
       it { expect(response).to render_template :show }
     end
 
-    context 'with an inexistent user' do
-      it { expect { get :show, id: 'foo' }.to raise_error ActiveRecord::RecordNotFound }
+    context 'with invalid parameters' do
+      it 'responds 404' do
+        get :show, id: 'foo'
+        expect(response.status).to eq 404
+      end
     end
 
     context 'signed in' do
@@ -167,43 +265,6 @@ describe EventsController, type: :controller do
         let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
 
         before { get :index }
-        it { expect(assigns(:events)).to match_array [event, other_event] }
-      end
-    end
-  end
-
-  describe 'GET #list_archived' do
-    context 'without events' do
-      before { get :list_archived }
-      it { expect(assigns(:events)).to match_array [] }
-      it { expect(response).to render_template :index }
-    end
-
-    context 'with events' do
-      let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: 2.months.ago, end_date: 1.month.ago) }
-
-      context 'and one event at the right period' do
-        before { get :list_archived }
-        it { expect(assigns(:events)).to match_array [event] }
-      end
-
-      context 'and two at the right period' do
-        let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
-        before { get :list_archived }
-        it { expect(assigns(:events)).to match_array [event, other_event] }
-      end
-
-      context 'and one at the right period and other not' do
-        let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
-        before { get :list_archived }
-        it { expect(assigns(:events)).to match_array [event] }
-      end
-
-      context 'and two at the right period and other not' do
-        let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
-        let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
-
-        before { get :list_archived }
         it { expect(assigns(:events)).to match_array [event, other_event] }
       end
     end

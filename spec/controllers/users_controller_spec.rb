@@ -28,10 +28,6 @@
 #
 #  fk_rails_ebe9fba698  (registration_group_id)
 #
-# Foreign Keys
-#
-#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id)
-#
 
 describe UsersController, type: :controller do
   context 'authorized' do

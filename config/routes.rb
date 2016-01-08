@@ -8,7 +8,7 @@ Current::Application.routes.draw do
 
   resources :users, only: %i(show edit update)
 
-  resources :events, only: %i(index show new create) do
+  resources :events, only: %i(index show new create destroy) do
     collection do
       get :list_archived
     end

@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: registration_periods
+#
+#  id             :integer          not null, primary key
+#  event_id       :integer
+#  title          :string(255)
+#  start_at       :datetime
+#  end_at         :datetime
+#  created_at     :datetime
+#  updated_at     :datetime
+#  price_cents    :integer          default(0), not null
+#  price_currency :string(255)      default("BRL"), not null
+#
+
 describe RegistrationPeriodsController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do

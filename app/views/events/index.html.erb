@@ -1,0 +1,10 @@
+%div
+  - if can? :create, Event
+    = link_to t('events.new.title'), new_event_path, class: 'btn btn-primary'
+%hr
+
+%div.events
+  - if @events.empty?
+    = render 'no_events'
+  - else
+    = render partial: 'events', locals: { events: @events }

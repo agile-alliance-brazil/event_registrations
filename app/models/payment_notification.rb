@@ -7,21 +7,18 @@
 #  params          :text(65535)
 #  status          :string(255)
 #  transaction_id  :string(255)
+#  invoicer_id     :integer
 #  payer_email     :string(255)
 #  settle_amount   :decimal(10, )
 #  settle_currency :string(255)
 #  notes           :text(65535)
 #  created_at      :datetime
 #  updated_at      :datetime
-#  invoice_id      :integer
+#  invoicer_type   :string(255)
 #
 # Indexes
 #
 #  fk_rails_92030b1506  (invoice_id)
-#
-# Foreign Keys
-#
-#  fk_rails_92030b1506  (invoice_id => invoices.id)
 #
 
 class PaymentNotification < ActiveRecord::Base

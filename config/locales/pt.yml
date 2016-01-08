@@ -300,7 +300,7 @@ pt:
     login: "Acessar"
     profile: "Perfil de %{username}"
     user: "Novo usuário"
-    events: "Próximos eventos"
+    events: "Eventos"
     until: "a"
     untitled: 'Untitled'
 
@@ -512,6 +512,8 @@ pt:
       no_periods_message: "Não existem períodos registrados para esse evento."
       no_quotas_message: "Não existem cotas registradas para esse evento."
     no_limit: "Este evento não tem limite de capacidade"
+    delete:
+      button: "Apagar evento"
   layouts:
     alert:
       message_prefix: "Atenção!"

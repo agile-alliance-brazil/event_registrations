@@ -68,7 +68,7 @@ class Attendance < ActiveRecord::Base
 
   scope :for_event, ->(e) { where(event_id: e.id) }
   scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show)) }
-  scope :older_than, ->(date) { where('registration_date < (?)', date) }
+  scope :older_than, ->(date) { where('registration_date <= (?)', date) }
   scope :search_for_list, lambda { |param, status|
     where('(first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?)',
           "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%", "#{param}", status).order(created_at: :desc)
@@ -79,7 +79,7 @@ class Attendance < ActiveRecord::Base
       .joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY)
   }
 
-  scope :for_cancelation, -> { where("attendances.status IN ('pending', 'accepted') AND advised = ? AND advised_at < (?)", true, 7.days.ago) }
+  scope :for_cancelation, -> { where("attendances.status IN ('pending', 'accepted') AND advised = ? AND advised_at <= (?)", true, 7.days.ago) }
   scope :last_biweekly_active, -> { active.where('created_at > ?', 15.days.ago) }
   scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
   scope :already_paid, -> { where("attendances.status IN ('paid', 'confirmed')") }

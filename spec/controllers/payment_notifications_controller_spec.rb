@@ -18,6 +18,10 @@
 #
 #  fk_rails_92030b1506  (invoice_id)
 #
+# Indexes
+#
+#  fk_rails_92030b1506  (invoice_id)
+#
 
 describe PaymentNotificationsController, type: :controller, block_network: true do
   describe '#create' do

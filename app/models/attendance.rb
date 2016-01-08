@@ -3,38 +3,31 @@
 #
 # Table name: attendances
 #
-#  id                     :integer          not null, primary key
-#  event_id               :integer
-#  user_id                :integer
-#  registration_group_id  :integer
-#  registration_date      :datetime
-#  status                 :string(255)
-#  email_sent             :boolean          default(FALSE)
-#  created_at             :datetime
-#  updated_at             :datetime
-#  first_name             :string(255)
-#  last_name              :string(255)
-#  email                  :string(255)
-#  organization           :string(255)
-#  phone                  :string(255)
-#  country                :string(255)
-#  state                  :string(255)
-#  city                   :string(255)
-#  badge_name             :string(255)
-#  cpf                    :string(255)
-#  gender                 :string(255)
-#  twitter_user           :string(255)
-#  address                :string(255)
-#  neighbourhood          :string(255)
-#  zipcode                :string(255)
-#  notes                  :string(255)
-#  event_price            :decimal(10, )
-#  registration_quota_id  :integer
-#  registration_value     :decimal(10, )
-#  registration_period_id :integer
-#  advised                :boolean          default(FALSE)
-#  advised_at             :datetime
-#  payment_type           :string(255)
+#  id                    :integer          not null, primary key
+#  event_id              :integer
+#  user_id               :integer
+#  registration_type_id  :integer
+#  registration_group_id :integer
+#  registration_date     :datetime
+#  status                :string(255)
+#  email_sent            :boolean          default(FALSE)
+#  created_at            :datetime
+#  updated_at            :datetime
+#  first_name            :string(255)
+#  last_name             :string(255)
+#  email                 :string(255)
+#  organization          :string(255)
+#  phone                 :string(255)
+#  country               :string(255)
+#  state                 :string(255)
+#  city                  :string(255)
+#  badge_name            :string(255)
+#  cpf                   :string(255)
+#  gender                :string(255)
+#  twitter_user          :string(255)
+#  address               :string(255)
+#  neighbourhood         :string(255)
+#  zipcode               :string(255)
 #
 # Indexes
 #

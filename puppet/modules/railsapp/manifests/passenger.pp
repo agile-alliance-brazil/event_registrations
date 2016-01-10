@@ -33,16 +33,16 @@ class railsapp::passenger ($path = '/srv/apps/rails-app/current/public', $server
       notify => Class['apache::service'],
     }
 
-    file { '/etc/apache2/mods-enabled/socache_shmcb.load':
+    file { '/etc/apache2/mods-enabled/ssl.load':
       ensure => 'link',
-      target => '/etc/apache2/mods-available/socache_shmcb.load',
+      target => '/etc/apache2/mods-available/ssl.load',
       require => Package['httpd'],
       notify => Class['apache::service'],
     }
 
-    file { '/etc/apache2/mods-enabled/ssl.load':
+    file { '/etc/apache2/mods-enabled/socache_shmcb.load':
       ensure => 'link',
-      target => '/etc/apache2/mods-available/ssl.load',
+      target => '/etc/apache2/mods-available/socache_shmcb.load',
       require => Package['httpd'],
       notify => Class['apache::service'],
     }

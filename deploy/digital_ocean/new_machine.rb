@@ -6,6 +6,8 @@ require 'uri'
 require 'English'
 require 'dotenv'
 
+APP_NAME='inscricoes'
+
 Dotenv.load
 unless ENV['TOKEN']
   puts "Ensure you've set the Digital ocean token using \"export TOKEN='your_token'\" or added it to your .env file"
@@ -52,12 +54,12 @@ end
 
 droplets = get_json('https://api.digitalocean.com/v2/droplets')
 machine_id = (JSON.parse(droplets.body)['droplets'].count do |d|
-  d['name'].match(/inscricoes-\d\d#{POSTFIX}\./)
+  d['name'].match(/#{APP_NAME}-\d\d#{POSTFIX}\./)
 end + 1)
 
 bootstrap_info = File.read(File.join(ROOT, 'puppet/script/server_bootstrap.sh'))
 body = {
-  names: ["inscricoes-#{format('%02d', machine_id)}#{POSTFIX}.agilebrazil.com"],
+  names: ["#{APP_NAME}-#{format('%02d', machine_id)}#{POSTFIX}.agilebrazil.com"],
   region: 'nyc3',
   size: '1gb',
   image: 'ubuntu-14-04-x64',

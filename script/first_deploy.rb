@@ -76,14 +76,17 @@ unless File.exist?("config/deploy/#{@target}.rb")
     file.write deploy_configs.gsub(/server '[^']+'/, "server '#{@target}'")
   end
 end
+
 @deployed_user = File.read("config/deploy/#{@target}.rb").match(/user[^']+'([^']+)'/)[1]
 execute 'bundle'
 execute "bundle exec cap #{@target} deploy:check:directories deploy:check:make_linked_dirs LOG_LEVEL=error"
 files_to_upload.each do |file|
+  execute "ssh -p #{@port} #{key_param} #{@user}@#{@target} 'mkdir -p #{File.dirname("#{REMOTE_SHARED_FOLDER}/#{file}")}'"
   execute "scp -P #{@port} #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
 end
 optional_files.each do |file|
   if File.exist? tag_with_target(file)
+    execute "ssh -p #{@port} #{key_param} #{@user}@#{@target} 'mkdir -p #{File.dirname("#{REMOTE_SHARED_FOLDER}/#{file}")}'"
     execute "scp -P #{@port} #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}"
   end
 end

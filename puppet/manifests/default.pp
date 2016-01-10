@@ -11,6 +11,7 @@ node default {
   }
 
   $app_name = "registrations"
+  $domain = "agilebrazil.com"
   $use_ssl = true
 
   class { 'webserver':

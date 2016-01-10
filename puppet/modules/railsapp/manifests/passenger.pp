@@ -8,7 +8,8 @@ class railsapp::passenger ($path = '/srv/apps/rails-app/current/public', $server
         mininstances       => '3',
         maxinstancesperapp => '0',
         maxpoolsize        => '30',
-        spawnmethod        => 'smart-lv2'
+        spawnmethod        => 'smart-lv2',
+        notify => Class['apache::service'],
     }
   }
 

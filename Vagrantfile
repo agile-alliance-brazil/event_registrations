@@ -9,7 +9,8 @@ Vagrant.configure('2') do |config|
   config.vm.box     = 'ubuntu/trusty64'
   config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
   config.vm.provider :virtualbox do |vm|
-    vm.customize ['modifyvm', :id, '--memory', 1024]
+    vm.memory = 2048
+    vm.cpus = 2
   end
   if Vagrant.has_plugin?('vagrant-cachier')
     config.cache.auto_detect = true
@@ -33,8 +34,6 @@ Vagrant.configure('2') do |config|
   config.vm.define :dev do |vm_config|
     # Setting up a share so we can edit locally but run in vagrant
     vm_config.vm.synced_folder "#{APP_DIR}", '/srv/apps/registrations/current'
-    vm_config.vm.synced_folder "#{APP_DIR}/tmp", '/srv/apps/registrations/current/tmp', disabled: true
-    vm_config.vm.synced_folder "#{APP_DIR}/vendor", '/srv/apps/registrations/current/vendor', disabled: true
 
     vm_config.vm.network :private_network, ip: '10.11.12.13'
     vm_config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2202

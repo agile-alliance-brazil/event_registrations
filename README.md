@@ -25,11 +25,11 @@ Deployment is handled by [Capistrano](http://capistranorb.com/). And can also be
 
 To test, run:
 ```sh
-vagrant destroy -f deploy && vagrant up deploy && bundle exec ruby script/first_deploy.rb vagrant staging 127.0.0.1:2203 certs/insecure\_private\_key
+vagrant destroy -f deploy && vagrant up deploy && bundle exec ruby script/first_deploy.rb vagrant 10.11.12.14 staging  certs/insecure_private_key
 ```
 
 Note that Capistrano uses the code currently available in github so you need to push to test it.
-You can set up `config/deploy/127.0.0.1.rb` to use a different branch with `set :branch, 'your_branch'`.
+You can set up `config/deploy/vagrant.rb` to use a different branch with `set :branch, 'your_branch'`.
 
 ### Deploying to a cloud
 

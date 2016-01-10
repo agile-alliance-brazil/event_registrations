@@ -7,14 +7,14 @@ class railsapp( $user, $app_name ) {
     rvm_system_ruby { 'ruby-2.2.3':
         name        => 'ruby-2.2.3-p0',
         ensure      => 'present',
-        build_opts  => '--disable-binary',
-        default_use => true;
+        build_opts  => '--disable-binary'
     }
 
     rvm_system_ruby { 'ruby-2.3.0':
         name        => 'ruby-2.3.0',
         ensure      => 'present',
-        build_opts  => '--disable-binary'
+        build_opts  => '--disable-binary',
+        default_use => true;
     }
 
     rvm_gem { 'bundler22':

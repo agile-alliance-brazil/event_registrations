@@ -15,7 +15,7 @@
 #
 
 class RegistrationQuotasController < ApplicationController
-  before_action :event
+  before_action :check_event
 
   def new
     @registration_quota = RegistrationQuota.new
@@ -41,5 +41,9 @@ class RegistrationQuotasController < ApplicationController
 
   def quota_params
     params.require(:registration_quota).permit(:order, :price, :quota)
+  end
+
+  def check_event
+    not_found unless @event.present?
   end
 end

@@ -25,9 +25,6 @@ describe RegistrationQuotasController, type: :controller do
     describe 'POST #create' do
       it 'redirects to login' do
         post :create, event_id: 'foo'
-    describe 'DELETE #destroy' do
-      it 'redirects to login' do
-        delete :destroy, event_id: event, id: 'foo'
         expect(response).to redirect_to login_path
       end
     end
@@ -53,9 +50,6 @@ describe RegistrationQuotasController, type: :controller do
     describe 'POST #create' do
       it 'redirects to root' do
         post :create, event_id: 'foo'
-    describe 'DELETE #destroy' do
-      it 'redirects to root' do
-        delete :destroy, event_id: event, id: 'foo'
         expect(response).to redirect_to root_path
       end
     end

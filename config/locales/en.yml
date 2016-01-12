@@ -398,3 +398,6 @@ en:
     new:
       title: "New quota"
       submit: "Submit quota"
+  general:
+    actions:
+      title: "Actions"

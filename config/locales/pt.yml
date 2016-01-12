@@ -532,3 +532,6 @@ pt:
     new:
       title: "Nova cota"
       submit: "Submeter cota"
+  general:
+    actions:
+      title: "Ações"

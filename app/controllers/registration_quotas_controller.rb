@@ -31,6 +31,12 @@ class RegistrationQuotasController < ApplicationController
     end
   end
 
+  def destroy
+    @quota = RegistrationQuota.find(params[:id])
+    @quota.destroy
+    redirect_to @event
+  end
+
   private
 
   def quota_params

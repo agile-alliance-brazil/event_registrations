@@ -38,7 +38,7 @@ class PaymentNotification < ActiveRecord::Base
   private
 
   def mark_invoicer_as_paid
-    if params_valid?
+    if pag_seguro_valid?(APP_CONFIG[params[:type]])
       invoice.pay
       if invoice.invoiceable_type == 'Attendance'
         attendance = Attendance.where(id: invoice.invoiceable_id).last
@@ -47,11 +47,6 @@ class PaymentNotification < ActiveRecord::Base
     else
       Airbrake.notify("Failed Payment Notification for invoicer: #{invoice.name}", params)
     end
-  end
-
-  def params_valid?
-    type = params[:type]
-    send "#{type}_valid?", APP_CONFIG[type]
   end
 
   def pag_seguro_valid?(hash)

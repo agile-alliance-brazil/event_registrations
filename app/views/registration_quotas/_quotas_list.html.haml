@@ -8,6 +8,7 @@
       %th= t('formtastic.labels.registration_quota.quota')
       %th= t('formtastic.labels.registration_quota.value')
       %th= t('formtastic.labels.registration_quota.active_attendances')
+      %th= t('general.actions.title')
       - @event.registration_quotas.each do |quota|
         %tr{ id: "quota_#{quota.id}" }
           %td= quota.id
@@ -15,5 +16,8 @@
           %td= quota.quota
           %td= number_to_currency quota.price
           %td= quota.attendances.active.count
+          %td
+            = link_to event_registration_quota_path(event, quota), method: :delete, class: 'btn btn-link' do
+              %span{class: 'glyphicon glyphicon-remove'}
   - else
-    %h3= t('events.show.no_periods_message')
+    %h5= t('events.show.no_quotas_message')

@@ -65,6 +65,7 @@ group :development, :test do
   gem 'byebug', require: false
   gem 'dotenv-rails', require: false
   gem 'parser', '>= 2.3.0.pre.6'
+  gem 'brakeman', require: false
 end
 
 group :development do

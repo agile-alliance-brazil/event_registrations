@@ -31,6 +31,12 @@ describe RegistrationQuotasController, type: :controller do
         expect(response).to redirect_to login_path
       end
     end
+    describe 'DELETE #destroy' do
+      it 'redirects to login' do
+        delete :destroy, event_id: 'foo', id: 'foo'
+        expect(response).to redirect_to login_path
+      end
+    end
   end
 
   context 'logged as normal user' do
@@ -38,18 +44,25 @@ describe RegistrationQuotasController, type: :controller do
     before { sign_in user }
 
     describe 'GET #new' do
-      it 'redirects to login' do
+      it 'redirects to root' do
         get :new, event_id: 'foo'
         expect(response).to redirect_to root_path
       end
     end
 
     describe 'POST #create' do
-      it 'redirects to login' do
+      it 'redirects to root' do
         post :create, event_id: 'foo'
     describe 'DELETE #destroy' do
       it 'redirects to root' do
         delete :destroy, event_id: event, id: 'foo'
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      it 'redirects to root' do
+        delete :destroy, event_id: 'foo', id: 'foo'
         expect(response).to redirect_to root_path
       end
     end

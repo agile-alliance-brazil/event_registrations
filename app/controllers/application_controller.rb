@@ -1,6 +1,8 @@
 # encoding: UTF-8
 class ApplicationController < ActionController::Base
-  helper :all # include all helpers, all the time
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+
+  helper :all
   protect_from_forgery
 
   before_action :set_locale

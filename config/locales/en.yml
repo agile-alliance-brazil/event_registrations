@@ -172,7 +172,7 @@ en:
     login: "Log in"
     profile: "Profile for %{username}"
     user: "New user"
-    events: "Upcoming events"
+    events: "Events"
     until: "until"
     untitled: 'Sem título'
 
@@ -378,6 +378,8 @@ en:
       no_periods_message: "There is no periods registered for this event."
       no_quotas_message: "There is no quotas registered for this event."
     no_limit: "This event has no capacity limit"
+    delete:
+      button: "Delete event"
   layouts:
     alert:
       message_prefix: "Attention!"

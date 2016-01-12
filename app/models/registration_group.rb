@@ -19,10 +19,6 @@
 #
 #  fk_rails_9544e3707e  (invoice_id)
 #
-# Foreign Keys
-#
-#  fk_rails_9544e3707e  (invoice_id => invoices.id)
-#
 
 class RegistrationGroup < ActiveRecord::Base
   belongs_to :event

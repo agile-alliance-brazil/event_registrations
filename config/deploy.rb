@@ -25,7 +25,7 @@ set :bundle_path, -> { shared_path.join('vendor/bundle') }
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-# set :log_level, :debug
+set :log_level, ENV['LOG_LEVEL'] || :debug
 
 # Default value for :pty is false
 # set :pty, true
@@ -41,15 +41,3 @@ set :linked_dirs, %w(bin log certs tmp/pids tmp/cache tmp/sockets vendor/bundle 
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
-namespace :git do
-  desc 'Copy repo to releases'
-  task create_release: :'git:update' do
-    on roles(:all) do
-      with fetch(:git_environmental_variables) do
-        within repo_path do
-          execute :git, :clone, '-b', fetch(:branch), '--recursive', '.', release_path
-        end
-      end
-    end
-  end
-end

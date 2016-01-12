@@ -14,13 +14,12 @@ require 'capistrano/deploy'
 #   https://github.com/capistrano/bundler
 #   https://github.com/capistrano/rails
 #
-# require 'capistrano/rvm'
+require 'capistrano/rvm'
 # require 'capistrano/rbenv'
 # require 'capistrano/chruby'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
-require 'rvm1/capistrano3'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
@@ -41,12 +40,23 @@ namespace :deploy do
 
   task :puppet do
     on roles(:all) do
-      within release_path do
-        execute :sudo, '/usr/bin/env',
-                "FACTER_server_url='#{fetch(:server_url)}'",
-                :sh, "-c '/opt/puppetlabs/bin/puppet apply\
-          --modulepath /opt/puppetlabs/puppet/modules:puppet/modules\
-          puppet/manifests/#{fetch(:manifest)}.pp'"
+      execute :sudo, '/usr/bin/env',
+              "FACTER_server_url='#{fetch(:server_url)}'",
+              :sh, "-c '/opt/puppetlabs/bin/puppet apply\
+        --modulepath /opt/puppetlabs/puppet/modules:#{release_path.join('puppet/modules')}\
+        #{release_path.join("puppet/manifests/#{fetch(:manifest)}.pp")}'"
+    end
+  end
+end
+
+namespace :git do
+  desc 'Copy repo to releases'
+  task create_release: :'git:update' do
+    on roles(:all) do
+      with fetch(:git_environmental_variables) do
+        within repo_path do
+          execute :git, :clone, '-b', fetch(:branch), '--recursive', '.', release_path
+        end
       end
     end
   end

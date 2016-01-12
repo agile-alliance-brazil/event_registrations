@@ -17,8 +17,6 @@ else
   cd /home/${USER}
 fi
 
-PUPPET_HOME=/opt/puppetlabs
-
 until (wget -q --tries=1 --timeout=10 --spider -O - https://apt.puppetlabs.com/ > /dev/null)
 do
   echo "Internet not reachable yet. Trying again."
@@ -26,6 +24,7 @@ done
 
 ${SUDO_COMMAND} -u root -H sh -c 'cd /root && gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3'
 
+PUPPET_HOME=/opt/puppetlabs
 if [ -e ${PUPPET_HOME}/bin/puppet ]; then
   echo "This puppet theatre is ready!"
 else

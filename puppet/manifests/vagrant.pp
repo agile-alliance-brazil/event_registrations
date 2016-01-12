@@ -11,6 +11,7 @@ node default {
   class { 'swap':
     swapsize => to_bytes('1 MB'),
   }
+
   class { 'webserver':
     server_url => $server_url
   }

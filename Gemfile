@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-ruby '2.2.3'
+ruby '2.3.0'
 
 def linux_only(require_as)
   RbConfig::CONFIG['host_os'] =~ /linux/ ? require_as : false
@@ -68,10 +68,10 @@ end
 
 group :development do
   gem 'capistrano', '~> 3.4', require: false
-  gem 'rvm1-capistrano3', require: false
   gem 'net-ssh', '~> 3.0'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm', require: false
   gem 'travis-lint'
   gem 'foreman'
   gem 'pry'

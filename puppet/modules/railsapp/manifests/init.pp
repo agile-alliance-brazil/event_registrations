@@ -4,18 +4,18 @@ class railsapp( $user, $app_name ) {
   if $rvm_installed == true {
     rvm::system_user { $user:; }
 
-    rvm_system_ruby { 'ruby-2.2.3':
-        name        => 'ruby-2.2.3-p0',
+    rvm_system_ruby { 'ruby-2.3.0':
+        name        => 'ruby-2.3.0',
         ensure      => 'present',
         build_opts  => '--disable-binary',
         default_use => true;
     }
 
-    rvm_gem { 'bundler22':
+    rvm_gem { 'bundler23':
         name         => 'bundler',
-        ruby_version => 'ruby-2.2.3@global',
+        ruby_version => 'ruby-2.3.0@global',
         ensure       => latest,
-        require      => Rvm_system_ruby['ruby-2.2.3'];
+        require      => Rvm_system_ruby['ruby-2.3.0'];
     }
   }
 

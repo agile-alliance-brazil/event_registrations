@@ -25,17 +25,17 @@ Deployment is handled by [Capistrano](http://capistranorb.com/). And can also be
 
 To test, run:
 ```sh
-vagrant destroy -f deploy && vagrant up deploy && bundle exec ruby script/first_deploy.rb vagrant staging 127.0.0.1:2203 certs/insecure\_private\_key
+vagrant destroy -f deploy && vagrant up deploy && bundle && bundle exec ruby script/first_deploy.rb vagrant 10.11.12.14 staging certs/insecure_private_key
 ```
 
 Note that Capistrano uses the code currently available in github so you need to push to test it.
-You can set up `config/deploy/127.0.0.1.rb` to use a different branch with `set :branch, 'your_branch'`.
+You can set up `config/deploy/vagrant.rb` to use a different branch with `set :branch, 'your_branch'`.
 
 ### Deploying to a cloud
 
 If you're deploying to any cloud, after you've created your virtual machine, add `config/<vms_ip>_config.yml`, `config/<vms_ip>_database.yml`, `certs/<vms_ip>_app_key.pem`, `certs/<vms_ip>_app_cert.pem` and `certs/<vms_ip>_paypal_cert.pem`. You can, optionally, also add `certs/<vms_ip>_server.crt`, `certs/<vms_ip>_server_key.pem` and `certs/<vms_ip>_server_key.pem` to set up apache to work with SSL. Then run:
 ```sh
-bundle exec ruby script/first_deploy.rb <configured_sudoer_user> <vms_ip> <type> <ssh_key_to_access_vm>
+bundle && bundle exec ruby script/first_deploy.rb <configured_sudoer_user> <vms_ip> <type> <ssh_key_to_access_vm>
 ```
 Where your sudoer user is a user in that machine that has sudo right (no password required), vms_ip is the vm IPv4 addres, type is either 'production' or 'staging' and the ssh key is the path in your machine to the ssh key that allows non password protected access to your cloud VM.
 
@@ -48,7 +48,7 @@ export TOKEN=<your_token>
 
 From then on, you can use:
 ```sh
-bundle exec ruby deploy/digital_ocean/new_machine.rb
+bundle && bundle exec ruby deploy/digital_ocean/new_machine.rb
 ```
 
 # Feedback

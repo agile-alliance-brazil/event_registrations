@@ -30,10 +30,10 @@ gem 'faker'
 gem 'pagseguro-oficial'
 gem 'money-rails'
 
-gem 'jquery-rails', '~> 4.0'
+gem 'jquery-rails'
 gem 'therubyracer', '~> 0.12', platforms: :ruby
-gem 'sass-rails', '~> 5.0'
-gem 'sass', '~> 3.4'
+gem 'sass-rails'
+gem 'sass'
 
 gem 'coffee-rails', '~> 4.1'
 gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
@@ -64,6 +64,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'byebug', require: false
   gem 'dotenv-rails', require: false
+  gem 'parser', '>= 2.3.0.pre.6'
 end
 
 group :development do

@@ -168,16 +168,6 @@ describe EventsController, type: :controller do
             expect(Event.count).to eq 0
           end
         end
-
-        context 'and responding to JS' do
-          let!(:event) { FactoryGirl.create :event }
-          it 'deletes the event and redirects to events index' do
-            xhr :delete, :destroy, id: event.id
-            expect(response.status).to eq 200
-            expect(response).to render_template 'events/destroy'
-            expect(Event.count).to eq 0
-          end
-        end
       end
 
       context 'with invalid parameters' do

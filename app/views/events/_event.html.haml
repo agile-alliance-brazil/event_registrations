@@ -24,6 +24,6 @@
         %span{class: 'glyphicon glyphicon-th-list'}
         = "#{t('actions.to_approval')} (#{event.attendances.waiting_approval.count})"
 
-      = link_to event_path(event), method: :delete, class: 'btn btn-link', remote: true do
+      = link_to event_path(event), method: :delete, class: 'btn btn-link' do
         %span{class: 'glyphicon glyphicon-remove'}
         = t('events.delete.button')

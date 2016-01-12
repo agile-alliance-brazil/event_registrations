@@ -19,10 +19,6 @@
 #
 #  fk_rails_92030b1506  (invoice_id)
 #
-# Foreign Keys
-#
-#  fk_rails_92030b1506  (invoice_id => invoices.id)
-#
 
 class PaymentNotification < ActiveRecord::Base
   belongs_to :invoice

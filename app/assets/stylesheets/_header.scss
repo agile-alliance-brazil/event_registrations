@@ -1,3 +1,9 @@
+@import "colors.scss";
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "bootstrap/variables";
+@import "bootstrap/forms";
+
 #header {
   color: $font-color-light;
   position: relative;

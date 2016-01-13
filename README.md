@@ -8,7 +8,7 @@ Feature requests, bug reports and questions are to be sent to GitHub's issue sys
 
 # Development
 
-Just clone this repo, enter it and run `./dev.sh`. This should be enough to install whatever is needed on your machine and start guard to run specs and front end tests.
+Just clone this repo (including submodules so ensure you run `git clone https://github.com/agilealliancebrazil/submissions.git  --recursive` or if you already cloned, use `git submodule foreach git pull origin master`), enter it and run `./dev.sh`. This should be enough to install whatever is needed on your machine and start guard to run specs and front end tests.
 
 If you don't want to mess with your own machine, an option to use [Vagrant](https://www.vagrantup.com/) for development is available. Download [Vagrant 1.8.1](https://releases.hashicorp.com/vagrant/1.8.1/) and [Virtual Box](https://www.virtualbox.org/wiki/Downloads), install both and then run:
 

@@ -1,4 +1,8 @@
 @import "colors.scss";
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "bootstrap/variables";
+@import "bootstrap/forms";
 
 .auto_focus {
   display: none;

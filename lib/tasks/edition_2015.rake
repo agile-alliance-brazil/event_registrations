@@ -11,7 +11,7 @@ namespace :edition_2015 do
 
     # Period
     RegistrationPeriod.create!(title: 'First period', start_at: Date.new(2015, 10, 8), end_at: Date.new(2015, 10, 15), event: event, price: 740)
-    RegistrationPeriod.create!(title: 'Second pediod', start_at: Date.new(2015, 10, 15), end_at: Date.new(2015, 10, 21), event: event, price: 840)
+    RegistrationPeriod.create!(title: 'Second period', start_at: Date.new(2015, 10, 15), end_at: Date.new(2015, 10, 21), event: event, price: 840)
 
     # Quotes
     RegistrationQuota.create!(order: 1, event: event, quota: 100, price: 420)

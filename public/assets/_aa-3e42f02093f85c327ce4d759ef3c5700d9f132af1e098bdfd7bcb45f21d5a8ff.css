@@ -1,0 +1,73 @@
+/* line 1, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-abLogo {
+  padding: 1em 0 1em 2em; }
+
+/* line 5, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu {
+  background-color: #5C95B6;
+  height: 30px;
+  line-height: 30px;
+  padding-right: 1em;
+  padding-left: 1em; }
+
+/* line 13, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list {
+  float: right;
+  list-style: none; }
+
+/* line 17, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list-item:not(.locale) {
+  float: left;
+  margin-right: 15px; }
+
+/* line 21, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list-item.logo {
+  margin-right: 0; }
+
+/* line 24, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list-item img {
+  float: left;
+  width: 80px; }
+
+/* line 28, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list-item.locale {
+  float: right;
+  clear: both;
+  font-size: 0.73em;
+  line-height: 1.5em;
+  padding-right: 7px; }
+
+/* line 35, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list-item.locale a {
+  color: #333;
+  text-decoration: none; }
+
+/* line 39, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+[lang=en] .headerAa-menu-list-item.locale {
+  font-size: 0.95em; }
+
+/* line 42, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list-item:not(.locale) a {
+  text-decoration: none;
+  color: #E6EFF4;
+  font-size: 0.85714em;
+  font-weight: 600;
+  display: block; }
+
+/* line 49, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+.headerAa-menu-list-item:not(.locale) a:hover {
+  color: #FFF; }
+
+@media (min-width: 340px) {
+  /* line 53, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+  .headerAa-menu {
+    padding-left: 2em;
+    padding-right: 2em; } }
+@media (min-width: 400px) {
+  /* line 59, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+  .headerAa-menu-list-item img {
+    width: 96px; }
+
+  /* line 62, /Users/celsomartins/workspace/agilebrazil/event_registrations/app/assets/stylesheets/_aa.scss */
+  .headerAa-menu-list-item.locale {
+    font-size: 0.87em; } }

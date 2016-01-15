@@ -188,7 +188,7 @@ describe AttendancesController, type: :controller do
       let!(:other) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
       before { get :index, event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled', format: :csv }
       it 'returns the attendances in the csv format' do
-        expected_disposition = "attachment; filename=\"attendances_list.csv\""
+        expected_disposition = 'attachment; filename="attendances_list.csv"'
         expect(response.body).to eq Attendance.all.to_csv
         expect(response.headers['Content-Disposition']).to eq expected_disposition
       end
@@ -255,7 +255,7 @@ describe AttendancesController, type: :controller do
       EmailNotifications.expects(action).raises(exception)
 
       Airbrake.expects(:notify)
-        .with(exception.message, action: action, attendance: attendance)
+              .with(exception.message, action: action, attendance: attendance)
 
       put :confirm, id: attendance.id
 
@@ -267,8 +267,8 @@ describe AttendancesController, type: :controller do
       action = :registration_confirmed
       EmailNotifications.expects(action).raises(exception)
       Airbrake.expects(:notify)
-        .with(exception.message, action: action, attendance: attendance)
-        .raises(exception)
+              .with(exception.message, action: action, attendance: attendance)
+              .raises(exception)
 
       put :confirm, id: attendance.id
 

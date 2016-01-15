@@ -38,7 +38,7 @@ describe AttendanceParams, type: :param_object do
                                                  'state' => user.state,
                                                  'city' => user.city,
                                                  'badge_name' => user.badge_name,
-                                                 'cpf' => "#{user.cpf}",
+                                                 'cpf' => user.cpf.to_s,
                                                  'gender' => user.gender,
                                                  'twitter_user' => user.twitter_user,
                                                  'address' => user.address,

@@ -78,7 +78,7 @@ class Attendance < ActiveRecord::Base
   scope :older_than, ->(date) { where('registration_date <= (?)', date) }
   scope :search_for_list, lambda { |param, status|
     where('(first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?)',
-          "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%", "#{param}", status).order(created_at: :desc)
+          "%#{param}%", "%#{param}%", "%#{param}%", "%#{param}%", param.to_s, status).order(created_at: :desc)
   }
   scope :attendances_for, ->(user_param) { where('user_id = ?', user_param.id).order(created_at: :asc) }
   scope :for_cancelation_warning, lambda {

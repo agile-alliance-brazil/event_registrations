@@ -13,8 +13,9 @@
 #
 
 class Authentication < ActiveRecord::Base
-  PROVIDERS = %w(twitter facebook github submission_system)
-  PROVIDERS << 'developer' unless Rails.env.production?
+  PRODUCTION_PROVIDERS = %w(twitter facebook github submission_system).freeze
+  OTHER_PROVIDERS = %w(twitter facebook github submission_system developer).freeze
+  PROVIDERS = Rails.env.production? ? PRODUCTION_PROVIDERS : OTHER_PROVIDERS
 
   belongs_to :user
 

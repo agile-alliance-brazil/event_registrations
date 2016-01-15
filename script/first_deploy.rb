@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 if ARGV.count < 2
   puts <<-END
@@ -18,7 +19,7 @@ end
 @type = ARGV[2].to_sym if ARGV.size > 2
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..')
 @key_path = ARGV[3] if ARGV.size > 3
-REMOTE_SHARED_FOLDER = '/srv/apps/registrations/shared'
+REMOTE_SHARED_FOLDER = '/srv/apps/registrations/shared'.freeze
 
 def files_to_upload
   [
@@ -54,7 +55,7 @@ if missing_files.size > 0
   puts 'Cannot deploy until the following files are available.'
   puts ''
   missing_files.each do |file|
-    puts "#{file}"
+    puts file.to_s
   end
   exit(1)
 end

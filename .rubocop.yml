@@ -10,7 +10,9 @@ AllCops:
     - 'config/locales/localized_country_select*'
     - 'config/deploy/**/*'
     - 'deploy/**/*'
-  RunRailsCops: true
+
+Rails:
+  Enabled: true
 
 Metrics/MethodLength:
   CountComments: false  # count full line comments?

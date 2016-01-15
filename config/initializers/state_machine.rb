@@ -38,11 +38,11 @@ module ActiveRecord
     private
 
     def attributes_for_create(attribute_names)
-      if self.class.respond_to?(:state_machines)
-        state_machine_attributes = self.class.state_machines.keys.map(&:to_s)
-      else
-        state_machine_attributes = []
-      end
+      state_machine_attributes = if self.class.respond_to?(:state_machines)
+                                   self.class.state_machines.keys.map(&:to_s)
+                                 else
+                                   []
+                                 end
 
       (attribute_names + state_machine_attributes).uniq.reject do |name|
         pk_attribute?(name) && id.nil?

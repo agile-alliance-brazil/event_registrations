@@ -35,7 +35,7 @@ describe PaymentNotification, type: :model do
       end
 
       it "fails if secret doesn't match" do
-        @valid_params.merge!(store_code: 'wrong_secret')
+        @valid_params[:store_code] = 'wrong_secret'
         FactoryGirl.create(:payment_notification, @valid_args)
         expect(@invoice).to be_pending
       end

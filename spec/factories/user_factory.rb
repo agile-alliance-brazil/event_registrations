@@ -46,7 +46,7 @@ FactoryGirl.define do
     badge_name { |e| "The Great #{e.first_name}" }
     cpf '111.444.777-35'
     gender 'M'
-    twitter_user { |e| "#{e.last_name.parameterize}" }
+    twitter_user { |e| e.last_name.parameterize.to_s }
     address 'Rua dos Bobos, 0'
     neighbourhood 'Vila Perdida'
     zipcode '12345000'

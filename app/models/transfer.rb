@@ -3,7 +3,7 @@ class Transfer
   extend ActiveModel::Naming
 
   attr_reader :origin_id, :origin, :destination_id, :destination
-  PROTECTED_ATTRIBUTES = %i(id email_sent registration_date created_at updated_at status)
+  PROTECTED_ATTRIBUTES = %i(id email_sent registration_date created_at updated_at status).freeze
 
   def self.build(attributes)
     origin = initialize_attendance(attributes[:origin_id])
@@ -30,8 +30,6 @@ class Transfer
     false
   end
 
-  protected
-
   def self.initialize_attendance(id)
     if id.nil?
       Attendance.new.tap { |a| a.status = '' }
@@ -39,6 +37,8 @@ class Transfer
       Attendance.find id
     end
   end
+
+  protected
 
   def initialize(origin, destination)
     @origin = origin

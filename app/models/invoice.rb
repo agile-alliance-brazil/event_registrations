@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: invoices
@@ -20,8 +21,8 @@
 #
 
 class Invoice < ActiveRecord::Base
-  STATUSES = [PENDING = 'pending', SENT = 'sent', PAID = 'paid', CANCELLED = 'cancelled']
-  TYPES = [GATEWAY = 'gateway', DEPOSIT = 'bank_deposit', STATEMENT = 'statement_agreement']
+  STATUSES = [PENDING = 'pending'.freeze, SENT = 'sent'.freeze, PAID = 'paid'.freeze, CANCELLED = 'cancelled'.freeze].freeze
+  TYPES = [GATEWAY = 'gateway'.freeze, DEPOSIT = 'bank_deposit'.freeze, STATEMENT = 'statement_agreement'.freeze].freeze
 
   belongs_to :user
   belongs_to :invoiceable, polymorphic: true

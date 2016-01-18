@@ -2,7 +2,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 HERE = File.dirname(__FILE__)
-APP_DIR = HERE.to_s.freeze
+APP_DIR = HERE.freeze
 INFRA_DIR = "#{HERE}/puppet".freeze
 
 Vagrant.configure('2') do |config|
@@ -34,7 +34,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.define :dev do |vm_config|
     # Setting up a share so we can edit locally but run in vagrant
-    vm_config.vm.synced_folder APP_DIR.to_s, '/srv/apps/registrations/current'
+    vm_config.vm.synced_folder APP_DIR, '/srv/apps/registrations/current'
 
     vm_config.vm.network :private_network, ip: '10.11.12.13'
     vm_config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2202

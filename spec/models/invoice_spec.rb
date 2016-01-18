@@ -15,7 +15,7 @@ describe Invoice, type: :model do
       subject(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       it { expect(invoice.user).to eq attendance.user }
       it { expect(invoice.invoiceable).to eq attendance }
-      it { expect(invoice.amount).to eq attendance.event.registration_price_for(attendance, Invoice::GATEWAY) }
+      it { expect(Money.new(invoice.amount * 100, :BRL)).to eq attendance.event.registration_price_for(attendance, Invoice::GATEWAY) }
     end
 
     context 'with an already registered invoice for another user' do

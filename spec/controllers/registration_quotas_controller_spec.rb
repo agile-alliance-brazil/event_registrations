@@ -88,11 +88,12 @@ describe RegistrationQuotasController, type: :controller do
       let(:event) { FactoryGirl.create :event }
       context 'with valid parameters' do
         it 'creates the quota and redirects to event' do
-          post :create, event_id: event, registration_quota: { order: 1, price: 100, quota: 45 }
+          price = 100
+          post :create, event_id: event, registration_quota: { order: 1, price: price, quota: 45 }
           quota_persisted = RegistrationQuota.last
           registration_quota = assigns(:registration_quota)
           expect(quota_persisted.order).to eq 1
-          expect(quota_persisted.price).to eq 100
+          expect(quota_persisted.price).to eq Money.new(price * 100, :BRL)
           expect(quota_persisted.quota).to eq 45
           expect(response).to redirect_to new_event_registration_quota_path(event, registration_quota)
         end

@@ -30,11 +30,15 @@ class Transfer
     false
   end
 
-  def self.initialize_attendance(id)
-    if id.nil?
-      Attendance.new.tap { |a| a.status = '' }
-    else
-      Attendance.find id
+  class << self
+    protected
+
+    def initialize_attendance(id)
+      if id.nil?
+        Attendance.new.tap { |a| a.status = '' }
+      else
+        Attendance.find id
+      end
     end
   end
 

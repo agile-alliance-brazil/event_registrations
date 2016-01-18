@@ -76,14 +76,15 @@ describe RegistrationPeriodsController, type: :controller do
         it 'creates the period and redirects to event' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
+          price = 100
 
-          post :create, event_id: event, registration_period: { title: 'foo', start_at: start_date, end_at: end_date, price: 100 }
+          post :create, event_id: event, registration_period: { title: 'foo', start_at: start_date, end_at: end_date, price: price }
           period_persisted = RegistrationPeriod.last
           registration_period = assigns(:registration_period)
           expect(period_persisted.title).to eq 'foo'
           expect(period_persisted.start_at.utc.to_i).to eq start_date.to_i
           expect(period_persisted.end_at.utc.to_i).to eq end_date.to_i
-          expect(period_persisted.price).to eq 100
+          expect(period_persisted.price).to eq Money.new(price * 100, :BRL)
           expect(response).to redirect_to new_event_registration_period_path(event, registration_period)
         end
       end

@@ -51,14 +51,15 @@ class Event < ActiveRecord::Base
 
   def not_amounted_group(attendance, payment_type)
     quota = find_quota
-    if payment_type == Invoice::STATEMENT
-      full_price
-    elsif period_for.present?
-      period_for.price * attendance.discount
-    elsif quota.first.present?
-      quota.first.price * attendance.discount
-    else
-      full_price * attendance.discount
-    end
+    value = if payment_type == Invoice::STATEMENT
+              (full_price * 100)
+            elsif period_for.present?
+              period_for.price * attendance.discount
+            elsif quota.first.present?
+              quota.first.price * attendance.discount
+            else
+              (full_price * 100) * attendance.discount
+            end
+    Money.new(value, :BRL)
   end
 end

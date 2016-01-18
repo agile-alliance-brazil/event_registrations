@@ -35,17 +35,6 @@ class PaymentNotification < ActiveRecord::Base
     PaymentNotification.create!(attributes)
   end
 
-  def self.from_pag_seguro_params(params)
-    PagSeguroService.config
-    {
-      params: params,
-      invoice: Invoice.find(params[:pedido]),
-      status: params[:status],
-      transaction_id: params[:transaction_code],
-      notes: params[:transaction_inspect]
-    }
-  end
-
   private
 
   def mark_invoicer_as_paid
@@ -62,5 +51,20 @@ class PaymentNotification < ActiveRecord::Base
 
   def pag_seguro_valid?(hash)
     params[:store_code] == hash[:store_code]
+  end
+
+  class << self
+    private
+
+    def from_pag_seguro_params(params)
+      PagSeguroService.config
+      {
+        params: params,
+        invoice: Invoice.find(params[:pedido]),
+        status: params[:status],
+        transaction_id: params[:transaction_code],
+        notes: params[:transaction_inspect]
+      }
+    end
   end
 end

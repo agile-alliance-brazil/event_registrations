@@ -8,6 +8,8 @@
       %th= t('formtastic.labels.registration_period.start_at')
       %th= t('formtastic.labels.registration_period.end_at')
       %th= t('formtastic.labels.registration_period.value')
+      %th= t('general.actions.title')
+
       - @event.registration_periods.each do |period|
         %tr{ id: "period_#{period.id}" }
           %td= period.id
@@ -15,5 +17,8 @@
           %td= l(period.start_at, format: :date)
           %td= l(period.end_at, format: :date)
           %td= number_to_currency period.price
+          %td
+            = link_to event_registration_period_path(event, period), method: :delete, class: 'btn btn-link' do
+              %span{ class: 'fa fa-trash' }
   - else
     %h5= t('events.show.no_periods_message')

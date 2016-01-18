@@ -35,7 +35,7 @@ Current::Application.routes.draw do
       end
     end
 
-    resources :registration_periods, only: [:new, :create]
+    resources :registration_periods, only: [:new, :create, :destroy]
     resources :registration_quotas, only: [:new, :create, :destroy]
   end
 

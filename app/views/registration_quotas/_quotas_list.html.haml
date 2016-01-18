@@ -18,6 +18,6 @@
           %td= quota.attendances.active.count
           %td
             = link_to event_registration_quota_path(event, quota), method: :delete, class: 'btn btn-link' do
-              %span{class: 'glyphicon glyphicon-remove'}
+              %span{ class: 'fa fa-trash' }
   - else
     %h5= t('events.show.no_quotas_message')

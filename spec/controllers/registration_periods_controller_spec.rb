@@ -109,5 +109,35 @@ describe RegistrationPeriodsController, type: :controller do
         end
       end
     end
+
+    describe 'DELETE #destroy' do
+      let(:event) { FactoryGirl.create :event }
+      let!(:period) { FactoryGirl.create :registration_period, event: event }
+
+      context 'with valid parameters' do
+        context 'and responding to HTML' do
+          it 'deletes the period and redirects to event show' do
+            delete :destroy, event_id: event.id, id: period
+            expect(response).to redirect_to event_path(event)
+            expect(RegistrationPeriod.count).to eq 0
+          end
+        end
+      end
+
+      context 'with invalid parameters' do
+        context 'and a valid event' do
+          it 'responds 404' do
+            delete :destroy, event_id: event, id: 'foo'
+            expect(response.status).to eq 404
+          end
+        end
+        context 'and a invalid event' do
+          it 'responds 404' do
+            delete :destroy, event_id: 'foo', id: period
+            expect(response.status).to eq 404
+          end
+        end
+      end
+    end
   end
 end

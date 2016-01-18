@@ -30,6 +30,12 @@ class RegistrationPeriodsController < ApplicationController
     end
   end
 
+  def destroy
+    @period = RegistrationPeriod.find(params[:id])
+    @period.destroy
+    redirect_to @event
+  end
+
   private
 
   def period_params

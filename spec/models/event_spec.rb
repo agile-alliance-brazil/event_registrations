@@ -1,7 +1,7 @@
 describe Event, type: :model do
   context 'associations' do
-    it { should have_many :attendances }
-    it { should have_many :registration_periods }
+    it { is_expected.to have_many :attendances }
+    it { is_expected.to have_many :registration_periods }
   end
 
   describe '#attendance limit' do
@@ -146,6 +146,14 @@ describe Event, type: :model do
       end
     end
 
+    describe '.not_started' do
+      context 'when the event has started' do
+        let!(:started) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.day.from_now) }
+        let!(:not_started) { FactoryGirl.create(:event, start_date: 2.days.from_now, end_date: 3.days.from_now) }
+        it { expect(Event.not_started).to eq [not_started] }
+      end
+    end
+
     describe '.ended' do
       context 'and one at the right period and other not' do
         let!(:event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
@@ -177,6 +185,18 @@ describe Event, type: :model do
 
     context 'with no quota' do
       it { expect(event.find_quota).to eq [] }
+    end
+  end
+
+  describe '#started' do
+    context 'when the event has started' do
+      let(:event) { FactoryGirl.build(:event, start_date: 1.day.ago, end_date: 1.day.from_now) }
+      it { expect(event.started).to be_truthy }
+    end
+
+    context 'when the event has not started' do
+      let(:event) { FactoryGirl.build(:event, start_date: 2.days.from_now, end_date: 3.days.from_now) }
+      it { expect(event.started).to be_falsey }
     end
   end
 end

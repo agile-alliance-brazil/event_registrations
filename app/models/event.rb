@@ -27,6 +27,7 @@ class Event < ActiveRecord::Base
   delegate :attendances_for, to: :attendances
 
   scope :active_for, ->(date) { where('end_date > ?', date) }
+  scope :not_started, -> { where('start_date > ?', Time.zone.today) }
   scope :ended, -> { where('end_date < ?', Time.zone.today) }
 
   def can_add_attendance?
@@ -47,19 +48,27 @@ class Event < ActiveRecord::Base
     registration_quotas.order(order: :asc).select(&:vacancy?)
   end
 
+  def started
+    Time.zone.today >= start_date
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)
     quota = find_quota
-    value = if payment_type == Invoice::STATEMENT
-              (full_price * 100)
-            elsif period_for.present?
-              period_for.price * attendance.discount
-            elsif quota.first.present?
-              quota.first.price * attendance.discount
-            else
-              (full_price * 100) * attendance.discount
-            end
+    value = extract_value(attendance, payment_type, quota)
     Money.new(value, :BRL)
+  end
+
+  def extract_value(attendance, payment_type, quota)
+    if payment_type == Invoice::STATEMENT
+      (full_price * 100)
+    elsif period_for.present?
+      period_for.price * attendance.discount
+    elsif quota.first.present?
+      quota.first.price * attendance.discount
+    else
+      (full_price * 100) * attendance.discount
+    end
   end
 end

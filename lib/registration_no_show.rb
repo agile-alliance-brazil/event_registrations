@@ -1,5 +1,7 @@
 # encoding: UTF-8
 class RegistrationNoShow
+  include Singleton
+
   def no_show
     events = Event.ended
     Rails.logger.info("Marking attendances as no show for #{events.count} events")

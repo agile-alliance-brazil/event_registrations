@@ -1,7 +1,3 @@
-# encoding: UTF-8
-
-require 'faker'
-
 FactoryGirl.define do
   factory :attendance do
     association :event
@@ -25,18 +21,5 @@ FactoryGirl.define do
     registration_value 400.00
 
     registration_date { Time.zone.now }
-  end
-
-  factory :authentication do
-    user
-    uid { |a| a.user.id }
-    provider 'twitter'
-  end
-
-  factory :registration_group do
-    name Faker::Company.name
-    event
-    minimum_size 13
-    discount 15
   end
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 require File.join(File.dirname(__FILE__), '../../lib/registration_no_show')
 
 describe RegistrationNoShow do
-  let(:no_show) { RegistrationNoShow.new }
+  let(:no_show_task) { RegistrationNoShow.instance }
 
   before do
     ::Rails.logger.stubs(:info)
@@ -21,7 +21,7 @@ describe RegistrationNoShow do
           let!(:other_attendance) { FactoryGirl.create(:attendance, event: past_event, status: :accepted) }
           let!(:out_attendance) { FactoryGirl.create(:attendance, event: current_event, status: :accepted) }
           it 'marks the attendances from past events and ignores the attendances from current event' do
-            no_show.no_show
+            no_show_task.no_show
             expect(attendance.reload.status).to eq 'no_show'
             expect(other_attendance.reload.status).to eq 'no_show'
             expect(out_attendance.reload.status).to eq 'accepted'

@@ -245,9 +245,12 @@ describe Attendance, type: :model do
       end
 
       describe '.for_cancelation' do
-        let!(:to_cancel) { FactoryGirl.create(:attendance, advised_at: 8.days.ago, advised: true) }
-        let!(:out) { FactoryGirl.create(:attendance, advised_at: 5.days.ago, advised: true) }
-        let!(:other_out) { FactoryGirl.create(:attendance, advised_at: nil, advised: false, created_at: 15.days.ago) }
+        let(:invoice) { FactoryGirl.create(:invoice, payment_type: Invoice::GATEWAY) }
+        let!(:to_cancel) { FactoryGirl.create(:attendance, advised_at: 8.days.ago, advised: true, invoices: [invoice]) }
+        let(:out_invoice) { FactoryGirl.create(:invoice, payment_type: Invoice::GATEWAY) }
+        let!(:out) { FactoryGirl.create(:attendance, advised_at: 5.days.ago, advised: true, invoices: [out_invoice]) }
+        let(:other_out_invoice) { FactoryGirl.create(:invoice, payment_type: Invoice::GATEWAY) }
+        let!(:other_out) { FactoryGirl.create(:attendance, advised_at: nil, advised: false, created_at: 15.days.ago, invoices: [other_out_invoice]) }
         it { expect(Attendance.for_cancelation).to eq [to_cancel] }
       end
 

@@ -69,6 +69,10 @@ class ApplicationController < ActionController::Base
     @event ||= Event.find_by_id(params[:event_id])
   end
 
+  def find_event
+    @event = Event.find params[:event_id]
+  end
+
   def authorize_action
     obj = call_or_nil(:resource)
     clazz = call_or_nil(:resource_class)

@@ -18,11 +18,6 @@ function set_datepicker(){
     $('.monthpicker').datepicker(opts);
 }
 
-function set_date(date){
-  var date = date.split('/');
-  $('.datepicker').datepicker('setDate', new Date(date[2], date[1]-1, date[0]));
-}
-
 $(function() {
   set_datepicker();
   $(document).on('persisted', set_datepicker);

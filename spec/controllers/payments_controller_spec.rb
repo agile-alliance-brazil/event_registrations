@@ -35,8 +35,7 @@ describe PaymentsController, type: :controller do
     context 'with invalid event' do
       let(:invoice) { FactoryGirl.create :invoice }
       before { post :checkout, event_id: 'foo', id: invoice.id }
-      it { expect(response).to redirect_to events_path }
-      it { expect(flash[:alert]).to eq I18n.t('event.not_found') }
+      it { expect(response).to have_http_status 404 }
     end
 
     context 'with invalid invoice' do

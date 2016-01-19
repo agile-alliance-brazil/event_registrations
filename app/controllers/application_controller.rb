@@ -71,8 +71,6 @@ class ApplicationController < ActionController::Base
 
   def find_event
     @event = Event.find params[:event_id]
-  rescue ActiveRecord::RecordNotFound
-    redirect_to events_path, alert: t('event.not_found')
   end
 
   def authorize_action

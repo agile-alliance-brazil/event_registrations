@@ -8,10 +8,15 @@
 (function($) {
   $.fn.bindSelectUpdated = function() {
     return this.each(function() {
-      $(this).change(function() {$(this).trigger('updated')});
-      $(this).keyup(function() {$(this).trigger('updated')});
+      $(this).change(function() {
+        $(this).trigger('updated');
+      });
+
+      $(this).keyup(function() {
+        $(this).trigger('updated');
+      });
     })
-  }
+  };
   $(document).ready(function() {
     $('a').filter(function(index, element) {
       return $(element).data('function') !== undefined;

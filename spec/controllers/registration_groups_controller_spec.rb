@@ -63,8 +63,7 @@ describe RegistrationGroupsController, type: :controller do
 
     context 'with invalid event' do
       before { get :index, event_id: 'foo' }
-      it { expect(response).to redirect_to events_path }
-      it { expect(flash[:alert]).to eq I18n.t('event.not_found') }
+      it { expect(response).to have_http_status 404 }
     end
   end
 

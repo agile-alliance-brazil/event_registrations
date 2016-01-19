@@ -3,6 +3,8 @@
   = form.input :discount, required: true, input_html: { tabindex: autotab }
   = form.input :amount, required: true, input_html: { tabindex: autotab }
   = form.input :minimum_size, required: true, input_html: { tabindex: autotab }
+  = form.input :minimum_size, required: true, input_html: { tabindex: autotab }
+  = form.input :automatic_approval, default: false
 
   = form.actions do
     = form.action(:submit, label: :new_group, button_html: { tabindex: autotab })

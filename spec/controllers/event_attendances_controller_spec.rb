@@ -219,6 +219,24 @@ describe EventAttendancesController, type: :controller do
         end
       end
 
+      context 'when is an automatic approval group' do
+        let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: true) }
+        before do
+          Invoice.from_registration_group(group, Invoice::GATEWAY)
+          post :create, event_id: @event.id, registration_token: group.token, attendance: { email: 'foo@bar.com', email_confirmation: 'foo@bar.com' }
+        end
+        it { expect(assigns(:attendance).status).to eq 'accepted' }
+      end
+
+      context 'when is not an automatic approval group' do
+        let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: false) }
+        before do
+          Invoice.from_registration_group(group, Invoice::GATEWAY)
+          post :create, event_id: @event.id, registration_token: group.token, attendance: { email: 'foo@bar.com', email_confirmation: 'foo@bar.com' }
+        end
+        it { expect(assigns(:attendance).status).to eq 'pending' }
+      end
+
       context 'when attempt to register again to the same event' do
         context 'with a pending attendance existent' do
           context 'in the same event' do

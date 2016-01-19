@@ -61,12 +61,6 @@ class RegistrationGroupsController < ApplicationController
     params.require(:registration_group).permit(:name, :discount, :minimum_size, :amount, :automatic_approval)
   end
 
-  def find_event
-    @event = Event.find params[:event_id]
-  rescue ActiveRecord::RecordNotFound
-    redirect_to events_path, alert: t('event.not_found')
-  end
-
   def find_group
     @group = RegistrationGroup.find_by(id: params[:id])
   end

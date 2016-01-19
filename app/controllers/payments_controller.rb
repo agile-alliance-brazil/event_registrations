@@ -33,12 +33,6 @@ class PaymentsController < ApplicationController
     )
   end
 
-  def find_event
-    @event = Event.find params[:event_id]
-  rescue ActiveRecord::RecordNotFound
-    redirect_to events_path, alert: t('event.not_found')
-  end
-
   def find_invoice
     @invoice = Invoice.find params[:id]
   rescue ActiveRecord::RecordNotFound

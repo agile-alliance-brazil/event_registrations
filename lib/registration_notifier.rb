@@ -1,9 +1,9 @@
 # encoding: UTF-8
 class RegistrationNotifier
   def cancel
-    Event.active_for(Time.zone.now).each do |event|
-      attendances_to_advise = event.attendances.for_cancelation
-      attendances_to_advise.each do |attendance|
+    Event.not_started.each do |event|
+      attendances_to_cancel = event.attendances.for_cancelation
+      attendances_to_cancel.each do |attendance|
         Rails.logger.info("[Attendance] #{attendance.to_param}")
         try_with('CANCEL') do
           attendance.cancel

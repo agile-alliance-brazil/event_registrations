@@ -3,7 +3,7 @@ require 'spec_helper'
 require File.join(File.dirname(__FILE__), '../../lib/registration_notifier')
 
 describe RegistrationNotifier do
-  let(:notifier) { RegistrationNotifier.new }
+  let(:notifier) { RegistrationNotifier.instance }
   before do
     ::Rails.logger.stubs(:info)
     ::Rails.logger.stubs(:flush)

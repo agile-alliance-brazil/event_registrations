@@ -1,5 +1,8 @@
 # encoding: UTF-8
+
 class RegistrationNotifier
+  include Singleton
+
   def cancel
     Event.not_started.each do |event|
       attendances_to_cancel = event.attendances.for_cancelation

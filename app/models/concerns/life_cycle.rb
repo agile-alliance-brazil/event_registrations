@@ -48,9 +48,13 @@ module Concerns
           end
         end
 
-        after_transition any => :accepted do |attendance|
-          try_user_notify(action: :registration_group_accepted, attendance: attendance) do
-            EmailNotifications.registration_group_accepted(attendance).deliver_now
+        after_transition pending: :accepted do |attendance|
+          if attendance.free?
+            attendance.confirm
+          else
+            try_user_notify(action: :registration_group_accepted, attendance: attendance) do
+              EmailNotifications.registration_group_accepted(attendance).deliver_now
+            end
           end
         end
 

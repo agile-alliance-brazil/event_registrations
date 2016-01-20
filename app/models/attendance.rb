@@ -144,6 +144,10 @@ class Attendance < ActiveRecord::Base
     end
   end
 
+  def free?
+    registration_group.try(:free?)
+  end
+
   private
 
   def advised_due_date

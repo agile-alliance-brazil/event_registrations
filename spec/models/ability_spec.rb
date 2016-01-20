@@ -18,9 +18,7 @@ describe Ability, type: :model do
   end
 
   context '- all users (guests)' do
-    before(:each) do
-      @ability = Ability.new(@user, @event)
-    end
+    before { @ability = Ability.new(@user, @event) }
 
     it_should_behave_like 'all users'
 
@@ -31,6 +29,10 @@ describe Ability, type: :model do
     it 'can view their attendances' do
       attendance = FactoryGirl.build(:attendance)
       expect(@ability).not_to be_able_to(:show, attendance)
+      attendance.email = @user.email
+      expect(@ability).to be_able_to(:show, attendance)
+      attendance.email = 'foo@bar.com'
+
       attendance.user = @user
       expect(@ability).to be_able_to(:show, attendance)
     end

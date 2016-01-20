@@ -76,25 +76,24 @@ describe Attendance, type: :model do
       before { 5.times { FactoryGirl.create(:attendance) } }
 
       it { expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first]) }
-
       it { expect(Attendance.pending).to include(Attendance.first) }
 
-      it 'should have scope accepted' do
+      it 'has scope accepted' do
         Attendance.first.tap(&:accept).save
         expect(Attendance.accepted).to include Attendance.first
       end
 
-      it 'should have scope paid' do
+      it 'has scope paid' do
         Attendance.first.tap(&:pay).save
         expect(Attendance.paid).to eq([Attendance.first])
       end
 
-      it 'should have scope active that excludes cancelled attendances' do
+      it 'has scope active that excludes cancelled attendances' do
         Attendance.first.tap(&:cancel).save
         expect(Attendance.active).not_to include(Attendance.first)
       end
 
-      it 'should have scope older_than that selects old attendances' do
+      it 'has scope older_than that selects old attendances' do
         Attendance.first.tap { |a| a.registration_date = 10.days.ago }.save
         expect(Attendance.older_than(5.days.ago)).to eq([Attendance.first])
       end
@@ -363,30 +362,6 @@ describe Attendance, type: :model do
           end
         end
       end
-
-      context 'when is individual' do
-        context 'from pending' do
-          let(:attendance) { FactoryGirl.create(:attendance) }
-
-          context 'without invoice' do
-            it 'move to paid upon payment' do
-              attendance.pay
-              expect { attendance.pay }.not_to raise_error
-              expect(attendance.status).to eq 'confirmed'
-            end
-          end
-
-          context 'with invoice' do
-            it 'move attendance to CONFIRMED upon payment and keep invoice as paid' do
-              Invoice.from_attendance(attendance, Invoice::GATEWAY)
-              EmailNotifications.expects(:registration_confirmed).once
-              attendance.pay
-              expect(attendance.status).to eq 'confirmed'
-              expect(Invoice.last.status).to eq 'paid'
-            end
-          end
-        end
-      end
     end
 
     describe '#cancel' do
@@ -458,6 +433,16 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :accepted
           attendance.accept
           expect(attendance.status).to eq 'accepted'
+        end
+      end
+
+      context 'when belongs to a free group' do
+        it 'confirms' do
+          EmailNotifications.expects(:registration_group_accepted).never
+          group = FactoryGirl.create :registration_group, discount: 100
+          attendance = FactoryGirl.create :attendance, status: :pending, registration_group: group
+          attendance.accept
+          expect(attendance.status).to eq 'confirmed'
         end
       end
     end

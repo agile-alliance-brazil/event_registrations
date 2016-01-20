@@ -23,7 +23,10 @@ class Ability
     can(:read, Event)
     can(:manage, @user)
 
-    can(%i(show destroy), Attendance, user_id: @user.id)
+    can %i(show destroy), Attendance do |attendance|
+      attendance.user_id == @user.id || attendance.email == @user.email
+    end
+
     can do |action, subject_class, _subject|
       expand_actions([:create]).include?(action) && [Attendance].include?(subject_class) &&
         Time.zone.now <= @event.end_date

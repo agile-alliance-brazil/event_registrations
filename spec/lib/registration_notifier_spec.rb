@@ -81,7 +81,7 @@ describe RegistrationNotifier do
       end
 
       context 'and with an event already started' do
-        let!(:event) { FactoryGirl.create :event, start_date: 1.day.ago, end_date: 2.months.from_now }
+        let!(:event) { FactoryGirl.create :event, start_date: 2.days.ago, end_date: 2.months.from_now }
         let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised_at: 15.days.ago, advised: true) }
         let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
         it 'notifies the pending attendance' do

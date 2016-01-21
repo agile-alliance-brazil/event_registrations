@@ -102,16 +102,16 @@ describe TransfersController, type: :controller do
   describe '#create' do
     let!(:origin) { FactoryGirl.create(:attendance, event: event, status: :paid, registration_value: 420) }
     let!(:destination) { FactoryGirl.create(:attendance, event: event, status: :pending, registration_value: 540) }
-    subject(:new_origin) { Attendance.find(origin.id) }
-    subject(:new_destination) { Attendance.find(destination.id) }
+    subject(:assigned_origin) { Attendance.find(origin.id) }
+    subject(:assigned_destination) { Attendance.find(destination.id) }
 
     context 'when origin is paid' do
       before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
       it 'changes the status and the registration value for an attendances and save them' do
         expect(flash[:notice]).to eq I18n.t('flash.transfer.success')
-        expect(new_origin.status).to eq 'cancelled'
-        expect(new_destination.status).to eq 'confirmed'
-        expect(new_destination.registration_value).to eq 420
+        expect(assigned_origin.status).to eq 'cancelled'
+        expect(assigned_destination.status).to eq 'confirmed'
+        expect(assigned_destination.registration_value).to eq 420
         expect(response).to redirect_to attendance_path(id: origin.id)
       end
     end
@@ -120,9 +120,9 @@ describe TransfersController, type: :controller do
       let!(:origin) { FactoryGirl.create(:attendance, status: :confirmed, registration_value: 420) }
       before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
       it 'changes the status and the registration value for an attendances and save them' do
-        expect(new_origin.status).to eq 'cancelled'
-        expect(new_destination.status).to eq 'confirmed'
-        expect(new_destination.registration_value).to eq 420
+        expect(assigned_origin.status).to eq 'cancelled'
+        expect(assigned_destination.status).to eq 'confirmed'
+        expect(assigned_destination.registration_value).to eq 420
       end
     end
 
@@ -130,9 +130,9 @@ describe TransfersController, type: :controller do
       let!(:destination) { FactoryGirl.create(:attendance, status: :accepted) }
       before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
       it 'changes the status and the registration value for an attendances and save them' do
-        expect(new_origin.status).to eq 'cancelled'
-        expect(new_destination.status).to eq 'confirmed'
-        expect(new_destination.registration_value).to eq 420
+        expect(assigned_origin.status).to eq 'cancelled'
+        expect(assigned_destination.status).to eq 'confirmed'
+        expect(assigned_destination.registration_value).to eq 420
       end
     end
 

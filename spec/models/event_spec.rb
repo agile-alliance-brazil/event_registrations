@@ -148,7 +148,7 @@ describe Event, type: :model do
 
     describe '.not_started' do
       context 'when the event has started' do
-        let!(:started) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.day.from_now) }
+        let!(:started) { FactoryGirl.create(:event, start_date: 2.days.ago, end_date: 2.days.from_now) }
         let!(:not_started) { FactoryGirl.create(:event, start_date: 2.days.from_now, end_date: 3.days.from_now) }
         it { expect(Event.not_started).to eq [not_started] }
       end
@@ -190,7 +190,7 @@ describe Event, type: :model do
 
   describe '#started' do
     context 'when the event has started' do
-      let(:event) { FactoryGirl.build(:event, start_date: 1.day.ago, end_date: 1.day.from_now) }
+      let(:event) { FactoryGirl.build(:event, start_date: 2.days.ago, end_date: 2.days.from_now) }
       it { expect(event.started).to be_truthy }
     end
 

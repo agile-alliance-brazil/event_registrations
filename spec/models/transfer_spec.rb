@@ -3,8 +3,6 @@ describe Transfer, type: :model do
   let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }
   let!(:destination) { FactoryGirl.create(:attendance, id: 2, status: :pending, registration_value: 540) }
   let(:transfer) { Transfer.build(origin_id: origin.id, destination_id: destination.id) }
-  subject(:new_origin) { Attendance.find(origin.id) }
-  subject(:new_destination) { Attendance.find(destination.id) }
 
   it { expect(transfer).not_to be_persisted }
 
@@ -52,29 +50,46 @@ describe Transfer, type: :model do
     end
   end
 
-  context 'saving' do
+  describe '#save' do
+    subject(:assigned_origin) { Attendance.find(origin.id) }
+    subject(:assigned_destination) { Attendance.find(destination.id) }
+
     it 'not try to change origin id' do
       transfer.save
-      expect(new_origin.id).to eq 1
+      expect(assigned_origin.id).to eq 1
     end
     it 'do the transfer and keep the dates' do
+      origin.pay
+
       destination_date = destination.registration_date
       origin_date = origin.registration_date
       transfer.save
-      expect(new_origin.status).to eq 'cancelled'
-      expect(new_origin.registration_date.to_i).to eq origin_date.to_i
-      expect(new_destination.registration_date.to_i).to eq destination_date.to_i
-      expect(new_destination.status).to eq 'confirmed'
-      expect(new_destination.registration_value).to eq 420
+      expect(assigned_origin.status).to eq 'cancelled'
+      expect(assigned_origin.registration_date.to_i).to eq origin_date.to_i
+      expect(assigned_destination.registration_date.to_i).to eq destination_date.to_i
+      expect(assigned_destination.status).to eq 'confirmed'
+      expect(assigned_destination.registration_value).to eq 420
     end
 
-    it 'also changes the related invoice' do
-      Invoice.from_attendance(origin, Invoice::GATEWAY)
-      Invoice.from_attendance(destination, Invoice::GATEWAY)
-      transfer.save
-      expect(new_origin.invoices.last.status).to eq 'cancelled'
-      expect(new_destination.invoices.last.status).to eq 'paid'
-      expect(new_destination.invoices.last.amount).to eq 420
+    context 'with paid origin' do
+      it 'also changes the related invoice' do
+        Invoice.from_attendance(origin, Invoice::GATEWAY)
+        Invoice.from_attendance(destination, Invoice::GATEWAY)
+        transfer.save
+        expect(assigned_origin.invoices.last.status).to eq 'cancelled'
+        expect(assigned_destination.invoices.last.status).to eq 'paid'
+        expect(assigned_destination.invoices.last.amount).to eq 420
+      end
+    end
+
+    context 'with confirmed origin' do
+      let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :confirmed, registration_value: 420, registration_date: origin_date) }
+      it 'also changes the related invoice' do
+        Invoice.from_attendance(origin, Invoice::GATEWAY)
+        Invoice.from_attendance(destination, Invoice::GATEWAY)
+        transfer.save
+        expect(assigned_destination.invoices.last.status).to eq 'paid'
+      end
     end
   end
 

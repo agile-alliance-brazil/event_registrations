@@ -304,7 +304,6 @@ describe Attendance, type: :model do
             context 'without invoice' do
               it 'move to paid upon payment' do
                 attendance.pay
-                expect { attendance.pay }.not_to raise_error
                 expect(attendance.status).to eq 'paid'
               end
             end
@@ -452,8 +451,10 @@ describe Attendance, type: :model do
         it 'confirm the attendance' do
           EmailNotifications.expects(:registration_confirmed).once
           attendance = FactoryGirl.create :attendance
+          Invoice.from_attendance(attendance, Invoice::GATEWAY)
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
+          expect(Invoice.last.status).to eq 'paid'
         end
       end
 

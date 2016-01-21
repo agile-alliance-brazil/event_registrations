@@ -13,6 +13,7 @@ module Concerns
         after_transition on: %i(cancel mark_no_show), do: :cancel_invoice!
         after_transition on: :recover, do: :recover_invoice!
         after_transition on: :pay, do: %i(check_confirmation pay_invoice!)
+        after_transition on: :confirm, do: :pay_invoice!
 
         event :accept do
           transition %i(pending) => :accepted

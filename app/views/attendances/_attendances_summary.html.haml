@@ -9,7 +9,7 @@
 %hr
 
 %div{class: 'row'}
-  %span{class: 'col-xs-2 search-checkbox'}
+  %span{class: 'col-xs-2'}
     = check_box_tag 'pending', 'pending', true, onclick: "submitSearch(#{@event.id});"
     = label_tag 'pending', "#{t('formtastic.labels.attendance.pending')} (#{@pending_total})"
 

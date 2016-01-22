@@ -535,3 +535,6 @@ pt:
   general:
     actions:
       title: "Ações"
+  attendances:
+    reports:
+      title: "Relatórios"

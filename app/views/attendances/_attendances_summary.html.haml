@@ -1,30 +1,39 @@
-%table.table
-  %th
-    = t('formtastic.labels.attendance.pending')
-    = check_box_tag 'pending', 'pending', true
-  %th
-    = t('formtastic.labels.attendance.accepted')
-    = check_box_tag 'accepted', 'accepted', true
-  %th
-    = t('formtastic.labels.attendance.paid')
-    = check_box_tag 'paid', 'paid', true
-  %th
-    = t('formtastic.labels.attendance.cancelled')
-    = check_box_tag 'cancelled', 'cancelled', false
-  %th= t('formtastic.labels.attendance.registration_total')
-  %th= t('formtastic.labels.attendance.total_without_cancelled')
+%h4{class: 'row'}
+  %span{class: 'col-xs-3'}
+    = "#{t('formtastic.labels.attendance.registration_total')}: #{@total}"
 
-  %tr
-    %td= @pending_total
-    %td= @accepted_total
-    %td= @paid_total
-    %td= @cancelled_total
-    %td= @total
-    %td= @total_without_cancelled
+%h4{class: 'row'}
+  %span{class: 'col-xs-3'}
+    = "#{t('formtastic.labels.attendance.total_without_cancelled')}: #{@total_without_cancelled}"
 
-%h3 Relatórios
-%ul
-  %li= link_to 'Total de ativos por estado', by_state_event_attendances_path(@event)
-  %li= link_to 'Total de ativos por cidade', by_city_event_attendances_path(@event)
-  %li= link_to 'Total de ativos na última quizena', last_biweekly_active_event_attendances_path(@event)
-  %li= link_to 'Agrupado por tipo de pagamento', payment_type_report_event_attendances_path(@event)
+%hr
+
+%div{class: 'row'}
+  %span{class: 'col-xs-2'}
+    = check_box_tag 'pending', 'pending', true, onclick: "submitSearch(#{@event.id});"
+    = label_tag 'pending', "#{t('formtastic.labels.attendance.pending')} (#{@pending_total})"
+
+  %span{class: 'col-xs-2'}
+    = check_box_tag 'accepted', 'accepted', true, onclick: "submitSearch(#{@event.id});"
+    = label_tag 'accepted', "#{t('formtastic.labels.attendance.accepted')} (#{@accepted_total})"
+
+  %span{class: 'col-xs-2'}
+    = check_box_tag 'paid', 'paid', true, onclick: "submitSearch(#{@event.id});"
+    = label_tag 'paid', "#{t('formtastic.labels.attendance.paid')} (#{@paid_total})"
+
+  %span{class: 'col-xs-2'}
+    = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
+    = label_tag 'cancelled', "#{t('formtastic.labels.attendance.cancelled')} (#{@cancelled_total})"
+
+%hr
+
+%h3= t('attendances.reports.title')
+%div{class: 'row'}
+  %span{class: 'col-xs-3'}
+    = link_to 'Total de ativos por estado', by_state_event_attendances_path(@event)
+  %span{class: 'col-xs-3'}
+    = link_to 'Total de ativos por cidade', by_city_event_attendances_path(@event)
+  %span{class: 'col-xs-3'}
+    = link_to 'Total de ativos na última quizena', last_biweekly_active_event_attendances_path(@event)
+  %span{class: 'col-xs-3'}
+    = link_to 'Agrupado por tipo de pagamento', payment_type_report_event_attendances_path(@event)

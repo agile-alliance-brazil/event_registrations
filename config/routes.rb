@@ -50,6 +50,10 @@ Current::Application.routes.draw do
       put :recover_it
     end
 
+    collection do
+      get :search
+    end
+
     resources :transfers, only: :new
   end
 

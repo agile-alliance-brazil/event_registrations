@@ -401,3 +401,6 @@ en:
   general:
     actions:
       title: "Actions"
+  attendances:
+    reports:
+      title: "Reports"

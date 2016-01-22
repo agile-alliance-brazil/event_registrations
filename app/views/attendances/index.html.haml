@@ -1,21 +1,23 @@
-= form_for attendances_path, method: 'get', html: {class: 'form-inline'} do
-  %h3 Resumo
+%h3 Resumo
 
-  = render partial: 'attendances_summary'
+= render partial: 'attendances_summary'
 
-  %h3 Inscritos ativos
+%h3 Inscritos ativos
 
-  - title t('title.attendances_list')
+- title t('title.attendances_list')
 
-  %p= t('registration.status', date: l(Time.zone.now))
+%p= t('registration.status', date: l(Time.zone.now))
 
 
-  = hidden_field_tag :event_id, @event.id
-  %div.form-group
-    = text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50, :class => 'form-control'
-    = submit_tag 'Search', :name => nil, :class => 'btn btn-primary'
-    = link_to t('actions.download_csv'), attendances_path(event_id: @event, format: 'csv', paid: 'paid'), class: 'btn btn-success'
+= hidden_field_tag :event_id, @event.id
+%div.form-group
+  = text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50, class: 'form-control'
+  = link_to 'Search', '#', onclick: "submitSearch(#{@event.id});", class: 'btn btn-primary'
+  = link_to t('actions.download_csv'), search_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-success'
 
 <br />
 
-= render partial: 'attendances_list', locals: { attendances_list: @attendances_list }
+%div{id: 'attendances_list'}
+  = render partial: 'attendances_list', locals: { attendances_list: @attendances_list }
+
+= javascript_include_tag 'attendances/index'

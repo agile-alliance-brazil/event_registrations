@@ -4,6 +4,7 @@ describe User, type: :model do
     it { is_expected.to have_many :attendances }
     it { is_expected.to have_many :events }
     it { is_expected.to have_many :payment_notifications }
+    it { is_expected.to have_and_belong_to_many(:organized_events).class_name('Event') }
 
     context 'events uniqueness' do
       it 'only show event once if user has multiple attendances' do

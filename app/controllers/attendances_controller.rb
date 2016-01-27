@@ -1,10 +1,8 @@
 class AttendancesController < ApplicationController
   before_action :load_event, except: [:index, :search]
-  skip_before_action :authorize_action, only: [:index]
   protect_from_forgery
 
   def index
-    return unless can? :attendances_list, Attendance
     @attendances_list = event_for_index.attendances.active
     @pending_total = event_for_index.attendances.pending.count
     @accepted_total = event_for_index.attendances.accepted.count

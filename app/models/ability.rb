@@ -1,4 +1,3 @@
-# encoding: UTF-8
 class Ability
   include CanCan::Ability
 
@@ -36,8 +35,17 @@ class Ability
   end
 
   def organizer_privileges
-    can(:manage, Attendance)
-
-    can(:manage, 'transfers')
+    can %i(show edit update), Event do |event|
+      @user.organized_events.include?(event)
+    end
+    can :manage, Attendance do |attendance|
+      @user.organized_events.include?(attendance.event)
+    end
+    can :manage, RegistrationPeriod do |period|
+      @user.organized_events.include?(period.event)
+    end
+    can :manage, RegistrationQuota do |quota|
+      @user.organized_events.include?(quota.event)
+    end
   end
 end

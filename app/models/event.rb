@@ -2,17 +2,17 @@
 #
 # Table name: events
 #
-#  id                :integer          not null, primary key
-#  name              :string(255)
-#  location_and_date :string(255)
-#  created_at        :datetime
-#  updated_at        :datetime
-#  price_table_link  :string(255)
 #  allow_voting      :boolean
 #  attendance_limit  :integer
-#  full_price        :decimal(10, )
-#  start_date        :datetime
+#  created_at        :datetime
 #  end_date          :datetime
+#  full_price        :decimal(10, )
+#  id                :integer          not null, primary key
+#  location_and_date :string(255)
+#  name              :string(255)
+#  price_table_link  :string(255)
+#  start_date        :datetime
+#  updated_at        :datetime
 #
 
 class Event < ActiveRecord::Base
@@ -21,6 +21,8 @@ class Event < ActiveRecord::Base
   has_many :registration_quotas
 
   has_many :registration_groups
+
+  has_and_belongs_to_many :organizers, class_name: 'User'
 
   validates :start_date, :end_date, :full_price, :name, presence: true
 

@@ -35,3 +35,6 @@ Metrics/LineLength:
   # contaning a URI to be longer than Max.
   AllowURI: true
   Enabled: false # 263 violations
+
+Rails/HasAndBelongsToMany:
+  Enabled: false

@@ -2,31 +2,35 @@
 #
 # Table name: users
 #
-#  id                    :integer          not null, primary key
-#  first_name            :string(255)
-#  last_name             :string(255)
+#  address               :string(255)
+#  badge_name            :string(255)
+#  city                  :string(255)
+#  country               :string(255)
+#  cpf                   :string(255)
+#  created_at            :datetime
+#  default_locale        :string(255)      default("pt")
 #  email                 :string(255)
+#  first_name            :string(255)
+#  gender                :string(255)
+#  id                    :integer          not null, primary key
+#  last_name             :string(255)
+#  neighbourhood         :string(255)
 #  organization          :string(255)
 #  phone                 :string(255)
-#  country               :string(255)
-#  state                 :string(255)
-#  city                  :string(255)
-#  badge_name            :string(255)
-#  cpf                   :string(255)
-#  gender                :string(255)
-#  twitter_user          :string(255)
-#  address               :string(255)
-#  neighbourhood         :string(255)
-#  zipcode               :string(255)
-#  roles_mask            :integer
-#  default_locale        :string(255)      default("pt")
-#  created_at            :datetime
-#  updated_at            :datetime
 #  registration_group_id :integer
+#  roles_mask            :integer
+#  state                 :string(255)
+#  twitter_user          :string(255)
+#  updated_at            :datetime
+#  zipcode               :string(255)
 #
 # Indexes
 #
 #  fk_rails_ebe9fba698  (registration_group_id)
+#
+# Foreign Keys
+#
+#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id)
 #
 
 require File.join(Rails.root, 'lib/authorization.rb')
@@ -50,6 +54,8 @@ class User < ActiveRecord::Base
   has_many :led_groups, class_name: 'RegistrationGroup', inverse_of: :leader, foreign_key: :leader_id
 
   has_many :invoices
+
+  has_and_belongs_to_many :organized_events, class_name: 'Event'
 
   validates :default_locale, inclusion: %w(en pt)
   validates :first_name, :last_name, presence: true, length: { maximum: 100 }

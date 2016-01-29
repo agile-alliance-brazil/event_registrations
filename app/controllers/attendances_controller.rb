@@ -57,7 +57,7 @@ class AttendancesController < ApplicationController
   end
 
   def search
-    @attendances_list = event_for_index.attendances.search_for_list(params[:search], statuses_params)
+    @attendances_list = AttendanceRepository.instance.search_for_list(event_for_index, params[:search], statuses_params)
 
     respond_to do |format|
       format.js {}

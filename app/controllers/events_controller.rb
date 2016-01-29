@@ -9,7 +9,7 @@ class EventsController < ApplicationController
   end
 
   def show
-    @last_attendance_for_user = @event.attendances_for(current_user).last if current_user.present?
+    @last_attendance_for_user = AttendanceRepository.instance.attendances_for(@event, current_user).last if current_user.present?
   end
 
   def list_archived

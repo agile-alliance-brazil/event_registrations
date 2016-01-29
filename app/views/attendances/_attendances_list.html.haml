@@ -10,7 +10,7 @@
     %th= t('formtastic.labels.attendance.registration_date')
     %th= t('formtastic.labels.attendance.registration_value')
     %th= t('formtastic.labels.attendance.status')
-    %th= t('formtastic.labels.attendance.actions')
+    %th= t('general.actions.title')
 
     - attendances_list.each do |attendance|
       = render partial: 'attendances/attendance', locals: { attendance: attendance }

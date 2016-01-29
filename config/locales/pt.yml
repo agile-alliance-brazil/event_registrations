@@ -208,7 +208,6 @@ pt:
         cancelled: 'Total canceladas'
         registration_total: 'Total de inscrições'
         total_without_cancelled: 'Total sem as canceladas'
-        actions: 'Ações'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"
@@ -218,6 +217,7 @@ pt:
         first_name: "Nome"
         last_name: "Sobrenome"
         email: "Email"
+        roles: "Papeis"
         phone: "Telefone para contato"
         country: "País"
         state: "Estado"
@@ -225,6 +225,7 @@ pt:
         organization: "Organização"
         twitter_user: "Usuário no Twitter"
         default_locale: "Idioma preferido"
+        name: "Nome"
       transfer:
         origin_id: "Origem"
         destination_id: "Destino"
@@ -305,6 +306,7 @@ pt:
     untitled: 'Untitled'
 
     archived_events: "Eventos arquivados"
+    users_list: "Lista dos Usuários"
   actions:
     edit: "Editar"
     destroy: "Remover"
@@ -538,3 +540,10 @@ pt:
   attendances:
     reports:
       title: "Relatórios"
+    index:
+      title: "Resumo"
+      active: "Active attendances"
+  users:
+    index:
+      search:
+        placeholder: "Buscar por nome e email"

@@ -24,4 +24,7 @@ FactoryGirl.define do
   factory :admin, parent: :user do
     roles [:admin]
   end
+  factory :organizer, parent: :user do
+    roles [:organizer]
+  end
 end

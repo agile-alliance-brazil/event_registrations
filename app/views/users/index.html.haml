@@ -1,0 +1,11 @@
+%div.form-group
+  %div
+    = text_field_tag :search, params[:search], placeholder: t('users.index.search.placeholder'), size: 50, class: 'form-control'
+  %div
+    = link_to 'Search', '#', onclick: 'submitSearch();', class: 'btn btn-primary search-button'
+
+%hr
+
+= render partial: 'users_list'
+
+= javascript_include_tag 'users/index'

@@ -1,0 +1,9 @@
+%div{id: 'users_list'}
+  %table.table
+    %th= t('formtastic.labels.user.name')
+    %th= t('formtastic.labels.user.email')
+    %th= t('formtastic.labels.user.roles')
+    %th= t('general.actions.title')
+
+    - @users_list.each do |user|
+      = render 'user', user: user

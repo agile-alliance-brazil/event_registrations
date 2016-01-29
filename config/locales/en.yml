@@ -91,6 +91,7 @@ en:
         first_name: "First name"
         last_name: "Last name"
         email: "E-mail address"
+        roles: "Roles"
         phone: "Phone"
         country: "Country"
         state: "State"
@@ -98,6 +99,7 @@ en:
         organization: "Organization"
         twitter_user: "Twitter username"
         default_locale: "Preferred language"
+        name: "Name"
       transfer:
         origin_id: "Origin"
         destination_id: "Destination"
@@ -177,6 +179,7 @@ en:
     untitled: 'Sem título'
 
     archived_events: "Archived events"
+    users_list: "Users list"
   actions:
     edit: "Edit"
     destroy: "Remove"
@@ -404,3 +407,10 @@ en:
   attendances:
     reports:
       title: "Reports"
+    index:
+      title: "Resumo"
+      active: "Inscritos ativos"
+  users:
+    index:
+      search:
+        placeholder: "Search in name and email"

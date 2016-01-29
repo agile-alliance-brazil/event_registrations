@@ -1,0 +1,5 @@
+function submitSearch() {
+  var searchText = $('#search').val();
+
+  $.get('/users', { search: searchText } );
+}

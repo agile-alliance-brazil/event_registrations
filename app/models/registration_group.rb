@@ -2,23 +2,27 @@
 #
 # Table name: registration_groups
 #
-#  id                 :integer          not null, primary key
-#  event_id           :integer
-#  name               :string(255)
-#  capacity           :integer
-#  discount           :integer
-#  token              :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
-#  leader_id          :integer
-#  invoice_id         :integer
-#  minimum_size       :integer
 #  amount             :decimal(10, )
 #  automatic_approval :boolean          default(FALSE)
+#  capacity           :integer
+#  created_at         :datetime
+#  discount           :integer
+#  event_id           :integer
+#  id                 :integer          not null, primary key
+#  invoice_id         :integer
+#  leader_id          :integer
+#  minimum_size       :integer
+#  name               :string(255)
+#  token              :string(255)
+#  updated_at         :datetime
 #
 # Indexes
 #
 #  fk_rails_9544e3707e  (invoice_id)
+#
+# Foreign Keys
+#
+#  fk_rails_9544e3707e  (invoice_id => invoices.id)
 #
 
 class RegistrationGroup < ActiveRecord::Base

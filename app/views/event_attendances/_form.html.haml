@@ -4,7 +4,7 @@
   %label Token
   = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), size: 100
 
-- if can? :payment_type, Attendance
+- if can? :update, @event
   %div.payment-type
     %label Choose the payment type
     = select_tag :payment_type, options_for_select(Invoice::TYPES, @attendance.payment_type)

@@ -6,12 +6,15 @@ Current::Application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
 
-  resources :users, only: %i(show edit update)
+  resources :users, only: %i(show edit update index) do
+    member do
+      patch :toggle_organizer
+      patch :toggle_admin
+    end
+  end
 
   resources :events, only: %i(index show new create destroy) do
-    collection do
-      get :list_archived
-    end
+    collection { get :list_archived }
 
     resources :attendances, only: %i(new create edit update), controller: :event_attendances do
       collection do
@@ -24,15 +27,11 @@ Current::Application.routes.draw do
       end
     end
     resources :registration_groups, only: %i(index destroy show create) do
-      member do
-        put :renew_invoice
-      end
+      member { put :renew_invoice }
     end
 
     resources :payments, only: :checkout do
-      member do
-        post :checkout
-      end
+      member { post :checkout }
     end
 
     resources :registration_periods, only: [:new, :create, :destroy]
@@ -50,9 +49,7 @@ Current::Application.routes.draw do
       put :recover_it
     end
 
-    collection do
-      get :search
-    end
+    collection { get :search }
 
     resources :transfers, only: :new
   end

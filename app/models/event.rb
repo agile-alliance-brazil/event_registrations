@@ -26,8 +26,6 @@ class Event < ActiveRecord::Base
 
   validates :start_date, :end_date, :full_price, :name, presence: true
 
-  delegate :attendances_for, to: :attendances
-
   scope :active_for, ->(date) { where('end_date > ?', date) }
   scope :not_started, -> { where('start_date > ?', Time.zone.today) }
   scope :ended, -> { where('end_date < ?', Time.zone.today) }

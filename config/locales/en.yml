@@ -407,9 +407,13 @@ en:
   attendances:
     reports:
       title: "Reports"
+      by_state:
+        state: "State"
+      general:
+        total: "Attendances total"
     index:
       title: "Resumo"
-      active: "Inscritos ativos"
+      active: "Active attentances"
   users:
     index:
       search:

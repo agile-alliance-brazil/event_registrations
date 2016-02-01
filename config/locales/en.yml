@@ -321,7 +321,7 @@ en:
       attendance_limit: "Max capacity: %{value}"
       full_price: "Full price: %{value}"
   registration_group:
-    list: 'Groups list of %{event_name}'
+    list: 'Group list: '
     destroy_confirmation: "Are you sure you want to delete the group named '%{registration_group}'?\nAll registrations associated to this group will be automatically canceled."
     destroy:
       success: 'Group deleted.'
@@ -333,6 +333,8 @@ en:
       attendances:
         one: '1 attendance'
         other: '%{count} attendances'
+    new:
+      title: "New group"
   invoice:
     not_found: 'Invoice not found'
 
@@ -380,6 +382,11 @@ en:
     show:
       no_periods_message: "There is no periods registered for this event."
       no_quotas_message: "There is no quotas registered for this event."
+      user_registration: "Your registration"
+      new_registration: "Register"
+      register_other: "Register other person"
+      registrations_ended: "Registrations are closed.  The event has reached the maximum number of participants."
+      no_groups_message: "There is no groups registered to this event."
     no_limit: "This event has no capacity limit"
     delete:
       button: "Delete event"

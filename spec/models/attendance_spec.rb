@@ -54,7 +54,7 @@ describe Attendance, type: :model do
     let!(:event) { FactoryGirl.create :event }
     describe '#update_group_invoice' do
       context 'having a registration group' do
-        let(:group) { RegistrationGroup.create! event: event }
+        let(:group) { FactoryGirl.create :registration_group, event: event }
         let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 50.00 }
         it 'updates the group invoice when add attendace to the group' do
           RegistrationGroup.any_instance.expects(:update_invoice).once
@@ -594,7 +594,7 @@ describe Attendance, type: :model do
     let(:event) { FactoryGirl.create(:event) }
 
     context 'when belongs to a group' do
-      let(:group) { RegistrationGroup.create! event: event }
+      let(:group) { FactoryGirl.create :registration_group, event: event }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
 
       it { expect(attendance.grouped?).to be_truthy }

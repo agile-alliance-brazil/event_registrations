@@ -1,26 +1,29 @@
 %section{class: 'event-details-box'}
-  %h1= @event.name
+  %h3= @event.name
   - if @event.start_date.present? && @event.end_date.present?
     %h4= "#{l(@event.start_date, format: :date)} #{t('title.until')} #{l(@event.end_date, format: :date)}"
 
-  %h4= "#{t('event.show.attendance_limit', value: @event.attendance_limit || t('events.no_limit'))}"
-  %h4= "#{t('event.show.full_price', value: number_to_currency(@event.full_price))}"
+  %div= "#{t('event.show.attendance_limit', value: @event.attendance_limit || t('events.no_limit'))}"
+  %div= "#{t('event.show.full_price', value: number_to_currency(@event.full_price))}"
+
+  %div{class: 'event-links'}
+    = render partial: 'registrations', locals: { event: @event }
 
 %hr
 
 %section
   %div
     = render partial: 'registration_periods/periods_list', locals: { event: @event }
-    = link_to t('registration_periods.new.title'), new_event_registration_period_path(@event), class: 'btn btn-primary'
+    = link_to t('registration_periods.new.title'), new_event_registration_period_path(@event), class: 'btn-sm btn-primary'
 
-  %hr
+%hr
 
   %div
     = render partial: 'registration_quotas/quotas_list', locals: { event: @event }
-    = link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn btn-primary'
+    = link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn-sm btn-primary'
 
-  %hr
+%hr
 
   %div
-    %h4= t('actions.registration')
-    = render partial: 'registrations', locals: { event: @event }
+    = render partial: 'registration_groups/groups_list', locals: { event: @event }
+    = link_to t('registration_group.new.title'), event_registration_groups_path(@event), class: 'btn-sm btn-primary'

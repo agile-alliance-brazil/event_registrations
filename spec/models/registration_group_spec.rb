@@ -1,6 +1,6 @@
 describe RegistrationGroup, type: :model do
   let(:event) { FactoryGirl.create :event }
-  let(:group) { RegistrationGroup.create! event: event }
+  let(:group) { FactoryGirl.create :registration_group, event: event }
 
   context 'associations' do
     it { is_expected.to have_many :attendances }
@@ -12,11 +12,11 @@ describe RegistrationGroup, type: :model do
 
   context 'validations' do
     it { is_expected.to validate_presence_of :event }
+    it { is_expected.to validate_presence_of :name }
   end
 
   describe '#destroy' do
     context 'mark attendances as cancelled' do
-      let(:group) { RegistrationGroup.create! event: event }
       before do
         2.times { FactoryGirl.create :attendance, registration_group: group }
         group.destroy
@@ -29,20 +29,20 @@ describe RegistrationGroup, type: :model do
 
   describe '#generate_token' do
     let(:event) { FactoryGirl.create :event }
-    let(:group) { RegistrationGroup.create! event: event }
+    let(:group) { FactoryGirl.create :registration_group, event: event }
     before { SecureRandom.expects(:hex).returns('eb693ec8252cd630102fd0d0fb7c3485') }
     it { expect(group.token).to eq 'eb693ec8252cd630102fd0d0fb7c3485' }
   end
 
   describe '#qtd_attendances' do
     context 'just pending attendances' do
-      let(:group) { RegistrationGroup.create! event: event }
+      let(:group) { FactoryGirl.create :registration_group, event: event }
       before { 2.times { FactoryGirl.create :attendance, registration_group: group } }
       it { expect(group.qtd_attendances).to eq 2 }
     end
 
     context 'with cancelled attendances' do
-      let(:group) { RegistrationGroup.create! event: event }
+      let(:group) { FactoryGirl.create :registration_group, event: event }
       before do
         2.times { @last_attendance = FactoryGirl.create(:attendance, registration_group: group) }
         @last_attendance.cancel
@@ -52,7 +52,7 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#total_price' do
-    let(:group) { RegistrationGroup.create! event: event }
+    let(:group) { FactoryGirl.create :registration_group, event: event }
 
     context 'with one attendance and 20% discount over full price' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
@@ -76,7 +76,7 @@ describe RegistrationGroup, type: :model do
 
   describe '#price?' do
     let!(:period) { RegistrationPeriod.create(event: event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
-    let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+    let(:group) { FactoryGirl.create :registration_group, event: event, discount: 20 }
 
     context 'without attendances' do
       it { expect(group.price?).to be_falsey }
@@ -84,7 +84,7 @@ describe RegistrationGroup, type: :model do
 
     context 'with attendances' do
       context 'and no value' do
-        let(:group) { RegistrationGroup.create! event: event }
+        let(:group) { FactoryGirl.create :registration_group, event: event }
         let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, registration_value: 0) }
         it { expect(group.price?).to be_falsey }
       end
@@ -97,7 +97,7 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#update_invoice' do
-    let(:group) { RegistrationGroup.create! event: event, discount: 100 }
+    let(:group) { FactoryGirl.create :registration_group, event: event, discount: 100 }
     context 'with a pending invoice' do
       let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 100.00 }
       it 'will change the invoice amount' do
@@ -118,7 +118,7 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#update_invoice' do
-    let(:group) { RegistrationGroup.create! event: event, discount: 100 }
+    let(:group) { FactoryGirl.create :registration_group, event: event, discount: 100 }
     context 'with a pending invoice' do
       let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, amount: 100.00 }
       it 'will change the invoice amount' do
@@ -139,7 +139,7 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#accept_members?' do
-    let(:group) { RegistrationGroup.create! event: event, discount: 100 }
+    let(:group) { FactoryGirl.create :registration_group, event: event, discount: 100 }
 
     context 'with a pending invoice' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
@@ -150,13 +150,13 @@ describe RegistrationGroup, type: :model do
   describe '#payment_pendent?' do
     context 'consistent data' do
       context 'with one pendent' do
-        let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+        let(:group) { FactoryGirl.create :registration_group, event: event, discount: 20 }
         let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
         it { expect(group.paid?).to be_falsey }
       end
 
       context 'with one paid' do
-        let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+        let(:group) { FactoryGirl.create :registration_group, event: event, discount: 20 }
         let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'paid') }
         it { expect(group.paid?).to be_truthy }
       end
@@ -164,7 +164,7 @@ describe RegistrationGroup, type: :model do
 
     context 'with inconsistent data' do
       context 'with one paid and one pendent' do
-        let(:group) { RegistrationGroup.create! event: event, discount: 20 }
+        let(:group) { FactoryGirl.create :registration_group, event: event, discount: 20 }
         let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'paid') }
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
         it { expect(group.paid?).to be_truthy }
@@ -175,12 +175,12 @@ describe RegistrationGroup, type: :model do
   describe '#leader_name' do
     let(:user) { FactoryGirl.create :user }
     context 'with a defined leader' do
-      let(:group) { RegistrationGroup.create! event: event, discount: 20, leader: user }
+      let(:group) { FactoryGirl.create :registration_group, event: event, discount: 20, leader: user }
       it { expect(group.leader_name).to eq user.full_name }
     end
 
     context 'with a defined leader' do
-      let(:group) { RegistrationGroup.create! event: event }
+      let(:group) { FactoryGirl.create :registration_group, event: event }
       it { expect(group.leader_name).to eq nil }
     end
   end

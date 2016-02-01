@@ -32,7 +32,7 @@ class RegistrationGroup < ActiveRecord::Base
   has_many :attendances
   has_many :invoices, as: :invoiceable
 
-  validates :event, presence: true
+  validates :event, :name, presence: true
 
   before_create :generate_token
 

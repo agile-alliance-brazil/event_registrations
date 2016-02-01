@@ -444,20 +444,14 @@ pt:
     not_found: 'Evento não encontrado.'
     no_upcoming: 'Sem eventos cadastrados'
     show:
-      attendance_limit: "Capacidade máxima: %{value}"
+      attendance_limit: "Lotação: %{value} pessoas"
       full_price: "Preço cheio: %{value}"
   registration_group:
-    list: 'Lista dos grupos de %{event_name}'
+    list: 'Lista dos grupos: '
     destroy:
       success: 'Grupo excluído com sucesso.'
       error: 'Falha ao excluir o grupo.'
-
-  registration_group:
-    list: 'Lista dos grupos de %{event_name}'
     destroy_confirmation: "Tem certeza que deseja remover o grupo '%{registration_group}'?\nTodas as inscrições associadas a este grupo serão automaticamente canceladas."
-    destroy:
-      success: 'Grupo excluído com sucesso.'
-      error: 'Falha ao excluir o grupo.'
     show:
       title: 'Detalhes para o grupo %{group_name}'
       discount: 'Desconto: %{group_discount}%'
@@ -466,6 +460,8 @@ pt:
         zero: 'nenhum congressita'
         one: '1 congressista'
         other: '%{count} congressistas'
+    new:
+      title: "Novo grupo"
   invoice:
     not_found: 'Fatura não encontrada'
 
@@ -513,6 +509,11 @@ pt:
     show:
       no_periods_message: "Não existem períodos registrados para esse evento."
       no_quotas_message: "Não existem cotas registradas para esse evento."
+      user_registration: "Sua inscrição"
+      new_registration: "Inscrever-se"
+      register_other: "Inscrever outra pessoa"
+      registrations_ended: "Inscrições encerradas. O evento chegou no limite máximo de participantes."
+      no_groups_message: "Não existem grupos registrados para este evento."
     no_limit: "Este evento não tem limite de capacidade"
     delete:
       button: "Apagar evento"

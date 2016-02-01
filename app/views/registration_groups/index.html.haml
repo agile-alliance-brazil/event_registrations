@@ -1,34 +1,7 @@
-= semantic_form_for([@event, @new_group]) do |form|
-  = form.input :name, required: true, input_html: { tabindex: autotab }
-  = form.input :discount, required: true, input_html: { tabindex: autotab }
-  = form.input :amount, required: true, input_html: { tabindex: autotab }
-  = form.input :minimum_size, required: true, input_html: { tabindex: autotab }
-  = form.input :minimum_size, required: true, input_html: { tabindex: autotab }
-  = form.input :automatic_approval, default: false
+%h3
+  = t('registration_group.list')
+  = link_to @event.name, @event
 
-  = form.actions do
-    = form.action(:submit, label: :new_group, button_html: { tabindex: autotab })
+= render :partial => 'form'
 
-- title t('registration_group.list', event_name: @event.name)
-
-%table.table
-  %th= t('formtastic.labels.registration_group.name')
-  %th= t('formtastic.labels.registration_group.created_at')
-  %th= t('formtastic.labels.registration_group.leader')
-  %th= t('formtastic.labels.registration_group.discount')
-  %th= t('formtastic.labels.registration_group.minimum_size')
-  %th= t('formtastic.labels.registration_group.amount')
-  %th= t('formtastic.labels.registration_group.token')
-  %th= t('formtastic.labels.registration_group.qtd_attendances')
-  %th= t('formtastic.labels.registration_group.index.actions')
-  - @groups.each do |group|
-    %tr
-      %td= link_to group.name, event_registration_group_path(@event, group)
-      %td= l group.created_at.to_date
-      %td= group.leader_name
-      %td= group.discount
-      %td= group.minimum_size
-      %td= number_with_precision(group.amount, precision: 2)
-      %td= group.token
-      %td= group.qtd_attendances
-      %td= link_to t('actions.destroy'), event_registration_group_path(@event, group), method: :delete, class: 'remove', data: { confirm: t('registration_group.destroy_confirmation', registration_group: group.name ) }
+= render partial: 'groups_list', locals: { event: @event }

@@ -3,9 +3,9 @@
 = semantic_form_for([@event, @registration_period]) do |form|
   = form.inputs :event_basics do
     = form.input :title, required: true, input_html: { tabindex: autotab }
-    = form.input :price, as: :number, required: true
-    = form.input :start_at, as: :string, required: true, input_html: { class: 'datepicker' }
-    = form.input :end_at, as: :string, required: true, input_html: { class: 'datepicker' }
+    = form.input :price, as: :number, required: true, input_html: { tabindex: autotab }
+    = form.input :start_at, as: :string, required: true, input_html: { tabindex: autotab, class: 'datepicker' }
+    = form.input :end_at, as: :string, required: true, input_html: { tabindex: autotab, class: 'datepicker' }
 
   = form.actions do
     = form.action(:submit, label: t('registration_periods.new.submit'), button_html: { tabindex: autotab, class: 'col-lg-2 btn btn-success' })

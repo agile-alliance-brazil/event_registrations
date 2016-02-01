@@ -540,6 +540,10 @@ pt:
   attendances:
     reports:
       title: "Relatórios"
+      by_state:
+        state: "Estado"
+      general:
+        total: "Total de inscritos"
     index:
       title: "Resumo"
       active: "Active attendances"

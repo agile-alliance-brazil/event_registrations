@@ -8,8 +8,11 @@
     = form.input :end_at, as: :string, required: true, input_html: { tabindex: autotab, class: 'datepicker' }
 
   = form.actions do
-    = form.action(:submit, label: t('registration_periods.new.submit'), button_html: { tabindex: autotab, class: 'col-lg-2 btn btn-success' })
-    = form.action(:cancel, label: t('commons.button.cancel'), url: event_path(@event), button_html: { class: 'col-lg-2 cancel btn btn-danger' })
+    %div{class: 'row'}
+      %span{class: 'col-xs-2'}
+        = form.action(:submit, label: t('registration_periods.new.submit'), button_html: { tabindex: autotab, class: 'btn btn-success' })
+      %span{class: 'col-xs-2'}
+        = form.action(:cancel, label: t('commons.button.cancel'), url: event_path(@event), button_html: { class: 'btn btn-danger' })
 
 %hr
 

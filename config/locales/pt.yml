@@ -510,7 +510,7 @@ pt:
       no_periods_message: "Não existem períodos registrados para esse evento."
       no_quotas_message: "Não existem cotas registradas para esse evento."
       user_registration: "Sua inscrição"
-      new_registration: "Inscrever-se"
+      new_registration: "Inscreva-se"
       register_other: "Inscrever outra pessoa"
       registrations_ended: "Inscrições encerradas. O evento chegou no limite máximo de participantes."
       no_groups_message: "Não existem grupos registrados para este evento."
@@ -552,3 +552,5 @@ pt:
     index:
       search:
         placeholder: "Buscar por nome e email"
+      role:
+        placeholder: "Selecione uma role..."

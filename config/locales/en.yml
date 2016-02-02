@@ -425,3 +425,5 @@ en:
     index:
       search:
         placeholder: "Search in name and email"
+      role:
+        placeholder: "Select a role..."

@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users_list = UserRepository.instance.search_engine(params[:search])
+    @users_list = UserRepository.instance.search_engine(params[:role_index], params[:search])
     respond_to do |format|
       format.js { render 'users/index.js.haml' }
       format.html { render :index }

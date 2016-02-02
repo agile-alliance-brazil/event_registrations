@@ -2,7 +2,7 @@
   %span= link_to t('events.show.user_registration'), attendance_path(@last_attendance_for_user), class: 'btn-sm btn-primary'
 
 - if current_user.try(:organizer?) || (event.can_add_attendance? && current_user.try(:registrations_for_event, event).blank?)
-  = link_to t('events.show.new_registration'), new_event_attendance_path(event.id), class: 'btn-sm btn-primary'
+  = link_to t('events.show.new_registration'), new_event_attendance_path(event), class: 'btn-sm btn-primary'
 - elsif event.can_add_attendance?
   = link_to t('events.show.register_other'), new_event_attendance_path(event), class: 'btn-sm btn-primary'
 - else

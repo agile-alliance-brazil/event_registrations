@@ -6,7 +6,7 @@
   %div= "#{t('event.show.attendance_limit', value: @event.attendance_limit || t('events.no_limit'))}"
   %div= "#{t('event.show.full_price', value: number_to_currency(@event.full_price))}"
 
-  %div{class: 'event-links'}
+  %div{class: 'register-button'}
     = render partial: 'registrations', locals: { event: @event }
 
 %hr

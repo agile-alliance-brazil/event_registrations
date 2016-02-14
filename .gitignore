@@ -20,8 +20,8 @@
 *.sassc
 .sass-cache
 capybara-*.html
-/vendor/bundle
-/vendor/cache
+/vendor/bundle/*
+/vendor/cache/*
 /public/system/*
 /coverage/
 /spec/tmp/*

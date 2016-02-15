@@ -1,0 +1,11 @@
+- if event.organizers.present?
+  %h4= t('organizers.list')
+  %table.table
+    %th= t('formtastic.labels.user.name')
+    %th= t('formtastic.labels.user.email')
+    - event.organizers.each do |user|
+      %tr
+        %td= link_to "#{user.last_name}, #{user.first_name}", user_path(user), method: :get
+        %td= user.email
+- else
+  %h5= t('events.show.no_organizers_message')

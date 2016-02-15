@@ -43,6 +43,8 @@ en:
         placeholder: 'search by ID, name, organization or email'
       token:
         placeholder: 'to register within a group, please enter the token provided by the event administration'
+      email:
+        placeholder: "Put the user's email"
     labels:
       attendance:
         id: "Registration Number"
@@ -387,6 +389,7 @@ en:
       register_other: "Register other person"
       registrations_ended: "Registrations are closed.  The event has reached the maximum number of participants."
       no_groups_message: "There is no groups registered to this event."
+      no_organizers_message: "There is no organizers to this event."
     no_limit: "This event has no capacity limit"
     delete:
       button: "Delete event"
@@ -427,3 +430,10 @@ en:
         placeholder: "Search in name and email"
       role:
         placeholder: "Select a role..."
+  reistration_groups:
+    list: "Groups for registrations"
+  organizers:
+    list: "Organizers list"
+  organizer:
+    new:
+      title: "New organizer"

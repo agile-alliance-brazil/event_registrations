@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   layout 'eventless', only: %i(index list_archived)
 
-  before_action :find_event, only: [:show, :destroy]
+  before_action :find_event, only: [:show, :destroy, :add_organizer]
   skip_before_action :authenticate_user!, :authorize_action, only: [:index, :show]
 
   def index
@@ -34,6 +34,19 @@ class EventsController < ApplicationController
     @event.destroy
     respond_to do |format|
       format.html { redirect_to events_path }
+    end
+  end
+
+  def add_organizer
+    user = User.where(email: params['email']).first
+    if user.present? && (user.organizer? || user.admin?)
+      @event.organizers << user unless @event.organizers.include?(user)
+      @event.save
+      respond_to do |format|
+        format.js {}
+      end
+    else
+      not_found
     end
   end
 

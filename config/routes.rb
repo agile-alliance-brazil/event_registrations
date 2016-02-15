@@ -14,7 +14,13 @@ Current::Application.routes.draw do
   end
 
   resources :events, only: %i(index show new create destroy) do
-    collection { get :list_archived }
+    collection do
+      get :list_archived
+    end
+
+    member do
+      patch :add_organizer
+    end
 
     resources :attendances, only: %i(new create edit update), controller: :event_attendances do
       collection do

@@ -170,6 +170,8 @@ pt:
         placeholder: 'procurar por ID, nome, organização ou email'
       token:
         placeholder: 'para se registrar através de um grupo, por favor entre com o token fornecido pela administração do evento'
+      email:
+        placeholder: "Entre com o email do usuário"
     labels:
       attendance:
         id: "Número de inscrição"
@@ -514,6 +516,7 @@ pt:
       register_other: "Inscrever outra pessoa"
       registrations_ended: "Inscrições encerradas. O evento chegou no limite máximo de participantes."
       no_groups_message: "Não existem grupos registrados para este evento."
+      no_organizers_message: "Não existem organizadores para este evento."
     no_limit: "Este evento não tem limite de capacidade"
     delete:
       button: "Apagar evento"
@@ -554,3 +557,10 @@ pt:
         placeholder: "Buscar por nome e email"
       role:
         placeholder: "Selecione uma role..."
+  reistration_groups:
+    list: "Grupos para inscrição"
+  organizers:
+    list: "Organizadores do evento"
+  organizer:
+    new:
+      title: "Novo organizador"

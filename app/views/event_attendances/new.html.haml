@@ -1,6 +1,4 @@
-
-
-- title t('title.registration')
+- title t('title.registration', event_name: @event.name)
 .auto_focus
 
 = semantic_form_for([@event, @attendance]) do |form|

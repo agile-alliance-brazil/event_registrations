@@ -1,10 +1,12 @@
-%tr{ id: "user_#{user.id}" }
-  %td= link_to "#{user.last_name}, #{user.first_name}", user_path(user), method: :get
-  %td= user.email
-  %td{class: 'centered'}
+%div{id: "user_#{user.id}", class: 'row'}
+  %div{class: 'col-lg-2 line'}
+    = link_to "#{user.last_name}, #{user.first_name}", user_path(user), method: :get
+  %div{class: 'col-lg-4 line'}
+    = user.email
+  %div{class: 'col-lg-3 centered line'}
     - user.roles.each do |role|
       = link_to "x #{role}", self.send("toggle_#{role}_user_path", user), class: 'btn-sm btn-primary', remote: true, method: :patch
-  %td{class: 'centered'}
+  %div{class: 'col-lg-3 centered line'}
     - unless user.admin?
       = link_to '+ admin', toggle_admin_user_path(user), class: 'btn-sm btn-danger', remote: true, method: :patch
     - unless user.organizer?

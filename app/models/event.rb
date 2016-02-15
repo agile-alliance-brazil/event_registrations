@@ -8,7 +8,9 @@
 #  end_date          :datetime
 #  full_price        :decimal(10, )
 #  id                :integer          not null, primary key
+#  link              :string(255)
 #  location_and_date :string(255)
+#  logo              :string(255)
 #  name              :string(255)
 #  price_table_link  :string(255)
 #  start_date        :datetime

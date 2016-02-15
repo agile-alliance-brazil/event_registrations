@@ -11,6 +11,8 @@
     = form.input :end_date, as: :string, input_html: { class: 'datepicker' }
     = form.input :full_price
     = form.input :price_table_link, required: false
+    = form.input :link, required: false
+    = form.input :logo, required: false
 
   = form.actions do
     = form.action(:submit, label: t('events.new.submit'), button_html: { tabindex: autotab, class: 'col-lg-2 btn btn-success' })

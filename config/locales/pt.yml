@@ -294,7 +294,7 @@ pt:
 
   # Mensagens customizadas
   title:
-    registration: "Nova inscrição"
+    registration: "Nova inscrição para %{event_name}"
     transfer: "Transferir inscrição"
     attendance: "Detalhes da inscrição"
     attendances_list: "Lista dos inscritos"

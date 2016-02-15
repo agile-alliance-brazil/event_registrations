@@ -167,7 +167,7 @@ en:
 
   # Custom messages
   title:
-    registration: "New registration"
+    registration: "New registration to %{event_name}"
     transfer: "Transfer registration"
     attendance: "Registration details"
     attendances_list: "Attendances list"

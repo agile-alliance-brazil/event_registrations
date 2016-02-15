@@ -18,8 +18,12 @@
       = render partial: 'layouts/aa'
       .container
         %div.logo
-          = link_to 'http://agilebrazil.com' do
-            = image_tag 'agile-brazil-2015-logo.png'
+          - if @event.present?
+            = link_to @event.link do
+              = image_tag @event.logo
+          - else
+            = link_to 'http://agilebrazil.com' do
+              = image_tag 'agile-brazil-2015-logo.png'
         = render partial: 'layouts/menu'
 
     #content

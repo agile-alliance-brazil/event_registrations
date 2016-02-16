@@ -133,4 +133,19 @@ describe AttendanceRepository, type: :repository do
     let!(:out) { FactoryGirl.create(:attendance, user: user) }
     it { expect(AttendanceRepository.instance.attendances_for(event, user)).to eq [attendance] }
   end
+
+  describe '#for_event' do
+    let(:user) { FactoryGirl.create :user }
+    let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
+    let!(:out) { FactoryGirl.create(:attendance, user: user) }
+    it { expect(AttendanceRepository.instance.for_event(event)).to eq [attendance] }
+  end
+
+  describe '_older_than' do
+    let(:user) { FactoryGirl.create :user }
+    let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user, registration_date: 2.days.ago) }
+    let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, user: user, registration_date: 4.days.ago) }
+    it { expect(AttendanceRepository.instance.send(:older_than)).to match_array [attendance, other_attendance] }
+    it { expect(AttendanceRepository.instance.send(:older_than, 3.days.ago)).to eq [other_attendance] }
+  end
 end

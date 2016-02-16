@@ -75,9 +75,6 @@ describe Attendance, type: :model do
     context 'with five attendances created' do
       before { 5.times { FactoryGirl.create(:attendance) } }
 
-      it { expect(Attendance.for_event(Attendance.first.event)).to eq([Attendance.first]) }
-      it { expect(Attendance.pending).to include(Attendance.first) }
-
       it 'has scope accepted' do
         Attendance.first.tap(&:accept).save
         expect(Attendance.accepted).to include Attendance.first
@@ -91,11 +88,6 @@ describe Attendance, type: :model do
       it 'has scope active that excludes cancelled attendances' do
         Attendance.first.tap(&:cancel).save
         expect(Attendance.active).not_to include(Attendance.first)
-      end
-
-      it 'has scope older_than that selects old attendances' do
-        Attendance.first.tap { |a| a.registration_date = 10.days.ago }.save
-        expect(Attendance.older_than(5.days.ago)).to eq([Attendance.first])
       end
     end
 
@@ -614,37 +606,6 @@ describe Attendance, type: :model do
       before { attendance.advise! }
       it { expect(Attendance.last.advised).to be_truthy }
       it { expect(Attendance.last.advised_at).to be_within(30.seconds).of Time.zone.now }
-    end
-  end
-
-  describe '.to_csv' do
-    context 'with attendances' do
-      let(:event) { FactoryGirl.create :event }
-      let(:group) { FactoryGirl.create :registration_group, event: event, name: 'Group for to csv test' }
-      let!(:attendance) do
-        FactoryGirl.create(:attendance,
-                           event: event,
-                           status: :pending,
-                           first_name: 'bLa',
-                           registration_group: group)
-      end
-
-      let(:expected) do
-        title = "first_name,last_name,organization,email,payment_type,group_name,city,state,value\n"
-        body =
-          "#{attendance.first_name},"\
-          "#{attendance.last_name},"\
-          "#{attendance.organization},"\
-          "#{attendance.email},"\
-          "#{attendance.payment_type},"\
-          "#{attendance.group_name},"\
-          "#{attendance.city},"\
-          "#{attendance.state},"\
-          "#{attendance.registration_value}\n"
-        title + body
-      end
-      subject(:attendances_list) { Attendance.all }
-      it { expect(attendances_list.to_csv).to eq expected }
     end
   end
 

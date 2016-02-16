@@ -73,9 +73,7 @@ class Attendance < ActiveRecord::Base
 
   usar_como_cpf :cpf
 
-  scope :for_event, ->(e) { where(event_id: e.id) }
   scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show)) }
-  scope :older_than, ->(date) { where('registration_date <= (?)', date) }
 
   scope :last_biweekly_active, -> { active.where('created_at > ?', 15.days.ago) }
   scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
@@ -112,23 +110,6 @@ class Attendance < ActiveRecord::Base
   def due_date
     return event.start_date if !advised_due_date.present? || advised_due_date > event.start_date
     advised_due_date
-  end
-
-  def self.to_csv(options = {})
-    CSV.generate(options) do |csv|
-      csv << %i(first_name last_name organization email payment_type group_name city state value)
-      all.find_each do |attendance|
-        csv << [attendance.first_name,
-                attendance.last_name,
-                attendance.organization,
-                attendance.email,
-                attendance.payment_type,
-                attendance.group_name,
-                attendance.city,
-                attendance.state,
-                attendance.registration_value]
-      end
-    end
   end
 
   def free?

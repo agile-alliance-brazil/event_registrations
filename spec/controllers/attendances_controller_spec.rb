@@ -309,7 +309,7 @@ describe AttendancesController, type: :controller do
       before { get :search, event_id: event, paid: 'true', format: :csv }
       it 'returns the attendances in the csv format' do
         expected_disposition = 'attachment; filename="attendances_list.csv"'
-        expect(response.body).to eq Attendance.all.to_csv
+        expect(response.body).to eq AttendanceExportService.to_csv([other, attendance])
         expect(response.headers['Content-Disposition']).to eq expected_disposition
       end
     end

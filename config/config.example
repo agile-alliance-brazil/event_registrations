@@ -1,10 +1,10 @@
 # encoding: UTF-8
 ---
   ses:
-    access_key_id: your_aws_access_key_id
-    secret_access_key: your_aws_secret_access_key
-    from: no-reply@domain.com
-    server: email.eu-east-1.amazonaws.com
+    access_key_id: "your_aws_access_key_id"
+    secret_access_key: "your_aws_secret_access_key"
+    from: "no-reply@domain.com"
+    server: "email.us-east-1.amazonaws.com"
   host: localhost:3000
   organizer:
     name: Organizer

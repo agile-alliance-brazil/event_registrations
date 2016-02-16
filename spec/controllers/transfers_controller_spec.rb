@@ -1,6 +1,3 @@
-# encoding: UTF-8
-require 'spec_helper'
-
 describe TransfersController, type: :controller do
   let(:event) { FactoryGirl.create(:event) }
   let(:user) { FactoryGirl.create(:user) }
@@ -101,6 +98,7 @@ describe TransfersController, type: :controller do
 
   describe '#create' do
     let!(:origin) { FactoryGirl.create(:attendance, event: event, status: :paid, registration_value: 420) }
+    let!(:origin_invoice) { Invoice.from_attendance(origin) }
     let!(:destination) { FactoryGirl.create(:attendance, event: event, status: :pending, registration_value: 540) }
     subject(:assigned_origin) { Attendance.find(origin.id) }
     subject(:assigned_destination) { Attendance.find(destination.id) }

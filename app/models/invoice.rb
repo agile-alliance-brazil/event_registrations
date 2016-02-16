@@ -34,7 +34,7 @@ class Invoice < ActiveRecord::Base
 
   validates :payment_type, presence: true
 
-  def self.from_attendance(attendance, payment_type)
+  def self.from_attendance(attendance, payment_type = GATEWAY)
     invoice = for_attendance(attendance.id).first
     return invoice if invoice.present?
 

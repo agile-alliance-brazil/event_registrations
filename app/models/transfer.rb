@@ -12,6 +12,14 @@ class Transfer
     Transfer.new(origin, destination)
   end
 
+  def self.initialize_attendance(id)
+    if id.nil?
+      Attendance.new.tap { |a| a.status = '' }
+    else
+      Attendance.find id
+    end
+  end
+
   def valid?
     !origin.new_record? && !destination.new_record? &&
       (origin.paid? || origin.confirmed?) && (destination.pending? || destination.accepted?)
@@ -21,6 +29,7 @@ class Transfer
     destination.registration_value = origin.registration_value
     destination.pay if origin.paid?
     destination.confirm if origin.confirmed?
+    transfer_invoice(origin, destination)
 
     origin.cancel
     origin.save && destination.save
@@ -30,18 +39,6 @@ class Transfer
     false
   end
 
-  class << self
-    protected
-
-    def initialize_attendance(id)
-      if id.nil?
-        Attendance.new.tap { |a| a.status = '' }
-      else
-        Attendance.find id
-      end
-    end
-  end
-
   protected
 
   def initialize(origin, destination)
@@ -49,5 +46,24 @@ class Transfer
     @origin_id = origin.id
     @destination = destination
     @destination_id = destination.id
+  end
+
+  private
+
+  def transfer_invoice(origin, destination)
+    destination_invoice = destination.invoices.active.last
+
+    if destination_invoice.present?
+      destination_invoice.update(amount: origin.registration_value)
+    else
+      origin_invoice = origin.invoices.active.last
+      Invoice.create(
+        user: destination.user,
+        amount: origin.registration_value,
+        status: origin_invoice.status,
+        invoiceable: destination,
+        payment_type: origin_invoice.payment_type
+      )
+    end
   end
 end

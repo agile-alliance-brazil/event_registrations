@@ -1,6 +1,7 @@
 describe Transfer, type: :model do
   let(:origin_date) { 1.month.from_now }
   let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }
+  let!(:origin_invoice) { Invoice.from_attendance(origin) }
   let!(:destination) { FactoryGirl.create(:attendance, id: 2, status: :pending, registration_value: 540) }
   let(:transfer) { Transfer.build(origin_id: origin.id, destination_id: destination.id) }
 

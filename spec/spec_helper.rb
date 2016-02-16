@@ -16,7 +16,7 @@ SimpleCov.start 'rails' do
   add_group 'Views', 'app/views'
   add_group 'Library', 'lib/'
 
-  minimum_coverage 99
+  minimum_coverage 100
 end
 
 require File.expand_path('../../config/environment', __FILE__)

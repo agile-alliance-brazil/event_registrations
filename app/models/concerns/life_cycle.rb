@@ -97,23 +97,22 @@ module Concerns
 
     def cancel_invoice!
       invoice = user.invoices.where(status: 'pending').last
-      return unless invoice.present?
-      invoice.cancel_it
-      invoice.save!
+      change_invoice_status(invoice, :cancel_it)
     end
 
     def recover_invoice!
       invoice = user.invoices.where(status: 'cancelled').last
-      return unless invoice.present?
-      invoice.recover_it
-      invoice.save!
+      change_invoice_status(invoice, :recover_it)
     end
 
     def pay_invoice!
       invoice = user.invoices.active.last
+      change_invoice_status(invoice, :pay_it)
+    end
+
+    def change_invoice_status(invoice, method)
       return unless invoice.present?
-      invoice.amount = registration_value
-      invoice.pay_it
+      invoice.send(method)
       invoice.save!
     end
   end

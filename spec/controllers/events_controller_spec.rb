@@ -249,6 +249,46 @@ describe EventsController, type: :controller do
         end
       end
     end
+
+    describe 'DELETE #remove_organizer' do
+      let(:event) { FactoryGirl.create :event }
+      context 'with invalid parameters' do
+        context 'and invalid event' do
+          it 'responds 404' do
+            xhr :delete, :remove_organizer, id: 'foo'
+            expect(response.status).to eq 404
+          end
+        end
+        context 'and invalid organizer email' do
+          context 'passing an invalid email' do
+            it 'responds 404' do
+              xhr :delete, :remove_organizer, id: event, email: 'bla'
+              expect(response.status).to eq 404
+            end
+          end
+        end
+      end
+      context 'with valid parameters' do
+        context 'and the user is already an organizer' do
+          let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+          it 'removes the organizer' do
+            xhr :delete, :remove_organizer, id: event, email: organizer.email
+            expect(response.status).to eq 200
+            expect(event.reload.organizers).not_to include organizer
+          end
+        end
+
+        context 'and the user is not an organizer of the event' do
+          let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+          let(:other_organizer) { FactoryGirl.create :user, roles: [:organizer] }
+          it 'adds the user as organizer' do
+            event.add_organizer_by_email!(other_organizer.email)
+            xhr :delete, :remove_organizer, id: event, email: organizer.email
+            expect(event.reload.organizers.count).to eq 1
+          end
+        end
+      end
+    end
   end
 
   describe 'GET #show' do

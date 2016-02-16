@@ -437,3 +437,5 @@ en:
   organizer:
     new:
       title: "New organizer"
+    remove:
+      title: "Remove organizer"

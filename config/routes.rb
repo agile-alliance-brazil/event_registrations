@@ -20,6 +20,7 @@ Current::Application.routes.draw do
 
     member do
       patch :add_organizer
+      delete :remove_organizer
     end
 
     resources :attendances, only: %i(new create edit update), controller: :event_attendances do

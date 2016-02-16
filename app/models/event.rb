@@ -61,6 +61,13 @@ class Event < ActiveRecord::Base
     save
   end
 
+  def remove_organizer_by_email!(email)
+    user = User.find_by(email: email)
+    return false unless user.present?
+    organizers.delete(user)
+    save
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)

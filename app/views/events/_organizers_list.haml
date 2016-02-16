@@ -3,9 +3,11 @@
   %table.table
     %th= t('formtastic.labels.user.name')
     %th= t('formtastic.labels.user.email')
+    %th= t('general.actions.title')
     - event.organizers.each do |user|
       %tr
         %td= link_to "#{user.last_name}, #{user.first_name}", user_path(user), method: :get
         %td= user.email
+        %td= link_to t('organizer.remove.title'), '#', onclick: "removeOrganizer('#{user.email}', #{@event.id});", class: 'btn-sm btn-danger'
 - else
   %h5= t('events.show.no_organizers_message')

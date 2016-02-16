@@ -9,30 +9,30 @@
   %div{class: 'register-button'}
     = render partial: 'registrations', locals: { event: @event }
 
-%hr
-
 %section
-  %div
-    = render partial: 'registration_periods/periods_list', locals: { event: @event }
-    = link_to t('registration_periods.new.title'), new_event_registration_period_path(@event), class: 'btn-sm btn-primary'
+  - if can? :edit, @event
+    %hr
 
-%hr
+    %div
+      = render partial: 'registration_periods/periods_list', locals: { event: @event }
+      = link_to t('registration_periods.new.title'), new_event_registration_period_path(@event), class: 'btn-sm btn-primary'
 
-  %div
-    = render partial: 'registration_quotas/quotas_list', locals: { event: @event }
-    = link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn-sm btn-primary'
+    %hr
+      %div
+        = render partial: 'registration_quotas/quotas_list', locals: { event: @event }
+        = link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn-sm btn-primary'
 
-%hr
+    %hr
 
-  %div
-    = render partial: 'registration_groups/groups_list', locals: { event: @event }
-    = link_to t('registration_group.new.title'), event_registration_groups_path(@event), class: 'btn-sm btn-primary'
+    %div
+      = render partial: 'registration_groups/groups_list', locals: { event: @event }
+      = link_to t('registration_group.new.title'), event_registration_groups_path(@event), class: 'btn-sm btn-primary'
 
-%hr
+    %hr
 
-  %div
-    %div{id: 'organizers_list'}
-      = render partial: 'events/organizers_list', locals: { event: @event }
+    %div
+      %div{id: 'organizers_list'}
+        = render partial: 'events/organizers_list', locals: { event: @event }
 
-    = text_field_tag :email, params[:email], placeholder: t('formtastic.fields.email.placeholder'), size: 50, class: 'form-control line'
-    = link_to t('organizer.new.title'), '#', onclick: "submitOrganizer(#{@event.id});", class: 'btn-sm btn-primary'
+      = text_field_tag :email, params[:email], placeholder: t('formtastic.fields.email.placeholder'), size: 50, class: 'form-control line'
+      = link_to t('organizer.new.title'), '#', onclick: "submitOrganizer(#{@event.id});", class: 'btn-sm btn-primary'

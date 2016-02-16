@@ -235,7 +235,7 @@ describe Event, type: :model do
           event.organizers << organizer
           event.save!
         end
-        it 'adds the user as organizer' do
+        it 'does not add the user twice' do
           expect(event.add_organizer_by_email!(organizer.email)).to be true
           expect(event.reload.organizers.count).to eq 1
         end
@@ -245,6 +245,37 @@ describe Event, type: :model do
         it 'adds the user as organizer' do
           expect(event.add_organizer_by_email!(admin.email)).to be true
           expect(event.reload.organizers).to include admin
+        end
+      end
+    end
+  end
+
+  describe '#remove_organizer_by_email!' do
+    let(:event) { FactoryGirl.create :event }
+    let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+
+    context 'with invalid parameters' do
+      it 'returns false' do
+        event.organizers << organizer
+        event.save!
+        expect(event.remove_organizer_by_email!('foo')).to be false
+        expect(event.reload.organizers.count).to eq 1
+      end
+    end
+    context 'with valid parameters' do
+      context 'and the user is already an organizer' do
+        it 'removes the user as organizer' do
+          event.organizers << organizer
+          event.save!
+          event.remove_organizer_by_email!(organizer.email)
+          expect(event.reload.organizers.count).to eq 0
+        end
+      end
+      context 'and the user is not an organizer of the event' do
+        let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+        it 'adds the user as organizer' do
+          event.remove_organizer_by_email!(organizer.email)
+          expect(event.reload.organizers.count).to eq 0
         end
       end
     end

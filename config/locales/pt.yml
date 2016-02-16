@@ -564,3 +564,5 @@ pt:
   organizer:
     new:
       title: "Novo organizador"
+    remove:
+      title: "Remover organizador"

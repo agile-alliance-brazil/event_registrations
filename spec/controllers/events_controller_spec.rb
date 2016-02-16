@@ -202,13 +202,13 @@ describe EventsController, type: :controller do
           end
         end
         context 'and invalid organizer email' do
-          context 'passing an invalid ID' do
+          context 'passing an invalid email' do
             it 'responds 404' do
               xhr :patch, :add_organizer, id: event, email: 'bla'
               expect(response.status).to eq 404
             end
           end
-          context 'passing a valid ID and the user is not organizer' do
+          context 'passing a valid email and the user is not organizer' do
             let(:not_organizer) { FactoryGirl.create :user }
             it 'responds 404' do
               xhr :patch, :add_organizer, id: event, email: not_organizer.email
@@ -240,11 +240,11 @@ describe EventsController, type: :controller do
           end
         end
         context 'and the user has the admin role' do
-          let(:organizer) { FactoryGirl.create :user, roles: [:admin] }
+          let(:admin) { FactoryGirl.create :user, roles: [:admin] }
           it 'adds the user as organizer' do
-            xhr :patch, :add_organizer, id: event, email: organizer.email
+            xhr :patch, :add_organizer, id: event, email: admin.email
             expect(response.status).to eq 200
-            expect(event.reload.organizers).to include organizer
+            expect(event.reload.organizers).to include admin
           end
         end
       end

@@ -200,4 +200,53 @@ describe Event, type: :model do
       it { expect(event.started).to be_falsey }
     end
   end
+
+  describe '#add_organizer_by_email!' do
+    let(:event) { FactoryGirl.create :event }
+    context 'with invalid parameters' do
+      context 'and invalid organizer email' do
+        context 'passing an invalid email' do
+          it 'responds false' do
+            expect(event.add_organizer_by_email!('bla')).to be false
+            expect(event.organizers).to be_empty
+          end
+        end
+        context 'passing a valid email and the user is not organizer' do
+          let(:not_organizer) { FactoryGirl.create :user }
+          it 'responds false' do
+            expect(event.add_organizer_by_email!(not_organizer.email)).to be false
+            expect(event.organizers).to be_empty
+          end
+        end
+      end
+    end
+    context 'with valid parameters' do
+      context 'and the user has the organizer role' do
+        let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+        it 'adds the user as organizer' do
+          expect(event.add_organizer_by_email!(organizer.email)).to be true
+          expect(event.reload.organizers).to include organizer
+        end
+      end
+
+      context 'and the user is already an organizer' do
+        let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+        before do
+          event.organizers << organizer
+          event.save!
+        end
+        it 'adds the user as organizer' do
+          expect(event.add_organizer_by_email!(organizer.email)).to be true
+          expect(event.reload.organizers.count).to eq 1
+        end
+      end
+      context 'and the user has the admin role' do
+        let(:admin) { FactoryGirl.create :user, roles: [:admin] }
+        it 'adds the user as organizer' do
+          expect(event.add_organizer_by_email!(admin.email)).to be true
+          expect(event.reload.organizers).to include admin
+        end
+      end
+    end
+  end
 end

@@ -38,10 +38,7 @@ class EventsController < ApplicationController
   end
 
   def add_organizer
-    user = User.where(email: params['email']).first
-    if user.present? && (user.organizer? || user.admin?)
-      @event.organizers << user unless @event.organizers.include?(user)
-      @event.save
+    if @event.add_organizer_by_email!(params['email'])
       respond_to do |format|
         format.js {}
       end

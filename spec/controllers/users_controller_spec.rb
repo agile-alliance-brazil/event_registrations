@@ -3,37 +3,37 @@ describe UsersController, type: :controller do
     describe 'GET #show' do
       it 'redirects to login path' do
         get :show, id: 'foo'
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
     describe 'GET #edit' do
       it 'redirects to login path' do
         get :edit, id: 'foo'
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
     describe 'PUT #update' do
       it 'redirects to login path' do
         put :update, id: 'foo'
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
     describe 'GET #index' do
       it 'redirects to login path' do
         get :index
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
     describe 'PATCH #toggle_organizer' do
       it 'redirects to login path' do
         patch :toggle_organizer, id: 'foo'
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
     describe 'PATCH #toggle_admin' do
       it 'redirects to login path' do
         patch :toggle_admin, id: 'foo'
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
   end
@@ -50,7 +50,18 @@ describe UsersController, type: :controller do
             before { get :show, id: user.id }
             it { expect(assigns(:user)).to eq user }
             it { expect(assigns(:events_for_today)).to match_array [event] }
-            it { expect(response).to render_template :show }
+            it { is_expected.to render_template :show }
+          end
+          context 'with two events available for date and one unavaiable' do
+            let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+            let!(:other_event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: 5.days.from_now }
+            let!(:already_attending) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+            let!(:attendance) { FactoryGirl.create(:attendance, user: user, event: already_attending) }
+            let!(:cancelled_attendance) { FactoryGirl.create(:attendance, user: user, event: other_event, status: :cancelled) }
+            before { get :show, id: user.id }
+            it { expect(assigns(:user)).to eq user }
+            it { expect(assigns(:events_for_today)).to match_array [event, other_event] }
+            it { is_expected.to render_template :show }
           end
         end
 
@@ -66,7 +77,7 @@ describe UsersController, type: :controller do
         context 'with an existent user' do
           before { get :edit, id: user.id }
           it { expect(assigns(:user)).to eq user }
-          it { expect(response).to render_template :edit }
+          it { is_expected.to render_template :edit }
         end
 
         context 'with an inexistent user' do
@@ -101,7 +112,7 @@ describe UsersController, type: :controller do
         context 'with failed update attributes' do
           before { put :update, id: user.id, user: { first_name: '' } }
           it { expect(flash[:error]).to eq I18n.t('flash.user.edit') }
-          it { expect(response).to render_template :edit }
+          it { is_expected.to render_template :edit }
 
           it { expect(User.last.first_name).to eq user.first_name }
           it { expect(User.last.last_name).to eq user.last_name }
@@ -112,19 +123,36 @@ describe UsersController, type: :controller do
       describe 'GET #index' do
         it 'redirects to root path' do
           get :index
-          expect(response).to redirect_to root_path
+          is_expected.to redirect_to root_path
         end
       end
       describe 'PATCH #toggle_organizer' do
         it 'redirects to root path' do
           patch :toggle_organizer, id: 'foo'
-          expect(response).to redirect_to root_path
+          is_expected.to redirect_to root_path
         end
       end
       describe 'PATCH #toggle_admin' do
         it 'redirects to login path' do
           patch :toggle_admin, id: 'foo'
-          expect(response).to redirect_to root_path
+          is_expected.to redirect_to root_path
+        end
+      end
+    end
+
+    context 'as organizer' do
+      let(:event) { FactoryGirl.create :event }
+      let(:organizer) { FactoryGirl.create :organizer, organized_events: [event] }
+      let(:user) { FactoryGirl.create :user }
+      let!(:attendance) { FactoryGirl.create :attendance, user: user, event: event }
+      before { sign_in organizer }
+
+      describe 'GET #show' do
+        context 'when the organizer is organizing an active event for the user' do
+          it 'assigns the instance variable and renders the template' do
+            get :show, id: user
+            is_expected.to render_template :show
+          end
         end
       end
     end
@@ -138,14 +166,14 @@ describe UsersController, type: :controller do
           it 'assign the variables and renders template' do
             UserRepository.instance.expects(:search_engine).returns([admin])
             get :index
-            expect(response).to render_template :index
+            is_expected.to render_template :index
           end
         end
 
         context 'ajax request' do
           it 'renders the template' do
             xhr :get, :index
-            expect(response).to render_template 'users/index.js.haml'
+            is_expected.to render_template 'users/index.js.haml'
           end
         end
       end
@@ -155,7 +183,7 @@ describe UsersController, type: :controller do
           let(:organizer) { FactoryGirl.create :organizer }
           it 'removes the role' do
             xhr :patch, :toggle_organizer, id: organizer
-            expect(response).to render_template 'users/user'
+            is_expected.to render_template 'users/user'
             expect(organizer.reload.roles).not_to include('organizer')
           end
         end
@@ -170,7 +198,7 @@ describe UsersController, type: :controller do
           let(:admin) { FactoryGirl.create :admin }
           it 'removes the role' do
             xhr :patch, :toggle_admin, id: admin
-            expect(response).to render_template 'users/user'
+            is_expected.to render_template 'users/user'
             expect(admin.reload.roles).not_to include('admin')
           end
         end

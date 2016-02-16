@@ -16,7 +16,7 @@ describe EventAttendancesController, type: :controller do
 
     it 'renders new template' do
       get :new, event_id: @event.id
-      expect(response).to render_template(:new)
+      is_expected.to render_template(:new)
     end
 
     it 'assigns current event to attendance' do
@@ -67,12 +67,12 @@ describe EventAttendancesController, type: :controller do
       user.phone = nil # User cannot have everything or we will just pick from there.
       # I think we need to consolidate all user and attendee information
       post :create, event_id: @event.id, attendance: { event_id: @event.id }
-      expect(response).to render_template(:new)
+      is_expected.to render_template(:new)
     end
 
     it 'redirects when model is valid' do
       post :create, event_id: @event.id, attendance: valid_attendance
-      expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+      is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
     end
 
     it 'assigns current event to attendance' do
@@ -153,7 +153,7 @@ describe EventAttendancesController, type: :controller do
 
         it 'redirects to home page with error message when cannot add more attendances' do
           post :create, event_id: @event.id, attendance: {}
-          expect(response).to redirect_to(root_path)
+          is_expected.to redirect_to(root_path)
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
       end
@@ -245,7 +245,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to render_template :new
+              is_expected.to render_template :new
               expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
@@ -257,7 +257,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -269,7 +269,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to render_template :new
+              is_expected.to render_template :new
               expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
@@ -281,7 +281,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -292,7 +292,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to render_template :new
+              is_expected.to render_template :new
               expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
@@ -303,7 +303,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -314,7 +314,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 1
-              expect(response).to render_template :new
+              is_expected.to render_template :new
               expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
             end
           end
@@ -325,7 +325,7 @@ describe EventAttendancesController, type: :controller do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, event_id: @event.id, attendance: valid_attendance
               expect(Attendance.count).to eq 2
-              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -335,7 +335,7 @@ describe EventAttendancesController, type: :controller do
             AgileAllianceService.stubs(:check_member).returns(false)
             post :create, event_id: @event.id, attendance: valid_attendance
             expect(Attendance.count).to eq 2
-            expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+            is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
           end
         end
       end
@@ -364,7 +364,7 @@ describe EventAttendancesController, type: :controller do
 
       it 'assigns the attendance and render edit' do
         get :edit, event_id: event.id, id: attendance.id
-        expect(response).to render_template :edit
+        is_expected.to render_template :edit
         expect(assigns(:attendance)).to eq attendance
       end
 
@@ -418,7 +418,7 @@ describe EventAttendancesController, type: :controller do
           expect(Attendance.last.email).to eq 'bla@foo.bar'
           expect(Attendance.last.organization).to eq 'sbrubbles'
           expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
-          expect(response).to redirect_to attendances_path(event_id: event)
+          is_expected.to redirect_to attendances_path(event_id: event)
         end
       end
 
@@ -454,7 +454,7 @@ describe EventAttendancesController, type: :controller do
           expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
           expect(Attendance.last.registration_group).to eq group
           expect(Attendance.last.registration_value).to eq 420
-          expect(response).to redirect_to attendances_path(event_id: event)
+          is_expected.to redirect_to attendances_path(event_id: event)
         end
       end
 
@@ -495,7 +495,7 @@ describe EventAttendancesController, type: :controller do
           expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
           expect(Attendance.last.registration_group).to eq group
           expect(Attendance.last.registration_value).to eq 420
-          expect(response).to redirect_to attendances_path(event_id: event)
+          is_expected.to redirect_to attendances_path(event_id: event)
         end
       end
     end

@@ -4,7 +4,8 @@ class UsersController < ApplicationController
   def show
     params[:id] ||= current_user.id
     @user = resource
-    @events_for_today = Event.active_for Time.zone.today
+    active_events = @user.attendances.active.map(&:event)
+    @events_for_today = Event.active_for(Time.zone.today) - active_events
   end
 
   def edit

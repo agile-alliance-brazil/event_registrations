@@ -112,7 +112,7 @@ describe TransfersController, type: :controller do
         expect(assigned_origin.status).to eq 'cancelled'
         expect(assigned_destination.status).to eq 'confirmed'
         expect(assigned_destination.registration_value).to eq 420
-        expect(response).to redirect_to attendance_path(id: origin.id)
+        is_expected.to redirect_to attendance_path(id: origin.id)
       end
     end
 
@@ -140,7 +140,7 @@ describe TransfersController, type: :controller do
       let!(:paid) { FactoryGirl.create(:attendance, status: :paid, user: user) }
       it 'renders transfer form again' do
         post :create, transfer: { origin_id: origin.id, destination_id: paid.id }
-        expect(response).to render_template :new
+        is_expected.to render_template :new
         expect(flash[:error]).to eq I18n.t('flash.transfer.failure')
       end
     end

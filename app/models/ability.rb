@@ -38,6 +38,9 @@ class Ability
     can %i(show edit update), Event do |event|
       @user.organized_events.include?(event)
     end
+    can %i(show), User do |user|
+      @user.organized_user_present?(user)
+    end
     can :manage, Attendance do |attendance|
       @user.organized_events.include?(attendance.event)
     end

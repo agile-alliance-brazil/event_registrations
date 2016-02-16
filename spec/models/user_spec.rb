@@ -175,4 +175,18 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#organized_user_present?' do
+    let(:event) { FactoryGirl.create :event }
+    let!(:organizer) { FactoryGirl.create :organizer, organized_events: [event] }
+    let(:user) { FactoryGirl.create :user }
+    let!(:attendance) { FactoryGirl.create :attendance, user: user, event: event }
+
+    let(:other_event) { FactoryGirl.create :event }
+    let(:other_user) { FactoryGirl.create :user }
+    let!(:other_attendance) { FactoryGirl.create :attendance, user: other_user, event: other_event }
+
+    it { expect(organizer.organized_user_present?(user)).to be_truthy }
+    it { expect(organizer.organized_user_present?(other_user)).to be_falsey }
+  end
 end

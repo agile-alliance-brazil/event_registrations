@@ -97,6 +97,13 @@ class User < ActiveRecord::Base
     [first_name, last_name].join(' ')
   end
 
+  def organized_user_present?(user)
+    organized_events.each do |event|
+      return true if event.contains?(user)
+    end
+    false
+  end
+
   def self.extract_names(hash)
     if hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?)
       hash[:name].split(' ')

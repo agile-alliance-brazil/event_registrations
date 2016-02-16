@@ -68,6 +68,10 @@ class Event < ActiveRecord::Base
     save
   end
 
+  def contains?(user)
+    attendances.active.where(user: user).present?
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)

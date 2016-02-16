@@ -20,35 +20,35 @@ describe EventsController, type: :controller do
     describe 'GET #list_archived' do
       it 'redirects to login' do
         get :list_archived
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
 
     describe 'GET #new' do
       it 'redirects to login' do
         get :new
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
 
     describe 'POST #create' do
       it 'redirects to login' do
         post :create
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
 
     describe 'DELETE destroy' do
       it 'redirects to login' do
         delete :destroy, id: 'foo'
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
 
     describe 'PATCH #add_organizer' do
       it 'redirects to login' do
         xhr :patch, :add_organizer, id: 'foo'
-        expect(response).to redirect_to login_path
+        is_expected.to redirect_to login_path
       end
     end
   end
@@ -60,35 +60,35 @@ describe EventsController, type: :controller do
     describe 'GET #list_archived' do
       it 'redirects to root' do
         get :list_archived
-        expect(response).to redirect_to root_path
+        is_expected.to redirect_to root_path
       end
     end
 
     describe 'GET #new' do
       it 'redirects to root' do
         get :new
-        expect(response).to redirect_to root_path
+        is_expected.to redirect_to root_path
       end
     end
 
     describe 'POST #create' do
       it 'redirects to root' do
         post :create
-        expect(response).to redirect_to root_path
+        is_expected.to redirect_to root_path
       end
     end
 
     describe 'DELETE #destroy' do
       it 'redirects to root' do
         delete :destroy, id: 'foo'
-        expect(response).to redirect_to root_path
+        is_expected.to redirect_to root_path
       end
     end
 
     describe 'PATCH #add_organizer' do
       it 'redirects to root' do
         xhr :patch, :add_organizer, id: 'foo'
-        expect(response).to redirect_to root_path
+        is_expected.to redirect_to root_path
       end
     end
   end
@@ -101,7 +101,7 @@ describe EventsController, type: :controller do
       context 'without events' do
         before { get :list_archived }
         it { expect(assigns(:events)).to match_array [] }
-        it { expect(response).to render_template :index }
+        it { is_expected.to render_template :index }
       end
 
       context 'with events' do
@@ -138,7 +138,7 @@ describe EventsController, type: :controller do
       it 'assigns the event and render the new template' do
         get :new
         expect(assigns(:event)).to be_a_new Event
-        expect(response).to render_template :new
+        is_expected.to render_template :new
       end
     end
 
@@ -157,7 +157,7 @@ describe EventsController, type: :controller do
           expect(event_persisted.full_price).to eq 100
           expect(event_persisted.price_table_link).to eq 'http://bla'
 
-          expect(response).to redirect_to event_path(event_persisted)
+          is_expected.to redirect_to event_path(event_persisted)
         end
       end
 
@@ -167,7 +167,7 @@ describe EventsController, type: :controller do
           post :create, event: { name: '' }
           expect(event).to be_a Event
           expect(event.errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco']
-          expect(response).to render_template :new
+          is_expected.to render_template :new
         end
       end
     end
@@ -178,7 +178,7 @@ describe EventsController, type: :controller do
           let!(:event) { FactoryGirl.create :event }
           it 'deletes the event and redirects to events index' do
             delete :destroy, id: event.id
-            expect(response).to redirect_to events_path
+            is_expected.to redirect_to events_path
             expect(Event.count).to eq 0
           end
         end
@@ -297,7 +297,7 @@ describe EventsController, type: :controller do
       before { get :show, id: event.id }
       it { expect(assigns(:event)).to eq event }
       it { expect(assigns(:last_attendance_for_user)).to be_nil }
-      it { expect(response).to render_template :show }
+      it { is_expected.to render_template :show }
     end
 
     context 'with invalid parameters' do

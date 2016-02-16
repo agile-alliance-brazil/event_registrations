@@ -280,4 +280,17 @@ describe Event, type: :model do
       end
     end
   end
+
+  describe '#contains?' do
+    let(:user) { FactoryGirl.create :user }
+    let(:event) { FactoryGirl.create :event }
+    context 'with no cancelled attendance' do
+      let!(:attendance) { FactoryGirl.create :attendance, user: user, event: event }
+      it { expect(event.contains?(user)).to be_truthy }
+    end
+    context 'with a cancelled attendance' do
+      let!(:attendance) { FactoryGirl.create :attendance, user: user, event: event, status: :cancelled }
+      it { expect(event.contains?(user)).to be_falsey }
+    end
+  end
 end

@@ -54,9 +54,14 @@ class EmailNotifications < ActionMailer::Base
   end
 
   def event_organizer
-    [
-      "\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>",
-      "\"#{APP_CONFIG[:organizer][:cced]}\" <#{APP_CONFIG[:organizer][:cced_email]}>"
-    ]
+    if @attendance.event.present? && @attendance.event.organizers.present?
+      organizers = []
+      @attendance.event.organizers.each do |organizer|
+        organizers << "\"#{organizer.first_name}\" <#{organizer.email}>"
+      end
+    else
+      organizers = ["\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>"]
+    end
+    organizers
   end
 end

@@ -3,8 +3,8 @@
 
   %head
     %title= content_for?(:title) ? yield(:title) : t('title.events')
-    %meta{"http-equiv"=>"Content-Type", :content=>"text/html; charset=utf-8"}/
-    %link{"rel" => "shortcut icon", "href" => "/favicon.ico"}/
+    %meta{'http-equiv' => 'Content-Type', content: 'text/html; charset=utf-8'}/
+    %link{'rel' => 'shortcut icon', 'href' => '/favicon.ico'}/
     = csrf_meta_tag
     = stylesheet_link_tag '//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'
     = stylesheet_link_tag :application
@@ -17,8 +17,8 @@
       = render partial: 'layouts/aa'
       .container
         %div.logo
-          =link_to "http://agilebrazil.com" do
-            =image_tag "agile-brazil-2015-logo.png"
+          = link_to 'https://www.agilealliance.org/agilebrazil' do
+            = image_tag 'agilealliance-brazil_black.png', size: '220x170'
         = render partial: 'layouts/menu'
 
     #content

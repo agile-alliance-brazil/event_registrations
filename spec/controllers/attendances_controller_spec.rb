@@ -287,16 +287,16 @@ describe AttendancesController, type: :controller do
         end
 
         context 'and searching by email' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
-          let!(:other_pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
-          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'foO@xpto.com.br', email_confirmation: 'foO@xpto.com.br') }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLa@xpto.com.br') }
+          let!(:other_pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLaSBBRUBLES@xpto.com.br') }
+          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'foO@xpto.com.br') }
           before { xhr :get, :search, event_id: event, pending: 'true', search: 'BLA' }
           it { expect(assigns(:attendances_list)).to match_array [pending, other_pending] }
         end
 
         context 'and searching by ID' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', status: :pending, email: 'bLa@xpto.com.br', email_confirmation: 'bLa@xpto.com.br') }
-          let!(:out) { FactoryGirl.create(:attendance, event: event, first_name: 'foo', last_name: 'bar', status: :pending, email: 'bLaSBBRUBLES@xpto.com.br', email_confirmation: 'bLaSBBRUBLES@xpto.com.br') }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', status: :pending, email: 'bLa@xpto.com.br') }
+          let!(:out) { FactoryGirl.create(:attendance, event: event, first_name: 'foo', last_name: 'bar', status: :pending, email: 'bLaSBBRUBLES@xpto.com.br') }
           before { xhr :get, :search, event_id: event, pending: 'true', search: pending.id }
           it { expect(assigns(:attendances_list)).to eq [pending] }
         end

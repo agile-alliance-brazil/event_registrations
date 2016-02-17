@@ -16,7 +16,7 @@ module Concerns
         after_transition on: :confirm, do: :pay_invoice!
 
         event :accept do
-          transition %i(pending) => :accepted
+          transition pending: :accepted
         end
 
         event :confirm do
@@ -32,7 +32,7 @@ module Concerns
         end
 
         event :recover do
-          transition %i(cancelled) => :pending
+          transition cancelled: :pending
         end
 
         event :mark_no_show do

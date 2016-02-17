@@ -55,30 +55,6 @@ describe User, type: :model do
     end
   end
 
-  context 'for attendance' do
-    before { @user = FactoryGirl.build(:user) }
-    it { expect(@user.attendance_attributes).not_to include('id') }
-    it { expect(@user.attendance_attributes).not_to include('created_at') }
-    it { expect(@user.attendance_attributes).not_to include('updated_at') }
-    it { expect(@user.attendance_attributes).not_to include('roles_mask') }
-    it { expect(@user.attendance_attributes).not_to include('default_locale') }
-    it { expect(@user.attendance_attributes).to include('first_name') }
-    it { expect(@user.attendance_attributes).to include('last_name') }
-    it { expect(@user.attendance_attributes).to include('email') }
-    it { expect(@user.attendance_attributes).to include('organization') }
-    it { expect(@user.attendance_attributes).to include('phone') }
-    it { expect(@user.attendance_attributes).to include('country') }
-    it { expect(@user.attendance_attributes).to include('state') }
-    it { expect(@user.attendance_attributes).to include('city') }
-    it { expect(@user.attendance_attributes).to include('badge_name') }
-    it { expect(@user.attendance_attributes).to include('cpf') }
-    it { expect(@user.attendance_attributes).to include('gender') }
-    it { expect(@user.attendance_attributes).to include('twitter_user') }
-    it { expect(@user.attendance_attributes).to include('address') }
-    it { expect(@user.attendance_attributes).to include('neighbourhood') }
-    it { expect(@user.attendance_attributes).to include('zipcode') }
-  end
-
   context 'new from auth hash' do
     it 'initializes user with names and email' do
       hash = { info: { name: 'John Doe', email: 'john@doe.com' } }

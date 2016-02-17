@@ -4,7 +4,7 @@
   = form.input :email, input_html: {tabindex: autotab}
   = form.input :phone, input_html: {tabindex: autotab}
   = form.input :country, as: :country, priority_countries: [:BR], input_html: {tabindex: autotab}
-  = form.input :state, as: :select, collection: ActionView::Helpers::FormOptionsHelper::ESTADOS_BRASILEIROS, input_html: {tabindex: autotab}
+  = form.input :state, input_html: {tabindex: autotab}
   = form.input :city, input_html: {tabindex: autotab}
   = form.input :organization, input_html: {tabindex: autotab}
   = form.input :twitter_user, input_html: {tabindex: autotab}

@@ -11,7 +11,6 @@ describe AttendanceParams, type: :param_object do
           first_name: user.first_name,
           last_name: user.last_name,
           email: user.email,
-          email_confirmation: user.email,
           organization: user.organization,
           phone: user.phone,
           country: user.country,
@@ -19,36 +18,15 @@ describe AttendanceParams, type: :param_object do
           city: user.city,
           badge_name: user.badge_name,
           cpf: user.cpf,
-          gender: user.gender,
-          twitter_user: user.twitter_user,
-          address: user.address,
-          neighbourhood: user.neighbourhood,
-          zipcode: user.zipcode
+          gender: user.gender
         }
       now = Time.zone.now
       Time.stubs(:now).returns(now)
       params = ActionController::Parameters.new(valid_attendance)
       params_object = AttendanceParams.new(user, event, params)
-      expect(params_object.new_attributes).to eq('first_name' => user.first_name,
-                                                 'last_name' => user.last_name,
-                                                 'email' => user.email,
-                                                 'organization' => user.organization,
-                                                 'phone' => user.phone,
-                                                 'country' => user.country,
-                                                 'state' => user.state,
-                                                 'city' => user.city,
-                                                 'badge_name' => user.badge_name,
-                                                 'cpf' => user.cpf.to_s,
-                                                 'gender' => user.gender,
-                                                 'twitter_user' => user.twitter_user,
-                                                 'address' => user.address,
-                                                 'neighbourhood' => user.neighbourhood,
-                                                 'zipcode' => user.zipcode,
-                                                 'registration_group_id' => nil,
-                                                 :email_confirmation => user.email,
-                                                 :event_id => event.id,
-                                                 :user_id => user.id,
-                                                 :registration_date => now)
+      expect(params_object.new_attributes).to eq(event_id: event.id,
+                                                 user_id: user.id,
+                                                 registration_date: now)
       expect(params_object.event).to eq event
       expect(params_object.user).to eq user
     end
@@ -74,7 +52,6 @@ describe AttendanceParams, type: :param_object do
                                first_name: user.first_name,
                                last_name: user.last_name,
                                email: user.email,
-                               email_confirmation: user.email,
                                organization: user.organization,
                                phone: user.phone,
                                country: user.country,
@@ -82,11 +59,7 @@ describe AttendanceParams, type: :param_object do
                                city: user.city,
                                badge_name: user.badge_name,
                                cpf: user.cpf,
-                               gender: user.gender,
-                               twitter_user: user.twitter_user,
-                               address: user.address,
-                               neighbourhood: user.neighbourhood,
-                               zipcode: user.zipcode
+                               gender: user.gender
                              }
       }
 
@@ -98,18 +71,13 @@ describe AttendanceParams, type: :param_object do
         'first_name' => user.first_name,
         'last_name' => user.last_name,
         'email' => user.email,
-        'email_confirmation' => user.email,
         'organization' => user.organization,
         'phone' => user.phone,
         'country' => user.country,
         'state' => user.state,
         'city' => user.city,
         'badge_name' => user.badge_name,
-        'gender' => user.gender,
-        'twitter_user' => user.twitter_user,
-        'address' => user.address,
-        'neighbourhood' => user.neighbourhood,
-        'zipcode' => user.zipcode }
+        'gender' => user.gender }
 
       expect(params_object.attributes_hash).to eq expected_return
     end

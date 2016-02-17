@@ -22,7 +22,6 @@ class EventAttendancesController < ApplicationController
 
   def edit
     @attendance = Attendance.find(params[:id])
-    @attendance.email_confirmation = @attendance.email
   end
 
   def update

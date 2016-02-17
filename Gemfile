@@ -11,7 +11,6 @@ def darwin_only(require_as)
 end
 
 gem 'rails', '~> 4.2'
-gem 'brhelper', '~> 3.3.0'
 gem 'brcpfcnpj', '~> 3.3.0'
 gem 'state_machine', '~> 1.2.0'
 gem 'haml', '~> 4.0'

@@ -3,7 +3,6 @@
 #
 # Table name: attendances
 #
-#  address                :string(255)
 #  advised                :boolean          default(FALSE)
 #  advised_at             :datetime
 #  badge_name             :string(255)
@@ -11,6 +10,7 @@
 #  country                :string(255)
 #  cpf                    :string(255)
 #  created_at             :datetime
+#  education_level        :string(255)
 #  email                  :string(255)
 #  email_sent             :boolean          default(FALSE)
 #  event_id               :integer
@@ -18,10 +18,11 @@
 #  first_name             :string(255)
 #  gender                 :string(255)
 #  id                     :integer          not null, primary key
+#  job_role               :string(255)
 #  last_name              :string(255)
-#  neighbourhood          :string(255)
 #  notes                  :string(255)
 #  organization           :string(255)
+#  organization_size      :string(255)
 #  payment_type           :string(255)
 #  phone                  :string(255)
 #  registration_date      :datetime
@@ -29,12 +30,12 @@
 #  registration_period_id :integer
 #  registration_quota_id  :integer
 #  registration_value     :decimal(10, )
+#  school                 :string(255)
 #  state                  :string(255)
 #  status                 :string(255)
-#  twitter_user           :string(255)
 #  updated_at             :datetime
 #  user_id                :integer
-#  zipcode                :string(255)
+#  years_of_experience    :string(255)
 #
 # Indexes
 #
@@ -43,8 +44,6 @@
 
 class Attendance < ActiveRecord::Base
   include Concerns::LifeCycle
-
-  SUPER_EARLY_LIMIT = 150
 
   belongs_to :event
   belongs_to :user
@@ -55,9 +54,8 @@ class Attendance < ActiveRecord::Base
 
   has_many :invoices, as: :invoiceable
 
-  validates :email, confirmation: true
-  validates :first_name, :last_name, :email, :phone, :country, :city, :registration_date, :user_id, :event_id, presence: true
-  validates :state, :cpf, presence: true, if: ->(a) { a.in_brazil? }
+  validates :first_name, :last_name, :email, :phone, :country, :city, :state, :registration_date, :user_id, :event_id, presence: true
+  validates :cpf, presence: true, if: ->(a) { a.in_brazil? }
 
   validates :first_name, :last_name, presence: true, length: { maximum: 100 }
   validates :phone, :city, :organization, length: { maximum: 100, allow_blank: true }

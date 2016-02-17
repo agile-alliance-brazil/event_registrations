@@ -38,6 +38,8 @@ en:
       attendance_payment: "Payment details"
       attendances_summary: "Attendances Summary"
       attendances_list: 'Attendances List'
+      professional_information: "Professional Information"
+      educacional_information: "Educational Information"
     fields:
       search:
         placeholder: 'search by ID, name, organization or email'
@@ -54,19 +56,19 @@ en:
         full_name: "Name"
         email: "E-mail address"
         group: "Grupo"
-        email_confirmation: "Confirm e-mail address"
         phone: "Phone"
         country: "Country"
         state: "State"
         city: "City"
-        organization: "Organization / Institution"
+        organization: "Organization"
+        organization_size: "Organization size"
+        job_role: "Job role"
+        years_of_experience: "Years of experience"
+        school: "School"
+        education_level: "Education level"
         badge_name: "Name for badge"
         cpf: "Identification number (CPF if you are Brazilian, empty otherwise)"
         gender: "Gender"
-        twitter_user: "Twitter username"
-        address: "Address"
-        neighbourhood: "Address 2"
-        zipcode: "Zip Code"
         status: "Status"
         registration_date: "Date"
         registration_value: "Registration Value"
@@ -151,11 +153,7 @@ en:
 
     hints:
       attendance:
-        badge_name: "The name you want to print in your badge. If blank, your full name will be used instead."
-        organization: "Name of the organization you represent or institution where you study. This information will appear in your badge."
-        cpf: "Leave blank if you are not Brazilian."
-        twitter_user: "Your <a href='http://www.twitter.com' target='_blank'>twitter</a> username (without the '@' character - e.g. 'agilebrazil'), if given, will appear in your badge. Leave blank if you do not want that."
-        email_confirmation: "Verify that your e-mail address is correct. This will be the main communication chanel about your registration."
+        education_level: "This field is using the ISCED 2011 education levels"
         notes: "Leave any notes or observations that you think are relevant, for future reference (e.g. payment confirmation number, or any special information about this participant)"
     actions:
       new_registration: "Submit registration"

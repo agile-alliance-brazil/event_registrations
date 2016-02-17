@@ -166,7 +166,7 @@ pt:
       attendance_registrations: "Inscrição para o evento"
       attendance_payment: "Dados de Pagamento"
       professional_information: "Informações profissionais"
-      educacional_information: "Informações educacionais"
+      educacional_information: "Informações acadêmicas"
     fields:
       search:
         placeholder: 'procurar por ID, nome, organização ou email'
@@ -190,7 +190,8 @@ pt:
         organization: "Organização"
         organization_size: "Tamanho da empresa"
         job_role: "Função"
-        years_of_experience: "Anos de experiência"
+        years_of_experience: "Experiência profissional (anos)"
+        experience_in_agility: "Experiência com agilidade (anos)"
         school: "Escola / Instituição"
         education_level: "Nível de escolaridade"
         badge_name: "Nome para o crachá"
@@ -212,6 +213,7 @@ pt:
         cancelled: 'Total canceladas'
         registration_total: 'Total de inscrições'
         total_without_cancelled: 'Total sem as canceladas'
+        payment_type:  'Tipo de pagamento'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"

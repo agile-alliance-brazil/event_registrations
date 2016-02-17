@@ -6,7 +6,7 @@
 
 - if can? :update, @event
   %div.payment-type
-    %label Choose the payment type
+    %label= t('formtastic.labels.attendance.payment_type')
     = select_tag :payment_type, options_for_select(Invoice::TYPES, @attendance.payment_type)
 
 = form.inputs :attendance_personal do
@@ -22,6 +22,7 @@
   = form.input :organization_size, as: :select, collection: organization_size_options, input_html: { tabindex: autotab }
   = form.input :job_role, input_html: { tabindex: autotab }
   = form.input :years_of_experience, as: :select, collection: year_of_experience_options, input_html: { tabindex: autotab }
+  = form.input :experience_in_agility, as: :select, collection: experience_in_agility_options, input_html: { tabindex: autotab }
 
 = form.inputs :educacional_information do
   = form.input :school, input_html: { tabindex: autotab }

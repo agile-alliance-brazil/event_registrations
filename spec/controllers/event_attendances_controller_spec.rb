@@ -13,6 +13,7 @@ describe EventAttendancesController, type: :controller do
       organization_size: 'bla',
       job_role: 'role',
       years_of_experience: '6',
+      experience_in_agility: '9',
       school: 'scholl',
       education_level: 'level',
       phone: user.phone,
@@ -167,6 +168,7 @@ describe EventAttendancesController, type: :controller do
         it { expect(attendance.organization_size).to eq 'bla' }
         it { expect(attendance.job_role).to eq 'role' }
         it { expect(attendance.years_of_experience).to eq '6' }
+        it { expect(attendance.experience_in_agility).to eq '9' }
         it { expect(attendance.education_level).to eq 'level' }
         it { expect(attendance.phone).to eq user.phone }
         it { expect(attendance.country).to eq user.country }
@@ -401,6 +403,7 @@ describe EventAttendancesController, type: :controller do
           expect(Attendance.last.organization_size).to eq 'bla'
           expect(Attendance.last.job_role).to eq 'role'
           expect(Attendance.last.years_of_experience).to eq '6'
+          expect(Attendance.last.experience_in_agility).to eq '9'
           expect(Attendance.last.education_level).to eq 'level'
           expect(Attendance.last.phone).to eq user.phone
           expect(Attendance.last.country).to eq user.country

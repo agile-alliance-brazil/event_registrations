@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20160217002804) do
     t.string   "organization_size",      limit: 255
     t.string   "job_role",               limit: 255
     t.string   "years_of_experience",    limit: 255
+    t.string   "experience_in_agility",  limit: 255
     t.string   "school",                 limit: 255
     t.string   "education_level",        limit: 255
   end

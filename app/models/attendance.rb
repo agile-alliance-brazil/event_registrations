@@ -15,6 +15,7 @@
 #  email_sent             :boolean          default(FALSE)
 #  event_id               :integer
 #  event_price            :decimal(10, )
+#  experience_in_agility  :string(255)
 #  first_name             :string(255)
 #  gender                 :string(255)
 #  id                     :integer          not null, primary key

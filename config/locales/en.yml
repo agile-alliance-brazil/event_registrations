@@ -63,7 +63,8 @@ en:
         organization: "Organization"
         organization_size: "Organization size"
         job_role: "Job role"
-        years_of_experience: "Years of experience"
+        years_of_experience: "Professional experience (years)"
+        experience_in_agility: "Agility experience (years)"
         school: "School"
         education_level: "Education level"
         badge_name: "Name for badge"
@@ -85,7 +86,7 @@ en:
         cancelled: 'Cancelled total'
         registration_total: 'Registration total'
         total_without_cancelled: 'Total without cancelled'
-        actions: 'Actions'
+        payment_type: 'Payment type'
       payment_notification:
         transaction_id: "Transaction ID"
         paid_at: "Payment date"

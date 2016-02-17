@@ -30,6 +30,14 @@ module AttendanceHelper
     }
   end
 
+  def experience_in_agility_options
+    {
+      :'0 - 2' => '0 - 2',
+      :'3 - 7' => '3 - 7',
+      :'7 -' => '7 -'
+    }
+  end
+
   def organization_size_options
     {
       :'1 - 10' => '1 - 10',

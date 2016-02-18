@@ -196,7 +196,7 @@ pt:
         education_level: "Nível de escolaridade"
         badge_name: "Nome para o crachá"
         cpf: "CPF"
-        gender: "Sexo"
+        gender: "Gênero"
         status: "Status"
         registration_date: "Data"
         registration_value: "Valor da Inscrição"
@@ -284,6 +284,7 @@ pt:
       attendance:
         education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"
         notes: "Deixe aqui qualquer anotação ou observação que considere relevante, para futura referência (por exemplo: número de confirmação do pagamento, ou alguma informação especial sobre essa inscrição)"
+        gender: "Deixe em branco caso prefira não responder"
     actions:
       edit_profile: "Atualizar perfil"
       new_registration: "Submeter inscrição"
@@ -394,6 +395,7 @@ pt:
     male: "Masculino"
     female: "Feminino"
 
+    other: "Outro"
   registration_total:
     title: "Custo total da inscrição"
     title_partial: "Custo parcial da inscrição"

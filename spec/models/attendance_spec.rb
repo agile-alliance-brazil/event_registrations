@@ -23,16 +23,15 @@ describe Attendance, type: :model do
     it { is_expected.not_to allow_value('1234-bfd').for(:phone) }
     it { is_expected.not_to allow_value(')(*&^%$@!').for(:phone) }
     it { is_expected.not_to allow_value('[=+]').for(:phone) }
+    it { is_expected.to validate_presence_of :state }
 
     context 'brazilians' do
       subject { FactoryGirl.build(:attendance, country: 'BR') }
-      it { is_expected.to validate_presence_of :state }
       it { is_expected.to validate_presence_of :cpf }
     end
 
     context 'foreigners' do
       subject { FactoryGirl.build(:attendance, country: 'US') }
-      it { is_expected.not_to validate_presence_of :state }
       it { is_expected.not_to validate_presence_of :cpf }
     end
 

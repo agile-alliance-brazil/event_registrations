@@ -6,8 +6,8 @@ describe AttendanceRepository, type: :repository do
     end
 
     context 'and having attendances' do
-      let!(:for_other_event) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com', email_confirmation: 'sbrubles@xpto.com') }
+      let!(:for_other_event) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
 
       let(:all_statuses) { %w(pending accepted paid confirmed cancelled) }
 
@@ -30,9 +30,9 @@ describe AttendanceRepository, type: :repository do
       end
 
       context 'with three attendances, one not matching' do
-        let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', organization: 'sbrubles', email: 'foo@xpto.com', email_confirmation: 'foo@xpto.com') }
-        let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
-        let!(:for_other_event) { FactoryGirl.create(:attendance, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path', email_confirmation: 'algorithm@node.path') }
+        let!(:other_attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', organization: 'sbrubles', email: 'foo@xpto.com') }
+        let!(:out_attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path') }
+        let!(:for_other_event) { FactoryGirl.create(:attendance, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path') }
 
         context 'entire field' do
           it { expect(AttendanceRepository.instance.search_for_list(event, 'xPTo', all_statuses)).to match_array [attendance, other_attendance] }

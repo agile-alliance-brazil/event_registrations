@@ -6,12 +6,12 @@ describe Gender, type: :model do
     I18n.with_locale(:en) do
       expect(Gender.options_for_select).to include('Male' => 'M')
       expect(Gender.options_for_select).to include('Female' => 'F')
-      expect(Gender.options_for_select.size).to eq(2)
+      expect(Gender.options_for_select.size).to eq 3
     end
   end
 
   it 'should provide valid values' do
-    expect(Gender.valid_values).to eq(%w(M F))
+    expect(Gender.valid_values).to eq(%w(M F O))
   end
 
   it 'should provide title for given value' do

@@ -89,7 +89,7 @@ describe UsersController, type: :controller do
       end
 
       describe '#update' do
-        let(:valid_params) { { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com', email_confirmation: 'xpto@bla.com' } }
+        let(:valid_params) { { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } }
 
         context 'with an existent user' do
           before { put :update, id: user.id, user: valid_params }

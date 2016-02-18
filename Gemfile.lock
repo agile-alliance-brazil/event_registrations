@@ -78,9 +78,6 @@ GEM
     brcpfcnpj (3.3.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    brhelper (3.3.0)
-      actionpack (>= 3.0.0)
-      activesupport (>= 3.0.0)
     builder (3.2.2)
     byebug (8.2.2)
     cancancan (1.13.1)
@@ -503,7 +500,6 @@ DEPENDENCIES
   bootstrap-sass (~> 3.3)
   brakeman
   brcpfcnpj (~> 3.3.0)
-  brhelper (~> 3.3.0)
   byebug
   cancancan (~> 1.10)
   capistrano (~> 3.4)

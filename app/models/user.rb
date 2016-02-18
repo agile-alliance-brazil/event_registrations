@@ -87,12 +87,6 @@ class User < ActiveRecord::Base
     user
   end
 
-  def attendance_attributes
-    attributes.reject do |attribute, _value|
-      %w(id created_at updated_at roles_mask default_locale).include?(attribute)
-    end
-  end
-
   def full_name
     [first_name, last_name].join(' ')
   end

@@ -1,7 +1,37 @@
-# encoding: UTF-8
 require 'webmock/rspec'
 
 describe EventAttendancesController, type: :controller do
+  let(:user) { FactoryGirl.create(:user) }
+  let(:valid_attendance) do
+    {
+      event_id: @event.id,
+      user_id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      organization: user.organization,
+      organization_size: 'bla',
+      job_role: 'role',
+      years_of_experience: '6',
+      experience_in_agility: '9',
+      school: 'scholl',
+      education_level: 'level',
+      phone: user.phone,
+      country: user.country,
+      state: user.state,
+      city: user.city,
+      badge_name: user.badge_name,
+      cpf: user.cpf,
+      gender: user.gender
+    }
+  end
+  let(:valid_event) do
+    {
+      name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link',
+      full_price: 840.00, start_date: 1.month.from_now, end_date: 2.months.from_now
+    }
+  end
+
   before :each do
     @event = FactoryGirl.create(:event)
     WebMock.enable!
@@ -26,35 +56,6 @@ describe EventAttendancesController, type: :controller do
   end
 
   describe '#create' do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:valid_attendance) do
-      {
-        event_id: @event.id,
-        user_id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        email_confirmation: user.email,
-        organization: user.organization,
-        phone: user.phone,
-        country: user.country,
-        state: user.state,
-        city: user.city,
-        badge_name: user.badge_name,
-        cpf: user.cpf,
-        gender: user.gender,
-        twitter_user: user.twitter_user,
-        address: user.address,
-        neighbourhood: user.neighbourhood,
-        zipcode: user.zipcode
-      }
-    end
-    let(:valid_event) do
-      {
-        name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link',
-        full_price: 840.00, start_date: 1.month.from_now, end_date: 2.months.from_now
-      }
-    end
     before(:each) do
       @email = stub(deliver_now: true)
       controller.current_user = user
@@ -64,8 +65,6 @@ describe EventAttendancesController, type: :controller do
     end
 
     it 'renders new template when model is invalid' do
-      user.phone = nil # User cannot have everything or we will just pick from there.
-      # I think we need to consolidate all user and attendee information
       post :create, event_id: @event.id, attendance: { event_id: @event.id }
       is_expected.to render_template(:new)
     end
@@ -157,12 +156,27 @@ describe EventAttendancesController, type: :controller do
           expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
         end
       end
-
       context 'with no token' do
         let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
         subject(:attendance) { assigns(:attendance) }
         before { post :create, event_id: @event.id, attendance: valid_attendance }
         it { expect(attendance.registration_group).to be_nil }
+        it { expect(attendance.first_name).to eq user.first_name }
+        it { expect(attendance.last_name).to eq user.last_name }
+        it { expect(attendance.email).to eq user.email }
+        it { expect(attendance.organization).to eq user.organization }
+        it { expect(attendance.organization_size).to eq 'bla' }
+        it { expect(attendance.job_role).to eq 'role' }
+        it { expect(attendance.years_of_experience).to eq '6' }
+        it { expect(attendance.experience_in_agility).to eq '9' }
+        it { expect(attendance.education_level).to eq 'level' }
+        it { expect(attendance.phone).to eq user.phone }
+        it { expect(attendance.country).to eq user.country }
+        it { expect(attendance.state).to eq user.state }
+        it { expect(attendance.city).to eq user.city }
+        it { expect(attendance.badge_name).to eq user.badge_name }
+        it { expect(attendance.cpf).to eq user.cpf }
+        it { expect(attendance.gender).to eq user.gender }
       end
 
       context 'with registration token' do
@@ -193,15 +207,6 @@ describe EventAttendancesController, type: :controller do
             end
             it { expect(attendance.registration_group).to eq group }
           end
-
-          context 'and different email from current user' do
-            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-            before do
-              Invoice.from_registration_group(group, Invoice::GATEWAY)
-              post :create, event_id: @event.id, registration_token: group.token, attendance: { email: 'warantesbr@gmail.com', email_confirmation: 'warantesbr@gmail.com' }
-            end
-            it { expect(attendance).to be_valid }
-          end
         end
       end
 
@@ -223,7 +228,7 @@ describe EventAttendancesController, type: :controller do
         let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: true) }
         before do
           Invoice.from_registration_group(group, Invoice::GATEWAY)
-          post :create, event_id: @event.id, registration_token: group.token, attendance: { email: 'foo@bar.com', email_confirmation: 'foo@bar.com' }
+          post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
         end
         it { expect(assigns(:attendance).status).to eq 'accepted' }
       end
@@ -232,7 +237,7 @@ describe EventAttendancesController, type: :controller do
         let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: false) }
         before do
           Invoice.from_registration_group(group, Invoice::GATEWAY)
-          post :create, event_id: @event.id, registration_token: group.token, attendance: { email: 'foo@bar.com', email_confirmation: 'foo@bar.com' }
+          post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
         end
         it { expect(assigns(:attendance).status).to eq 'pending' }
       end
@@ -371,13 +376,11 @@ describe EventAttendancesController, type: :controller do
       it 'keeps group token and email confirmation' do
         get :edit, event_id: event.id, id: attendance_with_group.id
         expect(response.body).to have_field('registration_token', type: 'text', with: group.token)
-        expect(response.body).to have_field('attendance_email_confirmation', type: 'text', with: attendance_with_group.email_confirmation)
       end
     end
   end
 
   describe '#update' do
-    let(:user) { FactoryGirl.create(:user) }
     before do
       User.any_instance.stubs(:has_approved_session?).returns(true)
       sign_in user
@@ -390,33 +393,25 @@ describe EventAttendancesController, type: :controller do
       let(:attendance) { FactoryGirl.create(:attendance, event: event) }
       let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       context 'and no group token informed' do
-        let(:valid_attendance) do
-          {
-            event_id: event.id,
-            user_id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: 'bla@foo.bar',
-            email_confirmation: 'bla@foo.bar',
-            organization: 'sbrubbles',
-            phone: user.phone,
-            country: user.country,
-            state: user.state,
-            city: user.city,
-            badge_name: user.badge_name,
-            cpf: user.cpf,
-            gender: user.gender,
-            twitter_user: user.twitter_user,
-            address: user.address,
-            neighbourhood: user.neighbourhood,
-            zipcode: user.zipcode
-          }
-        end
-
-        it 'assigns the attendance and render edit' do
+        it 'updates the attendance' do
           put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance, payment_type: Invoice::DEPOSIT
-          expect(Attendance.last.email).to eq 'bla@foo.bar'
-          expect(Attendance.last.organization).to eq 'sbrubbles'
+          expect(Attendance.last.registration_group).to be_nil
+          expect(Attendance.last.first_name).to eq user.first_name
+          expect(Attendance.last.last_name).to eq user.last_name
+          expect(Attendance.last.email).to eq user.email
+          expect(Attendance.last.organization).to eq user.organization
+          expect(Attendance.last.organization_size).to eq 'bla'
+          expect(Attendance.last.job_role).to eq 'role'
+          expect(Attendance.last.years_of_experience).to eq '6'
+          expect(Attendance.last.experience_in_agility).to eq '9'
+          expect(Attendance.last.education_level).to eq 'level'
+          expect(Attendance.last.phone).to eq user.phone
+          expect(Attendance.last.country).to eq user.country
+          expect(Attendance.last.state).to eq user.state
+          expect(Attendance.last.city).to eq user.city
+          expect(Attendance.last.badge_name).to eq user.badge_name
+          expect(Attendance.last.cpf).to eq user.cpf
+          expect(Attendance.last.gender).to eq user.gender
           expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
           is_expected.to redirect_to attendances_path(event_id: event)
         end
@@ -431,7 +426,6 @@ describe EventAttendancesController, type: :controller do
             first_name: user.first_name,
             last_name: user.last_name,
             email: 'bla@foo.bar',
-            email_confirmation: 'bla@foo.bar',
             organization: 'sbrubbles',
             phone: user.phone,
             country: user.country,
@@ -439,11 +433,7 @@ describe EventAttendancesController, type: :controller do
             city: user.city,
             badge_name: user.badge_name,
             cpf: user.cpf,
-            gender: user.gender,
-            twitter_user: user.twitter_user,
-            address: user.address,
-            neighbourhood: user.neighbourhood,
-            zipcode: user.zipcode
+            gender: user.gender
           }
         end
 
@@ -471,7 +461,6 @@ describe EventAttendancesController, type: :controller do
             first_name: user.first_name,
             last_name: user.last_name,
             email: 'bla@foo.bar',
-            email_confirmation: 'bla@foo.bar',
             organization: 'sbrubbles',
             phone: user.phone,
             country: user.country,
@@ -479,14 +468,9 @@ describe EventAttendancesController, type: :controller do
             city: user.city,
             badge_name: user.badge_name,
             cpf: user.cpf,
-            gender: user.gender,
-            twitter_user: user.twitter_user,
-            address: user.address,
-            neighbourhood: user.neighbourhood,
-            zipcode: user.zipcode
+            gender: user.gender
           }
         end
-
         it 'assigns the attendance and render edit' do
           RegistrationGroup.stubs(:find_by).returns(aa_group)
           put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance, payment_type: Invoice::DEPOSIT, registration_token: group.token

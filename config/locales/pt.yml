@@ -189,7 +189,7 @@ pt:
         city: "Cidade"
         organization: "Organização"
         organization_size: "Tamanho da empresa"
-        job_role: "Função"
+        job_role: "Cargo"
         years_of_experience: "Experiência profissional (anos)"
         experience_in_agility: "Experiência com agilidade (anos)"
         school: "Escola / Instituição"

@@ -17,6 +17,13 @@
   - if I18n.locale == :pt
     = form.input :cpf, required: true, input_html: { tabindex: autotab }
 
+= form.inputs :attendance_address do
+  = form.input :country, required: true, as: :country, priority_countries: [:BR], input_html: { tabindex: autotab }
+  = form.input :city, required: true, input_html: { tabindex: autotab }
+  = form.input :state, required: true, input_html: { tabindex: autotab }
+  = form.input :email, required: true, input_html: { tabindex: autotab }
+  = form.input :phone, required: true, input_html: { tabindex: autotab }
+
 = form.inputs :professional_information do
   = form.input :organization, input_html: { tabindex: autotab }
   = form.input :organization_size, as: :select, collection: organization_size_options, input_html: { tabindex: autotab }
@@ -27,13 +34,6 @@
 = form.inputs :educacional_information do
   = form.input :school, input_html: { tabindex: autotab }
   = form.input :education_level, as: :select, collection: education_level_options, input_html: { tabindex: autotab }
-
-= form.inputs :attendance_address do
-  = form.input :country, required: true, as: :country, priority_countries: [:BR], input_html: { tabindex: autotab }
-  = form.input :email, required: true, input_html: { tabindex: autotab }
-  = form.input :phone, required: true, input_html: { tabindex: autotab }
-  = form.input :city, required: true, input_html: { tabindex: autotab }
-  = form.input :state, required: true, input_html: { tabindex: autotab }
 
 #flash_notice= t('flash.registration.attendance')
 

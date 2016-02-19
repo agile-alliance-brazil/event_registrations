@@ -26,11 +26,13 @@ class PaymentNotificationsController < ApplicationController
 
   def create
     transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
-    transaction_params = params
-    transaction_params[:status] = transaction.status.paid? ? 'Completed' : transaction.status.status
-    transaction_params[:transaction_code] = transaction.code
-    transaction_params[:transaction_inspect] = transaction.inspect
-    PaymentNotification.create_for_pag_seguro(transaction_params)
+    if transaction.status.present?
+      transaction_params = params
+      transaction_params[:status] = transaction.status.try(:paid?) ? 'Completed' : transaction.status.status
+      transaction_params[:transaction_code] = transaction.code
+      transaction_params[:transaction_inspect] = transaction.inspect
+      PaymentNotification.create_for_pag_seguro(transaction_params)
+    end
     render nothing: true
   end
 end

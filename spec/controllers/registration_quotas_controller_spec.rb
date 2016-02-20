@@ -1,20 +1,10 @@
-# == Schema Information
-#
-# Table name: registration_quotas
-#
-#  id                    :integer          not null, primary key
-#  quota                 :integer
-#  created_at            :datetime
-#  updated_at            :datetime
-#  event_id              :integer
-#  registration_price_id :integer
-#  order                 :integer
-#  closed                :boolean          default(FALSE)
-#  price_cents           :integer          default(0), not null
-#  price_currency        :string(255)      default("BRL"), not null
-#
-
 describe RegistrationQuotasController, type: :controller do
+  context 'ability stuff' do
+    describe '#resource' do
+      it { expect(controller.send(:resource_class)).to eq RegistrationQuota }
+    end
+  end
+
   context 'unauthenticated' do
     describe 'GET #new' do
       it 'redirects to login' do

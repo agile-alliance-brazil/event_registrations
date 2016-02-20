@@ -46,4 +46,8 @@ class RegistrationQuotasController < ApplicationController
   def check_event
     not_found unless @event.present?
   end
+
+  def resource_class
+    RegistrationQuota
+  end
 end

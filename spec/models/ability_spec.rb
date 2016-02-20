@@ -101,6 +101,10 @@ describe Ability, type: :model do
         let(:registration_quota) { FactoryGirl.create :registration_quota, event: event }
         it { expect(ability).to be_able_to(:manage, registration_quota) }
       end
+      context 'for registration_group' do
+        let(:registration_group) { FactoryGirl.create :registration_group, event: event }
+        it { expect(ability).to be_able_to(:manage, registration_group) }
+      end
     end
   end
 end

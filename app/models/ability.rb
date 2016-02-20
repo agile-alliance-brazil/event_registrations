@@ -50,5 +50,8 @@ class Ability
     can :manage, RegistrationQuota do |quota|
       @user.organized_events.include?(quota.event)
     end
+    can :manage, RegistrationGroup do |group|
+      @user.organized_events.include?(group.event)
+    end
   end
 end

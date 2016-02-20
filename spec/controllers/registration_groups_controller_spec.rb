@@ -1,32 +1,15 @@
-# == Schema Information
-#
-# Table name: registration_groups
-#
-#  id                 :integer          not null, primary key
-#  event_id           :integer
-#  name               :string(255)
-#  capacity           :integer
-#  discount           :integer
-#  token              :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
-#  leader_id          :integer
-#  invoice_id         :integer
-#  minimum_size       :integer
-#  amount             :decimal(10, )
-#  automatic_approval :boolean          default(FALSE)
-#
-# Indexes
-#
-#  fk_rails_9544e3707e  (invoice_id)
-#
-
 describe RegistrationGroupsController, type: :controller do
   let(:user) { FactoryGirl.create :user }
   before do
     user.add_role(:admin)
     user.save
     sign_in user
+  end
+
+  context 'ability stuff' do
+    describe '#resource' do
+      it { expect(controller.send(:resource_class)).to eq RegistrationGroup }
+    end
   end
 
   describe '#index' do

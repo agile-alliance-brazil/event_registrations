@@ -1,4 +1,10 @@
 describe RegistrationPeriodsController, type: :controller do
+  context 'ability stuff' do
+    describe '#resource' do
+      it { expect(controller.send(:resource_class)).to eq RegistrationPeriod }
+    end
+  end
+
   context 'unauthenticated' do
     describe 'GET #new' do
       it 'redirects to login' do

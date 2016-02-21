@@ -1,5 +1,52 @@
 describe EventsController, type: :controller do
+  context 'ability stuff' do
+    describe '#resource_class' do
+      it { expect(controller.send(:resource_class)).to eq Event }
+    end
+    describe '#resource' do
+      let(:event) { FactoryGirl.create :event }
+      before { get :show, id: event }
+      it { expect(controller.send(:resource)).to eq event }
+    end
+  end
+
   context 'unauthenticated' do
+    describe 'GET #index' do
+      context 'without events at the right period' do
+        before { get :index }
+        it { expect(assigns(:events)).to match_array [] }
+      end
+
+      context 'with events' do
+        let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: Time.zone.today - 1, end_date: 1.month.from_now) }
+
+        context 'and one event at the right period' do
+          before { get :index }
+          it { expect(assigns(:events)).to match_array [event] }
+        end
+
+        context 'and two at the right period' do
+          let!(:other_event) { FactoryGirl.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
+          before { get :index }
+          it { expect(assigns(:events)).to match_array [event, other_event] }
+        end
+
+        context 'and one at the right period and other not' do
+          let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
+          before { get :index }
+          it { expect(assigns(:events)).to match_array [event] }
+        end
+
+        context 'and two at the right period and other not' do
+          let!(:other_event) { FactoryGirl.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
+          let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
+
+          before { get :index }
+          it { expect(assigns(:events)).to match_array [event, other_event] }
+        end
+      end
+    end
+
     describe 'GET #list_archived' do
       it 'redirects to login' do
         get :list_archived
@@ -31,6 +78,20 @@ describe EventsController, type: :controller do
     describe 'PATCH #add_organizer' do
       it 'redirects to login' do
         xhr :patch, :add_organizer, id: 'foo'
+        is_expected.to redirect_to login_path
+      end
+    end
+
+    describe 'GET #edit' do
+      it 'redirects to login' do
+        get :edit, id: 'foo'
+        is_expected.to redirect_to login_path
+      end
+    end
+
+    describe 'PUT #update' do
+      it 'redirects to login' do
+        put :update, id: 'foo'
         is_expected.to redirect_to login_path
       end
     end
@@ -72,6 +133,100 @@ describe EventsController, type: :controller do
       it 'redirects to root' do
         xhr :patch, :add_organizer, id: 'foo'
         is_expected.to redirect_to root_path
+      end
+    end
+
+    describe 'GET #edit' do
+      it 'redirects to root' do
+        get :edit, id: 'foo'
+        is_expected.to redirect_to root_path
+      end
+    end
+
+    describe 'PUT #update' do
+      it 'redirects to root' do
+        put :update, id: 'foo'
+        is_expected.to redirect_to root_path
+      end
+    end
+  end
+
+  context 'logged as organizer' do
+    let(:organizer) { FactoryGirl.create :organizer }
+    before { sign_in organizer }
+
+    describe 'DELETE #destroy' do
+      it 'redirects to root' do
+        delete :destroy, id: 'foo'
+        is_expected.to redirect_to root_path
+      end
+    end
+
+    context 'when is organizing' do
+      let(:event) { FactoryGirl.create :event, organizers: [organizer] }
+      describe 'GET #edit' do
+        context 'and valid event ID' do
+          it 'assigns the instance variable and renders the template' do
+            get :edit, id: event
+            is_expected.to render_template :edit
+            expect(assigns(:event)).to eq event
+          end
+        end
+        context 'and invalid event ID' do
+          it 'responds 404' do
+            get :edit, id: 'foo'
+            expect(response).to have_http_status 404
+          end
+        end
+      end
+
+      describe 'PUT #update' do
+        context 'with valid event ID' do
+          it 'updates the event' do
+            start_date = Time.zone.now
+            end_date = 1.week.from_now
+            put :update, id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, full_price: 278, price_table_link: 'http://xpto' }
+            event_updated = Event.last
+            is_expected.to redirect_to event
+            expect(event_updated.name).to eq 'name'
+            expect(event_updated.attendance_limit).to eq 65
+            expect(event_updated.days_to_charge).to eq 5
+            expect(event_updated.start_date.utc.to_i).to eq start_date.to_i
+            expect(event_updated.end_date.utc.to_i).to eq end_date.to_i
+            expect(event_updated.full_price).to eq 278
+            expect(event_updated.price_table_link).to eq 'http://xpto'
+          end
+        end
+        context 'with invalid event parameters' do
+          it 'renderes the form with the errors' do
+            put :update, id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '', price_table_link: '' }
+            is_expected.to render_template :edit
+            expect(assigns(:event).errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco']
+          end
+        end
+        context 'with invalid event ID' do
+          it 'responds 404' do
+            get :edit, id: 'foo'
+            expect(response).to have_http_status 404
+          end
+        end
+      end
+    end
+
+    context 'when is not organizing' do
+      let(:event) { FactoryGirl.create :event }
+      describe 'GET #edit' do
+        it 'redirects to root' do
+          get :edit, id: event
+          is_expected.to redirect_to root_path
+        end
+      end
+
+      describe 'PUT #update' do
+        it 'redirects to root' do
+          put :update, id: event
+          is_expected.to redirect_to root_path
+        end
       end
     end
   end
@@ -316,42 +471,6 @@ describe EventsController, type: :controller do
         let!(:other_attendance) { FactoryGirl.create(:attendance, event: other_event, user: user) }
         before { get :show, id: event.id }
         it { expect(assigns[:last_attendance_for_user]).to eq attendance }
-      end
-    end
-  end
-
-  describe 'GET #index' do
-    context 'without events at the right period' do
-      before { get :index }
-      it { expect(assigns(:events)).to match_array [] }
-    end
-
-    context 'with events' do
-      let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: Time.zone.today - 1, end_date: 1.month.from_now) }
-
-      context 'and one event at the right period' do
-        before { get :index }
-        it { expect(assigns(:events)).to match_array [event] }
-      end
-
-      context 'and two at the right period' do
-        let!(:other_event) { FactoryGirl.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
-        before { get :index }
-        it { expect(assigns(:events)).to match_array [event, other_event] }
-      end
-
-      context 'and one at the right period and other not' do
-        let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
-        before { get :index }
-        it { expect(assigns(:events)).to match_array [event] }
-      end
-
-      context 'and two at the right period and other not' do
-        let!(:other_event) { FactoryGirl.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
-        let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
-
-        before { get :index }
-        it { expect(assigns(:events)).to match_array [event, other_event] }
       end
     end
   end

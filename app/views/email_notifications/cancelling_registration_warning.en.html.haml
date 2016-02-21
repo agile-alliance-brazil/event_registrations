@@ -1,6 +1,6 @@
 %p Dear #{h(@attendance.full_name)},
 
-%p We noticed that you have a pending payment for #{@attendance.event.name}. If that payment is not realized until #{7.days.from_now.to_date.strftime('%d/%m/%Y')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
+%p We noticed that you have a pending payment for #{@attendance.event.name}. If that payment is not realized until #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
 
 %p In order to complete the registration process, please follow the instructions on the page:
 
@@ -16,4 +16,4 @@
 
 %p If you have any questions, please contact us at #{mail_to APP_CONFIG[:organizer][:contact_email]}
 
-%small [Please do not reply to this e-mail. It was sent from an unmonitored email address]
+%small ['Please do not reply to this e-mail. It was sent from an unmonitored email address']

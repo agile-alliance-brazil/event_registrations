@@ -118,7 +118,7 @@ class Attendance < ActiveRecord::Base
   private
 
   def advised_due_date
-    advised_at + 7.days if advised_at.present?
+    advised_at + event.days_to_charge.days if advised_at.present?
   end
 
   def update_group_invoice

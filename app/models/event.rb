@@ -2,20 +2,21 @@
 #
 # Table name: events
 #
-#  allow_voting      :boolean
-#  attendance_limit  :integer
-#  created_at        :datetime
-#  days_to_charge    :integer          default(7)
-#  end_date          :datetime
-#  full_price        :decimal(10, )
-#  id                :integer          not null, primary key
-#  link              :string(255)
-#  location_and_date :string(255)
-#  logo              :string(255)
-#  name              :string(255)
-#  price_table_link  :string(255)
-#  start_date        :datetime
-#  updated_at        :datetime
+#  allow_voting       :boolean
+#  attendance_limit   :integer
+#  created_at         :datetime
+#  days_to_charge     :integer          default(7)
+#  end_date           :datetime
+#  full_price         :decimal(10, )
+#  id                 :integer          not null, primary key
+#  link               :string(255)
+#  location_and_date  :string(255)
+#  logo               :string(255)
+#  main_email_contact :string(255)      not null
+#  name               :string(255)
+#  price_table_link   :string(255)
+#  start_date         :datetime
+#  updated_at         :datetime
 #
 
 class Event < ActiveRecord::Base
@@ -27,7 +28,7 @@ class Event < ActiveRecord::Base
 
   has_and_belongs_to_many :organizers, class_name: 'User'
 
-  validates :start_date, :end_date, :full_price, :name, presence: true
+  validates :start_date, :end_date, :full_price, :name, :main_email_contact, presence: true
 
   scope :active_for, ->(date) { where('end_date > ?', date) }
   scope :not_started, -> { where('start_date > ?', Time.zone.today) }

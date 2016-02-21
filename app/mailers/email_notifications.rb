@@ -25,8 +25,7 @@ class EmailNotifications < ActionMailer::Base
   def mail_attendance(attendance, sent_at, title)
     @attendance = attendance
     I18n.locale = attendance.country == 'BR' ? :pt : :en
-    Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { locale: #{I18n.locale}, host: #{host}, title: #{title}, attendance_id: #{attendance.id} } }")
-    subject = "[#{host}] #{I18n.t(title, event_name: attendance.event.name, attendance_id: attendance.id)}"
+    subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
     Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
     mail subject: subject, cc: event_organizer, date: sent_at
   end
@@ -39,18 +38,13 @@ class EmailNotifications < ActionMailer::Base
   def default_mail_preferences
     {
       to: "\"#{@attendance.full_name}\" <#{@attendance.email}>",
-      from: "\"#{@attendance.event.name}\" <#{from_address}>",
-      reply_to: "\"#{@attendance.event.name}\" <#{from_address}>"
+      from: "\"#{@attendance.event_name}\" <#{from_address}>",
+      reply_to: "\"#{@attendance.event_name}\" <#{from_address}>"
     }
   end
 
   def from_address
     APP_CONFIG[:ses][:from]
-  end
-
-  def host
-    Rails.logger.info("[EmailNotifications:host] { mail informations: { #{APP_CONFIG[:host]} } }")
-    APP_CONFIG[:host]
   end
 
   def event_organizer

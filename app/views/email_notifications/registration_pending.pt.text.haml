@@ -1,13 +1,13 @@
 Oi #{h(@attendance.full_name)},
 
 
-Seu pedido de inscrição no valor de #{number_to_currency(@attendance.registration_value, :locale => :pt)} na #{@attendance.event.name} foi realizado com sucesso.
+Seu pedido de inscrição no valor de #{number_to_currency(@attendance.registration_value, locale: :pt)} na #{@attendance.event_name} foi realizado com sucesso.
 
 
 Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:
 
 
-= attendance_url(@attendance, :locale => 'pt')
+= attendance_url(@attendance, locale: 'pt')
 
 
 Você pode acessar essa página a qualquer momento para realizar o pagamento ou verificar o status da sua inscrição. Guarde esse e-mail e link para referência futura, assim como seu número de inscrição:
@@ -18,7 +18,7 @@ NÚMERO DE INSCRIÇÃO: #{@attendance.id}
 
 
 
-Qualquer dúvida, entre em contato através do email #{APP_CONFIG[:organizer][:contact_email]}
+Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}
 
 
 

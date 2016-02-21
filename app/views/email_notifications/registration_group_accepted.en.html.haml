@@ -1,12 +1,12 @@
 %p Dear #{h(@attendance.full_name)},
 
-%p Your registration to #{@attendance.event.name} in the group #{@attendance.registration_group.name} was confirmed.
+%p Your registration to #{@attendance.event_name} in the group #{@attendance.registration_group.name} was confirmed.
 
 %p Please, complete the payment at the bellow location:
 
-%p= link_to attendance_url(@attendance, :locale => 'en'), attendance_url(@attendance, :locale => 'en')
+%p= link_to attendance_url(@attendance, locale: 'en'), attendance_url(@attendance, locale: 'en')
 
 
-%p If you have any questions, please contact us at #{mail_to APP_CONFIG[:organizer][:contact_email]}
+%p If you have any questions, please contact us at #{mail_to @attendance.event.main_email_contact}
 
-%small [Please do not reply to this e-mail. It was sent from an unmonitored email address]
+%small '[Please do not reply to this e-mail. It was sent from an unmonitored email address]'

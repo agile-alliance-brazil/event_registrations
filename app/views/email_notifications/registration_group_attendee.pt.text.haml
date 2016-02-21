@@ -1,13 +1,13 @@
 Oi #{h(@attendance.full_name)},
 
 
-Seu pedido de inscrição no grupo #{h(@group.name)} para a #{@attendance.event.name} foi realizado com sucesso.
+Seu pedido de inscrição no grupo #{h(@group.name)} para a #{@attendance.event_name} foi realizado com sucesso.
 
 
 Instruções para completar o processo de inscrição serão enviadas para o organizador do seu grupo assim que todos os participantes se inscreverem.
 
 
-Qualquer dúvida, entre em contato através do email #{APP_CONFIG[:organizer][:contact_email]}
+Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}
 
 
 

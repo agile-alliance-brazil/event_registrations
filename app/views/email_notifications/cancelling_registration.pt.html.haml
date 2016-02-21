@@ -1,6 +1,6 @@
 %p Oi #{h(@attendance.full_name)},
 
-%p Agradecemos o seu interesse pelo #{@attendance.event.name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
+%p Agradecemos o seu interesse pelo #{@attendance.event_name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
 
 %p Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do PagSeguro ou da transferência bancária que restauraremos sua inscrição.
 
@@ -10,8 +10,8 @@
 
 %p
   Sinceramente,
-  Comitê de organização do #{@attendance.event.name}.
+  Comitê de organização da conferência #{@attendance.event_name}.
 
-%p Qualquer dúvida, entre em contato através do email #{mail_to APP_CONFIG[:organizer][:contact_email]}
+%p= "Qualquer dúvida, entre em contato através do email #{mail_to @attendance.event.main_email_contact}"
 
-%small [Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]
+%small '[Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]'

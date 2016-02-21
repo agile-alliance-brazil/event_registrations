@@ -1,6 +1,6 @@
 Oi #{h(@attendance.full_name)},
 
-%p Sua inscrição na #{@attendance.event.name} foi confirmada.
+%p Sua inscrição na #{@attendance.event_name} foi confirmada.
 
 %ul
   - if @attendance.event.start_date.present? && @attendance.event.end_date.present?
@@ -9,8 +9,6 @@ Oi #{h(@attendance.full_name)},
     - else
       %li Quando: #{ l(@attendance.event.start_date.to_date) } #{ t('title.until')} #{l(@attendance.event.end_date.to_date) }
 
-  %li Informações sobre como chegar: #{@attendance.event.location_and_date}
+%p Qualquer dúvida, entre em contato através do email #{mail_to @attendance.event.main_email_contact}
 
-%p Qualquer dúvida, entre em contato através do email #{mail_to APP_CONFIG[:organizer][:contact_email]}
-
-%small [Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]
+%small '[Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]'

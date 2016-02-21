@@ -1,8 +1,8 @@
 %div.attendances-actions
   - if (can? :confirm, attendance) && (attendance.confirmable?)
-    = button_to 'Confirmar inscrição', confirm_attendance_path(attendance), method: :put, class: 'confirm btn btn-primary', data: { confirm: t('attendance.confirm_confirmation', event: attendance.event.name) }
+    = button_to 'Confirmar inscrição', confirm_attendance_path(attendance), method: :put, class: 'confirm btn btn-primary', data: { confirm: t('attendance.confirm_confirmation', event: attendance.event_name) }
   - if can?(:destroy, attendance) && (attendance.cancellable?)
-    = button_to 'Cancelar inscrição', attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event.name) }
+    = button_to 'Cancelar inscrição', attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name) }
   - if can?(:transfer, attendance) && (attendance.transferrable?)
     = link_to 'Transferir inscrição', new_attendance_transfer_path(attendance, transfer: { origin_id: attendance.id }), :class => 'btn btn-success'
   - if can?(:recover, attendance) && (attendance.recoverable?)

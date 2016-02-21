@@ -279,6 +279,7 @@ pt:
         full_price: 'Preço cheio do evento'
         price_table_link: 'Link para a tabela de preços'
         days_to_charge: 'Dias para cobrar a inscrição'
+        main_email_contact: 'Email principal de contato'
     hints:
       attendance:
         education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"

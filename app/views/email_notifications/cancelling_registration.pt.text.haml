@@ -1,7 +1,7 @@
 Oi #{h(@attendance.full_name)},
 
 
-Agradecemos o seu interesse pelo #{@attendance.event.name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
+Agradecemos o seu interesse pelo #{@attendance.event_name}, mas infelizmente cancelamos a sua inscrição (ID #{@attendance.id}) devido ao vencimento do prazo de pagamento.
 
 
 Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do PagSeguro ou da transferência bancária que restauraremos sua inscrição.
@@ -14,10 +14,11 @@ Esperamos encontrá-lo na maior conferência de métodos ágeis da América Lati
 
 
 Sinceramente,
-Comitê de organização do #{@attendance.event.name}
+Comitê de organização da conferência #{@attendance.event_name}
 
 
-Qualquer dúvida, entre em contato através do email #{APP_CONFIG[:organizer][:contact_email]}
+Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}
+
 
 
 

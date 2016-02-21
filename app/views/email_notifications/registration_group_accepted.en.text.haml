@@ -1,14 +1,14 @@
 Dear #{h(@attendance.full_name)},
 
 
-Your registration to #{@attendance.event.name} in the group #{@attendance.registration_group.name} was confirmed.
+Your registration to #{@attendance.event_name} in the group #{@attendance.registration_group.name} was confirmed.
 
 The details can be found following the link below:
 
-%p= link_to attendance_url(@attendance, :locale => 'pt'), attendance_url(@attendance, :locale => 'pt')
+%p= link_to attendance_url(@attendance, locale: 'pt'), attendance_url(@attendance, locale: 'pt')
 
 
-If you have any questions, please contact us at #{APP_CONFIG[:organizer][:contact_email]}
+If you have any questions, please contact us at #{@attendance.event.main_email_contact}
 
 
 [Please do not reply to this e-mail. It was sent from an unmonitored email address]

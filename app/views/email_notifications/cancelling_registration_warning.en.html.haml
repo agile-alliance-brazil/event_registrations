@@ -1,19 +1,19 @@
 %p Dear #{h(@attendance.full_name)},
 
-%p We noticed that you have a pending payment for #{@attendance.event.name}. If that payment is not realized until #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
+%p We noticed that you have a pending payment for #{@attendance.event_name}. If that payment is not realized until #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
 
 %p In order to complete the registration process, please follow the instructions on the page:
 
 %p= link_to attendance_url(@attendance, :locale => 'en'), attendance_url(@attendance, :locale => 'en')
 
-%p If you already settled your registration payment, please contact us - #{mail_to APP_CONFIG[:organizer][:contact_email]}.
+%p If you already settled your registration payment, please contact us - #{mail_to @attendance.event.main_email_contact}.
 
 %p We hope to meet you in Brasília between #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} and #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
 
 %p
   Sincerely,
-  Agile Brazil's organizing committee.
+  #{@attendance.event_name}'s organizing committee.
 
-%p If you have any questions, please contact us at #{mail_to APP_CONFIG[:organizer][:contact_email]}
+%p If you have any questions, please contact us at #{mail_to @attendance.event.main_email_contact}
 
-%small ['Please do not reply to this e-mail. It was sent from an unmonitored email address']
+%small '[Please do not reply to this e-mail. It was sent from an unmonitored email address]'

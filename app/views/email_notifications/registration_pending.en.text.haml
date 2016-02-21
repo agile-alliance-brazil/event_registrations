@@ -1,21 +1,21 @@
 Dear #{h(@attendance.full_name)},
 
-Your request for registration priced #{number_to_currency(@attendance.registration_value, :locale => :pt)} at #{@attendance.event.name} was received successfully.
+Your request for registration priced #{number_to_currency(@attendance.registration_value, locale: :pt)} at #{@attendance.event_name} was received successfully.
 
 
 In order to complete the registration process, please follow the instructions on the page:
 
 
-= attendance_url(@attendance, :locale => 'en')
+= attendance_url(@attendance, locale: 'en')
 
 
-You can access this page at any time to make the payment and check the status of your registration, so keep this e-mail and link for future reference. Your registration number is:
+You can access this page at any time to make the payment and check the status of your registration, so keep this e-mail and link for future reference.
 
 
 REGISTRATION NUMBER: #{@attendance.id}
 
 
-If you have any questions, please contact us at #{APP_CONFIG[:organizer][:contact_email]}
+If you have any questions, please contact us at #{@attendance.event.main_email_contact}
 
 
 [Please do not reply to this e-mail. It was sent from an unmonitored email address]

@@ -185,7 +185,7 @@ describe EventsController, type: :controller do
           it 'updates the event' do
             start_date = Time.zone.now
             end_date = 1.week.from_now
-            put :update, id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, full_price: 278, price_table_link: 'http://xpto' }
+            put :update, id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto' }
             event_updated = Event.last
             is_expected.to redirect_to event
             expect(event_updated.name).to eq 'name'
@@ -285,7 +285,7 @@ describe EventsController, type: :controller do
         it 'creates the event and redirects to index of events' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          post :create, event: { name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, full_price: 100, price_table_link: 'http://bla' }
+          post :create, event: { name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla' }
           expect(Event.count).to eq 1
           event_persisted = Event.last
           expect(event_persisted.name).to eq 'foo'
@@ -305,7 +305,7 @@ describe EventsController, type: :controller do
         it 'renders form with the errors' do
           post :create, event: { name: '' }
           expect(event).to be_a Event
-          expect(event.errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco']
+          expect(event.errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco', 'Main email contact não pode ficar em branco']
           is_expected.to render_template :new
         end
       end

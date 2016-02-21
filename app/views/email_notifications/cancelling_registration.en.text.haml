@@ -1,7 +1,7 @@
 Dear #{h(@attendance.full_name)},
 
 
-Thank you for your interest on #{@attendance.event.name}, but, unfortunately, we had to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
+Thank you for your interest on #{@attendance.event_name}, but, unfortunately, we had to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
 
 
 If you already settled your registration payment, please contact us with your payment confirmation so we can restore your registration.
@@ -11,10 +11,10 @@ Remeber if you still want to register, you can fill in the form once again and c
 
 
 Sincerely,
-Agile Brazil's organizing commitee.
+#{@attendance.event_name}'s organizing commitee.
 
 
-If you have any questions, please contact us at #{APP_CONFIG[:organizer][:contact_email]}
+If you have any questions, please contact us at #{@attendance.event.main_email_contact}
 
 
 [Please do not reply to this e-mail. It was sent from an unmonitored email address]

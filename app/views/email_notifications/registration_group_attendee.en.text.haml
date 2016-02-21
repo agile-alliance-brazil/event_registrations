@@ -1,11 +1,11 @@
 Dear #{h(@attendance.full_name)},
 
-Your request for registration as part of group <strong>#{h(@group.name)}</strong> at #{@attendance.event.name} was received successfully.
+Your request for registration as part of group <strong>#{h(@group.name)}</strong> at #{@attendance.event_name} was received successfully.
 
 Instructions to complete the registration process will be sent to your group organizer as soon the request for registration for all participants are received.
 
 
-If you have any questions, please contact us at #{APP_CONFIG[:organizer][:contact_email]}
+If you have any questions, please contact us at #{@attendance.event.main_email_contact}
 
 
 [Please do not reply to this e-mail. It was sent from an unmonitored email address]

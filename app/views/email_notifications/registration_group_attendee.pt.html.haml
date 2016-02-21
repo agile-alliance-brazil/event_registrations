@@ -1,9 +1,9 @@
 %p Oi #{h(@attendance.full_name)},
 
-%p Seu pedido de inscrição no grupo <strong>#{h(@group.name)}</strong> na #{@attendance.event.name} foi realizado com sucesso.
+%p Seu pedido de inscrição no grupo <strong>#{h(@group.name)}</strong> na #{@attendance.event_name} foi realizado com sucesso.
 
 %p Instruções para completar o processo de inscrição serão enviadas para o organizador do seu grupo assim que todos os participantes se inscreverem.
 
-%p Qualquer dúvida, entre em contato através do email #{mail_to APP_CONFIG[:organizer][:contact_email]}
+%p Qualquer dúvida, entre em contato através do email #{mail_to @attendance.event.main_email_contact}
 
-%small [Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]
+%small '[Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]'

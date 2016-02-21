@@ -8,7 +8,7 @@
 
 %p Caso a pendência já tenha sido regularizada, favor entrar em contato com a organização - #{mail_to @attendance.event.main_email_contact}
 
-%p Esperamos encontrá-lo no #{@attendance.event_name} entre os dias #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} e #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
+%p Esperamos encontrá-lo no #{@attendance.event_name} em #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')}.
 
 %p
   Sinceramente,
@@ -16,4 +16,4 @@
 
 %p Qualquer dúvida, entre em contato através do email #{mail_to @attendance.event.main_email_contact}
 
-%small ['Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado']
+%small= '[Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]'

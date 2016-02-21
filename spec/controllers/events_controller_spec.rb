@@ -1,20 +1,3 @@
-# == Schema Information
-#
-# Table name: events
-#
-#  id                :integer          not null, primary key
-#  name              :string(255)
-#  location_and_date :string(255)
-#  created_at        :datetime
-#  updated_at        :datetime
-#  price_table_link  :string(255)
-#  allow_voting      :boolean
-#  attendance_limit  :integer
-#  full_price        :decimal(10, )
-#  start_date        :datetime
-#  end_date          :datetime
-#
-
 describe EventsController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #list_archived' do
@@ -147,11 +130,12 @@ describe EventsController, type: :controller do
         it 'creates the event and redirects to index of events' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          post :create, event: { name: 'foo', attendance_limit: 10, start_date: start_date, end_date: end_date, full_price: 100, price_table_link: 'http://bla' }
+          post :create, event: { name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, full_price: 100, price_table_link: 'http://bla' }
           expect(Event.count).to eq 1
           event_persisted = Event.last
           expect(event_persisted.name).to eq 'foo'
           expect(event_persisted.attendance_limit).to eq 10
+          expect(event_persisted.days_to_charge).to eq 3
           expect(event_persisted.start_date.utc.to_i).to eq start_date.to_i
           expect(event_persisted.end_date.utc.to_i).to eq end_date.to_i
           expect(event_persisted.full_price).to eq 100

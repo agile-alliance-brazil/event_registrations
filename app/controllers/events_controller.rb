@@ -60,7 +60,7 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:name, :attendance_limit, :start_date, :end_date, :full_price, :price_table_link)
+    params.require(:event).permit(:name, :attendance_limit, :days_to_charge, :start_date, :end_date, :full_price, :price_table_link)
   end
 
   def find_event

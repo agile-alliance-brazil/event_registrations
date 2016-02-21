@@ -151,7 +151,7 @@ en:
         end_date: 'End date'
         full_price: 'Full price'
         price_table_link: 'Link for the price table'
-
+        days_to_charge: 'Days to charge the registration'
     hints:
       attendance:
         education_level: "This field is using the ISCED 2011 education levels"

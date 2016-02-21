@@ -13,7 +13,7 @@ Current::Application.routes.draw do
     end
   end
 
-  resources :events, only: %i(index show new create destroy) do
+  resources :events, only: %i(index show new create destroy edit update) do
     collection do
       get :list_archived
     end

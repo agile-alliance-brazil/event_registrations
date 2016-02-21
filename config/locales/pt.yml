@@ -521,6 +521,9 @@ pt:
     no_limit: "Este evento não tem limite de capacidade"
     delete:
       button: "Apagar evento"
+    edit:
+      title: "Editando evento %{event_name}"
+      button: "Editar evento"
   layouts:
     alert:
       message_prefix: "Atenção!"

@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   layout 'eventless', only: %i(index list_archived)
 
-  before_action :find_event, only: [:show, :destroy, :add_organizer, :remove_organizer]
+  before_action :find_event, only: [:show, :destroy, :add_organizer, :remove_organizer, :edit, :update]
   skip_before_action :authenticate_user!, :authorize_action, only: [:index, :show]
 
   def index
@@ -57,6 +57,14 @@ class EventsController < ApplicationController
     end
   end
 
+  def update
+    if @event.update(event_params)
+      redirect_to @event
+    else
+      render :edit
+    end
+  end
+
   private
 
   def event_params
@@ -65,5 +73,13 @@ class EventsController < ApplicationController
 
   def find_event
     @event = Event.find(params[:id])
+  end
+
+  def resource
+    Event.find_by_id(params[:id])
+  end
+
+  def resource_class
+    Event
   end
 end

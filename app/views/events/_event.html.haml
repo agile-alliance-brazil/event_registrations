@@ -24,6 +24,11 @@
         %i{class: 'fa fa-check-square-o'}
         = "#{t('actions.to_approval')} (#{event.attendances.waiting_approval.count})"
 
+    - if can? :edit, event
+      = link_to edit_event_path(event), class: 'btn btn-link' do
+        %span{class: 'fa fa-pencil'}
+        = t('events.edit.button')
+
     - if can? :destroy, event
       = link_to event_path(event), method: :delete, class: 'btn btn-link' do
         %span{class: 'fa fa-trash'}

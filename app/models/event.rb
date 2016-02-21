@@ -5,6 +5,7 @@
 #  allow_voting      :boolean
 #  attendance_limit  :integer
 #  created_at        :datetime
+#  days_to_charge    :integer          default(7)
 #  end_date          :datetime
 #  full_price        :decimal(10, )
 #  id                :integer          not null, primary key

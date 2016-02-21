@@ -5,6 +5,7 @@
   = form.inputs :event_basics do
     = form.input :name, required: true, input_html: { tabindex: autotab }
     = form.input :attendance_limit, input_html: { tabindex: autotab }
+    = form.input :days_to_charge, input_html: { tabindex: autotab }
 
   = form.inputs :event_core do
     = form.input :start_date, as: :string, input_html: { class: 'datepicker' }

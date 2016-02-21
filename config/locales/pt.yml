@@ -278,8 +278,7 @@ pt:
         end_date: 'Termina em'
         full_price: 'Preço cheio do evento'
         price_table_link: 'Link para a tabela de preços'
-
-
+        days_to_charge: 'Dias para cobrar a inscrição'
     hints:
       attendance:
         education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"

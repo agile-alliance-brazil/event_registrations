@@ -33,7 +33,7 @@ class AttendancesController < ApplicationController
     begin
       attendance.confirm
     rescue => ex
-      flash[:alert] = t('flash.attendance.mail.fail')
+      flash[:alert] = t('flash.attendance.mail.fail', email: attendance.event.main_email_contact)
       Rails.logger.error('Airbrake notification failed. Logging error locally only')
       Rails.logger.error(ex.message)
     end

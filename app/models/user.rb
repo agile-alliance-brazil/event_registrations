@@ -74,14 +74,18 @@ class User < ActiveRecord::Base
 
   def self.new_from_auth_hash(hash)
     hash_info = hash[:info]
-    user = User.where(email: hash_info[:email]).first_or_initialize
-    names = extract_names(hash_info)
+    user = User.find_by(email: hash_info[:email])
 
-    user.first_name = names[0]
-    user.last_name = names[-1]
-    user.twitter_user = extract_twitter_user(hash)
-    %i(email organization phone country state city).each do |attribute|
-      user.send("#{attribute}=", hash_info[attribute])
+    unless user.present?
+      user = User.new
+      names = extract_names(hash_info)
+
+      user.first_name = names[0]
+      user.last_name = names[-1]
+      user.twitter_user = extract_twitter_user(hash)
+      %i(email organization phone country state city).each do |attribute|
+        user.send("#{attribute}=", hash_info[attribute])
+      end
     end
 
     user

@@ -22,6 +22,6 @@ FactoryGirl.define do
     full_price 850.00
     start_date 1.month.from_now
     end_date 2.months.from_now
-    main_email_contact { Faker::Internet.email }
+    main_email_contact 'bla@xpto.com'
   end
 end

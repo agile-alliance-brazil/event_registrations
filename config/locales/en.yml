@@ -217,7 +217,7 @@ en:
         already_existent: "you already have a registration in this event"
       news: "<a href='/registration_groups/new?locale=en'>Click here</a> for company registration."
       mail:
-        fail: "There was a problem while sending your confirmation email. Your registration was received but we could not deliver the confirmation email. We will try later but if you do not receive it in 24 hours, please contact us at inscricoes@agilebrazil.com."
+        fail: "There was a problem while sending your confirmation email. Your registration was received but we could not deliver the confirmation email. We will try later but if you do not receive it in 24 hours, please contact us at %{email}."
       payment:
         success: 'Attendee check as paid.'
         error: 'Could not check attendee as paid.'

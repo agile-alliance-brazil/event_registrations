@@ -82,7 +82,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def floor?
-    minimum_size > 1
+    minimum_size.to_i > 1
   end
 
   def complete?

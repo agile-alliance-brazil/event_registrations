@@ -198,17 +198,22 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#floor?' do
-    context 'with minimun_size of 0' do
+    context 'with minimun_size nil' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: nil) }
+      it { expect(group.floor?).to be_falsey }
+    end
+
+    context 'with minimun_size 0' do
       let(:group) { FactoryGirl.create(:registration_group, minimum_size: 0) }
       it { expect(group.floor?).to be_falsey }
     end
 
-    context 'with minimun_size of 1' do
+    context 'with minimun_size 1' do
       let(:group) { FactoryGirl.create(:registration_group, minimum_size: 1) }
       it { expect(group.floor?).to be_falsey }
     end
 
-    context 'with minimun_size of 2' do
+    context 'with minimun_size 2' do
       let(:group) { FactoryGirl.create(:registration_group, minimum_size: 2) }
       it { expect(group.floor?).to be_truthy }
     end

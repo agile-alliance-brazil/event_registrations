@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
     elsif logged_in?
       flash[:notice] = I18n.t('flash.user.authentication.new')
       add_authentication(auth_hash)
-    elsif (user = User.new_from_auth_hash(auth_hash)).save
+    elsif (user = User.new_from_auth_hash(auth_hash))
       flash[:notice] = I18n.t('flash.user.create')
       log_in(user)
       add_authentication(auth_hash)

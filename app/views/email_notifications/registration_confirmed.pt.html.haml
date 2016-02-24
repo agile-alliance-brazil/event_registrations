@@ -9,6 +9,6 @@ Oi #{h(@attendance.full_name)},
     - else
       %li Quando: #{ l(@attendance.event.start_date.to_date) } #{ t('title.until')} #{l(@attendance.event.end_date.to_date) }
 
-%p "Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}"
+%p Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}
 
-%small '[Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado]'
+%small Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado

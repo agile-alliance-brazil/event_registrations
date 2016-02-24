@@ -109,6 +109,19 @@ describe User, type: :model do
       expect(user.state).to eq('SP')
       expect(user.city).to eq('São Paulo')
     end
+
+    context 'no email informed by auth provider' do
+      let(:hash) { { info: { name: 'John Doe', email: nil } } }
+      let(:user) { FactoryGirl.create(:user, email: nil) }
+      subject(:user_from_hash) { User.new_from_auth_hash(hash) }
+      it { expect(user_from_hash).not_to eq user }
+    end
+    context 'email informed by auth provider' do
+      let(:hash) { { info: { name: 'John Doe', email: 'bla@xpto.com' } } }
+      let!(:user) { FactoryGirl.create(:user, email: 'bla@xpto.com') }
+      subject(:user_from_hash) { User.new_from_auth_hash(hash) }
+      it { expect(user_from_hash).to eq user }
+    end
   end
 
   describe '#registrations_for_event' do

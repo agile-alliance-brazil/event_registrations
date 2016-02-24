@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
 
   def self.new_from_auth_hash(hash)
     hash_info = hash[:info]
-    user = User.find_by(email: hash_info[:email])
+    user = User.find_by(email: hash_info[:email]) if hash_info[:email].present?
 
     unless user.present?
       user = User.new

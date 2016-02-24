@@ -11,12 +11,12 @@ class SessionsController < ApplicationController
 
   def create
     auth = Authentication.find_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
-    if auth
+    if auth.present?
       log_in_with(auth)
     elsif logged_in?
       flash[:notice] = I18n.t('flash.user.authentication.new')
       add_authentication(auth_hash)
-    elsif (user = User.new_from_auth_hash(auth_hash))
+    elsif (user = User.new_from_auth_hash(auth_hash)).save
       flash[:notice] = I18n.t('flash.user.create')
       log_in(user)
       add_authentication(auth_hash)

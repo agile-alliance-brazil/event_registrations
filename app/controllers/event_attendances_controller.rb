@@ -1,6 +1,4 @@
 class EventAttendancesController < ApplicationController
-  include Concerns::Initiation
-
   before_action :event
 
   def new
@@ -8,9 +6,6 @@ class EventAttendancesController < ApplicationController
   end
 
   def create
-    if !current_user.organizer? && !event.can_add_attendance?
-      return redirect_to root_path, flash: { error: t('flash.attendance.create.max_limit_reached') }
-    end
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for create_params
     if @attendance.errors.any?
@@ -48,5 +43,23 @@ class EventAttendancesController < ApplicationController
 
   def payment_type_report
     @payment_type_report = GeneratePaymentTypeReport.run_for event
+  end
+
+  def waiting_list
+    @waiting_list = event.attendances.waiting
+  end
+
+  private
+
+  def resource_class
+    Attendance
+  end
+
+  def resource
+    Attendance.find_by_id(params[:id])
+  end
+
+  def event
+    @event ||= Event.includes(registration_periods: [:event]).find_by_id(params.require(:event_id))
   end
 end

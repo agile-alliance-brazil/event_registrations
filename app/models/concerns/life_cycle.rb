@@ -3,11 +3,12 @@ module Concerns
     extend ActiveSupport::Concern
 
     included do
-      scope :pending, -> { where(status: :pending) }
-      scope :pending_accepted, -> { where("status IN ('pending', 'accepted')") }
+      scope :pending, -> { where("attendances.status IN ('pending', 'accepted')") }
       scope :accepted, -> { where(status: :accepted) }
       scope :cancelled, -> { where(status: :cancelled) }
       scope :paid, -> { where(status: %i(paid confirmed)) }
+      scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show waiting)) }
+      scope :waiting, -> { where(status: :waiting) }
 
       state_machine :status, initial: :pending do
         after_transition on: %i(cancel mark_no_show), do: :cancel_invoice!
@@ -37,6 +38,10 @@ module Concerns
 
         event :mark_no_show do
           transition %i(pending accepted) => :no_show
+        end
+
+        event :wait do
+          transition %i(pending) => :waiting
         end
 
         state :confirmed do

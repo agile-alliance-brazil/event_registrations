@@ -297,7 +297,6 @@ pt:
 
   # Mensagens customizadas
   title:
-    registration: "Nova inscrição para %{event_name}"
     transfer: "Transferir inscrição"
     attendance: "Detalhes da inscrição"
     attendances_list: "Lista dos inscritos"
@@ -334,6 +333,7 @@ pt:
     account: 'Minha conta'
     download_csv: "Download do arquivo CSV"
 
+    waiting_list: "Lista de espera"
   flash:
     failure: "Por favor verifique os campos em destaque"
     unauthorised: "Você não está autorizado a acessar esta página"
@@ -415,6 +415,7 @@ pt:
 
   attendance:
     status:
+      waiting: "Fila de espera"
       pending: "Pendente"
       accepted: "Aceito no grupo"
       confirmed: "Confirmado"
@@ -556,6 +557,12 @@ pt:
     index:
       title: "Resumo"
       active: "Active attendances"
+    new:
+      title:
+        no_vacancy: "O evento %{event_name} está cheio. Faça o cadastro abaixo para entrar na fila."
+        vacancy: "Nova inscrição para %{event_name}"
+    edit:
+      title: "Atualizar participante"
   users:
     index:
       search:

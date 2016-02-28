@@ -9,6 +9,7 @@ class CreateAttendance
       @attendance.errors.add(:email, I18n.t('flash.attendance.create.already_existent'))
     else
       @attendance = Attendance.new(attributes)
+      @attendance.status = :waiting unless @event.can_add_attendance?
       @attendance = PerformGroupCheck.run(@attendance, @params['registration_token'])
       put_band
       @attendance.registration_value = @event.registration_price_for(@attendance, create_params.payment_type_params)

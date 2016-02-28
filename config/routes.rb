@@ -31,6 +31,7 @@ Current::Application.routes.draw do
         get :last_biweekly_active
         get :to_approval
         get :payment_type_report
+        get :waiting_list
       end
     end
     resources :registration_groups, only: %i(index destroy show create) do

@@ -18,9 +18,12 @@
       = render partial: 'layouts/aa'
       .container
         %div.logo
-          - if @event.present?
+          - if @event.present? && @event.logo.present?
             = link_to @event.link do
               = image_tag @event.logo
+            - unless @event.can_add_attendance?
+              %div{class: 'pull-right'}
+                = image_tag 'soldout_960_720.png', size: '170x170'
           - else
             = link_to 'https://www.agilealliance.org/agilebrazil' do
               = image_tag 'agilealliance-brazil_black.png', size: '220x170'

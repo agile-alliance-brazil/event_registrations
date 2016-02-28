@@ -233,36 +233,54 @@ describe Attendance, type: :model do
     end
 
     describe '#cancel' do
-      context 'when is pending' do
-        it 'cancel the attendance and the invoice' do
-          attendance = FactoryGirl.create :attendance
-
+      context 'when is waiting' do
+        let(:attendance) { FactoryGirl.create :attendance, status: :waiting }
+        let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
+        it 'cancels the attendance and the invoice' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.invoices.last.status).to eq 'cancelled'
+        end
+      end
+
+      context 'when is pending' do
+        let(:attendance) { FactoryGirl.create :attendance, status: :pending }
+        let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
+        it 'cancels the attendance and the invoice' do
+          attendance.cancel
+          expect(attendance.status).to eq 'cancelled'
+          expect(attendance.invoices.last.status).to eq 'cancelled'
         end
       end
 
       context 'when is accepted' do
-        it 'cancel the attendance' do
-          attendance = FactoryGirl.create :attendance, status: 'accepted'
+        let(:attendance) { FactoryGirl.create :attendance, status: :accepted }
+        let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
+
+        it 'cancels the attendance' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.invoices.last.status).to eq 'cancelled'
         end
       end
 
       context 'when is confirmed' do
-        it 'cancel the attendance' do
-          attendance = FactoryGirl.create :attendance, status: 'confirmed'
+        let(:attendance) { FactoryGirl.create :attendance, status: :confirmed }
+        let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
+        it 'cancels the attendance' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.invoices.last.status).to eq 'cancelled'
         end
       end
 
       context 'when is paid' do
+        let(:attendance) { FactoryGirl.create :attendance, status: :paid }
+        let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
         it 'cancel the attendance' do
-          attendance = FactoryGirl.create :attendance, status: 'paid'
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.invoices.last.status).to eq 'cancelled'
         end
       end
     end

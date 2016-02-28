@@ -30,7 +30,12 @@
 
     #footer
       .container
-        Copyleft - Agile Brazil 2010-2015 - #{t('footer.help').html_safe}
+        - if @event.present?
+          %p #{t('footer.help', email: @event.main_email_contact)}
+        - else
+          %p #{t('footer.help', email: 'inscricoes@agilebrazil.com')}
+      %p
+        %strong Copyleft - Agile Brazil 2010 - 2016
 
     - unless APP_CONFIG[:google].nil?
       :javascript

@@ -29,7 +29,7 @@ module Concerns
         end
 
         event :cancel do
-          transition %i(pending accepted paid confirmed) => :cancelled
+          transition %i(waiting pending accepted paid confirmed) => :cancelled
         end
 
         event :recover do

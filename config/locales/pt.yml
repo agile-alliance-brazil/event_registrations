@@ -377,7 +377,7 @@ pt:
     form:
       invalid_data: "Seus dados são inválidos. Por favor, verifique os campos indicados abaixo."
   footer:
-    help: "Se tiver dúvidas, críticas ou sugestões entre em contato através do email <a href='mailto:inscricoes@agilebrazil.com'>inscricoes@agilebrazil.com</a>"
+    help: "Se tiver dúvidas, críticas ou sugestões entre em contato através do email %{email}"
 
   email:
     registration_pending:

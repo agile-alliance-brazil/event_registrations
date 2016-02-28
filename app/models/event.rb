@@ -34,8 +34,8 @@ class Event < ActiveRecord::Base
   scope :not_started, -> { where('start_date > ?', Time.zone.today) }
   scope :ended, -> { where('end_date < ?', Time.zone.today) }
 
-  def can_add_attendance?
-    attendance_limit.nil? || attendance_limit == 0 || (attendance_limit > attendances.active.size)
+  def full?
+    attendance_limit.present? && attendance_limit > 0 && (attendance_limit <= attendances.active.size)
   end
 
   def registration_price_for(attendance, payment_type)
@@ -72,6 +72,10 @@ class Event < ActiveRecord::Base
 
   def contains?(user)
     attendances.active.where(user: user).present?
+  end
+
+  def attendances_in_the_queue?
+    !attendances.waiting.empty?
   end
 
   private

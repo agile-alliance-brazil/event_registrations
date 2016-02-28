@@ -57,299 +57,319 @@ describe EventAttendancesController, type: :controller do
   end
 
   describe '#create' do
-    before(:each) do
-      @email = stub(deliver_now: true)
-      controller.current_user = user
-      EmailNotifications.stubs(:registration_pending).returns(@email)
-      Net::HTTP.stubs(:post).returns('<nil>')
-      stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', headers: {})
-    end
-
-    it 'renders new template when model is invalid' do
-      post :create, event_id: @event.id, attendance: { event_id: @event.id }
-      is_expected.to render_template(:new)
-    end
-
-    it 'redirects when model is valid' do
-      post :create, event_id: @event.id, attendance: valid_attendance
-      is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
-    end
-
-    it 'assigns current event to attendance' do
-      post :create, event_id: @event.id, attendance: valid_attendance
-      expect(assigns(:attendance).event).to eq @event
-      expect(assigns(:attendance).payment_type).to eq Invoice.last.payment_type
-    end
-
-    context 'event value for attendance' do
-      before { Timecop.return }
-
-      context 'with no period, quotas or groups' do
-        before { post :create, event_id: @event.id, attendance: valid_attendance }
-        it { expect(assigns(:attendance).registration_value).to eq @event.full_price }
+    context 'signed in' do
+      let(:user) { FactoryGirl.create :user }
+      before(:each) do
+        sign_in user
+        @email = stub(deliver_now: true)
+        controller.current_user = user
+        EmailNotifications.stubs(:registration_pending).returns(@email)
+        Net::HTTP.stubs(:post).returns('<nil>')
+        stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', headers: {})
       end
 
-      context 'with no period or quotas, but with a valid group' do
-        let(:group) { FactoryGirl.create(:registration_group, event: @event, discount: 30) }
-        before do
-          Invoice.from_registration_group(group, Invoice::GATEWAY)
-          post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
-        end
-        it { expect(assigns(:attendance).registration_value).to eq @event.full_price * 0.7 }
+      it 'renders new template when model is invalid' do
+        post :create, event_id: @event.id, attendance: { event_id: @event.id }
+        is_expected.to render_template(:new)
       end
 
-      context 'with period and no quotas or group' do
-        price = 740
-        let(:event) { Event.create!(valid_event) }
-        let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: price) }
-
-        before { post :create, event_id: event.id, attendance: valid_attendance }
-        it { expect(assigns(:attendance).registration_period).to eq full_registration_period }
-        it { expect(assigns(:attendance).registration_value).to eq price }
-      end
-
-      context 'with no period and one quota' do
-        price = 350
-        let(:quota_event) { Event.create!(valid_event) }
-        let!(:quota) { FactoryGirl.create :registration_quota, event: quota_event, quota: 40, order: 1, price: price }
-        before { post :create, event_id: quota_event.id, attendance: valid_attendance }
-        it { expect(assigns(:attendance).registration_quota).to eq quota }
-        it { expect(assigns(:attendance).registration_value).to eq price }
-      end
-
-      context 'with statement_agreement as payment type, even with configured quotas and periods' do
-        let(:event) { Event.create!(valid_event) }
-        let!(:quota) { FactoryGirl.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
-        let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
-
-        before { post :create, event_id: event.id, payment_type: Invoice::STATEMENT, attendance: valid_attendance }
-        it { expect(Attendance.last.registration_value).to eq event.full_price }
-      end
-    end
-
-    it 'notifies airbrake if cannot send email' do
-      Attendance.any_instance.stubs(:valid?).returns(true)
-      exception = StandardError.new
-      action = :registration_pending
-      EmailNotifications.expects(action).raises(exception)
-      Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] })
-      post :create, event_id: @event.id, attendance: valid_attendance
-      expect(assigns(:attendance).event).to eq(@event)
-    end
-
-    it 'ignores airbrake errors if cannot send email' do
-      Attendance.any_instance.stubs(:valid?).returns(true)
-      exception = StandardError.new
-      action = :registration_pending
-      EmailNotifications.expects(action).raises(exception)
-      Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] }).raises(exception)
-      post :create, event_id: @event.id, attendance: valid_attendance
-      expect(assigns(:attendance).event).to eq(@event)
-    end
-
-    context 'for individual registration' do
-      context 'cannot add more attendances' do
-        before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
-
-        it 'redirects to home page with error message when cannot add more attendances' do
-          post :create, event_id: @event.id, attendance: {}
-          is_expected.to redirect_to(root_path)
-          expect(flash[:error]).to eq(I18n.t('flash.attendance.create.max_limit_reached'))
-        end
-      end
-      context 'with no token' do
-        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
-        subject(:attendance) { assigns(:attendance) }
-        before { post :create, event_id: @event.id, attendance: valid_attendance }
-        it { expect(attendance.registration_group).to be_nil }
-        it { expect(attendance.first_name).to eq user.first_name }
-        it { expect(attendance.last_name).to eq user.last_name }
-        it { expect(attendance.email).to eq user.email }
-        it { expect(attendance.organization).to eq user.organization }
-        it { expect(attendance.organization_size).to eq 'bla' }
-        it { expect(attendance.job_role).to eq 'role' }
-        it { expect(attendance.years_of_experience).to eq '6' }
-        it { expect(attendance.experience_in_agility).to eq '9' }
-        it { expect(attendance.education_level).to eq 'level' }
-        it { expect(attendance.phone).to eq user.phone }
-        it { expect(attendance.country).to eq user.country }
-        it { expect(attendance.state).to eq user.state }
-        it { expect(attendance.city).to eq user.city }
-        it { expect(attendance.badge_name).to eq user.badge_name }
-        it { expect(attendance.cpf).to eq user.cpf }
-        it { expect(attendance.gender).to eq user.gender }
-      end
-
-      context 'with registration token' do
-        let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
-        subject(:attendance) { assigns(:attendance) }
-
-        context 'an invalid' do
-          context 'and one event' do
-            before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: valid_attendance }
-            it { expect(attendance.registration_group).to be_nil }
-          end
-
-          context 'and with a registration token from other event' do
-            let(:other_event) { FactoryGirl.create :event }
-            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-            let!(:other_group) { FactoryGirl.create(:registration_group, event: other_event) }
-            before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: valid_attendance }
-            it { expect(attendance.registration_group).to be_nil }
-          end
-        end
-
-        context 'a valid attendance' do
-          context 'and same email as current user' do
-            let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-            before do
-              Invoice.from_registration_group(group, Invoice::GATEWAY)
-              post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
-            end
-            it { expect(attendance.registration_group).to eq group }
-          end
-        end
-      end
-
-      context 'when agile alliance member' do
-        context 'and not in any group' do
-          let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
-          it 'uses the AA group as attendance group and accept the entrance' do
-            Invoice.from_registration_group(aa_group, Invoice::GATEWAY)
-            AgileAllianceService.stubs(:check_member).returns(true)
-            RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
-            post :create, event_id: @event.id, attendance: valid_attendance
-            attendance = Attendance.last
-            expect(attendance.registration_group).to eq aa_group
-          end
-        end
-      end
-
-      context 'when is an automatic approval group' do
-        let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: true) }
-        before do
-          Invoice.from_registration_group(group, Invoice::GATEWAY)
-          post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
-        end
-        it { expect(assigns(:attendance).status).to eq 'accepted' }
-      end
-
-      context 'when is not an automatic approval group' do
-        let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: false) }
-        before do
-          Invoice.from_registration_group(group, Invoice::GATEWAY)
-          post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
-        end
-        it { expect(assigns(:attendance).status).to eq 'pending' }
-      end
-
-      context 'when attempt to register again to the same event' do
-        context 'with a pending attendance existent' do
-          context 'in the same event' do
-            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :pending) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 1
-              is_expected.to render_template :new
-              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
-            end
-          end
-
-          context 'in other event' do
-            let(:other_event) { FactoryGirl.create(:event) }
-            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :pending) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 2
-              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
-            end
-          end
-        end
-
-        context 'with an accepted attendance existent' do
-          context 'in the same event' do
-            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :accepted) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 1
-              is_expected.to render_template :new
-              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
-            end
-          end
-
-          context 'in other event' do
-            let(:other_event) { FactoryGirl.create(:event) }
-            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :accepted) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 2
-              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
-            end
-          end
-        end
-        context 'with a paid attendance existent' do
-          context 'in the same event' do
-            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :paid) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 1
-              is_expected.to render_template :new
-              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
-            end
-          end
-          context 'in other event' do
-            let(:other_event) { FactoryGirl.create(:event) }
-            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :paid) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 2
-              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
-            end
-          end
-        end
-        context 'with a confirmed attendance existent' do
-          context 'in the same event' do
-            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :confirmed) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 1
-              is_expected.to render_template :new
-              expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
-            end
-          end
-          context 'in other event' do
-            let(:other_event) { FactoryGirl.create(:event) }
-            let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :confirmed) }
-            it 'does not include the new attendance and send the user to show of attendance' do
-              AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
-              expect(Attendance.count).to eq 2
-              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
-            end
-          end
-        end
-        context 'with a cancelled attendance existent' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :cancelled) }
-          it 'does not include the new attendance and send the user to show of attendance' do
-            AgileAllianceService.stubs(:check_member).returns(false)
-            post :create, event_id: @event.id, attendance: valid_attendance
-            expect(Attendance.count).to eq 2
-            is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
-          end
-        end
-      end
-
-      it 'should send pending registration e-mail' do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        EmailNotifications.expects(:registration_pending).returns(@email)
+      it 'redirects when model is valid' do
         post :create, event_id: @event.id, attendance: valid_attendance
+        is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+      end
+
+      it 'assigns current event to attendance' do
+        post :create, event_id: @event.id, attendance: valid_attendance
+        expect(assigns(:attendance).event).to eq @event
+        expect(assigns(:attendance).payment_type).to eq Invoice.last.payment_type
+      end
+
+      context 'event value for attendance' do
+        before { Timecop.return }
+
+        context 'with no period, quotas or groups' do
+          before { post :create, event_id: @event.id, attendance: valid_attendance }
+          it { expect(assigns(:attendance).registration_value).to eq @event.full_price }
+        end
+
+        context 'with no period or quotas, but with a valid group' do
+          let(:group) { FactoryGirl.create(:registration_group, event: @event, discount: 30) }
+          before do
+            Invoice.from_registration_group(group, Invoice::GATEWAY)
+            post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+          end
+          it { expect(assigns(:attendance).registration_value).to eq @event.full_price * 0.7 }
+        end
+
+        context 'with period and no quotas or group' do
+          price = 740
+          let(:event) { Event.create!(valid_event) }
+          let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: price) }
+
+          before { post :create, event_id: event.id, attendance: valid_attendance }
+          it { expect(assigns(:attendance).registration_period).to eq full_registration_period }
+          it { expect(assigns(:attendance).registration_value).to eq price }
+        end
+
+        context 'with no period and one quota' do
+          price = 350
+          let(:quota_event) { Event.create!(valid_event) }
+          let!(:quota) { FactoryGirl.create :registration_quota, event: quota_event, quota: 40, order: 1, price: price }
+          before { post :create, event_id: quota_event.id, attendance: valid_attendance }
+          it { expect(assigns(:attendance).registration_quota).to eq quota }
+          it { expect(assigns(:attendance).registration_value).to eq price }
+        end
+
+        context 'with statement_agreement as payment type, even with configured quotas and periods' do
+          let(:event) { Event.create!(valid_event) }
+          let!(:quota) { FactoryGirl.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
+          let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
+
+          before { post :create, event_id: event.id, payment_type: Invoice::STATEMENT, attendance: valid_attendance }
+          it { expect(Attendance.last.registration_value).to eq event.full_price }
+        end
+      end
+
+      it 'notifies airbrake if cannot send email' do
+        Attendance.any_instance.stubs(:valid?).returns(true)
+        exception = StandardError.new
+        action = :registration_pending
+        EmailNotifications.expects(action).raises(exception)
+        Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] })
+        post :create, event_id: @event.id, attendance: valid_attendance
+        expect(assigns(:attendance).event).to eq(@event)
+      end
+
+      it 'ignores airbrake errors if cannot send email' do
+        Attendance.any_instance.stubs(:valid?).returns(true)
+        exception = StandardError.new
+        action = :registration_pending
+        EmailNotifications.expects(action).raises(exception)
+        Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] }).raises(exception)
+        post :create, event_id: @event.id, attendance: valid_attendance
+        expect(assigns(:attendance).event).to eq(@event)
+      end
+
+      context 'for individual registration' do
+        context 'full event' do
+          let(:event) { FactoryGirl.create :event, attendance_limit: 1 }
+          let!(:pending) { FactoryGirl.create :attendance, event: event, status: :pending }
+          subject(:attendance) { assigns(:attendance) }
+
+          it 'puts the attendance in the queue' do
+            post :create, event_id: event.id, attendance: valid_attendance
+            expect(attendance.status).to eq 'waiting'
+            is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+          end
+        end
+        context 'event having space, but also having attendances in the queue' do
+          let(:event) { FactoryGirl.create :event, attendance_limit: 10 }
+          let!(:waiting) { FactoryGirl.create :attendance, event: event, status: :waiting }
+          subject(:attendance) { assigns(:attendance) }
+          it 'puts the attendance in the queue' do
+            post :create, event_id: event, attendance: valid_attendance
+            expect(attendance.status).to eq 'waiting'
+            is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+          end
+        end
+        context 'with no token' do
+          let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
+          subject(:attendance) { assigns(:attendance) }
+          before { post :create, event_id: @event.id, attendance: valid_attendance }
+          it 'creates the attendance and redirects' do
+            expect(attendance.registration_group).to be_nil
+            expect(attendance.first_name).to eq user.first_name
+            expect(attendance.last_name).to eq user.last_name
+            expect(attendance.status).to eq 'pending'
+            expect(attendance.email).to eq user.email
+            expect(attendance.organization).to eq user.organization
+            expect(attendance.organization_size).to eq 'bla'
+            expect(attendance.job_role).to eq 'role'
+            expect(attendance.years_of_experience).to eq '6'
+            expect(attendance.experience_in_agility).to eq '9'
+            expect(attendance.education_level).to eq 'level'
+            expect(attendance.phone).to eq user.phone
+            expect(attendance.country).to eq user.country
+            expect(attendance.state).to eq user.state
+            expect(attendance.city).to eq user.city
+            expect(attendance.badge_name).to eq user.badge_name
+            expect(attendance.cpf).to eq user.cpf
+            expect(attendance.gender).to eq user.gender
+            is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+          end
+        end
+
+        context 'with registration token' do
+          let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
+          subject(:attendance) { assigns(:attendance) }
+
+          context 'an invalid' do
+            context 'and one event' do
+              before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: valid_attendance }
+              it { expect(attendance.registration_group).to be_nil }
+            end
+
+            context 'and with a registration token from other event' do
+              let(:other_event) { FactoryGirl.create :event }
+              let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+              let!(:other_group) { FactoryGirl.create(:registration_group, event: other_event) }
+              before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: valid_attendance }
+              it { expect(attendance.registration_group).to be_nil }
+            end
+          end
+
+          context 'a valid attendance' do
+            context 'and same email as current user' do
+              let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+              before do
+                Invoice.from_registration_group(group, Invoice::GATEWAY)
+                post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+              end
+              it { expect(attendance.registration_group).to eq group }
+            end
+          end
+        end
+
+        context 'when agile alliance member' do
+          context 'and not in any group' do
+            let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
+            it 'uses the AA group as attendance group and accept the entrance' do
+              Invoice.from_registration_group(aa_group, Invoice::GATEWAY)
+              AgileAllianceService.stubs(:check_member).returns(true)
+              RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              attendance = Attendance.last
+              expect(attendance.registration_group).to eq aa_group
+            end
+          end
+        end
+
+        context 'when is an automatic approval group' do
+          let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: true) }
+          before do
+            Invoice.from_registration_group(group, Invoice::GATEWAY)
+            post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+          end
+          it { expect(assigns(:attendance).status).to eq 'accepted' }
+        end
+
+        context 'when is not an automatic approval group' do
+          let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: false) }
+          before do
+            Invoice.from_registration_group(group, Invoice::GATEWAY)
+            post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+          end
+          it { expect(assigns(:attendance).status).to eq 'pending' }
+        end
+
+        context 'when attempt to register again to the same event' do
+          context 'with a pending attendance existent' do
+            context 'in the same event' do
+              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :pending) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 1
+                is_expected.to render_template :new
+                expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+              end
+            end
+
+            context 'in other event' do
+              let(:other_event) { FactoryGirl.create(:event) }
+              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :pending) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 2
+                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              end
+            end
+          end
+
+          context 'with an accepted attendance existent' do
+            context 'in the same event' do
+              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :accepted) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 1
+                is_expected.to render_template :new
+                expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+              end
+            end
+
+            context 'in other event' do
+              let(:other_event) { FactoryGirl.create(:event) }
+              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :accepted) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 2
+                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              end
+            end
+          end
+          context 'with a paid attendance existent' do
+            context 'in the same event' do
+              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :paid) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 1
+                is_expected.to render_template :new
+                expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+              end
+            end
+            context 'in other event' do
+              let(:other_event) { FactoryGirl.create(:event) }
+              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :paid) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 2
+                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              end
+            end
+          end
+          context 'with a confirmed attendance existent' do
+            context 'in the same event' do
+              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :confirmed) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 1
+                is_expected.to render_template :new
+                expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+              end
+            end
+            context 'in other event' do
+              let(:other_event) { FactoryGirl.create(:event) }
+              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :confirmed) }
+              it 'does not include the new attendance and send the user to show of attendance' do
+                AgileAllianceService.stubs(:check_member).returns(false)
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(Attendance.count).to eq 2
+                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              end
+            end
+          end
+          context 'with a cancelled attendance existent' do
+            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :cancelled) }
+            it 'does not include the new attendance and send the user to show of attendance' do
+              AgileAllianceService.stubs(:check_member).returns(false)
+              post :create, event_id: @event.id, attendance: valid_attendance
+              expect(Attendance.count).to eq 2
+              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+            end
+          end
+        end
+
+        it 'should send pending registration e-mail' do
+          Attendance.any_instance.stubs(:valid?).returns(true)
+          EmailNotifications.expects(:registration_pending).returns(@email)
+          post :create, event_id: @event.id, attendance: valid_attendance
+        end
       end
     end
   end
@@ -630,6 +650,75 @@ describe EventAttendancesController, type: :controller do
                                                       ['gateway', 400] => 2,
                                                       ['statement_agreement', 400] => 1,
                                                       ['gateway', 123] => 1)
+        end
+      end
+    end
+  end
+
+  describe '#waiting_list' do
+    context 'signed as organizer' do
+      let(:organizer) { FactoryGirl.create :organizer }
+      before { sign_in organizer }
+      context 'and it is organizing the event' do
+        let(:event) { FactoryGirl.create(:event, organizers: [organizer]) }
+
+        context 'having no attendances' do
+          before { get :waiting_list, event_id: event.id }
+          it { is_expected.to render_template :waiting_list }
+          it { expect(assigns(:waiting_list)).to eq [] }
+        end
+        context 'having attendances' do
+          let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+          let!(:other_waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+          let!(:out_waiting) { FactoryGirl.create(:attendance, status: :waiting) }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
+          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
+          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+
+          it 'returns just the waiting attendances' do
+            get :waiting_list, event_id: event.id
+            expect(assigns(:waiting_list)).to match_array [waiting, other_waiting]
+          end
+        end
+      end
+      context 'and it does not organize the event' do
+        let(:event) { FactoryGirl.create(:event) }
+        context 'having attendances' do
+          let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+
+          it 'redirects to root_path' do
+            get :waiting_list, event_id: event.id
+            is_expected.to redirect_to root_path
+          end
+        end
+      end
+    end
+
+    context 'signed as admin' do
+      let(:event) { FactoryGirl.create(:event) }
+      let(:admin) { FactoryGirl.create :admin }
+      before { sign_in admin }
+
+      context 'with no attendances' do
+        before { get :waiting_list, event_id: event.id }
+        it { is_expected.to render_template :waiting_list }
+        it { expect(assigns(:waiting_list)).to eq [] }
+      end
+      context 'with attendances' do
+        let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+        let!(:other_waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+        let!(:out_waiting) { FactoryGirl.create(:attendance, status: :waiting) }
+        let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+
+        it 'returns just the waiting attendances' do
+          get :waiting_list, event_id: event.id
+          expect(assigns(:waiting_list)).to match_array [waiting, other_waiting]
         end
       end
     end

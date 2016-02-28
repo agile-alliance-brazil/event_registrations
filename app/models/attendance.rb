@@ -72,13 +72,10 @@ class Attendance < ActiveRecord::Base
 
   usar_como_cpf :cpf
 
-  scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show)) }
-
   scope :last_biweekly_active, -> { active.where('created_at > ?', 15.days.ago) }
   scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
   scope :already_paid, -> { where("attendances.status IN ('paid', 'confirmed')") }
   scope :non_free, -> { where('registration_value > 0') }
-  scope :pending, -> { where("attendances.status IN ('pending', 'accepted')") }
 
   def full_name
     [first_name, last_name].join(' ')

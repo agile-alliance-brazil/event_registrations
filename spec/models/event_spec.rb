@@ -13,33 +13,30 @@ describe Event, type: :model do
     it { is_expected.to validate_presence_of :main_email_contact }
   end
 
-  describe '#attendance limit' do
-    let(:event) { FactoryGirl.build(:event) }
-    before { event.attendance_limit = 1 }
-
-    it 'adds more attendance without limit' do
-      event.attendance_limit = nil
-      expect(event.can_add_attendance?).to be true
+  describe '#full?' do
+    context 'with a defined event limit' do
+      let(:event) { FactoryGirl.create(:event, attendance_limit: 1) }
+      context 'and it was not reached' do
+        it { expect(event.full?).to be_falsey }
+      end
+      context 'and it was reached' do
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+        it { expect(event.full?).to be_truthy }
+      end
+      context 'and it was reached by a cancelled attendance' do
+        let(:attendance) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+        it { expect(event.full?).to be_falsey }
+      end
     end
 
-    it 'adds more attendance with 0 limit' do
-      event.attendance_limit = 0
-      expect(event.can_add_attendance?).to be true
+    context 'with a nil event limit' do
+      let(:event) { FactoryGirl.create(:event, attendance_limit: nil) }
+      it { expect(event.full?).to be_falsey }
     end
 
-    it { expect(event.can_add_attendance?).to be true }
-
-    it 'not adds more attendance after reaching limit' do
-      attendance = FactoryGirl.build(:attendance, event: event)
-      event.attendances.expects(:active).returns([attendance])
-      expect(event.can_add_attendance?).to be false
-    end
-
-    it 'adds more attendance after reaching cancelling attendance' do
-      attendance = FactoryGirl.build(:attendance, event: event)
-      attendance.cancel
-      event.attendances.expects(:active).returns([])
-      expect(event.can_add_attendance?).to be true
+    context 'with a zero event limit' do
+      let(:event) { FactoryGirl.create(:event, attendance_limit: 0) }
+      it { expect(event.full?).to be_falsey }
     end
   end
 
@@ -299,6 +296,20 @@ describe Event, type: :model do
     context 'with a cancelled attendance' do
       let!(:attendance) { FactoryGirl.create :attendance, user: user, event: event, status: :cancelled }
       it { expect(event.contains?(user)).to be_falsey }
+    end
+  end
+
+  describe '#attendances_in_the_queue?' do
+    let(:event) { FactoryGirl.create :event }
+
+    context 'with an attendance in the queue' do
+      let!(:waiting) { FactoryGirl.create :attendance, event: event, status: :waiting }
+      it { expect(event.attendances_in_the_queue?).to be_truthy }
+    end
+
+    context 'with no attendance in the queue' do
+      let!(:pending) { FactoryGirl.create :attendance, event: event, status: :pending }
+      it { expect(event.attendances_in_the_queue?).to be_falsey }
     end
   end
 end

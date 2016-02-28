@@ -1,4 +1,8 @@
-- title t('title.registration', event_name: @event.name)
+- if @event.full? || @event.attendances_in_the_queue?
+  %h4= t('attendances.new.title.no_vacancy', event_name: @event.name)
+- else
+  - title t('attendances.new.title.vacancy', event_name: @event.name)
+
 .auto_focus
 
 = semantic_form_for([@event, @attendance]) do |form|

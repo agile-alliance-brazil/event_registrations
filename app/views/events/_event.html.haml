@@ -24,6 +24,10 @@
         %i{class: 'fa fa-check-square-o'}
         = "#{t('actions.to_approval')} (#{event.attendances.waiting_approval.count})"
 
+      = link_to waiting_list_event_attendances_path(event), class: 'btn btn-link' do
+        %i{class: 'fa fa-check-square-o'}
+        = "#{t('actions.waiting_list')} (#{event.attendances.waiting.count})"
+
     - if can? :edit, event
       = link_to edit_event_path(event), class: 'btn btn-link' do
         %span{class: 'fa fa-pencil'}

@@ -98,6 +98,7 @@ describe Attendance, type: :model do
         let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
         let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
         let!(:no_show) { FactoryGirl.create(:attendance, status: :no_show) }
+        let!(:waiting) { FactoryGirl.create(:attendance, status: :waiting) }
         it { expect(Attendance.active).to eq [pending, accepted, paid, confirmed] }
       end
 
@@ -118,15 +119,6 @@ describe Attendance, type: :model do
         let!(:paid) { FactoryGirl.create(:attendance, registration_group: group, status: :paid) }
         let!(:confirmed) { FactoryGirl.create(:attendance, registration_group: group, status: :confirmed) }
         it { expect(Attendance.waiting_approval).to eq [pending] }
-      end
-
-      describe '.pending_accepted' do
-        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
-        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
-        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
-        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
-        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
-        it { expect(Attendance.pending_accepted).to eq [pending, accepted] }
       end
 
       describe '.already_paid' do
@@ -151,6 +143,16 @@ describe Attendance, type: :model do
         let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
         let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
         it { expect(Attendance.pending).to eq [pending, accepted] }
+      end
+
+      describe '.waiting' do
+        let!(:waiting) { FactoryGirl.create(:attendance, status: :waiting) }
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
+        it { expect(Attendance.waiting).to eq [waiting] }
       end
     end
   end

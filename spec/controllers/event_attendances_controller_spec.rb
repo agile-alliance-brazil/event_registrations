@@ -152,11 +152,22 @@ describe EventAttendancesController, type: :controller do
 
       context 'for individual registration' do
         context 'full event' do
+          let(:event) { FactoryGirl.create :event, attendance_limit: 1 }
+          let!(:pending) { FactoryGirl.create :attendance, event: event, status: :pending }
           subject(:attendance) { assigns(:attendance) }
-          before { Event.any_instance.stubs(:can_add_attendance?).returns(false) }
 
           it 'puts the attendance in the queue' do
-            post :create, event_id: @event.id, attendance: valid_attendance
+            post :create, event_id: event.id, attendance: valid_attendance
+            expect(attendance.status).to eq 'waiting'
+            is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+          end
+        end
+        context 'event having space, but also having attendances in the queue' do
+          let(:event) { FactoryGirl.create :event, attendance_limit: 10 }
+          let!(:waiting) { FactoryGirl.create :attendance, event: event, status: :waiting }
+          subject(:attendance) { assigns(:attendance) }
+          it 'puts the attendance in the queue' do
+            post :create, event_id: event, attendance: valid_attendance
             expect(attendance.status).to eq 'waiting'
             is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
           end

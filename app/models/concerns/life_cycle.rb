@@ -75,7 +75,7 @@ module Concerns
     end
 
     def cancellable?
-      pending? || accepted? || paid? || confirmed?
+      waiting? || pending? || accepted? || paid? || confirmed?
     end
 
     def transferrable?

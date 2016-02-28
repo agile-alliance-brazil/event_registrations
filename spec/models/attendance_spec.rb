@@ -405,6 +405,12 @@ describe Attendance, type: :model do
 
   describe '#cancellable?' do
     let(:attendance) { FactoryGirl.build(:attendance) }
+
+    context 'when is waiting' do
+      let(:waiting) { FactoryGirl.build(:attendance, status: :waiting) }
+      it { expect(waiting).to be_cancellable }
+    end
+
     context 'when is pending' do
       it { expect(attendance).to be_cancellable }
     end

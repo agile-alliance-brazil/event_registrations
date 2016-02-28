@@ -12,6 +12,10 @@ class EmailNotifications < ActionMailer::Base
     mail_attendance(attendance, sent_at, 'email.registration_confirmed.subject')
   end
 
+  def registration_waiting(attendance, sent_at = Time.zone.now)
+    mail_attendance(attendance, sent_at, 'email.registration_waiting.subject')
+  end
+
   def cancelling_registration(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.cancelling_registration.subject')
   end

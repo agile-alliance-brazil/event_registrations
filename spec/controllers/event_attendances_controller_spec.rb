@@ -130,26 +130,6 @@ describe EventAttendancesController, type: :controller do
         end
       end
 
-      it 'notifies airbrake if cannot send email' do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        exception = StandardError.new
-        action = :registration_pending
-        EmailNotifications.expects(action).raises(exception)
-        Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] })
-        post :create, event_id: @event.id, attendance: valid_attendance
-        expect(assigns(:attendance).event).to eq(@event)
-      end
-
-      it 'ignores airbrake errors if cannot send email' do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        exception = StandardError.new
-        action = :registration_pending
-        EmailNotifications.expects(action).raises(exception)
-        Airbrake.expects(:notify).with(exception.message, action: action, attendance: { event: @event, email: valid_attendance[:email] }).raises(exception)
-        post :create, event_id: @event.id, attendance: valid_attendance
-        expect(assigns(:attendance).event).to eq(@event)
-      end
-
       context 'for individual registration' do
         context 'full event' do
           let(:event) { FactoryGirl.create :event, attendance_limit: 1 }
@@ -157,6 +137,7 @@ describe EventAttendancesController, type: :controller do
           subject(:attendance) { assigns(:attendance) }
 
           it 'puts the attendance in the queue' do
+            EmailNotifications.expects(:registration_waiting).returns @email
             post :create, event_id: event.id, attendance: valid_attendance
             expect(attendance.status).to eq 'waiting'
             is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
@@ -167,6 +148,7 @@ describe EventAttendancesController, type: :controller do
           let!(:waiting) { FactoryGirl.create :attendance, event: event, status: :waiting }
           subject(:attendance) { assigns(:attendance) }
           it 'puts the attendance in the queue' do
+            EmailNotifications.expects(:registration_waiting).returns @email
             post :create, event_id: event, attendance: valid_attendance
             expect(attendance.status).to eq 'waiting'
             is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
@@ -365,7 +347,7 @@ describe EventAttendancesController, type: :controller do
           end
         end
 
-        it 'should send pending registration e-mail' do
+        it 'sends pending registration e-mail' do
           Attendance.any_instance.stubs(:valid?).returns(true)
           EmailNotifications.expects(:registration_pending).returns(@email)
           post :create, event_id: @event.id, attendance: valid_attendance

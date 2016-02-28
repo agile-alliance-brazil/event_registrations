@@ -1,0 +1,16 @@
+Oi #{h(@attendance.full_name)},
+
+Seu pedido de inscrição para #{@attendance.event_name} entrou na nossa fila de espera.
+
+Você poderá acompanhar o status na seguinte página, mas não se preocupe, o avisaremos caso tenha vaga para a sua inscrição:
+
+= link_to attendance_url(@attendance, locale: 'pt'), attendance_url(@attendance, locale: 'pt')
+
+Guarde esse e-mail e link para referência futura.
+
+Número de inscrição: @attendance.id
+Status: @attendance.status
+
+Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}
+
+Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado

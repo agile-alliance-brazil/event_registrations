@@ -1,0 +1,16 @@
+Hi #{h(@attendance.full_name)},
+
+Your registration request to #{@attendance.event_name} was queued.
+
+You can check the status in the following page, but don' worry, we will notify you if we get a free vacancy to your subscription:
+
+= link_to attendance_url(@attendance, locale: 'pt'), attendance_url(@attendance, locale: 'pt')
+
+Keep this e-mail and link for future reference.
+
+Registration number: @attendance.id
+Status: @attendance.status
+
+Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}
+
+Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado

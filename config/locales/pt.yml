@@ -381,20 +381,21 @@ pt:
 
   email:
     registration_pending:
-      subject: "Pedido de inscrição na %{event_name} enviado"
+      subject: "Pedido de inscrição para %{event_name} enviado"
     registration_accepted:
-      subject: "Pedido de inscrição na %{event_name} aceito"
+      subject: "Pedido de inscrição para %{event_name} aceito"
     registration_confirmed:
-      subject: "Inscrição na %{event_name} confirmada"
+      subject: "Inscrição para %{event_name} confirmada"
+    registration_waiting:
+      subject: "Sua inscrição para %{event_name} está na fila de espera"
     cancelling_registration:
-      subject: "Aviso de cancelamento da inscrição %{attendance_id} na %{event_name}"
+      subject: "Aviso de cancelamento da inscrição %{attendance_id} para %{event_name}"
     cancelling_registration_warning:
-      subject: "Lembrete de pagamento da inscrição %{attendance_id} na %{event_name}"
+      subject: "Lembrete de pagamento da inscrição %{attendance_id} para %{event_name}"
 
   gender:
     male: "Masculino"
     female: "Feminino"
-
     other: "Outro"
   registration_total:
     title: "Custo total da inscrição"

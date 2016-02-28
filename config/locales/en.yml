@@ -258,16 +258,17 @@ en:
     registration_accepted:
       subject: "Registration request to %{event_name} accepted"
     registration_confirmed:
-      subject: "Registration confirmed for %{event_name}"
+      subject: "Registration request to %{event_name} confirmed"
+    registration_waiting:
+      subject: "Your registration request to %{event_name} was queued"
     cancelling_registration:
-      subject: "Notice about registration %{attendance_id} cancelation for %{event_name}"
+      subject: "Notice about registration %{attendance_id} cancelation to %{event_name}"
     cancelling_registration_warning:
-      subject: "Payment reminder about registration %{attendance_id} for %{event_name}"
+      subject: "Payment reminder about registration %{attendance_id} to %{event_name}"
 
   gender:
     male: "Male"
     female: "Female"
-
     other: "Other"
   registration_total:
     title: "Total Registration Amount"

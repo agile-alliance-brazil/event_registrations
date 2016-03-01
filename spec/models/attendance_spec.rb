@@ -286,6 +286,15 @@ describe Attendance, type: :model do
     end
 
     describe '#accept' do
+      context 'when is waiting' do
+        it 'accept the attendance' do
+          EmailNotifications.expects(:registration_group_accepted).never
+          attendance = FactoryGirl.create :attendance, status: :waiting
+          attendance.accept
+          expect(attendance.status).to eq 'waiting'
+        end
+      end
+
       context 'when is pending' do
         it 'accept the attendance' do
           EmailNotifications.expects(:registration_group_accepted).once
@@ -334,8 +343,17 @@ describe Attendance, type: :model do
     end
 
     describe '#confirm' do
+      context 'when is waiting' do
+        it 'keeps waiting' do
+          EmailNotifications.expects(:registration_confirmed).never
+          attendance = FactoryGirl.create :attendance, status: :waiting
+          attendance.confirm
+          expect(attendance.status).to eq 'waiting'
+        end
+      end
+
       context 'when is pending' do
-        it 'confirm the attendance' do
+        it 'confirms the attendance' do
           EmailNotifications.expects(:registration_confirmed).once
           attendance = FactoryGirl.create :attendance
           Invoice.from_attendance(attendance, Invoice::GATEWAY)
@@ -346,7 +364,7 @@ describe Attendance, type: :model do
       end
 
       context 'when is accepted' do
-        it 'confirm the attendance' do
+        it 'confirms the attendance' do
           EmailNotifications.expects(:registration_confirmed).once
           attendance = FactoryGirl.create :attendance, status: :accepted
           attendance.confirm
@@ -374,6 +392,15 @@ describe Attendance, type: :model do
     end
 
     describe '#mark_no_show' do
+      context 'when is waiting' do
+        it 'keep it waiting' do
+          attendance = FactoryGirl.create :attendance, status: :waiting
+          attendance.expects(:cancel_invoice!).never
+          attendance.mark_no_show
+          expect(attendance.status).to eq 'waiting'
+        end
+      end
+
       context 'when is pending' do
         it 'mark as no show' do
           attendance = FactoryGirl.create :attendance
@@ -411,10 +438,66 @@ describe Attendance, type: :model do
       end
 
       context 'when is confirmed' do
-        it 'keep it paid' do
+        it 'keep it confirmed' do
           attendance = FactoryGirl.create :attendance, status: :confirmed
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
+          expect(attendance.status).to eq 'confirmed'
+        end
+      end
+    end
+
+    describe '#dequeue' do
+      context 'when is waiting' do
+        it 'removes the attendance from the queue' do
+          attendance = FactoryGirl.create :attendance, status: :waiting
+          EmailNotifications.expects(:registration_dequeued).with(attendance).once
+          attendance.dequeue
+          expect(attendance.status).to eq 'pending'
+        end
+      end
+
+      context 'when is pending' do
+        it 'keep it pending' do
+          attendance = FactoryGirl.create :attendance
+          EmailNotifications.expects(:registration_dequeued).never
+          attendance.dequeue
+          expect(attendance.status).to eq 'pending'
+        end
+      end
+
+      context 'when is accepted' do
+        it 'keep it accepted' do
+          attendance = FactoryGirl.create :attendance, status: :accepted
+          EmailNotifications.expects(:registration_dequeued).never
+          attendance.dequeue
+          expect(attendance.status).to eq 'accepted'
+        end
+      end
+
+      context 'when is cancelled' do
+        it 'keep it cancelled' do
+          attendance = FactoryGirl.create :attendance, status: :cancelled
+          EmailNotifications.expects(:registration_dequeued).never
+          attendance.dequeue
+          expect(attendance.status).to eq 'cancelled'
+        end
+      end
+
+      context 'when is paid' do
+        it 'keep it paid' do
+          attendance = FactoryGirl.create :attendance, status: :paid
+          EmailNotifications.expects(:registration_dequeued).never
+          attendance.dequeue
+          expect(attendance.status).to eq 'paid'
+        end
+      end
+
+      context 'when is confirmed' do
+        it 'keep it confirmed' do
+          attendance = FactoryGirl.create :attendance, status: :confirmed
+          EmailNotifications.expects(:registration_dequeued).never
+          attendance.dequeue
           expect(attendance.status).to eq 'confirmed'
         end
       end

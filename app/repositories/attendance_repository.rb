@@ -25,6 +25,10 @@ class AttendanceRepository
     Attendance.where(event_id: event.id)
   end
 
+  def event_queue(event)
+    Attendance.where(event_id: event.id, status: :waiting).order(created_at: :asc)
+  end
+
   private
 
   def older_than(date = Time.zone.now)

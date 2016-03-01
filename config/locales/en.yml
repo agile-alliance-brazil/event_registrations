@@ -265,6 +265,8 @@ en:
       subject: "Notice about registration %{attendance_id} cancelation to %{event_name}"
     cancelling_registration_warning:
       subject: "Payment reminder about registration %{attendance_id} to %{event_name}"
+    registration_dequeued:
+      subject: 'Wooray! We accepted your registration for %{event_name} from the queue!'
 
   gender:
     male: "Male"

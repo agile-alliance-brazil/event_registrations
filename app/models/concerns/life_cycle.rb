@@ -123,7 +123,7 @@ module Concerns
     end
 
     def dequeue_attendance
-      EmailNotifications.registration_dequeued(self)
+      EmailNotifications.registration_dequeued(self).deliver_now
     end
   end
 end

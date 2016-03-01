@@ -26,7 +26,8 @@ describe QueueService, type: :service do
       let!(:third_waiting) { FactoryGirl.create :attendance, event: event, status: :waiting, created_at: 2.days.ago }
 
       it 'dequeues all the attendances and sends the notification' do
-        EmailNotifications.expects(:registration_dequeued).twice
+        email = stub(deliver_now: true)
+        EmailNotifications.expects(:registration_dequeued).twice.returns(email)
         QueueService.serve_the_queue(event)
         expect(third_waiting.reload.status).to eq 'pending'
         expect(second_waiting.reload.status).to eq 'pending'
@@ -42,7 +43,8 @@ describe QueueService, type: :service do
       let!(:third_waiting) { FactoryGirl.create :attendance, event: event, status: :waiting, created_at: 2.days.ago }
 
       it 'dequeues all the attendances and sends the notification' do
-        EmailNotifications.expects(:registration_dequeued).times(3)
+        email = stub(deliver_now: true)
+        EmailNotifications.expects(:registration_dequeued).times(3).returns(email)
         QueueService.serve_the_queue(event)
         expect(third_waiting.reload.status).to eq 'pending'
         expect(second_waiting.reload.status).to eq 'pending'

@@ -451,7 +451,8 @@ describe Attendance, type: :model do
       context 'when is waiting' do
         it 'removes the attendance from the queue' do
           attendance = FactoryGirl.create :attendance, status: :waiting
-          EmailNotifications.expects(:registration_dequeued).with(attendance).once
+          email = stub(deliver_now: true)
+          EmailNotifications.expects(:registration_dequeued).once.returns(email)
           attendance.dequeue
           expect(attendance.status).to eq 'pending'
         end

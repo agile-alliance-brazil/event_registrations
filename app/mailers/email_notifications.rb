@@ -24,6 +24,10 @@ class EmailNotifications < ActionMailer::Base
     mail_attendance(attendance, sent_at, 'email.cancelling_registration_warning.subject')
   end
 
+  def registration_dequeued(attendance, sent_at = Time.zone.now)
+    mail_attendance(attendance, sent_at, 'email.registration_dequeued.subject')
+  end
+
   private
 
   def mail_attendance(attendance, sent_at, title)

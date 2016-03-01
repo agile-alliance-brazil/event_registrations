@@ -201,4 +201,34 @@ describe EmailNotifications, type: :mailer do
       end
     end
   end
+
+  describe '#registration_dequeued' do
+    let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+
+    context 'having no organizers in the event' do
+      it 'sends to attendee cc the events organizer' do
+        mail = EmailNotifications.registration_dequeued(attendance).deliver_now
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(mail.to).to eq [attendance.email]
+        expect(mail.cc).to eq [APP_CONFIG[:organizer][:email]]
+        expect(mail.encoded).to match(/Oi #{attendance.full_name},/)
+        expect(mail.encoded).to match(/Nossa fila andou e chegou a sua vez!/)
+        expect(mail.encoded).to match(/#{attendance.event.main_email_contact}/)
+        expect(mail.subject).to eq("Aeee! Nossa fila andou e a sua inscrição para #{event.name} foi recebida!")
+      end
+    end
+
+    context 'having organizers in the event' do
+      let(:organizer) { FactoryGirl.create :organizer }
+      let(:other_organizer) { FactoryGirl.create :organizer }
+      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer] }
+
+      it 'sends to attendee and cc the events organizer' do
+        mail = EmailNotifications.registration_dequeued(attendance).deliver_now
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(mail.to).to eq [attendance.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+      end
+    end
+  end
 end

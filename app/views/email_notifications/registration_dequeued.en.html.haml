@@ -1,0 +1,16 @@
+%p Dear #{h(@attendance.full_name)},
+
+%p We bring great news! Your registration was accepted and you was removed from the queue.
+
+%p In order to complete the registration process, please follow the instructions on the page:
+
+%p= link_to attendance_url(@attendance, locale: 'en'), attendance_url(@attendance, locale: 'en')
+
+%p You can access this page at any time to make the payment and check the status of your registration, so keep this e-mail and link for future reference.
+
+%p "Registration Number: #{@attendance.id}"
+%p "Status: #{@attendance.status}"
+
+%p If you have any questions, please contact us at #{mail_to @attendance.event.main_email_contact}
+
+%small Please do not reply to this e-mail. It was sent from an unmonitored email address

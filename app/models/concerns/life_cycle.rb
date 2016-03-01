@@ -15,6 +15,7 @@ module Concerns
         after_transition on: :recover, do: :recover_invoice!
         after_transition on: :pay, do: %i(check_confirmation pay_invoice!)
         after_transition on: :confirm, do: :pay_invoice!
+        after_transition on: :dequeue, do: :dequeue_attendance
 
         event :accept do
           transition pending: :accepted
@@ -40,8 +41,8 @@ module Concerns
           transition %i(pending accepted) => :no_show
         end
 
-        event :wait do
-          transition %i(pending) => :waiting
+        event :dequeue do
+          transition waiting: :pending
         end
 
         state :confirmed do
@@ -119,6 +120,10 @@ module Concerns
       return unless invoice.present?
       invoice.send(method)
       invoice.save!
+    end
+
+    def dequeue_attendance
+      EmailNotifications.registration_dequeued(self)
     end
   end
 end

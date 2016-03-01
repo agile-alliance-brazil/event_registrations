@@ -81,12 +81,12 @@ class Event < ActiveRecord::Base
   private
 
   def not_amounted_group(attendance, payment_type)
-    quota = find_quota
-    value = extract_value(attendance, payment_type, quota)
+    value = extract_value(attendance, payment_type)
     Money.new(value, :BRL)
   end
 
-  def extract_value(attendance, payment_type, quota)
+  def extract_value(attendance, payment_type)
+    quota = find_quota
     if payment_type == Invoice::STATEMENT
       (full_price * 100)
     elsif period_for.present?

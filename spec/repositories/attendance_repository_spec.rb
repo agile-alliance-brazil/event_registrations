@@ -141,6 +141,14 @@ describe AttendanceRepository, type: :repository do
     it { expect(AttendanceRepository.instance.for_event(event)).to eq [attendance] }
   end
 
+  describe '#event_queue' do
+    let!(:first_waiting) { FactoryGirl.create :attendance, event: event, status: :waiting, created_at: 1.day.from_now }
+    let!(:second_waiting) { FactoryGirl.create :attendance, event: event, status: :waiting, created_at: Time.zone.today }
+    let!(:third_waiting) { FactoryGirl.create :attendance, event: event, status: :waiting, created_at: 2.days.ago }
+
+    it { expect(AttendanceRepository.instance.event_queue(event)).to eq [third_waiting, second_waiting, first_waiting] }
+  end
+
   describe '_older_than' do
     let(:user) { FactoryGirl.create :user }
     let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user, registration_date: 2.days.ago) }

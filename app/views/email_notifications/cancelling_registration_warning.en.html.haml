@@ -1,6 +1,6 @@
 %p Dear #{h(@attendance.full_name)},
 
-%p We noticed that you have a pending payment for #{@attendance.event_name}. If that payment is not realized until #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
+%p We noticed that you have a pending payment for #{@attendance.event_name}. If that payment is not realized until #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} at #{Time.zone.now.strftime('%H:%M')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
 
 %p In order to complete the registration process, please follow the instructions on the page:
 

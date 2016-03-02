@@ -1,6 +1,6 @@
 %p Oi #{h(@attendance.full_name)},
 
-%p Existe uma pendência no pagamento da sua inscrição na conferência #{@attendance.event_name}. Caso não seja regularizada até #{@attendance.due_date.to_date.strftime('%d/%m/%Y')}, sua inscrição será automaticamente cancelada.
+%p Existe uma pendência no pagamento da sua inscrição na conferência #{@attendance.event_name}. Caso não seja regularizada até #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} as #{Time.zone.now.strftime('%H:%M')}, sua inscrição será automaticamente cancelada.
 
 %p Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:
 

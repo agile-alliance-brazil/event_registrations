@@ -1,7 +1,6 @@
 module Concerns
   module LifeCycle
     extend ActiveSupport::Concern
-
     included do
       scope :pending, -> { where("attendances.status IN ('pending', 'accepted')") }
       scope :accepted, -> { where(status: :accepted) }
@@ -102,18 +101,15 @@ module Concerns
     end
 
     def cancel_invoice!
-      invoice = user.invoices.where(status: 'pending').last
-      change_invoice_status(invoice, :cancel_it)
+      change_invoice_status(user.invoices.where(status: 'pending').last, :cancel_it)
     end
 
     def recover_invoice!
-      invoice = user.invoices.where(status: 'cancelled').last
-      change_invoice_status(invoice, :recover_it)
+      change_invoice_status(user.invoices.where(status: 'cancelled').last, :recover_it)
     end
 
     def pay_invoice!
-      invoice = user.invoices.active.last
-      change_invoice_status(invoice, :pay_it)
+      change_invoice_status(user.invoices.active.last, :pay_it)
     end
 
     def change_invoice_status(invoice, method)
@@ -123,6 +119,8 @@ module Concerns
     end
 
     def dequeue_attendance
+      self.queue_time = ((Time.zone.now - created_at) / 1.hour).round
+      self.created_at = Time.zone.now
       EmailNotifications.registration_dequeued(self).deliver_now
     end
   end

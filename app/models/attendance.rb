@@ -26,6 +26,7 @@
 #  organization_size      :string(255)
 #  payment_type           :string(255)
 #  phone                  :string(255)
+#  queue_time             :integer
 #  registration_date      :datetime
 #  registration_group_id  :integer
 #  registration_period_id :integer

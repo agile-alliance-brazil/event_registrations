@@ -450,11 +450,15 @@ describe Attendance, type: :model do
     describe '#dequeue' do
       context 'when is waiting' do
         it 'removes the attendance from the queue' do
-          attendance = FactoryGirl.create :attendance, status: :waiting
+          Timecop.freeze
+          attendance = FactoryGirl.create :attendance, status: :waiting, created_at: 10.days.ago
           email = stub(deliver_now: true)
           EmailNotifications.expects(:registration_dequeued).once.returns(email)
           attendance.dequeue
           expect(attendance.status).to eq 'pending'
+          expect(attendance.created_at).to eq Time.zone.now
+          expect(attendance.queue_time).to eq 240
+          Timecop.return
         end
       end
 

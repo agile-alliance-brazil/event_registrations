@@ -1,4 +1,4 @@
-- if @invoice.payment_type == Invoice::GATEWAY || @invoice.payment_type.blank?
+- if @invoice.present? && (@invoice.payment_type == Invoice::GATEWAY || @invoice.payment_type.blank?)
   .payments
     %h4= "#{t(:'registration.payment.request.text', value: number_to_currency(@invoice.amount, locale: :pt)) }"
 

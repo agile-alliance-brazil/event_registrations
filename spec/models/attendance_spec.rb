@@ -14,6 +14,8 @@ describe Attendance, type: :model do
     it { is_expected.to validate_presence_of :phone }
     it { is_expected.to validate_presence_of :country }
     it { is_expected.to validate_presence_of :city }
+    it { is_expected.to validate_presence_of :user }
+    it { is_expected.to validate_presence_of :event }
 
     it { is_expected.to allow_value('1234-2345').for(:phone) }
     it { is_expected.to allow_value('+55 11 5555 2234').for(:phone) }

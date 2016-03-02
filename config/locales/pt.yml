@@ -334,6 +334,7 @@ pt:
     download_csv: "Download do arquivo CSV"
 
     waiting_list: "Lista de espera"
+    confirm: "Confirmar"
   flash:
     failure: "Por favor verifique os campos em destaque"
     unauthorised: "Você não está autorizado a acessar esta página"

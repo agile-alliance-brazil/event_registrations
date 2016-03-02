@@ -56,7 +56,7 @@ class Attendance < ActiveRecord::Base
 
   has_many :invoices, as: :invoiceable
 
-  validates :first_name, :last_name, :email, :phone, :country, :city, :state, :registration_date, :user_id, :event_id, presence: true
+  validates :first_name, :last_name, :email, :phone, :country, :city, :state, :registration_date, :user, :event, presence: true
   validates :cpf, presence: true, if: ->(a) { a.in_brazil? }
 
   validates :first_name, :last_name, presence: true, length: { maximum: 100 }

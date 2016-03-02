@@ -10,6 +10,8 @@
   %td= number_to_currency(attendance.registration_value, locale: :pt)
   %td= attendance.status
   %td
+    - if (can? :confirm, attendance) && (attendance.confirmable?)
+      %p= button_to t('actions.confirm'), confirm_attendance_path(attendance), method: :put, remote: true, class: 'confirm btn btn-primary', data: { confirm: t('attendance.confirm_confirmation', event: attendance.event_name) }
     - if attendance.pending? && attendance.grouped?
       %p= link_to t('actions.accept'), accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success', remote: true
     - if attendance.payable?

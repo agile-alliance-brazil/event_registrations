@@ -206,6 +206,7 @@ en:
     account: 'My account'
     download_csv: "Download CSV file"
     waiting_list: "Waiting list"
+    confirm: "Confirm"
   flash:
     failure: "Please check the highlighted fields"
     unauthorised: "You are not authorized to access this page"

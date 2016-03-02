@@ -98,44 +98,56 @@ describe AttendancesController, type: :controller do
   end
 
   describe '#confirm' do
-    let!(:attendance) { FactoryGirl.create(:attendance) }
-    it 'confirms attendance' do
-      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
-      Attendance.any_instance.expects(:confirm)
-      put :confirm, id: attendance.id
+    context 'responding HTML' do
+      let!(:attendance) { FactoryGirl.create(:attendance) }
+      it 'confirms attendance' do
+        EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
+        Attendance.any_instance.expects(:confirm)
+        put :confirm, id: attendance.id
+      end
+
+      it 'redirects back to status' do
+        EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
+        put :confirm, id: attendance.id
+
+        expect(response).to redirect_to(attendance_path(attendance))
+      end
+
+      it 'notifies airbrake if cannot send email' do
+        exception = StandardError.new
+        action = :registration_confirmed
+        EmailNotifications.expects(action).raises(exception)
+
+        Airbrake.expects(:notify)
+                .with(exception.message, action: action, attendance: attendance)
+
+        put :confirm, id: attendance.id
+
+        expect(response).to redirect_to(attendance_path(attendance))
+      end
+
+      it 'ignores airbrake errors if cannot send email' do
+        exception = StandardError.new
+        action = :registration_confirmed
+        EmailNotifications.expects(action).raises(exception)
+        Airbrake.expects(:notify)
+                .with(exception.message, action: action, attendance: attendance)
+                .raises(exception)
+
+        put :confirm, id: attendance.id
+
+        expect(response).to redirect_to(attendance_path(attendance))
+      end
     end
 
-    it 'redirects back to status' do
-      EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
-      put :confirm, id: attendance.id
+    context 'responding JS' do
+      let!(:attendance) { FactoryGirl.create(:attendance) }
 
-      expect(response).to redirect_to(attendance_path(attendance))
-    end
-
-    it 'notifies airbrake if cannot send email' do
-      exception = StandardError.new
-      action = :registration_confirmed
-      EmailNotifications.expects(action).raises(exception)
-
-      Airbrake.expects(:notify)
-              .with(exception.message, action: action, attendance: attendance)
-
-      put :confirm, id: attendance.id
-
-      expect(response).to redirect_to(attendance_path(attendance))
-    end
-
-    it 'ignores airbrake errors if cannot send email' do
-      exception = StandardError.new
-      action = :registration_confirmed
-      EmailNotifications.expects(action).raises(exception)
-      Airbrake.expects(:notify)
-              .with(exception.message, action: action, attendance: attendance)
-              .raises(exception)
-
-      put :confirm, id: attendance.id
-
-      expect(response).to redirect_to(attendance_path(attendance))
+      it 'marks attendance as confirmed, save when this occurs and redirect to attendances index' do
+        xhr :put, :confirm, id: attendance.id
+        expect(assigns(:attendance)).to eq attendance
+        expect(Attendance.last.status).to eq 'confirmed'
+      end
     end
   end
 

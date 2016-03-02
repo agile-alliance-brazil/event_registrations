@@ -37,8 +37,10 @@ class AttendancesController < ApplicationController
       Rails.logger.error('Airbrake notification failed. Logging error locally only')
       Rails.logger.error(ex.message)
     end
-
-    redirect_to attendance_path(attendance)
+    respond_to do |format|
+      format.html { redirect_to attendance_path(attendance) }
+      format.js { responds_js }
+    end
   end
 
   def pay_it

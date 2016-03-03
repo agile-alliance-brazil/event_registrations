@@ -32,6 +32,6 @@ class AttendanceRepository
   private
 
   def older_than(date = Time.zone.now)
-    Attendance.where('registration_date <= (?)', date)
+    Attendance.where('last_status_change_date <= (?)', date)
   end
 end

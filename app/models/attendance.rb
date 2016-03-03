@@ -3,41 +3,42 @@
 #
 # Table name: attendances
 #
-#  advised                :boolean          default(FALSE)
-#  advised_at             :datetime
-#  badge_name             :string(255)
-#  city                   :string(255)
-#  country                :string(255)
-#  cpf                    :string(255)
-#  created_at             :datetime
-#  education_level        :string(255)
-#  email                  :string(255)
-#  email_sent             :boolean          default(FALSE)
-#  event_id               :integer
-#  event_price            :decimal(10, )
-#  experience_in_agility  :string(255)
-#  first_name             :string(255)
-#  gender                 :string(255)
-#  id                     :integer          not null, primary key
-#  job_role               :string(255)
-#  last_name              :string(255)
-#  notes                  :string(255)
-#  organization           :string(255)
-#  organization_size      :string(255)
-#  payment_type           :string(255)
-#  phone                  :string(255)
-#  queue_time             :integer
-#  registration_date      :datetime
-#  registration_group_id  :integer
-#  registration_period_id :integer
-#  registration_quota_id  :integer
-#  registration_value     :decimal(10, )
-#  school                 :string(255)
-#  state                  :string(255)
-#  status                 :string(255)
-#  updated_at             :datetime
-#  user_id                :integer
-#  years_of_experience    :string(255)
+#  advised                 :boolean          default(FALSE)
+#  advised_at              :datetime
+#  badge_name              :string(255)
+#  city                    :string(255)
+#  country                 :string(255)
+#  cpf                     :string(255)
+#  created_at              :datetime
+#  education_level         :string(255)
+#  email                   :string(255)
+#  email_sent              :boolean          default(FALSE)
+#  event_id                :integer
+#  event_price             :decimal(10, )
+#  experience_in_agility   :string(255)
+#  first_name              :string(255)
+#  gender                  :string(255)
+#  id                      :integer          not null, primary key
+#  job_role                :string(255)
+#  last_name               :string(255)
+#  last_status_change_date :datetime
+#  notes                   :string(255)
+#  organization            :string(255)
+#  organization_size       :string(255)
+#  payment_type            :string(255)
+#  phone                   :string(255)
+#  queue_time              :integer
+#  registration_date       :datetime
+#  registration_group_id   :integer
+#  registration_period_id  :integer
+#  registration_quota_id   :integer
+#  registration_value      :decimal(10, )
+#  school                  :string(255)
+#  state                   :string(255)
+#  status                  :string(255)
+#  updated_at              :datetime
+#  user_id                 :integer
+#  years_of_experience     :string(255)
 #
 # Indexes
 #
@@ -46,6 +47,7 @@
 
 class Attendance < ActiveRecord::Base
   include Concerns::LifeCycle
+  before_create :set_last_status_change
 
   belongs_to :event
   belongs_to :user
@@ -121,5 +123,9 @@ class Attendance < ActiveRecord::Base
 
   def update_group_invoice
     registration_group.update_invoice if registration_group.present? && registration_value.present?
+  end
+
+  def set_last_status_change
+    self.last_status_change_date = Time.zone.now unless last_status_change_date.present?
   end
 end

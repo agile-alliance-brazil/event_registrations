@@ -11,43 +11,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302151710) do
+ActiveRecord::Schema.define(version: 20160303004112) do
 
   create_table "attendances", force: :cascade do |t|
-    t.integer  "event_id",               limit: 4
-    t.integer  "user_id",                limit: 4
-    t.integer  "registration_group_id",  limit: 4
+    t.integer  "event_id",                limit: 4
+    t.integer  "user_id",                 limit: 4
+    t.integer  "registration_group_id",   limit: 4
     t.datetime "registration_date"
-    t.string   "status",                 limit: 255
-    t.boolean  "email_sent",                                        default: false
+    t.string   "status",                  limit: 255
+    t.boolean  "email_sent",                                         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.string   "email",                  limit: 255
-    t.string   "organization",           limit: 255
-    t.string   "phone",                  limit: 255
-    t.string   "country",                limit: 255
-    t.string   "state",                  limit: 255
-    t.string   "city",                   limit: 255
-    t.string   "badge_name",             limit: 255
-    t.string   "cpf",                    limit: 255
-    t.string   "gender",                 limit: 255
-    t.string   "notes",                  limit: 255
-    t.decimal  "event_price",                        precision: 10
-    t.integer  "registration_quota_id",  limit: 4
-    t.decimal  "registration_value",                 precision: 10
-    t.integer  "registration_period_id", limit: 4
-    t.boolean  "advised",                                           default: false
+    t.string   "first_name",              limit: 255
+    t.string   "last_name",               limit: 255
+    t.string   "email",                   limit: 255
+    t.string   "organization",            limit: 255
+    t.string   "phone",                   limit: 255
+    t.string   "country",                 limit: 255
+    t.string   "state",                   limit: 255
+    t.string   "city",                    limit: 255
+    t.string   "badge_name",              limit: 255
+    t.string   "cpf",                     limit: 255
+    t.string   "gender",                  limit: 255
+    t.string   "notes",                   limit: 255
+    t.decimal  "event_price",                         precision: 10
+    t.integer  "registration_quota_id",   limit: 4
+    t.decimal  "registration_value",                  precision: 10
+    t.integer  "registration_period_id",  limit: 4
+    t.boolean  "advised",                                            default: false
     t.datetime "advised_at"
-    t.string   "payment_type",           limit: 255
-    t.string   "organization_size",      limit: 255
-    t.string   "job_role",               limit: 255
-    t.string   "years_of_experience",    limit: 255
-    t.string   "experience_in_agility",  limit: 255
-    t.string   "school",                 limit: 255
-    t.string   "education_level",        limit: 255
-    t.integer  "queue_time",             limit: 4
+    t.string   "payment_type",            limit: 255
+    t.string   "organization_size",       limit: 255
+    t.string   "job_role",                limit: 255
+    t.string   "years_of_experience",     limit: 255
+    t.string   "experience_in_agility",   limit: 255
+    t.string   "school",                  limit: 255
+    t.string   "education_level",         limit: 255
+    t.integer  "queue_time",              limit: 4
+    t.datetime "last_status_change_date"
   end
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id", using: :btree

@@ -15,38 +15,16 @@ module Concerns
         after_transition on: :pay, do: %i(check_confirmation pay_invoice!)
         after_transition on: :confirm, do: :pay_invoice!
         after_transition on: :dequeue, do: :dequeue_attendance
+        after_transition any => any, do: :update_last_status_change_date
 
-        event :accept do
-          transition pending: :accepted
-        end
-
-        event :confirm do
-          transition %i(pending accepted paid) => :confirmed
-        end
-
-        event :pay do
-          transition %i(pending accepted) => :paid
-        end
-
-        event :cancel do
-          transition %i(waiting pending accepted paid confirmed) => :cancelled
-        end
-
-        event :recover do
-          transition cancelled: :pending
-        end
-
-        event :mark_no_show do
-          transition %i(pending accepted) => :no_show
-        end
-
-        event :dequeue do
-          transition waiting: :pending
-        end
-
-        state :confirmed do
-          validates :payment_agreement, acceptance: true
-        end
+        event(:accept) { transition pending: :accepted }
+        event(:confirm) { transition %i(pending accepted paid) => :confirmed }
+        event(:pay) { transition %i(pending accepted) => :paid }
+        event(:cancel) { transition %i(waiting pending accepted paid confirmed) => :cancelled }
+        event(:recover) { transition cancelled: :pending }
+        event(:mark_no_show) { transition %i(pending accepted) => :no_show }
+        event(:dequeue) { transition waiting: :pending }
+        state(:confirmed) { validates :payment_agreement, acceptance: true }
 
         after_transition any => :confirmed do |attendance|
           try_user_notify(action: :registration_confirmed, attendance: attendance) do
@@ -105,6 +83,8 @@ module Concerns
     end
 
     def recover_invoice!
+      self.advised = false
+      self.advised_at = nil
       change_invoice_status(user.invoices.where(status: 'cancelled').last, :recover_it)
     end
 
@@ -120,8 +100,11 @@ module Concerns
 
     def dequeue_attendance
       self.queue_time = ((Time.zone.now - created_at) / 1.hour).round
-      self.created_at = Time.zone.now
       EmailNotifications.registration_dequeued(self).deliver_now
+    end
+
+    def update_last_status_change_date
+      self.last_status_change_date = Time.zone.now
     end
   end
 end

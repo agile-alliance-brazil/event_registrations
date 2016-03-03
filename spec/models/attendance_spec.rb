@@ -160,6 +160,7 @@ describe Attendance, type: :model do
   end
 
   context 'state machine' do
+    let(:past_status_date_change) { 2.days.ago }
     it 'starts pending' do
       attendance = Attendance.new
       expect(attendance.status).to eq 'pending'
@@ -171,11 +172,12 @@ describe Attendance, type: :model do
           let(:group) { FactoryGirl.create(:registration_group, minimum_size: 10) }
 
           context 'from pending' do
-            let(:attendance) { FactoryGirl.create(:attendance, registration_group: group) }
+            let(:attendance) { FactoryGirl.create(:attendance, registration_group: group, last_status_change_date: past_status_date_change) }
             context 'without invoice' do
               it 'move to paid upon payment' do
                 attendance.pay
                 expect(attendance.status).to eq 'paid'
+                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
               end
             end
 
@@ -185,23 +187,26 @@ describe Attendance, type: :model do
                 attendance.pay
                 expect(attendance.status).to eq 'paid'
                 expect(Invoice.last.status).to eq 'paid'
+                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
               end
             end
           end
 
           context 'from accepted' do
             it 'move to paid upon payment' do
-              attendance = FactoryGirl.create :attendance, status: 'accepted', registration_group: group
+              attendance = FactoryGirl.create :attendance, status: 'accepted', registration_group: group, last_status_change_date: past_status_date_change
               attendance.pay
               expect(attendance.status).to eq 'paid'
+              expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
             end
           end
 
           context 'from cancelled' do
             it 'stay cancelled' do
-              attendance = FactoryGirl.create :attendance, status: 'cancelled', registration_group: group
+              attendance = FactoryGirl.create :attendance, status: 'cancelled', registration_group: group, last_status_change_date: past_status_date_change
               attendance.pay
               expect(attendance.status).to eq 'cancelled'
+              expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
             end
           end
         end
@@ -210,23 +215,24 @@ describe Attendance, type: :model do
           let(:group) { FactoryGirl.create(:registration_group, minimum_size: 1) }
 
           context 'from pending' do
-            let(:attendance) { FactoryGirl.create(:attendance, registration_group: group) }
+            let(:attendance) { FactoryGirl.create(:attendance, registration_group: group, last_status_change_date: past_status_date_change) }
             context 'without invoice' do
-              it 'move to paid upon payment' do
+              it 'move to confirm upon payment' do
                 EmailNotifications.expects(:registration_confirmed).once
                 attendance.pay
-                expect { attendance.pay }.not_to raise_error
                 expect(attendance.status).to eq 'confirmed'
+                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
               end
             end
 
             context 'with an invoice' do
-              it 'move both attendance and invoice to paid upon payment' do
+              it 'move attendance to confirm and invoice to paid upon payment' do
                 EmailNotifications.expects(:registration_confirmed).once
                 Invoice.from_attendance(attendance, Invoice::GATEWAY)
                 attendance.pay
                 expect(attendance.status).to eq 'confirmed'
                 expect(Invoice.last.status).to eq 'paid'
+                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
               end
             end
           end
@@ -236,100 +242,110 @@ describe Attendance, type: :model do
 
     describe '#cancel' do
       context 'when is waiting' do
-        let(:attendance) { FactoryGirl.create :attendance, status: :waiting }
+        let(:attendance) { FactoryGirl.create :attendance, status: :waiting, last_status_change_date: 2.days.from_now }
         let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
         it 'cancels the attendance and the invoice' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is pending' do
-        let(:attendance) { FactoryGirl.create :attendance, status: :pending }
+        let(:attendance) { FactoryGirl.create :attendance, status: :pending, last_status_change_date: past_status_date_change }
         let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
         it 'cancels the attendance and the invoice' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is accepted' do
-        let(:attendance) { FactoryGirl.create :attendance, status: :accepted }
+        let(:attendance) { FactoryGirl.create :attendance, status: :accepted, last_status_change_date: past_status_date_change }
         let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
 
         it 'cancels the attendance' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is confirmed' do
-        let(:attendance) { FactoryGirl.create :attendance, status: :confirmed }
+        let(:attendance) { FactoryGirl.create :attendance, status: :confirmed, last_status_change_date: past_status_date_change }
         let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
         it 'cancels the attendance' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is paid' do
-        let(:attendance) { FactoryGirl.create :attendance, status: :paid }
+        let(:attendance) { FactoryGirl.create :attendance, status: :paid, last_status_change_date: past_status_date_change }
         let!(:invoice) { FactoryGirl.create :invoice, user: attendance.user, invoiceable: attendance }
-        it 'cancel the attendance' do
+        it 'cancels the attendance' do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
     end
 
     describe '#accept' do
       context 'when is waiting' do
-        it 'accept the attendance' do
+        it 'keeps the attendance waiting' do
           EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryGirl.create :attendance, status: :waiting
+          attendance = FactoryGirl.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'waiting'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is pending' do
         it 'accept the attendance' do
           EmailNotifications.expects(:registration_group_accepted).once
-          attendance = FactoryGirl.create :attendance
+          attendance = FactoryGirl.create :attendance, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'accepted'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is cancelled' do
         it 'keep it cancelled' do
           EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryGirl.create :attendance, status: :cancelled
+          attendance = FactoryGirl.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is paid' do
         it 'keep it paid' do
           EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryGirl.create :attendance, status: :paid
+          attendance = FactoryGirl.create :attendance, status: :paid, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'paid'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is already accepted' do
         it 'keep it accepted' do
           EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryGirl.create :attendance, status: :accepted
+          attendance = FactoryGirl.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'accepted'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
@@ -337,9 +353,10 @@ describe Attendance, type: :model do
         it 'confirms' do
           EmailNotifications.expects(:registration_group_accepted).never
           group = FactoryGirl.create :registration_group, discount: 100
-          attendance = FactoryGirl.create :attendance, status: :pending, registration_group: group
+          attendance = FactoryGirl.create :attendance, status: :pending, registration_group: group, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'confirmed'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
     end
@@ -348,47 +365,52 @@ describe Attendance, type: :model do
       context 'when is waiting' do
         it 'keeps waiting' do
           EmailNotifications.expects(:registration_confirmed).never
-          attendance = FactoryGirl.create :attendance, status: :waiting
+          attendance = FactoryGirl.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'waiting'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is pending' do
         it 'confirms the attendance' do
           EmailNotifications.expects(:registration_confirmed).once
-          attendance = FactoryGirl.create :attendance
+          attendance = FactoryGirl.create :attendance, last_status_change_date: past_status_date_change
           Invoice.from_attendance(attendance, Invoice::GATEWAY)
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
           expect(Invoice.last.status).to eq 'paid'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is accepted' do
         it 'confirms the attendance' do
           EmailNotifications.expects(:registration_confirmed).once
-          attendance = FactoryGirl.create :attendance, status: :accepted
+          attendance = FactoryGirl.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is cancelled' do
         it 'keep it cancelled' do
           EmailNotifications.expects(:registration_confirmed).never
-          attendance = FactoryGirl.create :attendance, status: :cancelled
+          attendance = FactoryGirl.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is paid' do
         it 'keep it paid' do
           EmailNotifications.expects(:registration_confirmed).once
-          attendance = FactoryGirl.create :attendance, status: :paid
+          attendance = FactoryGirl.create :attendance, status: :paid, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
     end
@@ -396,55 +418,61 @@ describe Attendance, type: :model do
     describe '#mark_no_show' do
       context 'when is waiting' do
         it 'keep it waiting' do
-          attendance = FactoryGirl.create :attendance, status: :waiting
+          attendance = FactoryGirl.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'waiting'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is pending' do
         it 'mark as no show' do
-          attendance = FactoryGirl.create :attendance
+          attendance = FactoryGirl.create :attendance, last_status_change_date: past_status_date_change
           attendance.expects(:cancel_invoice!).once
           attendance.mark_no_show
           expect(attendance.status).to eq 'no_show'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is accepted' do
         it 'mark as no show' do
-          attendance = FactoryGirl.create :attendance, status: :accepted
+          attendance = FactoryGirl.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
           attendance.expects(:cancel_invoice!).once
           attendance.mark_no_show
           expect(attendance.status).to eq 'no_show'
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
         end
       end
 
       context 'when is cancelled' do
         it 'keep it cancelled' do
-          attendance = FactoryGirl.create :attendance, status: :cancelled
+          attendance = FactoryGirl.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is paid' do
         it 'keep it paid' do
-          attendance = FactoryGirl.create :attendance, status: :paid
+          attendance = FactoryGirl.create :attendance, status: :paid, last_status_change_date: past_status_date_change
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'paid'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is confirmed' do
         it 'keep it confirmed' do
-          attendance = FactoryGirl.create :attendance, status: :confirmed
+          attendance = FactoryGirl.create :attendance, status: :confirmed, last_status_change_date: past_status_date_change
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'confirmed'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
     end
@@ -453,59 +481,64 @@ describe Attendance, type: :model do
       context 'when is waiting' do
         it 'removes the attendance from the queue' do
           Timecop.freeze
-          attendance = FactoryGirl.create :attendance, status: :waiting, created_at: 10.days.ago
+          attendance = FactoryGirl.create :attendance, status: :waiting, created_at: 10.days.ago, last_status_change_date: past_status_date_change
           email = stub(deliver_now: true)
           EmailNotifications.expects(:registration_dequeued).once.returns(email)
           attendance.dequeue
           expect(attendance.status).to eq 'pending'
-          expect(attendance.created_at).to eq Time.zone.now
           expect(attendance.queue_time).to eq 240
+          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
           Timecop.return
         end
       end
 
       context 'when is pending' do
         it 'keep it pending' do
-          attendance = FactoryGirl.create :attendance
+          attendance = FactoryGirl.create :attendance, last_status_change_date: past_status_date_change
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'pending'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is accepted' do
         it 'keep it accepted' do
-          attendance = FactoryGirl.create :attendance, status: :accepted
+          attendance = FactoryGirl.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'accepted'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is cancelled' do
         it 'keep it cancelled' do
-          attendance = FactoryGirl.create :attendance, status: :cancelled
+          attendance = FactoryGirl.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'cancelled'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is paid' do
         it 'keep it paid' do
-          attendance = FactoryGirl.create :attendance, status: :paid
+          attendance = FactoryGirl.create :attendance, status: :paid, last_status_change_date: past_status_date_change
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'paid'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
 
       context 'when is confirmed' do
         it 'keep it confirmed' do
-          attendance = FactoryGirl.create :attendance, status: :confirmed
+          attendance = FactoryGirl.create :attendance, status: :confirmed, last_status_change_date: past_status_date_change
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'confirmed'
+          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
         end
       end
     end

@@ -98,7 +98,7 @@ describe RegistrationNotifier do
       context 'and one attendance older than 7 days' do
         context 'with gateway as payment type' do
           context 'and not advised' do
-            let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago, advised: false) }
+            let!(:attendance) { FactoryGirl.create(:attendance, event: event, last_status_change_date: 7.days.ago, advised: false) }
             let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
             it 'notifies the pending attendance and mark as advised' do
               EmailNotifications.expects(:cancelling_registration_warning).once
@@ -108,7 +108,7 @@ describe RegistrationNotifier do
             end
           end
           context 'and has been already advised' do
-            let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago, advised: true, advised_at: Time.zone.today) }
+            let!(:attendance) { FactoryGirl.create(:attendance, event: event, last_status_change_date: 7.days.ago, advised: true, advised_at: Time.zone.today) }
             let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
             it 'notifies the pending attendance and mark as advised' do
               EmailNotifications.expects(:cancelling_registration_warning).never
@@ -119,7 +119,7 @@ describe RegistrationNotifier do
       end
 
       context 'and one accepted attendance older than 14 days with gateway as payment type' do
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago, status: :accepted) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, last_status_change_date: 7.days.ago, status: :accepted) }
         let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
         it 'notifies the accepted attendance' do
           EmailNotifications.expects(:cancelling_registration_warning).once
@@ -128,7 +128,7 @@ describe RegistrationNotifier do
       end
 
       context 'and one attendance older than 13 days with gateway as payment type' do
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 6.days.ago) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, last_status_change_date: 6.days.ago) }
         let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
         it 'notifies the pending attendance' do
           EmailNotifications.expects(:cancelling_registration_warning).never
@@ -137,7 +137,7 @@ describe RegistrationNotifier do
       end
 
       context 'and one attendance older than 15 days with bank_deposit as payment type' do
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 7.days.ago) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, last_status_change_date: 7.days.ago) }
         let!(:invoice) { Invoice.from_attendance(attendance, Invoice::DEPOSIT) }
         it 'notifies the pending attendance' do
           EmailNotifications.expects(:cancelling_registration_warning).never
@@ -146,7 +146,7 @@ describe RegistrationNotifier do
       end
 
       context 'and one attendance older than 15 days with statement of agreement as payment type' do
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: 8.days.ago) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, last_status_change_date: 8.days.ago) }
         let!(:invoice) { Invoice.from_attendance(attendance, Invoice::STATEMENT) }
         it 'notifies the pending attendance' do
           EmailNotifications.expects(:cancelling_registration_warning).never

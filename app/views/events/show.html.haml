@@ -4,6 +4,7 @@
     %h4= "#{l(@event.start_date, format: :date)} #{t('title.until')} #{l(@event.end_date, format: :date)}"
 
   %div= "#{t('event.show.attendance_limit', value: @event.attendance_limit || t('events.no_limit'))}"
+  %div= "#{t('event.show.average_queue_time', value: @event.queue_average_time)}"
   %div= "#{t('event.show.full_price', value: number_to_currency(@event.full_price))}"
 
   %div{class: 'register-button'}

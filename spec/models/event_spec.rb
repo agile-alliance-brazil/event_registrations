@@ -312,4 +312,23 @@ describe Event, type: :model do
       it { expect(event.attendances_in_the_queue?).to be_falsey }
     end
   end
+
+  describe '#queue_average_time' do
+    let(:event) { FactoryGirl.create :event }
+    context 'having queue time' do
+      let!(:attendance) { FactoryGirl.create :attendance, event: event, queue_time: 20 }
+      let!(:other_attendance) { FactoryGirl.create :attendance, event: event, queue_time: 10 }
+      it { expect(event.queue_average_time).to eq 15 }
+    end
+    context 'no queue time' do
+      context 'having attendances' do
+        let!(:attendance) { FactoryGirl.create :attendance, event: event, queue_time: 0 }
+        let!(:other_attendance) { FactoryGirl.create :attendance, event: event, queue_time: 0 }
+        it { expect(event.queue_average_time).to eq 0 }
+      end
+      context 'and no attendances' do
+        it { expect(event.queue_average_time).to eq 0 }
+      end
+    end
+  end
 end

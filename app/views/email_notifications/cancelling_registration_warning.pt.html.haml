@@ -2,6 +2,9 @@
 
 %p Existe uma pendência no pagamento da sua inscrição na conferência #{@attendance.event_name}. Caso não seja regularizada até #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} as #{Time.zone.now.strftime('%H:%M')}, sua inscrição será automaticamente cancelada.
 
+- if @attendance.event.full?
+  %p #{@attendance.event_name} está cheio e agora temos uma fila de espera. Caso você não complete a sua inscrição a tempo e o nosso sistema automático a cancele, você precisará submeter uma nova inscrição, que o colocará nesta fila.
+
 %p Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:
 
 %p= link_to attendance_url(@attendance, :locale => 'pt'), attendance_url(@attendance, :locale => 'pt')

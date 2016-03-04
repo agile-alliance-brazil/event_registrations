@@ -156,6 +156,13 @@ describe Attendance, type: :model do
         let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
         it { expect(Attendance.waiting).to eq [waiting] }
       end
+
+      describe '.with_time_in_queue' do
+        let!(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', queue_time: 100 }
+        let!(:other_attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', queue_time: 2 }
+        let!(:out_attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', queue_time: 0 }
+        it { expect(Attendance.with_time_in_queue).to match_array [attendance, other_attendance] }
+      end
     end
   end
 

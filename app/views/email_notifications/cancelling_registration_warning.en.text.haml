@@ -4,6 +4,8 @@ Dear #{h(@attendance.full_name)},
 
 We noticed that you have a pending payment for #{@attendance.event_name}. If that payment is not realized until #{@attendance.due_date.to_date.strftime('%d/%m/%Y')} at #{Time.zone.now.strftime('%H:%M')} we, unfortunately, will have to cancel your registration (ID #{@attendance.id}) due to the expiration of the payment deadline.
 
+- if @attendance.event.full?
+  #{@attendance.event_name} is pretty full and we now have a waiting list. If you do not complete your registration in time and our automated system cancels it, you will have to submit a new registration which will add you to our waiting list.
 
 In order to complete the registration process, please follow the instructions on the page:
 

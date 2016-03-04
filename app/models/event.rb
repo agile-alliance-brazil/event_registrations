@@ -78,6 +78,12 @@ class Event < ActiveRecord::Base
     !attendances.waiting.empty?
   end
 
+  def queue_average_time
+    attendances_passed_by_queue = attendances.active.with_time_in_queue
+    return 0 if attendances_passed_by_queue.empty?
+    attendances_passed_by_queue.sum(:queue_time) / attendances_passed_by_queue.count
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)

@@ -200,6 +200,16 @@ describe EmailNotifications, type: :mailer do
         expect(mail.cc).to eq [organizer.email, other_organizer.email]
       end
     end
+
+    context 'when event is full' do
+      let(:full_event) { FactoryGirl.create :event, attendance_limit: 1 }
+      let!(:attendance) { FactoryGirl.create :attendance, event: full_event }
+
+      it 'sends the email warning about the queue' do
+        mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
+        expect(mail.encoded).to match(/fila de espera/)
+      end
+    end
   end
 
   describe '#registration_dequeued' do

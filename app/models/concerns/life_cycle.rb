@@ -105,6 +105,7 @@ module Concerns
 
     def update_last_status_change_date
       self.last_status_change_date = Time.zone.now
+      save
     end
   end
 end

@@ -455,6 +455,7 @@ pt:
     show:
       attendance_limit: "Lotação: %{value} pessoas"
       full_price: "Preço cheio: %{value}"
+      average_queue_time: "Tempo médio na fila: %{value} hs"
   registration_group:
     list: 'Lista dos grupos: '
     destroy:

@@ -79,6 +79,7 @@ class Attendance < ActiveRecord::Base
   scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
   scope :already_paid, -> { where("attendances.status IN ('paid', 'confirmed')") }
   scope :non_free, -> { where('registration_value > 0') }
+  scope :with_time_in_queue, -> { where('queue_time > 0') }
 
   def full_name
     [first_name, last_name].join(' ')

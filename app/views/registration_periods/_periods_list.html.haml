@@ -20,5 +20,7 @@
           %td
             = link_to event_registration_period_path(event, period), method: :delete, class: 'btn btn-link' do
               %span{ class: 'fa fa-trash' }
+            = link_to edit_event_registration_period_path(event, period), class: 'btn btn-link' do
+              %span{ class: 'fa fa-pencil' }
   - else
     %h5= t('events.show.no_periods_message')

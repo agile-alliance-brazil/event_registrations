@@ -15,28 +15,37 @@
 
 class RegistrationPeriodsController < ApplicationController
   before_action :check_event
+  before_action :find_period, only: [:destroy, :edit, :update]
 
   def new
-    @registration_period = RegistrationPeriod.new
+    @period = RegistrationPeriod.new
   end
 
   def create
-    @registration_period = RegistrationPeriod.new(period_params.merge(event: @event))
-    if @registration_period.save
-      @registration_period = RegistrationPeriod.new
-      redirect_to new_event_registration_period_path(@event, @registration_period)
+    @period = RegistrationPeriod.new(period_params.merge(event: @event))
+    if @period.save
+      @period = RegistrationPeriod.new
+      redirect_to new_event_registration_period_path(@event, @period)
     else
       render :new
     end
   end
 
   def destroy
-    @period = RegistrationPeriod.find(params[:id])
     @period.destroy
     redirect_to @event
   end
 
+  def update
+    return redirect_to @event if @period.update(period_params)
+    render :edit
+  end
+
   private
+
+  def find_period
+    @period = @event.registration_periods.find(params[:id])
+  end
 
   def period_params
     params.require(:registration_period).permit(:title, :start_at, :end_at, :price)

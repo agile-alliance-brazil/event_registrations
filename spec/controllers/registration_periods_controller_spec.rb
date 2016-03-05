@@ -49,7 +49,7 @@ describe RegistrationPeriodsController, type: :controller do
         it 'assigns the variables and render the template' do
           get :new, event_id: event
           expect(assigns(:event)).to eq event
-          expect(assigns(:registration_period)).to be_a_new RegistrationPeriod
+          expect(assigns(:period)).to be_a_new RegistrationPeriod
           expect(response).to render_template :new
         end
       end
@@ -63,19 +63,20 @@ describe RegistrationPeriodsController, type: :controller do
 
     describe 'POST #create' do
       let(:event) { FactoryGirl.create :event }
+
       context 'with valid parameters' do
         it 'creates the period and redirects to event' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          price = 100
+          valid_parameters = { title: 'foo', start_at: start_date, end_at: end_date, price: 100 }
 
-          post :create, event_id: event, registration_period: { title: 'foo', start_at: start_date, end_at: end_date, price: price }
+          post :create, event_id: event, registration_period: valid_parameters
           period_persisted = RegistrationPeriod.last
           registration_period = assigns(:registration_period)
           expect(period_persisted.title).to eq 'foo'
           expect(period_persisted.start_at.utc.to_i).to eq start_date.to_i
           expect(period_persisted.end_at.utc.to_i).to eq end_date.to_i
-          expect(period_persisted.price).to eq Money.new(price * 100, :BRL)
+          expect(period_persisted.price.to_d).to eq 100
           expect(response).to redirect_to new_event_registration_period_path(event, registration_period)
         end
       end
@@ -84,7 +85,7 @@ describe RegistrationPeriodsController, type: :controller do
         context 'and invalid period params' do
           it 'renders form with the errors' do
             post :create, event_id: event, registration_period: { title: '' }
-            period = assigns(:registration_period)
+            period = assigns(:period)
 
             expect(period).to be_a RegistrationPeriod
             expect(period.errors.full_messages).to eq ['Title não pode ficar em branco', 'Start at não pode ficar em branco', 'End at não pode ficar em branco']
@@ -126,6 +127,96 @@ describe RegistrationPeriodsController, type: :controller do
           it 'responds 404' do
             delete :destroy, event_id: 'foo', id: period
             expect(response.status).to eq 404
+          end
+        end
+      end
+    end
+
+    describe 'GET #edit' do
+      let(:event) { FactoryGirl.create :event }
+      let(:period) { FactoryGirl.create :registration_period, event: event }
+      context 'with valid IDs' do
+        it 'assigns the instance variable and renders the template' do
+          get :edit, event_id: event, id: period
+          expect(assigns(:period)).to eq period
+          expect(response).to render_template :edit
+        end
+      end
+      context 'with invalid IDs' do
+        context 'and no valid event and period' do
+          it 'does not assign the instance variable responds 404' do
+            get :edit, event_id: 'foo', id: 'bar'
+            expect(assigns(:period)).to be_nil
+            expect(response.status).to eq 404
+          end
+        end
+        context 'and an invalid event' do
+          it 'responds 404' do
+            get :edit, event_id: 'foo', id: period
+            expect(response.status).to eq 404
+          end
+        end
+        context 'and a period for other event' do
+          let(:other_event) { FactoryGirl.create :event }
+          let(:period) { FactoryGirl.create :registration_period, event: other_event }
+          it 'does not assign the instance variable responds 404' do
+            get :edit, event_id: event, id: period
+            expect(assigns(:period)).to be_nil
+            expect(response.status).to eq 404
+          end
+        end
+      end
+    end
+
+    describe 'PUT #update' do
+      let(:event) { FactoryGirl.create :event }
+      let(:period) { FactoryGirl.create :registration_period, event: event }
+      let(:start_date) { Time.zone.now }
+      let(:end_date) { 1.week.from_now }
+      let(:valid_parameters) { { title: 'foo', start_at: start_date, end_at: end_date, price: 100 } }
+      context 'with valid parameters' do
+        it 'updates and redirects to event show' do
+          put :update, event_id: event, id: period, registration_period: valid_parameters
+          updated_period = RegistrationPeriod.last
+          expect(updated_period.title).to eq 'foo'
+          expect(updated_period.start_at.utc.to_i).to eq start_date.to_i
+          expect(updated_period.end_at.utc.to_i).to eq end_date.to_i
+          expect(updated_period.price.to_d).to eq 100
+          expect(response).to redirect_to event
+        end
+      end
+      context 'with invalid parameters' do
+        context 'and valid event and period, but invalid update parameters' do
+          it 'does not update and render form with errors' do
+            put :update, event_id: event, id: period, registration_period: { title: '', start_at: '', end_at: '' }
+            updated_period = assigns(:period)
+            expect(updated_period.errors.full_messages).to eq ['Title não pode ficar em branco', 'Start at não pode ficar em branco', 'End at não pode ficar em branco']
+            expect(response).to render_template :edit
+          end
+        end
+
+        context 'with invalid IDs' do
+          context 'and no valid event and period' do
+            it 'does not assign the instance variable responds 404' do
+              put :update, event_id: 'bar', id: 'foo', registration_period: valid_parameters
+              expect(assigns(:registration_period)).to be_nil
+              expect(response.status).to eq 404
+            end
+          end
+          context 'and an invalid event' do
+            it 'responds 404' do
+              put :update, event_id: 'bar', id: period, registration_period: valid_parameters
+              expect(response.status).to eq 404
+            end
+          end
+          context 'and a period for other event' do
+            let(:other_event) { FactoryGirl.create :event }
+            let(:period) { FactoryGirl.create :registration_period, event: other_event }
+            it 'does not assign the instance variable responds 404' do
+              put :update, event_id: event, id: period, registration_period: valid_parameters
+              expect(assigns(:period)).to be_nil
+              expect(response.status).to eq 404
+            end
           end
         end
       end

@@ -542,6 +542,8 @@ pt:
     new:
       title: "Novo período"
       submit: "Submeter período"
+    edit:
+      title: "Atualizando período de inscrição"
   commons:
     button:
       cancel: "Cancelar"

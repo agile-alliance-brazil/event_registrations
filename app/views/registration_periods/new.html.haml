@@ -1,18 +1,6 @@
 %h1= t('registration_periods.new.title')
 
-= semantic_form_for([@event, @registration_period]) do |form|
-  = form.inputs :event_basics do
-    = form.input :title, required: true, input_html: { tabindex: autotab }
-    = form.input :price, as: :number, required: true, input_html: { tabindex: autotab }
-    = form.input :start_at, as: :string, required: true, input_html: { tabindex: autotab, class: 'datepicker' }
-    = form.input :end_at, as: :string, required: true, input_html: { tabindex: autotab, class: 'datepicker' }
-
-  = form.actions do
-    %div{class: 'row'}
-      %span{class: 'col-xs-2'}
-        = form.action(:submit, label: t('registration_periods.new.submit'), button_html: { tabindex: autotab, class: 'btn btn-success' })
-      %span{class: 'col-xs-2'}
-        = form.action(:cancel, label: t('commons.button.cancel'), url: event_path(@event), button_html: { class: 'btn btn-danger' })
+= render partial: 'form'
 
 %hr
 

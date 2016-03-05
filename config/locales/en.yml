@@ -416,6 +416,8 @@ en:
     new:
       title: "New period"
       submit: "Submit period"
+    edit:
+      title: "Update registration period"
   commons:
     button:
       cancel: "Cancel"

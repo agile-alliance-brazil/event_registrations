@@ -1,21 +1,6 @@
-# == Schema Information
-#
-# Table name: registration_quotas
-#
-#  id                    :integer          not null, primary key
-#  quota                 :integer
-#  created_at            :datetime
-#  updated_at            :datetime
-#  event_id              :integer
-#  registration_price_id :integer
-#  order                 :integer
-#  closed                :boolean          default(FALSE)
-#  price_cents           :integer          default(0), not null
-#  price_currency        :string(255)      default("BRL"), not null
-#
-
 class RegistrationQuotasController < ApplicationController
   before_action :check_event
+  before_action :find_quota, only: [:destroy, :edit, :update]
 
   def new
     @registration_quota = RegistrationQuota.new
@@ -32,9 +17,13 @@ class RegistrationQuotasController < ApplicationController
   end
 
   def destroy
-    @quota = RegistrationQuota.find(params[:id])
-    @quota.destroy
+    @registration_quota.destroy
     redirect_to @event
+  end
+
+  def update
+    return redirect_to @event if @registration_quota.update(quota_params)
+    render :edit
   end
 
   private
@@ -45,6 +34,10 @@ class RegistrationQuotasController < ApplicationController
 
   def check_event
     not_found unless @event.present?
+  end
+
+  def find_quota
+    @registration_quota = @event.registration_quotas.find(params[:id])
   end
 
   def resource_class

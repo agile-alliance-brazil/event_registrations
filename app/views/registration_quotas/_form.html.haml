@@ -1,0 +1,10 @@
+= semantic_form_for([@event, @registration_quota]) do |form|
+  = form.inputs :quota_basics do
+    = form.input :order, required: true, input_html: { tabindex: autotab }
+    = form.input :price, required: true, input_html: { tabindex: autotab }
+    = form.input :quota, required: true, input_html: { tabindex: autotab }
+
+  = form.actions do
+    %div{class: 'row'}
+      %span{class: 'col-xs-2'}
+        = form.action(:submit, label: t('registration_quotas.new.submit'), button_html: { tabindex: autotab, class: 'btn btn-success' })

@@ -1,4 +1,7 @@
-%h1= t('registration_quotas.new.title')
+%h4
+  = "#{t('registration_quotas.edit.title')} - "
+  %span= link_to @event.name, @event
+
 
 = render :partial => 'form'
 

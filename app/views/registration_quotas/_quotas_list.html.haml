@@ -19,5 +19,8 @@
           %td
             = link_to event_registration_quota_path(event, quota), method: :delete, class: 'btn btn-link' do
               %span{ class: 'fa fa-trash' }
+            = link_to edit_event_registration_quota_path(event, quota), class: 'btn btn-link' do
+              %span{ class: 'fa fa-pencil' }
+
   - else
     %h5= t('events.show.no_quotas_message')

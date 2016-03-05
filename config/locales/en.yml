@@ -423,6 +423,8 @@ en:
     new:
       title: "New quota"
       submit: "Submit quota"
+    edit:
+      title: "Update registration quota"
   general:
     actions:
       title: "Actions"

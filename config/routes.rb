@@ -34,7 +34,7 @@ Current::Application.routes.draw do
         get :waiting_list
       end
     end
-    resources :registration_groups, only: %i(index destroy show create) do
+    resources :registration_groups, only: %i(index destroy show create edit update) do
       member { put :renew_invoice }
     end
 

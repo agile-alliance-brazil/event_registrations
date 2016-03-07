@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: registration_periods
-#
-#  id             :integer          not null, primary key
-#  event_id       :integer
-#  title          :string(255)
-#  start_at       :datetime
-#  end_at         :datetime
-#  created_at     :datetime
-#  updated_at     :datetime
-#  price_cents    :integer          default(0), not null
-#  price_currency :string(255)      default("BRL"), not null
-#
-
 class RegistrationPeriodsController < ApplicationController
   before_action :check_event
   before_action :find_period, only: [:destroy, :edit, :update]

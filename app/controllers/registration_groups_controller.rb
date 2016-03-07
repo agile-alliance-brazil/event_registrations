@@ -4,7 +4,7 @@ class RegistrationGroupsController < ApplicationController
 
   def index
     @groups = @event.registration_groups
-    @new_group = RegistrationGroup.new
+    @group = RegistrationGroup.new
   end
 
   def show
@@ -18,17 +18,23 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def create
-    new_group = RegistrationGroup.new(group_params)
-    new_group.event = @event
-    new_group.leader = current_user
-    new_group.save!
-    create_invoice(new_group)
-    redirect_to event_registration_groups_path(@event)
+    @group = RegistrationGroup.new(group_params.merge(event: @event, leader: current_user))
+    if @group.save
+      create_invoice(@group)
+      redirect_to event_registration_groups_path(@event)
+    else
+      render :index
+    end
   end
 
   def renew_invoice
     @group.update_invoice
     redirect_to event_registration_group_path(@event, @group)
+  end
+
+  def update
+    return redirect_to @event if @group.update(group_params)
+    render :edit
   end
 
   private
@@ -38,7 +44,7 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def find_group
-    @group = RegistrationGroup.find_by(id: params[:id])
+    @group = @event.registration_groups.find(params[:id])
   end
 
   def create_invoice(group)

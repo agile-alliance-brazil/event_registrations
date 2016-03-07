@@ -472,6 +472,8 @@ pt:
         other: '%{count} congressistas'
     new:
       title: "Novo grupo"
+    edit:
+      title: "Atualizando grupo de inscrição"
   invoice:
     not_found: 'Fatura não encontrada'
 

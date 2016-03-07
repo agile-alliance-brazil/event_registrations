@@ -21,7 +21,9 @@
         %td= group.token
         %td= group.qtd_attendances
         %td
-          =link_to event_registration_group_path(event, group), method: :delete, data: { confirm: t('registration_group.destroy_confirmation', registration_group: group.name ) } do
+          = link_to event_registration_group_path(event, group), method: :delete, data: { confirm: t('registration_group.destroy_confirmation', registration_group: group.name ) } do
             %span{ class: 'fa fa-trash' }
+          = link_to edit_event_registration_group_path(event, group), class: 'btn btn-link' do
+            %span{ class: 'fa fa-pencil' }
 - else
   %h5= t('events.show.no_groups_message')

@@ -1,0 +1,11 @@
+%h4
+  = "#{t('registration_group.edit.title')} - "
+  %span= link_to @event.name, @event
+
+= render partial: 'form'
+
+%hr
+
+%section
+  %div
+    = render partial: 'registration_groups/groups_list', locals: { event: @event }

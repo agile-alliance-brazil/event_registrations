@@ -363,7 +363,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :pending, registration_group: group, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date).to be_within(0.5).of Time.zone.now
         end
       end
     end

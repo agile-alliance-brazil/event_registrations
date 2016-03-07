@@ -346,6 +346,8 @@ en:
         other: '%{count} attendances'
     new:
       title: "New group"
+    edit:
+      title: "Updating registration group"
   invoice:
     not_found: 'Invoice not found'
 

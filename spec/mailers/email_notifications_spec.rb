@@ -216,7 +216,7 @@ describe EmailNotifications, type: :mailer do
     let(:attendance) { FactoryGirl.create(:attendance, event: event) }
 
     context 'having no organizers in the event' do
-      it 'sends to attendee cc the events organizer' do
+      it 'sends to attendee cc the events organizer in the config file' do
         mail = EmailNotifications.registration_dequeued(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
@@ -235,6 +235,39 @@ describe EmailNotifications, type: :mailer do
 
       it 'sends to attendee and cc the events organizer' do
         mail = EmailNotifications.registration_dequeued(attendance).deliver_now
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(mail.to).to eq [attendance.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+      end
+    end
+  end
+
+  describe '#welcome_attendance' do
+    let(:event) { FactoryGirl.create(:event, start_date: 1.day.from_now) }
+    let(:out_event) { FactoryGirl.create(:event, start_date: 2.days.from_now) }
+    let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+    let(:out_attendance) { FactoryGirl.create(:attendance, event: out_event) }
+
+    context 'having no organizers in the event' do
+      it 'sends to attendee cc the events organizer in the config file' do
+        mail = EmailNotifications.welcome_attendance(attendance).deliver_now
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(mail.to).to eq [attendance.email]
+        expect(mail.cc).to eq [APP_CONFIG[:organizer][:email]]
+        expect(mail.encoded).to match(/Oi #{attendance.full_name},/)
+        expect(mail.encoded).to match(/o grande dia!/)
+        expect(mail.encoded).to match(/#{attendance.event.main_email_contact}/)
+        expect(mail.subject).to eq("Bem vindo ao #{event.name}! É amanhã!")
+      end
+    end
+
+    context 'having organizers in the event' do
+      let(:organizer) { FactoryGirl.create :organizer }
+      let(:other_organizer) { FactoryGirl.create :organizer }
+      let!(:event) { FactoryGirl.create :event, start_date: 1.day.from_now, organizers: [organizer, other_organizer] }
+
+      it 'sends to attendee and cc the events organizer' do
+        mail = EmailNotifications.welcome_attendance(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq [organizer.email, other_organizer.email]

@@ -15,6 +15,6 @@
   %strong Status:
   = @attendance.status
 
-%p Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}
+%p If you have any questions, please contact us at #{mail_to @attendance.event.main_email_contact}
 
-%small Por favor não responda este e-mail. Ele foi enviado através de um endereço não monitorado
+%small Please do not reply to this e-mail. It was sent from an unmonitored email address

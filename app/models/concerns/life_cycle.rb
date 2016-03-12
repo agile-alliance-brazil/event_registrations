@@ -6,6 +6,7 @@ module Concerns
       scope :accepted, -> { where(status: :accepted) }
       scope :cancelled, -> { where(status: :cancelled) }
       scope :paid, -> { where(status: %i(paid confirmed)) }
+      scope :confirmed, -> { where(status: :confirmed) }
       scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show waiting)) }
       scope :waiting, -> { where(status: :waiting) }
 

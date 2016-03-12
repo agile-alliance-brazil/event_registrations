@@ -1,0 +1,17 @@
+Hi #{h(@attendance.full_name)},
+
+%p Tomorrow is an agile day. =)
+
+%p You should remember to:
+
+%ul
+  %li Bring a valid document
+  %li If you are registered as student, you’ll be invited to comprove it by show your student id. You'll be asked to pay the full price if you don't have it.
+  %li The welcome coffee and the registration will be in place at 9:00
+  %li Check #{@attendance.event.link} for address and how to get there details.
+
+%p If you have any questions, please contact us at #{mail_to @attendance.event.main_email_contact}
+
+%p See you there
+
+%small Please do not reply to this e-mail. It was sent from an unmonitored email address

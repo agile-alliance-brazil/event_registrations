@@ -163,6 +163,17 @@ describe Attendance, type: :model do
         let!(:out_attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', queue_time: 0 }
         it { expect(Attendance.with_time_in_queue).to match_array [attendance, other_attendance] }
       end
+
+      describe '.confirmed' do
+        let!(:waiting) { FactoryGirl.create(:attendance, status: :waiting) }
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
+
+        it { expect(Attendance.confirmed).to eq [confirmed] }
+      end
     end
   end
 

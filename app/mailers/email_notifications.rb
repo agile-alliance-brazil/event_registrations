@@ -28,6 +28,10 @@ class EmailNotifications < ActionMailer::Base
     mail_attendance(attendance, sent_at, 'email.registration_dequeued.subject')
   end
 
+  def welcome_attendance(attendance, sent_at = Time.zone.now)
+    mail_attendance(attendance, sent_at, 'email.welcome_attendance.subject')
+  end
+
   private
 
   def mail_attendance(attendance, sent_at, title)

@@ -395,6 +395,8 @@ pt:
       subject: "Lembrete de pagamento da inscrição %{attendance_id} para %{event_name}"
     registration_dequeued:
       subject: "Aeee! Nossa fila andou e a sua inscrição para %{event_name} foi recebida!"
+    welcome_attendance:
+      subject: "Bem vindo ao %{event_name}! É amanhã!"
 
   gender:
     male: "Masculino"

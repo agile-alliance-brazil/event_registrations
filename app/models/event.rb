@@ -33,6 +33,7 @@ class Event < ActiveRecord::Base
   scope :active_for, ->(date) { where('end_date > ?', date) }
   scope :not_started, -> { where('start_date > ?', Time.zone.today) }
   scope :ended, -> { where('end_date < ?', Time.zone.today) }
+  scope :tomorrow_events, -> { where(start_date: 1.day.from_now.beginning_of_day..1.day.from_now.end_of_day) }
 
   def full?
     attendance_limit.present? && attendance_limit > 0 && (attendance_limit <= attendances.active.size)

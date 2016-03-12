@@ -12,8 +12,9 @@ describe AttendanceExportService, type: :service do
       end
 
       let(:expected) do
-        title = "first_name,last_name,organization,email,payment_type,group_name,city,state,value\n"
+        title = "id,first_name,last_name,organization,email,payment_type,group_name,city,state,value\n"
         body =
+          "#{attendance.id},"\
           "#{attendance.first_name},"\
           "#{attendance.last_name},"\
           "#{attendance.organization},"\

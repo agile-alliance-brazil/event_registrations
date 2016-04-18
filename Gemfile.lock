@@ -495,7 +495,7 @@ DEPENDENCIES
   brcpfcnpj (~> 3.3.0)
   byebug
   cancancan (~> 1.10)
-  capistrano (~> 3.4)
+  capistrano (= 3.4.1)
   capistrano-bundler
   capistrano-rails
   capistrano-rvm

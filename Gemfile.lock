@@ -193,7 +193,7 @@ GEM
     haml (4.0.7)
       tilt
     hashdiff (0.3.0)
-    hashie (3.4.3)
+    hashie (3.4.4)
     highline (1.7.8)
     hirb (0.7.3)
     http-cookie (1.0.2)
@@ -464,7 +464,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
-    unicode-display_width (1.0.3)
+    unicode-display_width (1.0.5)
     unparser (0.2.5)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
@@ -515,7 +515,6 @@ DEPENDENCIES
   guard-rspec
   guard-rubocop
   haml (~> 4.0)
-  hashie (= 3.4.3)
   jquery-rails
   localized_country_select (~> 0.9.11)
   metric_fu

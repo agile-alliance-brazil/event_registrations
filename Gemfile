@@ -21,6 +21,7 @@ gem 'cancancan', '~> 1.10'
 gem 'rake'
 gem 'will_paginate', '~> 3.1'
 gem 'omniauth', '~>1.3'
+gem 'hashie', '3.4.3' # TODO Weird rubygems error
 gem 'omniauth-twitter', '~>1.2'
 gem 'omniauth-facebook', '~>3.0'
 gem 'omniauth-github', '~>1.1'

@@ -60,8 +60,7 @@ describe AttendanceParams, type: :param_object do
                                badge_name: user.badge_name,
                                cpf: user.cpf,
                                gender: user.gender
-                             }
-      }
+                             } }
 
       params = ActionController::Parameters.new(valid_attendance)
       params_object = AttendanceParams.new(user, event, params)
@@ -77,7 +76,8 @@ describe AttendanceParams, type: :param_object do
         'state' => user.state,
         'city' => user.city,
         'badge_name' => user.badge_name,
-        'gender' => user.gender }
+        'gender' => user.gender
+      }
 
       expect(params_object.attributes_hash).to eq expected_return
     end

@@ -30,8 +30,7 @@ MoneyRails.configure do |config|
                            type: :integer,       # column type
                            present: true,        # column will be created
                            null: false,          # other options will be treated as column options
-                           default: 0
-                         }
+                           default: 0 }
   #
   # config.currency_column = { prefix: '',
   #                            postfix: '_currency',

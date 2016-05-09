@@ -185,7 +185,7 @@ describe EventsController, type: :controller do
           it 'updates the event' do
             start_date = Time.zone.now
             end_date = 1.week.from_now
-            put :update, id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto' }
+            put :update, id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto', logo: 'bla.jpg' }
             event_updated = Event.last
             is_expected.to redirect_to event
             expect(event_updated.name).to eq 'name'
@@ -195,6 +195,7 @@ describe EventsController, type: :controller do
             expect(event_updated.end_date.utc.to_i).to eq end_date.to_i
             expect(event_updated.full_price).to eq 278
             expect(event_updated.price_table_link).to eq 'http://xpto'
+            expect(event_updated.logo).to eq 'bla.jpg'
           end
         end
         context 'with invalid event parameters' do
@@ -285,7 +286,7 @@ describe EventsController, type: :controller do
         it 'creates the event and redirects to index of events' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          post :create, event: { name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla' }
+          post :create, event: { name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla', logo: 'bla.jpg' }
           expect(Event.count).to eq 1
           event_persisted = Event.last
           expect(event_persisted.name).to eq 'foo'
@@ -295,6 +296,7 @@ describe EventsController, type: :controller do
           expect(event_persisted.end_date.utc.to_i).to eq end_date.to_i
           expect(event_persisted.full_price).to eq 100
           expect(event_persisted.price_table_link).to eq 'http://bla'
+          expect(event_persisted.logo).to eq 'bla.jpg'
 
           is_expected.to redirect_to event_path(event_persisted)
         end

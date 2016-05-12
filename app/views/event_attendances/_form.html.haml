@@ -1,13 +1,11 @@
 - @registration_token ||= params[:registration_token]
 
-%div.token
-  %label Token
-  = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), size: 100
-
 - if can? :update, @event
-  %div.payment-type
-    %label= t('formtastic.labels.attendance.payment_type')
-    = select_tag :payment_type, options_for_select(Invoice::TYPES, @attendance.payment_type)
+  %div{class: 'container form-field'}
+    %div{class: 'row'}
+      %div.payment-type
+        %label= t('formtastic.labels.attendance.payment_type')
+        = select_tag :payment_type, options_for_select(Invoice::TYPES, @attendance.payment_type)
 
 = form.inputs :attendance_personal do
   = form.input :first_name, required: true, input_html: { tabindex: autotab }
@@ -35,7 +33,12 @@
   = form.input :school, input_html: { tabindex: autotab }
   = form.input :education_level, as: :select, collection: education_level_options, input_html: { tabindex: autotab }
 
-#flash_notice= t('flash.registration.attendance')
+=form.inputs 'Desconto' do
+  %label= I18n.t('attendances.new.form.token_field')
+  = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), class: 'token-field'
+
+%div{class: 'agreed-message'}
+  #flash_notice= t('flash.registration.attendance')
 
 :javascript
   (function($) {

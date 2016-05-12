@@ -448,6 +448,8 @@ en:
       title:
         no_vacancy: "The event %{event_name} is full. Please, register below to the event's queue."
         vacancy: "New registration to %{event_name}"
+      form:
+        token_field: "Access token to discount group"
     edit:
       title: "Update attendance"
   users:

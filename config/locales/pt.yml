@@ -574,6 +574,8 @@ pt:
       title:
         no_vacancy: "O evento %{event_name} está cheio. Faça o cadastro abaixo para entrar na fila."
         vacancy: "Nova inscrição para %{event_name}"
+      form:
+        token_field: "Token de acesso ao grupo de desconto"
     edit:
       title: "Atualizar participante"
   users:

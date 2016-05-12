@@ -7,12 +7,9 @@ class PerformGroupCheck
       attendance.registration_group = group
       attendance.accept if group.automatic_approval?
       group.save!
-    elsif AgileAllianceService.check_member(attendance.email)
-      aa_group = event.registration_groups.where(name: 'Membros da Agile Alliance').first
-      if aa_group.present?
-        attendance.registration_group = aa_group
-        attendance.accept
-      end
+    elsif event.agile_alliance_discount_group? && AgileAllianceService.check_member(attendance.email)
+      attendance.registration_group = event.agile_alliance_discount_group
+      attendance.accept
     end
 
     attendance

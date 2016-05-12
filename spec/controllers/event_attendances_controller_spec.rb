@@ -87,6 +87,35 @@ describe EventAttendancesController, type: :controller do
       context 'event value for attendance' do
         before { Timecop.return }
 
+        context 'when the AA service is returning timeout' do
+          before { stub_request(:post, 'http://cf.agilealliance.org/api/').to_raise Net::OpenTimeout }
+          context 'when the event has a group to AA discount' do
+            let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
+            context 'calling html' do
+              it 'responds 408' do
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(response.status).to eq 408
+              end
+            end
+            context 'calling JS' do
+              it 'responds 408' do
+                xhr :post, :create, event_id: @event.id, attendance: valid_attendance
+                expect(response.status).to eq 408
+              end
+            end
+          end
+          context 'when the event has no group to AA discount' do
+            context 'calling html' do
+              subject(:attendance) { assigns(:attendance) }
+              it 'creates the attendance and redirects' do
+                post :create, event_id: @event.id, attendance: valid_attendance
+                expect(attendance).to be_persisted
+                expect(response).to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+              end
+            end
+          end
+        end
+
         context 'with no period, quotas or groups' do
           before { post :create, event_id: @event.id, attendance: valid_attendance }
           it { expect(assigns(:attendance).registration_value).to eq @event.full_price }

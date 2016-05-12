@@ -331,4 +331,26 @@ describe Event, type: :model do
       end
     end
   end
+
+  describe '#agile_alliance_discount_group?' do
+    let(:event) { FactoryGirl.create :event }
+    context 'when the event has an AA discount group' do
+      let!(:aa_group) { FactoryGirl.create(:registration_group, event: event, name: 'Membros da Agile Alliance') }
+      it { expect(event.agile_alliance_discount_group?).to be_truthy }
+    end
+    context 'when the event does not have an AA discount group' do
+      it { expect(event.agile_alliance_discount_group?).to be_falsey }
+    end
+  end
+
+  describe '#agile_alliance_discount_group' do
+    let(:event) { FactoryGirl.create :event }
+    context 'when the event has an AA discount group' do
+      let!(:aa_group) { FactoryGirl.create(:registration_group, event: event, name: 'Membros da Agile Alliance') }
+      it { expect(event.agile_alliance_discount_group).to eq aa_group }
+    end
+    context 'when the event does not have an AA discount group' do
+      it { expect(event.agile_alliance_discount_group).to be_nil }
+    end
+  end
 end

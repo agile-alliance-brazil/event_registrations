@@ -1,4 +1,6 @@
 class EventAttendancesController < ApplicationController
+  rescue_from Net::OpenTimeout, with: :timeout
+
   before_action :event
 
   def new
@@ -61,5 +63,12 @@ class EventAttendancesController < ApplicationController
 
   def event
     @event ||= Event.includes(registration_periods: [:event]).find_by_id(params.require(:event_id))
+  end
+
+  def timeout
+    respond_to do |format|
+      format.html { render file: "#{Rails.root}/public/408", layout: false, status: 408 }
+      format.js { render plain: '408 Request Timeout', status: 408 }
+    end
   end
 end

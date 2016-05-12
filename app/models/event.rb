@@ -85,6 +85,14 @@ class Event < ActiveRecord::Base
     attendances_passed_by_queue.sum(:queue_time) / attendances_passed_by_queue.count
   end
 
+  def agile_alliance_discount_group?
+    agile_alliance_discount_group.present?
+  end
+
+  def agile_alliance_discount_group
+    registration_groups.find_by(name: 'Membros da Agile Alliance')
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)

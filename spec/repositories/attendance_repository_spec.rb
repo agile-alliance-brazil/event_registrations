@@ -115,6 +115,18 @@ describe AttendanceRepository, type: :repository do
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to eq [pending_gateway]
       end
     end
+
+    context 'with a pending status and belonging to a group' do
+      let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago) }
+      let!(:invoice) { Invoice.from_attendance(pending, Invoice::GATEWAY) }
+      let!(:group) { FactoryGirl.create :registration_group, automatic_approval: false }
+      let!(:pending_in_a_group) { FactoryGirl.create(:attendance, registration_group: group, event: event, last_status_change_date: 7.days.ago) }
+      let!(:other_invoice) { Invoice.from_attendance(pending_in_a_group, Invoice::GATEWAY) }
+      let!(:accepted_in_a_group) { FactoryGirl.create(:attendance, status: :accepted, registration_group: group, event: event, last_status_change_date: 7.days.ago) }
+      let!(:other_invoice) { Invoice.from_attendance(accepted_in_a_group, Invoice::GATEWAY) }
+
+      it { expect(AttendanceRepository.instance.for_cancelation_warning(event)).to match_array [pending, accepted_in_a_group] }
+    end
   end
 
   describe '#for_cancelation' do

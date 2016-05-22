@@ -27,6 +27,10 @@ en:
           attributes:
             email:
               free_not_allowed: "Free registration is only available to speaker emails."
+        event:
+          attributes:
+            end_date:
+              invalid_period: "End date must be after the start date."
 
   formtastic:
     :yes: "Yes"

@@ -155,6 +155,10 @@ pt:
           attributes:
             email:
               free_not_allowed: "Inscrições gratuitas só estão disponíveis para o email do palestrante."
+        event:
+          attributes:
+            end_date:
+              invalid_period: "Data de término deve ser posterior à data de início."
 
   # Formtastic
   formtastic:

@@ -29,6 +29,7 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :organizers, class_name: 'User'
 
   validates :start_date, :end_date, :full_price, :name, :main_email_contact, presence: true
+  validate :period_valid?
 
   scope :active_for, ->(date) { where('end_date > ?', date) }
   scope :not_started, -> { where('start_date > ?', Time.zone.today) }
@@ -111,5 +112,10 @@ class Event < ActiveRecord::Base
     else
       (full_price * 100) * attendance.discount
     end
+  end
+
+  def period_valid?
+    return unless start_date.present? && end_date.present?
+    errors.add(:end_date, :invalid_period) if start_date > end_date
   end
 end

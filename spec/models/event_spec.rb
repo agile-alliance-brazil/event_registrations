@@ -11,6 +11,21 @@ describe Event, type: :model do
     it { is_expected.to validate_presence_of :start_date }
     it { is_expected.to validate_presence_of :end_date }
     it { is_expected.to validate_presence_of :main_email_contact }
+
+    context 'with start date before end date' do
+      let(:event) { FactoryGirl.build :event, start_date: DateTime.new(2016, 5, 20).in_time_zone, end_date: DateTime.new(2016, 5, 21).in_time_zone }
+      it { expect(event.valid?).to be_truthy }
+    end
+
+    context 'with end date before start date' do
+      let(:event) { FactoryGirl.build :event, start_date: DateTime.new(2016, 5, 21).in_time_zone, end_date: DateTime.new(2016, 5, 20).in_time_zone }
+      it { expect(event.valid?).to be_falsey }
+    end
+
+    context 'with start date equal to end date' do
+      let(:event) { FactoryGirl.build :event, start_date: DateTime.new(2016, 5, 20).in_time_zone, end_date: DateTime.new(2016, 5, 20).in_time_zone }
+      it { expect(event.valid?).to be_truthy }
+    end
   end
 
   describe '#full?' do

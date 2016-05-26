@@ -52,6 +52,10 @@ From then on, you can use:
 bundle && bundle exec ruby deploy/digital_ocean/new_machine.rb
 ```
 
+#### Integration service bus for Agile Alliance membership checking
+* [github](https://github.com/agile-alliance-brazil/aa-service-bus)
+* [heroku](https://aa-service-bus.herokuapp.com/)
+
 # Feedback
 
 If you have a bug or a feature request, please create a issue here:

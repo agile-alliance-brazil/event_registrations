@@ -190,6 +190,9 @@ GEM
     hirb (0.7.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     ice_nine (0.11.2)
     jquery-rails (4.1.1)
@@ -502,6 +505,7 @@ DEPENDENCIES
   guard-rspec
   guard-rubocop
   haml (~> 4.0)
+  httparty
   jquery-rails
   localized_country_select (~> 0.9.11)
   metric_fu

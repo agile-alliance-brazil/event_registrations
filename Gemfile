@@ -41,6 +41,8 @@ gem 'autoprefixer-rails', '~> 6.2'
 
 gem 'mysql2', '~> 0.4'
 
+gem 'httparty'
+
 group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails'

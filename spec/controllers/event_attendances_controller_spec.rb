@@ -88,7 +88,7 @@ describe EventAttendancesController, type: :controller do
         before { Timecop.return }
 
         context 'when the AA service is returning timeout' do
-          before { stub_request(:post, 'http://cf.agilealliance.org/api/').to_raise Net::OpenTimeout }
+          before { WebMock.stub_request(:get, "#{APP_CONFIG[:agile_alliance][:api_host]}/check_member/#{user.email}").with(headers: { 'Authorization' => APP_CONFIG[:agile_alliance][:api_token] }).to_raise Net::OpenTimeout }
           context 'when the event has a group to AA discount' do
             let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
             context 'calling html' do

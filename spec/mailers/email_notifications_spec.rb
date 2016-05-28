@@ -255,8 +255,9 @@ describe EmailNotifications, type: :mailer do
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq [APP_CONFIG[:organizer][:email]]
         expect(mail.encoded).to match(/Oi #{attendance.full_name},/)
-        expect(mail.encoded).to match(/o grande dia!/)
+        expect(mail.encoded).to match(/mais um dia/)
         expect(mail.encoded).to match(/#{attendance.event.main_email_contact}/)
+        expect(mail.encoded).to match(/#{attendance.event.start_date.to_date.strftime('%H:%M')}/)
         expect(mail.subject).to eq("Bem vindo ao #{event.name}! É amanhã!")
       end
     end

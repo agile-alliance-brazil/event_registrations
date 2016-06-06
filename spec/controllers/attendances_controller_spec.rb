@@ -227,6 +227,23 @@ describe AttendancesController, type: :controller do
     end
   end
 
+  describe '#dequeue' do
+    let!(:event) { FactoryGirl.create(:event) }
+    context 'when is an individual registration' do
+      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'waiting') }
+      before do
+        Invoice.from_attendance(attendance, Invoice::GATEWAY)
+        patch :dequeue_it, id: attendance.id
+      end
+
+      it 'changes the status and redirects to the attendance page' do
+        expect(Attendance.last.status).to eq 'pending'
+        expect(Invoice.last.status).to eq 'pending'
+        expect(response).to redirect_to attendance_path(attendance)
+      end
+    end
+  end
+
   describe '#search' do
     let(:admin) { FactoryGirl.create(:admin) }
     before { sign_in admin }

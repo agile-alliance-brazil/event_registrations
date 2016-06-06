@@ -437,6 +437,9 @@ pt:
     confirm_confirmation: "Se confirmar essa inscrição na %{event}, o participante será notificado e  não será possível cancelar essa operação.\n\nTem certeza que deseja continuar?"
     confirmed:
       unpaid: "Boleto/Transferência/Empenho"
+    list:
+      actions:
+        dequeue: "Colocar para dentro"
 
   authentication:
     list: "Serviços de autenticação registrados"

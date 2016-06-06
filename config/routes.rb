@@ -55,6 +55,7 @@ Current::Application.routes.draw do
       put :accept_it
       delete :destroy
       put :recover_it
+      patch :dequeue_it
     end
 
     collection { get :search }

@@ -13,9 +13,11 @@
     - if (can? :confirm, attendance) && (attendance.confirmable?)
       %p= button_to t('actions.confirm'), confirm_attendance_path(attendance), method: :put, remote: true, class: 'confirm btn btn-primary', data: { confirm: t('attendance.confirm_confirmation', event: attendance.event_name) }
     - if attendance.pending? && attendance.grouped?
-      %p= link_to t('actions.accept'), accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success', remote: true
+      %p= link_to t('actions.accept'), accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, class: 'btn btn-success', remote: true
     - if attendance.payable?
-      %p= link_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, :class => 'btn btn-success', remote: true
+      %p= link_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, class: 'btn btn-success', remote: true
     - if attendance.cancellable?
       %p= button_to t('actions.cancel'), attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) }
-    %p= button_to t('actions.edit'), edit_event_attendance_path(event_id: @event.id, id: attendance.id), method: :get , :class => 'btn btn-primary'
+    - if can?(:dequeue, attendance) && (attendance.waiting?)
+      %p= link_to t('attendance.list.actions.dequeue'), dequeue_it_attendance_path(attendance), method: :patch, class: 'btn btn-success'
+    %p= button_to t('actions.edit'), edit_event_attendance_path(event_id: @event.id, id: attendance.id), method: :get , class: 'btn btn-primary'

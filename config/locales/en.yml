@@ -311,6 +311,9 @@ en:
     confirm_confirmation: "If you confirm this registration to %{event}, you will notify the attendee and will not be able to cancel this operation.\n\nAre you sure you want to proceed?"
     confirmed:
       unpaid: "External/Delayed payment"
+    list:
+      actions:
+        dequeue: "Dequeue"
 
   authentication:
     list: "Registered authentications"

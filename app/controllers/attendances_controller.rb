@@ -58,6 +58,11 @@ class AttendancesController < ApplicationController
     redirect_to attendance_path(resource)
   end
 
+  def dequeue_it
+    resource.dequeue
+    redirect_to attendance_path(resource)
+  end
+
   def search
     @attendances_list = AttendanceRepository.instance.search_for_list(event_for_index, params[:search], statuses_params)
 

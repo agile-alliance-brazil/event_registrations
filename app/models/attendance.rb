@@ -117,7 +117,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def to_pay_the_difference?
-    paid? && grouped? && registration_group.incomplete?
+    (paid? || confirmed?) && grouped? && registration_group.incomplete?
   end
 
   private

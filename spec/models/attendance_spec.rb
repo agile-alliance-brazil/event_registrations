@@ -832,5 +832,10 @@ describe Attendance, type: :model do
       let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid, registration_group: group }
       it { expect(attendance.to_pay_the_difference?).to be_truthy }
     end
+    context 'confirmed and grouped, but the group is incomplete' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 2) }
+      let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', status: :confirmed, registration_group: group }
+      it { expect(attendance.to_pay_the_difference?).to be_truthy }
+    end
   end
 end

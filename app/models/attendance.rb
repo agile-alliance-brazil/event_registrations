@@ -116,6 +116,10 @@ class Attendance < ActiveRecord::Base
     registration_group.try(:free?)
   end
 
+  def to_pay_the_difference?
+    paid? && grouped? && registration_group.incomplete?
+  end
+
   private
 
   def advised_due_date

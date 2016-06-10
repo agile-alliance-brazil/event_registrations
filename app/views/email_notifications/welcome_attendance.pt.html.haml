@@ -6,6 +6,8 @@ Oi #{h(@attendance.full_name)},
 
 %ul
   %li Trazer um documento válido com foto para o credenciamento.
+  - if @attendance.to_pay_the_difference?
+    %li= "Seu grupo não atingiu o mínimo necessário, você precisará pagar a diferença entre o preço que pagou para o preço atual no credenciamento. Você pagou R$#{number_to_currency(@attendance.registration_value)} e o preço atual é R$#{number_to_currency(@attendance.event.full_price)}"
   %li Se você se cadastrou como estudante, não esqueça o comprovante. Se você esquecer, precisará pagar a diferença da entrada total.
   %li O credenciamento e o coffee de boas vindas começarão às #{@attendance.event.start_date.to_date.strftime('%H:%M')}.
   %li Consulte #{@attendance.event.link} para informações detalhadas de como chegar.

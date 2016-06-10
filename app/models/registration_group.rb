@@ -85,8 +85,8 @@ class RegistrationGroup < ActiveRecord::Base
     minimum_size.to_i > 1
   end
 
-  def complete?
-    attendances.paid.count >= minimum_size
+  def incomplete?
+    attendances.paid.count < minimum_size
   end
 
   private

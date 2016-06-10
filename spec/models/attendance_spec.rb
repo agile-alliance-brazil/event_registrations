@@ -754,13 +754,11 @@ describe Attendance, type: :model do
     context 'when belongs to a group' do
       let(:group) { FactoryGirl.create :registration_group, event: event }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
-
       it { expect(attendance.grouped?).to be_truthy }
     end
 
     context 'when not belonging to a group' do
       let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
-
       it { expect(attendance.grouped?).to be_falsey }
     end
   end
@@ -809,5 +807,30 @@ describe Attendance, type: :model do
   describe '#to_s' do
     let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar' }
     it { expect(attendance.to_s).to eq 'bar, foo' }
+  end
+
+  describe '#to_pay_the_difference?' do
+    context 'not paid attendance' do
+      let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar' }
+      it { expect(attendance.to_pay_the_difference?).to be_falsey }
+    end
+    context 'paid attendance not grouped' do
+      let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid }
+      it { expect(attendance.to_pay_the_difference?).to be_falsey }
+    end
+    context 'confirmed attendance not grouped' do
+      let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', status: :confirmed }
+      it { expect(attendance.to_pay_the_difference?).to be_falsey }
+    end
+    context 'paid and grouped, but the group is complete' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 1) }
+      let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid, registration_group: group }
+      it { expect(attendance.to_pay_the_difference?).to be_falsey }
+    end
+    context 'paid and grouped, but the group is incomplete' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: 2) }
+      let(:attendance) { FactoryGirl.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid, registration_group: group }
+      it { expect(attendance.to_pay_the_difference?).to be_truthy }
+    end
   end
 end

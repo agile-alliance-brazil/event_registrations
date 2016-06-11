@@ -225,6 +225,11 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#incomplete?' do
+    context 'with nil minimun_size' do
+      let(:group) { FactoryGirl.create(:registration_group, minimum_size: nil) }
+      it { expect(group.incomplete?).to be_falsey }
+    end
+
     context 'with minimun_size of 0' do
       let(:group) { FactoryGirl.create(:registration_group, minimum_size: 0) }
       it { expect(group.incomplete?).to be_falsey }

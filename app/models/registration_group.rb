@@ -86,6 +86,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def incomplete?
+    return false unless minimum_size.present?
     attendances.paid.count < minimum_size
   end
 

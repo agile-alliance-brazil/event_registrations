@@ -5,7 +5,7 @@ class EventsController < ApplicationController
   skip_before_action :authenticate_user!, :authorize_action, only: [:index, :show]
 
   def index
-    @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date > Time.zone.now }
+    @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date >= Time.zone.now }
   end
 
   def show

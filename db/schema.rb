@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160614042015) do
+ActiveRecord::Schema.define(version: 20160303004112) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id",                limit: 4
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20160614042015) do
     t.string   "education_level",         limit: 255
     t.integer  "queue_time",              limit: 4
     t.datetime "last_status_change_date"
+    t.string   "payment_type",            limit: 255
   end
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id", using: :btree

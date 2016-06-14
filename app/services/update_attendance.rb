@@ -7,6 +7,7 @@ class UpdateAttendance
     @attendance = PerformGroupCheck.run(attendance, params['registration_token'])
     @attendance.registration_value = @event.registration_price_for(@attendance, update_params.payment_type_params)
     @attendance.invoices.last.update(payment_type: update_params.payment_type_params)
+    @attendance.payment_type = update_params.payment_type_params
     @attendance.save!
   end
 end

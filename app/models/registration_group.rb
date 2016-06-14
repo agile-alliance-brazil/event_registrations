@@ -12,8 +12,8 @@
 #  invoice_id         :integer
 #  leader_id          :integer
 #  minimum_size       :integer
-#  name               :string(255)
-#  token              :string(255)
+#  name               :string
+#  token              :string
 #  updated_at         :datetime
 #
 # Indexes

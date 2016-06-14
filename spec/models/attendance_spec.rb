@@ -838,4 +838,50 @@ describe Attendance, type: :model do
       it { expect(attendance.to_pay_the_difference?).to be_truthy }
     end
   end
+
+  describe '#payment_type' do
+    context 'having invoices' do
+      let!(:attendance) { FactoryGirl.create(:attendance) }
+      let!(:invoice) { Invoice.from_attendance(attendance) }
+      it { expect(attendance.payment_type).to eq Invoice::GATEWAY }
+    end
+    context 'and without invoices' do
+      let!(:attendance) { FactoryGirl.create(:attendance) }
+      it { expect(attendance.payment_type).to eq nil }
+    end
+  end
+
+  describe '#price_band?' do
+    context 'having period' do
+      let(:period) { FactoryGirl.create(:registration_period) }
+      let!(:attendance) { FactoryGirl.create(:attendance, registration_period: period) }
+      it { expect(attendance.price_band?).to be_truthy }
+    end
+    context 'having quota' do
+      let(:quota) { FactoryGirl.create(:registration_quota) }
+      let!(:attendance) { FactoryGirl.create(:attendance, registration_quota: quota) }
+      it { expect(attendance.price_band?).to be_truthy }
+    end
+    context 'having no bands' do
+      let!(:attendance) { FactoryGirl.create(:attendance) }
+      it { expect(attendance.price_band?).to be_falsey }
+    end
+  end
+
+  describe '#band_value' do
+    context 'having period' do
+      let(:period) { FactoryGirl.create(:registration_period) }
+      let!(:attendance) { FactoryGirl.create(:attendance, registration_period: period) }
+      it { expect(attendance.band_value).to eq period.price }
+    end
+    context 'having quota' do
+      let(:quota) { FactoryGirl.create(:registration_quota) }
+      let!(:attendance) { FactoryGirl.create(:attendance, registration_quota: quota) }
+      it { expect(attendance.band_value).to eq quota.price }
+    end
+    context 'having no bands' do
+      let!(:attendance) { FactoryGirl.create(:attendance) }
+      it { expect(attendance.band_value).to be_nil }
+    end
+  end
 end

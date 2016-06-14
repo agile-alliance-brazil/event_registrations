@@ -413,6 +413,33 @@ describe EventAttendancesController, type: :controller do
   end
 
   describe '#update' do
+    let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
+    let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+
+    let(:valid_attendance_parameters) do
+      {
+        event_id: event.id,
+        user_id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        organization: user.organization,
+        organization_size: 'bla',
+        job_role: 'role',
+        years_of_experience: '6',
+        experience_in_agility: '9',
+        school: 'scholl',
+        education_level: 'level',
+        phone: user.phone,
+        country: user.country,
+        state: user.state,
+        city: user.city,
+        badge_name: user.badge_name,
+        cpf: user.cpf,
+        gender: user.gender
+      }
+    end
+
     before do
       User.any_instance.stubs(:has_approved_session?).returns(true)
       sign_in user
@@ -421,12 +448,10 @@ describe EventAttendancesController, type: :controller do
     end
 
     context 'with a valid attendance' do
-      let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
-      let(:attendance) { FactoryGirl.create(:attendance, event: event) }
       let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
       context 'and no group token informed' do
         it 'updates the attendance' do
-          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance, payment_type: Invoice::DEPOSIT
+          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: Invoice::DEPOSIT
           expect(Attendance.last.registration_group).to be_nil
           expect(Attendance.last.first_name).to eq user.first_name
           expect(Attendance.last.last_name).to eq user.last_name
@@ -445,73 +470,31 @@ describe EventAttendancesController, type: :controller do
           expect(Attendance.last.cpf).to eq user.cpf
           expect(Attendance.last.gender).to eq user.gender
           expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
-          is_expected.to redirect_to attendances_path(event_id: event)
+          expect(response).to redirect_to attendances_path(event_id: event)
         end
       end
 
       context 'and with a group token informed' do
         let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
-        let(:valid_attendance) do
-          {
-            event_id: event.id,
-            user_id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: 'bla@foo.bar',
-            organization: 'sbrubbles',
-            phone: user.phone,
-            country: user.country,
-            state: user.state,
-            city: user.city,
-            badge_name: user.badge_name,
-            cpf: user.cpf,
-            gender: user.gender
-          }
-        end
 
-        it 'assigns the attendance and render edit' do
-          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance, payment_type: Invoice::DEPOSIT, registration_token: group.token
-          expect(Attendance.last.email).to eq 'bla@foo.bar'
-          expect(Attendance.last.organization).to eq 'sbrubbles'
-          expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
+        it 'updates the user with the token' do
+          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: Invoice::DEPOSIT, registration_token: group.token
           expect(Attendance.last.registration_group).to eq group
           expect(Attendance.last.registration_value).to eq 420
-          is_expected.to redirect_to attendances_path(event_id: event)
         end
       end
 
-      context 'and with a group token informed and the attendance is an AA member' do
-        before do
-          stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>1</result></data>', headers: {})
-        end
-        let!(:aa_group) { FactoryGirl.create(:registration_group, event: event, discount: 10) }
-        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
-        let(:valid_attendance) do
-          {
-            event_id: event.id,
-            user_id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: 'bla@foo.bar',
-            organization: 'sbrubbles',
-            phone: user.phone,
-            country: user.country,
-            state: user.state,
-            city: user.city,
-            badge_name: user.badge_name,
-            cpf: user.cpf,
-            gender: user.gender
-          }
-        end
-        it 'assigns the attendance and render edit' do
-          RegistrationGroup.stubs(:find_by).returns(aa_group)
-          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance, payment_type: Invoice::DEPOSIT, registration_token: group.token
-          expect(Attendance.last.email).to eq 'bla@foo.bar'
-          expect(Attendance.last.organization).to eq 'sbrubbles'
-          expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
-          expect(Attendance.last.registration_group).to eq group
-          expect(Attendance.last.registration_value).to eq 420
-          is_expected.to redirect_to attendances_path(event_id: event)
+      context 'and the price band has changed' do
+        let!(:quota) { FactoryGirl.create(:registration_quota, event: event, quota: 1, price: 100) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_quota: quota) }
+        let!(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
+
+        context 'having the same group access token' do
+          it 'updates the attendance and does not change the price' do
+            put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: Invoice::DEPOSIT, registration_token: group.token
+            expect(Attendance.last.registration_group).to eq group
+            expect(Attendance.last.registration_value).to eq 50
+          end
         end
       end
     end

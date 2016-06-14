@@ -3,13 +3,13 @@
 #
 # Table name: authentications
 #
-#  id            :integer          not null, primary key
-#  user_id       :integer
-#  provider      :string(255)
-#  uid           :string(255)
 #  created_at    :datetime
+#  id            :integer          not null, primary key
+#  provider      :string
+#  refresh_token :string
+#  uid           :string
 #  updated_at    :datetime
-#  refresh_token :string(255)
+#  user_id       :integer
 #
 
 class Authentication < ActiveRecord::Base

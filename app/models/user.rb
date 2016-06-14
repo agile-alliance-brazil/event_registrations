@@ -2,27 +2,27 @@
 #
 # Table name: users
 #
-#  address               :string(255)
-#  badge_name            :string(255)
-#  city                  :string(255)
-#  country               :string(255)
-#  cpf                   :string(255)
+#  address               :string
+#  badge_name            :string
+#  city                  :string
+#  country               :string
+#  cpf                   :string
 #  created_at            :datetime
-#  default_locale        :string(255)      default("pt")
-#  email                 :string(255)
-#  first_name            :string(255)
-#  gender                :string(255)
+#  default_locale        :string           default("pt")
+#  email                 :string
+#  first_name            :string
+#  gender                :string
 #  id                    :integer          not null, primary key
-#  last_name             :string(255)
-#  neighbourhood         :string(255)
-#  organization          :string(255)
-#  phone                 :string(255)
+#  last_name             :string
+#  neighbourhood         :string
+#  organization          :string
+#  phone                 :string
 #  registration_group_id :integer
 #  roles_mask            :integer
-#  state                 :string(255)
-#  twitter_user          :string(255)
+#  state                 :string
+#  twitter_user          :string
 #  updated_at            :datetime
-#  zipcode               :string(255)
+#  zipcode               :string
 #
 # Indexes
 #

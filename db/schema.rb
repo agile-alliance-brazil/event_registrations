@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303004112) do
+ActiveRecord::Schema.define(version: 20160614042015) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id",                limit: 4
@@ -40,7 +40,6 @@ ActiveRecord::Schema.define(version: 20160303004112) do
     t.integer  "registration_period_id",  limit: 4
     t.boolean  "advised",                                            default: false
     t.datetime "advised_at"
-    t.string   "payment_type",            limit: 255
     t.string   "organization_size",       limit: 255
     t.string   "job_role",                limit: 255
     t.string   "years_of_experience",     limit: 255

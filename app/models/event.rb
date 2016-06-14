@@ -9,12 +9,12 @@
 #  end_date           :datetime
 #  full_price         :decimal(10, )
 #  id                 :integer          not null, primary key
-#  link               :string(255)
-#  location_and_date  :string(255)
-#  logo               :string(255)
-#  main_email_contact :string(255)      not null
-#  name               :string(255)
-#  price_table_link   :string(255)
+#  link               :string
+#  location_and_date  :string
+#  logo               :string
+#  main_email_contact :string           not null
+#  name               :string
+#  price_table_link   :string
 #  start_date         :datetime
 #  updated_at         :datetime
 #
@@ -105,6 +105,8 @@ class Event < ActiveRecord::Base
     quota = find_quota
     if payment_type == Invoice::STATEMENT
       (full_price * 100)
+    elsif attendance.price_band?
+      attendance.band_value * attendance.discount
     elsif period_for.present?
       period_for.price * attendance.discount
     elsif quota.first.present?

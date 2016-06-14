@@ -3,17 +3,17 @@
 #
 # Table name: invoices
 #
-#  id                    :integer          not null, primary key
-#  frete                 :integer
 #  amount                :decimal(10, )
 #  created_at            :datetime
+#  frete                 :integer
+#  id                    :integer          not null, primary key
+#  invoiceable_id        :integer
+#  invoiceable_type      :string
+#  payment_type          :string
+#  registration_group_id :integer
+#  status                :string
 #  updated_at            :datetime
 #  user_id               :integer
-#  registration_group_id :integer
-#  status                :string(255)
-#  payment_type          :string(255)
-#  invoiceable_id        :integer
-#  invoiceable_type      :string(255)
 #
 # Indexes
 #

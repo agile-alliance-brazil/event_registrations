@@ -8,11 +8,11 @@
 #  invoice_id      :integer
 #  notes           :text(65535)
 #  params          :text(65535)
-#  payer_email     :string(255)
+#  payer_email     :string
 #  settle_amount   :decimal(10, )
-#  settle_currency :string(255)
-#  status          :string(255)
-#  transaction_id  :string(255)
+#  settle_currency :string
+#  status          :string
+#  transaction_id  :string
 #  updated_at      :datetime
 #
 # Indexes

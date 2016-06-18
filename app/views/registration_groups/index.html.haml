@@ -2,6 +2,6 @@
   = t('registration_group.list')
   = link_to @event.name, @event
 
-= render partial: 'form'
+= render 'form'
 
 = render partial: 'groups_list', locals: { event: @event }

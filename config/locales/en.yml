@@ -124,6 +124,7 @@ en:
         qtd_attendances: 'Attendances Total'
         index:
           actions: 'Actions'
+        capacity: "Capacity"
       invoice:
         title: 'Fatura'
         name: 'Name'
@@ -357,6 +358,8 @@ en:
       title: "New group"
     edit:
       title: "Updating registration group"
+    event_capacity_error: "The event has no capacity to receive your group! Sorry!"
+    quota_capacity_error: "The registration quota has no capacity to receive your group! Sorry!"
   invoice:
     not_found: 'Invoice not found'
 

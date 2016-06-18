@@ -240,15 +240,18 @@ pt:
         origin_id: "Origem"
         destination_id: "Destino"
       registration_group:
-        name: 'Nome'
+        name: 'Nome do grupo'
         created_at: 'Criado em'
         discount: 'Desconto (%)'
         minimum_size: 'Tamanho mínimo'
-        amount: 'Valor'
+        amount: 'Valor por inscrição'
         token: 'Token para inscrição'
         leader: 'Líder'
         event: 'Evento'
         qtd_attendances: 'Total de inscritos'
+        paid_in_advance: 'Pago antecipadamente?'
+        automatic_approval: 'Aprovação automática?'
+        capacity: 'Capacidade de inscrições'
         index:
           actions: 'Ações'
       invoice:
@@ -284,6 +287,7 @@ pt:
         price_table_link: 'Link para a tabela de preços'
         days_to_charge: 'Dias para cobrar a inscrição'
         main_email_contact: 'Email principal de contato'
+        attendance_limit: 'Público máximo esperado'
     hints:
       attendance:
         education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"
@@ -483,6 +487,8 @@ pt:
       title: "Novo grupo"
     edit:
       title: "Atualizando grupo de inscrição"
+    event_capacity_error: "O evento não tem mais lugares para o seu grupo. Desculpe!"
+    quota_capacity_error: "A cota não tem mais lugares para o seu grupo. Desculpe!"
   invoice:
     not_found: 'Fatura não encontrada'
 

@@ -29,7 +29,8 @@ describe EventAttendancesController, type: :controller do
     {
       name: 'Agile Brazil 2015', price_table_link: 'http://localhost:9292/link',
       full_price: 840.00, start_date: 1.month.from_now, end_date: 2.months.from_now,
-      main_email_contact: 'contact@foo.com'
+      main_email_contact: 'contact@foo.com',
+      attendance_limit: 1000
     }
   end
 

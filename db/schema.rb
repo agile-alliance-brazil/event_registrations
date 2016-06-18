@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303004112) do
+ActiveRecord::Schema.define(version: 20160618142016) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id",                limit: 4
@@ -118,18 +118,20 @@ ActiveRecord::Schema.define(version: 20160303004112) do
   add_index "payment_notifications", ["invoice_id"], name: "fk_rails_92030b1506", using: :btree
 
   create_table "registration_groups", force: :cascade do |t|
-    t.integer  "event_id",           limit: 4
-    t.string   "name",               limit: 255
-    t.integer  "capacity",           limit: 4
-    t.integer  "discount",           limit: 4
-    t.string   "token",              limit: 255
+    t.integer  "event_id",              limit: 4
+    t.string   "name",                  limit: 255
+    t.integer  "capacity",              limit: 4
+    t.integer  "discount",              limit: 4
+    t.string   "token",                 limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "leader_id",          limit: 4
-    t.integer  "invoice_id",         limit: 4
-    t.integer  "minimum_size",       limit: 4
-    t.decimal  "amount",                         precision: 10
-    t.boolean  "automatic_approval",                            default: false
+    t.integer  "leader_id",             limit: 4
+    t.integer  "invoice_id",            limit: 4
+    t.integer  "minimum_size",          limit: 4
+    t.decimal  "amount",                            precision: 10
+    t.boolean  "automatic_approval",                               default: false
+    t.integer  "registration_quota_id", limit: 4
+    t.boolean  "paid_in_advance",                                  default: false
   end
 
   add_index "registration_groups", ["invoice_id"], name: "fk_rails_9544e3707e", using: :btree

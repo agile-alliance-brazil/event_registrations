@@ -2,6 +2,9 @@
 
 %h5= t('registration_group.show.discount', group_discount: @group.discount)
 %h5= t('registration_group.show.minimum_size', minimum_size: @group.minimum_size)
+%h5= "#{t('formtastic.labels.registration_group.capacity')}: #{@group.capacity}"
+%h5= "#{t('formtastic.labels.registration_group.amount')}: #{number_to_currency @group.amount}"
+%h5= t('registration_group.show.minimum_size', minimum_size: @group.minimum_size)
 
 %h5 #{ number_to_currency @group.total_price }
 

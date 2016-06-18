@@ -24,12 +24,21 @@ class RegistrationQuota < ActiveRecord::Base
   validates :order, :quota, presence: true
 
   def vacancy?
-    open? && attendances.active.size < quota
+    places_sold = reserved + attendances.active.size
+    open? && places_sold < quota
+  end
+
+  def capacity_left
+    quota - (attendances.active.size + reserved)
   end
 
   private
 
   def open?
     !closed
+  end
+
+  def reserved
+    RegistrationGroupRepository.instance.reserved_for_quota(self)
   end
 end

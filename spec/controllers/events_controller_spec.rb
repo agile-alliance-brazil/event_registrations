@@ -199,10 +199,10 @@ describe EventsController, type: :controller do
           end
         end
         context 'with invalid event parameters' do
+          before { put :update, id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '', price_table_link: '' } }
           it 'renderes the form with the errors' do
-            put :update, id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '', price_table_link: '' }
-            is_expected.to render_template :edit
-            expect(assigns(:event).errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco']
+            expect(response).to render_template :edit
+            expect(assigns(:event).errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco', 'Attendance limit não pode ficar em branco']
           end
         end
         context 'with invalid event ID' do
@@ -304,10 +304,11 @@ describe EventsController, type: :controller do
 
       context 'with invalid parameters' do
         subject(:event) { assigns(:event) }
+        before { post :create, event: { name: '' } }
+
         it 'renders form with the errors' do
-          post :create, event: { name: '' }
           expect(event).to be_a Event
-          expect(event.errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco', 'Main email contact não pode ficar em branco']
+          expect(event.errors.full_messages).to eq ['Start date não pode ficar em branco', 'End date não pode ficar em branco', 'Full price não pode ficar em branco', 'Name não pode ficar em branco', 'Main email contact não pode ficar em branco', 'Attendance limit não pode ficar em branco']
           is_expected.to render_template :new
         end
       end

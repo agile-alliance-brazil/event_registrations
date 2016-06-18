@@ -25,6 +25,7 @@
 #  notes                   :string
 #  organization            :string
 #  organization_size       :string
+#  payment_type            :string
 #  phone                   :string
 #  queue_time              :integer
 #  registration_date       :datetime

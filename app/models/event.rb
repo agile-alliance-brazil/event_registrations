@@ -28,7 +28,7 @@ class Event < ActiveRecord::Base
 
   has_and_belongs_to_many :organizers, class_name: 'User'
 
-  validates :start_date, :end_date, :full_price, :name, :main_email_contact, presence: true
+  validates :start_date, :end_date, :full_price, :name, :main_email_contact, :attendance_limit, presence: true
   validate :period_valid?
 
   scope :active_for, ->(date) { where('end_date > ?', date) }
@@ -37,7 +37,8 @@ class Event < ActiveRecord::Base
   scope :tomorrow_events, -> { where(start_date: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day) }
 
   def full?
-    attendance_limit.present? && attendance_limit > 0 && (attendance_limit <= attendances.active.size)
+    places_sold = reserved + attendances.active.size
+    attendance_limit.present? && attendance_limit > 0 && (attendance_limit <= places_sold)
   end
 
   def registration_price_for(attendance, payment_type)
@@ -94,6 +95,10 @@ class Event < ActiveRecord::Base
     registration_groups.find_by(name: 'Membros da Agile Alliance')
   end
 
+  def capacity_left
+    attendance_limit - (attendances.active.size + reserved)
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)
@@ -119,5 +124,9 @@ class Event < ActiveRecord::Base
   def period_valid?
     return unless start_date.present? && end_date.present?
     errors.add(:end_date, :invalid_period) if start_date > end_date
+  end
+
+  def reserved
+    RegistrationGroupRepository.instance.reserved_for_event(self)
   end
 end

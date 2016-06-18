@@ -40,7 +40,7 @@ class RegistrationGroupsController < ApplicationController
   private
 
   def group_params
-    params.require(:registration_group).permit(:name, :discount, :minimum_size, :amount, :automatic_approval)
+    params.require(:registration_group).permit(:name, :discount, :minimum_size, :amount, :automatic_approval, :paid_in_advance, :capacity)
   end
 
   def find_group

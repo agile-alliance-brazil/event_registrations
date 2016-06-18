@@ -23,5 +23,6 @@ FactoryGirl.define do
     start_date 1.month.from_now
     end_date 2.months.from_now
     main_email_contact 'bla@xpto.com'
+    attendance_limit 1000
   end
 end

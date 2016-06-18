@@ -42,11 +42,21 @@ describe Event, type: :model do
         let(:attendance) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
         it { expect(event.full?).to be_falsey }
       end
-    end
 
-    context 'with a nil event limit' do
-      let(:event) { FactoryGirl.create(:event, attendance_limit: nil) }
-      it { expect(event.full?).to be_falsey }
+      context 'and the event has reserved places in groups' do
+        let(:event) { FactoryGirl.create(:event, attendance_limit: 10) }
+
+        context 'and is full' do
+          let!(:group) { FactoryGirl.create :registration_group, event: event, paid_in_advance: true, capacity: 5, amount: 100 }
+          let!(:other_group) { FactoryGirl.create :registration_group, event: event, paid_in_advance: true, capacity: 5, amount: 100 }
+          it { expect(event.full?).to be_truthy }
+        end
+
+        context 'and is not full' do
+          let!(:group) { FactoryGirl.create :registration_group, event: event, paid_in_advance: true, capacity: 5, amount: 100 }
+          it { expect(event.full?).to be_falsey }
+        end
+      end
     end
 
     context 'with a zero event limit' do
@@ -367,5 +377,13 @@ describe Event, type: :model do
     context 'when the event does not have an AA discount group' do
       it { expect(event.agile_alliance_discount_group).to be_nil }
     end
+  end
+
+  describe '#capacity_left' do
+    let(:event) { FactoryGirl.create :event, attendance_limit: 10 }
+    let!(:group) { FactoryGirl.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
+    let!(:attendance) { FactoryGirl.create :attendance, event: event }
+
+    it { expect(event.capacity_left).to eq 6 }
   end
 end

@@ -1,7 +1,7 @@
 = semantic_form_for event do |form|
   = form.inputs :event_basics do
     = form.input :name, required: true, input_html: { tabindex: autotab }
-    = form.input :attendance_limit, input_html: { tabindex: autotab }
+    = form.input :attendance_limit, required: true, input_html: { tabindex: autotab }
     = form.input :main_email_contact, input_html: { tabindex: autotab }
     = form.input :days_to_charge, input_html: { tabindex: autotab }
 

@@ -2,19 +2,21 @@
 #
 # Table name: registration_groups
 #
-#  amount             :decimal(10, )
-#  automatic_approval :boolean          default(FALSE)
-#  capacity           :integer
-#  created_at         :datetime
-#  discount           :integer
-#  event_id           :integer
-#  id                 :integer          not null, primary key
-#  invoice_id         :integer
-#  leader_id          :integer
-#  minimum_size       :integer
-#  name               :string
-#  token              :string
-#  updated_at         :datetime
+#  amount                :decimal(10, )
+#  automatic_approval    :boolean          default(FALSE)
+#  capacity              :integer
+#  created_at            :datetime
+#  discount              :integer
+#  event_id              :integer
+#  id                    :integer          not null, primary key
+#  invoice_id            :integer
+#  leader_id             :integer
+#  minimum_size          :integer
+#  name                  :string
+#  paid_in_advance       :boolean          default(FALSE)
+#  registration_quota_id :integer
+#  token                 :string
+#  updated_at            :datetime
 #
 # Indexes
 #
@@ -28,11 +30,14 @@
 class RegistrationGroup < ActiveRecord::Base
   belongs_to :event
   belongs_to :leader, class_name: 'User', inverse_of: :led_groups
+  belongs_to :registration_quota
 
   has_many :attendances
   has_many :invoices, as: :invoiceable
 
   validates :event, :name, presence: true
+  validates :capacity, :amount, presence: true, if: :paid_in_advance?
+  validate :enough_capacity, if: :paid_in_advance?
 
   before_create :generate_token
 
@@ -90,9 +95,22 @@ class RegistrationGroup < ActiveRecord::Base
     attendances.paid.count < minimum_size
   end
 
+  def capacity_left
+    capacity - attendances.active.count
+  end
+
   private
 
   def generate_token
     self.token = SecureRandom.hex
+  end
+
+  def enough_capacity
+    return unless capacity.present?
+    if registration_quota.present? && registration_quota.capacity_left < capacity
+      errors.add(:capacity, I18n.t('registration_group.quota_capacity_error'))
+    elsif event.capacity_left < capacity
+      errors.add(:capacity, I18n.t('registration_group.event_capacity_error'))
+    end
   end
 end

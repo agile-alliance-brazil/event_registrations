@@ -1,1 +1,1 @@
-web: bundle exec rails server -p 9292
+web: bundle exec rails server -p $PORT

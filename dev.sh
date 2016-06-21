@@ -51,5 +51,18 @@ fi
 
 echo "GRANT ALL PRIVILEGES ON * . * TO 'registrations_db'@'localhost';" | mysql -u root
 
+MY_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd ${MY_DIR}
+
 bundle install
+
+if [[ ! -f ${MY_DIR}/.env ]]; then
+  printf "TOKEN=`bundle exec rake secret`\n" > ${MY_DIR}/.env
+fi
+
+if [[ -z `cat ${MY_DIR}/.env | grep PORT` ]]; then
+  printf "PORT=9292\n" >> ${MY_DIR}/.env
+fi
+
 bundle exec foreman start -f Procfile.dev

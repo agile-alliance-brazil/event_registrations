@@ -65,7 +65,7 @@ describe EmailNotifications, type: :mailer do
   end
 
   describe '#registration_confirmed' do
-    let(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: Time.zone.local(2013, 05, 01, 12, 0, 0)) }
+    let(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: Time.zone.local(2013, 5, 1, 12, 0, 0)) }
 
     context 'when the attendance is brazilian' do
       context 'and event start date before end date' do

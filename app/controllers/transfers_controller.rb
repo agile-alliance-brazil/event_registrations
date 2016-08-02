@@ -6,7 +6,9 @@ class TransfersController < ApplicationController
 
   def new
     event = @attendance.event
-    @origins = ((current_user.organizer? || current_user.admin?) ? event.attendances : current_user.attendances).paid
+    can_see_all_attendances = current_user.organizer? || current_user.admin?
+    attendances = can_see_all_attendances ? event.attendances : current_user.attendances
+    @origins = attendances.paid
     @destinations = event.attendances.pending
     @event = transfer.origin.event || transfer.destination.event || Event.new.tap { |e| e.name = 'missing' }
   end

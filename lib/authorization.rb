@@ -24,13 +24,13 @@ module Authorization
   def self.included(model)
     ROLES.each do |role|
       model.send :define_method, "#{role}?" do
-        ((roles_mask || 0) & role_index(role)) != 0
+        ((roles_mask || 0) & role_index(role)).nonzero?
       end
     end
   end
 
   def guest?
-    (roles_mask || 0) == 0
+    (roles_mask || 0).zero?
   end
 
   private

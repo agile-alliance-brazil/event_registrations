@@ -68,7 +68,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'capistrano', '3.5.0', require: false
+  gem 'capistrano', '3.6.0', require: false
   gem 'net-ssh', '~> 3.0'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false

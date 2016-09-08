@@ -14,6 +14,8 @@
   = form.input :gender, as: :select, collection: Gender.options_for_select, input_html: { tabindex: autotab }
   - if I18n.locale == :pt
     = form.input :cpf, required: true, input_html: { tabindex: autotab }
+  - else
+    = form.input :cpf, input_html: { tabindex: autotab }
 
 = form.inputs :attendance_address do
   = form.input :country, required: true, as: :country, priority_countries: [:BR], input_html: { tabindex: autotab }

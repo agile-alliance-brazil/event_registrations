@@ -293,6 +293,7 @@ pt:
         education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"
         notes: "Deixe aqui qualquer anotação ou observação que considere relevante, para futura referência (por exemplo: número de confirmação do pagamento, ou alguma informação especial sobre essa inscrição)"
         gender: "Deixe em branco caso prefira não responder"
+        cpf: "Deixe em branco caso não seja brasileiro"
     actions:
       edit_profile: "Atualizar perfil"
       new_registration: "Submeter inscrição"

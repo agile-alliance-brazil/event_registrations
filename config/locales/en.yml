@@ -72,7 +72,7 @@ en:
         school: "School"
         education_level: "Education level"
         badge_name: "Name for badge"
-        cpf: "Identification number (CPF if you are Brazilian, empty otherwise)"
+        cpf: "CPF"
         gender: "Gender"
         status: "Status"
         registration_date: "Date"
@@ -163,6 +163,7 @@ en:
         education_level: "This field is using the ISCED 2011 education levels"
         notes: "Leave any notes or observations that you think are relevant, for future reference (e.g. payment confirmation number, or any special information about this participant)"
         gender: "Leave blank if you prefer to not answer"
+        cpf: "Leave blank if you are not brazilian"
     actions:
       new_registration: "Submit registration"
       edit_registration: "Update registration"

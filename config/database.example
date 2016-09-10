@@ -1,8 +1,8 @@
 common: &common
   adapter: mysql2
   pool: 5
-  username: root
-  password:
+  username: registrations_db
+  password: registrations_db
 
 development:
   <<: *common

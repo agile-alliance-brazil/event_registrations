@@ -34,3 +34,4 @@ pickle-email-*.html
 .env
 .byebug_history
 /public/assets/
+.ruby-gemset

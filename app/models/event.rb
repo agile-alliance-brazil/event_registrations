@@ -12,7 +12,7 @@
 #  link               :string
 #  location_and_date  :string
 #  logo               :string
-#  main_email_contact :string           not null
+#  main_email_contact :string           default(""), not null
 #  name               :string
 #  price_table_link   :string
 #  start_date         :datetime

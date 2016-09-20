@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20160618142016) do
     t.integer  "registration_period_id",  limit: 4
     t.boolean  "advised",                                            default: false
     t.datetime "advised_at"
+    t.string   "payment_type",            limit: 255
     t.string   "organization_size",       limit: 255
     t.string   "job_role",                limit: 255
     t.string   "years_of_experience",     limit: 255
@@ -48,7 +49,6 @@ ActiveRecord::Schema.define(version: 20160618142016) do
     t.string   "education_level",         limit: 255
     t.integer  "queue_time",              limit: 4
     t.datetime "last_status_change_date"
-    t.string   "payment_type",            limit: 255
   end
 
   add_index "attendances", ["registration_quota_id"], name: "index_attendances_on_registration_quota_id", using: :btree
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20160618142016) do
     t.string   "link",               limit: 255
     t.string   "logo",               limit: 255
     t.integer  "days_to_charge",     limit: 4,                  default: 7
-    t.string   "main_email_contact", limit: 255,                            null: false
+    t.string   "main_email_contact", limit: 255,                default: "", null: false
   end
 
   create_table "events_users", id: false, force: :cascade do |t|

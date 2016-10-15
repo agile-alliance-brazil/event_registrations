@@ -1,6 +1,7 @@
 class PaymentsController < ApplicationController
   skip_before_action :authenticate_user!, :authorize_action
 
+  # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
   before_action :find_event, :find_invoice
 
   def checkout

@@ -58,11 +58,11 @@ class EventAttendancesController < ApplicationController
   end
 
   def resource
-    Attendance.find_by_id(params[:id])
+    Attendance.find_by(id: params[:id])
   end
 
   def event
-    @event ||= Event.includes(registration_periods: [:event]).find_by_id(params.require(:event_id))
+    @event ||= Event.includes(registration_periods: [:event]).find_by(id: params.require(:event_id))
   end
 
   def timeout

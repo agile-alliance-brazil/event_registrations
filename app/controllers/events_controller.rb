@@ -1,6 +1,7 @@
 class EventsController < ApplicationController
   layout 'eventless', only: %i(index list_archived)
 
+  # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
   before_action :find_event, only: [:show, :destroy, :add_organizer, :remove_organizer, :edit, :update]
   skip_before_action :authenticate_user!, :authorize_action, only: [:index, :show]
 
@@ -76,7 +77,7 @@ class EventsController < ApplicationController
   end
 
   def resource
-    Event.find_by_id(params[:id])
+    Event.find(params[:id])
   end
 
   def resource_class

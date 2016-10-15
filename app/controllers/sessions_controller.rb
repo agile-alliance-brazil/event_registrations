@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    auth = Authentication.find_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
+    auth = Authentication.find_by(provider: auth_hash['provider'], uid: auth_hash['uid'])
     if auth.present?
       log_in_with(auth)
     elsif logged_in?

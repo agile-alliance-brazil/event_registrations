@@ -35,12 +35,14 @@ class CreateAttendance
   end
 
   def self.save_attendance!
-    if @attendance.save
-      if @attendance.pending?
-        EmailNotifications.registration_pending(@attendance).deliver_now
-      elsif @attendance.waiting?
-        EmailNotifications.registration_waiting(@attendance).deliver_now
-      end
+    notify_attendance if @attendance.save
+  end
+
+  def self.notify_attendance
+    if @attendance.pending?
+      EmailNotifications.registration_pending(@attendance).deliver_now
+    elsif @attendance.waiting?
+      EmailNotifications.registration_waiting(@attendance).deliver_now
     end
   end
 end

@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/BlockLength
 Current::Application.routes.draw do
   post '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/:provider/callback', to: 'sessions#create' # due problems without dev backdoor

@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
   end
 
   def event
-    @event ||= Event.find_by_id(params[:event_id])
+    @event ||= Event.find_by(id: params[:event_id])
   end
 
   def find_event

@@ -25,6 +25,7 @@ class PaymentNotificationsController < ApplicationController
   protect_from_forgery except: [:create]
 
   def create
+    # rubocop:disable Rails/DynamicFindBy
     transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
     if transaction.status.present?
       transaction_params = params

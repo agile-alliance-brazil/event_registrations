@@ -1,6 +1,7 @@
 module Concerns
   module LifeCycle
     extend ActiveSupport::Concern
+    # rubocop:disable Metrics/BlockLength
     included do
       scope :pending, -> { where("attendances.status IN ('pending', 'accepted')") }
       scope :accepted, -> { where(status: :accepted) }
@@ -52,6 +53,7 @@ module Concerns
         end
       end
     end
+    # rubocop:enable Metrics/BlockLength
 
     def cancellable?
       waiting? || pending? || accepted? || paid? || confirmed?

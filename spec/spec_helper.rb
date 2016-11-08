@@ -1,7 +1,4 @@
 # encoding: UTF-8
-require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
-
 ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start 'rails' do

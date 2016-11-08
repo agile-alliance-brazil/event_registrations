@@ -83,7 +83,7 @@ group :test do
   gem 'shoulda-matchers', require: false
   gem 'factory_girl_rails'
   gem 'timecop'
-  gem 'codeclimate-test-reporter', require: nil
-  gem 'simplecov', require: false
+  gem 'codeclimate-test-reporter', '~> 1.0.0'
+  gem 'simplecov'
   gem 'webmock'
 end

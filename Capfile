@@ -20,6 +20,8 @@ require 'capistrano/rvm'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
+require "capistrano/scm/git-with-submodules"
+install_plugin Capistrano::SCM::Git::WithSubmodules
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
@@ -30,7 +32,7 @@ namespace :deploy do
   %w(start restart).each do |name|
     desc "#{name.capitalize} application"
     task name.to_sym do
-      on roles(:app), in: :sequence, wait: 5 do
+      on roles(:web), in: :sequence, wait: 5 do
         execute :touch, release_path.join('tmp/restart.txt')
       end
     end
@@ -45,19 +47,6 @@ namespace :deploy do
               :sh, "-c '/opt/puppetlabs/bin/puppet apply\
         --modulepath /opt/puppetlabs/puppet/modules:#{release_path.join('puppet/modules')}\
         #{release_path.join("puppet/manifests/#{fetch(:manifest)}.pp")}'"
-    end
-  end
-end
-
-namespace :git do
-  desc 'Copy repo to releases'
-  task create_release: :'git:update' do
-    on roles(:all) do
-      with fetch(:git_environmental_variables) do
-        within repo_path do
-          execute :git, :clone, '-b', fetch(:branch), '--recursive', '.', release_path
-        end
-      end
     end
   end
 end

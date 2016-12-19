@@ -74,7 +74,7 @@ GEM
     cancancan (1.15.0)
     cane (2.6.2)
       parallel
-    capistrano (3.6.1)
+    capistrano (3.7.1)
       airbrussh (>= 1.0.0)
       capistrano-harrow
       i18n
@@ -83,6 +83,8 @@ GEM
     capistrano-bundler (1.2.0)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
+    capistrano-git-with-submodules (1.0.2)
+      capistrano (~> 3.7)
     capistrano-harrow (0.5.3)
     capistrano-rails (1.2.0)
       capistrano (~> 3.1)
@@ -493,8 +495,9 @@ DEPENDENCIES
   brcpfcnpj (~> 3.3.0)
   byebug
   cancancan (~> 1.10)
-  capistrano (= 3.6.1)
+  capistrano (= 3.7.1)
   capistrano-bundler
+  capistrano-git-with-submodules
   capistrano-rails
   capistrano-rvm
   codeclimate-test-reporter (~> 1.0.0)

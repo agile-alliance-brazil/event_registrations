@@ -5,8 +5,7 @@ class SampleUser
   include Authorization
   attr_accessor :roles_mask
 
-  def initialize
-  end
+  def initialize; end
 end
 
 describe Authorization do

@@ -6,8 +6,7 @@ class SessionsController < ApplicationController
 
   layout 'eventless'
 
-  def new
-  end
+  def new; end
 
   def create
     auth = Authentication.find_by(provider: auth_hash['provider'], uid: auth_hash['uid'])

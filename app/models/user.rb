@@ -33,8 +33,8 @@
 #  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id)
 #
 
-require File.join(Rails.root, 'lib/authorization.rb')
-require File.join(Rails.root, 'lib/trimmer.rb')
+require Rails.root.join('lib', 'authorization.rb')
+require Rails.root.join('lib', 'trimmer.rb')
 
 class User < ActiveRecord::Base
   include Trimmer

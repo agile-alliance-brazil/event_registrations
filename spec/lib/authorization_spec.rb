@@ -1,5 +1,5 @@
 
-require File.join(Rails.root, '/lib/authorization.rb')
+require Rails.root.join('lib', 'authorization.rb')
 
 class SampleUser
   include Authorization

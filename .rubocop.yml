@@ -1,4 +1,5 @@
 AllCops:
+  DisplayCopNames: true
   Exclude:
     - 'puppet/modules/stdlib/**/*' # Pulled from Puppetfile
     - 'puppet/modules/apache/**/*' # Pulled from Puppetfile
@@ -35,6 +36,11 @@ Metrics/LineLength:
   # contaning a URI to be longer than Max.
   AllowURI: true
   Enabled: false # 263 violations
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*_spec.rb'
+    - 'spec/factories/**/*.rb'
 
 Rails/HasAndBelongsToMany:
   Enabled: false

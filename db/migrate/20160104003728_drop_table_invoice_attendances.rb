@@ -7,10 +7,7 @@ class DropTableInvoiceAttendances < ActiveRecord::Migration
       t.timestamps
     end
 
-    change_table :invoices do |t|
-      t.references :invoiceable, polymorphic: true, index: true
-    end
-
+    add_reference(:invoices, :invoiceable, polymorphic: true, index: true)
     remove_column :payment_notifications, :invoicer_id, :integer
     remove_column :payment_notifications, :invoicer_type, :string
 

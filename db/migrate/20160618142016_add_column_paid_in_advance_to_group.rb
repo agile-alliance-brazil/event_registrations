@@ -1,8 +1,6 @@
 class AddColumnPaidInAdvanceToGroup < ActiveRecord::Migration
   def change
-    change_table :registration_groups do |t|
-      t.belongs_to :registration_quota
-      t.boolean :paid_in_advance, default: false
-    end
+    add_reference(:registration_groups, :registration_quota)
+    add_column(:registration_groups, :paid_in_advance, :boolean, default: false)
   end
 end

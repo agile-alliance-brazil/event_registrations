@@ -36,7 +36,8 @@ class Authentication < ActiveRecord::Base
       refresh_token: refresh_token
     )
     new_token = token.refresh!
-    update_attribute(:refresh_token, new_token.refresh_token)
+    self.refresh_token = new_token.refresh_token
+    save!
     new_token
   end
 end

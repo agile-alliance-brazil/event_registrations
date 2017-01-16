@@ -67,7 +67,7 @@ class EventAttendancesController < ApplicationController
 
   def timeout
     respond_to do |format|
-      format.html { render file: "#{Rails.root}/public/408", layout: false, status: 408 }
+      format.html { render file: Rails.root.join('public', '408'), layout: false, status: 408 }
       format.js { render plain: '408 Request Timeout', status: 408 }
     end
   end

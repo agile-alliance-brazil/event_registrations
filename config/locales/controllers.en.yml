@@ -15,4 +15,8 @@ en:
         option_one: 'OPTION 1: Pay with PagSeguro'
         option_two: 'OPTION 2: If you can understand Portuguese, pay with PagSeguro for different payment types'
         text: 'Pay the total amount of %{value}'
+  attendances:
+    create:
+      errors:
+        group_full: "The group you have choose is full."
 

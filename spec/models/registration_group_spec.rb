@@ -325,9 +325,39 @@ describe RegistrationGroup, type: :model do
   end
 
   describe '#capacity_left' do
-    let(:group) { FactoryGirl.create :registration_group, capacity: 100 }
-    let!(:attendance) { FactoryGirl.create :attendance, registration_group: group }
-    let!(:other_attendance) { FactoryGirl.create :attendance, registration_group: group, status: :cancelled }
-    it { expect(group.capacity_left).to eq 99 }
+    context 'having capacity' do
+      let(:group) { FactoryGirl.create :registration_group, capacity: 100 }
+      let!(:attendance) { FactoryGirl.create :attendance, registration_group: group }
+      let!(:other_attendance) { FactoryGirl.create :attendance, registration_group: group, status: :cancelled }
+      it { expect(group.capacity_left).to eq 99 }
+    end
+    context 'having no capacity' do
+      let(:group) { FactoryGirl.create :registration_group, capacity: nil }
+      let!(:attendance) { FactoryGirl.create :attendance, registration_group: group }
+      let!(:other_attendance) { FactoryGirl.create :attendance, registration_group: group, status: :cancelled }
+      it { expect(group.capacity_left).to eq 0 }
+    end
+  end
+
+  describe '#vacancies?' do
+    context 'having vacancies' do
+      let(:group) { FactoryGirl.create :registration_group, capacity: 3 }
+      let!(:attendance) { FactoryGirl.create :attendance, registration_group: group }
+      let!(:other_attendance) { FactoryGirl.create :attendance, registration_group: group, status: :accepted }
+      let!(:cancelled_attendance) { FactoryGirl.create :attendance, registration_group: group, status: :cancelled }
+
+      it { expect(group.vacancies?).to eq true }
+    end
+    context 'having no vacancies' do
+      let(:group) { FactoryGirl.create :registration_group, capacity: 2 }
+      let!(:attendance) { FactoryGirl.create :attendance, registration_group: group }
+      let!(:other_attendance) { FactoryGirl.create :attendance, registration_group: group, status: :accepted }
+      let!(:cancelled_attendance) { FactoryGirl.create :attendance, registration_group: group, status: :cancelled }
+      it { expect(group.vacancies?).to eq false }
+    end
+    context 'having no capacity defined' do
+      let(:group) { FactoryGirl.create :registration_group, capacity: nil }
+      it { expect(group.vacancies?).to be true }
+    end
   end
 end

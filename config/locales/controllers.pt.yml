@@ -15,3 +15,7 @@ pt:
       request:
         option_one: 'OPÇÃO 1: Pague com PagSeguro'
         text: 'Efetue o pagamento no valor de %{value}'
+  attendances:
+    create:
+      errors:
+        group_full: "O grupo que você escolheu está cheio."

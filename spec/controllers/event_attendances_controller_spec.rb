@@ -230,6 +230,18 @@ describe EventAttendancesController, type: :controller do
             end
           end
 
+          context 'and the group is full' do
+            let(:first_attendance) { FactoryGirl.create(:attendance, event: @event) }
+            let(:second_attendance) { FactoryGirl.create(:attendance, event: @event) }
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event, capacity: 2, attendances: [first_attendance, second_attendance]) }
+            before { post :create, event_id: @event, registration_token: group.token, attendance: valid_attendance }
+            it 'render the form again with the error on flash' do
+              expect(response).to render_template :new
+              expect(flash[:error]).to eq I18n.t('attendances.create.errors.group_full', group_name: group.name)
+              expect(attendance.registration_group).to be_nil
+            end
+          end
+
           context 'a valid attendance' do
             context 'and same email as current user' do
               let!(:group) { FactoryGirl.create(:registration_group, event: @event) }

@@ -96,7 +96,13 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def capacity_left
+    return 0 if capacity.blank?
     capacity - attendances.active.count
+  end
+
+  def vacancies?
+    return true if capacity.blank? || capacity.zero?
+    capacity_left > 0
   end
 
   private

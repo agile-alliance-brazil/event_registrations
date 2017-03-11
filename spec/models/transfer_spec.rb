@@ -74,8 +74,8 @@ describe Transfer, type: :model do
 
     context 'with paid origin' do
       it 'also changes the related invoice' do
-        Invoice.from_attendance(origin, Invoice::GATEWAY)
-        Invoice.from_attendance(destination, Invoice::GATEWAY)
+        Invoice.from_attendance(origin, 'gateway')
+        Invoice.from_attendance(destination, 'gateway')
         transfer.save
         expect(assigned_origin.invoices.last.status).to eq 'cancelled'
         expect(assigned_destination.invoices.last.status).to eq 'paid'
@@ -86,8 +86,8 @@ describe Transfer, type: :model do
     context 'with confirmed origin' do
       let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :confirmed, registration_value: 420, registration_date: origin_date) }
       it 'also changes the related invoice' do
-        Invoice.from_attendance(origin, Invoice::GATEWAY)
-        Invoice.from_attendance(destination, Invoice::GATEWAY)
+        Invoice.from_attendance(origin, 'gateway')
+        Invoice.from_attendance(destination, 'gateway')
         transfer.save
         expect(assigned_destination.invoices.last.status).to eq 'paid'
       end

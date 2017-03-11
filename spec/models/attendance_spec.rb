@@ -144,7 +144,16 @@ describe Attendance, type: :model do
         let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
         let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
         let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
-        it { expect(Attendance.pending).to eq [pending, accepted] }
+        it { expect(Attendance.pending).to eq [pending] }
+      end
+
+      describe '.accepted' do
+        let!(:pending) { FactoryGirl.create(:attendance, status: :pending) }
+        let!(:accepted) { FactoryGirl.create(:attendance, status: :accepted) }
+        let!(:paid) { FactoryGirl.create(:attendance, status: :paid) }
+        let!(:confirmed) { FactoryGirl.create(:attendance, status: :confirmed) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, status: :cancelled) }
+        it { expect(Attendance.accepted).to eq [accepted] }
       end
 
       describe '.waiting' do
@@ -201,7 +210,7 @@ describe Attendance, type: :model do
 
             context 'with an invoice' do
               it 'move both attendance and invoice to paid upon payment' do
-                Invoice.from_attendance(attendance, Invoice::GATEWAY)
+                Invoice.from_attendance(attendance, 'gateway')
                 attendance.pay
                 expect(attendance.status).to eq 'paid'
                 expect(Invoice.last.status).to eq 'paid'
@@ -246,7 +255,7 @@ describe Attendance, type: :model do
             context 'with an invoice' do
               it 'move attendance to confirm and invoice to paid upon payment' do
                 EmailNotifications.expects(:registration_confirmed).once
-                Invoice.from_attendance(attendance, Invoice::GATEWAY)
+                Invoice.from_attendance(attendance, 'gateway')
                 attendance.pay
                 expect(attendance.status).to eq 'confirmed'
                 expect(Invoice.last.status).to eq 'paid'
@@ -394,7 +403,7 @@ describe Attendance, type: :model do
         it 'confirms the attendance' do
           EmailNotifications.expects(:registration_confirmed).once
           attendance = FactoryGirl.create :attendance, last_status_change_date: past_status_date_change
-          Invoice.from_attendance(attendance, Invoice::GATEWAY)
+          Invoice.from_attendance(attendance, 'gateway')
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
           expect(Invoice.last.status).to eq 'paid'
@@ -845,7 +854,7 @@ describe Attendance, type: :model do
     context 'having invoices' do
       let!(:attendance) { FactoryGirl.create(:attendance) }
       let!(:invoice) { Invoice.from_attendance(attendance) }
-      it { expect(attendance.payment_type).to eq Invoice::GATEWAY }
+      it { expect(attendance.payment_type).to eq 'gateway' }
     end
     context 'and without invoices' do
       let!(:attendance) { FactoryGirl.create(:attendance) }

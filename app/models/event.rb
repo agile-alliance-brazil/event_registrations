@@ -108,7 +108,7 @@ class Event < ActiveRecord::Base
 
   def extract_value(attendance, payment_type)
     quota = find_quota
-    if payment_type == Invoice::STATEMENT
+    if payment_type == 'statement_agreement'
       (full_price * 100)
     elsif attendance.price_band?
       attendance.band_value * attendance.discount

@@ -73,7 +73,7 @@ describe Event, type: :model do
       let(:final_price) { 100 }
       let!(:registration_period) { FactoryGirl.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
 
-      subject!(:event_value) { event.registration_price_for(attendance, Invoice::GATEWAY) }
+      subject!(:event_value) { event.registration_price_for(attendance, 'gateway') }
       it { expect(event_value).to eq Money.new(final_price * 100, :BRL) }
     end
 
@@ -83,20 +83,20 @@ describe Event, type: :model do
       let!(:registration_period) { FactoryGirl.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:period_passed) { FactoryGirl.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago, price: past_price }
 
-      it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
     end
 
     context 'with one registration quota with vacancy and opened' do
       let(:final_price) { 40 }
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, quota: 25 }
 
-      it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
     end
 
     context 'with one registration quota with vacancy and closed' do
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, quota: 25, closed: true }
 
-      it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(event.full_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(event.full_price * 100, :BRL) }
     end
 
     context 'with one passed period and one registration quota with vacancy and opened' do
@@ -104,7 +104,7 @@ describe Event, type: :model do
       let!(:period_passed) { FactoryGirl.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, quota: 25, price: final_price }
 
-      it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
     end
 
     context 'with one period and one registration quota with vacancy and opened' do
@@ -112,12 +112,12 @@ describe Event, type: :model do
       let!(:registration_period) { FactoryGirl.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:registration_quota) { FactoryGirl.create :registration_quota, event: event, quota: 25 }
 
-      it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
     end
 
     context 'with one passed period and no quota vacancy' do
       let!(:period_passed) { FactoryGirl.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
-      it { expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(event.full_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(event.full_price * 100, :BRL) }
     end
 
     context 'and with three quotas, one with limit reached, and other two not' do
@@ -131,7 +131,7 @@ describe Event, type: :model do
           final_price = 470
           FactoryGirl.create :registration_quota, event: event, quota: 40, order: 2, price: final_price
 
-          expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(final_price * 100, :BRL)
+          expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL)
         end
       end
 
@@ -141,7 +141,7 @@ describe Event, type: :model do
           final_price = 360
           FactoryGirl.create :registration_quota, event: event, attendances: forty_attendances, quota: 25, order: 1, price: final_price
 
-          expect(event.registration_price_for(attendance, Invoice::GATEWAY)).to eq Money.new(final_price * 100, :BRL)
+          expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL)
         end
       end
     end
@@ -152,11 +152,11 @@ describe Event, type: :model do
       let(:discounted_value) { full_price * (1.00 - (group_30.discount / 100.00)) }
       let(:discounted_price) { Money.new(discounted_value * 100, :BRL) }
 
-      it { expect(event.registration_price_for(grouped_attendance, Invoice::GATEWAY)).to eq discounted_price }
+      it { expect(event.registration_price_for(grouped_attendance, 'gateway')).to eq discounted_price }
     end
 
     context 'when payment type is statement of agreement' do
-      subject!(:event_value) { event.registration_price_for(attendance, Invoice::STATEMENT) }
+      subject!(:event_value) { event.registration_price_for(attendance, 'statement_agreement') }
       it { expect(event_value).to eq Money.new(event.full_price * 100, :BRL) }
     end
   end

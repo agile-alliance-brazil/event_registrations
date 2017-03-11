@@ -1,0 +1,17 @@
+pt:
+  general:
+    currency: 'USD'
+    buttons:
+      save: "Salvar"
+    actions:
+      title: "Ações"
+
+  registration:
+    quantity: "Quantidade"
+    status: "Status das inscrições para %{date}"
+    details:
+      csv: 'Baixe a lista de participantes em formato CSV'
+    payment:
+      request:
+        option_one: 'OPÇÃO 1: Pague com PagSeguro'
+        text: 'Efetue o pagamento no valor de %{value}'

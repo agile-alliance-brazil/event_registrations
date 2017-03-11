@@ -48,7 +48,7 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def create_invoice(group)
-    Invoice.from_registration_group(group, Invoice::GATEWAY)
+    Invoice.from_registration_group(group, 'gateway')
   end
 
   def resource_class

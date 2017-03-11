@@ -27,4 +27,8 @@ describe AttendanceHelper, type: :helper do
       expect(price_table_link(event, :en)).to eq('http://localhost:9292/testing?locale=en')
     end
   end
+
+  describe '#payment_types_options' do
+    it { expect(payment_types_options).to eq Invoice.payment_types.map { |payment_type, _| [I18n.t("activerecord.attributes.invoce.payment_types.#{payment_type}"), payment_type] } }
+  end
 end

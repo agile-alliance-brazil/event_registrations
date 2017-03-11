@@ -41,9 +41,11 @@ Metrics/BlockLength:
   Exclude:
     - '**/*_spec.rb'
     - 'spec/factories/**/*.rb'
+    - 'lib/tasks/auto_annotate_models.rake'
 
 Rails/HasAndBelongsToMany:
   Enabled: false
 
 Rails/HttpPositionalArguments:
   Enabled: false # TODO: Requires rails 5 to be enabled. Check branch bugfix/rubocop_0_44_new_offenses_fixes for fixes
+

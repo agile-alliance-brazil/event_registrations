@@ -3,8 +3,26 @@
   display: none;
 }
 
-input:not([type='submit']) {
-  @extend .form-control;
+#container {
+  background-color: #E0ECF4;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+//input:not([type='submit']) {
+//  @extend .form-control;
+//}
+
+.text-label {
+  text-transform: uppercase;
+}
+
+.button-spacing {
+  margin-top: 20px;
+}
+
+.form-field {
+  margin-bottom: 10px;
 }
 
 select {

@@ -1,11 +1,10 @@
-- if @event.full? || @event.attendances_in_the_queue?
-  %h4= t('attendances.new.title.no_vacancy', event_name: @event.name)
-- else
-  - title t('attendances.new.title.vacancy', event_name: @event.name)
+%div{class: 'row'}
+  %div{class: 'col-xs-8 col-md-offset-2'}
+    - if @event.full? || @event.attendances_in_the_queue?
+      %h4= t('attendances.new.title.no_vacancy', event_name: @event.name)
+    - else
+      %h2= t('attendances.new.title.vacancy', event_name: @event.name)
 
 .auto_focus
 
-= semantic_form_for([@event, @attendance]) do |form|
-  = render 'form', form: form
-  = form.actions do
-    = form.action(:submit, label: :new_registration, button_html: { tabindex: autotab, class: 'btn btn-primary' })
+= render 'form'

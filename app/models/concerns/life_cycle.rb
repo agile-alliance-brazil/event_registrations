@@ -3,7 +3,7 @@ module Concerns
     extend ActiveSupport::Concern
     # rubocop:disable Metrics/BlockLength
     included do
-      scope :pending, -> { where("attendances.status IN ('pending', 'accepted')") }
+      scope :pending, -> { where(status: :pending) }
       scope :accepted, -> { where(status: :accepted) }
       scope :cancelled, -> { where(status: :cancelled) }
       scope :paid, -> { where(status: %i(paid confirmed)) }

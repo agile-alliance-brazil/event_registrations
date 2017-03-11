@@ -30,9 +30,9 @@ module Current
     config.time_zone = 'Brasilia'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.i18n.available_locales = %w(en pt)
-    config.i18n.default_locale = :pt
+    config.i18n.enforce_available_locales = false
+    config.i18n.available_locales = %w(pt en)
+    config.i18n.default_locale = 'pt'
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'

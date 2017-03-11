@@ -9,12 +9,12 @@ class AttendanceRepository
   def for_cancelation_warning(event)
     older_than(event.days_to_charge.days.ago)
       .where("event_id = ? AND (((attendances.status = 'pending' AND attendances.registration_group_id IS NULL) OR (attendances.status = 'accepted')) AND advised = ?)", event.id, false)
-      .joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY)
+      .joins(:invoices).where('invoices.payment_type = ?', Invoice.payment_types[:gateway])
   end
 
   def for_cancelation(event)
     Attendance.where("event_id = ? AND (attendances.status IN ('pending', 'accepted') AND advised = ? AND advised_at <= (?))", event.id, true, event.days_to_charge.days.ago)
-              .joins(:invoices).where('invoices.payment_type = ?', Invoice::GATEWAY)
+              .joins(:invoices).where('invoices.payment_type = ?', Invoice.payment_types[:gateway])
   end
 
   def attendances_for(event, user_param)

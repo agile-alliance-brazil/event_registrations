@@ -9,9 +9,9 @@ class EventAttendancesController < ApplicationController
 
   def create
     create_params = AttendanceParams.new(current_user, @event, params)
-    @attendance = CreateAttendance.run_for create_params
+    @attendance = CreateAttendance.run_for(create_params)
     if @attendance.errors.any?
-      flash.now[:error] = t('flash.form.invalid_data')
+      flash.now[:error] = "#{t('flash.form.invalid_data')} #{@attendance.errors.values.join(', ')}"
       return render :new
     end
     redirect_to attendance_path @attendance, notice: t('flash.attendance.create.success')

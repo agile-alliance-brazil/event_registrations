@@ -11,7 +11,7 @@ describe PaymentNotification, type: :model do
     describe 'pagseguro payment' do
       before(:each) do
         @attendance = FactoryGirl.create(:attendance, registration_date: Time.zone.now)
-        @invoice = Invoice.from_attendance(@attendance, Invoice::GATEWAY)
+        @invoice = Invoice.from_attendance(@attendance, 'gateway')
         expect(@attendance).to be_pending
 
         @valid_params = {

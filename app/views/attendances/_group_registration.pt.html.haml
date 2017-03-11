@@ -1,5 +1,5 @@
 %h5 Você se registrou através do grupo #{@attendance.registration_group.name}
-- if @attendance.event.registration_price_for(attendance, Invoice::GATEWAY).to_d > 0
+- if @attendance.event.registration_price_for(attendance, 'gateway').to_d > 0
   %h6 Sua entrada precisará ser aprovada por um administrador. Você receberá mais informações em breve.
 - else
   %h6 Você realizou a inscrição através de um grupo gratuito. Aguarde até o administrador confirmar a sua inscrição.

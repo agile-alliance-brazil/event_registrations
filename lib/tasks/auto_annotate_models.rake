@@ -1,11 +1,5 @@
-# NOTE: only doing this in development as some production environments (Heroku)
-# NOTE: are sensitive to local FS writes, and besides -- it's just not proper
-# NOTE: to have a dev-mode tool do its thing in production.
 if Rails.env.development?
-  # rubocop:disable Metrics/BlockLength
   task :set_annotation_options do
-    # You can override any of these by setting an environment variable of the
-    # same name.
     Annotate.set_defaults(
       'routes'                  => 'false',
       'position_in_routes'      => 'before',
@@ -21,12 +15,12 @@ if Rails.env.development?
       'root_dir'                => '',
       'include_version'         => 'false',
       'require'                 => '',
-      'exclude_tests'           => 'false',
+      'exclude_tests'           => 'true',
       'exclude_fixtures'        => 'false',
-      'exclude_factories'       => 'true',
+      'exclude_factories'       => 'false',
       'exclude_serializers'     => 'false',
       'exclude_scaffolds'       => 'false',
-      'exclude_controllers'     => 'false',
+      'exclude_controllers'     => 'true',
       'exclude_helpers'         => 'false',
       'ignore_model_sub_dir'    => 'false',
       'ignore_columns'          => nil,

@@ -8,7 +8,7 @@ describe GeneratePaymentTypeReport, type: :service do
     end
 
     context 'with valid parameter' do
-      let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
+      let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
 
       it 'generates the hash with the report' do
         result = GeneratePaymentTypeReport.run_for(event)

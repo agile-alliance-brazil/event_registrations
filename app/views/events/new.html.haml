@@ -1,5 +1,8 @@
-%h1
-  = t('events.new.title')
+
+%div{class: 'row'}
+  %div{class: 'col-xs-8 col-md-offset-2'}
+    %div= link_to 'ALL EVENTS', list_archived_events_path
+    %h2= t('events.new.title')
 
 = render 'form', event: @event
 

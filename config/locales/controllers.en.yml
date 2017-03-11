@@ -19,4 +19,8 @@ en:
     create:
       errors:
         group_full: "The group you have choose is full."
+  events:
+    form:
+      event_basics: "Basic Informations"
+      event_core: "Main informations"
 

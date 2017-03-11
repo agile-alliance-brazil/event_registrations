@@ -562,5 +562,6 @@ pt:
     submit:
       attendance:
         create: Eu quero me registrar
+      create: Salvar %{model}
       submit: Salvar %{model}
       update: Atualizar %{model}

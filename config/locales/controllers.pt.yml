@@ -19,3 +19,7 @@ pt:
     create:
       errors:
         group_full: "O grupo que você escolheu está cheio."
+  events:
+    form:
+      event_basics: "Informações Básicas"
+      event_core: "Informações principais"

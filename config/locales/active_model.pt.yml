@@ -51,6 +51,9 @@ pt:
             invoices:
               invalid: Suas faturas não são válidas. Contacte o administrador do sistema.
     models:
+      event:
+        one: Evento
+        other: Eventos
       attendance:
         one: Participante
         other: Participantes
@@ -75,6 +78,16 @@ pt:
         years_of_experience: Experiência profissional (anos)
         experience_in_agility: Experiência com agilidade (anos)
         invoices: Faturas
+      event:
+        name: Nome
+        attendance_limit: Capacidade
+        main_email_contact: Contato para notificações
+        days_to_charge: Dias para cobrar pendentes
+        start_date: Inicia em
+        end_date: Termina em
+        full_price: Preço cheio
+        link: Link para a página do evento
+        logo: Logo do evento
       invoce:
         payment_types:
           gateway: Gateway

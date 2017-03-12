@@ -60,10 +60,14 @@ pt:
       invoice:
         one: Fatura
         other: Faturas
+      registration_group:
+        one: Grupo de Inscrições
+        other: Grupos de Inscrições
     attributes:
       attendance:
         first_name: Primeiro nome
         last_name: Sobrenome
+        full_name: Nome
         badge_name: Nome no crachá
         gender: Gênero (deixe em branco caso não queira responder)
         cpf: CPF
@@ -78,6 +82,8 @@ pt:
         years_of_experience: Experiência profissional (anos)
         experience_in_agility: Experiência com agilidade (anos)
         invoices: Faturas
+        status: "Status"
+        registration_value: Valor da inscrição
       event:
         name: Nome
         attendance_limit: Capacidade
@@ -88,9 +94,30 @@ pt:
         full_price: Preço cheio
         link: Link para a página do evento
         logo: Logo do evento
-      invoce:
+      registration_group:
+        name: Nome
+        discount: Desconto (%)
+        amount: Valor das inscrições no grupo
+        minimum_size: Tamanho mínimo
+        capacity: Capacidade
+        paid_in_advance: Pago antecipadamente?
+        automatic_approval: Aprovação automática?
+        attendances: Inscritos
+      invoice:
+        payment_type: Tipo de pagamento
+        amount: Valor
         payment_types:
           gateway: Gateway
           bank_deposit: Depósito bancário
           statement_agreement: Empenho
+  invoices:
+    show:
+      title: "Fatura"
+  attendance:
+    enum:
+      status:
+        pending: "Pendente"
+        accepted: "Aceita no grupo"
+        paid: "Paga"
+        cancelled: "Cancelada"
 

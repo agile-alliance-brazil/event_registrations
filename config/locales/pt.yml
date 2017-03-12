@@ -138,45 +138,6 @@ pt:
       email:
         placeholder: "Entre com o email do usuário"
     labels:
-      attendance:
-        id: "Número de inscrição"
-        first_name: "Nome"
-        last_name: "Sobrenome"
-        name: 'Nome'
-        full_name: "Nome"
-        group: "Grupo"
-        email: "Email"
-        phone: "Telefone para contato"
-        country: "País"
-        state: "Estado"
-        city: "Cidade"
-        organization: "Organização"
-        organization_size: "Tamanho da empresa"
-        job_role: "Cargo"
-        years_of_experience: "Experiência profissional (anos)"
-        experience_in_agility: "Experiência com agilidade (anos)"
-        school: "Escola / Instituição"
-        education_level: "Nível de escolaridade"
-        badge_name: "Nome para o crachá"
-        cpf: "CPF"
-        gender: "Gênero"
-        status: "Status"
-        registration_date: "Data"
-        registration_value: "Valor da Inscrição"
-        payment_agreement: "Confirmo que o participante realizou o pagamento no valor acima. O sistema notificará o participante por email de que sua inscrição foi confirmada."
-        notes: "Anotações"
-        only_with_notes: "Exibir apenas resultados com anotações"
-        total: "Valor"
-        price: 'Preço (R$)'
-        payment_type: "Tipo de Pagamento"
-        pending: 'Pendentes'
-        accepted: 'Total aceitas'
-        paid: 'Total pagas'
-        confirmed: 'Total confirmadas'
-        cancelled: 'Total canceladas'
-        registration_total: 'Total de inscrições'
-        total_without_cancelled: 'Total sem as canceladas'
-        payment_type:  'Tipo de pagamento'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"
@@ -198,30 +159,6 @@ pt:
       transfer:
         origin_id: "Origem"
         destination_id: "Destino"
-      registration_group:
-        name: 'Nome do grupo'
-        created_at: 'Criado em'
-        discount: 'Desconto (%)'
-        minimum_size: 'Tamanho mínimo'
-        amount: 'Valor por inscrição'
-        token: 'Token para inscrição'
-        leader: 'Líder'
-        event: 'Evento'
-        qtd_attendances: 'Total de inscritos'
-        paid_in_advance: 'Pago antecipadamente?'
-        automatic_approval: 'Aprovação automática?'
-        capacity: 'Capacidade de inscrições'
-        index:
-          actions: 'Ações'
-      invoice:
-        title: 'Fatura'
-        name: 'Nome'
-        amount: 'Valor'
-        created_at: 'Criada em'
-        user: 'Usuário'
-        status: 'Status'
-        index:
-          actions: 'ações'
       registration_period:
         title: 'Título do período'
         id: 'ID'
@@ -237,16 +174,6 @@ pt:
         value: 'Valor'
         active_attendances: 'Inscritos Ativos'
         order: "Ordem"
-      event:
-        name: 'Nome do evento'
-        attendance_limit: 'Limite de participantes'
-        start_date: 'Inicia em'
-        end_date: 'Termina em'
-        full_price: 'Preço cheio do evento'
-        price_table_link: 'Link para a tabela de preços'
-        days_to_charge: 'Dias para cobrar a inscrição'
-        main_email_contact: 'Email principal de contato'
-        attendance_limit: 'Público máximo esperado'
     hints:
       attendance:
         education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"
@@ -420,19 +347,13 @@ pt:
       full_price: "Preço cheio: %{value}"
       average_queue_time: "Tempo médio na fila: %{value} hs"
   registration_group:
-    list: 'Lista dos grupos: '
+    list: 'Grupos de inscrições de %{event_name}'
     destroy:
       success: 'Grupo excluído com sucesso.'
       error: 'Falha ao excluir o grupo.'
     destroy_confirmation: "Tem certeza que deseja remover o grupo '%{registration_group}'?\nTodas as inscrições associadas a este grupo serão automaticamente canceladas."
     show:
       title: 'Detalhes para o grupo %{group_name}'
-      discount: 'Desconto: %{group_discount}%'
-      minimum_size: 'Tamanho mínimo: %{minimum_size}'
-      attendances:
-        zero: 'nenhum congressita'
-        one: '1 congressista'
-        other: '%{count} congressistas'
     new:
       title: "Novo grupo"
     edit:

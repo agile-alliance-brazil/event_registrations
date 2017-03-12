@@ -20,7 +20,7 @@ describe RegistrationGroup, type: :model do
         subject(:group) { FactoryGirl.build(:registration_group, paid_in_advance: true) }
         it 'not be valid and will have errors on capacity and amount presence' do
           expect(group.valid?).to be_falsey
-          expect(group.errors.full_messages).to eq ['Capacity não pode ficar em branco', 'Amount não pode ficar em branco']
+          expect(group.errors.full_messages).to eq ['Capacidade não pode ficar em branco', 'Valor das inscrições no grupo não pode ficar em branco']
         end
       end
       context 'when is not a paid_in_advance group' do
@@ -35,7 +35,7 @@ describe RegistrationGroup, type: :model do
         let(:group) { FactoryGirl.build :registration_group, event: event, paid_in_advance: true, capacity: 10, amount: 100 }
         it 'not consider the group as valid and gives the correct error message' do
           expect(group.valid?).to be_falsey
-          expect(group.errors.full_messages).to eq ['Capacity O evento não tem mais lugares para o seu grupo. Desculpe!']
+          expect(group.errors.full_messages).to eq ['Capacidade O evento não tem mais lugares para o seu grupo. Desculpe!']
         end
       end
       context 'for quota' do
@@ -43,7 +43,7 @@ describe RegistrationGroup, type: :model do
         let(:group) { FactoryGirl.build :registration_group, registration_quota: quota, paid_in_advance: true, capacity: 10, amount: 100 }
         it 'not consider the group as valid and gives the correct error message' do
           expect(group.valid?).to be_falsey
-          expect(group.errors.full_messages).to eq ['Capacity A cota não tem mais lugares para o seu grupo. Desculpe!']
+          expect(group.errors.full_messages).to eq ['Capacidade A cota não tem mais lugares para o seu grupo. Desculpe!']
         end
       end
     end

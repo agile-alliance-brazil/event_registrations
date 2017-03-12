@@ -6,7 +6,7 @@
       %div{class: 'col-xs-8 col-md-offset-2'}
         #container
           .field{class: 'form-field'}
-            = label_tag t('formtastic.labels.attendance.payment_type')
+            = label_tag Invoice.human_attribute_name :payment_type
             = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
 
     %div{class: 'row'}

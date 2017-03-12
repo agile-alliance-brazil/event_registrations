@@ -46,7 +46,7 @@
         - else
           %p #{t('footer.help', email: 'inscricoes@agilebrazil.com')}
         %p
-          %strong Copyleft - Agile Brazil 2010 - 2016
+          %strong Copyleft - Agile Brazil 2010 - 2017
 
     - unless APP_CONFIG[:google].nil?
       :javascript
@@ -70,3 +70,5 @@
           $(':input:visible:enabled:first').focus();
         }
       })
+
+  = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js'

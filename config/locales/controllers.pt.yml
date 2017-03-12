@@ -19,7 +19,13 @@ pt:
     create:
       errors:
         group_full: "O grupo que você escolheu está cheio."
+    summary:
+      registration_total: "Total"
+      with_no_cancelled: "Sem as canceladas"
   events:
     form:
       event_basics: "Informações Básicas"
       event_core: "Informações principais"
+  registration_groups:
+    index:
+      token_clipboard_tooltip: "Copiar o token para a área de transferência"

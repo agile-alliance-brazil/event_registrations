@@ -1,15 +1,15 @@
 %div{id: 'attendances_list'}
   %table.table
-    %th= t('formtastic.labels.attendance.name')
-    %th= t('formtastic.labels.attendance.organization')
-    %th= t('formtastic.labels.attendance.group')
-    %th= t('formtastic.labels.attendance.email')
-    %th= t('formtastic.labels.attendance.city')
-    %th= t('formtastic.labels.attendance.state')
-    %th= t('formtastic.labels.attendance.payment_type')
-    %th= t('formtastic.labels.attendance.registration_date')
-    %th= t('formtastic.labels.attendance.registration_value')
-    %th= t('formtastic.labels.attendance.status')
+    %th= t('activerecord.attributes.attendance.full_name')
+    %th= Attendance.human_attribute_name :organization
+    %th= Attendance.human_attribute_name :registration_group
+    %th= Attendance.human_attribute_name :email
+    %th= Attendance.human_attribute_name :city
+    %th= Attendance.human_attribute_name :state
+    %th= Invoice.human_attribute_name :payment_type
+    %th= Attendance.human_attribute_name :registration_date
+    %th= Attendance.human_attribute_name :registration_value
+    %th= Attendance.human_attribute_name :status
     %th= t('general.actions.title')
 
     - attendances_list.each do |attendance|

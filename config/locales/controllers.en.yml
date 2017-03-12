@@ -19,8 +19,14 @@ en:
     create:
       errors:
         group_full: "The group you have choose is full."
+    summary:
+      registration_total: "Total"
+      with_no_cancelled: "Without cancelled"
   events:
     form:
       event_basics: "Basic Informations"
       event_core: "Main informations"
+  registration_groups:
+    index:
+      token_clipboard_tooltip: "Copy group token to the clipboard"
 

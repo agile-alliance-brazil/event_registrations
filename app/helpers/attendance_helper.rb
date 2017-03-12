@@ -49,6 +49,6 @@ module AttendanceHelper
   end
 
   def payment_types_options
-    Invoice.payment_types.map { |payment_type, _| [I18n.t("activerecord.attributes.invoce.payment_types.#{payment_type}"), payment_type] }
+    Invoice.payment_types.map { |payment_type, _| [I18n.t("activerecord.attributes.invoice.payment_types.#{payment_type}"), payment_type] }
   end
 end

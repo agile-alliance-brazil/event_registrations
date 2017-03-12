@@ -46,8 +46,21 @@ en:
           has_one: Cannot delete record because a dependent %{record} exists
           has_many: Cannot delete record because dependent %{record} exist
     attributes:
-      invoce:
+      invoice:
         payment_types:
           gateway: Gateway
           bank_deposit: Bank Deposit
           statement_agreement: Statement of Agreement
+      attendance:
+        full_name: "Name"
+        status: "Status"
+  invoices:
+    show:
+      title: "Invoice"
+  attendance:
+    enum:
+      status:
+        pending: "Pending"
+        accepted: "Accepted"
+        paid: "Paid"
+        cancelled: "Cancelled"

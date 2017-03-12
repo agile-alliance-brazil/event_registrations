@@ -44,6 +44,7 @@ en:
       attendances_list: 'Attendances List'
       professional_information: "Professional Information"
       educacional_information: "Educational Information"
+      discount: "Discount"
     fields:
       search:
         placeholder: 'search by ID, name, organization or email'
@@ -52,45 +53,6 @@ en:
       email:
         placeholder: "Put the user's email"
     labels:
-      attendance:
-        id: "Registration Number"
-        first_name: "First name"
-        last_name: "Last name"
-        name: 'Name'
-        full_name: "Name"
-        email: "E-mail address"
-        group: "Grupo"
-        phone: "Phone"
-        country: "Country"
-        state: "State"
-        city: "City"
-        organization: "Organization"
-        organization_size: "Organization size"
-        job_role: "Job role"
-        years_of_experience: "Professional experience (years)"
-        experience_in_agility: "Agility experience (years)"
-        school: "School"
-        education_level: "Education level"
-        badge_name: "Name for badge"
-        cpf: "CPF"
-        gender: "Gender"
-        status: "Status"
-        registration_date: "Date"
-        registration_value: "Registration Value"
-        payment_agreement: "I confirm that the participant made the payment of the above mentioned amount. The system will notify the participant that his/her registration to the conference is confirmed."
-        notes: "Notes"
-        only_with_notes: "Show only results with notes"
-        total: "Amount"
-        price: 'Price (R$)'
-        payment_type: "Payment Type"
-        pending: 'Pending total'
-        accepted: 'Accepted total'
-        paid: 'Paid total'
-        confirmed: 'Confirmed total'
-        cancelled: 'Cancelled total'
-        registration_total: 'Registration total'
-        total_without_cancelled: 'Total without cancelled'
-        payment_type: 'Payment type'
       payment_notification:
         transaction_id: "Transaction ID"
         paid_at: "Payment date"
@@ -112,28 +74,6 @@ en:
       transfer:
         origin_id: "Origin"
         destination_id: "Destination"
-      registration_group:
-        name: 'Name'
-        created_at: 'Created at'
-        discount: 'Discount (%)'
-        minimum_size: 'Minimum size'
-        amount: 'Amount'
-        token: 'Registration token'
-        leader: 'Leader'
-        event: 'Event'
-        qtd_attendances: 'Attendances Total'
-        index:
-          actions: 'Actions'
-        capacity: "Capacity"
-      invoice:
-        title: 'Fatura'
-        name: 'Name'
-        amount: 'Amount'
-        created_at: 'Created at'
-        user: 'User'
-        status: 'Status'
-        index:
-          actions: 'Actions'
       registration_period:
         title: 'Title'
         id: 'ID'
@@ -149,15 +89,6 @@ en:
         value: 'Value'
         active_attendances: 'Active Attendances'
         order: "Order"
-      event:
-        name: 'Event name'
-        attendance_limit: 'Limit of attendances'
-        start_date: 'Start date'
-        end_date: 'End date'
-        full_price: 'Full price'
-        price_table_link: 'Link for the price table'
-        days_to_charge: 'Days to charge the registration'
-        main_email_contact: 'Main email to contact'
     hints:
       attendance:
         education_level: "This field is using the ISCED 2011 education levels"
@@ -253,9 +184,8 @@ en:
     transfer:
       success: "Transfer applied successfully"
       failure: "Transfer failed. Ensure the origin attendance is paid for and/or confirmed and the destination one is pending.\n\nCancelled attendances cannot receive a transfer. A new attendance has to be created in this case."
-
     form:
-      invalid_data: "Your data is invalid. Please check the fields below."
+      invalid_data: "We had a problem processing your data."
   footer:
     help: "If you have questions, issues, or suggestions, send us an email to %{email}"
 
@@ -287,17 +217,6 @@ en:
     base_price: "Registration"
     discount: "Discount"
     total: "Total"
-
-  registration:
-    quantity: "Quantity"
-    status: "Registration status on %{date}"
-    details:
-      csv: 'Download CSV attendee list'
-    payment:
-      request:
-        option_one: 'OPTION 1: Pay with PagSeguro'
-        option_two: 'OPTION 2: If you can understand Portuguese, pay with PagSeguro for different payment types'
-        text: 'Pay the total amount of %{value}'
 
   attendance:
     status:
@@ -343,18 +262,13 @@ en:
       full_price: "Full price: %{value}"
       average_queue_time: "Average time in queue: %{value}"
   registration_group:
-    list: 'Group list: '
+    list: 'Registration groups for %{event_name}'
     destroy_confirmation: "Are you sure you want to delete the group named '%{registration_group}'?\nAll registrations associated to this group will be automatically canceled."
     destroy:
       success: 'Group deleted.'
       error: 'An error occurred. The group was not deleted.'
     show:
       title: 'Details for group %{group_name}'
-      discount: 'Discount: %{group_discount}%'
-      minimum_size: 'Minimum size: %{minimum_size}'
-      attendances:
-        one: '1 attendance'
-        other: '%{count} attendances'
     new:
       title: "New group"
     edit:
@@ -478,3 +392,11 @@ en:
       title: "New organizer"
     remove:
       title: "Remove organizer"
+  helpers:
+    select:
+      prompt: Please select
+    submit:
+      attendance:
+        create: I want to register
+      submit: Save %{model}
+      update: Update %{model}

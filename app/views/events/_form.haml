@@ -1,17 +1,42 @@
-= semantic_form_for event do |form|
-  = form.inputs :event_basics do
-    = form.input :name, required: true, input_html: { tabindex: autotab }
-    = form.input :attendance_limit, required: true, input_html: { tabindex: autotab }
-    = form.input :main_email_contact, input_html: { tabindex: autotab }
-    = form.input :days_to_charge, input_html: { tabindex: autotab }
+= form_for event, class: 'form-horizontal' do |form|
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        %h3= t('events.form.event_basics')
+        .field{class: 'form-field'}
+          = form.label :name, class: 'control-label'
+          = form.text_field :name, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :attendance_limit, class: 'control-label'
+          = form.text_field :attendance_limit, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :main_email_contact, class: 'control-label'
+          = form.text_field :main_email_contact, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :days_to_charge, class: 'control-label'
+          = form.text_field :days_to_charge, class: 'form-control'
 
-  = form.inputs :event_core do
-    = form.input :start_date, as: :string, input_html: { class: 'datepicker' }
-    = form.input :end_date, as: :string, input_html: { class: 'datepicker' }
-    = form.input :full_price
-    = form.input :price_table_link, required: false
-    = form.input :link, required: false
-    = form.input :logo, required: false
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        %h3= t('events.form.event_core')
+        .field{class: 'form-field'}
+          = form.label :start_date, class: 'control-label'
+          = form.text_field :start_date, class: 'form-control datepicker'
+        .field{class: 'form-field'}
+          = form.label :end_date, class: 'control-label'
+          = form.text_field :end_date, class: 'form-control datepicker'
+        .field{class: 'form-field'}
+          = form.label :full_price, class: 'control-label'
+          = form.text_field :full_price, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :link, class: 'control-label'
+          = form.text_field :link, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :logo, class: 'control-label'
+          = form.text_field :logo, class: 'form-control'
 
-  = form.actions do
-    = form.action(:submit, label: t('events.new.submit'), button_html: { tabindex: autotab, class: 'col-lg-2 btn btn-success' })
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      %div{class: 'pull-right'}
+        = form.submit class: 'btn btn-success text-label button-spacing'

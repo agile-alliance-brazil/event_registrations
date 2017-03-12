@@ -1,6 +1,7 @@
-%h4
-  = "#{t('registration_group.edit.title')} - "
-  %span= link_to @event.name, @event
+%div{class: 'row'}
+  %div{class: 'col-xs-8 col-md-offset-2'}
+    %div= link_to 'ALL EVENTS', list_archived_events_path
+    %h4= "#{t('registration_group.edit.title')} - #{link_to @event.name, @event}"
 
 = render partial: 'form'
 

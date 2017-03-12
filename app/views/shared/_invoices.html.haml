@@ -1,12 +1,12 @@
-%h5= t('formtastic.labels.invoice.title')
+%h5= t('invoices.show.title')
 
 %table.table
-  %th= t('formtastic.labels.invoice.name')
-  %th= t('formtastic.labels.invoice.created_at')
-  %th= t('formtastic.labels.invoice.user')
-  %th= t('formtastic.labels.invoice.status')
-  %th= t('formtastic.labels.invoice.amount')
-  %th= t('formtastic.labels.invoice.index.actions')
+  %th= Invoice.human_attribute_name :name
+  %th= Invoice.human_attribute_name :created_at
+  %th= Invoice.human_attribute_name :user
+  %th= Invoice.human_attribute_name :status
+  %th= Invoice.human_attribute_name :amount
+  %th= t('general.actions.title')
 
   %tr
     %td= @invoice.name

@@ -1,0 +1,32 @@
+en:
+  general:
+    currency: 'R$'
+    buttons:
+      save: "Save"
+    actions:
+      title: "Actions"
+  registration:
+    quantity: "Quantity"
+    status: "Registration status on %{date}"
+    details:
+      csv: 'Download CSV attendee list'
+    payment:
+      request:
+        option_one: 'OPTION 1: Pay with PagSeguro'
+        option_two: 'OPTION 2: If you can understand Portuguese, pay with PagSeguro for different payment types'
+        text: 'Pay the total amount of %{value}'
+  attendances:
+    create:
+      errors:
+        group_full: "The group you have choose is full."
+    summary:
+      registration_total: "Total"
+      with_no_cancelled: "Without cancelled"
+  events:
+    form:
+      event_basics: "Basic Informations"
+      event_core: "Main informations"
+  registration_groups:
+    index:
+      token_clipboard_tooltip: "Copy group token to the clipboard"
+

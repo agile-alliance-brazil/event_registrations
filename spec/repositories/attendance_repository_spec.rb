@@ -74,8 +74,8 @@ describe AttendanceRepository, type: :repository do
         pending_gateway = FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
         accepted_gateway = FactoryGirl.create(:attendance, event: event, status: :accepted, last_status_change_date: 7.days.ago)
         FactoryGirl.create(:attendance, status: :accepted, registration_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
-        Invoice.from_attendance(accepted_gateway, Invoice::GATEWAY)
+        Invoice.from_attendance(pending_gateway, 'gateway')
+        Invoice.from_attendance(accepted_gateway, 'gateway')
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to match_array [pending_gateway, accepted_gateway]
       end
     end
@@ -83,10 +83,10 @@ describe AttendanceRepository, type: :repository do
     context 'with two pending and gateway as payment type' do
       it 'returns the both attendances' do
         pending_gateway = FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+        Invoice.from_attendance(pending_gateway, 'gateway')
 
         other_pending_gateway = FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(other_pending_gateway, Invoice::GATEWAY)
+        Invoice.from_attendance(other_pending_gateway, 'gateway')
 
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to eq [pending_gateway, other_pending_gateway]
       end
@@ -95,10 +95,10 @@ describe AttendanceRepository, type: :repository do
     context 'with one pending and gateway as payment type and other bank deposit' do
       it 'returns the attendance pending gateway' do
         pending_gateway = FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+        Invoice.from_attendance(pending_gateway, 'gateway')
 
         pending_deposit = FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_deposit, Invoice::DEPOSIT)
+        Invoice.from_attendance(pending_deposit, 'bank_deposit')
 
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to eq [pending_gateway]
       end
@@ -107,10 +107,10 @@ describe AttendanceRepository, type: :repository do
     context 'with one pending and gateway as payment type and other statement of agreement' do
       it 'returns the attendance pending gateway' do
         pending_gateway = FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, Invoice::GATEWAY)
+        Invoice.from_attendance(pending_gateway, 'gateway')
 
         pending_statement = FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_statement, Invoice::STATEMENT)
+        Invoice.from_attendance(pending_statement, 'statement_agreement')
 
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to eq [pending_gateway]
       end
@@ -118,23 +118,23 @@ describe AttendanceRepository, type: :repository do
 
     context 'with a pending status and belonging to a group' do
       let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago) }
-      let!(:invoice) { Invoice.from_attendance(pending, Invoice::GATEWAY) }
+      let!(:invoice) { Invoice.from_attendance(pending, 'gateway') }
       let!(:group) { FactoryGirl.create :registration_group, automatic_approval: false }
       let!(:pending_in_a_group) { FactoryGirl.create(:attendance, registration_group: group, event: event, last_status_change_date: 7.days.ago) }
-      let!(:other_invoice) { Invoice.from_attendance(pending_in_a_group, Invoice::GATEWAY) }
+      let!(:other_invoice) { Invoice.from_attendance(pending_in_a_group, 'gateway') }
       let!(:accepted_in_a_group) { FactoryGirl.create(:attendance, status: :accepted, registration_group: group, event: event, last_status_change_date: 7.days.ago) }
-      let!(:other_invoice) { Invoice.from_attendance(accepted_in_a_group, Invoice::GATEWAY) }
+      let!(:other_invoice) { Invoice.from_attendance(accepted_in_a_group, 'gateway') }
 
       it { expect(AttendanceRepository.instance.for_cancelation_warning(event)).to match_array [pending, accepted_in_a_group] }
     end
   end
 
   describe '#for_cancelation' do
-    let(:invoice) { FactoryGirl.create(:invoice, payment_type: Invoice::GATEWAY) }
+    let(:invoice) { FactoryGirl.create(:invoice, payment_type: 'gateway') }
     let!(:to_cancel) { FactoryGirl.create(:attendance, event: event, advised_at: 8.days.ago, advised: true, invoices: [invoice]) }
-    let(:out_invoice) { FactoryGirl.create(:invoice, payment_type: Invoice::GATEWAY) }
+    let(:out_invoice) { FactoryGirl.create(:invoice, payment_type: 'gateway') }
     let!(:out) { FactoryGirl.create(:attendance, event: event, advised_at: 5.days.ago, advised: true, invoices: [out_invoice]) }
-    let(:other_out_invoice) { FactoryGirl.create(:invoice, payment_type: Invoice::GATEWAY) }
+    let(:other_out_invoice) { FactoryGirl.create(:invoice, payment_type: 'gateway') }
     let!(:other_out) { FactoryGirl.create(:attendance, event: event, advised_at: nil, advised: false, created_at: 15.days.ago, invoices: [other_out_invoice]) }
     it { expect(AttendanceRepository.instance.for_cancelation(event)).to eq [to_cancel] }
   end

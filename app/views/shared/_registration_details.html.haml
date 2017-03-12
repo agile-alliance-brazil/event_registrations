@@ -1,7 +1,7 @@
 %table.table
   %tr
-    %th= t('formtastic.labels.attendance.registration_date')
-    %th= t('formtastic.labels.attendance.total')
+    %th= Attendance.human_attribute_name :registration_date
+    %th= Attendance.human_attribute_name :registration_value
   %tr
     %td= l(attendance.registration_date.to_date)
     %td= number_to_currency(attendance.registration_value, :locale => :pt)

@@ -49,7 +49,7 @@ describe RegistrationGroupsController, type: :controller do
   describe '#show' do
     let(:event) { FactoryGirl.create :event }
     let(:group) { FactoryGirl.create :registration_group, event: event }
-    let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: Invoice::GATEWAY }
+    let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: 'gateway' }
     context 'without attendances' do
       before { get :show, event_id: event.id, id: group.id }
       it { expect(assigns(:group)).to eq group }
@@ -99,7 +99,7 @@ describe RegistrationGroupsController, type: :controller do
       before { post :create, event_id: event, registration_group: invalid_params }
       it 'does not create the group and re-render the form with the errors' do
         expect(RegistrationGroup.last).to be_nil
-        expect(assigns(:group).errors.full_messages).to eq ['Name não pode ficar em branco']
+        expect(assigns(:group).errors.full_messages).to eq ['Nome não pode ficar em branco']
       end
     end
   end
@@ -181,7 +181,7 @@ describe RegistrationGroupsController, type: :controller do
         it 'does not update and render form with errors' do
           put :update, event_id: event, id: group, registration_group: invalid_parameters
           updated_group = assigns(:group)
-          expect(updated_group.errors.full_messages).to eq ['Name não pode ficar em branco']
+          expect(updated_group.errors.full_messages).to eq ['Nome não pode ficar em branco']
           expect(response).to render_template :edit
         end
       end

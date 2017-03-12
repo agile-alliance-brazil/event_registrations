@@ -9,7 +9,7 @@
 #  id                    :integer          not null, primary key
 #  invoiceable_id        :integer
 #  invoiceable_type      :string
-#  payment_type          :string
+#  payment_type          :integer          not null
 #  registration_group_id :integer
 #  status                :string
 #  updated_at            :datetime
@@ -22,7 +22,8 @@
 
 class Invoice < ActiveRecord::Base
   STATUSES = [PENDING = 'pending'.freeze, SENT = 'sent'.freeze, PAID = 'paid'.freeze, CANCELLED = 'cancelled'.freeze].freeze
-  TYPES = [GATEWAY = 'gateway'.freeze, DEPOSIT = 'bank_deposit'.freeze, STATEMENT = 'statement_agreement'.freeze].freeze
+
+  enum payment_type: { gateway: 1, bank_deposit: 2, statement_agreement: 3 }
 
   belongs_to :user
   belongs_to :invoiceable, polymorphic: true
@@ -34,7 +35,7 @@ class Invoice < ActiveRecord::Base
 
   validates :payment_type, presence: true
 
-  def self.from_attendance(attendance, payment_type = GATEWAY)
+  def self.from_attendance(attendance, payment_type = 'gateway')
     invoice = for_attendance(attendance.id).first
     return invoice if invoice.present?
 

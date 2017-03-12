@@ -1,71 +1,99 @@
-- @registration_token ||= params[:registration_token]
+= form_for([@event, @attendance], class: 'form-horizontal') do |form|
+  - @registration_token ||= params[:registration_token]
 
-- if can? :update, @event
-  %div{class: 'container form-field'}
+  - if can? :update, @event
     %div{class: 'row'}
-      %div.payment-type
-        %label= t('formtastic.labels.attendance.payment_type')
-        = select_tag :payment_type, options_for_select(Invoice::TYPES, @attendance.payment_type)
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        #container
+          .field{class: 'form-field'}
+            = label_tag Invoice.human_attribute_name :payment_type
+            = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
 
-= form.inputs :attendance_personal do
-  = form.input :first_name, required: true, input_html: { tabindex: autotab }
-  = form.input :last_name, required: true, input_html: { tabindex: autotab }
-  = form.input :badge_name, input_html: { tabindex: autotab }
-  = form.input :gender, as: :select, collection: Gender.options_for_select, input_html: { tabindex: autotab }
-  - if I18n.locale == :pt
-    = form.input :cpf, required: true, input_html: { tabindex: autotab }
-  - else
-    = form.input :cpf, input_html: { tabindex: autotab }
+    %div{class: 'row'}
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        #container
+          %h3= t('formtastic.titles.attendance_personal')
+          .field{class: 'form-field'}
+            = form.label :first_name, class: 'control-label'
+            = form.text_field :first_name, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :last_name, class: 'control-label'
+            = form.text_field :last_name, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :badge_name, class: 'control-label'
+            = form.text_field :badge_name, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :gender, class: 'control-label'
+            = form.select :gender, Gender.options_for_select
+          - if I18n.locale == :pt
+            .field{class: 'form-field'}
+              = form.label :cpf, class: 'control-label'
+              = form.text_field :cpf, class: 'form-control'
 
-= form.inputs :attendance_address do
-  = form.input :country, required: true, as: :country, priority_countries: [:BR], input_html: { tabindex: autotab }
-  = form.input :city, required: true, input_html: { tabindex: autotab }
-  = form.input :state, required: true, input_html: { tabindex: autotab }
-  = form.input :email, required: true, input_html: { tabindex: autotab }
-  = form.input :phone, required: true, input_html: { tabindex: autotab }
+    %div{class: 'row'}
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        #container
+          %h3= t('formtastic.titles.attendance_address')
+          .field{class: 'form-field'}
+            = form.label :country, class: 'control-label'
+            = form.text_field :country, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :city, class: 'control-label'
+            = form.text_field :city, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :state, class: 'control-label'
+            = form.text_field :state, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :email, class: 'control-label'
+            = form.text_field :email, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :phone, class: 'control-label'
+            = form.text_field :phone, class: 'form-control'
 
-= form.inputs :professional_information do
-  = form.input :organization, input_html: { tabindex: autotab }
-  = form.input :organization_size, as: :select, collection: organization_size_options, input_html: { tabindex: autotab }
-  = form.input :job_role, input_html: { tabindex: autotab }
-  = form.input :years_of_experience, as: :select, collection: year_of_experience_options, input_html: { tabindex: autotab }
-  = form.input :experience_in_agility, as: :select, collection: experience_in_agility_options, input_html: { tabindex: autotab }
+    %div{class: 'row'}
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        #container
+          %h3= t('formtastic.titles.professional_information')
+          .field{class: 'form-field'}
+            = form.label :organization, class: 'control-label'
+            = form.text_field :organization, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :organization_size, class: 'control-label'
+            = form.select :organization_size, organization_size_options
+          .field{class: 'form-field'}
+            = form.label :job_role, class: 'control-label'
+            = form.text_field :job_role, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :years_of_experience, class: 'control-label'
+            = form.select :years_of_experience, year_of_experience_options
+          .field{class: 'form-field'}
+            = form.label :experience_in_agility, class: 'control-label'
+            = form.select :experience_in_agility, experience_in_agility_options
 
-= form.inputs :educacional_information do
-  = form.input :school, input_html: { tabindex: autotab }
-  = form.input :education_level, as: :select, collection: education_level_options, input_html: { tabindex: autotab }
+    %div{class: 'row'}
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        #container
+          %h3= t('formtastic.titles.educacional_information')
+          .field{class: 'form-field'}
+            = form.label :school, class: 'control-label'
+            = form.text_field :school, class: 'form-control'
+          .field{class: 'form-field'}
+            = form.label :education_level, class: 'control-label'
+            = form.select :education_level, education_level_options
 
-=form.inputs 'Desconto' do
-  %label= I18n.t('attendances.new.form.token_field')
-  = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), class: 'token-field'
+    %div{class: 'row'}
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        #container
+          %h3= t('formtastic.titles.discount')
+          .field{class: 'form-field'}
+            = label_tag t('attendances.new.form.token_field')
+            = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), class: 'form-control'
 
-%div{class: 'agreed-message'}
-  #flash_notice= t('flash.registration.attendance')
+    %div{class: 'row'}
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        %div{class: 'agreed-message'}= t('flash.registration.attendance')
 
-:javascript
-  (function($) {
-
-    function updateTotal() {
-      var total = toFloat($("td#registration_price").text());
-      total += toFloat($("td#discount").text());
-      $("td#total").text(integerToCurrency(total));
-    }
-
-    function toFloat(text) {
-      var match = /R\$ (-?\d+),\d+/.exec(text);
-      return parseFloat(match[1]);
-    }
-
-    function integerToCurrency(value) {
-      return "R$ " + value + ",00";
-    }
-
-    $(document).ready(function() {
-      $("#attendance_country").bind('change', countryTriggered);
-
-      $("#attendance_email_input input").trigger('change');
-      $("#attendance_country").trigger('change');
-
-      $(".total").show();
-    })
-  })(jQuery);
+    %div{class: 'row'}
+      %div{class: 'col-xs-8 col-md-offset-2'}
+        %div{class: 'pull-right'}
+          = form.submit class: 'btn btn-success text-label button-spacing'

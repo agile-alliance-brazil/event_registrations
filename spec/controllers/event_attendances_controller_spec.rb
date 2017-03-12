@@ -125,7 +125,7 @@ describe EventAttendancesController, type: :controller do
         context 'with no period or quotas, but with a valid group' do
           let(:group) { FactoryGirl.create(:registration_group, event: @event, discount: 30) }
           before do
-            Invoice.from_registration_group(group, Invoice::GATEWAY)
+            Invoice.from_registration_group(group, 'gateway')
             post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
           end
           it { expect(assigns(:attendance).registration_value).to eq @event.full_price * 0.7 }
@@ -155,7 +155,7 @@ describe EventAttendancesController, type: :controller do
           let!(:quota) { FactoryGirl.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
           let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
 
-          before { post :create, event_id: event.id, payment_type: Invoice::STATEMENT, attendance: valid_attendance }
+          before { post :create, event_id: event.id, payment_type: 'statement_agreement', attendance: valid_attendance }
           it { expect(Attendance.last.registration_value).to eq event.full_price }
         end
       end
@@ -230,11 +230,23 @@ describe EventAttendancesController, type: :controller do
             end
           end
 
+          context 'and the group is full' do
+            let(:first_attendance) { FactoryGirl.create(:attendance, event: @event) }
+            let(:second_attendance) { FactoryGirl.create(:attendance, event: @event) }
+            let!(:group) { FactoryGirl.create(:registration_group, event: @event, capacity: 2, attendances: [first_attendance, second_attendance]) }
+            before { post :create, event_id: @event, registration_token: group.token, attendance: valid_attendance }
+            it 'render the form again with the error on flash' do
+              expect(response).to render_template :new
+              expect(flash[:error]).to eq I18n.t('attendances.create.errors.group_full', group_name: group.name)
+              expect(attendance.registration_group).to be_nil
+            end
+          end
+
           context 'a valid attendance' do
             context 'and same email as current user' do
               let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
               before do
-                Invoice.from_registration_group(group, Invoice::GATEWAY)
+                Invoice.from_registration_group(group, 'gateway')
                 post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
               end
               it { expect(attendance.registration_group).to eq group }
@@ -246,7 +258,7 @@ describe EventAttendancesController, type: :controller do
           context 'and not in any group' do
             let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
             it 'uses the AA group as attendance group and accept the entrance' do
-              Invoice.from_registration_group(aa_group, Invoice::GATEWAY)
+              Invoice.from_registration_group(aa_group, 'gateway')
               AgileAllianceService.stubs(:check_member).returns(true)
               RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
               post :create, event_id: @event.id, attendance: valid_attendance
@@ -259,7 +271,7 @@ describe EventAttendancesController, type: :controller do
         context 'when is an automatic approval group' do
           let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: true) }
           before do
-            Invoice.from_registration_group(group, Invoice::GATEWAY)
+            Invoice.from_registration_group(group, 'gateway')
             post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
           end
           it { expect(assigns(:attendance).status).to eq 'accepted' }
@@ -268,7 +280,7 @@ describe EventAttendancesController, type: :controller do
         context 'when is not an automatic approval group' do
           let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: false) }
           before do
-            Invoice.from_registration_group(group, Invoice::GATEWAY)
+            Invoice.from_registration_group(group, 'gateway')
             post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
           end
           it { expect(assigns(:attendance).status).to eq 'pending' }
@@ -449,10 +461,10 @@ describe EventAttendancesController, type: :controller do
     end
 
     context 'with a valid attendance' do
-      let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+      let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
       context 'and no group token informed' do
         it 'updates the attendance' do
-          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: Invoice::DEPOSIT
+          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit'
           expect(Attendance.last.registration_group).to be_nil
           expect(Attendance.last.first_name).to eq user.first_name
           expect(Attendance.last.last_name).to eq user.last_name
@@ -470,7 +482,7 @@ describe EventAttendancesController, type: :controller do
           expect(Attendance.last.badge_name).to eq user.badge_name
           expect(Attendance.last.cpf).to eq user.cpf
           expect(Attendance.last.gender).to eq user.gender
-          expect(Attendance.last.invoices.last.payment_type).to eq Invoice::DEPOSIT
+          expect(Attendance.last.invoices.last.payment_type).to eq 'bank_deposit'
           expect(response).to redirect_to attendances_path(event_id: event)
         end
       end
@@ -479,7 +491,7 @@ describe EventAttendancesController, type: :controller do
         let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
 
         it 'updates the user with the token' do
-          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: Invoice::DEPOSIT, registration_token: group.token
+          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit', registration_token: group.token
           expect(Attendance.last.registration_group).to eq group
           expect(Attendance.last.registration_value).to eq 420
         end
@@ -492,7 +504,7 @@ describe EventAttendancesController, type: :controller do
 
         context 'having the same group access token' do
           it 'updates the attendance and does not change the price' do
-            put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: Invoice::DEPOSIT, registration_token: group.token
+            put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit', registration_token: group.token
             expect(Attendance.last.registration_group).to eq group
             expect(Attendance.last.registration_value).to eq 50
           end
@@ -628,16 +640,16 @@ describe EventAttendancesController, type: :controller do
       end
 
       context 'with attendances' do
-        let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, payment_type: Invoice::GATEWAY) }
-        let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
-        let!(:valued) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY, registration_value: 123) }
-        let!(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: Invoice::GATEWAY) }
-        let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::DEPOSIT) }
-        let!(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::STATEMENT) }
-        let!(:free) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: Invoice::STATEMENT, registration_value: 0) }
+        let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, payment_type: 'gateway') }
+        let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
+        let!(:valued) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: 'gateway', registration_value: 123) }
+        let!(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
+        let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: 'bank_deposit') }
+        let!(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement') }
+        let!(:free) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement', registration_value: 0) }
 
-        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, payment_type: Invoice::GATEWAY) }
-        let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid, payment_type: Invoice::GATEWAY) }
+        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, payment_type: 'gateway') }
+        let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid, payment_type: 'gateway') }
 
         before { get :payment_type_report, event_id: event.id }
         it 'returns the attendances with non free registration value grouped by payment type' do

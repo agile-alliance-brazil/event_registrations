@@ -1,29 +1,29 @@
 %h4{class: 'row'}
   %span{class: 'col-xs-3'}
-    = "#{t('formtastic.labels.attendance.registration_total')}: #{@total}"
+    = "#{t('attendances.summary.registration_total')}: #{@total}"
 
 %h4{class: 'row'}
   %span{class: 'col-xs-3'}
-    = "#{t('formtastic.labels.attendance.total_without_cancelled')}: #{@total_without_cancelled}"
+    = "#{t('attendances.summary.with_no_cancelled')}: #{@total_without_cancelled}"
 
 %hr
 
 %div{class: 'row'}
   %span{class: 'col-xs-2'}
     = check_box_tag 'pending', 'pending', true, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'pending', "#{t('formtastic.labels.attendance.pending')} (#{@pending_total})"
+    = label_tag 'pending', "#{t('attendance.enum.status.pending')} (#{@pending_total})"
 
   %span{class: 'col-xs-2'}
     = check_box_tag 'accepted', 'accepted', true, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'accepted', "#{t('formtastic.labels.attendance.accepted')} (#{@accepted_total})"
+    = label_tag 'accepted', "#{t('attendance.enum.status.accepted')} (#{@accepted_total})"
 
   %span{class: 'col-xs-2'}
     = check_box_tag 'paid', 'paid', true, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'paid', "#{t('formtastic.labels.attendance.paid')} (#{@paid_total})"
+    = label_tag 'paid', "#{t('attendance.enum.status.paid')} (#{@paid_total})"
 
   %span{class: 'col-xs-2'}
     = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'cancelled', "#{t('formtastic.labels.attendance.cancelled')} (#{@cancelled_total})"
+    = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled')} (#{@cancelled_total})"
 
 %hr
 

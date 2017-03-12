@@ -2,6 +2,7 @@ class EventAttendancesController < ApplicationController
   rescue_from Net::OpenTimeout, with: :timeout
 
   before_action :event
+  before_action :check_group, only: [:create]
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -9,9 +10,9 @@ class EventAttendancesController < ApplicationController
 
   def create
     create_params = AttendanceParams.new(current_user, @event, params)
-    @attendance = CreateAttendance.run_for create_params
+    @attendance = CreateAttendance.run_for(create_params)
     if @attendance.errors.any?
-      flash.now[:error] = t('flash.form.invalid_data')
+      flash.now[:error] = "#{t('flash.form.invalid_data')} #{@attendance.errors.values.join(', ')}"
       return render :new
     end
     redirect_to attendance_path @attendance, notice: t('flash.attendance.create.success')
@@ -70,5 +71,21 @@ class EventAttendancesController < ApplicationController
       format.html { render file: Rails.root.join('public', '408'), layout: false, status: 408 }
       format.js { render plain: '408 Request Timeout', status: 408 }
     end
+  end
+
+  def check_group
+    group = RegistrationGroup.find_by(token: params[:registration_token])
+    return if group.blank? || group.vacancies?
+    @attendance = Attendance.new(attendance_params)
+    flash[:error] = I18n.t('attendances.create.errors.group_full', group_name: group.name)
+    render :new
+  end
+
+  def attendance_params
+    params.require(:attendance).permit(
+      :payment_type, :event_id, :user_id, :registration_group_id, :registration_date, :first_name, :last_name, :email,
+      :organization, :organization_size, :job_role, :years_of_experience, :experience_in_agility,
+      :school, :education_level, :phone, :country, :state, :city, :badge_name, :cpf, :gender
+    )
   end
 end

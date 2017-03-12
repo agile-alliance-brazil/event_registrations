@@ -1,19 +1,46 @@
-
-.auto_focus {
-  display: none;
+#container {
+  background-color: #E0ECF4;
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
-input:not([type='submit']) {
-  @extend .form-control;
+.auto_focus { display: none; }
+
+.text-label { text-transform: uppercase; }
+
+.button-spacing { margin-top: 20px; }
+
+.form-field { margin-bottom: 10px; }
+
+.label-checkbox { margin-left: 5px; }
+
+.input_action { margin-left: 15px; }
+
+.payment-type, .token { padding: 10px 30px 20px 0; }
+
+.search-button { margin-top: 10px; }
+
+.centered { text-align: center; }
+
+.register-button { margin: 10px 0 0 0; }
+
+.form-actions { text-align: center}
+
+.hand-pointer {
+  cursor: pointer;
+  color: #336699;
 }
 
-select {
-  @extend .form-control;
+.table-title {
+  font-weight: bold;
+  margin: 0 0 10px 0;
 }
 
-.input_action {
-  margin-left: 15px;
-}
+.line { margin: 0 0 10px 0; }
+
+table th { text-align: center; }
+
+select { @extend .form-control; }
 
 form fieldset.inputs ol {
   padding: 0;
@@ -36,33 +63,4 @@ form fieldset.inputs ol {
     vertical-align: baseline;
     border-radius: none;
   }
-}
-
-.payment-type, .token {
-  padding: 10px 30px 20px 0;
-}
-
-.search-button {
-  margin-top: 10px;
-}
-
-.centered {
-  text-align: center;
-}
-
-table th {
-  text-align: center;
-}
-
-.register-button {
-  margin: 10px 0 0 0;
-}
-
-.table-title {
-  font-weight: bold;
-  margin: 0 0 10px 0;
-}
-
-.line {
-  margin: 0 0 10px 0;
 }

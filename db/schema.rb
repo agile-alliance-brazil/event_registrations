@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160618142016) do
+ActiveRecord::Schema.define(version: 20170311160016) do
 
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id",                limit: 4
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 20160618142016) do
     t.integer  "user_id",               limit: 4
     t.integer  "registration_group_id", limit: 4
     t.string   "status",                limit: 255
-    t.string   "payment_type",          limit: 255
+    t.integer  "payment_type",          limit: 4,                  null: false
     t.integer  "invoiceable_id",        limit: 4
     t.string   "invoiceable_type",      limit: 255
   end

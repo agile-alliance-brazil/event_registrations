@@ -1,0 +1,31 @@
+pt:
+  general:
+    currency: 'USD'
+    buttons:
+      save: "Salvar"
+    actions:
+      title: "Ações"
+
+  registration:
+    quantity: "Quantidade"
+    status: "Status das inscrições para %{date}"
+    details:
+      csv: 'Baixe a lista de participantes em formato CSV'
+    payment:
+      request:
+        option_one: 'OPÇÃO 1: Pague com PagSeguro'
+        text: 'Efetue o pagamento no valor de %{value}'
+  attendances:
+    create:
+      errors:
+        group_full: "O grupo que você escolheu está cheio."
+    summary:
+      registration_total: "Total"
+      with_no_cancelled: "Sem as canceladas"
+  events:
+    form:
+      event_basics: "Informações Básicas"
+      event_core: "Informações principais"
+  registration_groups:
+    index:
+      token_clipboard_tooltip: "Copiar o token para a área de transferência"

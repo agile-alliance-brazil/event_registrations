@@ -1,7 +1,4 @@
 - title t('attendances.edit.title')
 .auto_focus
 
-= semantic_form_for([@event, @attendance]) do |form|
-  = render 'form', form: form
-  = form.actions do
-    = form.action(:submit, label: :edit_registration, button_html: {tabindex: autotab})
+= render 'form'

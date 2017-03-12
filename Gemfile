@@ -46,6 +46,7 @@ group :development, :test do
   gem 'byebug', require: false
   gem 'database_cleaner'
   gem 'dotenv-rails', require: false
+  gem 'factory_girl_rails'
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'metric_fu'
@@ -78,7 +79,6 @@ end
 
 group :test do
   gem 'codeclimate-test-reporter', '~> 1.0.0'
-  gem 'factory_girl_rails'
   gem 'mocha', require: false
   gem 'shoulda-matchers', require: false
   gem 'simplecov'

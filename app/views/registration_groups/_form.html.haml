@@ -1,12 +1,30 @@
-= semantic_form_for([@event, @group]) do |form|
-  = form.inputs :group_basics do
-    = form.input :name, required: true, input_html: { tabindex: autotab }
-    = form.input :discount, input_html: { tabindex: autotab }
-    = form.input :amount, input_html: { tabindex: autotab }
-    = form.input :minimum_size, input_html: { tabindex: autotab }
-    = form.input :capacity, input_html: { tabindex: autotab }
-    = form.input :paid_in_advance, default: false
-    = form.input :automatic_approval, default: false
+= form_for [@event, @group], class: 'form-horizontal' do |form|
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        .field{class: 'form-field'}
+          = form.label :name, class: 'control-label'
+          = form.text_field :name, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :discount, class: 'control-label'
+          = form.text_field :discount, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :amount, class: 'control-label'
+          = form.text_field :amount, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :minimum_size, class: 'control-label'
+          = form.text_field :minimum_size, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :capacity, class: 'control-label'
+          = form.text_field :capacity, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.check_box :paid_in_advance
+          = form.label :paid_in_advance, class: 'label-checkbox'
+        .field{class: 'form-field'}
+          = form.check_box :automatic_approval
+          = form.label :automatic_approval, class: 'label-checkbox'
 
-  = form.actions do
-    = form.action(:submit, label: :new_group, button_html: { tabindex: autotab, class: 'btn btn-success submit' })
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      %div{class: 'pull-right'}
+        = form.submit class: 'btn btn-success text-label button-spacing'

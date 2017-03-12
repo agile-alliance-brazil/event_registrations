@@ -1,0 +1,123 @@
+pt:
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: deve ser aceito
+      blank: não pode ficar em branco
+      present: deve ficar em branco
+      confirmation: não é igual a %{attribute}
+      empty: não pode ficar vazio
+      equal_to: deve ser igual a %{count}
+      even: deve ser par
+      exclusion: não está disponível
+      greater_than: deve ser maior que %{count}
+      greater_than_or_equal_to: deve ser maior ou igual a %{count}
+      inclusion: não está incluído na lista
+      invalid: não é válido
+      less_than: deve ser menor que %{count}
+      less_than_or_equal_to: deve ser menor ou igual a %{count}
+      model_invalid: 'A validação falhou: %{errors}'
+      not_a_number: não é um número
+      not_an_integer: não é um número inteiro
+      odd: deve ser ímpar
+      required: é obrigatório(a)
+      taken: já está em uso
+      too_long:
+        one: 'é muito longo (máximo: 1 caracter)'
+        other: 'é muito longo (máximo: %{count} caracteres)'
+      too_short:
+        one: 'é muito curto (mínimo: 1 caracter)'
+        other: 'é muito curto (mínimo: %{count} caracteres)'
+      wrong_length:
+        one: não possui o tamanho esperado (1 caracter)
+        other: não possui o tamanho esperado (%{count} caracteres)
+      other_than: deve ser diferente de %{count}
+      same_advisor: "Você não pode marcar uma sessão consigo mesmo"
+    template:
+      body: 'Por favor, verifique o(s) seguinte(s) campo(s):'
+      header:
+        one: 'Não foi possível gravar %{model}: 1 erro'
+        other: 'Não foi possível gravar %{model}: %{count} erros'
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'A validação falhou: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Não é possível excluir o registro pois existe um %{record} dependente
+          has_many: Não é possível excluir o registro pois existem %{record} dependentes
+      models:
+        attendance:
+          attributes:
+            invoices:
+              invalid: Suas faturas não são válidas. Contacte o administrador do sistema.
+    models:
+      event:
+        one: Evento
+        other: Eventos
+      attendance:
+        one: Participante
+        other: Participantes
+      invoice:
+        one: Fatura
+        other: Faturas
+      registration_group:
+        one: Grupo de Inscrições
+        other: Grupos de Inscrições
+    attributes:
+      attendance:
+        first_name: Primeiro nome
+        last_name: Sobrenome
+        full_name: Nome
+        badge_name: Nome no crachá
+        gender: Gênero (deixe em branco caso não queira responder)
+        cpf: CPF
+        country: País
+        city: Cidade
+        state: Estado
+        email: Email
+        phone: Telefone
+        organization: Empresa
+        organization_size: Tamanho da empresa
+        job_role: Cargo
+        years_of_experience: Experiência profissional (anos)
+        experience_in_agility: Experiência com agilidade (anos)
+        invoices: Faturas
+        status: "Status"
+        registration_value: Valor da inscrição
+      event:
+        name: Nome
+        attendance_limit: Capacidade
+        main_email_contact: Contato para notificações
+        days_to_charge: Dias para cobrar pendentes
+        start_date: Inicia em
+        end_date: Termina em
+        full_price: Preço cheio
+        link: Link para a página do evento
+        logo: Logo do evento
+      registration_group:
+        name: Nome
+        discount: Desconto (%)
+        amount: Valor das inscrições no grupo
+        minimum_size: Tamanho mínimo
+        capacity: Capacidade
+        paid_in_advance: Pago antecipadamente?
+        automatic_approval: Aprovação automática?
+        attendances: Inscritos
+      invoice:
+        payment_type: Tipo de pagamento
+        amount: Valor
+        payment_types:
+          gateway: Gateway
+          bank_deposit: Depósito bancário
+          statement_agreement: Empenho
+  invoices:
+    show:
+      title: "Fatura"
+  attendance:
+    enum:
+      status:
+        pending: "Pendente"
+        accepted: "Aceita no grupo"
+        paid: "Paga"
+        cancelled: "Cancelada"
+

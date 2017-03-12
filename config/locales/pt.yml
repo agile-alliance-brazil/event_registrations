@@ -118,48 +118,6 @@ pt:
       two_words_connector: " e "
       last_word_connector: " e "
 
-  # ActiveRecord
-  activerecord:
-    errors:
-      template:
-        header:
-          one: "Não foi possível gravar %{model}: 1 erro"
-          other: "Não foi possível gravar %{model}: %{count} erros."
-        body: "Por favor, verifique o(s) seguinte(s) campo(s):"
-      messages:
-        inclusion: "não está incluído na lista"
-        exclusion: "não está disponível"
-        invalid: "não é válido"
-        confirmation: "não está de acordo com a confirmação"
-        accepted: "deve ser aceito"
-        empty: "não pode ficar vazio"
-        blank: "não pode ficar em branco"
-        too_long: "é muito longo (máximo: %{count} caracteres)"
-        too_short: "é muito curto (mínimo: %{count} caracteres)"
-        wrong_length: "não possui o tamanho esperado (%{count} caracteres)"
-        taken: "já está em uso"
-        not_a_number: "não é um número"
-        greater_than: "deve ser maior do que %{count}"
-        greater_than_or_equal_to: "deve ser maior ou igual a %{count}"
-        equal_to: "deve ser igual a %{count}"
-        less_than: "deve ser menor do que %{count}"
-        less_than_or_equal_to: "deve ser menor ou igual a %{count}"
-        odd: "deve ser ímpar"
-        even: "deve ser par"
-        record_invalid: "A validação falhou: %{errors}"
-        existence: "não existe"
-        email_format: "deve ter um formato de e-mail válido"
-        constant: "não pode mudar"
-      models:
-        attendance:
-          attributes:
-            email:
-              free_not_allowed: "Inscrições gratuitas só estão disponíveis para o email do palestrante."
-        event:
-          attributes:
-            end_date:
-              invalid_period: "Data de término deve ser posterior à data de início."
-
   # Formtastic
   formtastic:
     :yes: "Sim"
@@ -171,6 +129,7 @@ pt:
       attendance_payment: "Dados de Pagamento"
       professional_information: "Informações profissionais"
       educacional_information: "Informações acadêmicas"
+      discount: "Desconto"
     fields:
       search:
         placeholder: 'procurar por ID, nome, organização ou email'
@@ -179,45 +138,6 @@ pt:
       email:
         placeholder: "Entre com o email do usuário"
     labels:
-      attendance:
-        id: "Número de inscrição"
-        first_name: "Nome"
-        last_name: "Sobrenome"
-        name: 'Nome'
-        full_name: "Nome"
-        group: "Grupo"
-        email: "Email"
-        phone: "Telefone para contato"
-        country: "País"
-        state: "Estado"
-        city: "Cidade"
-        organization: "Organização"
-        organization_size: "Tamanho da empresa"
-        job_role: "Cargo"
-        years_of_experience: "Experiência profissional (anos)"
-        experience_in_agility: "Experiência com agilidade (anos)"
-        school: "Escola / Instituição"
-        education_level: "Nível de escolaridade"
-        badge_name: "Nome para o crachá"
-        cpf: "CPF"
-        gender: "Gênero"
-        status: "Status"
-        registration_date: "Data"
-        registration_value: "Valor da Inscrição"
-        payment_agreement: "Confirmo que o participante realizou o pagamento no valor acima. O sistema notificará o participante por email de que sua inscrição foi confirmada."
-        notes: "Anotações"
-        only_with_notes: "Exibir apenas resultados com anotações"
-        total: "Valor"
-        price: 'Preço (R$)'
-        payment_type: "Tipo de Pagamento"
-        pending: 'Total pendentes'
-        accepted: 'Total aceitas'
-        paid: 'Total pagas'
-        confirmed: 'Total confirmadas'
-        cancelled: 'Total canceladas'
-        registration_total: 'Total de inscrições'
-        total_without_cancelled: 'Total sem as canceladas'
-        payment_type:  'Tipo de pagamento'
       payment_notification:
         transaction_id: "Código da transação"
         paid_at: "Data do pagamento"
@@ -239,30 +159,6 @@ pt:
       transfer:
         origin_id: "Origem"
         destination_id: "Destino"
-      registration_group:
-        name: 'Nome do grupo'
-        created_at: 'Criado em'
-        discount: 'Desconto (%)'
-        minimum_size: 'Tamanho mínimo'
-        amount: 'Valor por inscrição'
-        token: 'Token para inscrição'
-        leader: 'Líder'
-        event: 'Evento'
-        qtd_attendances: 'Total de inscritos'
-        paid_in_advance: 'Pago antecipadamente?'
-        automatic_approval: 'Aprovação automática?'
-        capacity: 'Capacidade de inscrições'
-        index:
-          actions: 'Ações'
-      invoice:
-        title: 'Fatura'
-        name: 'Nome'
-        amount: 'Valor'
-        created_at: 'Criada em'
-        user: 'Usuário'
-        status: 'Status'
-        index:
-          actions: 'ações'
       registration_period:
         title: 'Título do período'
         id: 'ID'
@@ -278,16 +174,6 @@ pt:
         value: 'Valor'
         active_attendances: 'Inscritos Ativos'
         order: "Ordem"
-      event:
-        name: 'Nome do evento'
-        attendance_limit: 'Limite de participantes'
-        start_date: 'Inicia em'
-        end_date: 'Termina em'
-        full_price: 'Preço cheio do evento'
-        price_table_link: 'Link para a tabela de preços'
-        days_to_charge: 'Dias para cobrar a inscrição'
-        main_email_contact: 'Email principal de contato'
-        attendance_limit: 'Público máximo esperado'
     hints:
       attendance:
         education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"
@@ -385,7 +271,7 @@ pt:
       success: "Transferência realizada com sucesso"
       failure: "A transferência falhou. Verifique que a inscrição de origem está paga e/ou confirmada e a de destino está pendente.\n\nInscrições canceladas não podem receber uma transferência. Uma nova inscrição precisa ser criada neste caso."
     form:
-      invalid_data: "Seus dados são inválidos. Por favor, verifique os campos indicados abaixo."
+      invalid_data: "Ocorreu um problema."
   footer:
     help: "Se tiver dúvidas, críticas ou sugestões entre em contato através do email %{email}"
 
@@ -417,16 +303,6 @@ pt:
     base_price: "Inscrição"
     discount: "Desconto"
     total: "Total"
-
-  registration:
-    quantity: "Quantidade"
-    status: "Status das inscrições para %{date}"
-    details:
-      csv: 'Baixe a lista de participantes em formato CSV'
-    payment:
-      request:
-        option_one: 'OPÇÃO 1: Pague com PagSeguro'
-        text: 'Efetue o pagamento no valor de %{value}'
 
   attendance:
     status:
@@ -471,19 +347,13 @@ pt:
       full_price: "Preço cheio: %{value}"
       average_queue_time: "Tempo médio na fila: %{value} hs"
   registration_group:
-    list: 'Lista dos grupos: '
+    list: 'Grupos de inscrições de %{event_name}'
     destroy:
       success: 'Grupo excluído com sucesso.'
       error: 'Falha ao excluir o grupo.'
     destroy_confirmation: "Tem certeza que deseja remover o grupo '%{registration_group}'?\nTodas as inscrições associadas a este grupo serão automaticamente canceladas."
     show:
       title: 'Detalhes para o grupo %{group_name}'
-      discount: 'Desconto: %{group_discount}%'
-      minimum_size: 'Tamanho mínimo: %{minimum_size}'
-      attendances:
-        zero: 'nenhum congressita'
-        one: '1 congressista'
-        other: '%{count} congressistas'
     new:
       title: "Novo grupo"
     edit:
@@ -523,7 +393,7 @@ pt:
       description: 'Este relatório mostra a soma do valor da inscrição de todos os participantes pagos e confirmados'
       gateway: 'Gateway'
       bank_deposit: 'Depósito Bancário'
-      statement_agreement: 'Empenho'
+      statement_agreement: 'Nota de Empenho'
       total: 'Valor total'
       count: 'Total de inscritos'
       nil: "Sem tipo de pagamento"
@@ -607,3 +477,12 @@ pt:
       title: "Novo organizador"
     remove:
       title: "Remover organizador"
+  helpers:
+    select:
+      prompt: Selecione uma opção
+    submit:
+      attendance:
+        create: Eu quero me registrar
+      create: Salvar %{model}
+      submit: Salvar %{model}
+      update: Atualizar %{model}

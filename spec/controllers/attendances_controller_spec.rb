@@ -62,7 +62,7 @@ describe AttendancesController, type: :controller do
     context 'with a valid attendance' do
       let!(:event) { FactoryGirl.create(:event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
-      let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+      let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
       before { get :show, id: attendance.id }
       it { expect(assigns[:attendance]).to eq attendance }
       it { expect(response).to be_success }
@@ -89,7 +89,7 @@ describe AttendancesController, type: :controller do
 
     context 'with invoice' do
       it 'cancel the attendance and the invoice' do
-        Invoice.from_attendance(attendance, Invoice::GATEWAY)
+        Invoice.from_attendance(attendance, 'gateway')
         delete :destroy, id: attendance.id
         expect(Attendance.last.status).to eq 'cancelled'
         expect(Invoice.last.status).to eq 'cancelled'
@@ -158,7 +158,7 @@ describe AttendancesController, type: :controller do
       context 'grouped attendance' do
         let(:group) { FactoryGirl.create :registration_group }
         let(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
-        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
         it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
           xhr :put, :pay_it, id: attendance.id
           expect(assigns(:attendance)).to eq attendance
@@ -169,7 +169,7 @@ describe AttendancesController, type: :controller do
 
       context 'individual attendance' do
         let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
-        let!(:invoice) { Invoice.from_attendance(attendance, Invoice::GATEWAY) }
+        let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
         it 'marks attendance as confirmed and related invoice as paid and redirect to attendances index' do
           EmailNotifications.expects(:registration_confirmed).once
           xhr :put, :pay_it, id: attendance.id
@@ -217,7 +217,7 @@ describe AttendancesController, type: :controller do
     context 'when is an individual registration' do
       let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
       before do
-        Invoice.from_attendance(attendance, Invoice::GATEWAY)
+        Invoice.from_attendance(attendance, 'gateway')
         attendance.cancel
         put :recover_it, id: attendance.id
       end
@@ -232,7 +232,7 @@ describe AttendancesController, type: :controller do
     context 'when is an individual registration' do
       let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'waiting') }
       before do
-        Invoice.from_attendance(attendance, Invoice::GATEWAY)
+        Invoice.from_attendance(attendance, 'gateway')
         patch :dequeue_it, id: attendance.id
       end
 

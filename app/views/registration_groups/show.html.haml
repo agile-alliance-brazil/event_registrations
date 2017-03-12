@@ -1,14 +1,13 @@
 %h3= t('registration_group.show.title', group_name: @group.name)
 
-%h5= t('registration_group.show.discount', group_discount: @group.discount)
-%h5= t('registration_group.show.minimum_size', minimum_size: @group.minimum_size)
-%h5= "#{t('formtastic.labels.registration_group.capacity')}: #{@group.capacity}"
-%h5= "#{t('formtastic.labels.registration_group.amount')}: #{number_to_currency @group.amount}"
-%h5= t('registration_group.show.minimum_size', minimum_size: @group.minimum_size)
+%h5= "#{RegistrationGroup.human_attribute_name(:discount)}: #{number_with_precision(@group.discount, precisiom: 2)}"
+%h5= "#{RegistrationGroup.human_attribute_name(:minimum_size)}: #{@group.minimum_size}"
+%h5= "#{RegistrationGroup.human_attribute_name(:capcity)}: #{@group.capacity}"
+%h5= "#{RegistrationGroup.human_attribute_name(:amount)}: #{number_to_currency(@group.amount, locale: 'pt-BR')}"
 
 %h5 #{ number_to_currency @group.total_price }
 
-%h5= t('registration_group.show.attendances', count: @group.attendances.count)
+%h5= RegistrationGroup.human_attribute_name(:attendances)
 
 = render partial: 'attendances/attendances_list', locals: { attendances_list: @attendance_list }
 

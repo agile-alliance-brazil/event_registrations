@@ -41,9 +41,9 @@ GEM
       memoizable (~> 0.4.0)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
-    airbrake (5.8.1)
-      airbrake-ruby (~> 1.8)
-    airbrake-ruby (1.8.0)
+    airbrake (6.0.0)
+      airbrake-ruby (~> 2.0)
+    airbrake-ruby (2.0.0)
     airbrussh (1.1.2)
       sshkit (>= 1.6.1, != 1.7.0)
     aitch (0.5.0)
@@ -483,7 +483,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake (~> 5.0)
+  airbrake (~> 6.0)
   annotate
   autoprefixer-rails (~> 6.2)
   aws-ses (~> 0.6.0)

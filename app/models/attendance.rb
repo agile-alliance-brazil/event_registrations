@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 # == Schema Information
 #
 # Table name: attendances
@@ -108,7 +109,7 @@ class Attendance < ActiveRecord::Base
   end
 
   def due_date
-    return event.start_date if !advised_due_date.present? || advised_due_date > event.start_date
+    return event.start_date if advised_due_date.blank? || advised_due_date > event.start_date
     advised_due_date
   end
 
@@ -143,6 +144,6 @@ class Attendance < ActiveRecord::Base
   end
 
   def set_last_status_change
-    self.last_status_change_date = Time.zone.now unless last_status_change_date.present?
+    self.last_status_change_date = Time.zone.now if last_status_change_date.blank?
   end
 end

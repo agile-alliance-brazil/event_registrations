@@ -96,7 +96,7 @@ module Concerns
     end
 
     def change_invoice_status(invoice, method)
-      return unless invoice.present?
+      return if invoice.blank?
       invoice.send(method)
       invoice.save!
     end

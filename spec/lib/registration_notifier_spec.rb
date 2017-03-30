@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 require 'spec_helper'
 require File.join(File.dirname(__FILE__), '../../lib/registration_notifier')
 

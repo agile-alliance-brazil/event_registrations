@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 # This module is included in your user model which makes
 # several methods available to handle roles for authorization.
 # The can-can gem is being used for implementing the authorization rules

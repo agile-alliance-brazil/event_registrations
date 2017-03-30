@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 # == Schema Information
 #
 # Table name: invoice_attendances

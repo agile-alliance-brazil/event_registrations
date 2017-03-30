@@ -15,6 +15,13 @@ AllCops:
 Rails:
   Enabled: true
 
+Rails/Blank:
+  Exclude: # Rubocop bug in 0.48.0 - Remove once rubocop > 0.48.0
+    - 'app/models/attendance.rb'
+    - 'app/models/concerns/life_cycle.rb'
+    - 'app/param_objects/attendance_params.rb'
+    - 'lib/authorization.rb'
+
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
   Max: 10

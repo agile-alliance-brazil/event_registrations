@@ -91,7 +91,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def incomplete?
-    return false unless minimum_size.present?
+    return false if minimum_size.blank?
     attendances.paid.count < minimum_size
   end
 
@@ -112,7 +112,7 @@ class RegistrationGroup < ActiveRecord::Base
   end
 
   def enough_capacity
-    return unless capacity.present?
+    return if capacity.blank?
     if registration_quota.present? && registration_quota.capacity_left < capacity
       errors.add(:capacity, I18n.t('registration_group.quota_capacity_error'))
     elsif event.capacity_left < capacity

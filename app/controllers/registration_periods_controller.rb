@@ -1,6 +1,6 @@
 class RegistrationPeriodsController < ApplicationController
   before_action :check_event
-  before_action :find_period, only: [:destroy, :edit, :update]
+  before_action :find_period, only: %i(destroy edit update)
 
   def new
     @period = RegistrationPeriod.new
@@ -37,7 +37,7 @@ class RegistrationPeriodsController < ApplicationController
   end
 
   def check_event
-    not_found unless @event.present?
+    not_found if @event.blank?
   end
 
   def resource_class

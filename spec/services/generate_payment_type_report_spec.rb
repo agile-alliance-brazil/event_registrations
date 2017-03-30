@@ -3,7 +3,7 @@ describe GeneratePaymentTypeReport, type: :service do
   describe '.run_for' do
     context 'with invalid parameter' do
       it 'does not generate' do
-        expect(GeneratePaymentTypeReport.run_for(nil)).to be {}
+        expect(GeneratePaymentTypeReport.run_for(nil)).to eq({})
       end
     end
 

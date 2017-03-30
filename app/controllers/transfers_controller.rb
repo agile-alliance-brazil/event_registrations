@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 class TransfersController < ApplicationController
   before_action :transfer
   before_action :attendance, only: [:new]

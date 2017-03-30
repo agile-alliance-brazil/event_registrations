@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 class TestAbility
   include CanCan::Ability
 

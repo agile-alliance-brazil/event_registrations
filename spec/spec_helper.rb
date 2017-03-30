@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start 'rails' do
@@ -58,8 +59,12 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  # rubocop:disable Style/MixinGrouping
+  # This was broken in rubocop 0.48.0 but already fixed on master in 2017-03-30
+  # Remove the disables once rubocop > 0.48.0
   config.include(ControllerMacros, type: :controller)
   config.include(DisableAuthorization, type: :controller)
+  # rubocop:enable Style/MixinGrouping
   config.include(TrimmerMacros)
 
   # == Mock Framework

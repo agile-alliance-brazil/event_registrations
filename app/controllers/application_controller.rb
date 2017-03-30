@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 

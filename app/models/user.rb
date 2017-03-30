@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
     hash_info = hash[:info]
     user = User.find_by(email: hash_info[:email]) if hash_info[:email].present?
 
-    unless user.present?
+    if user.blank?
       user = User.new
       names = extract_names(hash_info)
 

@@ -43,8 +43,8 @@ Current::Application.routes.draw do
       member { post :checkout }
     end
 
-    resources :registration_periods, only: [:new, :create, :destroy, :edit, :update]
-    resources :registration_quotas, only: [:new, :create, :destroy, :edit, :update]
+    resources :registration_periods, only: %i(new create destroy edit update)
+    resources :registration_quotas, only: %i(new create destroy edit update)
   end
 
   get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')

@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
   # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
-  before_action :load_event, except: [:index, :search]
+  before_action :load_event, except: %i(index search)
   protect_from_forgery
 
   def index

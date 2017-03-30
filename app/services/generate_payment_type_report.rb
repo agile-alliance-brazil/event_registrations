@@ -1,6 +1,6 @@
 class GeneratePaymentTypeReport
   def self.run_for(event)
-    return {} unless event.present?
+    return {} if event.blank?
     event
       .attendances
       .non_free

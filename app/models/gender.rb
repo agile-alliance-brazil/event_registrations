@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 class Gender
   class << self
     def options_for_select

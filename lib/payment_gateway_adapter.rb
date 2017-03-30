@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 class PaymentGatewayAdapter
   class << self
     def from_invoice(invoice, item_class)

@@ -72,7 +72,7 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
   gem 'foreman'
-  gem 'net-ssh', '~> 3.0'
+  gem 'net-ssh'
   gem 'pry'
   gem 'travis-lint'
 end

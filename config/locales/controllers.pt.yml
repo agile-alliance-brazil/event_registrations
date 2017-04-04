@@ -8,7 +8,6 @@ pt:
 
   registration:
     quantity: "Quantidade"
-    status: "Status das inscrições para %{date}"
     details:
       csv: 'Baixe a lista de participantes em formato CSV'
     payment:
@@ -21,11 +20,32 @@ pt:
         group_full: "O grupo que você escolheu está cheio."
     summary:
       registration_total: "Total"
-      with_no_cancelled: "Sem as canceladas"
+    index:
+      title: "Participantes"
+      search: "Buscar"
+      reports:
+        active_by_state: "Ativos por estado"
+        active_by_city: "Ativos por cidade"
+        active_last_biweek: "Ativos na última quizena"
+        grouped_by_payment_type: "Agrupado por tipo de pagamento"
   events:
     form:
       event_basics: "Informações Básicas"
       event_core: "Informações principais"
+    index:
+      title: "Eventos"
   registration_groups:
     index:
       token_clipboard_tooltip: "Copiar o token para a área de transferência"
+  attendance:
+    reports:
+      attendance_organization_size: "Participantes x Tamanho da Empresa"
+    enum:
+      status:
+        waiting: "Na Fila"
+  report:
+    attendance_organization_size:
+      title: "Agrupado por tamanho da empresa"
+      unknown: "Desconhecido"
+    button:
+      title: "Relatórios"

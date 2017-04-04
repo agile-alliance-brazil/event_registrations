@@ -1,4 +1,4 @@
-describe AttendancesController, type: :controller do
+RSpec.describe AttendancesController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:event) { FactoryGirl.create(:event, full_price: 930.00) }
 

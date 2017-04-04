@@ -7,7 +7,6 @@ en:
       title: "Actions"
   registration:
     quantity: "Quantity"
-    status: "Registration status on %{date}"
     details:
       csv: 'Download CSV attendee list'
     payment:
@@ -21,12 +20,33 @@ en:
         group_full: "The group you have choose is full."
     summary:
       registration_total: "Total"
-      with_no_cancelled: "Without cancelled"
+    index:
+      title: "Attendances"
+      search: "Search"
+      reports:
+        active_by_state: "Active by state"
+        active_by_city: "Active by city"
+        active_last_biweek: "Active last biweek"
+        grouped_by_payment_type: "Grouped by payment type"
   events:
     form:
       event_basics: "Basic Informations"
       event_core: "Main informations"
+    index:
+      title: "Events"
   registration_groups:
     index:
       token_clipboard_tooltip: "Copy group token to the clipboard"
+  attendance:
+    reports:
+      attendance_organization_size: "Attendance x Organization Size"
+    enum:
+      status:
+        waiting: "In Line"
+  report:
+    attendance_organization_size:
+      title: "Grouped on organization size"
+      unknown: "Unknown"
+    button:
+      title: "Reports"
 

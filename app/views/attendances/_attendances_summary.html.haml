@@ -1,39 +1,30 @@
 %h4{class: 'row'}
   %span{class: 'col-xs-3'}
-    = "#{t('attendances.summary.registration_total')}: #{@total}"
-
-%h4{class: 'row'}
-  %span{class: 'col-xs-3'}
-    = "#{t('attendances.summary.with_no_cancelled')}: #{@total_without_cancelled}"
+    = "#{t('attendances.summary.registration_total')}: #{@attendances_list.count}"
+%div{class: 'row'}
+  %span{class: 'col-xs-12'}= render partial: 'reports_menu', locals: { event: @event }
 
 %hr
 
 %div{class: 'row'}
   %span{class: 'col-xs-2'}
+    = check_box_tag 'waiting', 'waiting', true, onclick: "submitSearch(#{@event.id});"
+    = label_tag 'waiting', "#{t('attendance.enum.status.waiting')} (#{@waiting_total})"
+
+  %span{class: 'col-xs-2'}
     = check_box_tag 'pending', 'pending', true, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'pending', "#{t('attendance.enum.status.pending')} (#{@pending_total})"
+    = label_tag 'pending', "#{t('attendance.enum.status.pending', count: @pending_total)} (#{@pending_total})"
 
   %span{class: 'col-xs-2'}
     = check_box_tag 'accepted', 'accepted', true, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'accepted', "#{t('attendance.enum.status.accepted')} (#{@accepted_total})"
+    = label_tag 'accepted', "#{t('attendance.enum.status.accepted', count: @accepted_total)} (#{@accepted_total})"
 
   %span{class: 'col-xs-2'}
     = check_box_tag 'paid', 'paid', true, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'paid', "#{t('attendance.enum.status.paid')} (#{@paid_total})"
+    = label_tag 'paid', "#{t('attendance.enum.status.paid', count: @paid_total)} (#{@paid_total})"
 
   %span{class: 'col-xs-2'}
     = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
-    = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled')} (#{@cancelled_total})"
+    = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"
 
 %hr
-
-%h3= t('attendances.reports.title')
-%div{class: 'row'}
-  %span{class: 'col-xs-3'}
-    = link_to 'Total de ativos por estado', by_state_event_attendances_path(@event)
-  %span{class: 'col-xs-3'}
-    = link_to 'Total de ativos por cidade', by_city_event_attendances_path(@event)
-  %span{class: 'col-xs-3'}
-    = link_to 'Total de ativos na última quizena', last_biweekly_active_event_attendances_path(@event)
-  %span{class: 'col-xs-3'}
-    = link_to 'Agrupado por tipo de pagamento', payment_type_report_event_attendances_path(@event)

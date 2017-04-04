@@ -67,5 +67,9 @@ Current::Application.routes.draw do
   resources :payment_notifications, only: :create
   resources :transfers, only: :create
 
+  controller :reports do
+    get 'reports/:event_id/attendance_organization_size', to: 'reports#attendance_organization_size', as: :reports_attendance_organization_size
+  end
+
   root to: 'events#index'
 end

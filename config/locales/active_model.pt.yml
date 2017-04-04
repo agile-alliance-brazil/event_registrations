@@ -84,6 +84,8 @@ pt:
         invoices: Faturas
         status: "Status"
         registration_value: Valor da inscrição
+        registration_date: Data
+        registration_group: Grupo
       event:
         name: Nome
         attendance_limit: Capacidade
@@ -116,8 +118,19 @@ pt:
   attendance:
     enum:
       status:
-        pending: "Pendente"
-        accepted: "Aceita no grupo"
-        paid: "Paga"
-        cancelled: "Cancelada"
-
+        waiting: Na fila
+        pending:
+          one: "Pendente"
+          other: "Pendentes"
+        accepted:
+          one: "Aceita no grupo"
+          other: "Aceitas no grupo"
+        paid:
+          one: "Paga"
+          other: "Pagas"
+        cancelled:
+          one: "Cancelada"
+          other: "Canceladas"
+        confirmed:
+          one: "Confirmada"
+          other: "Confirmadas"

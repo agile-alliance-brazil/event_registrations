@@ -451,9 +451,6 @@ pt:
         state: "Estado"
       general:
         total: "Total de inscritos"
-    index:
-      title: "Resumo"
-      active: "Active attendances"
     new:
       title:
         no_vacancy: "O evento %{event_name} está cheio. Faça o cadastro abaixo para entrar na fila."

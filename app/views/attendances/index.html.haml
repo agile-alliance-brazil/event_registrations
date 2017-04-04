@@ -1,23 +1,24 @@
-%h3= t('attendances.index.title')
+%div{class:'container'}
+  %h3= t('attendances.index.title')
 
-= render partial: 'attendances_summary'
+  = render partial: 'attendances_summary'
 
-%h3= t('attendances.index.active')
+  = hidden_field_tag :event_id, @event.id
 
-- title t('title.attendances_list')
+  %div{class:'row'}
+    %div{class:'col-xs-6'}
+      .field{class: 'form-field'}
+        = label_tag t('formtastic.fields.search.placeholder'), nil, class: 'control-label'
+        = text_field_tag :search, params[:search], class: 'form-control'
+  %div{class:'row'}
+    %div{class:'col-xs-6'}
+      .field{class: 'form-field'}
+        = link_to t('attendances.index.search'), '#', onclick: "submitSearch(#{@event.id});", class: 'btn btn-sm btn-primary'
+        = link_to t('actions.download_csv'), search_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-sm btn-success'
 
-%p= t('registration.status', date: l(Time.zone.now))
-
-
-= hidden_field_tag :event_id, @event.id
-%div.form-group
-  = text_field_tag :search, params[:search], placeholder: t('formtastic.fields.search.placeholder'), size: 50, class: 'form-control'
-  = link_to 'Search', '#', onclick: "submitSearch(#{@event.id});", class: 'btn btn-primary'
-  = link_to t('actions.download_csv'), search_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-primary'
-
-<br />
-
-%div{id: 'attendances_list'}
-  = render partial: 'attendances_list', locals: { attendances_list: @attendances_list }
+  %div{class:'row'}
+    %div{class:'col-xs-12'}
+      %div{id: 'attendances_list'}
+        = render partial: 'attendances_list', locals: { attendances_list: @attendances_list }
 
 = javascript_include_tag 'attendances/index'

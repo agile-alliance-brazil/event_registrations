@@ -366,8 +366,6 @@ en:
         state: "State"
       general:
         total: "Attendances total"
-    index:
-      title: "Resumo"
       active: "Active attentances"
     new:
       title:

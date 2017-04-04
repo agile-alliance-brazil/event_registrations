@@ -2,22 +2,27 @@
   %td= link_to "#{attendance.last_name}, #{attendance.first_name}", attendance_path(attendance), method: :get
   %td= attendance.organization
   %td= attendance.group_name
-  %td= attendance.email
-  %td= attendance.city
   %td= attendance.state
   %td= t("report.payment_type.#{attendance.payment_type || 'nil'}")
   %td= attendance.registration_date.strftime('%d/%m/%Y %H:%M')
   %td= number_to_currency(attendance.registration_value, locale: :pt)
-  %td= attendance.status
+  %td= t("attendance.enum.status.#{attendance.status}", count: 1)
   %td
-    - if (can? :confirm, attendance) && (attendance.confirmable?)
-      %p= button_to t('actions.confirm'), confirm_attendance_path(attendance), method: :put, remote: true, class: 'confirm btn btn-primary', data: { confirm: t('attendance.confirm_confirmation', event: attendance.event_name) }
     - if attendance.pending? && attendance.grouped?
-      %p= link_to t('actions.accept'), accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, class: 'btn btn-success', remote: true
+      = link_to accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, remote: true do
+        %i{class: 'fa fa-check', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.accept')}
+
     - if attendance.payable?
-      %p= link_to t('actions.pay'), pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, class: 'btn btn-success', remote: true
+      = link_to pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, remote: true do
+        %i{class: 'fa fa-credit-card', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.pay')}
+
     - if attendance.cancellable?
-      %p= button_to t('actions.cancel'), attendance, method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) }
+      = link_to attendance, method: :delete, data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) } do
+        %i{class: 'fa fa-ban', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.cancel')}
+
     - if can?(:dequeue, attendance) && (attendance.waiting?)
-      %p= link_to t('attendance.list.actions.dequeue'), dequeue_it_attendance_path(attendance), method: :patch, class: 'btn btn-success'
-    %p= button_to t('actions.edit'), edit_event_attendance_path(event_id: @event.id, id: attendance.id), method: :get , class: 'btn btn-primary'
+      = link_to dequeue_it_attendance_path(attendance), method: :patch do
+        %i{class: 'fa fa-thumbs-o-up', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('attendance.list.actions.dequeue')}
+
+    = link_to edit_event_attendance_path(event_id: @event.id, id: attendance.id), method: :get do
+      %i{class: 'fa fa-pencil', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.edit')}

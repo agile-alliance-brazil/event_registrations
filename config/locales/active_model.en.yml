@@ -60,7 +60,9 @@ en:
   attendance:
     enum:
       status:
+        waiting: "In line"
         pending: "Pending"
         accepted: "Accepted"
         paid: "Paid"
         cancelled: "Cancelled"
+        confirmed: "Confirmed"

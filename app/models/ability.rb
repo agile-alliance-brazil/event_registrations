@@ -33,6 +33,7 @@ class Ability
 
   def organizer_privileges
     can(%i(show edit update), Event) { |event| @user.organized_events.include?(event) }
+    can(:read, ReportsController) if @user.organized_events.include?(@event)
     can(:waiting_list, Attendance) if @user.organized_events.include?(@event)
     can(:show, User) { |user| @user.organized_user_present?(user) }
     can(:manage, Attendance) if @user.organized_events.include?(@event)

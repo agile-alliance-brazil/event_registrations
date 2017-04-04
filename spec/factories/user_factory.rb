@@ -1,11 +1,8 @@
 FactoryGirl.define do
   factory :user do
-    first_name 'User'
+    first_name { Faker::Name.first_name }
     sequence(:last_name) { |n| "Name#{n}" }
-    email do |a|
-      username = "#{a.first_name} #{a.last_name}".parameterize
-      "#{username}@example.com"
-    end
+    email { Faker::Internet.email }
 
     phone '(11) 3322-1234'
     country 'BR'

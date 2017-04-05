@@ -1,7 +1,7 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-directories %w(app config db deploy lib public script spec)
+directories %w[app config db deploy lib public script spec]
 
 ### Guard::Konacha
 #  available options:

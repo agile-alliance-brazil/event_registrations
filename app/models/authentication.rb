@@ -14,8 +14,8 @@
 #
 
 class Authentication < ActiveRecord::Base
-  PRODUCTION_PROVIDERS = %w(twitter facebook github).freeze
-  OTHER_PROVIDERS = %w(twitter facebook github developer).freeze
+  PRODUCTION_PROVIDERS = %w[twitter facebook github].freeze
+  OTHER_PROVIDERS = %w[twitter facebook github developer].freeze
   PROVIDERS = Rails.env.production? ? PRODUCTION_PROVIDERS : OTHER_PROVIDERS
 
   belongs_to :user

@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
   # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
-  before_action :load_event, except: %i(index search)
+  before_action :load_event, except: %i[index search]
   protect_from_forgery
 
   def index
@@ -105,7 +105,7 @@ class AttendancesController < ApplicationController
     statuses = []
     statuses << :pending if params[:pending] == 'true'
     statuses << :accepted if params[:accepted] == 'true'
-    statuses += %i(paid confirmed) if params[:paid] == 'true'
+    statuses += %i[paid confirmed] if params[:paid] == 'true'
     statuses << :cancelled if params[:cancelled] == 'true'
     statuses
   end

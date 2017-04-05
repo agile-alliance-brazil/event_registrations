@@ -1,6 +1,6 @@
 class RegistrationQuotasController < ApplicationController
   before_action :check_event
-  before_action :find_quota, only: %i(destroy edit update)
+  before_action :find_quota, only: %i[destroy edit update]
 
   def new
     @registration_quota = RegistrationQuota.new

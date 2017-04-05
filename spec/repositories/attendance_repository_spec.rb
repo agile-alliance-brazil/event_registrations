@@ -9,7 +9,7 @@ describe AttendanceRepository, type: :repository do
       let!(:for_other_event) { FactoryGirl.create(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
 
-      let(:all_statuses) { %w(pending accepted paid confirmed cancelled) }
+      let(:all_statuses) { %w[pending accepted paid confirmed cancelled] }
 
       context 'with one attendance' do
         context 'and matching fields' do

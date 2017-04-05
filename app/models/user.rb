@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :organized_events, class_name: 'Event'
 
-  validates :default_locale, inclusion: %w(en pt)
+  validates :default_locale, inclusion: %w[en pt]
   validates :first_name, :last_name, presence: true, length: { maximum: 100 }
   validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true }
   validates :email, uniqueness: { case_sensitive: false, allow_blank: true }
@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
       user.first_name = names[0]
       user.last_name = names[-1]
       user.twitter_user = extract_twitter_user(hash)
-      %i(email organization phone country state city).each do |attribute|
+      %i[email organization phone country state city].each do |attribute|
         user.send("#{attribute}=", hash_info[attribute])
       end
     end

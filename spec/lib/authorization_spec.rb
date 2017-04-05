@@ -29,9 +29,9 @@ describe Authorization do
     end
 
     it '- multiple' do
-      @user.roles = %w(admin organizer)
+      @user.roles = %w[admin organizer]
       expect(@user.roles_mask).to eq(3)
-      @user.roles = %i(admin organizer)
+      @user.roles = %i[admin organizer]
       expect(@user.roles_mask).to eq(3)
     end
 
@@ -48,9 +48,9 @@ describe Authorization do
     end
 
     it '- mixed valid and invalid (ignores invalid)' do
-      @user.roles = %w(invalid organizer admin)
+      @user.roles = %w[invalid organizer admin]
       expect(@user.roles_mask).to eq(3)
-      @user.roles = %i(invalid organizer admin)
+      @user.roles = %i[invalid organizer admin]
       expect(@user.roles_mask).to eq(3)
     end
   end
@@ -69,7 +69,7 @@ describe Authorization do
     end
 
     it '- multiple roles' do
-      @user.roles = %w(admin organizer)
+      @user.roles = %w[admin organizer]
       expect(@user.roles).to include('admin')
       expect(@user.roles).to include('organizer')
     end
@@ -89,7 +89,7 @@ describe Authorization do
     end
 
     it '- multiple' do
-      @user.roles = %w(admin organizer)
+      @user.roles = %w[admin organizer]
       expect(@user).not_to be_guest
       expect(@user).to be_admin
       expect(@user).to be_organizer
@@ -120,7 +120,7 @@ describe Authorization do
     end
 
     it '- multiple roles' do
-      @user.roles = %i(admin organizer)
+      @user.roles = %i[admin organizer]
       @user.add_role :organizer
       expect(@user).to be_admin
       expect(@user).to be_organizer

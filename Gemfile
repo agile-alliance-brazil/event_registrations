@@ -1,14 +1,6 @@
 source 'https://rubygems.org'
-ruby '2.3.1'
-
-def linux_only(require_as)
-  RbConfig::CONFIG['host_os'] =~ /linux/ ? require_as : false
-end
-
-# Mac OS X
-def darwin_only(require_as)
-  RbConfig::CONFIG['host_os'] =~ /darwin/ ? require_as : false
-end
+ruby '2.4.0'
+gem 'rails', '~> 4.2'
 
 gem 'airbrake', '~> 6.0'
 gem 'autoprefixer-rails', '~> 6.2'
@@ -23,7 +15,7 @@ gem 'formtastic', '~> 3.1.3'
 gem 'haml', '~> 4.0'
 gem 'httparty'
 gem 'jquery-rails'
-gem 'localized_country_select', '~> 0.9.11'
+gem 'localized_country_select'
 gem 'money-rails'
 gem 'mysql2', '~> 0.4'
 gem 'omniauth', '~>1.3'
@@ -31,7 +23,6 @@ gem 'omniauth-facebook', '~>4.0'
 gem 'omniauth-github', '~>1.1'
 gem 'omniauth-twitter', '~>1.2'
 gem 'pagseguro-oficial'
-gem 'rails', '~> 4.2'
 gem 'rake'
 gem 'sass'
 gem 'sass-rails'
@@ -50,10 +41,8 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'metric_fu'
-  gem 'parser', '>= 2.3.0.pre.6'
+  gem 'parser'
   gem 'poltergeist', require: 'capybara/poltergeist'
-  gem 'rb-fsevent', require: darwin_only('rb-fsevent')
-  gem 'rb-inotify', require: linux_only('rb-inotify')
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
   gem 'rubocop', require: false
@@ -62,7 +51,6 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'sprockets-rails'
   gem 'sqlite3'
-  gem 'terminal-notifier-guard', require: darwin_only('terminal-notifier-guard')
 end
 
 group :development do

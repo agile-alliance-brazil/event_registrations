@@ -3,7 +3,7 @@ FactoryGirl.define do
     user
     status Invoice::PENDING
     amount 1.00
-    payment_type { %w(gateway bank_deposit statement_agreement).sample }
+    payment_type { %w[gateway bank_deposit statement_agreement].sample }
   end
 
   factory :invoice_group, class: Invoice do

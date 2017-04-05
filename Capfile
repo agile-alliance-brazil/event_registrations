@@ -31,7 +31,7 @@ Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
 before 'bundler:install', 'deploy:puppet'
 
 namespace :deploy do
-  %w(start restart).each do |name|
+  %w[start restart].each do |name|
     desc "#{name.capitalize} application"
     task name.to_sym do
       on roles(:web), in: :sequence, wait: 5 do

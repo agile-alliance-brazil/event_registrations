@@ -1,6 +1,6 @@
 begin
   desc 'Task to run on CI: runs Konacha specs and RSpec specs'
-  task ci: %i(rubocop brakeman spec codeclimate-test-reporter)
+  task ci: %i[rubocop brakeman spec codeclimate-test-reporter]
 
   task default: :ci
 

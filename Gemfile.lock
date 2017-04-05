@@ -391,7 +391,7 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
-    rubocop (0.48.0)
+    rubocop (0.48.1)
       parser (>= 2.3.3.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
@@ -437,11 +437,10 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.13)
-    sshkit (1.13.0)
+    sshkit (1.13.1)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     state_machine (1.2.0)
-    terminal-notifier-guard (1.7.0)
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
@@ -510,7 +509,7 @@ DEPENDENCIES
   haml (~> 4.0)
   httparty
   jquery-rails
-  localized_country_select (~> 0.9.11)
+  localized_country_select
   metric_fu
   mocha
   money-rails
@@ -521,13 +520,11 @@ DEPENDENCIES
   omniauth-github (~> 1.1)
   omniauth-twitter (~> 1.2)
   pagseguro-oficial
-  parser (>= 2.3.0.pre.6)
+  parser
   poltergeist
   pry
   rails (~> 4.2)
   rake
-  rb-fsevent
-  rb-inotify
   rspec-collection_matchers
   rspec-rails
   rubocop
@@ -541,7 +538,6 @@ DEPENDENCIES
   sprockets-rails
   sqlite3
   state_machine (~> 1.2.0)
-  terminal-notifier-guard
   therubyracer (~> 0.12)
   timecop
   travis-lint
@@ -550,7 +546,7 @@ DEPENDENCIES
   yui-compressor (~> 0.12)
 
 RUBY VERSION
-   ruby 2.3.1p112
+   ruby 2.4.0p0
 
 BUNDLED WITH
    1.14.6

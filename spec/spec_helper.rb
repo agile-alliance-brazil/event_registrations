@@ -47,7 +47,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     # GC.disable
     ActionMailer::Base.deliveries.clear
-    DatabaseCleaner.clean_with(:truncation, except: %w(public.schema_migrations))
+    DatabaseCleaner.clean_with(:truncation, except: %w[public.schema_migrations])
   end
 
   config.before(:each) do
@@ -58,8 +58,6 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-  # rubocop:disable Style/MixinGrouping
   # This was broken in rubocop 0.48.0 but already fixed on master in 2017-03-30
   # Remove the disables once rubocop > 0.48.0
   config.include(ControllerMacros, type: :controller)

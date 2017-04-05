@@ -6,25 +6,25 @@ module Concerns
       scope :pending, -> { where(status: :pending) }
       scope :accepted, -> { where(status: :accepted) }
       scope :cancelled, -> { where(status: :cancelled) }
-      scope :paid, -> { where(status: %i(paid confirmed)) }
+      scope :paid, -> { where(status: %i[paid confirmed]) }
       scope :confirmed, -> { where(status: :confirmed) }
-      scope :active, -> { where('status NOT IN (?)', %i(cancelled no_show waiting)) }
+      scope :active, -> { where('status NOT IN (?)', %i[cancelled no_show waiting]) }
       scope :waiting, -> { where(status: :waiting) }
 
       state_machine :status, initial: :pending do
-        after_transition on: %i(cancel mark_no_show), do: :cancel_invoice!
+        after_transition on: %i[cancel mark_no_show], do: :cancel_invoice!
         after_transition on: :recover, do: :recover_invoice!
-        after_transition on: :pay, do: %i(check_confirmation pay_invoice!)
+        after_transition on: :pay, do: %i[check_confirmation pay_invoice!]
         after_transition on: :confirm, do: :pay_invoice!
         after_transition on: :dequeue, do: :dequeue_attendance
         after_transition any => any, do: :update_last_status_change_date
 
         event(:accept) { transition pending: :accepted }
-        event(:confirm) { transition %i(pending accepted paid) => :confirmed }
-        event(:pay) { transition %i(pending accepted) => :paid }
-        event(:cancel) { transition %i(waiting pending accepted paid confirmed) => :cancelled }
+        event(:confirm) { transition %i[pending accepted paid] => :confirmed }
+        event(:pay) { transition %i[pending accepted] => :paid }
+        event(:cancel) { transition %i[waiting pending accepted paid confirmed] => :cancelled }
         event(:recover) { transition cancelled: :pending }
-        event(:mark_no_show) { transition %i(pending accepted) => :no_show }
+        event(:mark_no_show) { transition %i[pending accepted] => :no_show }
         event(:dequeue) { transition waiting: :pending }
         state(:confirmed) { validates :payment_agreement, acceptance: true }
 

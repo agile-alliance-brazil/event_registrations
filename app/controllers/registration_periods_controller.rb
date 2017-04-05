@@ -1,6 +1,6 @@
 class RegistrationPeriodsController < ApplicationController
   before_action :check_event
-  before_action :find_period, only: %i(destroy edit update)
+  before_action :find_period, only: %i[destroy edit update]
 
   def new
     @period = RegistrationPeriod.new

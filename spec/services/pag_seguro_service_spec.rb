@@ -26,7 +26,7 @@ describe PagSeguroService do
     context 'when errors in response' do
       it 'will answer with the errors' do
         pag_seguro_response = PagSeguro::PaymentRequest::Response.new(nil)
-        pag_seguro_response.instance_variable_set(:@errors, %w(bla foo))
+        pag_seguro_response.instance_variable_set(:@errors, %w[bla foo])
         PagSeguro::PaymentRequest.any_instance.expects(:register).returns pag_seguro_response
 
         payment = PagSeguro::PaymentRequest.new

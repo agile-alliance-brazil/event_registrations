@@ -1,9 +1,9 @@
 class EventsController < ApplicationController
-  layout 'eventless', only: %i(index list_archived)
+  layout 'eventless', only: %i[index list_archived]
 
   # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
-  before_action :find_event, only: %i(show destroy add_organizer remove_organizer edit update)
-  skip_before_action :authenticate_user!, :authorize_action, only: %i(index show)
+  before_action :find_event, only: %i[show destroy add_organizer remove_organizer edit update]
+  skip_before_action :authenticate_user!, :authorize_action, only: %i[index show]
 
   def index
     @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date >= Time.zone.now }

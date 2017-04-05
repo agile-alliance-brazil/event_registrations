@@ -1,6 +1,6 @@
 class RegistrationGroupsController < ApplicationController
   before_action :find_event
-  before_action :find_group, except: %i(index create)
+  before_action :find_group, except: %i[index create]
 
   def index
     @groups = @event.registration_groups

@@ -8,19 +8,11 @@ AllCops:
     - 'puppet/.tmp/**/*' # Temporary files
     - 'vendor/**/*' # Pulled from Gemfile
     - 'db/schema.rb' # Auto-generated file
-    - 'config/locales/localized_country_select*'
     - 'config/deploy/**/*'
     - 'deploy/**/*'
 
 Rails:
   Enabled: true
-
-Rails/Blank:
-  Exclude: # Rubocop bug in 0.48.0 - Remove once rubocop > 0.48.0
-    - 'app/models/attendance.rb'
-    - 'app/models/concerns/life_cycle.rb'
-    - 'app/param_objects/attendance_params.rb'
-    - 'lib/authorization.rb'
 
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
@@ -56,3 +48,5 @@ Rails/HasAndBelongsToMany:
 Rails/HttpPositionalArguments:
   Enabled: false # TODO: Requires rails 5 to be enabled. Check branch bugfix/rubocop_0_44_new_offenses_fixes for fixes
 
+Lint/AmbiguousBlockAssociation:
+  Enabled: false

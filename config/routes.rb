@@ -7,14 +7,14 @@ Current::Application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
 
-  resources :users, only: %i(show edit update index) do
+  resources :users, only: %i[show edit update index] do
     member do
       patch :toggle_organizer
       patch :toggle_admin
     end
   end
 
-  resources :events, only: %i(index show new create destroy edit update) do
+  resources :events, only: %i[index show new create destroy edit update] do
     collection do
       get :list_archived
     end
@@ -24,7 +24,7 @@ Current::Application.routes.draw do
       delete :remove_organizer
     end
 
-    resources :attendances, only: %i(new create edit update), controller: :event_attendances do
+    resources :attendances, only: %i[new create edit update], controller: :event_attendances do
       collection do
         get :by_state
         get :by_city
@@ -35,7 +35,7 @@ Current::Application.routes.draw do
         get :waiting_list
       end
     end
-    resources :registration_groups, only: %i(index destroy show create edit update) do
+    resources :registration_groups, only: %i[index destroy show create edit update] do
       member { put :renew_invoice }
     end
 
@@ -43,13 +43,13 @@ Current::Application.routes.draw do
       member { post :checkout }
     end
 
-    resources :registration_periods, only: %i(new create destroy edit update)
-    resources :registration_quotas, only: %i(new create destroy edit update)
+    resources :registration_periods, only: %i[new create destroy edit update]
+    resources :registration_quotas, only: %i[new create destroy edit update]
   end
 
   get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
   post '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
-  resources :attendances, only: %i(show index) do
+  resources :attendances, only: %i[show index] do
     member do
       put :confirm
       put :pay_it

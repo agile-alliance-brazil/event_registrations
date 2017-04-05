@@ -1,0 +1,11 @@
+dependencies:
+  pre:
+    - gem update --system
+    - gem install bundler
+test:
+  override:
+    - bundle exec rspec --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --format html -o $CIRCLE_ARTIFACTS/specs_report.html
+  post:
+    - bundle exec rubocop -D
+    - bundle exec brakeman -z
+    - bundle exec rake assets:precompile

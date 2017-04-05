@@ -2,9 +2,11 @@ dependencies:
   pre:
     - gem update --system
     - gem install bundler
+    - mv config/config.example config/config.yml
+    - mv config/database.example config/database.yml
 test:
   override:
-    - bundle exec rspec --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --format html -o $CIRCLE_ARTIFACTS/specs_report.html
+    - bundle exec rspec --format progress
   post:
     - bundle exec rubocop -D
     - bundle exec brakeman -z

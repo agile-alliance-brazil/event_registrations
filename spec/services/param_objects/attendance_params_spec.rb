@@ -1,4 +1,4 @@
-describe AttendanceParams, type: :param_object do
+RSpec.describe AttendanceParams, type: :param_object do
   let(:user) { FactoryGirl.create :user }
   let(:event) { FactoryGirl.create :event }
 
@@ -24,9 +24,7 @@ describe AttendanceParams, type: :param_object do
       Time.stubs(:now).returns(now)
       params = ActionController::Parameters.new(valid_attendance)
       params_object = AttendanceParams.new(user, event, params)
-      expect(params_object.new_attributes).to eq(event_id: event.id,
-                                                 user_id: user.id,
-                                                 registration_date: now)
+      expect(params_object.new_attributes).to eq(status: :pending, event_id: event.id, user_id: user.id, registration_date: now)
       expect(params_object.event).to eq event
       expect(params_object.user).to eq user
     end
@@ -79,7 +77,7 @@ describe AttendanceParams, type: :param_object do
         'gender' => user.gender
       }
 
-      expect(params_object.attributes_hash).to eq expected_return
+      expect(params_object.attributes_hash.to_h).to eq expected_return
     end
   end
 end

@@ -56,3 +56,7 @@ pt:
       unknown: "Desconhecido"
     attendance_job_role:
       title: "Agrupado por cargo"
+  payments_controller:
+    checkout:
+      error: "Seu pagamento não foi enviado. Motivo: %{reason}."
+      success: "Pagamento enviado."

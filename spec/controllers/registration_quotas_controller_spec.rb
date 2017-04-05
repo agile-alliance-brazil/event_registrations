@@ -8,31 +8,31 @@ describe RegistrationQuotasController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do
       it 'redirects to login' do
-        get :new, event_id: 'foo'
+        get :new, params: { event_id: 'foo' }
         expect(response).to redirect_to login_path
       end
     end
     describe 'POST #create' do
       it 'redirects to login' do
-        post :create, event_id: 'foo'
+        post :create, params: { event_id: 'foo' }
         expect(response).to redirect_to login_path
       end
     end
     describe 'DELETE #destroy' do
       it 'redirects to login' do
-        delete :destroy, event_id: 'foo', id: 'foo'
+        delete :destroy, params: { event_id: 'foo', id: 'foo' }
         expect(response).to redirect_to login_path
       end
     end
     describe 'GET #edit' do
       it 'redirects to login' do
-        get :edit, event_id: 'foo', id: 'foo'
+        get :edit, params: { event_id: 'foo', id: 'foo' }
         expect(response).to redirect_to login_path
       end
     end
     describe 'PUT #update' do
       it 'redirects to login' do
-        put :update, event_id: 'foo', id: 'foo'
+        put :update, params: { event_id: 'foo', id: 'foo' }
         expect(response).to redirect_to login_path
       end
     end
@@ -44,31 +44,31 @@ describe RegistrationQuotasController, type: :controller do
 
     describe 'GET #new' do
       it 'redirects to root' do
-        get :new, event_id: 'foo'
+        get :new, params: { event_id: 'foo' }
         expect(response).to redirect_to root_path
       end
     end
     describe 'POST #create' do
       it 'redirects to root' do
-        post :create, event_id: 'foo'
+        post :create, params: { event_id: 'foo' }
         expect(response).to redirect_to root_path
       end
     end
     describe 'DELETE #destroy' do
       it 'redirects to root' do
-        delete :destroy, event_id: 'foo', id: 'foo'
+        delete :destroy, params: { event_id: 'foo', id: 'foo' }
         expect(response).to redirect_to root_path
       end
     end
     describe 'GET #edit' do
       it 'redirects to root' do
-        get :edit, event_id: 'foo', id: 'foo'
+        get :edit, params: { event_id: 'foo', id: 'foo' }
         expect(response).to redirect_to root_path
       end
     end
     describe 'PUT #update' do
       it 'redirects to login' do
-        put :update, event_id: 'foo', id: 'foo'
+        put :update, params: { event_id: 'foo', id: 'foo' }
         expect(response).to redirect_to root_path
       end
     end
@@ -82,7 +82,7 @@ describe RegistrationQuotasController, type: :controller do
       context 'with a valid event' do
         let!(:event) { FactoryGirl.create :event }
         it 'assigns the variables and render the template' do
-          get :new, event_id: event
+          get :new, params: { event_id: event }
           expect(assigns(:event)).to eq event
           expect(assigns(:registration_quota)).to be_a_new RegistrationQuota
           expect(response).to render_template :new
@@ -90,7 +90,7 @@ describe RegistrationQuotasController, type: :controller do
       end
       context 'with an invalid event' do
         it 'renders 404' do
-          get :new, event_id: 'foo'
+          get :new, params: { event_id: 'foo' }
           expect(response).to have_http_status 404
         end
       end
@@ -100,7 +100,7 @@ describe RegistrationQuotasController, type: :controller do
       let(:event) { FactoryGirl.create :event }
       context 'with valid parameters' do
         it 'creates the quota and redirects to event' do
-          post :create, event_id: event, registration_quota: { order: 1, price: 100, quota: 45 }
+          post :create, params: { event_id: event, registration_quota: { order: 1, price: 100, quota: 45 } }
           quota_persisted = RegistrationQuota.last
           registration_quota = assigns(:registration_quota)
           expect(quota_persisted.order).to eq 1
@@ -113,7 +113,7 @@ describe RegistrationQuotasController, type: :controller do
       context 'with invalid parameters' do
         context 'and invalid quota params' do
           it 'renders form with the errors' do
-            post :create, event_id: event, registration_quota: { bla: 0 }
+            post :create, params: { event_id: event, registration_quota: { bla: 0 } }
             quota = assigns(:registration_quota)
 
             expect(quota).to be_a RegistrationQuota
@@ -124,7 +124,7 @@ describe RegistrationQuotasController, type: :controller do
 
         context 'and invalid event' do
           it 'renders 404' do
-            post :create, event_id: 'foo', registration_quota: { order: 0 }
+            post :create, params: { event_id: 'foo', registration_quota: { order: 0 } }
             expect(response).to have_http_status 404
           end
         end
@@ -138,7 +138,7 @@ describe RegistrationQuotasController, type: :controller do
       context 'with valid parameters' do
         context 'and responding to HTML' do
           it 'deletes the quota and redirects to event show' do
-            delete :destroy, event_id: event.id, id: quota
+            delete :destroy, params: { event_id: event.id, id: quota }
             expect(response).to redirect_to event_path(event)
             expect(RegistrationQuota.count).to eq 0
           end
@@ -148,13 +148,13 @@ describe RegistrationQuotasController, type: :controller do
       context 'with invalid parameters' do
         context 'and a valid event' do
           it 'responds 404' do
-            delete :destroy, event_id: event, id: 'foo'
+            delete :destroy, params: { event_id: event, id: 'foo' }
             expect(response.status).to eq 404
           end
         end
         context 'and an invalid event' do
           it 'responds 404' do
-            delete :destroy, event_id: 'foo', id: quota
+            delete :destroy, params: { event_id: 'foo', id: quota }
             expect(response.status).to eq 404
           end
         end
@@ -163,7 +163,7 @@ describe RegistrationQuotasController, type: :controller do
           let(:other_event) { FactoryGirl.create :event }
           let(:quota) { FactoryGirl.create :registration_quota, event: other_event }
           it 'does not assign the instance variable responds 404' do
-            delete :destroy, event_id: event, id: quota
+            delete :destroy, params: { event_id: event, id: quota }
             expect(assigns(:registration_quota)).to be_nil
             expect(response.status).to eq 404
           end
@@ -176,7 +176,7 @@ describe RegistrationQuotasController, type: :controller do
       let(:quota) { FactoryGirl.create :registration_quota, event: event }
       context 'with valid IDs' do
         it 'assigns the instance variable and renders the template' do
-          get :edit, event_id: event, id: quota
+          get :edit, params: { event_id: event, id: quota }
           expect(assigns(:registration_quota)).to eq quota
           expect(response).to render_template :edit
         end
@@ -184,14 +184,14 @@ describe RegistrationQuotasController, type: :controller do
       context 'with invalid IDs' do
         context 'and no valid event and quota' do
           it 'does not assign the instance variable responds 404' do
-            get :edit, event_id: 'foo', id: 'bar'
+            get :edit, params: { event_id: 'foo', id: 'bar' }
             expect(assigns(:registration_quota)).to be_nil
             expect(response.status).to eq 404
           end
         end
         context 'and an invalid event' do
           it 'responds 404' do
-            get :edit, event_id: 'foo', id: quota
+            get :edit, params: { event_id: 'foo', id: quota }
             expect(response.status).to eq 404
           end
         end
@@ -199,7 +199,7 @@ describe RegistrationQuotasController, type: :controller do
           let(:other_event) { FactoryGirl.create :event }
           let(:quota) { FactoryGirl.create :registration_quota, event: other_event }
           it 'does not assign the instance variable responds 404' do
-            get :edit, event_id: event, id: quota
+            get :edit, params: { event_id: event, id: quota }
             expect(assigns(:registration_quota)).to be_nil
             expect(response.status).to eq 404
           end
@@ -213,7 +213,7 @@ describe RegistrationQuotasController, type: :controller do
       let(:valid_parameters) { { order: 4, price: 300, quota: 32 } }
       context 'with valid parameters' do
         it 'updates and redirects to event show' do
-          put :update, event_id: event, id: quota, registration_quota: valid_parameters
+          put :update, params: { event_id: event, id: quota, registration_quota: valid_parameters }
           updated_quota = RegistrationQuota.last
           expect(updated_quota.order).to eq 4
           expect(updated_quota.price.to_d).to eq 300
@@ -226,9 +226,9 @@ describe RegistrationQuotasController, type: :controller do
           let(:invalid_parameters) { { order: nil, price: nil, quota: nil } }
 
           it 'does not update and render form with errors' do
-            put :update, event_id: event, id: quota, registration_quota: invalid_parameters
+            put :update, params: { event_id: event, id: quota, registration_quota: invalid_parameters }
             updated_quota = assigns(:registration_quota)
-            expect(updated_quota.errors.full_messages).to eq ['Order não pode ficar em branco', 'Quota não pode ficar em branco']
+            expect(updated_quota.errors.full_messages).to eq ['Price não é um número', 'Order não pode ficar em branco', 'Quota não pode ficar em branco']
             expect(response).to render_template :edit
           end
         end
@@ -236,14 +236,14 @@ describe RegistrationQuotasController, type: :controller do
         context 'with invalid IDs' do
           context 'and no valid event and quota' do
             it 'does not assign the instance variable responds 404' do
-              put :update, event_id: 'bar', id: 'foo', registration_quota: valid_parameters
+              put :update, params: { event_id: 'bar', id: 'foo', registration_quota: valid_parameters }
               expect(assigns(:registration_quota)).to be_nil
               expect(response.status).to eq 404
             end
           end
           context 'and an invalid event' do
             it 'responds 404' do
-              put :update, event_id: 'bar', id: quota, registration_quota: valid_parameters
+              put :update, params: { event_id: 'bar', id: quota, registration_quota: valid_parameters }
               expect(response.status).to eq 404
             end
           end
@@ -251,7 +251,7 @@ describe RegistrationQuotasController, type: :controller do
             let(:other_event) { FactoryGirl.create :event }
             let(:quota) { FactoryGirl.create :registration_quota, event: other_event }
             it 'does not assign the instance variable responds 404' do
-              put :update, event_id: event, id: quota, registration_quota: valid_parameters
+              put :update, params: { event_id: event, id: quota, registration_quota: valid_parameters }
               expect(assigns(:registration_quota)).to be_nil
               expect(response.status).to eq 404
             end

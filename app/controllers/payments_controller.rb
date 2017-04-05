@@ -12,8 +12,10 @@ class PaymentsController < ApplicationController
     response = PagSeguroService.checkout(@invoice, payment)
 
     if response[:errors].present?
-      redirect_to :back, alert: response[:errors]
+      flash[:error] = I18n.t('payments_controller.checkout.error', reason: 'xpto')
+      redirect_to event_registration_groups_path(@event)
     else
+      flash[:notice] = I18n.t('payments_controller.checkout.success')
       @invoice.send_it
       @invoice.save!
       redirect_to response[:url]

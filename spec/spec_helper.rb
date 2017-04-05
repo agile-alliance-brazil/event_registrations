@@ -23,6 +23,7 @@ require 'mocha/api'
 require 'cancan/matchers'
 require 'shoulda-matchers'
 require 'rspec/collection_matchers'
+require 'webmock/rspec'
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

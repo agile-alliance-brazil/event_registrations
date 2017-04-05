@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.4.0'
-gem 'rails', '~> 4.2'
+gem 'rails', '~> 5.0', '>= 5.0.2'
 
 gem 'airbrake', '~> 6.0'
 gem 'autoprefixer-rails', '~> 6.2'
@@ -43,6 +43,7 @@ group :development, :test do
   gem 'metric_fu'
   gem 'parser'
   gem 'poltergeist', require: 'capybara/poltergeist'
+  gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
   gem 'rubocop', require: false

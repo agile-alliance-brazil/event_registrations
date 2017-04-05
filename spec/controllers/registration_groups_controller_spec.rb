@@ -14,19 +14,19 @@ describe RegistrationGroupsController, type: :controller do
       let!(:group) { FactoryGirl.create :registration_group, event: event }
 
       context 'instance variables' do
-        before { get :index, event_id: event }
+        before { get :index, params: { event_id: event } }
         it { expect(assigns(:group)).not_to be_nil }
       end
 
       context 'and an existent group for event' do
-        before { get :index, event_id: event }
+        before { get :index, params: { event_id: event } }
         it { expect(assigns(:groups)).to match_array [group] }
         it { expect(response).to render_template :index }
       end
 
       context 'and two groups for event' do
         let!(:other_group) { FactoryGirl.create :registration_group, event: event }
-        before { get :index, event_id: event }
+        before { get :index, params: { event_id: event } }
         it { expect(assigns(:groups)).to match_array [group, other_group] }
         it { expect(response).to render_template :index }
       end
@@ -34,14 +34,14 @@ describe RegistrationGroupsController, type: :controller do
       context 'and two groups one for event and other not' do
         let!(:other_group) { FactoryGirl.create :registration_group, event: event }
         let!(:out) { FactoryGirl.create :registration_group }
-        before { get :index, event_id: event }
+        before { get :index, params: { event_id: event } }
         it { expect(assigns(:groups)).to match_array [group, other_group] }
         it { expect(response).to render_template :index }
       end
     end
 
     context 'with invalid event' do
-      before { get :index, event_id: 'foo' }
+      before { get :index, params: { event_id: 'foo' } }
       it { expect(response).to have_http_status 404 }
     end
   end
@@ -51,7 +51,7 @@ describe RegistrationGroupsController, type: :controller do
     let(:group) { FactoryGirl.create :registration_group, event: event }
     let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: 'gateway' }
     context 'without attendances' do
-      before { get :show, event_id: event.id, id: group.id }
+      before { get :show, params: { event_id: event.id, id: group.id } }
       it { expect(assigns(:group)).to eq group }
       it { expect(assigns(:invoice)).to eq invoice }
       it { expect(response).to render_template :show }
@@ -61,7 +61,7 @@ describe RegistrationGroupsController, type: :controller do
       let!(:third_attendance) { FactoryGirl.create(:attendance, registration_group: group, created_at: 5.days.ago) }
       let!(:first_attendance) { FactoryGirl.create(:attendance, registration_group: group, created_at: 2.days.ago) }
       let!(:second_attendance) { FactoryGirl.create(:attendance, registration_group: group, created_at: 3.days.ago) }
-      before { get :show, event_id: event.id, id: group.id }
+      before { get :show, params: { event_id: event.id, id: group.id } }
       it { expect(assigns(:attendance_list)).to eq [first_attendance, second_attendance, third_attendance] }
     end
   end
@@ -69,7 +69,7 @@ describe RegistrationGroupsController, type: :controller do
   describe '#destroy' do
     context 'valid data' do
       let!(:group) { FactoryGirl.create :registration_group }
-      before { delete :destroy, event_id: group.event.id, id: group.id }
+      before { delete :destroy, params: { event_id: group.event.id, id: group.id } }
       it { expect(RegistrationGroup.count).to be 0 }
       it { expect(response).to redirect_to event_registration_groups_path(group.event) }
       it { expect(flash[:notice]).to eq I18n.t('registration_group.destroy.success') }
@@ -80,7 +80,7 @@ describe RegistrationGroupsController, type: :controller do
     let(:event) { FactoryGirl.create :event }
     context 'with valid parameters' do
       let(:valid_params) { { name: 'new_group', discount: 5, minimum_size: 10, amount: 137, capacity: 100, paid_in_advance: true } }
-      before { post :create, event_id: event, registration_group: valid_params }
+      before { post :create, params: { event_id: event, registration_group: valid_params } }
       subject(:new_group) { RegistrationGroup.last }
       it { expect(new_group.event).to eq event }
       it { expect(new_group.name).to eq 'new_group' }
@@ -96,7 +96,7 @@ describe RegistrationGroupsController, type: :controller do
 
     context 'with invalid parameters' do
       let(:invalid_params) { { name: '', discount: nil, minimum_size: nil, amount: nil } }
-      before { post :create, event_id: event, registration_group: invalid_params }
+      before { post :create, params: { event_id: event, registration_group: invalid_params } }
       it 'does not create the group and re-render the form with the errors' do
         expect(RegistrationGroup.last).to be_nil
         expect(assigns(:group).errors.full_messages).to eq ['Nome não pode ficar em branco']
@@ -112,7 +112,7 @@ describe RegistrationGroupsController, type: :controller do
       context 'and the group total price is different from current amount in invoice' do
         it 'will update the invoice amount' do
           RegistrationGroup.any_instance.stubs(:total_price).returns(240.00)
-          put :renew_invoice, event_id: event, id: group.id
+          put :renew_invoice, params: { event_id: event, id: group.id }
           expect(Invoice.last.amount).to eq 240.00
         end
       end
@@ -124,7 +124,7 @@ describe RegistrationGroupsController, type: :controller do
     let(:group) { FactoryGirl.create :registration_group, event: event }
     context 'with valid IDs' do
       it 'assigns the instance variable and renders the template' do
-        get :edit, event_id: event, id: group
+        get :edit, params: { event_id: event, id: group }
         expect(assigns(:group)).to eq group
         expect(response).to render_template :edit
       end
@@ -132,14 +132,14 @@ describe RegistrationGroupsController, type: :controller do
     context 'with invalid IDs' do
       context 'and no valid event and group' do
         it 'does not assign the instance variable responds 404' do
-          get :edit, event_id: 'foo', id: 'bar'
+          get :edit, params: { event_id: 'foo', id: 'bar' }
           expect(assigns(:group)).to be_nil
           expect(response.status).to eq 404
         end
       end
       context 'and an invalid event' do
         it 'responds 404' do
-          get :edit, event_id: 'foo', id: group
+          get :edit, params: { event_id: 'foo', id: group }
           expect(response.status).to eq 404
         end
       end
@@ -147,7 +147,7 @@ describe RegistrationGroupsController, type: :controller do
         let(:other_event) { FactoryGirl.create :event }
         let(:group) { FactoryGirl.create :registration_group, event: other_event }
         it 'does not assign the instance variable responds 404' do
-          get :edit, event_id: event, id: group
+          get :edit, params: { event_id: event, id: group }
           expect(assigns(:group)).to be_nil
           expect(response.status).to eq 404
         end
@@ -164,7 +164,7 @@ describe RegistrationGroupsController, type: :controller do
 
     context 'with valid parameters' do
       it 'updates and redirects to event show' do
-        put :update, event_id: event, id: group, registration_group: valid_parameters
+        put :update, params: { event_id: event, id: group, registration_group: valid_parameters }
         updated_group = RegistrationGroup.last
         expect(updated_group.name).to eq 'updated_group'
         expect(updated_group.discount).to eq 5
@@ -179,7 +179,7 @@ describe RegistrationGroupsController, type: :controller do
 
       context 'and valid event and group, but invalid update parameters' do
         it 'does not update and render form with errors' do
-          put :update, event_id: event, id: group, registration_group: invalid_parameters
+          put :update, params: { event_id: event, id: group, registration_group: invalid_parameters }
           updated_group = assigns(:group)
           expect(updated_group.errors.full_messages).to eq ['Nome não pode ficar em branco']
           expect(response).to render_template :edit
@@ -189,14 +189,14 @@ describe RegistrationGroupsController, type: :controller do
       context 'with invalid IDs' do
         context 'and no valid event and group' do
           it 'does not assign the instance variable responds 404' do
-            put :update, event_id: 'bar', id: 'foo', registration_group: valid_parameters
+            put :update, params: { event_id: 'bar', id: 'foo', registration_group: valid_parameters }
             expect(assigns(:registration_group)).to be_nil
             expect(response.status).to eq 404
           end
         end
         context 'and an invalid event' do
           it 'responds 404' do
-            put :update, event_id: 'bar', id: group, registration_group: valid_parameters
+            put :update, params: { event_id: 'bar', id: group, registration_group: valid_parameters }
             expect(response.status).to eq 404
           end
         end
@@ -204,7 +204,7 @@ describe RegistrationGroupsController, type: :controller do
           let(:other_event) { FactoryGirl.create :event }
           let(:group) { FactoryGirl.create :registration_group, event: other_event }
           it 'does not assign the instance variable responds 404' do
-            put :update, event_id: event, id: group, registration_group: valid_parameters
+            put :update, params: { event_id: event, id: group, registration_group: valid_parameters }
             expect(assigns(:group)).to be_nil
             expect(response.status).to eq 404
           end

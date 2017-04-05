@@ -56,4 +56,8 @@ en:
       unknown: "Unknown"
     attendance_job_role:
       title: "Grouped by job role"
+  payments_controller:
+    checkout:
+      error: "Your checkout was not processed. Reason: %{reason}."
+      success: "Payment sent."
 

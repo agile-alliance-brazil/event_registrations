@@ -34,6 +34,6 @@ class PaymentNotificationsController < ApplicationController
       transaction_params[:transaction_inspect] = transaction.inspect
       PaymentNotification.create_for_pag_seguro(transaction_params)
     end
-    render nothing: true
+    head :ok
   end
 end

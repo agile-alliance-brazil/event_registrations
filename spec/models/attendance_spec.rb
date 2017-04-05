@@ -1,4 +1,4 @@
-describe Attendance, type: :model do
+RSpec.describe Attendance, type: :model do
   context 'associations' do
     it { is_expected.to belong_to :event }
     it { is_expected.to belong_to :user }
@@ -187,11 +187,9 @@ describe Attendance, type: :model do
   end
 
   context 'state machine' do
+    before { Timecop.freeze }
+    after { Timecop.return }
     let(:past_status_date_change) { 2.days.ago }
-    it 'starts pending' do
-      attendance = Attendance.new
-      expect(attendance.status).to eq 'pending'
-    end
 
     describe '#pay' do
       context 'when is group member' do
@@ -204,7 +202,7 @@ describe Attendance, type: :model do
               it 'move to paid upon payment' do
                 attendance.pay
                 expect(attendance.status).to eq 'paid'
-                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
               end
             end
 
@@ -214,7 +212,7 @@ describe Attendance, type: :model do
                 attendance.pay
                 expect(attendance.status).to eq 'paid'
                 expect(Invoice.last.status).to eq 'paid'
-                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
               end
             end
           end
@@ -224,7 +222,7 @@ describe Attendance, type: :model do
               attendance = FactoryGirl.create :attendance, status: 'accepted', registration_group: group, last_status_change_date: past_status_date_change
               attendance.pay
               expect(attendance.status).to eq 'paid'
-              expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+              expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
             end
           end
 
@@ -233,7 +231,7 @@ describe Attendance, type: :model do
               attendance = FactoryGirl.create :attendance, status: 'cancelled', registration_group: group, last_status_change_date: past_status_date_change
               attendance.pay
               expect(attendance.status).to eq 'cancelled'
-              expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+              expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
             end
           end
         end
@@ -248,7 +246,7 @@ describe Attendance, type: :model do
                 EmailNotifications.expects(:registration_confirmed).once
                 attendance.pay
                 expect(attendance.status).to eq 'confirmed'
-                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
               end
             end
 
@@ -259,7 +257,7 @@ describe Attendance, type: :model do
                 attendance.pay
                 expect(attendance.status).to eq 'confirmed'
                 expect(Invoice.last.status).to eq 'paid'
-                expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
               end
             end
           end
@@ -275,7 +273,7 @@ describe Attendance, type: :model do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -286,7 +284,7 @@ describe Attendance, type: :model do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -298,7 +296,7 @@ describe Attendance, type: :model do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -309,7 +307,7 @@ describe Attendance, type: :model do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -320,7 +318,7 @@ describe Attendance, type: :model do
           attendance.cancel
           expect(attendance.status).to eq 'cancelled'
           expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
     end
@@ -332,7 +330,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'waiting'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -342,7 +340,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'accepted'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -352,7 +350,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -362,7 +360,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :paid, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'paid'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -372,7 +370,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'accepted'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -383,7 +381,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :pending, registration_group: group, last_status_change_date: past_status_date_change
           attendance.accept
           expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date).to be_within(0.5).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
     end
@@ -395,7 +393,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'waiting'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -407,7 +405,7 @@ describe Attendance, type: :model do
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
           expect(Invoice.last.status).to eq 'paid'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -417,7 +415,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -427,7 +425,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -437,7 +435,7 @@ describe Attendance, type: :model do
           attendance = FactoryGirl.create :attendance, status: :paid, last_status_change_date: past_status_date_change
           attendance.confirm
           expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
     end
@@ -449,7 +447,7 @@ describe Attendance, type: :model do
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'waiting'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -459,7 +457,7 @@ describe Attendance, type: :model do
           attendance.expects(:cancel_invoice!).once
           attendance.mark_no_show
           expect(attendance.status).to eq 'no_show'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -469,7 +467,7 @@ describe Attendance, type: :model do
           attendance.expects(:cancel_invoice!).once
           attendance.mark_no_show
           expect(attendance.status).to eq 'no_show'
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
         end
       end
 
@@ -479,7 +477,7 @@ describe Attendance, type: :model do
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -489,7 +487,7 @@ describe Attendance, type: :model do
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'paid'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -499,7 +497,7 @@ describe Attendance, type: :model do
           attendance.expects(:cancel_invoice!).never
           attendance.mark_no_show
           expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
     end
@@ -516,7 +514,7 @@ describe Attendance, type: :model do
           attendance.dequeue
           expect(attendance.status).to eq 'pending'
           expect(attendance.queue_time).to eq 240
-          expect(attendance.last_status_change_date).to be_within(0.1).of Time.zone.now
+          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
           Timecop.return
         end
       end
@@ -527,7 +525,7 @@ describe Attendance, type: :model do
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'pending'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -537,7 +535,7 @@ describe Attendance, type: :model do
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'accepted'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -547,7 +545,7 @@ describe Attendance, type: :model do
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -557,7 +555,7 @@ describe Attendance, type: :model do
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'paid'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
 
@@ -567,7 +565,7 @@ describe Attendance, type: :model do
           EmailNotifications.expects(:registration_dequeued).never
           attendance.dequeue
           expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date).to be_within(0.1).of past_status_date_change
+          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
         end
       end
     end

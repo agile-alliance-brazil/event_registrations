@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :attendance do
+    status :pending
     association :event
     association :user
     first_name { |a| a.user.first_name }

@@ -15,11 +15,7 @@ class ApplicationController < ActionController::Base
     Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
 
     flash[:error] = t('flash.unauthorised')
-    begin
-      redirect_to :back
-    rescue
-      redirect_to root_path
-    end
+    redirect_back(fallback_location: root_path)
   end
 
   def current_ability

@@ -1,6 +1,4 @@
-require 'webmock/rspec'
-
-describe EventAttendancesController, type: :controller do
+RSpec.describe EventAttendancesController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:valid_attendance) do
     {
@@ -47,12 +45,12 @@ describe EventAttendancesController, type: :controller do
     before { controller.current_user = FactoryGirl.create(:user) }
 
     it 'renders new template' do
-      get :new, event_id: @event.id
-      is_expected.to render_template(:new)
+      get :new, params: { event_id: @event.id }
+      expect(response).to render_template(:new)
     end
 
     it 'assigns current event to attendance' do
-      get :new, event_id: @event.id
+      get :new, params: { event_id: @event.id }
       expect(assigns(:attendance).event).to eq @event
     end
   end
@@ -69,20 +67,20 @@ describe EventAttendancesController, type: :controller do
         stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', headers: {})
       end
 
-      it 'renders new template when model is invalid' do
-        post :create, event_id: @event.id, attendance: { event_id: @event.id }
-        is_expected.to render_template(:new)
+      context 'valid parameters' do
+        it 'redirects when model is valid' do
+          post :create, params: { event_id: @event.id, attendance: valid_attendance }
+          expect(assigns(:attendance).event).to eq @event
+          expect(assigns(:attendance).payment_type).to eq Invoice.last.payment_type
+          expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+        end
       end
 
-      it 'redirects when model is valid' do
-        post :create, event_id: @event.id, attendance: valid_attendance
-        is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
-      end
-
-      it 'assigns current event to attendance' do
-        post :create, event_id: @event.id, attendance: valid_attendance
-        expect(assigns(:attendance).event).to eq @event
-        expect(assigns(:attendance).payment_type).to eq Invoice.last.payment_type
+      context 'invalid parameters' do
+        it 'renders new template when model is invalid' do
+          post :create, params: { event_id: @event.id, attendance: { event_id: @event.id } }
+          expect(response).to render_template(:new)
+        end
       end
 
       context 'event value for attendance' do
@@ -94,13 +92,13 @@ describe EventAttendancesController, type: :controller do
             let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
             context 'calling html' do
               it 'responds 408' do
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(response.status).to eq 408
               end
             end
             context 'calling JS' do
               it 'responds 408' do
-                xhr :post, :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }, xhr: true
                 expect(response.status).to eq 408
               end
             end
@@ -109,7 +107,7 @@ describe EventAttendancesController, type: :controller do
             context 'calling html' do
               subject(:attendance) { assigns(:attendance) }
               it 'creates the attendance and redirects' do
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(attendance).to be_persisted
                 expect(response).to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
               end
@@ -118,7 +116,7 @@ describe EventAttendancesController, type: :controller do
         end
 
         context 'with no period, quotas or groups' do
-          before { post :create, event_id: @event.id, attendance: valid_attendance }
+          before { post :create, params: { event_id: @event.id, attendance: valid_attendance } }
           it { expect(assigns(:attendance).registration_value).to eq @event.full_price }
         end
 
@@ -126,7 +124,7 @@ describe EventAttendancesController, type: :controller do
           let(:group) { FactoryGirl.create(:registration_group, event: @event, discount: 30) }
           before do
             Invoice.from_registration_group(group, 'gateway')
-            post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+            post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
           end
           it { expect(assigns(:attendance).registration_value).to eq @event.full_price * 0.7 }
         end
@@ -136,7 +134,7 @@ describe EventAttendancesController, type: :controller do
           let(:event) { Event.create!(valid_event) }
           let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: price) }
 
-          before { post :create, event_id: event.id, attendance: valid_attendance }
+          before { post :create, params: { event_id: event.id, attendance: valid_attendance } }
           it { expect(assigns(:attendance).registration_period).to eq full_registration_period }
           it { expect(assigns(:attendance).registration_value).to eq price }
         end
@@ -145,7 +143,7 @@ describe EventAttendancesController, type: :controller do
           price = 350
           let(:quota_event) { Event.create!(valid_event) }
           let!(:quota) { FactoryGirl.create :registration_quota, event: quota_event, quota: 40, order: 1, price: price }
-          before { post :create, event_id: quota_event.id, attendance: valid_attendance }
+          before { post :create, params: { event_id: quota_event.id, attendance: valid_attendance } }
           it { expect(assigns(:attendance).registration_quota).to eq quota }
           it { expect(assigns(:attendance).registration_value).to eq price }
         end
@@ -155,7 +153,7 @@ describe EventAttendancesController, type: :controller do
           let!(:quota) { FactoryGirl.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
           let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
 
-          before { post :create, event_id: event.id, payment_type: 'statement_agreement', attendance: valid_attendance }
+          before { post :create, params: { event_id: event.id, payment_type: 'statement_agreement', attendance: valid_attendance } }
           it { expect(Attendance.last.registration_value).to eq event.full_price }
         end
       end
@@ -168,9 +166,9 @@ describe EventAttendancesController, type: :controller do
 
           it 'puts the attendance in the queue' do
             EmailNotifications.expects(:registration_waiting).returns @email
-            post :create, event_id: event.id, attendance: valid_attendance
+            post :create, params: { event_id: event.id, attendance: valid_attendance }
             expect(attendance.status).to eq 'waiting'
-            is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+            expect(response).to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
           end
         end
         context 'event having space, but also having attendances in the queue' do
@@ -179,15 +177,15 @@ describe EventAttendancesController, type: :controller do
           subject(:attendance) { assigns(:attendance) }
           it 'puts the attendance in the queue' do
             EmailNotifications.expects(:registration_waiting).returns @email
-            post :create, event_id: event, attendance: valid_attendance
+            post :create, params: { event_id: event, attendance: valid_attendance }
             expect(attendance.status).to eq 'waiting'
-            is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+            expect(response).to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
           end
         end
         context 'with no token' do
           let!(:period) { RegistrationPeriod.create(event: @event, start_at: 1.month.ago, end_at: 1.month.from_now, price: 100) }
           subject(:attendance) { assigns(:attendance) }
-          before { post :create, event_id: @event.id, attendance: valid_attendance }
+          before { post :create, params: { event_id: @event.id, attendance: valid_attendance } }
           it 'creates the attendance and redirects' do
             expect(attendance.registration_group).to be_nil
             expect(attendance.first_name).to eq user.first_name
@@ -207,7 +205,7 @@ describe EventAttendancesController, type: :controller do
             expect(attendance.badge_name).to eq user.badge_name
             expect(attendance.cpf).to eq user.cpf
             expect(attendance.gender).to eq user.gender
-            is_expected.to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
+            expect(response).to redirect_to attendance_path(attendance, notice: I18n.t('flash.attendance.create.success'))
           end
         end
 
@@ -217,7 +215,7 @@ describe EventAttendancesController, type: :controller do
 
           context 'an invalid' do
             context 'and one event' do
-              before { post :create, event_id: @event.id, registration_token: 'xpto', attendance: valid_attendance }
+              before { post :create, params: { event_id: @event.id, registration_token: 'xpto', attendance: valid_attendance } }
               it { expect(attendance.registration_group).to be_nil }
             end
 
@@ -225,7 +223,7 @@ describe EventAttendancesController, type: :controller do
               let(:other_event) { FactoryGirl.create :event }
               let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
               let!(:other_group) { FactoryGirl.create(:registration_group, event: other_event) }
-              before { post :create, event_id: @event.id, registration_token: other_group.token, attendance: valid_attendance }
+              before { post :create, params: { event_id: @event.id, registration_token: other_group.token, attendance: valid_attendance } }
               it { expect(attendance.registration_group).to be_nil }
             end
           end
@@ -234,7 +232,7 @@ describe EventAttendancesController, type: :controller do
             let(:first_attendance) { FactoryGirl.create(:attendance, event: @event) }
             let(:second_attendance) { FactoryGirl.create(:attendance, event: @event) }
             let!(:group) { FactoryGirl.create(:registration_group, event: @event, capacity: 2, attendances: [first_attendance, second_attendance]) }
-            before { post :create, event_id: @event, registration_token: group.token, attendance: valid_attendance }
+            before { post :create, params: { event_id: @event, registration_token: group.token, attendance: valid_attendance } }
             it 'render the form again with the error on flash' do
               expect(response).to render_template :new
               expect(flash[:error]).to eq I18n.t('attendances.create.errors.group_full', group_name: group.name)
@@ -247,7 +245,7 @@ describe EventAttendancesController, type: :controller do
               let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
               before do
                 Invoice.from_registration_group(group, 'gateway')
-                post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
               end
               it { expect(attendance.registration_group).to eq group }
             end
@@ -261,7 +259,7 @@ describe EventAttendancesController, type: :controller do
               Invoice.from_registration_group(aa_group, 'gateway')
               AgileAllianceService.stubs(:check_member).returns(true)
               RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
-              post :create, event_id: @event.id, attendance: valid_attendance
+              post :create, params: { event_id: @event.id, attendance: valid_attendance }
               attendance = Attendance.last
               expect(attendance.registration_group).to eq aa_group
             end
@@ -272,7 +270,7 @@ describe EventAttendancesController, type: :controller do
           let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: true) }
           before do
             Invoice.from_registration_group(group, 'gateway')
-            post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+            post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
           end
           it { expect(assigns(:attendance).status).to eq 'accepted' }
         end
@@ -281,7 +279,7 @@ describe EventAttendancesController, type: :controller do
           let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: false) }
           before do
             Invoice.from_registration_group(group, 'gateway')
-            post :create, event_id: @event.id, registration_token: group.token, attendance: valid_attendance
+            post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
           end
           it { expect(assigns(:attendance).status).to eq 'pending' }
         end
@@ -292,9 +290,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :pending) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 1
-                is_expected.to render_template :new
+                expect(response).to render_template :new
                 expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
               end
             end
@@ -304,9 +302,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :pending) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 2
-                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+                expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
               end
             end
           end
@@ -316,9 +314,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :accepted) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 1
-                is_expected.to render_template :new
+                expect(response).to render_template :new
                 expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
               end
             end
@@ -328,9 +326,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :accepted) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 2
-                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+                expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
               end
             end
           end
@@ -339,9 +337,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :paid) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 1
-                is_expected.to render_template :new
+                expect(response).to render_template :new
                 expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
               end
             end
@@ -350,9 +348,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :paid) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 2
-                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+                expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
               end
             end
           end
@@ -361,9 +359,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :confirmed) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 1
-                is_expected.to render_template :new
+                expect(response).to render_template :new
                 expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
               end
             end
@@ -372,9 +370,9 @@ describe EventAttendancesController, type: :controller do
               let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :confirmed) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
-                post :create, event_id: @event.id, attendance: valid_attendance
+                post :create, params: { event_id: @event.id, attendance: valid_attendance }
                 expect(Attendance.count).to eq 2
-                is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+                expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
               end
             end
           end
@@ -382,9 +380,9 @@ describe EventAttendancesController, type: :controller do
             let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :cancelled) }
             it 'does not include the new attendance and send the user to show of attendance' do
               AgileAllianceService.stubs(:check_member).returns(false)
-              post :create, event_id: @event.id, attendance: valid_attendance
+              post :create, params: { event_id: @event.id, attendance: valid_attendance }
               expect(Attendance.count).to eq 2
-              is_expected.to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
+              expect(response).to redirect_to attendance_path(Attendance.last, notice: I18n.t('flash.attendance.create.success'))
             end
           end
         end
@@ -392,7 +390,7 @@ describe EventAttendancesController, type: :controller do
         it 'sends pending registration e-mail' do
           Attendance.any_instance.stubs(:valid?).returns(true)
           EmailNotifications.expects(:registration_pending).returns(@email)
-          post :create, event_id: @event.id, attendance: valid_attendance
+          post :create, params: { event_id: @event.id, attendance: valid_attendance }
         end
       end
     end
@@ -413,13 +411,13 @@ describe EventAttendancesController, type: :controller do
       let!(:attendance_with_group) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
 
       it 'assigns the attendance and render edit' do
-        get :edit, event_id: event.id, id: attendance.id
-        is_expected.to render_template :edit
+        get :edit, params: { event_id: event.id, id: attendance.id }
+        expect(response).to render_template :edit
         expect(assigns(:attendance)).to eq attendance
       end
 
       it 'keeps group token and email confirmation' do
-        get :edit, event_id: event.id, id: attendance_with_group.id
+        get :edit, params: { event_id: event.id, id: attendance_with_group.id }
         expect(response.body).to have_field('registration_token', type: 'text', with: group.token)
       end
     end
@@ -464,7 +462,7 @@ describe EventAttendancesController, type: :controller do
       let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
       context 'and no group token informed' do
         it 'updates the attendance' do
-          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit'
+          put :update, params: { event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit' }
           expect(Attendance.last.registration_group).to be_nil
           expect(Attendance.last.first_name).to eq user.first_name
           expect(Attendance.last.last_name).to eq user.last_name
@@ -491,7 +489,7 @@ describe EventAttendancesController, type: :controller do
         let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
 
         it 'updates the user with the token' do
-          put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit', registration_token: group.token
+          put :update, params: { event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit', registration_token: group.token }
           expect(Attendance.last.registration_group).to eq group
           expect(Attendance.last.registration_value).to eq 420
         end
@@ -504,7 +502,7 @@ describe EventAttendancesController, type: :controller do
 
         context 'having the same group access token' do
           it 'updates the attendance and does not change the price' do
-            put :update, event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit', registration_token: group.token
+            put :update, params: { event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit', registration_token: group.token }
             expect(Attendance.last.registration_group).to eq group
             expect(Attendance.last.registration_value).to eq 50
           end
@@ -527,32 +525,32 @@ describe EventAttendancesController, type: :controller do
       let(:event) { FactoryGirl.create(:event) }
 
       context 'with no attendances' do
-        before { get :by_state, event_id: event.id }
+        before { get :by_state, params: { event_id: event.id } }
         it { expect(assigns(:attendances_state_grouped)).to eq({}) }
       end
 
       context 'with attendances' do
         let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
         context 'with one attendance' do
-          before { get :by_state, event_id: event.id }
+          before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
         end
 
         context 'with two attendances on same state' do
           let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
-          before { get :by_state, event_id: event.id }
+          before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 2) }
         end
 
         context 'with two attendances in different states' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP') }
-          before { get :by_state, event_id: event.id }
+          before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1, 'SP' => 1) }
         end
 
         context 'with two attendances one active and other not' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', status: 'cancelled') }
-          before { get :by_state, event_id: event.id }
+          before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
         end
       end
@@ -562,32 +560,32 @@ describe EventAttendancesController, type: :controller do
       let(:event) { FactoryGirl.create(:event) }
 
       context 'with no attendances' do
-        before { get :by_city, event_id: event.id }
+        before { get :by_city, params: { event_id: event.id } }
         it { expect(assigns(:attendances_city_grouped)).to eq({}) }
       end
 
       context 'with attendances' do
         let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
         context 'with one attendance' do
-          before { get :by_city, event_id: event.id }
+          before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
         end
 
         context 'with two attendances on same state' do
           let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
-          before { get :by_city, event_id: event.id }
+          before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 2) }
         end
 
         context 'with two attendances in different states' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo') }
-          before { get :by_city, event_id: event.id }
+          before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1, ['Sao Paulo', 'SP'] => 1) }
         end
 
         context 'with two attendances one active and other not' do
           let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo', status: 'cancelled') }
-          before { get :by_city, event_id: event.id }
+          before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
         end
       end
@@ -597,7 +595,7 @@ describe EventAttendancesController, type: :controller do
       let(:event) { FactoryGirl.create(:event) }
 
       context 'with no attendances' do
-        before { get :last_biweekly_active, event_id: event.id }
+        before { get :last_biweekly_active, params: { event_id: event.id } }
         it { expect(assigns(:attendances_biweekly_grouped)).to eq({}) }
       end
 
@@ -610,7 +608,7 @@ describe EventAttendancesController, type: :controller do
           today = FactoryGirl.create(:attendance, event: event)
           FactoryGirl.create(:attendance, event: event, created_at: 21.days.ago)
           FactoryGirl.create(:attendance)
-          get :last_biweekly_active, event_id: event.id
+          get :last_biweekly_active, params: { event_id: event.id }
           expect(assigns(:attendances_biweekly_grouped)).to eq(last_week.created_at.to_date => 2,
                                                                today.created_at.to_date => 1)
           Timecop.return
@@ -627,7 +625,7 @@ describe EventAttendancesController, type: :controller do
       let!(:accepted) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :accepted) }
       let!(:paid) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :paid) }
       let!(:confirmed) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :confirmed) }
-      before { get :to_approval, event_id: event.id }
+      before { get :to_approval, params: { event_id: event.id } }
       it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
     end
 
@@ -635,7 +633,7 @@ describe EventAttendancesController, type: :controller do
       let(:event) { FactoryGirl.create(:event) }
 
       context 'with no attendances' do
-        before { get :payment_type_report, event_id: event.id }
+        before { get :payment_type_report, params: { event_id: event.id } }
         it { expect(assigns(:payment_type_report)).to eq({}) }
       end
 
@@ -651,7 +649,7 @@ describe EventAttendancesController, type: :controller do
         let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, payment_type: 'gateway') }
         let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid, payment_type: 'gateway') }
 
-        before { get :payment_type_report, event_id: event.id }
+        before { get :payment_type_report, params: { event_id: event.id } }
         it 'returns the attendances with non free registration value grouped by payment type' do
           expect(assigns(:payment_type_report)).to eq(['bank_deposit', 400] => 1,
                                                       ['gateway', 400] => 2,
@@ -670,8 +668,8 @@ describe EventAttendancesController, type: :controller do
         let(:event) { FactoryGirl.create(:event, organizers: [organizer]) }
 
         context 'having no attendances' do
-          before { get :waiting_list, event_id: event.id }
-          it { is_expected.to render_template :waiting_list }
+          before { get :waiting_list, params: { event_id: event.id } }
+          it { expect(response).to render_template :waiting_list }
           it { expect(assigns(:waiting_list)).to eq [] }
         end
         context 'having attendances' do
@@ -685,7 +683,7 @@ describe EventAttendancesController, type: :controller do
           let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
 
           it 'returns just the waiting attendances' do
-            get :waiting_list, event_id: event.id
+            get :waiting_list, params: { event_id: event.id }
             expect(assigns(:waiting_list)).to match_array [waiting, other_waiting]
           end
         end
@@ -696,8 +694,8 @@ describe EventAttendancesController, type: :controller do
           let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
 
           it 'redirects to root_path' do
-            get :waiting_list, event_id: event.id
-            is_expected.to redirect_to root_path
+            get :waiting_list, params: { event_id: event.id }
+            expect(response).to redirect_to root_path
           end
         end
       end
@@ -709,8 +707,8 @@ describe EventAttendancesController, type: :controller do
       before { sign_in admin }
 
       context 'with no attendances' do
-        before { get :waiting_list, event_id: event.id }
-        it { is_expected.to render_template :waiting_list }
+        before { get :waiting_list, params: { event_id: event.id } }
+        it { expect(response).to render_template :waiting_list }
         it { expect(assigns(:waiting_list)).to eq [] }
       end
       context 'with attendances' do
@@ -724,7 +722,7 @@ describe EventAttendancesController, type: :controller do
         let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
 
         it 'returns just the waiting attendances' do
-          get :waiting_list, event_id: event.id
+          get :waiting_list, params: { event_id: event.id }
           expect(assigns(:waiting_list)).to match_array [waiting, other_waiting]
         end
       end

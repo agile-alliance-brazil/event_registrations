@@ -11,7 +11,7 @@ describe TransfersController, type: :controller do
     let!(:destination) { FactoryGirl.create(:attendance, event: event, status: :pending) }
 
     context 'response' do
-      before { get :new, attendance_id: origin }
+      before { get :new, params: { attendance_id: origin } }
       it { expect(response.code).to eq '200' }
     end
 
@@ -19,19 +19,19 @@ describe TransfersController, type: :controller do
       context 'when the destinations are from the same event' do
         let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
         let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-        before { get :new, attendance_id: origin }
+        before { get :new, params: { attendance_id: origin } }
         it { expect(assigns[:destinations]).to match_array [destination, accepted] }
       end
 
       context 'when the destinations are from a different event' do
         let!(:out_destination) { FactoryGirl.create(:attendance, status: :accepted) }
-        before { get :new, attendance_id: origin }
+        before { get :new, params: { attendance_id: origin } }
         it { expect(assigns[:destinations]).to match_array [destination] }
       end
     end
 
     context 'empty' do
-      before { get :new, attendance_id: origin }
+      before { get :new, params: { attendance_id: origin } }
       it { expect(assigns[:event]).to be_new_record }
       it 'should set empty transfer' do
         expect(assigns[:transfer]).to be_new_record
@@ -40,17 +40,17 @@ describe TransfersController, type: :controller do
       end
     end
     context 'with origin' do
-      before { get :new, attendance_id: origin, transfer: { origin_id: origin.id } }
+      before { get :new, params: { attendance_id: origin, transfer: { origin_id: origin.id } } }
       it { expect(assigns[:event]).to eq origin.event }
       it { expect(assigns[:transfer].origin).to eq origin }
     end
     context 'with destination' do
-      before { get :new, attendance_id: origin, transfer: { destination_id: destination.id } }
+      before { get :new, params: { attendance_id: origin, transfer: { destination_id: destination.id } } }
       it { expect(assigns[:event]).to eq destination.event }
       it { expect(assigns[:transfer].destination).to eq destination }
     end
     context 'with origin and destination' do
-      before { get :new, attendance_id: origin, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      before { get :new, params: { attendance_id: origin, transfer: { origin_id: origin.id, destination_id: destination.id } } }
       it { expect(assigns[:event]).to eq origin.event }
       it 'set transfer origin and destination' do
         expect(assigns[:transfer].origin).to eq origin
@@ -62,7 +62,7 @@ describe TransfersController, type: :controller do
       before { user.add_role :organizer }
       after { user.remove_role :organizer }
       it 'set potential transfer origins as all paid or confirmed attendances' do
-        get :new, attendance_id: origin
+        get :new, params: { attendance_id: origin }
         expect(assigns[:origins]).to match_array [origin]
       end
     end
@@ -71,7 +71,7 @@ describe TransfersController, type: :controller do
       let!(:paid) { FactoryGirl.create(:attendance, status: :paid, user: user) }
       let!(:other_paid) { FactoryGirl.create(:attendance, status: :paid, user: user) }
       let!(:out_paid) { FactoryGirl.create(:attendance, status: :paid) }
-      before { get :new, attendance_id: origin }
+      before { get :new, params: { attendance_id: origin } }
       it { expect(assigns[:origins]).to eq [paid, other_paid] }
     end
 
@@ -83,13 +83,13 @@ describe TransfersController, type: :controller do
           let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
           let!(:other_paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
           let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-          before { get :new, attendance_id: origin }
+          before { get :new, params: { attendance_id: origin } }
           it { expect(assigns[:origins]).to match_array [origin, paid, other_paid, confirmed] }
         end
 
         context 'when the origins are from a different event' do
           let!(:out_origin) { FactoryGirl.create(:attendance, status: :paid) }
-          before { get :new, attendance_id: origin.id }
+          before { get :new, params: { attendance_id: origin.id } }
           it { expect(assigns[:origins]).to match_array [origin] }
         end
       end
@@ -104,19 +104,19 @@ describe TransfersController, type: :controller do
     subject(:assigned_destination) { Attendance.find(destination.id) }
 
     context 'when origin is paid' do
-      before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      before { post :create, params: { transfer: { origin_id: origin.id, destination_id: destination.id } } }
       it 'changes the status and the registration value for an attendances and save them' do
         expect(flash[:notice]).to eq I18n.t('flash.transfer.success')
         expect(assigned_origin.status).to eq 'cancelled'
         expect(assigned_destination.status).to eq 'confirmed'
         expect(assigned_destination.registration_value).to eq 420
-        is_expected.to redirect_to attendance_path(id: origin.id)
+        expect(response).to redirect_to attendance_path(id: origin.id)
       end
     end
 
     context 'when origin is confirmed' do
       let!(:origin) { FactoryGirl.create(:attendance, status: :confirmed, registration_value: 420) }
-      before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      before { post :create, params: { transfer: { origin_id: origin.id, destination_id: destination.id } } }
       it 'changes the status and the registration value for an attendances and save them' do
         expect(assigned_origin.status).to eq 'cancelled'
         expect(assigned_destination.status).to eq 'confirmed'
@@ -126,7 +126,7 @@ describe TransfersController, type: :controller do
 
     context 'when destination is accepted' do
       let!(:destination) { FactoryGirl.create(:attendance, status: :accepted) }
-      before { post :create, transfer: { origin_id: origin.id, destination_id: destination.id } }
+      before { post :create, params: { transfer: { origin_id: origin.id, destination_id: destination.id } } }
       it 'changes the status and the registration value for an attendances and save them' do
         expect(assigned_origin.status).to eq 'cancelled'
         expect(assigned_destination.status).to eq 'confirmed'
@@ -137,7 +137,7 @@ describe TransfersController, type: :controller do
     context 'forbidden transfer' do
       let!(:paid) { FactoryGirl.create(:attendance, status: :paid, user: user) }
       it 'renders transfer form again' do
-        post :create, transfer: { origin_id: origin.id, destination_id: paid.id }
+        post :create, params: { transfer: { origin_id: origin.id, destination_id: paid.id } }
         is_expected.to render_template :new
         expect(flash[:error]).to eq I18n.t('flash.transfer.failure')
       end

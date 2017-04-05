@@ -1,4 +1,4 @@
-describe Event, type: :model do
+RSpec.describe Event, type: :model do
   context 'associations' do
     it { is_expected.to have_many :attendances }
     it { is_expected.to have_many :registration_periods }

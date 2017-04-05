@@ -1,0 +1,24 @@
+<div class="page-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-md-9">
+        <div class="breadcrumb">
+          <span class="fa fa-angle-left"></span> <%= link_to t('attendances.index.title'), attendances_path(event_id: @event) %>
+        </div>
+        <h1><%= t('attendance.reports.attendance_job_role') %></h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div id="pie_div" class="attendance-graph" data-share='<%= @attendance_job_role_data.to_json %>' data-title='<%= t('attendance.reports.attendance_job_role') %>'></div>
+    </div>
+  </div>
+</div>
+
+<% content_for :javascript do %>
+    <%= javascript_include_tag 'graphs/pie' %>
+<%end%>

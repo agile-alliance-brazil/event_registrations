@@ -40,12 +40,19 @@ pt:
   attendance:
     reports:
       attendance_organization_size: "Participantes x Tamanho da Empresa"
+      attendance_years_of_experience: "Participante vs Anos de Experiência"
+      attendance_job_role: "Participantes vs Cargo"
     enum:
       status:
         waiting: "Na Fila"
   report:
     attendance_organization_size:
       title: "Agrupado por tamanho da empresa"
-      unknown: "Desconhecido"
     button:
       title: "Relatórios"
+    attendance_years_of_experience:
+      title: "Agrupado por anos de experiência"
+    common:
+      unknown: "Desconhecido"
+    attendance_job_role:
+      title: "Agrupado por cargo"

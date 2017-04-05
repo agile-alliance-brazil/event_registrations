@@ -69,7 +69,7 @@ end
 group :test do
   gem 'codeclimate-test-reporter', '~> 1.0.0'
   gem 'mocha', require: false
-  gem 'shoulda-matchers', require: false
+  gem 'shoulda-matchers', git: 'https://github.com/wuakitv/shoulda-matchers', ref: 'd576b2d'
   gem 'simplecov'
   gem 'timecop'
   gem 'webmock'

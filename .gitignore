@@ -34,3 +34,6 @@ pickle-email-*.html
 .byebug_history
 /public/assets/
 .ruby-gemset
+
+certs/*
+!certs/*.example

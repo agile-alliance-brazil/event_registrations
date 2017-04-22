@@ -84,7 +84,7 @@ GEM
     cancancan (1.16.0)
     cane (2.6.2)
       parallel
-    capistrano (3.8.0)
+    capistrano (3.8.1)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -505,7 +505,7 @@ DEPENDENCIES
   brcpfcnpj (~> 3.3.0)
   byebug
   cancancan (~> 1.10)
-  capistrano (= 3.8.0)
+  capistrano (= 3.8.1)
   capistrano-bundler
   capistrano-git-with-submodules
   capistrano-rails

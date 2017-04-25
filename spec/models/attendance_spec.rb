@@ -51,6 +51,10 @@ RSpec.describe Attendance, type: :model do
     it { is_expected.not_to allow_value('@12.com').for(:email) }
   end
 
+  context 'enums' do
+    it { is_expected.to define_enum_for(:job_role).with(%i[other student analyst manager vp president clevel coach]) }
+  end
+
   context 'callbacks' do
     let!(:event) { FactoryGirl.create :event }
     describe '#update_group_invoice' do

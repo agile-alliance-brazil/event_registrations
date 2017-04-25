@@ -20,7 +20,7 @@
         %div.logo
           - if @event.present? && @event.logo.present?
             = link_to @event.link do
-              = image_tag @event.logo
+              = image_tag @event.logo, size: '243x100'
             - if @event.full? || @event.attendances_in_the_queue?
               %div{class: 'pull-right'}
                 = image_tag 'soldout_960_720.png', size: '170x170'

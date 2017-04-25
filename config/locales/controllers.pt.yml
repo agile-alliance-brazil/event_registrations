@@ -28,6 +28,17 @@ pt:
         active_by_city: "Ativos por cidade"
         active_last_biweek: "Ativos na última quizena"
         grouped_by_payment_type: "Agrupado por tipo de pagamento"
+    new:
+      form:
+        job_role:
+          analyst: "Analista"
+          student: "Estudante"
+          manager: "Gerente"
+          clevel: "C-Level"
+          vp: "Vice presidente"
+          president: "Presidente"
+          other: "Outro"
+          coach: "Coach"
   events:
     form:
       event_basics: "Informações Básicas"

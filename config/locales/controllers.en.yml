@@ -28,6 +28,17 @@ en:
         active_by_city: "Active by city"
         active_last_biweek: "Active last biweek"
         grouped_by_payment_type: "Grouped by payment type"
+    new:
+      form:
+        job_role:
+          analyst: "Analyst"
+          other: "Other"
+          clevel: "C-Level"
+          president: "President"
+          vp: "Vice president"
+          manager: "Manager"
+          student: "Student"
+          coach: "Coach"
   events:
     form:
       event_basics: "Basic Informations"

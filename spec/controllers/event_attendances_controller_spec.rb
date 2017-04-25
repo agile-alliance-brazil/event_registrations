@@ -9,7 +9,7 @@ RSpec.describe EventAttendancesController, type: :controller do
       email: user.email,
       organization: user.organization,
       organization_size: 'bla',
-      job_role: 'role',
+      job_role: :analyst,
       years_of_experience: '6',
       experience_in_agility: '9',
       school: 'scholl',
@@ -194,7 +194,7 @@ RSpec.describe EventAttendancesController, type: :controller do
             expect(attendance.email).to eq user.email
             expect(attendance.organization).to eq user.organization
             expect(attendance.organization_size).to eq 'bla'
-            expect(attendance.job_role).to eq 'role'
+            expect(attendance.analyst?).to be true
             expect(attendance.years_of_experience).to eq '6'
             expect(attendance.experience_in_agility).to eq '9'
             expect(attendance.education_level).to eq 'level'
@@ -436,7 +436,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         email: user.email,
         organization: user.organization,
         organization_size: 'bla',
-        job_role: 'role',
+        job_role: :analyst,
         years_of_experience: '6',
         experience_in_agility: '9',
         school: 'scholl',
@@ -469,7 +469,7 @@ RSpec.describe EventAttendancesController, type: :controller do
           expect(Attendance.last.email).to eq user.email
           expect(Attendance.last.organization).to eq user.organization
           expect(Attendance.last.organization_size).to eq 'bla'
-          expect(Attendance.last.job_role).to eq 'role'
+          expect(Attendance.last.analyst?).to be true
           expect(Attendance.last.years_of_experience).to eq '6'
           expect(Attendance.last.experience_in_agility).to eq '9'
           expect(Attendance.last.education_level).to eq 'level'

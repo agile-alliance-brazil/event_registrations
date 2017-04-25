@@ -29,11 +29,14 @@ describe AttendanceHelper, type: :helper do
   end
 
   describe '#payment_types_options' do
-    it do
+    it 'returns the payment type values' do
       options = Invoice.payment_types.map do |payment_type, _|
         [I18n.t("activerecord.attributes.invoice.payment_types.#{payment_type}"), payment_type]
       end
       expect(payment_types_options).to eq(options)
     end
+  end
+  describe '#job_role_options' do
+    it { expect(job_role_options).to eq [%w[Analista analyst], %w[C-Level clevel], %w[Coach coach], %w[Estudante student], %w[Gerente manager], %w[Outro other], %w[Presidente president], ['Vice presidente', 'vp']] }
   end
 end

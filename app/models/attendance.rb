@@ -20,10 +20,10 @@
 #  first_name              :string
 #  gender                  :string
 #  id                      :integer          not null, primary key
-#  job_role                :string
+#  job_role                :integer          default("other")
 #  last_name               :string
 #  last_status_change_date :datetime
-#  notes                   :string
+#  notes                   :stringAB2017_logo.png
 #  organization            :string
 #  organization_size       :string
 #  payment_type            :string
@@ -49,6 +49,8 @@
 class Attendance < ActiveRecord::Base
   include Concerns::LifeCycle
   before_create :set_last_status_change
+
+  enum job_role: %i[other student analyst manager vp president clevel coach]
 
   belongs_to :event
   belongs_to :user

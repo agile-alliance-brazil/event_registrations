@@ -7,14 +7,23 @@ RSpec.describe AgileAllianceService do
   let(:host) { "#{APP_CONFIG[:agile_alliance][:api_host]}/check_member/bla" }
 
   describe '.check_member' do
-    context 'when the user is a member' do
-      before { WebMock.stub_request(:get, host).with(headers: headers).to_return(body: { member: true }.to_json, headers: {}) }
-      it { expect(AgileAllianceService.check_member('bla')).to be_truthy }
+    context 'valid data returned' do
+      context 'when the user is a member' do
+        before { WebMock.stub_request(:get, host).with(headers: headers).to_return(body: { member: true }.to_json, headers: {}) }
+        it { expect(AgileAllianceService.check_member('bla')).to be true }
+      end
+
+      context 'when the user is not a member' do
+        before { WebMock.stub_request(:get, host).with(headers: headers).to_return(body: { member: false }.to_json, headers: {}) }
+        it { expect(AgileAllianceService.check_member('bla')).to be false }
+      end
     end
 
-    context 'when the user is not a member' do
-      before { WebMock.stub_request(:get, host).with(headers: headers).to_return(body: { member: false }.to_json, headers: {}) }
-      it { expect(AgileAllianceService.check_member('bla')).to be_falsey }
+    context 'invalid data returned' do
+      context 'HTML informing not found' do
+        before { WebMock.stub_request(:get, host).with(headers: headers).to_return(body: '<h1>Not Found</h1>', headers: {}, status: 200) }
+        it { expect(AgileAllianceService.check_member('bla')).to be false }
+      end
     end
   end
 end

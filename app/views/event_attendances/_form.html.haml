@@ -16,9 +16,13 @@
         .field{class: 'form-field'}
           = form.label :first_name, class: 'control-label'
           = form.text_field :first_name, class: 'form-control'
+          .div{class: 'error-field'}
+            = @attendance.errors[:first_name].join(', ')
         .field{class: 'form-field'}
           = form.label :last_name, class: 'control-label'
           = form.text_field :last_name, class: 'form-control'
+          .div{class: 'error-field'}
+            = @attendance.errors[:last_name].join(', ')
         .field{class: 'form-field'}
           = form.label :badge_name, class: 'control-label'
           = form.text_field :badge_name, class: 'form-control'
@@ -37,18 +41,28 @@
         .field{class: 'form-field'}
           = form.label :country, class: 'control-label'
           = form.text_field :country, class: 'form-control'
+          .div{class: 'error-field'}
+            = @attendance.errors[:country].join(', ')
         .field{class: 'form-field'}
           = form.label :city, class: 'control-label'
           = form.text_field :city, class: 'form-control'
+          .div{class: 'error-field'}
+            = @attendance.errors[:city].join(', ')
         .field{class: 'form-field'}
           = form.label :state, class: 'control-label'
           = form.text_field :state, class: 'form-control'
+          .div{class: 'error-field'}
+            = @attendance.errors[:state].join(', ')
         .field{class: 'form-field'}
           = form.label :email, class: 'control-label'
           = form.text_field :email, class: 'form-control'
+          .div{class: 'error-field'}
+            = @attendance.errors[:email].join(', ')
         .field{class: 'form-field'}
           = form.label :phone, class: 'control-label'
           = form.text_field :phone, class: 'form-control'
+          .div{class: 'error-field'}
+            = @attendance.errors[:phone].join(', ')
 
   %div{class: 'row'}
     %div{class: 'col-xs-8 col-md-offset-2'}

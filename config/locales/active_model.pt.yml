@@ -85,7 +85,7 @@ pt:
         education_level: Nível educacional
         experience_in_agility: Experiência com agilidade (anos)
         invoices: Faturas
-        status: "Status"
+        status: Status
         registration_value: Valor da inscrição
         registration_date: Data
         registration_group: Grupo

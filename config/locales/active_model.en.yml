@@ -54,6 +54,24 @@ en:
       attendance:
         full_name: "Name"
         status: "Status"
+        organization_size: "Organization size"
+        organization: "Organization"
+        phone: "Phone"
+        email: "Email"
+        state: "State"
+        city: "City"
+        country: "Country"
+        first_name: "Name"
+        last_name: "Last Name"
+        badge_name: "Badge Name"
+        gender: "Gender"
+        discount: "Discount"
+        twitter_user: User on twitter
+        default_locale: Default Locale
+      user:
+        roles: Roles
+        email: Email
+        name: Name
   invoices:
     show:
       title: "Invoice"

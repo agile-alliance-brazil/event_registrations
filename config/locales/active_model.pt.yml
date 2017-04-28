@@ -65,7 +65,7 @@ pt:
         other: Grupos de Inscrições
     attributes:
       attendance:
-        first_name: Primeiro nome
+        first_name: Nome
         last_name: Sobrenome
         full_name: Nome
         badge_name: Nome no crachá
@@ -89,6 +89,9 @@ pt:
         registration_value: Valor da inscrição
         registration_date: Data
         registration_group: Grupo
+        discount: Desconto
+        twitter_user: Usuário no twitter
+        default_locale: Local default
       event:
         name: Nome
         attendance_limit: Capacidade
@@ -115,6 +118,10 @@ pt:
           gateway: Gateway
           bank_deposit: Depósito bancário
           statement_agreement: Empenho
+      user:
+        name: Nome
+        email: Email
+        roles: Papéis
   invoices:
     show:
       title: "Fatura"

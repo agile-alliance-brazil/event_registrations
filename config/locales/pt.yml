@@ -122,14 +122,6 @@ pt:
   formtastic:
     :yes: "Sim"
     :no: "Não"
-    titles:
-      attendance_personal: "Informações Pessoais"
-      attendance_address: "Informações para Contato"
-      attendance_registrations: "Inscrição para o evento"
-      attendance_payment: "Dados de Pagamento"
-      professional_information: "Informações profissionais"
-      educacional_information: "Informações acadêmicas"
-      discount: "Desconto"
     fields:
       search:
         placeholder: 'procurar por ID, nome, organização ou email'
@@ -143,21 +135,6 @@ pt:
         paid_at: "Data do pagamento"
         settle_amount: "Total pago"
         notes: "Notas"
-      user:
-        first_name: "Nome"
-        last_name: "Sobrenome"
-        email: "Email"
-        roles: "Papeis"
-        phone: "Telefone para contato"
-        country: "País"
-        state: "Estado"
-        city: "Cidade"
-        organization: "Organização"
-        twitter_user: "Usuário no Twitter"
-        default_locale: "Idioma preferido"
-        name: "Nome"
-        badge_name: "Nome no crachá"
-        gender: "Sexo"
       transfer:
         origin_id: "Origem"
         destination_id: "Destino"
@@ -183,7 +160,6 @@ pt:
         gender: "Deixe em branco caso prefira não responder"
         cpf: "Deixe em branco caso não seja brasileiro"
     actions:
-      edit_profile: "Atualizar perfil"
       new_registration: "Submeter inscrição"
       edit_registration: "Atualizar inscrição"
       confirm_registered_attendance: "Confirmar Pagamento"

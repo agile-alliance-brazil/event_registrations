@@ -12,22 +12,22 @@
   %div{class: 'row'}
     %div{class: 'col-xs-8 col-md-offset-2'}
       #container
-        %h3= t('formtastic.titles.attendance_personal')
+        %h3= t('attendances.new.form.attendance_personal')
         .field{class: 'form-field'}
-          = form.label :first_name, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.first_name'), class: 'control-label'
           = form.text_field :first_name, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:first_name].join(', ')
         .field{class: 'form-field'}
-          = form.label :last_name, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.last_name'), class: 'control-label'
           = form.text_field :last_name, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:last_name].join(', ')
         .field{class: 'form-field'}
-          = form.label :badge_name, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.badge_name'), class: 'control-label'
           = form.text_field :badge_name, class: 'form-control'
         .field{class: 'form-field'}
-          = form.label :gender, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.gender'), class: 'control-label'
           = form.select :gender, Gender.options_for_select
         - if I18n.locale == :pt
           .field{class: 'form-field'}
@@ -37,29 +37,29 @@
   %div{class: 'row'}
     %div{class: 'col-xs-8 col-md-offset-2'}
       #container
-        %h3= t('formtastic.titles.attendance_address')
+        %h3= t('attendances.new.form.attendance_address')
         .field{class: 'form-field'}
-          = form.label :country, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.country'), class: 'control-label'
           = form.text_field :country, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:country].join(', ')
         .field{class: 'form-field'}
-          = form.label :city, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.city'), class: 'control-label'
           = form.text_field :city, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:city].join(', ')
         .field{class: 'form-field'}
-          = form.label :state, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.state'), class: 'control-label'
           = form.text_field :state, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:state].join(', ')
         .field{class: 'form-field'}
-          = form.label :email, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.email'), class: 'control-label'
           = form.text_field :email, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:email].join(', ')
         .field{class: 'form-field'}
-          = form.label :phone, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.phone'), class: 'control-label'
           = form.text_field :phone, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:phone].join(', ')
@@ -67,12 +67,12 @@
   %div{class: 'row'}
     %div{class: 'col-xs-8 col-md-offset-2'}
       #container
-        %h3= t('formtastic.titles.professional_information')
+        %h3= t('attendances.new.form.professional_informations')
         .field{class: 'form-field'}
-          = form.label :organization, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.organization'), class: 'control-label'
           = form.text_field :organization, class: 'form-control'
         .field{class: 'form-field'}
-          = form.label :organization_size, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.organization_size'), class: 'control-label'
           = form.select :organization_size, organization_size_options
         .field{class: 'form-field'}
           = form.label :job_role, class: 'control-label'
@@ -87,7 +87,7 @@
   %div{class: 'row'}
     %div{class: 'col-xs-8 col-md-offset-2'}
       #container
-        %h3= t('formtastic.titles.educacional_information')
+        %h3= t('attendances.new.form.educacional_information')
         .field{class: 'form-field'}
           = form.label :school, class: 'control-label'
           = form.text_field :school, class: 'form-control'
@@ -98,7 +98,7 @@
   %div{class: 'row'}
     %div{class: 'col-xs-8 col-md-offset-2'}
       #container
-        %h3= t('formtastic.titles.discount')
+        %h3= t('activerecord.attributes.attendance.discount')
         .field{class: 'form-field'}
           = label_tag t('attendances.new.form.token_field')
           = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), class: 'form-control'

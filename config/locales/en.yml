@@ -35,16 +35,6 @@ en:
   formtastic:
     :yes: "Yes"
     :no: "No"
-    titles:
-      attendance_personal: "Personal details"
-      attendance_address: "Contact details"
-      attendance_registrations: "Conference registrations"
-      attendance_payment: "Payment details"
-      attendances_summary: "Attendances Summary"
-      attendances_list: 'Attendances List'
-      professional_information: "Professional Information"
-      educacional_information: "Educational Information"
-      discount: "Discount"
     fields:
       search:
         placeholder: 'search by ID, name, organization or email'
@@ -58,21 +48,6 @@ en:
         paid_at: "Payment date"
         settle_amount: "Total amount paid"
         notes: "Notes"
-      user:
-        first_name: "First name"
-        last_name: "Last name"
-        email: "E-mail address"
-        roles: "Roles"
-        phone: "Phone"
-        country: "Country"
-        state: "State"
-        city: "City"
-        organization: "Organization"
-        twitter_user: "Twitter username"
-        default_locale: "Preferred language"
-        name: "Name"
-        badge_name: "Name in the badge"
-        gender: "Gender"
       transfer:
         origin_id: "Origin"
         destination_id: "Destination"
@@ -104,7 +79,6 @@ en:
       update_pending_attendance: "Update Price"
       paid_pending_attendance: "Payment Received"
       search: "Search"
-      edit_profile: "Update profile"
       new_group: "Submit group"
 
   # Custom messages

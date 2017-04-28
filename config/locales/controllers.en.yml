@@ -39,6 +39,10 @@ en:
           manager: "Manager"
           student: "Student"
           coach: "Coach"
+        professional_informations: "Professional Informations"
+        attendance_address: "Contact Info"
+        attendance_personal: "Personal Informations"
+        educacional_information: "Educational Informations"
   events:
     form:
       event_basics: "Basic Informations"
@@ -71,4 +75,8 @@ en:
     checkout:
       error: "Your checkout was not processed. Reason: %{reason}."
       success: "Payment sent."
+  users:
+    show:
+      edit:
+        button: "Update Profile"
 

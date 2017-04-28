@@ -39,6 +39,10 @@ pt:
           president: "Presidente"
           other: "Outro"
           coach: "Coach"
+        professional_informations: "Informações Profissionais"
+        attendance_address: "Informações para contato"
+        attendance_personal: "Informações Pessoais"
+        educacional_information: "Informações Acadêmicas"
   events:
     form:
       event_basics: "Informações Básicas"
@@ -71,3 +75,7 @@ pt:
     checkout:
       error: "Seu pagamento não foi enviado. Motivo: %{reason}."
       success: "Pagamento enviado."
+  users:
+    show:
+      edit:
+        button: "Editar Perfil"

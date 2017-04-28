@@ -1,8 +1,8 @@
 - if event.organizers.present?
   %h4= t('organizers.list')
   %table.table
-    %th= t('formtastic.labels.user.name')
-    %th= t('formtastic.labels.user.email')
+    %th= t('activerecord.attributes.attendance.first_name')
+    %th= t('activerecord.attributes.attendance.email')
     %th= t('general.actions.title')
     - event.organizers.each do |user|
       %tr

@@ -1,14 +1,13 @@
 - title t('title.profile', username: @user.full_name)
 
 .profile
-  %h3= t('formtastic.titles.attendance_personal')
   %ul.list-group
     - [:first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale].each do |attribute|
       %li.list-group-item
-        = t("formtastic.labels.user.#{attribute}") + ': '
+        = t("activerecord.attributes.attendance.#{attribute}") + ': '
         %strong= @user.send(attribute)
   - if can? :edit, @user
-    = link_to t('formtastic.actions.edit_profile'), edit_user_path(@user), :class=> 'btn btn-primary'
+    = link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-primary'
 
 .attendances
   %h3= t('event.attendance.list')
@@ -30,7 +29,7 @@
   .auth_providers
     - @user.authentications.each do |authentication|
       %div.thumbnail
-        = image_tag "#{authentication.provider}_64.png", size: "64x64"
+        = image_tag "#{authentication.provider}_64.png", size: '64x64'
         %span= t("authentication.providers.#{authentication.provider}")
         .uuid
           %strong= authentication.uid

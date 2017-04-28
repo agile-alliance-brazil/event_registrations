@@ -9,91 +9,91 @@
             = label_tag Invoice.human_attribute_name :payment_type
             = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
 
-    %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        #container
-          %h3= t('formtastic.titles.attendance_personal')
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        %h3= t('formtastic.titles.attendance_personal')
+        .field{class: 'form-field'}
+          = form.label :first_name, class: 'control-label'
+          = form.text_field :first_name, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :last_name, class: 'control-label'
+          = form.text_field :last_name, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :badge_name, class: 'control-label'
+          = form.text_field :badge_name, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :gender, class: 'control-label'
+          = form.select :gender, Gender.options_for_select
+        - if I18n.locale == :pt
           .field{class: 'form-field'}
-            = form.label :first_name, class: 'control-label'
-            = form.text_field :first_name, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :last_name, class: 'control-label'
-            = form.text_field :last_name, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :badge_name, class: 'control-label'
-            = form.text_field :badge_name, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :gender, class: 'control-label'
-            = form.select :gender, Gender.options_for_select
-          - if I18n.locale == :pt
-            .field{class: 'form-field'}
-              = form.label :cpf, class: 'control-label'
-              = form.text_field :cpf, class: 'form-control'
+            = form.label :cpf, class: 'control-label'
+            = form.text_field :cpf, class: 'form-control'
 
-    %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        #container
-          %h3= t('formtastic.titles.attendance_address')
-          .field{class: 'form-field'}
-            = form.label :country, class: 'control-label'
-            = form.text_field :country, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :city, class: 'control-label'
-            = form.text_field :city, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :state, class: 'control-label'
-            = form.text_field :state, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :email, class: 'control-label'
-            = form.text_field :email, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :phone, class: 'control-label'
-            = form.text_field :phone, class: 'form-control'
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        %h3= t('formtastic.titles.attendance_address')
+        .field{class: 'form-field'}
+          = form.label :country, class: 'control-label'
+          = form.text_field :country, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :city, class: 'control-label'
+          = form.text_field :city, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :state, class: 'control-label'
+          = form.text_field :state, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :email, class: 'control-label'
+          = form.text_field :email, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :phone, class: 'control-label'
+          = form.text_field :phone, class: 'form-control'
 
-    %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        #container
-          %h3= t('formtastic.titles.professional_information')
-          .field{class: 'form-field'}
-            = form.label :organization, class: 'control-label'
-            = form.text_field :organization, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :organization_size, class: 'control-label'
-            = form.select :organization_size, organization_size_options
-          .field{class: 'form-field'}
-            = form.label :job_role, class: 'control-label'
-            = form.select :job_role, job_role_options
-          .field{class: 'form-field'}
-            = form.label :years_of_experience, class: 'control-label'
-            = form.select :years_of_experience, year_of_experience_options
-          .field{class: 'form-field'}
-            = form.label :experience_in_agility, class: 'control-label'
-            = form.select :experience_in_agility, experience_in_agility_options
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        %h3= t('formtastic.titles.professional_information')
+        .field{class: 'form-field'}
+          = form.label :organization, class: 'control-label'
+          = form.text_field :organization, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :organization_size, class: 'control-label'
+          = form.select :organization_size, organization_size_options
+        .field{class: 'form-field'}
+          = form.label :job_role, class: 'control-label'
+          = form.select :job_role, job_role_options
+        .field{class: 'form-field'}
+          = form.label :years_of_experience, class: 'control-label'
+          = form.select :years_of_experience, year_of_experience_options
+        .field{class: 'form-field'}
+          = form.label :experience_in_agility, class: 'control-label'
+          = form.select :experience_in_agility, experience_in_agility_options
 
-    %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        #container
-          %h3= t('formtastic.titles.educacional_information')
-          .field{class: 'form-field'}
-            = form.label :school, class: 'control-label'
-            = form.text_field :school, class: 'form-control'
-          .field{class: 'form-field'}
-            = form.label :education_level, class: 'control-label'
-            = form.select :education_level, education_level_options
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        %h3= t('formtastic.titles.educacional_information')
+        .field{class: 'form-field'}
+          = form.label :school, class: 'control-label'
+          = form.text_field :school, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :education_level, class: 'control-label'
+          = form.select :education_level, education_level_options
 
-    %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        #container
-          %h3= t('formtastic.titles.discount')
-          .field{class: 'form-field'}
-            = label_tag t('attendances.new.form.token_field')
-            = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), class: 'form-control'
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      #container
+        %h3= t('formtastic.titles.discount')
+        .field{class: 'form-field'}
+          = label_tag t('attendances.new.form.token_field')
+          = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), class: 'form-control'
 
-    %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        %div{class: 'agreed-message'}= t('flash.registration.attendance')
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      %div{class: 'agreed-message'}= t('flash.registration.attendance')
 
-    %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        %div{class: 'pull-right'}
-          = form.submit class: 'btn btn-success text-label button-spacing'
+  %div{class: 'row'}
+    %div{class: 'col-xs-8 col-md-offset-2'}
+      %div{class: 'pull-right'}
+        = form.submit class: 'btn btn-success text-label button-spacing'

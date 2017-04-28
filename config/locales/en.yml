@@ -71,6 +71,8 @@ en:
         twitter_user: "Twitter username"
         default_locale: "Preferred language"
         name: "Name"
+        badge_name: "Name in the badge"
+        gender: "Gender"
       transfer:
         origin_id: "Origin"
         destination_id: "Destination"

@@ -156,6 +156,8 @@ pt:
         twitter_user: "Usuário no Twitter"
         default_locale: "Idioma preferido"
         name: "Nome"
+        badge_name: "Nome no crachá"
+        gender: "Sexo"
       transfer:
         origin_id: "Origem"
         destination_id: "Destino"

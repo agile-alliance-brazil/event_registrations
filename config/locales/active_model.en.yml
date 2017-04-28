@@ -51,6 +51,7 @@ en:
           gateway: Gateway
           bank_deposit: Bank Deposit
           statement_agreement: Statement of Agreement
+        payment_type: "Payment type"
       attendance:
         full_name: "Name"
         status: "Status"
@@ -68,6 +69,11 @@ en:
         discount: "Discount"
         twitter_user: User on twitter
         default_locale: Default Locale
+        job_role: "Job role"
+        years_of_experience: "Years of Experience"
+        experience_in_agility: "Experience in Agility"
+        school: "School"
+        education_level: "Education Level"
       user:
         roles: Roles
         email: Email

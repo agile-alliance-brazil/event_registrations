@@ -6,7 +6,7 @@
       %div{class: 'col-xs-8 col-md-offset-2'}
         #container
           .field{class: 'form-field'}
-            = label_tag Invoice.human_attribute_name :payment_type
+            = label_tag t('activerecord.attributes.invoice.payment_type')
             = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
 
   %div{class: 'row'}
@@ -75,13 +75,13 @@
           = form.label t('activerecord.attributes.attendance.organization_size'), class: 'control-label'
           = form.select :organization_size, organization_size_options
         .field{class: 'form-field'}
-          = form.label :job_role, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.job_role'), class: 'control-label'
           = form.select :job_role, job_role_options
         .field{class: 'form-field'}
-          = form.label :years_of_experience, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.years_of_experience'), class: 'control-label'
           = form.select :years_of_experience, year_of_experience_options
         .field{class: 'form-field'}
-          = form.label :experience_in_agility, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.experience_in_agility'), class: 'control-label'
           = form.select :experience_in_agility, experience_in_agility_options
 
   %div{class: 'row'}
@@ -89,10 +89,10 @@
       #container
         %h3= t('attendances.new.form.educacional_information')
         .field{class: 'form-field'}
-          = form.label :school, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.school'), class: 'control-label'
           = form.text_field :school, class: 'form-control'
         .field{class: 'form-field'}
-          = form.label :education_level, class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.education_level'), class: 'control-label'
           = form.select :education_level, education_level_options
 
   %div{class: 'row'}

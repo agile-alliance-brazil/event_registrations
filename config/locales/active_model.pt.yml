@@ -81,6 +81,9 @@ pt:
         job_role: Cargo
         years_of_experience: Experiência profissional (anos)
         experience_in_agility: Experiência com agilidade (anos)
+        school: Escola
+        education_level: Nível educacional
+        experience_in_agility: Experiência com agilidade (anos)
         invoices: Faturas
         status: "Status"
         registration_value: Valor da inscrição

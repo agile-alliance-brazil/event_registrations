@@ -4,7 +4,7 @@
 
 %p Caso a pendência já tenha sido regularizada, favor nos enviar o comprovante do PagSeguro ou da transferência bancária que restauraremos sua inscrição.
 
-%p Lembre-se que você poderá se inscrever novamente e completar esse novo registro.
+%p Lembre-se que você poderá se #{link_to('inscrever novamente', new_event_attendance_url(event_id: @attendance.event.id, locale: :pt))} e completar esse novo registro.
 
 %p Esperamos encontrá-lo em #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')}.
 

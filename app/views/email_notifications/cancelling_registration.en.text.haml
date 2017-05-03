@@ -7,7 +7,7 @@ Thank you for your interest on #{@attendance.event_name}, but, unfortunately, we
 If you already settled your registration payment, please contact us with your payment confirmation so we can restore your registration.
 
 
-Remeber if you still want to register, you can fill in the form once again and complete the new registration. We hope to meet you, between #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} and #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
+Remeber if you still want to register, you can #{link_to('fill in the form once again', new_event_attendance_url(event_id: @attendance.event.id, locale: :en))} and complete the new registration. We hope to meet you, between #{@attendance.event.start_date.to_date.strftime('%d/%m/%Y')} and #{@attendance.event.end_date.to_date.strftime('%d/%m/%Y')}.
 
 
 Sincerely,

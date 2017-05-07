@@ -31,6 +31,7 @@ en:
     new:
       form:
         job_role:
+          not_informed: "Not informed"
           analyst: "Analyst"
           other: "Other"
           clevel: "C-Level"

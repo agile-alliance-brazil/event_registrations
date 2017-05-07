@@ -16,7 +16,7 @@ describe RegistrationNotifier do
       let!(:event) { FactoryGirl.create :event, start_date: 1.month.from_now, end_date: 2.months.from_now }
       context 'and one attendance pending' do
         context 'advised more than 7 days ago' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised: true, advised_at: 8.days.ago) }
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised: true, advised_at: 8.days.ago, due_date: 8.days.ago) }
           let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
           it 'notifies and cancel the pending attendance' do
             EmailNotifications.expects(:cancelling_registration).once
@@ -26,7 +26,7 @@ describe RegistrationNotifier do
         end
 
         context 'advised less than 7 days ago' do
-          let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised: true, advised_at: 6.days.ago) }
+          let!(:attendance) { FactoryGirl.create(:attendance, event: event, advised: true, advised_at: 6.days.ago, due_date: 6.days.ago) }
           it 'not send the notification and keep the attendance pending' do
             EmailNotifications.expects(:cancelling_registration).never
             notifier.cancel
@@ -45,7 +45,7 @@ describe RegistrationNotifier do
       end
 
       context 'and one attendance accepted and advised 7 days ago with gateway as payment type' do
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :accepted, advised: true, advised_at: 7.days.ago) }
+        let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :accepted, advised: true, advised_at: 7.days.ago, due_date: 7.days.ago) }
         let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
         it 'notifies the accepted attendance about the cancellation and cancel the registration' do
           EmailNotifications.expects(:cancelling_registration).once
@@ -95,7 +95,7 @@ describe RegistrationNotifier do
 
   describe '#cancel_warning' do
     context 'when having one active event for today' do
-      let!(:event) { FactoryGirl.create :event, start_date: 1.month.from_now, end_date: 2.months.from_now }
+      let!(:event) { FactoryGirl.create :event, start_date: 1.month.from_now, end_date: 2.months.from_now, days_to_charge: 7 }
       context 'and one attendance older than 7 days' do
         context 'with gateway as payment type' do
           context 'and not advised' do

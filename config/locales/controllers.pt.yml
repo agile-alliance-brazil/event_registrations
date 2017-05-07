@@ -31,6 +31,7 @@ pt:
     new:
       form:
         job_role:
+          not_informed: "Não Informado"
           analyst: "Analista"
           student: "Estudante"
           manager: "Gerente"

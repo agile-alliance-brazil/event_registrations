@@ -5,8 +5,7 @@ class RegistrationNotifier
 
   def cancel
     Event.not_started.each do |event|
-      attendances_to_cancel = AttendanceRepository.instance.for_cancelation(event)
-      attendances_to_cancel.each do |attendance|
+      AttendanceRepository.instance.for_cancelation(event).each do |attendance|
         Rails.logger.info("[Attendance] #{attendance.to_param}")
         try_with('CANCEL') do
           attendance.cancel

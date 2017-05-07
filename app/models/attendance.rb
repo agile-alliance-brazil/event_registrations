@@ -11,6 +11,7 @@
 #  country                 :string
 #  cpf                     :string
 #  created_at              :datetime
+#  due_date                :datetime
 #  education_level         :string
 #  email                   :string
 #  email_sent              :boolean          default(FALSE)
@@ -23,7 +24,7 @@
 #  job_role                :integer          default("other")
 #  last_name               :string
 #  last_status_change_date :datetime
-#  notes                   :stringAB2017_logo.png
+#  notes                   :string
 #  organization            :string
 #  organization_size       :string
 #  payment_type            :string
@@ -50,7 +51,7 @@ class Attendance < ActiveRecord::Base
   include Concerns::LifeCycle
   before_create :set_last_status_change
 
-  enum job_role: %i[other student analyst manager vp president clevel coach]
+  enum job_role: %i[not_informed student analyst manager vp president clevel coach other]
 
   belongs_to :event
   belongs_to :user
@@ -107,12 +108,8 @@ class Attendance < ActiveRecord::Base
   end
 
   def advise!
-    update_attributes(advised: true, advised_at: Time.zone.now)
-  end
-
-  def due_date
-    return event.start_date if advised_due_date.blank? || advised_due_date > event.start_date
-    advised_due_date
+    advised_time = Time.zone.now
+    update_attributes(advised: true, advised_at: advised_time, due_date: [DateService.instance.skip_weekends(advised_time, event.days_to_charge), event.start_date].min)
   end
 
   def free?
@@ -136,10 +133,6 @@ class Attendance < ActiveRecord::Base
   end
 
   private
-
-  def advised_due_date
-    advised_at + event.days_to_charge.days if advised_at.present?
-  end
 
   def update_group_invoice
     registration_group.update_invoice if registration_group.present? && registration_value.present?

@@ -20,5 +20,6 @@ FactoryGirl.define do
     years_of_experience { ['0 - 5', '6 - 10', '11 - 20', '21 - 30', '31 -'].sample }
 
     registration_date { Time.zone.now }
+    due_date { Time.zone.now + (event.days_to_charge * 2).days }
   end
 end

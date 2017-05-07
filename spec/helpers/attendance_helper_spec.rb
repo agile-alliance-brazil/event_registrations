@@ -37,6 +37,6 @@ describe AttendanceHelper, type: :helper do
     end
   end
   describe '#job_role_options' do
-    it { expect(job_role_options).to eq [%w[Analista analyst], %w[C-Level clevel], %w[Coach coach], %w[Estudante student], %w[Gerente manager], %w[Outro other], %w[Presidente president], ['Vice presidente', 'vp']] }
+    it { expect(job_role_options).to eq [%w[Analista analyst], %w[C-Level clevel], %w[Coach coach], %w[Estudante student], %w[Gerente manager], ['Não Informado', 'not_informed'], %w[Outro other], %w[Presidente president], ['Vice presidente', 'vp']] }
   end
 end

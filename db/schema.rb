@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425042251) do
+ActiveRecord::Schema.define(version: 20170507021846) do
 
   create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer  "event_id"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20170425042251) do
     t.integer  "queue_time"
     t.datetime "last_status_change_date"
     t.integer  "job_role",                               default: 0
+    t.datetime "due_date"
     t.index ["registration_quota_id"], name: "index_attendances_on_registration_quota_id", using: :btree
   end
 

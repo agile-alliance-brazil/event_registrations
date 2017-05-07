@@ -131,7 +131,7 @@ describe AttendanceRepository, type: :repository do
 
   describe '#for_cancelation' do
     let(:invoice) { FactoryGirl.create(:invoice, payment_type: 'gateway') }
-    let!(:to_cancel) { FactoryGirl.create(:attendance, event: event, advised_at: 8.days.ago, advised: true, invoices: [invoice]) }
+    let!(:to_cancel) { FactoryGirl.create(:attendance, event: event, advised_at: 8.days.ago, due_date: 1.day.ago, advised: true, invoices: [invoice]) }
     let(:out_invoice) { FactoryGirl.create(:invoice, payment_type: 'gateway') }
     let!(:out) { FactoryGirl.create(:attendance, event: event, advised_at: 5.days.ago, advised: true, invoices: [out_invoice]) }
     let(:other_out_invoice) { FactoryGirl.create(:invoice, payment_type: 'gateway') }

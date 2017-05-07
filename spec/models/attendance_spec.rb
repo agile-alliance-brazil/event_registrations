@@ -52,7 +52,7 @@ RSpec.describe Attendance, type: :model do
   end
 
   context 'enums' do
-    it { is_expected.to define_enum_for(:job_role).with(%i[other student analyst manager vp president clevel coach]) }
+    it { is_expected.to define_enum_for(:job_role).with(%i[not_informed student analyst manager vp president clevel coach other]) }
   end
 
   context 'callbacks' do
@@ -777,36 +777,53 @@ RSpec.describe Attendance, type: :model do
   end
 
   describe '#advise!' do
-    context 'with a valid attendance' do
-      let(:event) { FactoryGirl.create :event }
+    context 'when the due date is in a workday' do
+      let!(:now) { Time.zone.local(2017, 5, 4, 0, 0, 0) }
+      before do
+        Time.zone.stubs(:today).returns(Date.new(2017, 5, 4))
+        Time.zone.stubs(:now).returns(now)
+      end
+
+      let(:event) { FactoryGirl.create :event, days_to_charge: 1 }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+
       before { attendance.advise! }
       it { expect(Attendance.last.advised).to be_truthy }
-      it { expect(Attendance.last.advised_at).to be_within(30.seconds).of Time.zone.now }
+      it { expect(Attendance.last.advised_at).to eq now }
+      it { expect(Attendance.last.due_date).to eq Time.zone.local(2017, 5, 5, 0, 0, 0) }
+    end
+
+    context 'when the due date is in a weekend' do
+      let!(:now) { Time.zone.local(2017, 5, 6, 0, 0, 0) }
+      before do
+        Time.zone.stubs(:today).returns(Date.new(2017, 5, 6))
+        Time.zone.stubs(:now).returns(now)
+      end
+
+      let(:event) { FactoryGirl.create :event, days_to_charge: 1 }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+
+      before { attendance.advise! }
+      it { expect(Attendance.last.due_date).to eq Time.zone.local(2017, 5, 8, 0, 0, 0) }
+    end
+
+    context 'when the event start date is before the attendance due date' do
+      let!(:now) { Time.zone.local(2017, 5, 6, 0, 0, 0) }
+      before do
+        Time.zone.stubs(:today).returns(Date.new(2017, 5, 6))
+        Time.zone.stubs(:now).returns(now)
+      end
+
+      let(:event) { FactoryGirl.create :event, start_date: Date.new(2017, 5, 8), days_to_charge: 5 }
+      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
+
+      let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+      before { attendance.advise! }
+      it { expect(Attendance.last.due_date).to eq Time.zone.local(2017, 5, 8, 0, 0, 0) }
     end
   end
 
-  describe '#due_date' do
-    context 'when the attendance was not advised yet' do
-      let(:event) { FactoryGirl.create(:event, start_date: 3.days.from_now) }
-      let(:attendance) { FactoryGirl.create(:attendance, event: event, advised_at: nil) }
-      it { expect(attendance.due_date.to_date).to eq event.start_date.to_date }
-    end
-
-    context 'when event start date is after event due date' do
-      let(:event) { FactoryGirl.create(:event, start_date: 3.days.from_now) }
-      let(:attendance) { FactoryGirl.create(:attendance, event: event, advised_at: 7.days.ago) }
-      it { expect(attendance.due_date.to_date).to eq Time.zone.today }
-    end
-
-    context 'when event start date is before event due date' do
-      let(:event) { FactoryGirl.create(:event, start_date: 3.days.from_now) }
-      let(:attendance) { FactoryGirl.create(:attendance, event: event, advised_at: Time.zone.today) }
-      it { expect(attendance.due_date.to_date).to eq event.start_date.to_date }
-    end
-  end
-
-  context 'delegates' do
+  context 'delegations' do
     describe '#token' do
       let(:group) { FactoryGirl.create :registration_group }
       let(:attendance) { FactoryGirl.create :attendance, registration_group: group }

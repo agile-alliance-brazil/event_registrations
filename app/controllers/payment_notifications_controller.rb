@@ -1,24 +1,3 @@
-# == Schema Information
-#
-# Table name: payment_notifications
-#
-#  id              :integer          not null, primary key
-#  params          :text(65535)
-#  status          :string(255)
-#  transaction_id  :string(255)
-#  payer_email     :string(255)
-#  settle_amount   :decimal(10, )
-#  settle_currency :string(255)
-#  notes           :text(65535)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  invoice_id      :integer
-#
-# Indexes
-#
-#  fk_rails_92030b1506  (invoice_id)
-#
-
 class PaymentNotificationsController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :authorize_action

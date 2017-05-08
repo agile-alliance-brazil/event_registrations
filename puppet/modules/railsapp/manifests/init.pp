@@ -8,14 +8,14 @@ class railsapp( $user, $app_name ) {
         name        => 'ruby-2.3.1',
         ensure      => 'present',
         build_opts  => '--disable-binary',
-        default_use => false
+        default_use => true
     }
 
     rvm_system_ruby { 'ruby-2.4.0':
         name        => 'ruby-2.4.0',
         ensure      => 'present',
         build_opts  => '--disable-binary',
-        default_use => true
+        default_use => false
     }
 
     rvm_gem { 'bundler231':

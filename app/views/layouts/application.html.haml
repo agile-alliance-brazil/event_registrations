@@ -16,24 +16,24 @@
   %body
     #header
       = render partial: 'layouts/aa'
-      .container
-        %div.logo
-          - if @event.present? && @event.logo.present?
-            = link_to @event.link do
-              = image_tag @event.logo, size: '243x100'
-            - if @event.full? || @event.attendances_in_the_queue?
-              %div{class: 'pull-right'}
-                = image_tag 'soldout_960_720.png', size: '170x170'
-          - else
-            = link_to 'https://www.agilealliance.org/agilebrazil' do
-              = image_tag 'agilealliance-brazil_black.png', size: '220x170'
+      %div.logo
+        - if @event.present? && @event.logo.present?
+          = link_to @event.link do
+            = image_tag @event.logo, size: '243x100'
+          - if @event.full? || @event.attendances_in_the_queue?
+            %div{class: 'pull-right'}
+              = image_tag 'soldout_960_720.png', size: '170x170'
+        - else
+          = link_to 'https://www.agilealliance.org/agilebrazil' do
+            = image_tag 'agilealliance-brazil_black.png', size: '220x170'
+
+      .container-fluid
         = render partial: 'layouts/menu'
 
     #content
-      .container
+      .container-fluid
         - flash.each do |name, msg|
           = content_tag :div, msg, id: "flash_#{name}", class: "alert alert-#{name}"
-
 
         %h1= yield(:title)
 

@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+    <h3><%= t('attendances.index.title') %></h3>
+  </div>
+</div>
+
+<%= render 'attendances_summary' %>
+
+<%= hidden_field_tag :event_id, @event.id %>
+
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+    <div id="attendances_list">
+      <%= render 'attendances_list', attendances_list: @attendances_list %>
+    </div>
+  </div>
+</div>
+
+<% content_for :javascript do %>
+    <%= javascript_include_tag 'attendances/index' %>
+    <%= javascript_include_tag 'graphs/burnup' %>
+<% end %>

@@ -133,8 +133,8 @@ pt:
           one: "Pendente"
           other: "Pendentes"
         accepted:
-          one: "Aceita no grupo"
-          other: "Aceitas no grupo"
+          one: "Aceita"
+          other: "Aceitas"
         paid:
           one: "Paga"
           other: "Pagas"

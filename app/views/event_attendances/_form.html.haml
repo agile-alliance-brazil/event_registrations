@@ -3,15 +3,14 @@
 
   - if can? :update, @event
     %div{class: 'row'}
-      %div{class: 'col-xs-8 col-md-offset-2'}
-        #container
-          .field{class: 'form-field'}
-            = label_tag t('activerecord.attributes.invoice.payment_type')
-            = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
+      %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+        .form-background
+          = label_tag t('activerecord.attributes.invoice.payment_type')
+          = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-md-offset-2'}
-      #container
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+      .form-background
         %h3= t('attendances.new.form.attendance_personal')
         .field{class: 'form-field'}
           = form.label t('activerecord.attributes.attendance.first_name'), class: 'control-label'
@@ -35,8 +34,8 @@
             = form.text_field :cpf, class: 'form-control'
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-md-offset-2'}
-      #container
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+      .form-background
         %h3= t('attendances.new.form.attendance_address')
         .field{class: 'form-field'}
           = form.label t('activerecord.attributes.attendance.country'), class: 'control-label'
@@ -65,8 +64,8 @@
             = @attendance.errors[:phone].join(', ')
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-md-offset-2'}
-      #container
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+      .form-background
         %h3= t('attendances.new.form.professional_informations')
         .field{class: 'form-field'}
           = form.label t('activerecord.attributes.attendance.organization'), class: 'control-label'
@@ -85,8 +84,8 @@
           = form.select :experience_in_agility, experience_in_agility_options
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-md-offset-2'}
-      #container
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+      .form-background
         %h3= t('attendances.new.form.educacional_information')
         .field{class: 'form-field'}
           = form.label t('activerecord.attributes.attendance.school'), class: 'control-label'
@@ -96,18 +95,17 @@
           = form.select :education_level, education_level_options
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-md-offset-2'}
-      #container
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+      .form-background
         %h3= t('activerecord.attributes.attendance.discount')
         .field{class: 'form-field'}
           = label_tag t('attendances.new.form.token_field')
           = text_field_tag :registration_token, @attendance.token, placeholder: I18n.t('formtastic.fields.token.placeholder'), class: 'form-control'
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-md-offset-2'}
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
       %div{class: 'agreed-message'}= t('flash.registration.attendance')
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-md-offset-2'}
-      %div{class: 'pull-right'}
-        = form.submit class: 'btn btn-success text-label button-spacing'
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+      = form.submit class: 'btn btn-success text-label button-spacing pull-right'

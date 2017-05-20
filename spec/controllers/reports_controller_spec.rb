@@ -14,6 +14,11 @@ RSpec.describe ReportsController, type: :controller do
       before { get :attendance_years_of_experience, params: { event_id: 'foo' } }
       it { expect(response).to redirect_to login_path }
     end
+
+    describe 'GET #burnup_registrations' do
+      before { get :attendance_years_of_experience, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to login_path }
+    end
   end
 
   context 'authenticated as organizer' do
@@ -65,25 +70,47 @@ RSpec.describe ReportsController, type: :controller do
           expect(assigns(:attendance_job_role_data)).to eq(event.attendances.active.group(:job_role).count.to_a.map { |x| x.map { |x_part| x_part || I18n.t('report.common.unknown') } })
         end
       end
+
+      describe 'GET #burnup_registrations' do
+        context 'with a valid event' do
+          let!(:event) { FactoryGirl.create :event, organizers: [user] }
+          it 'calls the service and renders the template' do
+            ReportService.instance.expects(:create_burnup_structure).with(event).once.returns(BurnupPresenter.new([], []))
+            get :burnup_registrations, params: { event_id: event }
+            expect(response).to render_template :burnup_registrations
+          end
+        end
+        context 'with an invalid event' do
+          it 'calls the service and renders the template' do
+            get :burnup_registrations, params: { event_id: 'foo' }
+            expect(response).to be_not_found
+          end
+        end
+      end
     end
 
     context 'and is not organizing the event' do
       describe 'GET #attendance_organization_size' do
         let(:event) { FactoryGirl.create :event }
         before { get :attendance_organization_size, params: { event_id: event } }
-        it { expect(response).to have_http_status :not_found }
+        it { expect(response).to be_not_found }
       end
 
       describe 'GET #attendance_years_of_experience' do
         let(:event) { FactoryGirl.create :event }
         before { get :attendance_years_of_experience, params: { event_id: event } }
-        it { expect(response).to have_http_status :not_found }
+        it { expect(response).to be_not_found }
       end
 
       describe 'GET #attendance_job_role' do
         let(:event) { FactoryGirl.create :event }
         before { get :attendance_job_role, params: { event_id: event } }
-        it { expect(response).to have_http_status :not_found }
+        it { expect(response).to be_not_found }
+      end
+
+      describe 'GET #burnup_registrations' do
+        before { get :burnup_registrations, params: { event_id: 'foo' } }
+        it { expect(response).to be_not_found }
       end
     end
   end

@@ -11,7 +11,7 @@ class AttendancesController < ApplicationController
     @paid_total = event_for_index.attendances.paid.count
     @cancelled_total = event_for_index.attendances.cancelled.count
     @total = event_for_index.attendances.count
-    @total_without_cancelled = event_for_index.attendances.where.not(status: :cancelled).count
+    @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
   end
 
   def show

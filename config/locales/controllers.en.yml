@@ -58,6 +58,7 @@ en:
       attendance_organization_size: "Attendance x Organization Size"
       attendance_years_of_experience: "Attendance vs Years of Experience"
       attendance_job_role: "Attendances vs Job Role"
+      registrations_burnup: "Registrations Burn-Up"
     enum:
       status:
         waiting: "In Line"

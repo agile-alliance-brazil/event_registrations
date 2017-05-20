@@ -5,7 +5,7 @@
         <div class="breadcrumb">
           <span class="fa fa-angle-left"></span> <%= link_to t('attendances.index.title'), attendances_path(event_id: @event) %>
         </div>
-        <h1><%= t('attendance.reports.attendance_years_of_experience') %></h1>
+        <h1><%= t('attendance.reports.registrations_burnup') %></h1>
       </div>
     </div>
   </div>
@@ -14,11 +14,11 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xs-12">
-      <div id="pie_div" class="attendance-chart" data-share='<%= @attendance_years_of_experience_data.to_json %>' data-title='<%= t('attendance.reports.attendance_years_of_experience') %>'></div>
+      <div id="burnup_div" class="attendance-chart" data-ideal='<%= @burnup_registrations_data.ideal.to_json %>' data-actual='<%= @burnup_registrations_data.actual.to_json %>'></div>
     </div>
   </div>
 </div>
 
 <% content_for :javascript do %>
-    <%= javascript_include_tag 'graphs/pie' %>
+    <%= javascript_include_tag 'graphs/burnup' %>
 <%end%>

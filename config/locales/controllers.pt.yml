@@ -58,6 +58,7 @@ pt:
       attendance_organization_size: "Participantes x Tamanho da Empresa"
       attendance_years_of_experience: "Participante vs Anos de Experiência"
       attendance_job_role: "Participantes vs Cargo"
+      registrations_burnup: "Burn-Up de Inscrições"
     enum:
       status:
         waiting: "Na Fila"

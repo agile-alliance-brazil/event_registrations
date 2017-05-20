@@ -15,21 +15,21 @@
   %body
     #header
       = render partial: 'layouts/aa'
-      .container
+      .container-fluid
         %div.logo
           = link_to 'https://www.agilealliance.org/agilebrazil' do
             = image_tag 'agilealliance-brazil_black.png', size: '220x170'
         = render partial: 'layouts/menu'
 
     #content
-      .container
+      .container-fluid
         - flash.each do |name, msg|
           = content_tag :div, msg, :id => "flash_#{name}"
 
         = yield
 
     #footer
-      .container
+      .container-fluid
         - if @event.present?
           %p #{t('footer.help', email: @event.main_email_contact)}
         - else

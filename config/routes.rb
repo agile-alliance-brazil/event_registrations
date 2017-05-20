@@ -71,6 +71,7 @@ Current::Application.routes.draw do
     get 'reports/:event_id/attendance_organization_size', to: 'reports#attendance_organization_size', as: :reports_attendance_organization_size
     get 'reports/:event_id/attendance_years_of_experience', to: 'reports#attendance_years_of_experience', as: :reports_attendance_years_of_experience
     get 'reports/:event_id/attendance_job_role', to: 'reports#attendance_job_role', as: :reports_attendance_job_role
+    get 'reports/:event_id/burnup_registrations', to: 'reports#burnup_registrations', as: :burnup_registrations
   end
 
   root to: 'events#index'

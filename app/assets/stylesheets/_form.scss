@@ -1,4 +1,4 @@
-#container {
+.form-background {
   background-color: #E0ECF4;
   margin-bottom: 20px;
   padding: 20px;
@@ -86,10 +86,19 @@ form fieldset.inputs ol {
   display: block;
 }
 
-.attendance-graph {
-  height: 540px;
+.attendance-chart {
+  width: 1500px;
+  height: 768px;
   margin: 40px auto;
 }
+
+.small-attendance-chart {
+  height: 330px;
+  width: 900px;
+}
+
+.top10 { margin-top: 10px; }
+.topMinus50 { margin-top: -50px; }
 
 .error-field {
   color: #C73822;

@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 # == Schema Information
 #
 # Table name: attendances
@@ -20,7 +21,7 @@
 #  first_name              :string
 #  gender                  :string
 #  id                      :integer          not null, primary key
-#  job_role                :integer          default("other")
+#  job_role                :integer          default("not_informed")
 #  last_name               :string
 #  last_status_change_date :datetime
 #  notes                   :string

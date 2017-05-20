@@ -515,6 +515,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1)
   database_cleaner
   dotenv-rails
+  erubis (~> 2.7)
   factory_girl_rails
   faker
   foreman

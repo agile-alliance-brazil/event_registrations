@@ -10,6 +10,8 @@ class ReportService
     mount_data_for_burnup_chart(event.attendances, growth_rate, registration_end_period, registration_start_period)
   end
 
+  private
+
   def mount_data_for_burnup_chart(attendances, growth_rate, end_period, start_period)
     burnup_actual = []
     burnup_ideal = []

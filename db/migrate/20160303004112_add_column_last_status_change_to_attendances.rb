@@ -1,4 +1,4 @@
-class AddColumnLastStatusChangeToAttendances < ActiveRecord::Migration
+class AddColumnLastStatusChangeToAttendances < ActiveRecord::Migration[4.2]
   def change
     add_column :attendances, :last_status_change_date, :datetime
   end

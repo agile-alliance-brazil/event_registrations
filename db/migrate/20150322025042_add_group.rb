@@ -1,4 +1,4 @@
-class AddGroup < ActiveRecord::Migration
+class AddGroup < ActiveRecord::Migration[4.2]
   def change
     remove_column(:attendances, :registration_groups_id, :integer) if column_exists?(:attendances, :registration_groups_id)
 

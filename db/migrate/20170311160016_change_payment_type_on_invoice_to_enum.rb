@@ -1,4 +1,4 @@
-class ChangePaymentTypeOnInvoiceToEnum < ActiveRecord::Migration
+class ChangePaymentTypeOnInvoiceToEnum < ActiveRecord::Migration[4.2]
   def up
     add_column :invoices, :type_number, :integer
     execute("UPDATE invoices SET type_number = 1 WHERE payment_type='gateway'")

@@ -1,4 +1,4 @@
-class DropTableInvoiceAttendances < ActiveRecord::Migration
+class DropTableInvoiceAttendances < ActiveRecord::Migration[4.2]
   def change
     drop_table :invoice_attendances do |t|
       t.belongs_to :invoice

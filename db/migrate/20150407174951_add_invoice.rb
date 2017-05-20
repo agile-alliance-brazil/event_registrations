@@ -1,4 +1,4 @@
-class AddInvoice < ActiveRecord::Migration
+class AddInvoice < ActiveRecord::Migration[4.2]
   def change
     create_table :invoices do |t|
       t.integer :frete

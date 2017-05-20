@@ -34,7 +34,6 @@ describe TransfersController, type: :controller do
       before { get :new, params: { attendance_id: origin } }
       it { expect(assigns[:event]).to be_new_record }
       it 'should set empty transfer' do
-        expect(assigns[:transfer]).to be_new_record
         expect(assigns[:transfer].origin_id).to be_nil
         expect(assigns[:transfer].destination_id).to be_nil
       end

@@ -1,4 +1,4 @@
-class RemoveFieldsFromAttendanceAndAddOthers < ActiveRecord::Migration
+class RemoveFieldsFromAttendanceAndAddOthers < ActiveRecord::Migration[4.2]
   def change
     remove_column :attendances, :address, :string
     remove_column :attendances, :neighbourhood, :string

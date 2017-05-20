@@ -1,4 +1,4 @@
-class AddRegistrationQuota < ActiveRecord::Migration
+class AddRegistrationQuota < ActiveRecord::Migration[4.2]
   def change
     create_table :registration_quota do |t|
       t.integer :quota

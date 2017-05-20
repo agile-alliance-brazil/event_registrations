@@ -1,4 +1,4 @@
-class DropRegistrationType < ActiveRecord::Migration
+class DropRegistrationType < ActiveRecord::Migration[4.2]
   def change
     drop_table :registration_types do |t|
       t.references :event

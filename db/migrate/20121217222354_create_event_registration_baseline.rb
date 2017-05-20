@@ -1,4 +1,4 @@
-class CreateEventRegistrationBaseline < ActiveRecord::Migration
+class CreateEventRegistrationBaseline < ActiveRecord::Migration[4.2]
   def change
     create_table :events do |t|
       t.string :name

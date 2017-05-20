@@ -1,4 +1,4 @@
-class AddAllowVotingToEvents < ActiveRecord::Migration
+class AddAllowVotingToEvents < ActiveRecord::Migration[4.2]
   def change
     add_column :events, :allow_voting, :boolean
   end

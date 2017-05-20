@@ -1,4 +1,4 @@
-class AddUserInfoToAttendance < ActiveRecord::Migration
+class AddUserInfoToAttendance < ActiveRecord::Migration[4.2]
   def change
     add_column :attendances, :first_name, :string
     add_column :attendances, :last_name, :string

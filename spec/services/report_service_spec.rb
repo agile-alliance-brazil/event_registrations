@@ -2,8 +2,13 @@ RSpec.describe ReportService, type: :service do
   describe '#create_burnup_structure' do
     context 'having attendances' do
       let(:event) { FactoryGirl.create :event, start_date: 1.week.from_now, attendance_limit: 4 }
-      let!(:first_attendante) { FactoryGirl.create :attendance, event: event }
-      let!(:second_attendante) { FactoryGirl.create :attendance, event: event }
+      let!(:first_attendante) { FactoryGirl.create :attendance, event: event, status: :confirmed }
+      let!(:second_attendante) { FactoryGirl.create :attendance, event: event, status: :confirmed }
+      let!(:pending_attendante) { FactoryGirl.create :attendance, event: event, status: :pending }
+      let!(:accepted_attendante) { FactoryGirl.create :attendance, event: event, status: :accepted }
+      let!(:paid_attendante) { FactoryGirl.create :attendance, event: event, status: :paid }
+      let!(:waiting_attendante) { FactoryGirl.create :attendance, event: event, status: :waiting }
+      let!(:cancelled_attendante) { FactoryGirl.create :attendance, event: event, status: :cancelled }
 
       it 'returns the sctructure for the burnup' do
         burnup_structure = ReportService.instance.create_burnup_structure(event)

@@ -7,7 +7,7 @@ class ReportService
     registration_end_period = event.start_date.to_date
     period_difference = registration_end_period - registration_start_period
     growth_rate = event.attendance_limit.to_f / period_difference.to_i
-    mount_data_for_burnup_chart(event.attendances, growth_rate, registration_end_period, registration_start_period)
+    mount_data_for_burnup_chart(event.attendances.confirmed, growth_rate, registration_end_period, registration_start_period)
   end
 
   private

@@ -2,8 +2,8 @@
 //= require jquery_ujs
 //= require highcharts.js
 //= require exporting.js
-//= require_self
 //= require bootstrap-sprockets
+//= require_self
 //= require_tree .
 
 (function($) {

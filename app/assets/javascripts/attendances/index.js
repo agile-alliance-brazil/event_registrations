@@ -6,8 +6,5 @@ function submitSearch(event_id) {
 
     var searchText = $('#search').val();
 
-    console.log(event_id);
-    console.log(searchText);
-
     $.get('/attendances/search', { event_id: event_id, search: searchText, pending: pending, accepted: accepted, paid: paid, cancelled: cancelled } );
 }

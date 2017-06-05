@@ -48,5 +48,11 @@ Rails/HasAndBelongsToMany:
 Rails/HttpPositionalArguments:
   Enabled: false # TODO: Requires rails 5 to be enabled. Check branch bugfix/rubocop_0_44_new_offenses_fixes for fixes
 
+Rails/ApplicationRecord:
+  Enabled: false # TODO: Requires rails 5 to be enabled.
+
+Rails/ApplicationJob:
+  Enabled: false # TODO: Requires rails 5 to be enabled.
+
 Lint/AmbiguousBlockAssociation:
   Enabled: false

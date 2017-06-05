@@ -47,8 +47,11 @@ Current::Application.routes.draw do
     resources :registration_quotas, only: %i[new create destroy edit update]
   end
 
+  # rubocop:disable Style/FormatStringToken
+  # Due to https://github.com/bbatsov/rubocop/issues/4425
   get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
   post '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
+  # rubocop:enable Style/FormatStringToken
   resources :attendances, only: %i[show index] do
     member do
       put :confirm

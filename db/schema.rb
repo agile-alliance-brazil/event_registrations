@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20170507021846) do
 
-  create_table "attendances", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "attendances", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "event_id"
     t.integer "user_id"
     t.integer "registration_group_id"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.index ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
   end
 
-  create_table "authentications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "authentications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id"
     t.string "provider"
     t.string "uid"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.string "refresh_token"
   end
 
-  create_table "events", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "events", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "location_and_date"
     t.datetime "created_at"
@@ -78,14 +78,14 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.string "main_email_contact", default: "", null: false
   end
 
-  create_table "events_users", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "events_users", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "event_id"
     t.integer "user_id"
     t.index ["event_id"], name: "index_events_users_on_event_id"
     t.index ["user_id"], name: "index_events_users_on_user_id"
   end
 
-  create_table "invoices", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "invoices", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "frete"
     t.decimal "amount", precision: 10
     t.datetime "created_at"
@@ -94,12 +94,12 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.integer "registration_group_id"
     t.string "status"
     t.integer "payment_type", null: false
-    t.integer "invoiceable_id"
     t.string "invoiceable_type"
+    t.integer "invoiceable_id"
     t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id"
   end
 
-  create_table "payment_notifications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "payment_notifications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "params"
     t.string "status"
     t.string "transaction_id"
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.index ["invoice_id"], name: "fk_rails_92030b1506"
   end
 
-  create_table "registration_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "registration_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "event_id"
     t.string "name"
     t.integer "capacity"
@@ -131,7 +131,7 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.index ["invoice_id"], name: "fk_rails_9544e3707e"
   end
 
-  create_table "registration_periods", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "registration_periods", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "event_id"
     t.string "title"
     t.datetime "start_at"
@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.string "price_currency", default: "BRL", null: false
   end
 
-  create_table "registration_quotas", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "registration_quotas", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "quota"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -154,7 +154,7 @@ ActiveRecord::Schema.define(version: 20170507021846) do
     t.string "price_currency", default: "BRL", null: false
   end
 
-  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "email"

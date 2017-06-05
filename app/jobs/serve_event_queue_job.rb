@@ -1,4 +1,4 @@
-class ServeEventQueueJob < ActiveJob::Base
+class ServeEventQueueJob < ApplicationJob
   queue_as :default
 
   def perform

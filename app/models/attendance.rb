@@ -47,7 +47,7 @@
 #  index_attendances_on_registration_quota_id  (registration_quota_id)
 #
 
-class Attendance < ActiveRecord::Base
+class Attendance < ApplicationRecord
   include Concerns::LifeCycle
   before_create :set_last_status_change
 

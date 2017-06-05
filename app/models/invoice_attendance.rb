@@ -11,7 +11,7 @@
 #  updated_at    :datetime
 #
 
-class InvoiceAttendance < ActiveRecord::Base
+class InvoiceAttendance < ApplicationRecord
   belongs_to :attendance
   belongs_to :invoice
 end

@@ -15,7 +15,7 @@
 #  updated_at     :datetime
 #
 
-class RegistrationPeriod < ActiveRecord::Base
+class RegistrationPeriod < ApplicationRecord
   belongs_to :event
 
   monetize :price_cents

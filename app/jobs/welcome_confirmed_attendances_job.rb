@@ -1,4 +1,4 @@
-class WelcomeConfirmedAttendancesJob < ActiveJob::Base
+class WelcomeConfirmedAttendancesJob < ApplicationJob
   queue_as :default
 
   def perform

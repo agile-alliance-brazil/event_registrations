@@ -21,7 +21,7 @@
 #  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 
-class Invoice < ActiveRecord::Base
+class Invoice < ApplicationRecord
   STATUSES = [PENDING = 'pending'.freeze, SENT = 'sent'.freeze, PAID = 'paid'.freeze, CANCELLED = 'cancelled'.freeze].freeze
 
   enum payment_type: { gateway: 1, bank_deposit: 2, statement_agreement: 3 }

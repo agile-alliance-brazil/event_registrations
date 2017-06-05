@@ -19,7 +19,7 @@
 #  updated_at         :datetime
 #
 
-class Event < ActiveRecord::Base
+class Event < ApplicationRecord
   has_many :attendances
   has_many :registration_periods
   has_many :registration_quotas

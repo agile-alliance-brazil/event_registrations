@@ -13,7 +13,7 @@
 #  user_id       :integer
 #
 
-class Authentication < ActiveRecord::Base
+class Authentication < ApplicationRecord
   PRODUCTION_PROVIDERS = %w[twitter facebook github].freeze
   OTHER_PROVIDERS = %w[twitter facebook github developer].freeze
   PROVIDERS = Rails.env.production? ? PRODUCTION_PROVIDERS : OTHER_PROVIDERS

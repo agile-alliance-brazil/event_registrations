@@ -25,7 +25,7 @@
 #  fk_rails_92030b1506  (invoice_id => invoices.id)
 #
 
-class PaymentNotification < ActiveRecord::Base
+class PaymentNotification < ApplicationRecord
   belongs_to :invoice
   serialize :params
 

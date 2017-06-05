@@ -36,7 +36,7 @@
 require Rails.root.join('lib', 'authorization.rb')
 require Rails.root.join('lib', 'trimmer.rb')
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include Trimmer
   include Authorization
 

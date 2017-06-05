@@ -14,7 +14,7 @@
 #  updated_at            :datetime
 #
 
-class RegistrationQuota < ActiveRecord::Base
+class RegistrationQuota < ApplicationRecord
   belongs_to :event
 
   monetize :price_cents

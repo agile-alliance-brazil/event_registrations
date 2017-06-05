@@ -27,7 +27,7 @@
 #  fk_rails_9544e3707e  (invoice_id => invoices.id)
 #
 
-class RegistrationGroup < ActiveRecord::Base
+class RegistrationGroup < ApplicationRecord
   belongs_to :event
   belongs_to :leader, class_name: 'User', inverse_of: :led_groups
   belongs_to :registration_quota

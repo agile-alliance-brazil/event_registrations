@@ -24,6 +24,10 @@ RSpec.describe AgileAllianceService do
         before { WebMock.stub_request(:get, host).with(headers: headers).to_return(body: '<h1>Not Found</h1>', headers: {}, status: 200) }
         it { expect(AgileAllianceService.check_member('bla')).to be false }
       end
+      context 'returning URI::InvalidURIError' do
+        before { WebMock.stub_request(:get, host).with(headers: headers).to_raise(URI::InvalidURIError) }
+        it { expect(AgileAllianceService.check_member('bla')).to be false }
+      end
     end
   end
 end

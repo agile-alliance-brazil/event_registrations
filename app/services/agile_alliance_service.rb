@@ -5,5 +5,7 @@ module AgileAllianceService
     response.present? && JSON.parse(response.body)['member']
   rescue JSON::ParserError
     return false
+  rescue URI::InvalidURIError
+    return false
   end
 end

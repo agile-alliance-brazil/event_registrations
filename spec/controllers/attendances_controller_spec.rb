@@ -62,10 +62,18 @@ RSpec.describe AttendancesController, type: :controller do
     context 'with a valid attendance' do
       let!(:event) { FactoryGirl.create(:event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
-      let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
-      before { get :show, params: { id: attendance.id } }
-      it { expect(assigns[:attendance]).to eq attendance }
-      it { expect(response).to be_success }
+      context 'having invoice' do
+        let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
+        before { get :show, params: { id: attendance.id } }
+        it { expect(assigns[:attendance]).to eq attendance }
+        it { expect(response).to be_success }
+      end
+
+      context 'having no invoice' do
+        before { get :show, params: { id: attendance.id } }
+        it { expect(assigns[:attendance]).to eq attendance }
+        it { expect(response).to be_success }
+      end
     end
   end
 

@@ -37,6 +37,6 @@ describe AttendanceHelper, type: :helper do
     end
   end
   describe '#job_role_options' do
-    it { expect(job_role_options).to eq [%w[Analista analyst], %w[C-Level clevel], %w[Coach coach], %w[Estudante student], %w[Gerente manager], ['Não Informado', 'not_informed'], %w[Outro other], %w[Presidente president], ['Vice presidente', 'vp']] }
+    it { expect(job_role_options).to eq Attendance.job_roles.map { |job_role| [t("attendances.new.form.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] } }
   end
 end

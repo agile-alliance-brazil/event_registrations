@@ -11,3 +11,8 @@ test:
     - bundle exec rubocop -D
     - bundle exec brakeman -z
     - bundle exec rake assets:precompile
+deployment:
+  staging:
+    branch: master
+    commands:
+      - bundle exec cap staging deploy

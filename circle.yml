@@ -6,11 +6,7 @@ dependencies:
     - mv config/database.example config/database.yml
 test:
   override:
-    - bundle exec rspec --format progress
-  post:
-    - bundle exec rubocop -D
-    - bundle exec brakeman -z
-    - bundle exec rake assets:precompile
+    - bundle exec rake ci
 deployment:
   staging:
     branch: master

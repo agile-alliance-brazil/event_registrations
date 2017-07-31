@@ -28,10 +28,13 @@
         .field{class: 'form-field'}
           = form.label t('activerecord.attributes.attendance.gender'), class: 'control-label'
           = form.select :gender, Gender.options_for_select
-        - if I18n.locale == :pt
-          .field{class: 'form-field'}
-            = form.label :cpf, class: 'control-label'
-            = form.text_field :cpf, class: 'form-control'
+        .field{class: 'form-field'}
+          = form.label :cpf, class: 'control-label'
+          = form.text_field :cpf, class: 'form-control'
+          .div{class: 'inline-hints'}
+            = t('formtastic.hints.attendance.cpf')
+          .div{class: 'error-field'}
+            = @attendance.errors[:cpf].join(', ')
 
   %div{class: 'row'}
     %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}

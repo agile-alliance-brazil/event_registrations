@@ -81,7 +81,7 @@ GEM
       activesupport (>= 3.0.0)
     builder (3.2.3)
     byebug (9.1.0)
-    cancancan (1.17.0)
+    cancancan (2.0.0)
     cane (2.6.2)
       parallel
     capistrano (3.8.1)
@@ -509,7 +509,7 @@ DEPENDENCIES
   brakeman
   brcpfcnpj (~> 3.3.0)
   byebug
-  cancancan (~> 1.10)
+  cancancan (~> 2.0)
   capistrano (= 3.8.1)
   capistrano-bundler
   capistrano-git-with-submodules

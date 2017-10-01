@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 gem 'rails', '~> 5.0', '>= 5.0.2'
 
-gem 'airbrake', '~> 6.0'
+gem 'airbrake', '~> 7.0'
 gem 'autoprefixer-rails', '~> 6.2'
 
 gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'

@@ -3,7 +3,7 @@ ruby '2.3.1'
 gem 'rails', '~> 5.0', '>= 5.0.2'
 
 gem 'airbrake', '~> 7.0'
-gem 'autoprefixer-rails', '~> 6.2'
+gem 'autoprefixer-rails', '~> 7.1'
 
 gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
 gem 'bootstrap-sass', '~> 3.3'

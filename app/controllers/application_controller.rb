@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
@@ -80,7 +78,7 @@ class ApplicationController < ActionController::Base
 
   def call_or_nil(method)
     send(method)
-  rescue
+  rescue StandardError
     nil
   end
 end

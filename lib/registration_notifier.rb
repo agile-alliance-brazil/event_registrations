@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 class RegistrationNotifier
   include Singleton
 
@@ -36,7 +34,7 @@ class RegistrationNotifier
   def try_with(action)
     Rails.logger.info(" processing [#{action}]")
     yield
-  rescue => e
+  rescue StandardError => e
     Airbrake.notify(e.message, action: action)
     Rails.logger.info("  [FAILED #{action}] #{e.message}")
   ensure

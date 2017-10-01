@@ -46,7 +46,7 @@ module Concerns
 
         def try_user_notify(params)
           yield
-        rescue => ex
+        rescue StandardError => ex
           Airbrake.notify(ex.message, params)
         ensure
           Rails.logger.flush

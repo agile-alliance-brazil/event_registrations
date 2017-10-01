@@ -9,7 +9,7 @@ begin
   end
 
   task :brakeman do
-    sh 'bundle exec brakeman -z'
+    sh 'bundle exec brakeman -z -5 --no-pager'
   end
 
   task :'codeclimate-test-reporter' do

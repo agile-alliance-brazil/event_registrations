@@ -19,7 +19,7 @@ class RegistrationQuota < ApplicationRecord
 
   monetize :price_cents
 
-  has_many :attendances
+  has_many :attendances, dependent: :restrict_with_exception
 
   validates :order, :quota, presence: true
 

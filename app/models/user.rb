@@ -43,13 +43,13 @@ class User < ApplicationRecord
   attr_trimmed :first_name, :last_name, :email, :organization, :phone, :country, :state, :city,
                :badge_name, :twitter_user, :address, :neighbourhood, :zipcode
 
-  has_many :authentications
+  has_many :authentications, dependent: :destroy
 
-  has_many :attendances
-  has_many :events, -> { distinct }, through: :attendances
-  has_many :payment_notifications, through: :attendances
-  has_many :led_groups, class_name: 'RegistrationGroup', inverse_of: :leader, foreign_key: :leader_id
-  has_many :invoices
+  has_many :attendances, dependent: :destroy
+  has_many :events, -> { distinct }, through: :attendances, dependent: :nullify
+  has_many :payment_notifications, through: :attendances, dependent: :destroy
+  has_many :led_groups, class_name: 'RegistrationGroup', inverse_of: :leader, foreign_key: :leader_id, dependent: :nullify
+  has_many :invoices, dependent: :destroy
 
   has_and_belongs_to_many :organized_events, class_name: 'Event'
 

@@ -8,4 +8,4 @@ mod 'puppetlabs/stdlib'
 # mod 'apt',
 #   :git => 'https://github.com/puppetlabs/puppetlabs-apt.git',
 #   :ref => 'feature/master/dans_refactor'
-# rubocop:enable Style/FileName
+# rubocop:enable Naming/FileName

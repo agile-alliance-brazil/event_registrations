@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 # Be sure to restart your server when you modify this file.
 
 # Your secret key for verifying the integrity of signed cookies.
@@ -11,6 +9,6 @@ begin
   config = HashWithIndifferentAccess.new(YAML.load_file(config_file))
   Current::Application.config.secret_token = config[:secret_token]
   Current::Application.config.secret_key_base = config[:secret_key_base]
-rescue
+rescue StandardError
   raise 'config/config.yml file not found. Please check config/config.example for a sample'
 end

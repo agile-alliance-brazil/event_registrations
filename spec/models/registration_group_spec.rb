@@ -53,11 +53,11 @@ describe RegistrationGroup, type: :model do
     context 'mark attendances as cancelled' do
       before do
         2.times { FactoryGirl.create :attendance, registration_group: group }
+        @attendances = Attendance.where(registration_group: group.id).all.to_a
         group.destroy
-        @attendances = Attendance.where(registration_group: group.id)
       end
       it { expect(RegistrationGroup.all).not_to include(group) }
-      it { expect(@attendances.map(&:status).uniq).to eq(['cancelled']) }
+      it { expect(@attendances.map(&:reload).map(&:status).uniq).to eq(['cancelled']) }
     end
   end
 

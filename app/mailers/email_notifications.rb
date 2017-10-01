@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 class EmailNotifications < ApplicationMailer
   def registration_pending(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.registration_pending.subject')

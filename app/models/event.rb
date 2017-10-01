@@ -20,11 +20,11 @@
 #
 
 class Event < ApplicationRecord
-  has_many :attendances
-  has_many :registration_periods
-  has_many :registration_quotas
+  has_many :attendances, dependent: :restrict_with_exception
+  has_many :registration_periods, dependent: :destroy
+  has_many :registration_quotas, dependent: :destroy
 
-  has_many :registration_groups
+  has_many :registration_groups, dependent: :destroy
 
   has_and_belongs_to_many :organizers, class_name: 'User'
 

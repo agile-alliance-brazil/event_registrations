@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 # == Schema Information
 #
 # Table name: payment_notifications

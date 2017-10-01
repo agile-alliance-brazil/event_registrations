@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 # config valid only for Capistrano 3.8.1
 lock '3.8.1'
 

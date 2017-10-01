@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 describe AttendanceHelper, type: :helper do
   describe '#attendance_price' do
     it 'returns attendance price' do

@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start 'rails' do

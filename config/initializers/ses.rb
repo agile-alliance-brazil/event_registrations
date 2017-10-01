@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 if APP_CONFIG[:ses]
   ActionMailer::Base.add_delivery_method :ses, AWS::SES::Base,
                                          access_key_id: APP_CONFIG[:ses][:access_key_id],

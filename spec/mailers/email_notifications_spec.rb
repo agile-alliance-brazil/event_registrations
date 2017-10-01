@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 RSpec.describe EmailNotifications, type: :mailer do
   let(:event) { FactoryGirl.create :event }
   before { ActionMailer::Base.deliveries = [] }

@@ -14,7 +14,7 @@ class EventsController < ApplicationController
   end
 
   def list_archived
-    @events = Event.includes(:registration_periods).ended
+    @events = Event.includes(:registration_periods).ended.order(start_date: :desc)
     render :index
   end
 

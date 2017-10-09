@@ -243,33 +243,12 @@ RSpec.describe EventsController, type: :controller do
         it { expect(response).to render_template :index }
       end
 
-      context 'with events' do
-        let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: 2.months.ago, end_date: 1.month.ago) }
+      context 'having events' do
+        let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: 3.months.ago, end_date: 2.months.ago) }
+        let!(:other_event) { FactoryGirl.create(:event, start_date: 2.months.ago, end_date: 1.month.ago) }
 
-        context 'and one event at the right period' do
-          before { get :list_archived }
-          it { expect(assigns(:events)).to match_array [event] }
-        end
-
-        context 'and two at the right period' do
-          let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
-          before { get :list_archived }
-          it { expect(assigns(:events)).to match_array [event, other_event] }
-        end
-
-        context 'and one at the right period and other not' do
-          let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
-          before { get :list_archived }
-          it { expect(assigns(:events)).to match_array [event] }
-        end
-
-        context 'and two at the right period and other not' do
-          let!(:other_event) { FactoryGirl.create(:event, start_date: 3.months.ago, end_date: 2.months.ago) }
-          let!(:out) { FactoryGirl.create(:event, start_date: 1.day.ago, end_date: 1.year.from_now) }
-
-          before { get :list_archived }
-          it { expect(assigns(:events)).to match_array [event, other_event] }
-        end
+        before { get :list_archived }
+        it { expect(assigns(:events)).to eq [other_event, event] }
       end
     end
 

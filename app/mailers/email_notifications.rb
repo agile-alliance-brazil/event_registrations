@@ -45,9 +45,8 @@ class EmailNotifications < ApplicationMailer
   def event_organizers
     if @attendance.event.present? && @attendance.event.organizers.present?
       organizers = []
-      @attendance.event.organizers.each do |organizer|
-        organizers << "\"#{organizer.first_name}\" <#{organizer.email}>"
-      end
+      @attendance.event.organizers.each { |organizer| organizers << "\"#{organizer.first_name}\" <#{organizer.email}>" }
+      organizers << @attendance.event.main_email_contact
     else
       organizers = ["\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>"]
     end

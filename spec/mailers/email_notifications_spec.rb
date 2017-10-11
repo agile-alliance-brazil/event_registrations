@@ -22,13 +22,13 @@ RSpec.describe EmailNotifications, type: :mailer do
     context 'having organizers in the event' do
       let(:organizer) { FactoryGirl.create :organizer }
       let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer] }
+      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee and cc the events organizer' do
         mail = EmailNotifications.registration_pending(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email, 'xpto@sbbrubles.com']
       end
     end
   end
@@ -51,13 +51,13 @@ RSpec.describe EmailNotifications, type: :mailer do
     context 'having organizers in the event' do
       let(:organizer) { FactoryGirl.create :organizer }
       let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer] }
+      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee cc the events organizer' do
         mail = EmailNotifications.registration_pending(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email, 'xpto@sbbrubles.com']
       end
     end
   end
@@ -91,13 +91,13 @@ RSpec.describe EmailNotifications, type: :mailer do
     context 'having organizers in the event' do
       let(:organizer) { FactoryGirl.create :organizer }
       let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer] }
+      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee cc the events organizer' do
         mail = EmailNotifications.registration_confirmed(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email, 'xpto@sbbrubles.com']
       end
     end
 
@@ -158,7 +158,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.cancelling_registration(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
       end
     end
   end
@@ -195,7 +195,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
       end
     end
 
@@ -235,7 +235,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.registration_dequeued(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
       end
     end
   end
@@ -269,7 +269,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.welcome_attendance(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email]
+        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
       end
     end
   end

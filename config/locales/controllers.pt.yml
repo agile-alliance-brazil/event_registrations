@@ -81,3 +81,6 @@ pt:
     show:
       edit:
         button: "Editar Perfil"
+  event_attendances:
+    form:
+      state: "Estado (ex: SP, SC, RJ...)"

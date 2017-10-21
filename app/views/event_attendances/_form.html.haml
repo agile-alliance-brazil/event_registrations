@@ -51,7 +51,7 @@
           .div{class: 'error-field'}
             = @attendance.errors[:city].join(', ')
         .field{class: 'form-field'}
-          = form.label t('activerecord.attributes.attendance.state'), class: 'control-label'
+          = form.label t('event_attendances.form.state'), class: 'control-label'
           = form.text_field :state, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:state].join(', ')

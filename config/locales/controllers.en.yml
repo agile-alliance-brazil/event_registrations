@@ -81,4 +81,7 @@ en:
     show:
       edit:
         button: "Update Profile"
+  event_attendances:
+    form:
+      state: "State"
 

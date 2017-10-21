@@ -4,7 +4,7 @@ class AttendancesController < ApplicationController
   protect_from_forgery
 
   def index
-    @attendances_list = event_for_index.attendances.active
+    @attendances_list = event_for_index.attendances.active.order(last_status_change_date: :desc)
     @waiting_total = event_for_index.attendances.waiting.count
     @pending_total = event_for_index.attendances.pending.count
     @accepted_total = event_for_index.attendances.accepted.count

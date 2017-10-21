@@ -4,13 +4,15 @@
     %th= RegistrationGroup.human_attribute_name(:name)
     %th= RegistrationGroup.human_attribute_name(:leader)
     %th= RegistrationGroup.human_attribute_name(:discount)
+    %th= RegistrationGroup.human_attribute_name(:amount)
     %th= RegistrationGroup.human_attribute_name(:attendances)
     %th= t('general.actions.title')
     - event.registration_groups.each do |group|
       %tr
         %td= link_to group.name, event_registration_group_path(event, group)
         %td= group.leader_name
-        %td= group.discount
+        %td= "#{group.discount}%"
+        %td= number_to_currency(group.amount, locale: :pt)
         %td= group.qtd_attendances
         %td{class: 'form-actions'}
           = link_to event_registration_group_path(event, group), method: :delete, data: { confirm: t('registration_group.destroy_confirmation', registration_group: group.name ) } do

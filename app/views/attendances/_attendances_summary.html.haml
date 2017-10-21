@@ -6,23 +6,23 @@
     %div{class: 'row'}
       %span{class: 'col-xs-3'}= render 'reports_menu', event: @event
     %div{class: 'row top10'}
-      %span{class: 'col-xs-2'}
+      %span{class: 'col-xs-4'}
         = check_box_tag 'waiting', 'waiting', true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'waiting', "#{t('attendance.enum.status.waiting')} (#{@waiting_total})"
 
-      %span{class: 'col-xs-2'}
+      %span{class: 'col-xs-4'}
         = check_box_tag 'pending', 'pending', true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'pending', "#{t('attendance.enum.status.pending', count: @pending_total)} (#{@pending_total})"
 
-      %span{class: 'col-xs-2'}
+      %span{class: 'col-xs-4'}
         = check_box_tag 'accepted', 'accepted', true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'accepted', "#{t('attendance.enum.status.accepted', count: @accepted_total)} (#{@accepted_total})"
 
-      %span{class: 'col-xs-2'}
+      %span{class: 'col-xs-4'}
         = check_box_tag 'paid', 'paid', true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'paid', "#{t('attendance.enum.status.paid', count: @paid_total)} (#{@paid_total})"
 
-      %span{class: 'col-xs-2'}
+      %span{class: 'col-xs-4'}
         = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
         = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"
 
@@ -37,6 +37,6 @@
 
   %div{class: 'row'}
     %div{class: 'col-xs-12 col-sm-6'}
-      %div{ id: 'burnup_div', class: 'small-attendance-chart topMinus50', 'data-ideal' => @burnup_registrations_data.ideal.to_json, 'data-actual' => @burnup_registrations_data.actual.to_json }
+      %div{ id: 'burnup_div', class: 'small-attendance-chart top-minus-50', 'data-ideal' => @burnup_registrations_data.ideal.to_json, 'data-actual' => @burnup_registrations_data.actual.to_json }
 
 %br

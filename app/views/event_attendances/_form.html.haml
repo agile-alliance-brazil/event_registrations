@@ -52,7 +52,7 @@
             = @attendance.errors[:city].join(', ')
         .field{class: 'form-field'}
           = form.label t('event_attendances.form.state'), class: 'control-label'
-          = form.text_field :state, class: 'form-control'
+          = form.text_field :state, class: 'form-control', maxlength: 2
           .div{class: 'error-field'}
             = @attendance.errors[:state].join(', ')
         .field{class: 'form-field'}

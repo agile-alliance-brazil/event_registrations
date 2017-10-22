@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AttendanceParams
   attr_reader :new_attributes, :user, :event, :request_params
   def initialize(user, event, request_params)
@@ -27,6 +29,7 @@ class AttendanceParams
     attributes[:event_id] = @event.id
     attributes[:user_id] = @user.id
     attributes[:registration_date] ||= Time.zone.now
+    attributes[:state] = attributes[:state].try(:upcase)
     attributes
   end
 end

@@ -49,7 +49,7 @@ class Attendance < ApplicationRecord
   include Concerns::LifeCycle
   before_create :set_last_status_change
 
-  enum job_role: %i[not_informed student analyst manager vp president clevel coach other]
+  enum job_role: %i[not_informed student analyst manager vp president clevel coach other developer]
 
   belongs_to :event
   belongs_to :user

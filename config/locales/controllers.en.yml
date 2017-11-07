@@ -40,6 +40,7 @@ en:
           manager: "Manager"
           student: "Student"
           coach: "Coach"
+          developer: "Developer"
         professional_informations: "Professional Informations"
         attendance_address: "Contact Info"
         attendance_personal: "Personal Informations"

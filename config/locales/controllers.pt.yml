@@ -40,6 +40,7 @@ pt:
           president: "Presidente"
           other: "Outro"
           coach: "Coach"
+          developer: "Desenvolvedor(a)"
         professional_informations: "Informações Profissionais"
         attendance_address: "Informações para contato"
         attendance_personal: "Informações Pessoais"

@@ -34,6 +34,7 @@ describe AttendanceHelper, type: :helper do
       expect(payment_types_options).to eq(options)
     end
   end
+
   describe '#job_role_options' do
     it { expect(job_role_options).to eq Attendance.job_roles.map { |job_role| [t("attendances.new.form.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] } }
   end

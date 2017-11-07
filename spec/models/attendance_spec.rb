@@ -52,7 +52,7 @@ RSpec.describe Attendance, type: :model do
   end
 
   context 'enums' do
-    it { is_expected.to define_enum_for(:job_role).with(%i[not_informed student analyst manager vp president clevel coach other]) }
+    it { is_expected.to define_enum_for(:job_role).with(%i[not_informed student analyst manager vp president clevel coach other developer]) }
   end
 
   context 'callbacks' do

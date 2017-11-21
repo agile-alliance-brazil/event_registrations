@@ -1,7 +1,10 @@
 %tr{ id: "attendance_#{attendance.id}" }
   %td= link_to "#{attendance.last_name}, #{attendance.first_name}", attendance_path(attendance), method: :get
   %td= attendance.organization
-  %td= attendance.group_name
+
+  %td
+    - if attendance.registration_group.present?
+      = link_to attendance.group_name, event_registration_group_path(@event, attendance.registration_group)
   %td= attendance.state
   %td= t("report.payment_type.#{attendance.payment_type || 'nil'}")
   %td= attendance.registration_date.strftime('%d/%m/%Y %H:%M')

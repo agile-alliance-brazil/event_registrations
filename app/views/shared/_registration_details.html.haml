@@ -2,9 +2,11 @@
   %tr
     %th= Attendance.human_attribute_name :registration_date
     %th= Attendance.human_attribute_name :registration_value
+    %th= Attendance.human_attribute_name :registration_group
   %tr
     %td= l(attendance.registration_date.to_date)
     %td= number_to_currency(attendance.registration_value, :locale => :pt)
+    %td= attendance.group_name
   %tr.last
     %th= t('registration_total.total')
     %th= number_to_currency(attendance.registration_value, :locale => :pt)

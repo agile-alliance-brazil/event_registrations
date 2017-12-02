@@ -99,6 +99,10 @@ class Event < ApplicationRecord
     attendance_limit - (attendances.active.size + reserved)
   end
 
+  def attendances_count
+    attendances.active.count + reserved
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)

@@ -9,8 +9,9 @@ class AttendancesController < ApplicationController
     @pending_total = event_for_index.attendances.pending.count
     @accepted_total = event_for_index.attendances.accepted.count
     @paid_total = event_for_index.attendances.paid.count
+    @reserved_total = event_for_index.reserved_count
     @cancelled_total = event_for_index.attendances.cancelled.count
-    @total = event_for_index.attendances.count
+    @total = event_for_index.attendances_count
     @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
   end
 

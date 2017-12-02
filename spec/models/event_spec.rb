@@ -394,4 +394,11 @@ RSpec.describe Event, type: :model do
     let!(:other_attendance) { FactoryGirl.create :attendance, event: event, registration_group: group }
     it { expect(event.attendances_count).to eq 4 }
   end
+
+  describe '#reserved_count' do
+    let(:event) { FactoryGirl.create :event }
+    let!(:group) { FactoryGirl.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
+    let!(:other_attendance) { FactoryGirl.create :attendance, event: event, registration_group: group }
+    it { expect(event.reserved_count).to eq 2 }
+  end
 end

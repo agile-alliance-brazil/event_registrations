@@ -37,7 +37,7 @@ class Event < ApplicationRecord
   scope :tomorrow_events, -> { where(start_date: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day) }
 
   def full?
-    places_sold = reserved + attendances.active.size
+    places_sold = reserved_count + attendances.active.size
     attendance_limit.present? && attendance_limit > 0 && (attendance_limit <= places_sold)
   end
 
@@ -96,11 +96,15 @@ class Event < ApplicationRecord
   end
 
   def capacity_left
-    attendance_limit - (attendances.active.size + reserved)
+    attendance_limit - (attendances.active.size + reserved_count)
   end
 
   def attendances_count
-    attendances.active.count + reserved
+    attendances.active.count + reserved_count
+  end
+
+  def reserved_count
+    RegistrationGroupRepository.instance.reserved_for_event(self)
   end
 
   private
@@ -128,9 +132,5 @@ class Event < ApplicationRecord
   def period_valid?
     return unless start_date.present? && end_date.present?
     errors.add(:end_date, :invalid_period) if start_date > end_date
-  end
-
-  def reserved
-    RegistrationGroupRepository.instance.reserved_for_event(self)
   end
 end

@@ -9,14 +9,14 @@ RSpec.describe AttendancesController, type: :controller do
     sign_in user
   end
 
-  describe '#index' do
+  describe 'GET #index' do
     let(:user) { FactoryGirl.create(:user) }
     before do
       sign_in user
       disable_authorization
     end
 
-    context 'with no search parameter' do
+    context 'passing no search parameter' do
       context 'and no attendances' do
         let!(:event) { FactoryGirl.create(:event) }
         before { get :index, params: { event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
@@ -30,35 +30,36 @@ RSpec.describe AttendancesController, type: :controller do
           before { get :index, params: { event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
           it { expect(assigns(:attendances_list)).to eq [] }
         end
-        context 'and one attendance associated' do
-          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
+        context 'having attendances and reservations' do
+          let!(:event) { FactoryGirl.create(:event) }
+          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
+          let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
+          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
+          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
+          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+          let!(:group) { FactoryGirl.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
+
           before { get :index, params: { event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
-          it { expect(assigns(:attendances_list)).to match_array [attendance] }
-        end
-        context 'and one associated and other not' do
-          let!(:other_attendance) { FactoryGirl.create(:attendance) }
-          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
-          before { get :index, params: { event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
-          it { expect(assigns(:attendances_list)).to match_array [attendance] }
-        end
-        context 'and two associated' do
-          let!(:other_attendance) { FactoryGirl.create(:attendance) }
-          let!(:event) { FactoryGirl.create(:event, attendances: [attendance, other_attendance]) }
-          before { get :index, params: { event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
-          it { expect(assigns(:attendances_list)).to match_array [attendance, other_attendance] }
-        end
-        context 'and one attendance in one event and other in other event' do
-          let!(:other_attendance) { FactoryGirl.create(:attendance) }
-          let!(:event) { FactoryGirl.create(:event, attendances: [attendance]) }
-          let!(:other_event) { FactoryGirl.create(:event, attendances: [other_attendance]) }
-          before { get :index, params: { event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
-          it { expect(assigns(:attendances_list)).to match_array [attendance] }
+          it 'assigns the instance variables and renders the template' do
+            expect(response).to render_template :index
+            expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed]
+            expect(assigns(:waiting_total)).to eq 1
+            expect(assigns(:pending_total)).to eq 1
+            expect(assigns(:accepted_total)).to eq 1
+            expect(assigns(:paid_total)).to eq 2
+            expect(assigns(:reserved_total)).to eq 3
+            expect(assigns(:cancelled_total)).to eq 1
+            expect(assigns(:total)).to eq 7
+            expect(assigns(:burnup_registrations_data).ideal.count).to eq 32
+            expect(assigns(:burnup_registrations_data).actual.count).to eq 1
+          end
         end
       end
     end
   end
 
-  describe '#show' do
+  describe 'GET #show' do
     context 'with a valid attendance' do
       let!(:event) { FactoryGirl.create(:event) }
       let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
@@ -77,7 +78,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  describe '#destroy' do
+  describe 'DELETE #destroy' do
     subject(:attendance) { FactoryGirl.create(:attendance) }
 
     it 'cancels attendance' do
@@ -105,7 +106,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  describe '#confirm' do
+  describe 'PUT #confirm' do
     context 'responding HTML' do
       let!(:attendance) { FactoryGirl.create(:attendance) }
       it 'confirms attendance' do
@@ -158,7 +159,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  describe '#pay_it' do
+  describe 'PUT #pay_it' do
     let!(:event) { FactoryGirl.create(:event) }
 
     context 'pending attendance' do
@@ -197,7 +198,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  describe '#accept_it' do
+  describe 'PUT #accept_it' do
     let!(:event) { FactoryGirl.create(:event) }
 
     context 'pending attendance' do
@@ -219,7 +220,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  describe '#recover_it' do
+  describe 'PUT #recover_it' do
     let!(:event) { FactoryGirl.create(:event) }
     context 'when is an individual registration' do
       let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
@@ -234,7 +235,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  describe '#dequeue' do
+  describe 'PATCH #dequeue' do
     let!(:event) { FactoryGirl.create(:event) }
     context 'when is an individual registration' do
       let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'waiting') }
@@ -251,7 +252,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  describe '#search' do
+  describe 'GET #search' do
     let(:admin) { FactoryGirl.create(:admin) }
     before { sign_in admin }
 

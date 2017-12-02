@@ -23,6 +23,10 @@
         = label_tag 'paid', "#{t('attendance.enum.status.paid', count: @paid_total)} (#{@paid_total})"
 
       %span{class: 'col-xs-4'}
+        = check_box_tag 'paid_in_advance', 'paid_in_advance', true
+        = label_tag 'paid_in_advance', "#{t('attendance.enum.status.paid_in_advance', count: @reserved_total)} (#{@paid_total})"
+
+      %span{class: 'col-xs-4'}
         = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
         = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"
 
@@ -30,6 +34,7 @@
       %div{class: 'col-xs-8'}
         = label_tag t('formtastic.fields.search.placeholder'), nil, class: 'control-label'
         = text_field_tag :search, params[:search], class: 'form-control'
+
     %div{class: 'row top10'}
       %div{class: 'col-xs-6'}
         = link_to t('attendances.index.search'), '#', onclick: "submitSearch(#{@event.id});", class: 'btn btn-sm btn-primary'

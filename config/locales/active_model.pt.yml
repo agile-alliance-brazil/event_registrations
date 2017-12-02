@@ -138,6 +138,9 @@ pt:
         paid:
           one: "Paga"
           other: "Pagas"
+        paid_in_advance:
+          one: "Reservada"
+          other: "Reservadas"
         cancelled:
           one: "Cancelada"
           other: "Canceladas"

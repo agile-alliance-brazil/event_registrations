@@ -1,8 +1,12 @@
 %div{class: 'row'}
   %div{class: 'col-xs-12 col-sm-4 col-sm-offset-1'}
     %h4{class: 'row'}
-      %span{class: 'col-xs-3'}
-        = "#{t('attendances.summary.registration_total')}: #{@attendances_list.count}"
+      %span{class: 'col-xs-12'}
+        = "#{t('attendances.summary.registration_total')}: #{@attendances_list.count} inscrições"
+    %h4{class: 'row'}
+      %span{class: 'col-xs-12'}
+        = "#{t('attendance.enum.status.paid_in_advance', count: @reserved_total)}: #{@reserved_total} inscrições"
+
     %div{class: 'row'}
       %span{class: 'col-xs-3'}= render 'reports_menu', event: @event
 
@@ -23,9 +27,6 @@
         = label_tag 'paid', "#{t('attendance.enum.status.paid', count: @paid_total)} (#{@paid_total})"
 
     %div{class: 'row'}
-      %span{class: 'col-xs-6'}
-        = check_box_tag 'paid_in_advance', 'paid_in_advance', true
-        = label_tag 'paid_in_advance', "#{t('attendance.enum.status.paid_in_advance', count: @reserved_total)} (#{@paid_total})"
       %span{class: 'col-xs-6'}
         = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
         = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"

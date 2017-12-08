@@ -107,6 +107,12 @@ class Event < ApplicationRecord
     RegistrationGroupRepository.instance.reserved_for_event(self)
   end
 
+  def average_ticket
+    attendances_confirmed = attendances.where("attendances.STATUS = 'confirmed' OR attendances.STATUS = 'showed_in'").includes(:invoices)
+    return 0 if attendances_confirmed.empty?
+    attendances_confirmed.sum('invoices.amount') / attendances_confirmed.count
+  end
+
   private
 
   def not_amounted_group(attendance, payment_type)

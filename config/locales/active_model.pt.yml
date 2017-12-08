@@ -138,12 +138,15 @@ pt:
         paid:
           one: "Paga"
           other: "Pagas"
-        paid_in_advance:
-          one: "Reservada"
-          other: "Reservadas"
         cancelled:
           one: "Cancelada"
           other: "Canceladas"
         confirmed:
           one: "Confirmada"
           other: "Confirmadas"
+  registration_group:
+    paid_in_advance:
+      one: "Reservada"
+      other: "Reservadas"
+  event:
+    average_ticket: "Ticket Médio"

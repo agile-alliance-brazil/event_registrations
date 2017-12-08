@@ -5,7 +5,10 @@
         = "#{t('attendances.summary.registration_total')}: #{@attendances_list.count} inscrições"
     %h4{class: 'row'}
       %span{class: 'col-xs-12'}
-        = "#{t('attendance.enum.status.paid_in_advance', count: @reserved_total)}: #{@reserved_total} inscrições"
+        = "#{t('registration_group.paid_in_advance', count: @reserved_total)}: #{@reserved_total} inscrições"
+    %h4{class: 'row'}
+      %span{class: 'col-xs-12'}
+        = "#{t('event.average_ticket')}: #{number_to_currency(@event.average_ticket)}"
 
     %div{class: 'row'}
       %span{class: 'col-xs-3'}= render 'reports_menu', event: @event

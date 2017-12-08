@@ -10,6 +10,7 @@ module Concerns
       scope :confirmed, -> { where(status: :confirmed) }
       scope :active, -> { where('status NOT IN (?)', %i[cancelled no_show waiting]) }
       scope :waiting, -> { where(status: :waiting) }
+      scope :showed_in, -> { where(status: :showed_in) }
 
       state_machine :status, initial: :pending do
         after_transition on: %i[cancel mark_no_show], do: :cancel_invoice!
@@ -25,6 +26,7 @@ module Concerns
         event(:cancel) { transition %i[waiting pending accepted paid confirmed] => :cancelled }
         event(:recover) { transition cancelled: :pending }
         event(:mark_no_show) { transition %i[pending accepted] => :no_show }
+        event(:mark_show) { transition %i[paid confirm] => :showed_in }
         event(:dequeue) { transition waiting: :pending }
         state(:confirmed) { validates :payment_agreement, acceptance: true }
 
@@ -53,7 +55,6 @@ module Concerns
         end
       end
     end
-    # rubocop:enable Metrics/BlockLength
 
     def cancellable?
       waiting? || pending? || accepted? || paid? || confirmed?

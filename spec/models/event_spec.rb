@@ -398,7 +398,24 @@ RSpec.describe Event, type: :model do
   describe '#reserved_count' do
     let(:event) { FactoryBot.create :event }
     let!(:group) { FactoryBot.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
-    let!(:other_attendance) { FactoryBot.create :attendance, event: event, registration_group: group }
+    let!(:attendance) { FactoryBot.create :attendance, event: event, registration_group: group }
     it { expect(event.reserved_count).to eq 2 }
+  end
+
+  describe '#average_ticket' do
+    let(:event) { FactoryBot.create :event }
+
+    context 'having attendances' do
+      let(:invoice) { FactoryBot.create :invoice, amount: 200 }
+      let(:other_invoice) { FactoryBot.create :invoice, amount: 500 }
+      let!(:attendance) { FactoryBot.create :attendance, event: event, invoices: [invoice], status: :confirmed }
+      let!(:other_attendance) { FactoryBot.create :attendance, event: event, invoices: [other_invoice], status: :showed_in }
+
+      it { expect(event.average_ticket).to eq 350 }
+    end
+
+    context 'having no attendances' do
+      it { expect(event.average_ticket).to eq 0 }
+    end
   end
 end

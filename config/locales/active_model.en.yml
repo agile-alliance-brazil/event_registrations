@@ -88,6 +88,9 @@ en:
         pending: "Pending"
         accepted: "Accepted"
         paid: "Paid"
-        paid_in_advance: "Reserved"
         cancelled: "Cancelled"
         confirmed: "Confirmed"
+  registration_group:
+    paid_in_advance: "Reserved"
+  event:
+    average_ticket: "Average Ticket"

@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), '../../lib/pag_seguro_adapter')
 
 describe PagSeguroAdapter do
-  let(:attendance) { FactoryGirl.create(:attendance) }
-  let(:invoice) { FactoryGirl.create(:invoice, invoiceable: attendance) }
+  let(:attendance) { FactoryBot.create(:attendance) }
+  let(:invoice) { FactoryBot.create(:invoice, invoiceable: attendance) }
 
   context 'from invoice' do
     it 'generates list of items from invoice' do

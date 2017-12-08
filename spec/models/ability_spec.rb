@@ -1,6 +1,6 @@
 describe Ability, type: :model do
-  let(:user) { FactoryGirl.create :user }
-  let(:event) { FactoryGirl.create :event }
+  let(:user) { FactoryBot.create :user }
+  let(:event) { FactoryBot.create :event }
   let(:deadline) { event.end_date }
   subject(:ability) { Ability.new(user, event) }
 
@@ -18,7 +18,7 @@ describe Ability, type: :model do
     it { expect(ability).to be_able_to(:manage, user) }
 
     it 'can view their attendances' do
-      attendance = FactoryGirl.build(:attendance)
+      attendance = FactoryBot.build(:attendance)
       expect(ability).not_to be_able_to(:show, attendance)
       attendance.email = user.email
       expect(ability).to be_able_to(:show, attendance)
@@ -29,20 +29,20 @@ describe Ability, type: :model do
     end
 
     it 'can view their attendance even when other user created it' do
-      other_user = FactoryGirl.build(:user)
-      attendance = FactoryGirl.build(:attendance, user: other_user, email: user.email)
+      other_user = FactoryBot.build(:user)
+      attendance = FactoryBot.build(:attendance, user: other_user, email: user.email)
       expect(ability).to be_able_to(:show, attendance)
     end
 
     it 'can cancel (destroy) their attendances' do
-      attendance = FactoryGirl.build(:attendance)
+      attendance = FactoryBot.build(:attendance)
       expect(ability).not_to be_able_to(:destroy, attendance)
       attendance.user = user
       expect(ability).to be_able_to(:destroy, attendance)
     end
 
     it 'cannot confirm their attendances' do
-      attendance = FactoryGirl.build(:attendance, user: user)
+      attendance = FactoryBot.build(:attendance, user: user)
       expect(ability).not_to be_able_to(:confirm, attendance)
     end
 
@@ -74,7 +74,7 @@ describe Ability, type: :model do
 
   context 'as organizers' do
     context 'when the user manages the event' do
-      let(:attendance) { FactoryGirl.create :attendance, event: event, user: user }
+      let(:attendance) { FactoryBot.create :attendance, event: event, user: user }
       before do
         user.organized_events << event
         user.add_role 'organizer'
@@ -94,15 +94,15 @@ describe Ability, type: :model do
         it { expect(ability).to be_able_to(:manage, attendance) }
       end
       context 'for registration_period' do
-        let(:registration_period) { FactoryGirl.create :registration_period, event: event }
+        let(:registration_period) { FactoryBot.create :registration_period, event: event }
         it { expect(ability).to be_able_to(:manage, registration_period) }
       end
       context 'for registration_quota' do
-        let(:registration_quota) { FactoryGirl.create :registration_quota, event: event }
+        let(:registration_quota) { FactoryBot.create :registration_quota, event: event }
         it { expect(ability).to be_able_to(:manage, registration_quota) }
       end
       context 'for registration_group' do
-        let(:registration_group) { FactoryGirl.create :registration_group, event: event }
+        let(:registration_group) { FactoryBot.create :registration_group, event: event }
         it { expect(ability).to be_able_to(:manage, registration_group) }
       end
     end

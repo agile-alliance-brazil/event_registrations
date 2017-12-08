@@ -1,8 +1,8 @@
 describe Transfer, type: :model do
   let(:origin_date) { 1.month.from_now }
-  let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }
+  let!(:origin) { FactoryBot.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }
   let!(:origin_invoice) { Invoice.from_attendance(origin) }
-  let!(:destination) { FactoryGirl.create(:attendance, id: 2, status: :pending, registration_value: 540) }
+  let!(:destination) { FactoryBot.create(:attendance, id: 2, status: :pending, registration_value: 540) }
   let(:transfer) { Transfer.build(origin_id: origin.id, destination_id: destination.id) }
 
   it { expect(transfer).not_to be_persisted }
@@ -15,12 +15,12 @@ describe Transfer, type: :model do
       expect(transfer).not_to be_valid
     end
     it 'not be valid with pending origin' do
-      origin = FactoryGirl.create(:attendance, status: :pending)
+      origin = FactoryBot.create(:attendance, status: :pending)
       transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
       expect(transfer).not_to be_valid
     end
     it 'not be valid with cancelled origin' do
-      origin = FactoryGirl.create(:attendance, status: :cancelled)
+      origin = FactoryBot.create(:attendance, status: :cancelled)
       transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
       expect(transfer).not_to be_valid
     end
@@ -30,22 +30,22 @@ describe Transfer, type: :model do
       expect(transfer).not_to be_valid
     end
     it 'not be valid with paid destination' do
-      destination = FactoryGirl.create(:attendance, status: :paid)
+      destination = FactoryBot.create(:attendance, status: :paid)
       transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
       expect(transfer).not_to be_valid
     end
     it 'not be valid with confirmed destination' do
-      destination = FactoryGirl.create(:attendance, status: :confirmed)
+      destination = FactoryBot.create(:attendance, status: :confirmed)
       transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
       expect(transfer).not_to be_valid
     end
     it 'not be valid with cancelled destination' do
-      destination = FactoryGirl.create(:attendance, status: :cancelled)
+      destination = FactoryBot.create(:attendance, status: :cancelled)
       transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
       expect(transfer).not_to be_valid
     end
     it 'be valid with confirmed origin and pending destination' do
-      origin = FactoryGirl.create(:attendance, status: :confirmed)
+      origin = FactoryBot.create(:attendance, status: :confirmed)
       transfer = Transfer.build(origin_id: origin.id, destination_id: destination.id)
       expect(transfer).to be_valid
     end
@@ -84,7 +84,7 @@ describe Transfer, type: :model do
     end
 
     context 'with confirmed origin' do
-      let!(:origin) { FactoryGirl.create(:attendance, id: 1, status: :confirmed, registration_value: 420, registration_date: origin_date) }
+      let!(:origin) { FactoryBot.create(:attendance, id: 1, status: :confirmed, registration_value: 420, registration_date: origin_date) }
       it 'also changes the related invoice' do
         Invoice.from_attendance(origin, 'gateway')
         Invoice.from_attendance(destination, 'gateway')

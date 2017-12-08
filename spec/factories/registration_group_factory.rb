@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :registration_group do
     name { Faker::Company.name }
     event

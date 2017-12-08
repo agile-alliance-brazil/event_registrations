@@ -38,7 +38,7 @@ group :development, :test do
   gem 'byebug', require: false
   gem 'database_cleaner'
   gem 'dotenv-rails', require: false
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'metric_fu'

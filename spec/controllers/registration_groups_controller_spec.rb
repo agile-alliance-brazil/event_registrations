@@ -1,5 +1,5 @@
 describe RegistrationGroupsController, type: :controller do
-  let(:admin) { FactoryGirl.create :admin }
+  let(:admin) { FactoryBot.create :admin }
   before { sign_in admin }
 
   context 'ability stuff' do
@@ -10,8 +10,8 @@ describe RegistrationGroupsController, type: :controller do
 
   describe '#index' do
     context 'with valid data' do
-      let(:event) { FactoryGirl.create :event }
-      let!(:group) { FactoryGirl.create :registration_group, event: event }
+      let(:event) { FactoryBot.create :event }
+      let!(:group) { FactoryBot.create :registration_group, event: event }
 
       context 'instance variables' do
         before { get :index, params: { event_id: event } }
@@ -25,15 +25,15 @@ describe RegistrationGroupsController, type: :controller do
       end
 
       context 'and two groups for event' do
-        let!(:other_group) { FactoryGirl.create :registration_group, event: event }
+        let!(:other_group) { FactoryBot.create :registration_group, event: event }
         before { get :index, params: { event_id: event } }
         it { expect(assigns(:groups)).to match_array [group, other_group] }
         it { expect(response).to render_template :index }
       end
 
       context 'and two groups one for event and other not' do
-        let!(:other_group) { FactoryGirl.create :registration_group, event: event }
-        let!(:out) { FactoryGirl.create :registration_group }
+        let!(:other_group) { FactoryBot.create :registration_group, event: event }
+        let!(:out) { FactoryBot.create :registration_group }
         before { get :index, params: { event_id: event } }
         it { expect(assigns(:groups)).to match_array [group, other_group] }
         it { expect(response).to render_template :index }
@@ -47,9 +47,9 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe '#show' do
-    let(:event) { FactoryGirl.create :event }
-    let(:group) { FactoryGirl.create :registration_group, event: event }
-    let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: 'gateway' }
+    let(:event) { FactoryBot.create :event }
+    let(:group) { FactoryBot.create :registration_group, event: event }
+    let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: 'gateway' }
     context 'without attendances' do
       before { get :show, params: { event_id: event.id, id: group.id } }
       it { expect(assigns(:group)).to eq group }
@@ -58,9 +58,9 @@ describe RegistrationGroupsController, type: :controller do
     end
 
     context 'with attendances' do
-      let!(:third_attendance) { FactoryGirl.create(:attendance, registration_group: group, created_at: 5.days.ago) }
-      let!(:first_attendance) { FactoryGirl.create(:attendance, registration_group: group, created_at: 2.days.ago) }
-      let!(:second_attendance) { FactoryGirl.create(:attendance, registration_group: group, created_at: 3.days.ago) }
+      let!(:third_attendance) { FactoryBot.create(:attendance, registration_group: group, created_at: 5.days.ago) }
+      let!(:first_attendance) { FactoryBot.create(:attendance, registration_group: group, created_at: 2.days.ago) }
+      let!(:second_attendance) { FactoryBot.create(:attendance, registration_group: group, created_at: 3.days.ago) }
       before { get :show, params: { event_id: event.id, id: group.id } }
       it { expect(assigns(:attendance_list)).to eq [first_attendance, second_attendance, third_attendance] }
     end
@@ -68,7 +68,7 @@ describe RegistrationGroupsController, type: :controller do
 
   describe '#destroy' do
     context 'valid data' do
-      let!(:group) { FactoryGirl.create :registration_group }
+      let!(:group) { FactoryBot.create :registration_group }
       before { delete :destroy, params: { event_id: group.event.id, id: group.id } }
       it { expect(RegistrationGroup.count).to be 0 }
       it { expect(response).to redirect_to event_registration_groups_path(group.event) }
@@ -77,7 +77,7 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe '#create' do
-    let(:event) { FactoryGirl.create :event }
+    let(:event) { FactoryBot.create :event }
     context 'with valid parameters' do
       let(:valid_params) { { name: 'new_group', discount: 5, minimum_size: 10, amount: 137, capacity: 100, paid_in_advance: true } }
       before { post :create, params: { event_id: event, registration_group: valid_params } }
@@ -105,10 +105,10 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe '#renew_invoice' do
-    let(:event) { FactoryGirl.create :event }
-    let(:group) { FactoryGirl.create :registration_group, event: event }
+    let(:event) { FactoryBot.create :event }
+    let(:group) { FactoryBot.create :registration_group, event: event }
     context 'with a pending invoice' do
-      let!(:invoice) { FactoryGirl.create :invoice, invoiceable: group, status: Invoice::PENDING, amount: 120.00 }
+      let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, status: Invoice::PENDING, amount: 120.00 }
       context 'and the group total price is different from current amount in invoice' do
         it 'will update the invoice amount' do
           RegistrationGroup.any_instance.stubs(:total_price).returns(240.00)
@@ -120,8 +120,8 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    let(:event) { FactoryGirl.create :event }
-    let(:group) { FactoryGirl.create :registration_group, event: event }
+    let(:event) { FactoryBot.create :event }
+    let(:group) { FactoryBot.create :registration_group, event: event }
     context 'with valid IDs' do
       it 'assigns the instance variable and renders the template' do
         get :edit, params: { event_id: event, id: group }
@@ -144,8 +144,8 @@ describe RegistrationGroupsController, type: :controller do
         end
       end
       context 'and a group for other event' do
-        let(:other_event) { FactoryGirl.create :event }
-        let(:group) { FactoryGirl.create :registration_group, event: other_event }
+        let(:other_event) { FactoryBot.create :event }
+        let(:group) { FactoryBot.create :registration_group, event: other_event }
         it 'does not assign the instance variable responds 404' do
           get :edit, params: { event_id: event, id: group }
           expect(assigns(:group)).to be_nil
@@ -156,8 +156,8 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe 'PUT #update' do
-    let(:event) { FactoryGirl.create :event }
-    let(:group) { FactoryGirl.create :registration_group, event: event }
+    let(:event) { FactoryBot.create :event }
+    let(:group) { FactoryBot.create :registration_group, event: event }
     let(:start_date) { Time.zone.now }
     let(:end_date) { 1.week.from_now }
     let(:valid_parameters) { { name: 'updated_group', discount: 5, minimum_size: 10, amount: 137 } }
@@ -201,8 +201,8 @@ describe RegistrationGroupsController, type: :controller do
           end
         end
         context 'and a group for other event' do
-          let(:other_event) { FactoryGirl.create :event }
-          let(:group) { FactoryGirl.create :registration_group, event: other_event }
+          let(:other_event) { FactoryBot.create :event }
+          let(:group) { FactoryBot.create :registration_group, event: other_event }
           it 'does not assign the instance variable responds 404' do
             put :update, params: { event_id: event, id: group, registration_group: valid_parameters }
             expect(assigns(:group)).to be_nil

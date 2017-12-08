@@ -8,9 +8,9 @@ describe User, type: :model do
 
     context 'events uniqueness' do
       it 'only show event once if user has multiple attendances' do
-        user = FactoryGirl.create(:user)
-        first_attendance = FactoryGirl.create(:attendance, user: user)
-        FactoryGirl.create(:attendance, user: user, event: first_attendance.event)
+        user = FactoryBot.create(:user)
+        first_attendance = FactoryBot.create(:attendance, user: user)
+        FactoryBot.create(:attendance, user: user, event: first_attendance.event)
 
         expect(user.events.size).to eq(1)
       end
@@ -35,8 +35,8 @@ describe User, type: :model do
     it { is_expected.not_to allow_value('@12.com').for(:email) }
 
     context 'uniqueness' do
-      let!(:user) { FactoryGirl.create :user }
-      let!(:other_user) { FactoryGirl.build :user, email: user.email }
+      let!(:user) { FactoryBot.create :user }
+      let!(:other_user) { FactoryBot.build :user, email: user.email }
       it { expect(other_user).not_to be_valid }
     end
   end
@@ -44,12 +44,12 @@ describe User, type: :model do
   context 'virtual attributes' do
     context 'twitter user' do
       it 'removes @ from start if present' do
-        user = FactoryGirl.build(:user, twitter_user: '@agilebrazil')
+        user = FactoryBot.build(:user, twitter_user: '@agilebrazil')
         expect(user.twitter_user).to eq('agilebrazil')
       end
 
       it 'keeps as given if doesnt start with @' do
-        user = FactoryGirl.build(:user, twitter_user: 'agilebrazil')
+        user = FactoryBot.build(:user, twitter_user: 'agilebrazil')
         expect(user.twitter_user).to eq('agilebrazil')
       end
     end
@@ -112,53 +112,53 @@ describe User, type: :model do
 
     context 'no email informed by auth provider' do
       let(:hash) { { info: { name: 'John Doe', email: nil } } }
-      let(:user) { FactoryGirl.create(:user, email: nil) }
+      let(:user) { FactoryBot.create(:user, email: nil) }
       subject(:user_from_hash) { User.new_from_auth_hash(hash) }
       it { expect(user_from_hash).not_to eq user }
     end
     context 'email informed by auth provider' do
       let(:hash) { { info: { name: 'John Doe', email: 'bla@xpto.com' } } }
-      let!(:user) { FactoryGirl.create(:user, email: 'bla@xpto.com') }
+      let!(:user) { FactoryBot.create(:user, email: 'bla@xpto.com') }
       subject(:user_from_hash) { User.new_from_auth_hash(hash) }
       it { expect(user_from_hash).to eq user }
     end
   end
 
   describe '#registrations_for_event' do
-    let(:event) { FactoryGirl.create :event }
+    let(:event) { FactoryBot.create :event }
     context 'when having registrations to event and the user' do
-      let(:user) { FactoryGirl.create :user }
+      let(:user) { FactoryBot.create :user }
 
       it 'returns all the registrations' do
-        first = FactoryGirl.create(:attendance, user: user, event: event)
-        second = FactoryGirl.create(:attendance, user: user, event: event)
-        third = FactoryGirl.create(:attendance, user: user, event: event)
+        first = FactoryBot.create(:attendance, user: user, event: event)
+        second = FactoryBot.create(:attendance, user: user, event: event)
+        third = FactoryBot.create(:attendance, user: user, event: event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second, third]
       end
     end
 
     context 'when having two users with registrations' do
-      let(:user) { FactoryGirl.create :user }
-      let(:other_user) { FactoryGirl.create :user }
+      let(:user) { FactoryBot.create :user }
+      let(:other_user) { FactoryBot.create :user }
 
       it 'returns all the registrations for the user' do
-        first = FactoryGirl.create(:attendance, user: user, event: event)
-        second = FactoryGirl.create(:attendance, user: user, event: event)
-        FactoryGirl.create(:attendance, user: other_user, event: event)
+        first = FactoryBot.create(:attendance, user: user, event: event)
+        second = FactoryBot.create(:attendance, user: user, event: event)
+        FactoryBot.create(:attendance, user: other_user, event: event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]
       end
     end
 
     context 'when having two events with registrations' do
-      let(:user) { FactoryGirl.create :user }
-      let(:other_event) { FactoryGirl.create :event }
+      let(:user) { FactoryBot.create :user }
+      let(:other_event) { FactoryBot.create :event }
 
       it 'returns all the registrations for the user' do
-        first = FactoryGirl.create(:attendance, user: user, event: event)
-        second = FactoryGirl.create(:attendance, user: user, event: event)
-        FactoryGirl.create(:attendance, user: user, event: other_event)
+        first = FactoryBot.create(:attendance, user: user, event: event)
+        second = FactoryBot.create(:attendance, user: user, event: event)
+        FactoryBot.create(:attendance, user: user, event: other_event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]
       end
@@ -166,14 +166,14 @@ describe User, type: :model do
   end
 
   describe '#organized_user_present?' do
-    let(:event) { FactoryGirl.create :event }
-    let!(:organizer) { FactoryGirl.create :organizer, organized_events: [event] }
-    let(:user) { FactoryGirl.create :user }
-    let!(:attendance) { FactoryGirl.create :attendance, user: user, event: event }
+    let(:event) { FactoryBot.create :event }
+    let!(:organizer) { FactoryBot.create :organizer, organized_events: [event] }
+    let(:user) { FactoryBot.create :user }
+    let!(:attendance) { FactoryBot.create :attendance, user: user, event: event }
 
-    let(:other_event) { FactoryGirl.create :event }
-    let(:other_user) { FactoryGirl.create :user }
-    let!(:other_attendance) { FactoryGirl.create :attendance, user: other_user, event: other_event }
+    let(:other_event) { FactoryBot.create :event }
+    let(:other_user) { FactoryBot.create :user }
+    let!(:other_attendance) { FactoryBot.create :attendance, user: other_user, event: other_event }
 
     it { expect(organizer.organized_user_present?(user)).to be_truthy }
     it { expect(organizer.organized_user_present?(other_user)).to be_falsey }

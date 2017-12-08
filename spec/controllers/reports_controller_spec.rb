@@ -22,15 +22,15 @@ RSpec.describe ReportsController, type: :controller do
   end
 
   context 'authenticated as organizer' do
-    let(:user) { FactoryGirl.create :user, roles: [:organizer] }
+    let(:user) { FactoryBot.create :user, roles: [:organizer] }
     before { sign_in user }
 
     context 'and is organizing the event' do
       describe 'GET #attendance_organization_size' do
-        let(:event) { FactoryGirl.create :event }
-        let!(:attendances) { FactoryGirl.create_list(:attendance, 10, event: event) }
-        let!(:no_company_attendances) { FactoryGirl.create_list(:attendance, 2, event: event, organization_size: nil) }
-        let!(:cancelled_attendances) { FactoryGirl.create_list(:attendance, 5, event: event, status: :cancelled) }
+        let(:event) { FactoryBot.create :event }
+        let!(:attendances) { FactoryBot.create_list(:attendance, 10, event: event) }
+        let!(:no_company_attendances) { FactoryBot.create_list(:attendance, 2, event: event, organization_size: nil) }
+        let!(:cancelled_attendances) { FactoryBot.create_list(:attendance, 5, event: event, status: :cancelled) }
         it 'assign the instances variables and renders the template' do
           user.organized_events << event
           user.save
@@ -42,10 +42,10 @@ RSpec.describe ReportsController, type: :controller do
       end
 
       describe 'GET #attendance_years_of_experience' do
-        let(:event) { FactoryGirl.create :event }
-        let!(:attendances) { FactoryGirl.create_list(:attendance, 10, event: event) }
-        let!(:no_company_attendances) { FactoryGirl.create_list(:attendance, 2, event: event, organization_size: nil) }
-        let!(:cancelled_attendances) { FactoryGirl.create_list(:attendance, 5, event: event, status: :cancelled) }
+        let(:event) { FactoryBot.create :event }
+        let!(:attendances) { FactoryBot.create_list(:attendance, 10, event: event) }
+        let!(:no_company_attendances) { FactoryBot.create_list(:attendance, 2, event: event, organization_size: nil) }
+        let!(:cancelled_attendances) { FactoryBot.create_list(:attendance, 5, event: event, status: :cancelled) }
         it 'assign the instances variables and renders the template' do
           user.organized_events << event
           user.save
@@ -57,10 +57,10 @@ RSpec.describe ReportsController, type: :controller do
       end
 
       describe 'GET #attendance_job_role' do
-        let(:event) { FactoryGirl.create :event }
-        let!(:attendances) { FactoryGirl.create_list(:attendance, 10, event: event) }
-        let!(:no_company_attendances) { FactoryGirl.create_list(:attendance, 2, event: event, organization_size: nil) }
-        let!(:cancelled_attendances) { FactoryGirl.create_list(:attendance, 5, event: event, status: :cancelled) }
+        let(:event) { FactoryBot.create :event }
+        let!(:attendances) { FactoryBot.create_list(:attendance, 10, event: event) }
+        let!(:no_company_attendances) { FactoryBot.create_list(:attendance, 2, event: event, organization_size: nil) }
+        let!(:cancelled_attendances) { FactoryBot.create_list(:attendance, 5, event: event, status: :cancelled) }
         it 'assign the instances variables and renders the template' do
           user.organized_events << event
           user.save
@@ -73,7 +73,7 @@ RSpec.describe ReportsController, type: :controller do
 
       describe 'GET #burnup_registrations' do
         context 'with a valid event' do
-          let!(:event) { FactoryGirl.create :event, organizers: [user] }
+          let!(:event) { FactoryBot.create :event, organizers: [user] }
           it 'calls the service and renders the template' do
             ReportService.instance.expects(:create_burnup_structure).with(event).once.returns(BurnupPresenter.new([], []))
             get :burnup_registrations, params: { event_id: event }
@@ -91,19 +91,19 @@ RSpec.describe ReportsController, type: :controller do
 
     context 'and is not organizing the event' do
       describe 'GET #attendance_organization_size' do
-        let(:event) { FactoryGirl.create :event }
+        let(:event) { FactoryBot.create :event }
         before { get :attendance_organization_size, params: { event_id: event } }
         it { expect(response).to be_not_found }
       end
 
       describe 'GET #attendance_years_of_experience' do
-        let(:event) { FactoryGirl.create :event }
+        let(:event) { FactoryBot.create :event }
         before { get :attendance_years_of_experience, params: { event_id: event } }
         it { expect(response).to be_not_found }
       end
 
       describe 'GET #attendance_job_role' do
-        let(:event) { FactoryGirl.create :event }
+        let(:event) { FactoryBot.create :event }
         before { get :attendance_job_role, params: { event_id: event } }
         it { expect(response).to be_not_found }
       end

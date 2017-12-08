@@ -1,5 +1,5 @@
 RSpec.describe EventAttendancesController, type: :controller do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   let(:valid_attendance) do
     {
       event_id: @event.id,
@@ -33,7 +33,7 @@ RSpec.describe EventAttendancesController, type: :controller do
   end
 
   before :each do
-    @event = FactoryGirl.create(:event)
+    @event = FactoryBot.create(:event)
     WebMock.enable!
   end
 
@@ -42,7 +42,7 @@ RSpec.describe EventAttendancesController, type: :controller do
   end
 
   describe 'GET new' do
-    before { controller.current_user = FactoryGirl.create(:user) }
+    before { controller.current_user = FactoryBot.create(:user) }
 
     it 'renders new template' do
       get :new, params: { event_id: @event.id }
@@ -57,7 +57,7 @@ RSpec.describe EventAttendancesController, type: :controller do
 
   describe '#create' do
     context 'signed in' do
-      let(:user) { FactoryGirl.create :user }
+      let(:user) { FactoryBot.create :user }
       before(:each) do
         sign_in user
         @email = stub(deliver_now: true)
@@ -89,7 +89,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         context 'when the AA service is returning timeout' do
           before { WebMock.stub_request(:get, "#{APP_CONFIG[:agile_alliance][:api_host]}/check_member/#{user.email}").with(headers: { 'Authorization' => APP_CONFIG[:agile_alliance][:api_token] }).to_raise Net::OpenTimeout }
           context 'when the event has a group to AA discount' do
-            let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
+            let!(:aa_group) { FactoryBot.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
             context 'calling html' do
               it 'responds 408' do
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -121,7 +121,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         end
 
         context 'with no period or quotas, but with a valid group' do
-          let(:group) { FactoryGirl.create(:registration_group, event: @event, discount: 30) }
+          let(:group) { FactoryBot.create(:registration_group, event: @event, discount: 30) }
           before do
             Invoice.from_registration_group(group, 'gateway')
             post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
@@ -132,7 +132,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         context 'with period and no quotas or group' do
           price = 740
           let(:event) { Event.create!(valid_event) }
-          let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: price) }
+          let!(:full_registration_period) { FactoryBot.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: price) }
 
           before { post :create, params: { event_id: event.id, attendance: valid_attendance } }
           it { expect(assigns(:attendance).registration_period).to eq full_registration_period }
@@ -142,7 +142,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         context 'with no period and one quota' do
           price = 350
           let(:quota_event) { Event.create!(valid_event) }
-          let!(:quota) { FactoryGirl.create :registration_quota, event: quota_event, quota: 40, order: 1, price: price }
+          let!(:quota) { FactoryBot.create :registration_quota, event: quota_event, quota: 40, order: 1, price: price }
           before { post :create, params: { event_id: quota_event.id, attendance: valid_attendance } }
           it { expect(assigns(:attendance).registration_quota).to eq quota }
           it { expect(assigns(:attendance).registration_value).to eq price }
@@ -150,8 +150,8 @@ RSpec.describe EventAttendancesController, type: :controller do
 
         context 'with statement_agreement as payment type, even with configured quotas and periods' do
           let(:event) { Event.create!(valid_event) }
-          let!(:quota) { FactoryGirl.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
-          let!(:full_registration_period) { FactoryGirl.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
+          let!(:quota) { FactoryBot.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
+          let!(:full_registration_period) { FactoryBot.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
 
           before { post :create, params: { event_id: event.id, payment_type: 'statement_agreement', attendance: valid_attendance } }
           it { expect(Attendance.last.registration_value).to eq event.full_price }
@@ -160,8 +160,8 @@ RSpec.describe EventAttendancesController, type: :controller do
 
       context 'for individual registration' do
         context 'full event' do
-          let(:event) { FactoryGirl.create :event, attendance_limit: 1 }
-          let!(:pending) { FactoryGirl.create :attendance, event: event, status: :pending }
+          let(:event) { FactoryBot.create :event, attendance_limit: 1 }
+          let!(:pending) { FactoryBot.create :attendance, event: event, status: :pending }
           subject(:attendance) { assigns(:attendance) }
 
           it 'puts the attendance in the queue' do
@@ -172,8 +172,8 @@ RSpec.describe EventAttendancesController, type: :controller do
           end
         end
         context 'event having space, but also having attendances in the queue' do
-          let(:event) { FactoryGirl.create :event, attendance_limit: 10 }
-          let!(:waiting) { FactoryGirl.create :attendance, event: event, status: :waiting }
+          let(:event) { FactoryBot.create :event, attendance_limit: 10 }
+          let!(:waiting) { FactoryBot.create :attendance, event: event, status: :waiting }
           subject(:attendance) { assigns(:attendance) }
           it 'puts the attendance in the queue' do
             EmailNotifications.expects(:registration_waiting).returns @email
@@ -220,18 +220,18 @@ RSpec.describe EventAttendancesController, type: :controller do
             end
 
             context 'and with a registration token from other event' do
-              let(:other_event) { FactoryGirl.create :event }
-              let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-              let!(:other_group) { FactoryGirl.create(:registration_group, event: other_event) }
+              let(:other_event) { FactoryBot.create :event }
+              let!(:group) { FactoryBot.create(:registration_group, event: @event) }
+              let!(:other_group) { FactoryBot.create(:registration_group, event: other_event) }
               before { post :create, params: { event_id: @event.id, registration_token: other_group.token, attendance: valid_attendance } }
               it { expect(attendance.registration_group).to be_nil }
             end
           end
 
           context 'and the group is full' do
-            let(:first_attendance) { FactoryGirl.create(:attendance, event: @event) }
-            let(:second_attendance) { FactoryGirl.create(:attendance, event: @event) }
-            let!(:group) { FactoryGirl.create(:registration_group, event: @event, capacity: 2, attendances: [first_attendance, second_attendance]) }
+            let(:first_attendance) { FactoryBot.create(:attendance, event: @event) }
+            let(:second_attendance) { FactoryBot.create(:attendance, event: @event) }
+            let!(:group) { FactoryBot.create(:registration_group, event: @event, capacity: 2, attendances: [first_attendance, second_attendance]) }
             before { post :create, params: { event_id: @event, registration_token: group.token, attendance: valid_attendance } }
             it 'render the form again with the error on flash' do
               expect(response).to render_template :new
@@ -242,7 +242,7 @@ RSpec.describe EventAttendancesController, type: :controller do
 
           context 'a valid attendance' do
             context 'and same email as current user' do
-              let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
+              let!(:group) { FactoryBot.create(:registration_group, event: @event) }
               before do
                 Invoice.from_registration_group(group, 'gateway')
                 post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
@@ -254,7 +254,7 @@ RSpec.describe EventAttendancesController, type: :controller do
 
         context 'when agile alliance member' do
           context 'and not in any group' do
-            let!(:aa_group) { FactoryGirl.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
+            let!(:aa_group) { FactoryBot.create(:registration_group, event: @event, name: 'Membros da Agile Alliance') }
             it 'uses the AA group as attendance group and accept the entrance' do
               Invoice.from_registration_group(aa_group, 'gateway')
               AgileAllianceService.stubs(:check_member).returns(true)
@@ -267,7 +267,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         end
 
         context 'when is an automatic approval group' do
-          let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: true) }
+          let!(:group) { FactoryBot.create(:registration_group, event: @event, automatic_approval: true) }
           before do
             Invoice.from_registration_group(group, 'gateway')
             post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
@@ -276,7 +276,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         end
 
         context 'when is not an automatic approval group' do
-          let!(:group) { FactoryGirl.create(:registration_group, event: @event, automatic_approval: false) }
+          let!(:group) { FactoryBot.create(:registration_group, event: @event, automatic_approval: false) }
           before do
             Invoice.from_registration_group(group, 'gateway')
             post :create, params: { event_id: @event.id, registration_token: group.token, attendance: valid_attendance }
@@ -287,7 +287,7 @@ RSpec.describe EventAttendancesController, type: :controller do
         context 'when attempt to register again to the same event' do
           context 'with a pending attendance existent' do
             context 'in the same event' do
-              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :pending) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: @event, user: user, status: :pending) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -298,8 +298,8 @@ RSpec.describe EventAttendancesController, type: :controller do
             end
 
             context 'in other event' do
-              let(:other_event) { FactoryGirl.create(:event) }
-              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :pending) }
+              let(:other_event) { FactoryBot.create(:event) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: other_event, user: user, status: :pending) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -311,7 +311,7 @@ RSpec.describe EventAttendancesController, type: :controller do
 
           context 'with an accepted attendance existent' do
             context 'in the same event' do
-              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :accepted) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: @event, user: user, status: :accepted) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -322,8 +322,8 @@ RSpec.describe EventAttendancesController, type: :controller do
             end
 
             context 'in other event' do
-              let(:other_event) { FactoryGirl.create(:event) }
-              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :accepted) }
+              let(:other_event) { FactoryBot.create(:event) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: other_event, user: user, status: :accepted) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -334,7 +334,7 @@ RSpec.describe EventAttendancesController, type: :controller do
           end
           context 'with a paid attendance existent' do
             context 'in the same event' do
-              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :paid) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: @event, user: user, status: :paid) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -344,8 +344,8 @@ RSpec.describe EventAttendancesController, type: :controller do
               end
             end
             context 'in other event' do
-              let(:other_event) { FactoryGirl.create(:event) }
-              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :paid) }
+              let(:other_event) { FactoryBot.create(:event) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: other_event, user: user, status: :paid) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -356,7 +356,7 @@ RSpec.describe EventAttendancesController, type: :controller do
           end
           context 'with a confirmed attendance existent' do
             context 'in the same event' do
-              let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :confirmed) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: @event, user: user, status: :confirmed) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -366,8 +366,8 @@ RSpec.describe EventAttendancesController, type: :controller do
               end
             end
             context 'in other event' do
-              let(:other_event) { FactoryGirl.create(:event) }
-              let!(:attendance) { FactoryGirl.create(:attendance, event: other_event, user: user, status: :confirmed) }
+              let(:other_event) { FactoryBot.create(:event) }
+              let!(:attendance) { FactoryBot.create(:attendance, event: other_event, user: user, status: :confirmed) }
               it 'does not include the new attendance and send the user to show of attendance' do
                 AgileAllianceService.stubs(:check_member).returns(false)
                 post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -377,7 +377,7 @@ RSpec.describe EventAttendancesController, type: :controller do
             end
           end
           context 'with a cancelled attendance existent' do
-            let!(:attendance) { FactoryGirl.create(:attendance, event: @event, user: user, status: :cancelled) }
+            let!(:attendance) { FactoryBot.create(:attendance, event: @event, user: user, status: :cancelled) }
             it 'does not include the new attendance and send the user to show of attendance' do
               AgileAllianceService.stubs(:check_member).returns(false)
               post :create, params: { event_id: @event.id, attendance: valid_attendance }
@@ -399,16 +399,16 @@ RSpec.describe EventAttendancesController, type: :controller do
   describe '#edit' do
     before do
       User.any_instance.stubs(:has_approved_session?).returns(true)
-      user = FactoryGirl.create(:user)
+      user = FactoryBot.create(:user)
       sign_in user
       disable_authorization
     end
 
     context 'with a valid attendance' do
-      let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
-      let!(:group) { FactoryGirl.create(:registration_group, event: @event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event) }
-      let!(:attendance_with_group) { FactoryGirl.create(:attendance, event: event, registration_group: group) }
+      let(:event) { FactoryBot.create(:event, full_price: 840.00) }
+      let!(:group) { FactoryBot.create(:registration_group, event: @event) }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event) }
+      let!(:attendance_with_group) { FactoryBot.create(:attendance, event: event, registration_group: group) }
 
       it 'assigns the attendance and render edit' do
         get :edit, params: { event_id: event.id, id: attendance.id }
@@ -424,8 +424,8 @@ RSpec.describe EventAttendancesController, type: :controller do
   end
 
   describe '#update' do
-    let(:event) { FactoryGirl.create(:event, full_price: 840.00) }
-    let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+    let(:event) { FactoryBot.create(:event, full_price: 840.00) }
+    let(:attendance) { FactoryBot.create(:attendance, event: event) }
 
     let(:valid_attendance_parameters) do
       {
@@ -486,7 +486,7 @@ RSpec.describe EventAttendancesController, type: :controller do
       end
 
       context 'and with a group token informed' do
-        let(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
+        let(:group) { FactoryBot.create(:registration_group, event: event, discount: 50) }
 
         it 'updates the user with the token' do
           put :update, params: { event_id: event.id, id: attendance.id, attendance: valid_attendance_parameters, payment_type: 'bank_deposit', registration_token: group.token }
@@ -496,9 +496,9 @@ RSpec.describe EventAttendancesController, type: :controller do
       end
 
       context 'and the price band has changed' do
-        let!(:quota) { FactoryGirl.create(:registration_quota, event: event, quota: 1, price: 100) }
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, registration_quota: quota) }
-        let!(:group) { FactoryGirl.create(:registration_group, event: event, discount: 50) }
+        let!(:quota) { FactoryBot.create(:registration_quota, event: event, quota: 1, price: 100) }
+        let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_quota: quota) }
+        let!(:group) { FactoryBot.create(:registration_group, event: event, discount: 50) }
 
         context 'having the same group access token' do
           it 'updates the attendance and does not change the price' do
@@ -512,7 +512,7 @@ RSpec.describe EventAttendancesController, type: :controller do
   end
 
   context 'reports' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
 
     before do
       user.add_role :organizer
@@ -522,7 +522,7 @@ RSpec.describe EventAttendancesController, type: :controller do
     end
 
     describe '#by_state' do
-      let(:event) { FactoryGirl.create(:event) }
+      let(:event) { FactoryBot.create(:event) }
 
       context 'with no attendances' do
         before { get :by_state, params: { event_id: event.id } }
@@ -530,26 +530,26 @@ RSpec.describe EventAttendancesController, type: :controller do
       end
 
       context 'with attendances' do
-        let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
+        let!(:carioca_attendance) { FactoryBot.create(:attendance, event: event, state: 'RJ') }
         context 'with one attendance' do
           before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
         end
 
         context 'with two attendances on same state' do
-          let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ') }
+          let!(:other_carioca) { FactoryBot.create(:attendance, event: event, state: 'RJ') }
           before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 2) }
         end
 
         context 'with two attendances in different states' do
-          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP') }
+          let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP') }
           before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1, 'SP' => 1) }
         end
 
         context 'with two attendances one active and other not' do
-          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', status: 'cancelled') }
+          let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP', status: 'cancelled') }
           before { get :by_state, params: { event_id: event.id } }
           it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
         end
@@ -557,7 +557,7 @@ RSpec.describe EventAttendancesController, type: :controller do
     end
 
     describe '#by_city' do
-      let(:event) { FactoryGirl.create(:event) }
+      let(:event) { FactoryBot.create(:event) }
 
       context 'with no attendances' do
         before { get :by_city, params: { event_id: event.id } }
@@ -565,26 +565,26 @@ RSpec.describe EventAttendancesController, type: :controller do
       end
 
       context 'with attendances' do
-        let!(:carioca_attendance) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
+        let!(:carioca_attendance) { FactoryBot.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
         context 'with one attendance' do
           before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
         end
 
         context 'with two attendances on same state' do
-          let!(:other_carioca) { FactoryGirl.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
+          let!(:other_carioca) { FactoryBot.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
           before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 2) }
         end
 
         context 'with two attendances in different states' do
-          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo') }
+          let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo') }
           before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1, ['Sao Paulo', 'SP'] => 1) }
         end
 
         context 'with two attendances one active and other not' do
-          let!(:paulista_attendance) { FactoryGirl.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo', status: 'cancelled') }
+          let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo', status: 'cancelled') }
           before { get :by_city, params: { event_id: event.id } }
           it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
         end
@@ -592,7 +592,7 @@ RSpec.describe EventAttendancesController, type: :controller do
     end
 
     describe '#last_biweekly_active' do
-      let(:event) { FactoryGirl.create(:event) }
+      let(:event) { FactoryBot.create(:event) }
 
       context 'with no attendances' do
         before { get :last_biweekly_active, params: { event_id: event.id } }
@@ -603,11 +603,11 @@ RSpec.describe EventAttendancesController, type: :controller do
         it 'returns just the attendances within two weeks ago' do
           now = Time.zone.local(2015, 4, 30, 0, 0, 0)
           Timecop.freeze(now)
-          last_week = FactoryGirl.create(:attendance, event: event, created_at: 7.days.ago)
-          FactoryGirl.create(:attendance, event: event, created_at: 7.days.ago)
-          today = FactoryGirl.create(:attendance, event: event)
-          FactoryGirl.create(:attendance, event: event, created_at: 21.days.ago)
-          FactoryGirl.create(:attendance)
+          last_week = FactoryBot.create(:attendance, event: event, created_at: 7.days.ago)
+          FactoryBot.create(:attendance, event: event, created_at: 7.days.ago)
+          today = FactoryBot.create(:attendance, event: event)
+          FactoryBot.create(:attendance, event: event, created_at: 21.days.ago)
+          FactoryBot.create(:attendance)
           get :last_biweekly_active, params: { event_id: event.id }
           expect(assigns(:attendances_biweekly_grouped)).to eq(last_week.created_at.to_date => 2,
                                                                today.created_at.to_date => 1)
@@ -617,20 +617,20 @@ RSpec.describe EventAttendancesController, type: :controller do
     end
 
     describe '#to_approval' do
-      let(:event) { FactoryGirl.create(:event) }
-      let(:group) { FactoryGirl.create(:registration_group, event: event) }
-      let!(:pending) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :pending) }
-      let!(:other_pending) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :pending) }
-      let!(:out_pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-      let!(:accepted) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :accepted) }
-      let!(:paid) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :paid) }
-      let!(:confirmed) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: :confirmed) }
+      let(:event) { FactoryBot.create(:event) }
+      let(:group) { FactoryBot.create(:registration_group, event: event) }
+      let!(:pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
+      let!(:other_pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
+      let!(:out_pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
+      let!(:accepted) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :accepted) }
+      let!(:paid) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :paid) }
+      let!(:confirmed) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :confirmed) }
       before { get :to_approval, params: { event_id: event.id } }
       it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
     end
 
     describe '#payment_type_report' do
-      let(:event) { FactoryGirl.create(:event) }
+      let(:event) { FactoryBot.create(:event) }
 
       context 'with no attendances' do
         before { get :payment_type_report, params: { event_id: event.id } }
@@ -638,16 +638,16 @@ RSpec.describe EventAttendancesController, type: :controller do
       end
 
       context 'with attendances' do
-        let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, payment_type: 'gateway') }
-        let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
-        let!(:valued) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: 'gateway', registration_value: 123) }
-        let!(:grouped) { FactoryGirl.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
-        let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: 'bank_deposit') }
-        let!(:other_confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement') }
-        let!(:free) { FactoryGirl.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement', registration_value: 0) }
+        let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, payment_type: 'gateway') }
+        let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
+        let!(:valued) { FactoryBot.create(:attendance, event: event, status: :paid, payment_type: 'gateway', registration_value: 123) }
+        let!(:grouped) { FactoryBot.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
+        let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, payment_type: 'bank_deposit') }
+        let!(:other_confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement') }
+        let!(:free) { FactoryBot.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement', registration_value: 0) }
 
-        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, payment_type: 'gateway') }
-        let!(:out_of_event) { FactoryGirl.create(:attendance, status: :paid, payment_type: 'gateway') }
+        let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled, payment_type: 'gateway') }
+        let!(:out_of_event) { FactoryBot.create(:attendance, status: :paid, payment_type: 'gateway') }
 
         before { get :payment_type_report, params: { event_id: event.id } }
         it 'returns the attendances with non free registration value grouped by payment type' do
@@ -662,10 +662,10 @@ RSpec.describe EventAttendancesController, type: :controller do
 
   describe '#waiting_list' do
     context 'signed as organizer' do
-      let(:organizer) { FactoryGirl.create :organizer }
+      let(:organizer) { FactoryBot.create :organizer }
       before { sign_in organizer }
       context 'and it is organizing the event' do
-        let(:event) { FactoryGirl.create(:event, organizers: [organizer]) }
+        let(:event) { FactoryBot.create(:event, organizers: [organizer]) }
 
         context 'having no attendances' do
           before { get :waiting_list, params: { event_id: event.id } }
@@ -673,14 +673,14 @@ RSpec.describe EventAttendancesController, type: :controller do
           it { expect(assigns(:waiting_list)).to eq [] }
         end
         context 'having attendances' do
-          let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
-          let!(:other_waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
-          let!(:out_waiting) { FactoryGirl.create(:attendance, status: :waiting) }
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
-          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+          let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
+          let!(:other_waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
+          let!(:out_waiting) { FactoryBot.create(:attendance, status: :waiting) }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
+          let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }
+          let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid) }
+          let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed) }
+          let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled) }
 
           it 'returns just the waiting attendances' do
             get :waiting_list, params: { event_id: event.id }
@@ -689,9 +689,9 @@ RSpec.describe EventAttendancesController, type: :controller do
         end
       end
       context 'and it does not organize the event' do
-        let(:event) { FactoryGirl.create(:event) }
+        let(:event) { FactoryBot.create(:event) }
         context 'having attendances' do
-          let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+          let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
 
           it 'redirects to root_path' do
             get :waiting_list, params: { event_id: event.id }
@@ -702,8 +702,8 @@ RSpec.describe EventAttendancesController, type: :controller do
     end
 
     context 'signed as admin' do
-      let(:event) { FactoryGirl.create(:event) }
-      let(:admin) { FactoryGirl.create :admin }
+      let(:event) { FactoryBot.create(:event) }
+      let(:admin) { FactoryBot.create :admin }
       before { sign_in admin }
 
       context 'with no attendances' do
@@ -712,14 +712,14 @@ RSpec.describe EventAttendancesController, type: :controller do
         it { expect(assigns(:waiting_list)).to eq [] }
       end
       context 'with attendances' do
-        let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
-        let!(:other_waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
-        let!(:out_waiting) { FactoryGirl.create(:attendance, status: :waiting) }
-        let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-        let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
-        let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-        let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-        let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+        let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
+        let!(:other_waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
+        let!(:out_waiting) { FactoryBot.create(:attendance, status: :waiting) }
+        let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
+        let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }
+        let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid) }
+        let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed) }
+        let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled) }
 
         it 'returns just the waiting attendances' do
           get :waiting_list, params: { event_id: event.id }

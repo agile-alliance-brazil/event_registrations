@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :event do
     sequence(:name) { |n| "Agile Brazil #{2000 + n}" }
     price_table_link 'http://localhost:9292/link'

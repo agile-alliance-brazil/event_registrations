@@ -1,6 +1,6 @@
 describe PagSeguroService do
   describe '.checkout' do
-    let(:invoice) { FactoryGirl.create :invoice }
+    let(:invoice) { FactoryBot.create :invoice }
     context 'with a valid invoice' do
       it 'returns an empty hash if no errors' do
         PagSeguro::PaymentRequest.any_instance.expects(:register).once.returns PagSeguro::PaymentRequest::Response.new(nil)

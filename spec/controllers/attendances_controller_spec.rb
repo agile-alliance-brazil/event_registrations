@@ -1,6 +1,6 @@
 RSpec.describe AttendancesController, type: :controller do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:event) { FactoryGirl.create(:event, full_price: 930.00) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:event) { FactoryBot.create(:event, full_price: 930.00) }
 
   before :each do
     user.add_role :organizer
@@ -10,7 +10,7 @@ RSpec.describe AttendancesController, type: :controller do
   end
 
   describe 'GET #index' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before do
       sign_in user
       disable_authorization
@@ -18,27 +18,27 @@ RSpec.describe AttendancesController, type: :controller do
 
     context 'passing no search parameter' do
       context 'and no attendances' do
-        let!(:event) { FactoryGirl.create(:event) }
+        let!(:event) { FactoryBot.create(:event) }
         before { get :index, params: { event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
         it { expect(assigns(:attendances_list)).to eq [] }
       end
 
       context 'and having attendances' do
-        let!(:attendance) { FactoryGirl.create(:attendance) }
+        let!(:attendance) { FactoryBot.create(:attendance) }
         context 'and one attendance, but no association with event' do
-          let!(:event) { FactoryGirl.create(:event) }
+          let!(:event) { FactoryBot.create(:event) }
           before { get :index, params: { event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
           it { expect(assigns(:attendances_list)).to eq [] }
         end
         context 'having attendances and reservations' do
-          let!(:event) { FactoryGirl.create(:event) }
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-          let!(:waiting) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
-          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
-          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
-          let!(:group) { FactoryGirl.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
+          let!(:event) { FactoryBot.create(:event) }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
+          let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
+          let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }
+          let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid) }
+          let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed) }
+          let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled) }
+          let!(:group) { FactoryBot.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
 
           before { get :index, params: { event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
           it 'assigns the instance variables and renders the template' do
@@ -61,8 +61,8 @@ RSpec.describe AttendancesController, type: :controller do
 
   describe 'GET #show' do
     context 'with a valid attendance' do
-      let!(:event) { FactoryGirl.create(:event) }
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
+      let!(:event) { FactoryBot.create(:event) }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, user: user) }
       context 'having invoice' do
         let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
         before { get :show, params: { id: attendance.id } }
@@ -79,7 +79,7 @@ RSpec.describe AttendancesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    subject(:attendance) { FactoryGirl.create(:attendance) }
+    subject(:attendance) { FactoryBot.create(:attendance) }
 
     it 'cancels attendance' do
       Attendance.any_instance.expects(:cancel)
@@ -108,7 +108,7 @@ RSpec.describe AttendancesController, type: :controller do
 
   describe 'PUT #confirm' do
     context 'responding HTML' do
-      let!(:attendance) { FactoryGirl.create(:attendance) }
+      let!(:attendance) { FactoryBot.create(:attendance) }
       it 'confirms attendance' do
         EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
         Attendance.any_instance.expects(:confirm)
@@ -149,7 +149,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     context 'responding JS' do
-      let!(:attendance) { FactoryGirl.create(:attendance) }
+      let!(:attendance) { FactoryBot.create(:attendance) }
 
       it 'marks attendance as confirmed, save when this occurs and redirect to attendances index' do
         put :confirm, params: { id: attendance.id }, xhr: true
@@ -160,12 +160,12 @@ RSpec.describe AttendancesController, type: :controller do
   end
 
   describe 'PUT #pay_it' do
-    let!(:event) { FactoryGirl.create(:event) }
+    let!(:event) { FactoryBot.create(:event) }
 
     context 'pending attendance' do
       context 'grouped attendance' do
-        let(:group) { FactoryGirl.create :registration_group }
-        let(:attendance) { FactoryGirl.create(:attendance, event: event, registration_group: group, status: 'pending') }
+        let(:group) { FactoryBot.create :registration_group }
+        let(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, status: 'pending') }
         let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
         it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
           put :pay_it, params: { id: attendance.id }, xhr: true
@@ -176,7 +176,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
 
       context 'individual attendance' do
-        let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
         let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
         it 'marks attendance as confirmed and related invoice as paid and redirect to attendances index' do
           EmailNotifications.expects(:registration_confirmed).once
@@ -189,7 +189,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     context 'cancelled attendance' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'cancelled') }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: 'cancelled') }
       it 'doesnt mark as paid and redirect to attendances index with alert' do
         put :pay_it, params: { id: attendance.id }, xhr: true
         expect(assigns(:attendance)).to eq attendance
@@ -199,10 +199,10 @@ RSpec.describe AttendancesController, type: :controller do
   end
 
   describe 'PUT #accept_it' do
-    let!(:event) { FactoryGirl.create(:event) }
+    let!(:event) { FactoryBot.create(:event) }
 
     context 'pending attendance' do
-      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+      let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
       it 'accepts attendance' do
         put :accept_it, params: { id: attendance.id }, xhr: true
         expect(assigns(:attendance)).to eq attendance
@@ -211,7 +211,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     context 'cancelled attendance' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'cancelled') }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: 'cancelled') }
       it 'keeps cancelled' do
         put :accept_it, params: { id: attendance.id }, xhr: true
         expect(assigns(:attendance)).to eq attendance
@@ -221,9 +221,9 @@ RSpec.describe AttendancesController, type: :controller do
   end
 
   describe 'PUT #recover_it' do
-    let!(:event) { FactoryGirl.create(:event) }
+    let!(:event) { FactoryBot.create(:event) }
     context 'when is an individual registration' do
-      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'pending') }
+      let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
       before do
         Invoice.from_attendance(attendance, 'gateway')
         attendance.cancel
@@ -236,9 +236,9 @@ RSpec.describe AttendancesController, type: :controller do
   end
 
   describe 'PATCH #dequeue' do
-    let!(:event) { FactoryGirl.create(:event) }
+    let!(:event) { FactoryBot.create(:event) }
     context 'when is an individual registration' do
-      let(:attendance) { FactoryGirl.create(:attendance, event: event, status: 'waiting') }
+      let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'waiting') }
       before do
         Invoice.from_attendance(attendance, 'gateway')
         patch :dequeue_it, params: { id: attendance.id }
@@ -253,11 +253,11 @@ RSpec.describe AttendancesController, type: :controller do
   end
 
   describe 'GET #search' do
-    let(:admin) { FactoryGirl.create(:admin) }
+    let(:admin) { FactoryBot.create(:admin) }
     before { sign_in admin }
 
     context 'with search parameters, insensitive case' do
-      let!(:event) { FactoryGirl.create :event }
+      let!(:event) { FactoryBot.create :event }
       context 'and no attendances' do
         before { get :search, params: { event_id: event, search: 'bla' }, xhr: true }
         it { expect(assigns(:attendances_list)).to eq [] }
@@ -265,13 +265,13 @@ RSpec.describe AttendancesController, type: :controller do
 
       context 'with attendances' do
         context 'and searching by first_name' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
-          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted, first_name: 'bLaXPTO') }
-          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid, first_name: 'bLa') }
-          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed, first_name: 'bLa') }
-          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled, first_name: 'bLa') }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'bLa') }
+          let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted, first_name: 'bLaXPTO') }
+          let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLa') }
+          let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, first_name: 'bLa') }
+          let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled, first_name: 'bLa') }
 
-          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, first_name: 'foO') }
+          let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'foO') }
           context 'including all statuses' do
             before { get :search, params: { event_id: event, search: 'bla', pending: 'true', accepted: 'true', paid: 'true', confirmed: 'true', cancelled: 'true' }, xhr: true }
             it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, cancelled] }
@@ -298,42 +298,42 @@ RSpec.describe AttendancesController, type: :controller do
         end
 
         context 'including all statuses' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending) }
-          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted) }
-          let!(:paid) { FactoryGirl.create(:attendance, event: event, status: :paid) }
-          let!(:confirmed) { FactoryGirl.create(:attendance, event: event, status: :confirmed) }
-          let!(:cancelled) { FactoryGirl.create(:attendance, event: event, status: :cancelled) }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
+          let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }
+          let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid) }
+          let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed) }
+          let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled) }
           before { get :search, params: { event_id: event, pending: 'true', accepted: 'true', paid: 'true', confirmed: 'true', cancelled: 'true' }, xhr: true }
           it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, cancelled] }
         end
 
         context 'and searching by last_name' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'bLa') }
-          let!(:accepted) { FactoryGirl.create(:attendance, event: event, status: :accepted, last_name: 'bLaXPTO') }
-          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, last_name: 'foO') }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, last_name: 'bLa') }
+          let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted, last_name: 'bLaXPTO') }
+          let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, last_name: 'foO') }
           before { get :search, params: { event_id: event, pending: 'true', accepted: 'true', search: 'Bla' }, xhr: true }
           it { expect(assigns(:attendances_list)).to match_array [pending, accepted] }
         end
 
         context 'and searching by organization' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLa') }
-          let!(:other_pending) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'bLaXPTO') }
-          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, organization: 'foO') }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'bLa') }
+          let!(:other_pending) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'bLaXPTO') }
+          let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'foO') }
           before { get :search, params: { event_id: event, pending: 'true', search: 'BLA' }, xhr: true }
           it { expect(assigns(:attendances_list)).to match_array [pending, other_pending] }
         end
 
         context 'and searching by email' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLa@xpto.com.br') }
-          let!(:other_pending) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'bLaSBBRUBLES@xpto.com.br') }
-          let!(:out) { FactoryGirl.create(:attendance, event: event, status: :pending, email: 'foO@xpto.com.br') }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, email: 'bLa@xpto.com.br') }
+          let!(:other_pending) { FactoryBot.create(:attendance, event: event, status: :pending, email: 'bLaSBBRUBLES@xpto.com.br') }
+          let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, email: 'foO@xpto.com.br') }
           before { get :search, params: { event_id: event, pending: 'true', search: 'BLA' }, xhr: true }
           it { expect(assigns(:attendances_list)).to match_array [pending, other_pending] }
         end
 
         context 'and searching by ID' do
-          let!(:pending) { FactoryGirl.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', status: :pending, email: 'bLa@xpto.com.br') }
-          let!(:out) { FactoryGirl.create(:attendance, event: event, first_name: 'foo', last_name: 'bar', status: :pending, email: 'bLaSBBRUBLES@xpto.com.br') }
+          let!(:pending) { FactoryBot.create(:attendance, event: event, first_name: 'bla', last_name: 'xpto', status: :pending, email: 'bLa@xpto.com.br') }
+          let!(:out) { FactoryBot.create(:attendance, event: event, first_name: 'foo', last_name: 'bar', status: :pending, email: 'bLaSBBRUBLES@xpto.com.br') }
           before { get :search, params: { event_id: event, pending: 'true', search: pending.id }, xhr: true }
           it { expect(assigns(:attendances_list)).to eq [pending] }
         end
@@ -341,8 +341,8 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     context 'with csv format' do
-      let!(:attendance) { FactoryGirl.create(:attendance, event: event, status: :paid, first_name: 'bLa', created_at: 1.day.ago) }
-      let!(:other) { FactoryGirl.create(:attendance, event: event, status: :paid, first_name: 'bLaXPTO') }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLa', created_at: 1.day.ago) }
+      let!(:other) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLaXPTO') }
       before { get :search, params: { event_id: event, paid: 'true', format: :csv } }
       it 'returns the attendances in the csv format' do
         expected_disposition = 'attachment; filename="attendances_list.csv"'

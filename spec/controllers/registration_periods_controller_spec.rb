@@ -21,7 +21,7 @@ describe RegistrationPeriodsController, type: :controller do
   end
 
   context 'logged as normal user' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before { sign_in user }
 
     describe 'GET #new' do
@@ -40,12 +40,12 @@ describe RegistrationPeriodsController, type: :controller do
   end
 
   context 'logged as admin user' do
-    let(:admin) { FactoryGirl.create(:admin) }
+    let(:admin) { FactoryBot.create(:admin) }
     before { sign_in admin }
 
     describe 'GET #new' do
       context 'with a valid event' do
-        let!(:event) { FactoryGirl.create :event }
+        let!(:event) { FactoryBot.create :event }
         it 'assigns the variables and render the template' do
           get :new, params: { event_id: event }
           expect(assigns(:event)).to eq event
@@ -62,7 +62,7 @@ describe RegistrationPeriodsController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(:event) { FactoryGirl.create :event }
+      let(:event) { FactoryBot.create :event }
 
       context 'with valid parameters' do
         it 'creates the period and redirects to event' do
@@ -103,8 +103,8 @@ describe RegistrationPeriodsController, type: :controller do
     end
 
     describe 'DELETE #destroy' do
-      let(:event) { FactoryGirl.create :event }
-      let!(:period) { FactoryGirl.create :registration_period, event: event }
+      let(:event) { FactoryBot.create :event }
+      let!(:period) { FactoryBot.create :registration_period, event: event }
 
       context 'with valid parameters' do
         context 'and responding to HTML' do
@@ -133,8 +133,8 @@ describe RegistrationPeriodsController, type: :controller do
     end
 
     describe 'GET #edit' do
-      let(:event) { FactoryGirl.create :event }
-      let(:period) { FactoryGirl.create :registration_period, event: event }
+      let(:event) { FactoryBot.create :event }
+      let(:period) { FactoryBot.create :registration_period, event: event }
       context 'with valid IDs' do
         it 'assigns the instance variable and renders the template' do
           get :edit, params: { event_id: event, id: period }
@@ -157,8 +157,8 @@ describe RegistrationPeriodsController, type: :controller do
           end
         end
         context 'and a period for other event' do
-          let(:other_event) { FactoryGirl.create :event }
-          let(:period) { FactoryGirl.create :registration_period, event: other_event }
+          let(:other_event) { FactoryBot.create :event }
+          let(:period) { FactoryBot.create :registration_period, event: other_event }
           it 'does not assign the instance variable responds 404' do
             get :edit, params: { event_id: event, id: period }
             expect(assigns(:period)).to be_nil
@@ -169,8 +169,8 @@ describe RegistrationPeriodsController, type: :controller do
     end
 
     describe 'PUT #update' do
-      let(:event) { FactoryGirl.create :event }
-      let(:period) { FactoryGirl.create :registration_period, event: event }
+      let(:event) { FactoryBot.create :event }
+      let(:period) { FactoryBot.create :registration_period, event: event }
       let(:start_date) { Time.zone.now }
       let(:end_date) { 1.week.from_now }
       let(:valid_parameters) { { title: 'foo', start_at: start_date, end_at: end_date, price: 100 } }
@@ -210,8 +210,8 @@ describe RegistrationPeriodsController, type: :controller do
             end
           end
           context 'and a period for other event' do
-            let(:other_event) { FactoryGirl.create :event }
-            let(:period) { FactoryGirl.create :registration_period, event: other_event }
+            let(:other_event) { FactoryBot.create :event }
+            let(:period) { FactoryBot.create :registration_period, event: other_event }
             it 'does not assign the instance variable responds 404' do
               put :update, params: { event_id: event, id: period, registration_period: valid_parameters }
               expect(assigns(:period)).to be_nil

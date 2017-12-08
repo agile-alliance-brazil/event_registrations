@@ -1,10 +1,10 @@
 describe PaymentsController, type: :controller do
   describe '#checkout' do
-    let!(:event) { FactoryGirl.create :event }
+    let!(:event) { FactoryBot.create :event }
 
     context 'with an invoice for group' do
-      let!(:group) { FactoryGirl.create :registration_group, event: event }
-      let(:invoice) { FactoryGirl.create :invoice, invoiceable: group }
+      let!(:group) { FactoryBot.create :registration_group, event: event }
+      let(:invoice) { FactoryBot.create :invoice, invoiceable: group }
 
       it 'call the register, changes the status of invoice and redirect to groups index' do
         PagSeguroService.expects(:checkout).with(invoice, anything).once.returns(url: 'xpto.foo.bar')
@@ -19,8 +19,8 @@ describe PaymentsController, type: :controller do
     context 'with errors from service' do
       before(:each) { request.env['HTTP_REFERER'] = event_registration_groups_path(event) }
 
-      let!(:group) { FactoryGirl.create :registration_group, event: event }
-      let(:invoice) { FactoryGirl.create :invoice, invoiceable: group }
+      let!(:group) { FactoryBot.create :registration_group, event: event }
+      let(:invoice) { FactoryBot.create :invoice, invoiceable: group }
 
       it 'redirects to event with the proper message if any errors' do
         PagSeguroService.expects(:checkout).with(invoice, anything).once.returns(errors: 'xpto')
@@ -32,7 +32,7 @@ describe PaymentsController, type: :controller do
     end
 
     context 'with invalid event' do
-      let(:invoice) { FactoryGirl.create :invoice }
+      let(:invoice) { FactoryBot.create :invoice }
       before { post :checkout, params: { event_id: 'foo', id: invoice.id } }
       it { expect(response).to have_http_status 404 }
     end

@@ -10,7 +10,7 @@ describe PaymentNotification, type: :model do
   context 'callbacks' do
     describe 'pagseguro payment' do
       before(:each) do
-        @attendance = FactoryGirl.create(:attendance, registration_date: Time.zone.now)
+        @attendance = FactoryBot.create(:attendance, registration_date: Time.zone.now)
         @invoice = Invoice.from_attendance(@attendance, 'gateway')
         expect(@attendance).to be_pending
 
@@ -30,32 +30,32 @@ describe PaymentNotification, type: :model do
       end
 
       it 'succeed if status is Aprovada and params are valid' do
-        FactoryGirl.create(:payment_notification, @valid_args)
+        FactoryBot.create(:payment_notification, @valid_args)
         expect(@invoice.status).to eq Invoice::PAID
       end
 
       it "fails if secret doesn't match" do
         @valid_params[:store_code] = 'wrong_secret'
-        FactoryGirl.create(:payment_notification, @valid_args)
+        FactoryBot.create(:payment_notification, @valid_args)
         expect(@invoice).to be_pending
       end
 
       it 'fails if status is not Aprovada' do
-        FactoryGirl.create(:payment_notification, @valid_args.merge(status: 'Cancelada'))
+        FactoryBot.create(:payment_notification, @valid_args.merge(status: 'Cancelada'))
         expect(@invoice).to be_pending
       end
     end
   end
 
   context 'named scope' do
-    let(:pagseguro) { FactoryGirl.create(:payment_notification, params: { type: 'pag_seguro' }) }
+    let(:pagseguro) { FactoryBot.create(:payment_notification, params: { type: 'pag_seguro' }) }
 
     it { expect(PaymentNotification.pag_seguro).to eq [pagseguro] }
     it { expect(PaymentNotification.completed).to eq [pagseguro] }
   end
 
   context 'should translate params into attributes' do
-    before { @invoice = FactoryGirl.create(:invoice) }
+    before { @invoice = FactoryBot.create(:invoice) }
 
     it 'from pag_seguro' do
       pag_seguro_params = {

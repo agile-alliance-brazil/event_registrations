@@ -1,26 +1,26 @@
 describe AttendanceHelper, type: :helper do
   describe '#attendance_price' do
     it 'returns attendance price' do
-      attendance = FactoryGirl.build(:attendance, registration_value: 250)
+      attendance = FactoryBot.build(:attendance, registration_value: 250)
       expect(attendance_price(attendance)).to eq 250
     end
   end
 
   describe '#price_table_link' do
     it 'show pure link if no locale information in the link' do
-      event = FactoryGirl.build(:event)
+      event = FactoryBot.build(:event)
       expect(price_table_link(event, :pt)).to eq(event.price_table_link)
       expect(price_table_link(event, :en)).to eq(event.price_table_link)
     end
 
     it 'replaces :locale placeholder in the link if present' do
-      event = FactoryGirl.build(:event, price_table_link: 'http://localhost:9292/testing/:locale/works')
+      event = FactoryBot.build(:event, price_table_link: 'http://localhost:9292/testing/:locale/works')
       expect(price_table_link(event, :pt)).to eq('http://localhost:9292/testing/pt/works')
       expect(price_table_link(event, :en)).to eq('http://localhost:9292/testing/en/works')
     end
 
     it 'works as a query param as well' do
-      event = FactoryGirl.build(:event, price_table_link: 'http://localhost:9292/testing?locale=:locale')
+      event = FactoryBot.build(:event, price_table_link: 'http://localhost:9292/testing?locale=:locale')
       expect(price_table_link(event, :pt)).to eq('http://localhost:9292/testing?locale=pt')
       expect(price_table_link(event, :en)).to eq('http://localhost:9292/testing?locale=en')
     end

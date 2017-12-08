@@ -11,7 +11,7 @@ describe Authentication, type: :model do
   end
 
   describe 'token' do
-    let(:authentication) { FactoryGirl.build(:authentication, provider: 'submission_system', refresh_token: 'ABC') }
+    let(:authentication) { FactoryBot.build(:authentication, provider: 'submission_system', refresh_token: 'ABC') }
     let(:new_token)      { stub(refresh_token: 'DEF') }
     let(:token)          { stub(refresh!: new_token) }
 

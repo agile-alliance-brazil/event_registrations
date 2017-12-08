@@ -4,7 +4,7 @@ RSpec.describe EventsController, type: :controller do
       it { expect(controller.send(:resource_class)).to eq Event }
     end
     describe '#resource' do
-      let(:event) { FactoryGirl.create :event }
+      let(:event) { FactoryBot.create :event }
       before { get :show, params: { id: event } }
       it { expect(controller.send(:resource)).to eq event }
     end
@@ -18,7 +18,7 @@ RSpec.describe EventsController, type: :controller do
       end
 
       context 'with events' do
-        let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: Time.zone.today - 1, end_date: 1.month.from_now) }
+        let!(:event) { FactoryBot.create(:event, name: 'Foo', start_date: Time.zone.today - 1, end_date: 1.month.from_now) }
 
         context 'and one event at the right period' do
           before { get :index }
@@ -26,20 +26,20 @@ RSpec.describe EventsController, type: :controller do
         end
 
         context 'and two at the right period' do
-          let!(:other_event) { FactoryGirl.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
+          let!(:other_event) { FactoryBot.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
           before { get :index }
           it { expect(assigns(:events)).to match_array [event, other_event] }
         end
 
         context 'and one at the right period and other not' do
-          let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
+          let!(:out) { FactoryBot.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
           before { get :index }
           it { expect(assigns(:events)).to match_array [event] }
         end
 
         context 'and two at the right period and other not' do
-          let!(:other_event) { FactoryGirl.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
-          let!(:out) { FactoryGirl.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
+          let!(:other_event) { FactoryBot.create(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
+          let!(:out) { FactoryBot.create(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
 
           before { get :index }
           it { expect(assigns(:events)).to match_array [event, other_event] }
@@ -98,7 +98,7 @@ RSpec.describe EventsController, type: :controller do
   end
 
   context 'logged as normal user' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before { sign_in user }
 
     describe 'GET #list_archived' do
@@ -152,7 +152,7 @@ RSpec.describe EventsController, type: :controller do
   end
 
   context 'logged as organizer' do
-    let(:organizer) { FactoryGirl.create :organizer }
+    let(:organizer) { FactoryBot.create :organizer }
     before { sign_in organizer }
 
     describe 'DELETE #destroy' do
@@ -163,7 +163,7 @@ RSpec.describe EventsController, type: :controller do
     end
 
     context 'when is organizing' do
-      let(:event) { FactoryGirl.create :event, organizers: [organizer] }
+      let(:event) { FactoryBot.create :event, organizers: [organizer] }
       describe 'GET #edit' do
         context 'and valid event ID' do
           it 'assigns the instance variable and renders the template' do
@@ -215,7 +215,7 @@ RSpec.describe EventsController, type: :controller do
     end
 
     context 'when is not organizing' do
-      let(:event) { FactoryGirl.create :event }
+      let(:event) { FactoryBot.create :event }
       describe 'GET #edit' do
         it 'redirects to root' do
           get :edit, params: { id: event }
@@ -233,7 +233,7 @@ RSpec.describe EventsController, type: :controller do
   end
 
   context 'logged as admin' do
-    let(:admin) { FactoryGirl.create(:admin) }
+    let(:admin) { FactoryBot.create(:admin) }
     before { sign_in admin }
 
     describe 'GET #list_archived' do
@@ -244,8 +244,8 @@ RSpec.describe EventsController, type: :controller do
       end
 
       context 'having events' do
-        let!(:event) { FactoryGirl.create(:event, name: 'Foo', start_date: 3.months.ago, end_date: 2.months.ago) }
-        let!(:other_event) { FactoryGirl.create(:event, start_date: 2.months.ago, end_date: 1.month.ago) }
+        let!(:event) { FactoryBot.create(:event, name: 'Foo', start_date: 3.months.ago, end_date: 2.months.ago) }
+        let!(:other_event) { FactoryBot.create(:event, start_date: 2.months.ago, end_date: 1.month.ago) }
 
         before { get :list_archived }
         it { expect(assigns(:events)).to eq [other_event, event] }
@@ -296,7 +296,7 @@ RSpec.describe EventsController, type: :controller do
     describe 'DELETE #destroy' do
       context 'with valid parameters' do
         context 'and responding to HTML' do
-          let!(:event) { FactoryGirl.create :event }
+          let!(:event) { FactoryBot.create :event }
           it 'deletes the event and redirects to events index' do
             delete :destroy, params: { id: event.id }
             expect(response).to redirect_to events_path
@@ -314,7 +314,7 @@ RSpec.describe EventsController, type: :controller do
     end
 
     describe 'PATCH #add_organizer' do
-      let(:event) { FactoryGirl.create :event }
+      let(:event) { FactoryBot.create :event }
       context 'with invalid parameters' do
         context 'and invalid event' do
           it 'responds 404' do
@@ -330,7 +330,7 @@ RSpec.describe EventsController, type: :controller do
             end
           end
           context 'passing a valid email and the user is not organizer' do
-            let(:not_organizer) { FactoryGirl.create :user }
+            let(:not_organizer) { FactoryBot.create :user }
             it 'responds 404' do
               patch :add_organizer, params: { id: event, email: not_organizer.email }, xhr: true
               expect(response.status).to eq 404
@@ -340,7 +340,7 @@ RSpec.describe EventsController, type: :controller do
       end
       context 'with valid parameters' do
         context 'and the user has the organizer role' do
-          let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
           it 'adds the user as organizer' do
             patch :add_organizer, params: { id: event, email: organizer.email }, xhr: true
             expect(response.status).to eq 200
@@ -349,7 +349,7 @@ RSpec.describe EventsController, type: :controller do
         end
 
         context 'and the user is already an organizer' do
-          let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
           before do
             event.organizers << organizer
             event.save!
@@ -361,7 +361,7 @@ RSpec.describe EventsController, type: :controller do
           end
         end
         context 'and the user has the admin role' do
-          let(:admin) { FactoryGirl.create :user, roles: [:admin] }
+          let(:admin) { FactoryBot.create :user, roles: [:admin] }
           it 'adds the user as organizer' do
             patch :add_organizer, params: { id: event, email: admin.email }, xhr: true
             expect(response.status).to eq 200
@@ -372,7 +372,7 @@ RSpec.describe EventsController, type: :controller do
     end
 
     describe 'DELETE #remove_organizer' do
-      let(:event) { FactoryGirl.create :event }
+      let(:event) { FactoryBot.create :event }
       context 'with invalid parameters' do
         context 'and invalid event' do
           it 'responds 404' do
@@ -391,7 +391,7 @@ RSpec.describe EventsController, type: :controller do
       end
       context 'with valid parameters' do
         context 'and the user is already an organizer' do
-          let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
           it 'removes the organizer' do
             delete :remove_organizer, params: { id: event, email: organizer.email }, xhr: true
             expect(response.status).to eq 200
@@ -400,8 +400,8 @@ RSpec.describe EventsController, type: :controller do
         end
 
         context 'and the user is not an organizer of the event' do
-          let(:organizer) { FactoryGirl.create :user, roles: [:organizer] }
-          let(:other_organizer) { FactoryGirl.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+          let(:other_organizer) { FactoryBot.create :user, roles: [:organizer] }
           it 'adds the user as organizer' do
             event.add_organizer_by_email!(other_organizer.email)
             delete :remove_organizer, params: { id: event, email: organizer.email }, xhr: true
@@ -413,7 +413,7 @@ RSpec.describe EventsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let!(:event) { FactoryGirl.create :event }
+    let!(:event) { FactoryBot.create :event }
     context 'with an existent user' do
       before { get :show, params: { id: event.id } }
       it { expect(assigns(:event)).to eq event }
@@ -429,7 +429,7 @@ RSpec.describe EventsController, type: :controller do
     end
 
     context 'signed in' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       before do
         sign_in user
         disable_authorization
@@ -439,18 +439,18 @@ RSpec.describe EventsController, type: :controller do
         it 'returns the event_persisted created' do
           now = Time.zone.local(2015, 4, 30, 0, 0, 0)
           Timecop.freeze(now)
-          FactoryGirl.create(:attendance, event: event, user: user, status: 'cancelled')
+          FactoryBot.create(:attendance, event: event, user: user, status: 'cancelled')
           Timecop.return
-          other_attendance = FactoryGirl.create(:attendance, event: event, user: user)
+          other_attendance = FactoryBot.create(:attendance, event: event, user: user)
           get :show, params: { id: event.id }
           expect(assigns[:last_attendance_for_user]).to eq other_attendance
         end
       end
 
       context 'with two valid attendances, one in an event and the second in other event' do
-        let(:other_event) { FactoryGirl.create(:event) }
-        let!(:attendance) { FactoryGirl.create(:attendance, event: event, user: user) }
-        let!(:other_attendance) { FactoryGirl.create(:attendance, event: other_event, user: user) }
+        let(:other_event) { FactoryBot.create(:event) }
+        let!(:attendance) { FactoryBot.create(:attendance, event: event, user: user) }
+        let!(:other_attendance) { FactoryBot.create(:attendance, event: other_event, user: user) }
         before { get :show, params: { id: event.id } }
         it { expect(assigns[:last_attendance_for_user]).to eq attendance }
       end

@@ -19,7 +19,7 @@
 #  fk_rails_92030b1506  (invoice_id)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :payment_notification do
     params { { some: 'params', type: 'pagseguro' } }
     status 'Completed'

@@ -1,6 +1,6 @@
 RSpec.describe AttendanceParams, type: :param_object do
-  let(:user) { FactoryGirl.create :user }
-  let(:event) { FactoryGirl.create :event }
+  let(:user) { FactoryBot.create :user }
+  let(:event) { FactoryBot.create :event }
 
   describe '#new_attributes' do
     it 'returns all parameters for attendance' do

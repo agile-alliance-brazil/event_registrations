@@ -1,14 +1,14 @@
 describe AttendanceExportService, type: :service do
   describe '.to_csv' do
     context 'with attendances' do
-      let(:event) { FactoryGirl.create :event }
-      let(:group) { FactoryGirl.create :registration_group, event: event, name: 'Group for to csv test' }
+      let(:event) { FactoryBot.create :event }
+      let(:group) { FactoryBot.create :registration_group, event: event, name: 'Group for to csv test' }
       let!(:attendance) do
-        FactoryGirl.create(:attendance,
-                           event: event,
-                           status: :pending,
-                           first_name: 'bLa',
-                           registration_group: group)
+        FactoryBot.create(:attendance,
+                          event: event,
+                          status: :pending,
+                          first_name: 'bLa',
+                          registration_group: group)
       end
 
       let(:expected) do

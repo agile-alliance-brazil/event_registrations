@@ -1,10 +1,10 @@
 RSpec.describe EmailNotifications, type: :mailer do
-  let(:event) { FactoryGirl.create :event }
+  let(:event) { FactoryBot.create :event }
   before { ActionMailer::Base.deliveries = [] }
   after { ActionMailer::Base.deliveries.clear }
 
   describe '#registration_pending' do
-    let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+    let(:attendance) { FactoryBot.create(:attendance, event: event) }
 
     context 'having no organizers in the event' do
       it 'sends to attendee cc the events organizer' do
@@ -20,9 +20,9 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'having organizers in the event' do
-      let(:organizer) { FactoryGirl.create :organizer }
-      let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
+      let(:organizer) { FactoryBot.create :organizer }
+      let(:other_organizer) { FactoryBot.create :organizer }
+      let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee and cc the events organizer' do
         mail = EmailNotifications.registration_pending(attendance).deliver_now
@@ -34,7 +34,7 @@ RSpec.describe EmailNotifications, type: :mailer do
   end
 
   describe '#registration_waiting' do
-    let(:attendance) { FactoryGirl.create(:attendance, event: event, status: :waiting) }
+    let(:attendance) { FactoryBot.create(:attendance, event: event, status: :waiting) }
 
     context 'having no organizers in the event' do
       it 'sends to attendee and cc the events organizer' do
@@ -49,9 +49,9 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'having organizers in the event' do
-      let(:organizer) { FactoryGirl.create :organizer }
-      let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
+      let(:organizer) { FactoryBot.create :organizer }
+      let(:other_organizer) { FactoryBot.create :organizer }
+      let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee cc the events organizer' do
         mail = EmailNotifications.registration_pending(attendance).deliver_now
@@ -63,7 +63,7 @@ RSpec.describe EmailNotifications, type: :mailer do
   end
 
   describe '#registration_confirmed' do
-    let(:attendance) { FactoryGirl.create(:attendance, event: event, registration_date: Time.zone.local(2013, 5, 1, 12, 0, 0)) }
+    let(:attendance) { FactoryBot.create(:attendance, event: event, registration_date: Time.zone.local(2013, 5, 1, 12, 0, 0)) }
 
     context 'when the attendance is brazilian' do
       context 'and event start date before end date' do
@@ -79,8 +79,8 @@ RSpec.describe EmailNotifications, type: :mailer do
       end
 
       context 'and with start date equals end date' do
-        let(:today_event) { FactoryGirl.create(:event, start_date: Time.zone.today, end_date: Time.zone.today) }
-        let(:today_attendance) { FactoryGirl.create(:attendance, event: today_event) }
+        let(:today_event) { FactoryBot.create(:event, start_date: Time.zone.today, end_date: Time.zone.today) }
+        let(:today_attendance) { FactoryBot.create(:attendance, event: today_event) }
         it 'show the start date only' do
           mail = EmailNotifications.registration_confirmed(today_attendance).deliver_now
           expect(mail.encoded).to match(/Quando: #{ I18n.l(today_attendance.event.start_date.to_date) }/)
@@ -89,9 +89,9 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'having organizers in the event' do
-      let(:organizer) { FactoryGirl.create :organizer }
-      let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
+      let(:organizer) { FactoryBot.create :organizer }
+      let(:other_organizer) { FactoryBot.create :organizer }
+      let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee cc the events organizer' do
         mail = EmailNotifications.registration_confirmed(attendance).deliver_now
@@ -115,8 +115,8 @@ RSpec.describe EmailNotifications, type: :mailer do
         end
       end
       context 'and with start date equals end date' do
-        let(:today_event) { FactoryGirl.create(:event, start_date: Time.zone.today, end_date: Time.zone.today) }
-        let(:today_attendance) { FactoryGirl.create(:attendance, event: today_event) }
+        let(:today_event) { FactoryBot.create(:event, start_date: Time.zone.today, end_date: Time.zone.today) }
+        let(:today_attendance) { FactoryBot.create(:attendance, event: today_event) }
         it 'show the start date only' do
           today_attendance.country = 'US'
           mail = EmailNotifications.registration_confirmed(today_attendance).deliver_now
@@ -127,8 +127,8 @@ RSpec.describe EmailNotifications, type: :mailer do
   end
 
   describe '#cancelling_registration' do
-    let(:event) { FactoryGirl.create :event }
-    let(:attendance) { FactoryGirl.create :attendance, event: event }
+    let(:event) { FactoryBot.create :event }
+    let(:attendance) { FactoryBot.create :attendance, event: event }
 
     it 'sends to pending attendee' do
       mail = EmailNotifications.cancelling_registration(attendance).deliver_now
@@ -150,9 +150,9 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'having organizers in the event' do
-      let(:organizer) { FactoryGirl.create :organizer }
-      let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer] }
+      let(:organizer) { FactoryBot.create :organizer }
+      let(:other_organizer) { FactoryBot.create :organizer }
+      let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee cc the events organizer' do
         mail = EmailNotifications.cancelling_registration(attendance).deliver_now
@@ -164,8 +164,8 @@ RSpec.describe EmailNotifications, type: :mailer do
   end
 
   describe '#cancelling_registration_warning' do
-    let(:event) { FactoryGirl.create :event }
-    let(:attendance) { FactoryGirl.create :attendance, event: event }
+    let(:event) { FactoryBot.create :event }
+    let(:attendance) { FactoryBot.create :attendance, event: event }
 
     it 'should be sent to pending attendee' do
       mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
@@ -187,9 +187,9 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'having organizers in the event' do
-      let(:organizer) { FactoryGirl.create :organizer }
-      let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer] }
+      let(:organizer) { FactoryBot.create :organizer }
+      let(:other_organizer) { FactoryBot.create :organizer }
+      let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee cc the events organizer' do
         mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
@@ -200,8 +200,8 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'when event is full' do
-      let(:full_event) { FactoryGirl.create :event, attendance_limit: 1 }
-      let!(:attendance) { FactoryGirl.create :attendance, event: full_event }
+      let(:full_event) { FactoryBot.create :event, attendance_limit: 1 }
+      let!(:attendance) { FactoryBot.create :attendance, event: full_event }
 
       it 'sends the email warning about the queue' do
         mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
@@ -211,7 +211,7 @@ RSpec.describe EmailNotifications, type: :mailer do
   end
 
   describe '#registration_dequeued' do
-    let(:attendance) { FactoryGirl.create(:attendance, event: event) }
+    let(:attendance) { FactoryBot.create(:attendance, event: event) }
 
     context 'having no organizers in the event' do
       it 'sends to attendee cc the events organizer in the config file' do
@@ -227,9 +227,9 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'having organizers in the event' do
-      let(:organizer) { FactoryGirl.create :organizer }
-      let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, organizers: [organizer, other_organizer] }
+      let(:organizer) { FactoryBot.create :organizer }
+      let(:other_organizer) { FactoryBot.create :organizer }
+      let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee and cc the events organizer' do
         mail = EmailNotifications.registration_dequeued(attendance).deliver_now
@@ -241,10 +241,10 @@ RSpec.describe EmailNotifications, type: :mailer do
   end
 
   describe '#welcome_attendance' do
-    let(:event) { FactoryGirl.create(:event, start_date: 1.day.from_now) }
-    let(:out_event) { FactoryGirl.create(:event, start_date: 2.days.from_now) }
-    let(:attendance) { FactoryGirl.create(:attendance, event: event) }
-    let(:out_attendance) { FactoryGirl.create(:attendance, event: out_event) }
+    let(:event) { FactoryBot.create(:event, start_date: 1.day.from_now) }
+    let(:out_event) { FactoryBot.create(:event, start_date: 2.days.from_now) }
+    let(:attendance) { FactoryBot.create(:attendance, event: event) }
+    let(:out_attendance) { FactoryBot.create(:attendance, event: out_event) }
 
     context 'having no organizers in the event' do
       it 'sends to attendee cc the events organizer in the config file' do
@@ -261,9 +261,9 @@ RSpec.describe EmailNotifications, type: :mailer do
     end
 
     context 'having organizers in the event' do
-      let(:organizer) { FactoryGirl.create :organizer }
-      let(:other_organizer) { FactoryGirl.create :organizer }
-      let!(:event) { FactoryGirl.create :event, start_date: 1.day.from_now, organizers: [organizer, other_organizer] }
+      let(:organizer) { FactoryBot.create :organizer }
+      let(:other_organizer) { FactoryBot.create :organizer }
+      let!(:event) { FactoryBot.create :event, start_date: 1.day.from_now, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee and cc the events organizer' do
         mail = EmailNotifications.welcome_attendance(attendance).deliver_now

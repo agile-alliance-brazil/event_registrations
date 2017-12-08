@@ -40,24 +40,24 @@ describe UsersController, type: :controller do
 
   context 'authorized' do
     context 'as a normal user' do
-      let!(:user) { FactoryGirl.create :user }
+      let!(:user) { FactoryBot.create :user }
       before { sign_in user }
 
       describe '#show' do
         context 'with an existent user' do
           context 'with only one event available for date' do
-            let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+            let!(:event) { FactoryBot.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
             before { get :show, params: { id: user.id } }
             it { expect(assigns(:user)).to eq user }
             it { expect(assigns(:events_for_today)).to match_array [event] }
             it { expect(response).to render_template :show }
           end
           context 'with two events available for date and one unavaiable' do
-            let!(:event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-            let!(:other_event) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: 5.days.from_now }
-            let!(:already_attending) { FactoryGirl.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-            let!(:attendance) { FactoryGirl.create(:attendance, user: user, event: already_attending) }
-            let!(:cancelled_attendance) { FactoryGirl.create(:attendance, user: user, event: other_event, status: :cancelled) }
+            let!(:event) { FactoryBot.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+            let!(:other_event) { FactoryBot.create :event, start_date: Time.zone.yesterday, end_date: 5.days.from_now }
+            let!(:already_attending) { FactoryBot.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+            let!(:attendance) { FactoryBot.create(:attendance, user: user, event: already_attending) }
+            let!(:cancelled_attendance) { FactoryBot.create(:attendance, user: user, event: other_event, status: :cancelled) }
             before { get :show, params: { id: user.id } }
             it { expect(assigns(:user)).to eq user }
             it { expect(assigns(:events_for_today)).to match_array [event, other_event] }
@@ -141,10 +141,10 @@ describe UsersController, type: :controller do
     end
 
     context 'as organizer' do
-      let(:event) { FactoryGirl.create :event }
-      let(:organizer) { FactoryGirl.create :organizer, organized_events: [event] }
-      let(:user) { FactoryGirl.create :user }
-      let!(:attendance) { FactoryGirl.create :attendance, user: user, event: event }
+      let(:event) { FactoryBot.create :event }
+      let(:organizer) { FactoryBot.create :organizer, organized_events: [event] }
+      let(:user) { FactoryBot.create :user }
+      let!(:attendance) { FactoryBot.create :attendance, user: user, event: event }
       before { sign_in organizer }
 
       describe 'GET #show' do
@@ -158,7 +158,7 @@ describe UsersController, type: :controller do
     end
 
     context 'as admin' do
-      let(:admin) { FactoryGirl.create :admin }
+      let(:admin) { FactoryBot.create :admin }
       before { sign_in admin }
 
       describe 'GET #index' do
@@ -180,7 +180,7 @@ describe UsersController, type: :controller do
 
       describe 'PATCH #toggle_organizer' do
         context 'when the user is organizer' do
-          let(:organizer) { FactoryGirl.create :organizer }
+          let(:organizer) { FactoryBot.create :organizer }
           it 'removes the role' do
             patch :toggle_organizer, params: { id: organizer }, xhr: true
             expect(response).to render_template 'users/user'
@@ -188,14 +188,14 @@ describe UsersController, type: :controller do
           end
         end
         context 'when the user is not an organizer' do
-          let(:user) { FactoryGirl.create :user }
+          let(:user) { FactoryBot.create :user }
           before { patch :toggle_organizer, params: { id: user }, xhr: true }
           it { expect(user.reload.roles).to include('organizer') }
         end
       end
       describe 'PATCH #toggle_admin' do
         context 'when the user is admin' do
-          let(:admin) { FactoryGirl.create :admin }
+          let(:admin) { FactoryBot.create :admin }
           it 'removes the role' do
             patch :toggle_admin, params: { id: admin }, xhr: true
             expect(response).to render_template 'users/user'
@@ -203,7 +203,7 @@ describe UsersController, type: :controller do
           end
         end
         context 'when the user is not an organizer' do
-          let(:user) { FactoryGirl.create :user }
+          let(:user) { FactoryBot.create :user }
           before { patch :toggle_admin, params: { id: user }, xhr: true }
           it { expect(user.reload.roles).to include('admin') }
         end

@@ -3,8 +3,8 @@ RSpec.describe PaymentNotificationsController, type: :controller do
   after { WebMock.disable! }
 
   describe 'POST #create' do
-    let(:attendance) { FactoryGirl.create(:attendance) }
-    let(:invoice) { FactoryGirl.create(:invoice, invoiceable: attendance) }
+    let(:attendance) { FactoryBot.create(:attendance) }
+    let(:invoice) { FactoryBot.create(:invoice, invoiceable: attendance) }
 
     context 'when pagseguro' do
       context 'with a valid status' do

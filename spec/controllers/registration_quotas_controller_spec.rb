@@ -39,7 +39,7 @@ describe RegistrationQuotasController, type: :controller do
   end
 
   context 'logged as normal user' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before { sign_in user }
 
     describe 'GET #new' do
@@ -75,12 +75,12 @@ describe RegistrationQuotasController, type: :controller do
   end
 
   context 'logged as admin user' do
-    let(:admin) { FactoryGirl.create(:admin) }
+    let(:admin) { FactoryBot.create(:admin) }
     before { sign_in admin }
 
     describe 'GET #new' do
       context 'with a valid event' do
-        let!(:event) { FactoryGirl.create :event }
+        let!(:event) { FactoryBot.create :event }
         it 'assigns the variables and render the template' do
           get :new, params: { event_id: event }
           expect(assigns(:event)).to eq event
@@ -97,7 +97,7 @@ describe RegistrationQuotasController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(:event) { FactoryGirl.create :event }
+      let(:event) { FactoryBot.create :event }
       context 'with valid parameters' do
         it 'creates the quota and redirects to event' do
           post :create, params: { event_id: event, registration_quota: { order: 1, price: 100, quota: 45 } }
@@ -132,8 +132,8 @@ describe RegistrationQuotasController, type: :controller do
     end
 
     describe 'DELETE #destroy' do
-      let(:event) { FactoryGirl.create :event }
-      let!(:quota) { FactoryGirl.create :registration_quota, event: event }
+      let(:event) { FactoryBot.create :event }
+      let!(:quota) { FactoryBot.create :registration_quota, event: event }
 
       context 'with valid parameters' do
         context 'and responding to HTML' do
@@ -159,9 +159,9 @@ describe RegistrationQuotasController, type: :controller do
           end
         end
         context 'and a quota for other event' do
-          let(:event) { FactoryGirl.create :event }
-          let(:other_event) { FactoryGirl.create :event }
-          let(:quota) { FactoryGirl.create :registration_quota, event: other_event }
+          let(:event) { FactoryBot.create :event }
+          let(:other_event) { FactoryBot.create :event }
+          let(:quota) { FactoryBot.create :registration_quota, event: other_event }
           it 'does not assign the instance variable responds 404' do
             delete :destroy, params: { event_id: event, id: quota }
             expect(assigns(:registration_quota)).to be_nil
@@ -172,8 +172,8 @@ describe RegistrationQuotasController, type: :controller do
     end
 
     describe 'GET #edit' do
-      let(:event) { FactoryGirl.create :event }
-      let(:quota) { FactoryGirl.create :registration_quota, event: event }
+      let(:event) { FactoryBot.create :event }
+      let(:quota) { FactoryBot.create :registration_quota, event: event }
       context 'with valid IDs' do
         it 'assigns the instance variable and renders the template' do
           get :edit, params: { event_id: event, id: quota }
@@ -196,8 +196,8 @@ describe RegistrationQuotasController, type: :controller do
           end
         end
         context 'and a quota for other event' do
-          let(:other_event) { FactoryGirl.create :event }
-          let(:quota) { FactoryGirl.create :registration_quota, event: other_event }
+          let(:other_event) { FactoryBot.create :event }
+          let(:quota) { FactoryBot.create :registration_quota, event: other_event }
           it 'does not assign the instance variable responds 404' do
             get :edit, params: { event_id: event, id: quota }
             expect(assigns(:registration_quota)).to be_nil
@@ -208,8 +208,8 @@ describe RegistrationQuotasController, type: :controller do
     end
 
     describe 'PUT #update' do
-      let(:event) { FactoryGirl.create :event }
-      let(:quota) { FactoryGirl.create :registration_quota, event: event }
+      let(:event) { FactoryBot.create :event }
+      let(:quota) { FactoryBot.create :registration_quota, event: event }
       let(:valid_parameters) { { order: 4, price: 300, quota: 32 } }
       context 'with valid parameters' do
         it 'updates and redirects to event show' do
@@ -248,8 +248,8 @@ describe RegistrationQuotasController, type: :controller do
             end
           end
           context 'and a quota for other event' do
-            let(:other_event) { FactoryGirl.create :event }
-            let(:quota) { FactoryGirl.create :registration_quota, event: other_event }
+            let(:other_event) { FactoryBot.create :event }
+            let(:quota) { FactoryBot.create :registration_quota, event: other_event }
             it 'does not assign the instance variable responds 404' do
               put :update, params: { event_id: event, id: quota, registration_quota: valid_parameters }
               expect(assigns(:registration_quota)).to be_nil

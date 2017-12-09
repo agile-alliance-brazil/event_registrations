@@ -6,7 +6,7 @@ describe AttendanceExportService, type: :service do
       let!(:attendance) do
         FactoryBot.create(:attendance,
                           event: event,
-                          status: :pending,
+                          status: :showed_in,
                           first_name: 'bLa',
                           registration_group: group)
       end
@@ -30,7 +30,7 @@ describe AttendanceExportService, type: :service do
           "#{attendance.job_role}\n"
         title + body
       end
-      it { expect(AttendanceExportService.to_csv).to eq expected }
+      it { expect(AttendanceExportService.to_csv(event)).to eq expected }
     end
   end
 end

@@ -360,12 +360,15 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     context 'with csv format' do
-      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLa', updated_at: 1.day.ago) }
-      let!(:other) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLaXPTO') }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :showed_in, first_name: 'bLa', updated_at: 1.day.ago) }
+      let!(:other) { FactoryBot.create(:attendance, event: event, status: :showed_in, first_name: 'bLaXPTO') }
+      let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
+      let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, first_name: 'bLaXPTO') }
+      let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLaXPTO') }
       before { get :search, params: { event_id: event, paid: 'true', format: :csv } }
       it 'returns the attendances in the csv format' do
         expected_disposition = 'attachment; filename="attendances_list.csv"'
-        expect(response.body).to eq AttendanceExportService.to_csv([other, attendance])
+        expect(response.body).to eq AttendanceExportService.to_csv(event)
         expect(response.headers['Content-Disposition']).to eq expected_disposition
       end
     end

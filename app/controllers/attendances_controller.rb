@@ -78,7 +78,7 @@ class AttendancesController < ApplicationController
     respond_to do |format|
       format.js {}
       format.csv do
-        send_data AttendanceExportService.to_csv(@attendances_list), filename: 'attendances_list.csv'
+        send_data AttendanceExportService.to_csv(event_for_index), filename: 'attendances_list.csv'
       end
     end
   end

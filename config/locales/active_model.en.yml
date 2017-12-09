@@ -91,6 +91,14 @@ en:
         cancelled: "Cancelled"
         confirmed: "Confirmed"
         showed_in: "Accredited"
+      education_level:
+        primary: "Primary Education"
+        secondary: "Secondary Education"
+        tec_secondary: "Post-secondary non-tertiary education"
+        tec_terciary: "Short-cycle tertiary education"
+        bachelor: "Bachelor or equivalent"
+        master: "Master"
+        doctoral: "Doctoral"
   registration_group:
     paid_in_advance: "Reserved"
   event:

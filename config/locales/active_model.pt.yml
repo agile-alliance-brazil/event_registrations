@@ -147,6 +147,14 @@ pt:
         showed_in:
           one: "Credenciado(a)"
           other: "Credenciados(as)"
+      education_level:
+        primary: "Ensino Fundamental"
+        secondary: "Ensino Médio"
+        tec_secondary: "Ensino Médio Técnico"
+        tec_terciary: "Tecnólogo"
+        bachelor: "Bacharelado"
+        master: "Mestrado"
+        doctoral: "Doutorado"
   registration_group:
     paid_in_advance:
       one: "Reservada"

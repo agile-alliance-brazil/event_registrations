@@ -9,14 +9,13 @@ module AttendanceHelper
 
   def education_level_options
     [
-      'Primary education',
-      'Lower secondary education',
-      'Upper secondary education',
-      'Post-secondary non-tertiary education',
-      'Short-cycle tertiary education',
-      'Bachelor or equivalent',
-      'Master or equivalent',
-      'Doctoral or equivalent'
+      [t('attendance.enum.education_level.primary'), 'Primary education'],
+      [t('attendance.enum.education_level.secondary'), 'Secondary education'],
+      [t('attendance.enum.education_level.tec_secondary'), 'Post-secondary non-tertiary education'],
+      [t('attendance.enum.education_level.tec_terciary'), 'Short-cycle tertiary education'],
+      [t('attendance.enum.education_level.bachelor'), 'Bachelor or equivalent'],
+      [t('attendance.enum.education_level.master'), 'Master or equivalent'],
+      [t('attendance.enum.education_level.doctoral'), 'Doctoral or equivalent']
     ]
   end
 

@@ -16,7 +16,7 @@ RSpec.describe ReportService, type: :service do
         burnup_structure = ReportService.instance.create_burnup_structure(event)
         expect(burnup_structure.ideal.first).to eq [Time.zone.today.to_time.to_i * 1000, 0.0]
         expect(burnup_structure.ideal.second).to eq [Time.zone.tomorrow.to_time.to_i * 1000, 14.285714285714286]
-        expect(burnup_structure.actual).to eq [[Time.zone.today.to_time.to_i * 1000, 3]]
+        expect(burnup_structure.actual).to eq [[Time.zone.today.to_time.to_i * 1000, 4]]
       end
     end
 

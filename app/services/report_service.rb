@@ -19,7 +19,7 @@ class ReportService
 
     (start_period..end_period).each_with_index do |date, index|
       burnup_ideal << [date.to_time.to_i * 1000, growth_rate * index]
-      registrations_in_day = event.attendances.confirmed.where("(STATUS = 'confirmed' OR STATUS = 'showed_in') AND (created_at BETWEEN :start AND :end)", start: date.beginning_of_day, end: date.end_of_day).count
+      registrations_in_day = event.attendances.where("(STATUS = 'confirmed' OR STATUS = 'showed_in') AND (created_at BETWEEN :start AND :end)", start: date.beginning_of_day, end: date.end_of_day).count
       reserved_in_day = event.registration_groups.where('created_at BETWEEN :start AND :end AND paid_in_advance = true', start: date.beginning_of_day, end: date.end_of_day).count
       registration_sum += (registrations_in_day + reserved_in_day)
       burnup_actual << [date.to_time.to_i * 1000, registration_sum] if date <= Time.zone.today

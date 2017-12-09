@@ -90,6 +90,7 @@ en:
         paid: "Paid"
         cancelled: "Cancelled"
         confirmed: "Confirmed"
+        showed_in: "Accredited"
   registration_group:
     paid_in_advance: "Reserved"
   event:

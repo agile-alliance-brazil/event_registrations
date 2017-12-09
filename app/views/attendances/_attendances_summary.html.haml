@@ -31,6 +31,10 @@
 
     %div{class: 'row'}
       %span{class: 'col-xs-6'}
+        = check_box_tag 'showed_in', 'showed_in', true, onclick: "submitSearch(#{@event.id});"
+        = label_tag 'showed_in', "#{t('attendance.enum.status.showed_in', count: @accredited_total)} (#{@accredited_total})"
+
+      %span{class: 'col-xs-6'}
         = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
         = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"
 

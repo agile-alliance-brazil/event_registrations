@@ -24,6 +24,7 @@ gem 'omniauth-facebook', '~>4.0'
 gem 'omniauth-github', '~>1.1'
 gem 'omniauth-twitter', '~>1.2'
 gem 'pagseguro-oficial'
+gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud
 gem 'rake'
 gem 'sass'
 gem 'sass-rails'
@@ -31,7 +32,6 @@ gem 'state_machine', '~> 1.2.0'
 gem 'therubyracer', '~> 0.12', platforms: :ruby
 gem 'will_paginate', '~> 3.1'
 gem 'yui-compressor', '~> 0.12', require: 'yui/compressor'
-gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud
 
 group :development, :test do
   gem 'annotate'

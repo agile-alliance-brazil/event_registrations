@@ -3,7 +3,7 @@ class AttendanceRepository
 
   def search_for_list(event, text, status)
     Attendance.where('event_id = ? AND ((first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?))',
-                     event.id, "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%", text.to_s, status).order(created_at: :desc)
+                     event.id, "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%", text.to_s, status).order(updated_at: :desc)
   end
 
   def for_cancelation_warning(event)

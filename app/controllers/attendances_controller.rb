@@ -10,6 +10,7 @@ class AttendancesController < ApplicationController
     @accepted_total = event_for_index.attendances.accepted.count
     @paid_total = event_for_index.attendances.paid.count
     @reserved_total = event_for_index.reserved_count
+    @accredited_total = event_for_index.attendances.showed_in.count
     @cancelled_total = event_for_index.attendances.cancelled.count
     @total = event_for_index.attendances_count
     @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
@@ -66,6 +67,11 @@ class AttendancesController < ApplicationController
     redirect_to attendance_path(resource)
   end
 
+  def receive_credential
+    resource.mark_show
+    responds_js
+  end
+
   def search
     @attendances_list = AttendanceRepository.instance.search_for_list(event_for_index, params[:search], statuses_params)
 
@@ -108,6 +114,7 @@ class AttendancesController < ApplicationController
     statuses << :accepted if params[:accepted] == 'true'
     statuses += %i[paid confirmed] if params[:paid] == 'true'
     statuses << :cancelled if params[:cancelled] == 'true'
+    statuses << :showed_in if params[:showed_in] == 'true'
     statuses
   end
 end

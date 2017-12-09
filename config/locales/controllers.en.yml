@@ -60,9 +60,6 @@ en:
       attendance_years_of_experience: "Attendance vs Years of Experience"
       attendance_job_role: "Attendances vs Job Role"
       registrations_burnup: "Registrations Burn-Up"
-    enum:
-      status:
-        waiting: "In Line"
   report:
     attendance_organization_size:
       title: "Grouped on organization size"
@@ -85,3 +82,5 @@ en:
   event_attendances:
     form:
       state: "State"
+  actions:
+    receive_credential: "Credential"

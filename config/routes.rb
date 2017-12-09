@@ -60,6 +60,7 @@ Current::Application.routes.draw do
       delete :destroy
       put :recover_it
       patch :dequeue_it
+      patch :receive_credential
     end
 
     collection { get :search }

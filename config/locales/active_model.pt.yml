@@ -144,6 +144,9 @@ pt:
         confirmed:
           one: "Confirmada"
           other: "Confirmadas"
+        showed_in:
+          one: "Credenciado(a)"
+          other: "Credenciados(as)"
   registration_group:
     paid_in_advance:
       one: "Reservada"

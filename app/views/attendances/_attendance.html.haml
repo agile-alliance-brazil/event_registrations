@@ -19,6 +19,10 @@
       = link_to pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, remote: true do
         %i{class: 'fa fa-credit-card', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.pay')}
 
+    - if attendance.confirmed?
+      = link_to receive_credential_attendance_path(event_id: @event.id, id: attendance.id), method: :patch, remote: true do
+        %i{class: 'fa fa-id-card-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => t('actions.receive_credential')}
+
     - if attendance.cancellable?
       = link_to attendance, method: :delete, data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) } do
         %i{class: 'fa fa-ban', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.cancel')}

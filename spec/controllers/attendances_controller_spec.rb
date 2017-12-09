@@ -37,20 +37,22 @@ RSpec.describe AttendancesController, type: :controller do
           let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }
           let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid) }
           let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed) }
+          let!(:showed_in) { FactoryBot.create(:attendance, event: event, status: :showed_in) }
           let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled) }
           let!(:group) { FactoryBot.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
 
-          before { get :index, params: { event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
+          before { get :index, params: { event_id: event.id, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', showed_in: 'showed_in', cancelled: 'cancelled' } }
           it 'assigns the instance variables and renders the template' do
             expect(response).to render_template :index
-            expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed]
+            expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, showed_in]
             expect(assigns(:waiting_total)).to eq 1
             expect(assigns(:pending_total)).to eq 1
             expect(assigns(:accepted_total)).to eq 1
             expect(assigns(:paid_total)).to eq 2
             expect(assigns(:reserved_total)).to eq 3
+            expect(assigns(:accredited_total)).to eq 1
             expect(assigns(:cancelled_total)).to eq 1
-            expect(assigns(:total)).to eq 7
+            expect(assigns(:total)).to eq 8
             expect(assigns(:burnup_registrations_data).ideal.count).to eq 32
             expect(assigns(:burnup_registrations_data).actual.count).to eq 1
           end
@@ -252,6 +254,23 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
+  describe 'PATCH #receive_credential' do
+    let!(:event) { FactoryBot.create(:event) }
+    context 'when is an individual registration' do
+      let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'confirmed') }
+      before do
+        invoice = Invoice.from_attendance(attendance, 'gateway')
+        invoice.update(status: :paid)
+        patch :receive_credential, params: { id: attendance.id }, xhr: true
+      end
+
+      it 'changes the status and redirects to the attendance page' do
+        expect(Attendance.last.status).to eq 'showed_in'
+        expect(Invoice.last.status).to eq 'paid'
+      end
+    end
+  end
+
   describe 'GET #search' do
     let(:admin) { FactoryBot.create(:admin) }
     before { sign_in admin }
@@ -341,7 +360,7 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     context 'with csv format' do
-      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLa', created_at: 1.day.ago) }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLa', updated_at: 1.day.ago) }
       let!(:other) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLaXPTO') }
       before { get :search, params: { event_id: event, paid: 'true', format: :csv } }
       it 'returns the attendances in the csv format' do

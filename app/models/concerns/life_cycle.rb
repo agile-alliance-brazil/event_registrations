@@ -83,7 +83,7 @@ module Concerns
     end
 
     def cancel_invoice!
-      change_invoice_status(user.invoices.where(status: 'pending').last, :cancel_it)
+      change_invoice_status(user.invoices.order(created_at: :asc).last, :cancel_it)
     end
 
     def recover_invoice!

@@ -25,10 +25,10 @@ class railsapp( $user, $app_name ) {
         require      => Rvm_system_ruby['ruby-2.3.1'];
     }
 
-    rvm_gem { 'bundler240':
+    rvm_gem { 'bundler243':
         name         => 'bundler',
         ruby_version => 'ruby-2.4.3@global',
-        ensure       => latest,
+        ensure       => '1.16.0',
         require      => Rvm_system_ruby['ruby-2.4.3'];
     }
   }

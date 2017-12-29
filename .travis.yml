@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.3.1
+  - 2.4.3
 before_install:
   - gem source -u
   - gem uninstall bundler -a -x

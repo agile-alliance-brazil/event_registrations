@@ -4,25 +4,11 @@ class railsapp( $user, $app_name ) {
   if $rvm_installed == true {
     rvm::system_user { $user:; }
 
-    rvm_system_ruby { 'ruby-2.3.1':
-        name        => 'ruby-2.3.1',
-        ensure      => 'present',
-        build_opts  => '--disable-binary',
-        default_use => false
-    }
-
     rvm_system_ruby { 'ruby-2.4.3':
         name        => 'ruby-2.4.3',
         ensure      => 'present',
         build_opts  => '--disable-binary',
         default_use => true
-    }
-
-    rvm_gem { 'bundler231':
-        name         => 'bundler',
-        ruby_version => 'ruby-2.3.1@global',
-        ensure       => latest,
-        require      => Rvm_system_ruby['ruby-2.3.1'];
     }
 
     rvm_gem { 'bundler243':

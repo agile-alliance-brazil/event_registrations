@@ -58,6 +58,8 @@ class EventsController < ApplicationController
     end
   end
 
+  def edit; end
+
   def update
     if @event.update(event_params)
       redirect_to @event

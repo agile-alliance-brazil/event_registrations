@@ -38,7 +38,7 @@ class RegistrationGroup < ApplicationRecord
   end
 
   has_many :attendances, dependent: :nullify
-  has_many :invoices, as: :invoiceable, dependent: :restrict_with_exception
+  has_many :invoices, as: :invoiceable, dependent: :restrict_with_exception, inverse_of: :invoiceable
 
   validates :event, :name, presence: true
   validates :capacity, :amount, presence: true, if: :paid_in_advance?

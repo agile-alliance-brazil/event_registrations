@@ -55,6 +55,7 @@ module Concerns
         end
       end
     end
+    # rubocop:enable Metrics/BlockLength
 
     def cancellable?
       waiting? || pending? || accepted? || paid? || confirmed?

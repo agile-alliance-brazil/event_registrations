@@ -21,6 +21,8 @@ class RegistrationQuotasController < ApplicationController
     redirect_to @event
   end
 
+  def edit; end
+
   def update
     return redirect_to @event if @registration_quota.update(quota_params)
     render :edit

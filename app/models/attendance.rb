@@ -56,9 +56,9 @@ class Attendance < ApplicationRecord
   belongs_to :registration_period
   belongs_to :registration_group
   belongs_to :registration_quota
-  has_many :payment_notifications, as: :invoicer, dependent: :delete_all
+  has_many :payment_notifications, as: :invoicer, dependent: :delete_all, inverse_of: :invoicer
 
-  has_many :invoices, as: :invoiceable, dependent: :destroy
+  has_many :invoices, as: :invoiceable, dependent: :destroy, inverse_of: :invoiceable
 
   validates :first_name, :last_name, :email, :phone, :country, :city, :state, :registration_date, :user, :event, presence: true
   validates :cpf, presence: true, if: ->(a) { a.in_brazil? }

@@ -53,3 +53,4 @@ Vagrant.configure('2') do |config|
     vm_config.vm.network :forwarded_port, guest: 80, host: 8081
   end
 end
+# rubocop:enable Metrics/BlockLength

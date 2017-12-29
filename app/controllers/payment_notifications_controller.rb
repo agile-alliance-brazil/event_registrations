@@ -6,6 +6,7 @@ class PaymentNotificationsController < ApplicationController
   def create
     # rubocop:disable Rails/DynamicFindBy
     transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
+    # rubocop:enable Rails/DynamicFindBy
     if transaction.status.present?
       transaction_params = params
       transaction_params[:status] = transaction.status.try(:paid?) ? 'Completed' : transaction.status.status

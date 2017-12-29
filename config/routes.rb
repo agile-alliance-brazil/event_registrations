@@ -80,3 +80,4 @@ Current::Application.routes.draw do
 
   root to: 'events#index'
 end
+# rubocop:enable Metrics/BlockLength

@@ -11,8 +11,8 @@ class railsapp( $user, $app_name ) {
         default_use => true
     }
 
-    rvm_system_ruby { 'ruby-2.4.0':
-        name        => 'ruby-2.4.0',
+    rvm_system_ruby { 'ruby-2.4.3':
+        name        => 'ruby-2.4.3',
         ensure      => 'present',
         build_opts  => '--disable-binary',
         default_use => false
@@ -27,9 +27,9 @@ class railsapp( $user, $app_name ) {
 
     rvm_gem { 'bundler240':
         name         => 'bundler',
-        ruby_version => 'ruby-2.4.0@global',
+        ruby_version => 'ruby-2.4.3@global',
         ensure       => latest,
-        require      => Rvm_system_ruby['ruby-2.4.0'];
+        require      => Rvm_system_ruby['ruby-2.4.3'];
     }
   }
 

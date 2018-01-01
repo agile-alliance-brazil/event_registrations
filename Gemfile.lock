@@ -382,7 +382,7 @@ GEM
       rainbow (~> 2.0)
       unparser (~> 0.2.2)
     ref (2.0.0)
-    require_all (1.4.0)
+    require_all (1.5.0)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)

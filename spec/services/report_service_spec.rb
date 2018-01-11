@@ -11,12 +11,13 @@ RSpec.describe ReportService, type: :service do
       let!(:cancelled_attendante) { FactoryBot.create :attendance, event: event, status: :cancelled }
       let!(:accredited_attendante) { FactoryBot.create :attendance, event: event, status: :showed_in }
       let!(:group) { FactoryBot.create :registration_group, event: event, paid_in_advance: true, capacity: 40, amount: 100 }
+      let!(:other_group) { FactoryBot.create :registration_group, event: event, paid_in_advance: true, capacity: 15, amount: 100 }
 
       it 'returns the sctructure for the burnup' do
         burnup_structure = ReportService.instance.create_burnup_structure(event)
         expect(burnup_structure.ideal.first).to eq [Time.zone.today.to_time.to_i * 1000, 0.0]
         expect(burnup_structure.ideal.second).to eq [Time.zone.tomorrow.to_time.to_i * 1000, 14.285714285714286]
-        expect(burnup_structure.actual).to eq [[Time.zone.today.to_time.to_i * 1000, 4]]
+        expect(burnup_structure.actual).to eq [[Time.zone.today.to_time.to_i * 1000, 58]]
       end
     end
 

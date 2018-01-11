@@ -42,7 +42,9 @@ class RegistrationGroup < ApplicationRecord
 
   validates :event, :name, presence: true
   validates :capacity, :amount, presence: true, if: :paid_in_advance?
+  validates :discount, numericality: { greater_than: 0 }, allow_nil: true
   validate :enough_capacity, if: :paid_in_advance?
+  validate :discount_or_amount_present?
 
   before_create :generate_token
 
@@ -118,5 +120,11 @@ class RegistrationGroup < ApplicationRecord
     elsif event.capacity_left < capacity
       errors.add(:capacity, I18n.t('registration_group.event_capacity_error'))
     end
+  end
+
+  def discount_or_amount_present?
+    return true if discount.present? || amount.present?
+    errors.add(:discount, I18n.t('registration_group.errors.discount_or_amount_present'))
+    errors.add(:amount, I18n.t('registration_group.errors.discount_or_amount_present'))
   end
 end

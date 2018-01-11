@@ -159,5 +159,7 @@ pt:
     paid_in_advance:
       one: "Reservada"
       other: "Reservadas"
+    errors:
+      discount_or_amount_present: "Ou o desconto ou o valor das inscrições no grupo deve estar preenchido."
   event:
     average_ticket: "Ticket Médio"

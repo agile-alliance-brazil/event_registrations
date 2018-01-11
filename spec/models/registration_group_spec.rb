@@ -1,4 +1,4 @@
-describe RegistrationGroup, type: :model do
+RSpec.describe RegistrationGroup, type: :model do
   let(:event) { FactoryBot.create :event }
   let(:group) { FactoryBot.create :registration_group, event: event }
 
@@ -14,6 +14,7 @@ describe RegistrationGroup, type: :model do
   context 'validations' do
     it { is_expected.to validate_presence_of :event }
     it { is_expected.to validate_presence_of :name }
+    it { is_expected.to validate_numericality_of(:discount).allow_nil }
 
     context 'paid_in_advance group validation' do
       context 'when is a paid_in_advance group' do
@@ -45,6 +46,24 @@ describe RegistrationGroup, type: :model do
           expect(group.valid?).to be_falsey
           expect(group.errors.full_messages).to eq ['Capacidade A cota não tem mais lugares para o seu grupo. Desculpe!']
         end
+      end
+    end
+
+    context '#discount_or_amount_present?' do
+      context 'having no discount or amount' do
+        let!(:group) { FactoryBot.build :registration_group, event: event, amount: nil, discount: nil }
+        it 'not consider the group as valid and gives the correct error message' do
+          expect(group.valid?).to be false
+          expect(group.errors[:discount]).to eq [I18n.t('registration_group.errors.discount_or_amount_present')]
+        end
+      end
+      context 'having discount' do
+        let!(:group) { FactoryBot.build :registration_group, event: event, amount: nil, discount: 10 }
+        it { expect(group.valid?).to be true }
+      end
+      context 'having amount' do
+        let!(:group) { FactoryBot.build :registration_group, event: event, amount: 10, discount: nil }
+        it { expect(group.valid?).to be true }
       end
     end
   end

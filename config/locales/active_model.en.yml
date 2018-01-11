@@ -101,5 +101,7 @@ en:
         doctoral: "Doctoral"
   registration_group:
     paid_in_advance: "Reserved"
+    errors:
+      discount_or_amount_present: "Discount or amount should be informed."
   event:
     average_ticket: "Average Ticket"

@@ -6,19 +6,6 @@ RSpec.describe EmailNotifications, type: :mailer do
   describe '#registration_pending' do
     let(:attendance) { FactoryBot.create(:attendance, event: event) }
 
-    context 'having no organizers in the event' do
-      it 'sends to attendee cc the events organizer' do
-        mail = EmailNotifications.registration_pending(attendance).deliver_now
-        expect(ActionMailer::Base.deliveries.size).to eq 1
-        expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [APP_CONFIG[:organizer][:email]]
-        expect(mail.text_part.body.to_s).to include("Oi #{attendance.full_name},")
-        expect(mail.text_part.body.to_s).to include("R$ #{attendance.registration_value}")
-        expect(mail.text_part.body.to_s).to include(attendance.event.main_email_contact)
-        expect(mail.subject).to eq("Pedido de inscrição para #{event.name} enviado")
-      end
-    end
-
     context 'having organizers in the event' do
       let(:organizer) { FactoryBot.create :organizer }
       let(:other_organizer) { FactoryBot.create :organizer }
@@ -28,7 +15,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.registration_pending(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email, 'xpto@sbbrubles.com']
+        expect(mail.cc).to eq ['xpto@sbbrubles.com']
       end
     end
   end
@@ -36,28 +23,16 @@ RSpec.describe EmailNotifications, type: :mailer do
   describe '#registration_waiting' do
     let(:attendance) { FactoryBot.create(:attendance, event: event, status: :waiting) }
 
-    context 'having no organizers in the event' do
-      it 'sends to attendee and cc the events organizer' do
-        mail = EmailNotifications.registration_waiting(attendance).deliver_now
-        expect(ActionMailer::Base.deliveries.size).to eq 1
-        expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [APP_CONFIG[:organizer][:email]]
-        expect(mail.text_part.body.to_s).to include("Oi #{attendance.full_name},")
-        expect(mail.text_part.body.to_s).to include(attendance.event.main_email_contact.to_s)
-        expect(mail.subject).to eq("Sua inscrição para #{event.name} está na fila de espera")
-      end
-    end
-
     context 'having organizers in the event' do
       let(:organizer) { FactoryBot.create :organizer }
       let(:other_organizer) { FactoryBot.create :organizer }
       let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee cc the events organizer' do
-        mail = EmailNotifications.registration_pending(attendance).deliver_now
+        mail = EmailNotifications.registration_waiting(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email, 'xpto@sbbrubles.com']
+        expect(mail.cc).to eq ['xpto@sbbrubles.com']
       end
     end
   end
@@ -97,7 +72,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.registration_confirmed(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email, 'xpto@sbbrubles.com']
+        expect(mail.cc).to eq ['xpto@sbbrubles.com']
       end
     end
 
@@ -158,7 +133,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.cancelling_registration(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
+        expect(mail.cc).to eq [event.main_email_contact]
       end
     end
   end
@@ -195,7 +170,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
+        expect(mail.cc).to eq [event.main_email_contact]
       end
     end
 
@@ -213,19 +188,6 @@ RSpec.describe EmailNotifications, type: :mailer do
   describe '#registration_dequeued' do
     let(:attendance) { FactoryBot.create(:attendance, event: event) }
 
-    context 'having no organizers in the event' do
-      it 'sends to attendee cc the events organizer in the config file' do
-        mail = EmailNotifications.registration_dequeued(attendance).deliver_now
-        expect(ActionMailer::Base.deliveries.size).to eq 1
-        expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [APP_CONFIG[:organizer][:email]]
-        expect(mail.text_part.body.to_s).to match(/Oi #{attendance.full_name},/)
-        expect(mail.text_part.body.to_s).to match(/Nossa fila andou e chegou a sua vez!/)
-        expect(mail.text_part.body.to_s).to match(/#{attendance.event.main_email_contact}/)
-        expect(mail.subject).to eq("Aeee! Nossa fila andou e a sua inscrição para #{event.name} foi recebida!")
-      end
-    end
-
     context 'having organizers in the event' do
       let(:organizer) { FactoryBot.create :organizer }
       let(:other_organizer) { FactoryBot.create :organizer }
@@ -235,7 +197,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.registration_dequeued(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
+        expect(mail.cc).to eq [event.main_email_contact]
       end
     end
   end
@@ -246,20 +208,6 @@ RSpec.describe EmailNotifications, type: :mailer do
     let(:attendance) { FactoryBot.create(:attendance, event: event) }
     let(:out_attendance) { FactoryBot.create(:attendance, event: out_event) }
 
-    context 'having no organizers in the event' do
-      it 'sends to attendee cc the events organizer in the config file' do
-        mail = EmailNotifications.welcome_attendance(attendance).deliver_now
-        expect(ActionMailer::Base.deliveries.size).to eq 1
-        expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [APP_CONFIG[:organizer][:email]]
-        expect(mail.text_part.body.to_s).to match(/Oi #{attendance.full_name},/)
-        expect(mail.text_part.body.to_s).to match(/mais um dia/)
-        expect(mail.text_part.body.to_s).to match(/#{attendance.event.main_email_contact}/)
-        expect(mail.text_part.body.to_s).to match(/#{attendance.event.start_date.to_date.strftime('%H:%M')}/)
-        expect(mail.subject).to eq("Bem vindo ao #{event.name}! É amanhã!")
-      end
-    end
-
     context 'having organizers in the event' do
       let(:organizer) { FactoryBot.create :organizer }
       let(:other_organizer) { FactoryBot.create :organizer }
@@ -269,7 +217,7 @@ RSpec.describe EmailNotifications, type: :mailer do
         mail = EmailNotifications.welcome_attendance(attendance).deliver_now
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [organizer.email, other_organizer.email, event.main_email_contact]
+        expect(mail.cc).to eq [event.main_email_contact]
       end
     end
   end

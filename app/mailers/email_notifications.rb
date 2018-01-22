@@ -39,17 +39,6 @@ class EmailNotifications < ApplicationMailer
     subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
     Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
     from = @attendance.event.main_email_contact || 'inscricoes@agilebrazil.com'
-    mail(from: from, to: attendance.email, subject: subject, cc: event_organizers, date: sent_at)
-  end
-
-  def event_organizers
-    if @attendance.event.present? && @attendance.event.organizers.present?
-      organizers = []
-      @attendance.event.organizers.each { |organizer| organizers << "\"#{organizer.first_name}\" <#{organizer.email}>" }
-      organizers << @attendance.event.main_email_contact
-    else
-      organizers = ["\"#{APP_CONFIG[:organizer][:name]}\" <#{APP_CONFIG[:organizer][:email]}>"]
-    end
-    organizers
+    mail(from: from, to: attendance.email, subject: subject, cc: from, date: sent_at)
   end
 end

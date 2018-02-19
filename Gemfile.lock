@@ -61,7 +61,7 @@ GEM
     arel (8.0.0)
     arrayfields (4.9.2)
     ast (2.4.0)
-    autoprefixer-rails (7.2.6)
+    autoprefixer-rails (8.0.0)
       execjs
     aws-ses (0.6.0)
       builder
@@ -490,7 +490,7 @@ PLATFORMS
 DEPENDENCIES
   airbrake (~> 7.0)
   annotate
-  autoprefixer-rails (~> 7.1)
+  autoprefixer-rails (~> 8.0)
   aws-ses (~> 0.6.0)
   bootstrap-sass (~> 3.3)
   brakeman

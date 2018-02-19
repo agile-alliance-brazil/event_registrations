@@ -1,5 +1,5 @@
-# config valid only for Capistrano 3.9.1
-lock '3.9.1'
+# config valid only for Capistrano 3.10.1
+lock '3.10.1'
 
 set :stages, %w[vagrant staging production 10.11.12.14 162.243.247.114 162.243.94.207]
 set :default_stage, 'vagrant'

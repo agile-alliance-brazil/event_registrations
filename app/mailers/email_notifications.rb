@@ -35,10 +35,12 @@ class EmailNotifications < ApplicationMailer
 
   def mail_attendance(attendance, sent_at, title)
     @attendance = attendance
-    I18n.locale = attendance.country == 'BR' ? :pt : :en
-    subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
-    Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
-    from = @attendance.event.main_email_contact || 'inscricoes@agilebrazil.com'
-    mail(from: from, to: attendance.email, subject: subject, cc: from, date: sent_at)
+    l = attendance.country == 'BR' ? :pt : :en
+    I18n.with_locale(l) do
+      subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
+      Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
+      from = @attendance.event.main_email_contact || 'inscricoes@agilebrazil.com'
+      mail(from: from, to: attendance.email, subject: subject, cc: from, date: sent_at)
+    end
   end
 end

@@ -78,24 +78,27 @@ RSpec.describe EmailNotifications, type: :mailer do
 
     context 'when the attendance is from other coutry' do
       context 'and event start date before end date' do
+        let(:attendance) { FactoryBot.create(:attendance, event: event, registration_date: Time.zone.local(2013, 5, 1, 12, 0, 0), country: 'US') }
         it 'sends the confirmation in english' do
-          attendance.country = 'US'
           mail = EmailNotifications.registration_confirmed(attendance).deliver_now
           expect(ActionMailer::Base.deliveries.size).to eq(1)
           expect(mail.to).to eq([attendance.email])
-          expect(mail.text_part.body.to_s).to include("Dear #{attendance.full_name},")
-          expect(mail.text_part.body.to_s).to include("When: #{I18n.l(attendance.event.start_date.to_date)} #{I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}")
-          expect(mail.text_part.body.to_s).to include(attendance.event.main_email_contact)
-          expect(mail.subject).to eq("Registration request to #{event.name} confirmed")
+          I18n.with_locale(:en) do
+            expect(mail.text_part.body.to_s).to include("Dear #{attendance.full_name},")
+            expect(mail.text_part.body.to_s).to include("When: #{I18n.l(attendance.event.start_date.to_date)} #{I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}")
+            expect(mail.text_part.body.to_s).to include(attendance.event.main_email_contact)
+            expect(mail.subject).to eq("Registration request to #{event.name} confirmed")
+          end
         end
       end
       context 'and with start date equals end date' do
         let(:today_event) { FactoryBot.create(:event, start_date: Time.zone.today, end_date: Time.zone.today) }
-        let(:today_attendance) { FactoryBot.create(:attendance, event: today_event) }
+        let(:today_attendance) { FactoryBot.create(:attendance, event: today_event, country: 'US') }
         it 'show the start date only' do
-          today_attendance.country = 'US'
           mail = EmailNotifications.registration_confirmed(today_attendance).deliver_now
-          expect(mail.text_part.body.to_s).to include("When: #{I18n.l(today_attendance.event.start_date.to_date)}")
+          I18n.with_locale(:en) do
+            expect(mail.text_part.body.to_s).to include("When: #{I18n.l(today_attendance.event.start_date.to_date)}")
+          end
         end
       end
     end

@@ -25,13 +25,22 @@ RSpec.describe AttendancesController, type: :controller do
 
       context 'and having attendances' do
         let!(:attendance) { FactoryBot.create(:attendance) }
+
+        before do
+          Timecop.freeze(Time.zone.local(2017, 12, 1, 12, 0, 0))
+        end
+
+        after do
+          Timecop.return
+        end
+
         context 'and one attendance, but no association with event' do
           let!(:event) { FactoryBot.create(:event) }
           before { get :index, params: { event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', cancelled: 'cancelled' } }
           it { expect(assigns(:attendances_list)).to eq [] }
         end
         context 'having attendances and reservations' do
-          let!(:event) { FactoryBot.create(:event) }
+          let(:event) { FactoryBot.create(:event) }
           let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
           let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
           let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }

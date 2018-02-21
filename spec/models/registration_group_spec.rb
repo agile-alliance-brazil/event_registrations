@@ -3,8 +3,8 @@ RSpec.describe RegistrationGroup, type: :model do
   let(:group) { FactoryBot.create :registration_group, event: event }
 
   context 'associations' do
-    it { is_expected.to have_many :attendances }
-    it { is_expected.to have_many :invoices }
+    it { is_expected.to have_many(:attendances).dependent(:restrict_with_error) }
+    it { is_expected.to have_many(:invoices).dependent(:destroy) }
 
     it { is_expected.to belong_to :event }
     it { is_expected.to belong_to(:leader).class_name('User') }
@@ -65,18 +65,6 @@ RSpec.describe RegistrationGroup, type: :model do
         let!(:group) { FactoryBot.build :registration_group, event: event, amount: 10, discount: nil }
         it { expect(group.valid?).to be true }
       end
-    end
-  end
-
-  describe '#destroy' do
-    context 'mark attendances as cancelled' do
-      before do
-        2.times { FactoryBot.create :attendance, registration_group: group }
-        @attendances = Attendance.where(registration_group: group.id).all.to_a
-        group.destroy
-      end
-      it { expect(RegistrationGroup.all).not_to include(group) }
-      it { expect(@attendances.map(&:reload).map(&:status).uniq).to eq(['cancelled']) }
     end
   end
 

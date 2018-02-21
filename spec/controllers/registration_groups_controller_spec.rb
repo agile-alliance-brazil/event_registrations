@@ -2,6 +2,8 @@ describe RegistrationGroupsController, type: :controller do
   let(:admin) { FactoryBot.create :admin }
   before { sign_in admin }
 
+  let(:event) { FactoryBot.create :event }
+
   context 'ability stuff' do
     describe '#resource' do
       it { expect(controller.send(:resource_class)).to eq RegistrationGroup }
@@ -10,44 +12,26 @@ describe RegistrationGroupsController, type: :controller do
 
   describe '#index' do
     context 'with valid data' do
-      let(:event) { FactoryBot.create :event }
       let!(:group) { FactoryBot.create :registration_group, event: event }
+      let!(:other_group) { FactoryBot.create :registration_group, event: event }
+      let!(:other_event_group) { FactoryBot.create :registration_group }
 
-      context 'instance variables' do
-        before { get :index, params: { event_id: event } }
-        it { expect(assigns(:group)).not_to be_nil }
-      end
-
-      context 'and an existent group for event' do
-        before { get :index, params: { event_id: event } }
-        it { expect(assigns(:groups)).to match_array [group] }
-        it { expect(response).to render_template :index }
-      end
-
-      context 'and two groups for event' do
-        let!(:other_group) { FactoryBot.create :registration_group, event: event }
-        before { get :index, params: { event_id: event } }
-        it { expect(assigns(:groups)).to match_array [group, other_group] }
-        it { expect(response).to render_template :index }
-      end
-
-      context 'and two groups one for event and other not' do
-        let!(:other_group) { FactoryBot.create :registration_group, event: event }
-        let!(:out) { FactoryBot.create :registration_group }
-        before { get :index, params: { event_id: event } }
-        it { expect(assigns(:groups)).to match_array [group, other_group] }
-        it { expect(response).to render_template :index }
+      it 'assign the instance variables and renders the template' do
+        get :index, params: { event_id: event }
+        expect(assigns(:groups)).to match_array [group, other_group]
+        expect(assigns(:group)).not_to be_nil
+        expect(response).to render_template :index
+        expect(response).to render_template :index
       end
     end
 
     context 'with invalid event' do
       before { get :index, params: { event_id: 'foo' } }
-      it { expect(response).to have_http_status 404 }
+      it { expect(response).to have_http_status :not_found }
     end
   end
 
   describe '#show' do
-    let(:event) { FactoryBot.create :event }
     let(:group) { FactoryBot.create :registration_group, event: event }
     let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: 'gateway' }
     context 'without attendances' do
@@ -67,31 +51,69 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe '#destroy' do
-    context 'valid data' do
-      let!(:group) { FactoryBot.create :registration_group }
-      before { delete :destroy, params: { event_id: group.event.id, id: group.id } }
-      it { expect(RegistrationGroup.count).to be 0 }
-      it { expect(response).to redirect_to event_registration_groups_path(group.event) }
-      it { expect(flash[:notice]).to eq I18n.t('registration_group.destroy.success') }
+    let!(:group) { FactoryBot.create :registration_group, event: event }
+    context 'with valid data' do
+      context 'having only invoices as dependencies' do
+        let!(:invoice) { FactoryBot.create(:invoice, invoiceable: group) }
+        it 'destroys the group and the invoices' do
+          expect(RegistrationGroup.count).to eq 1
+          expect(Invoice.count).to eq 1
+
+          delete :destroy, params: { event_id: event, id: group }
+          expect(RegistrationGroup.count).to eq 0
+          expect(Invoice.count).to eq 0
+          expect(response).to redirect_to event_registration_groups_path(event)
+          expect(flash[:notice]).to eq I18n.t('registration_group.destroy.success')
+        end
+      end
+      context 'having invoices and attendances as dependencies' do
+        let!(:invoice) { FactoryBot.create(:invoice, invoiceable: group) }
+        let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group) }
+
+        it 'does not destroy the group nor the invoices and redirects with an error message' do
+          expect(RegistrationGroup.count).to eq 1
+          expect(Invoice.count).to eq 1
+          expect(Attendance.count).to eq 1
+
+          delete :destroy, params: { event_id: event, id: group }
+          expect(RegistrationGroup.count).to eq 1
+          expect(Invoice.count).to eq 1
+          expect(Attendance.count).to eq 1
+          expect(response).to redirect_to event_registration_groups_path(event)
+          expect(flash[:error]).to eq 'Não é possível excluir o registro pois existem inscritos dependentes'
+        end
+      end
+    end
+
+    context 'with invalid' do
+      context 'event' do
+        before { delete :destroy, params: { event_id: 'foo', id: group } }
+        it { expect(response).to have_http_status :not_found }
+      end
+      context 'registration group' do
+        before { delete :destroy, params: { event_id: event, id: 'foo' } }
+        it { expect(response).to have_http_status :not_found }
+      end
     end
   end
 
   describe '#create' do
-    let(:event) { FactoryBot.create :event }
     context 'with valid parameters' do
       let(:valid_params) { { name: 'new_group', discount: 5, minimum_size: 10, amount: 137, capacity: 100, paid_in_advance: true } }
       before { post :create, params: { event_id: event, registration_group: valid_params } }
       subject(:new_group) { RegistrationGroup.last }
-      it { expect(new_group.event).to eq event }
-      it { expect(new_group.name).to eq 'new_group' }
-      it { expect(new_group.discount).to eq 5 }
-      it { expect(new_group.minimum_size).to eq 10 }
-      it { expect(new_group.amount).to eq 137 }
-      it { expect(new_group.paid_in_advance?).to be_truthy }
-      it { expect(new_group.capacity).to eq 100 }
-      it { expect(new_group.token).not_to be_blank }
-      it { expect(new_group.invoices.count).to eq 1 }
-      it { expect(new_group.invoices.last.amount).to eq 0 }
+      it 'creates the group and redirects' do
+        expect(new_group.event).to eq event
+        expect(new_group.name).to eq 'new_group'
+        expect(new_group.discount).to eq 5
+        expect(new_group.minimum_size).to eq 10
+        expect(new_group.amount).to eq 137
+        expect(new_group.paid_in_advance?).to be_truthy
+        expect(new_group.capacity).to eq 100
+        expect(new_group.token).not_to be_blank
+        expect(new_group.invoices.count).to eq 1
+        expect(new_group.invoices.last.amount).to eq 0
+      end
     end
 
     context 'with invalid parameters' do
@@ -105,7 +127,6 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe '#renew_invoice' do
-    let(:event) { FactoryBot.create :event }
     let(:group) { FactoryBot.create :registration_group, event: event }
     context 'with a pending invoice' do
       let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, status: Invoice::PENDING, amount: 120.00 }
@@ -120,7 +141,6 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    let(:event) { FactoryBot.create :event }
     let(:group) { FactoryBot.create :registration_group, event: event }
     context 'with valid IDs' do
       it 'assigns the instance variable and renders the template' do
@@ -156,7 +176,6 @@ describe RegistrationGroupsController, type: :controller do
   end
 
   describe 'PUT #update' do
-    let(:event) { FactoryBot.create :event }
     let(:group) { FactoryBot.create :registration_group, event: event }
     let(:start_date) { Time.zone.now }
     let(:end_date) { 1.week.from_now }

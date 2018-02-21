@@ -307,7 +307,7 @@ GEM
       json (~> 1.8)
       nokogiri (~> 1.6)
     parallel (1.12.1)
-    parser (2.5.0.0)
+    parser (2.5.0.1)
       ast (~> 2.4.0)
     path_expander (1.0.2)
     poltergeist (1.17.0)

@@ -13,12 +13,12 @@
       .form-background
         %h3= t('attendances.new.form.attendance_personal')
         .field{class: 'form-field'}
-          = form.label t('activerecord.attributes.attendance.first_name'), class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.first_name'), class: 'control-label required'
           = form.text_field :first_name, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:first_name].join(', ')
         .field{class: 'form-field'}
-          = form.label t('activerecord.attributes.attendance.last_name'), class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.last_name'), class: 'control-label required'
           = form.text_field :last_name, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:last_name].join(', ')
@@ -29,7 +29,7 @@
           = form.label t('activerecord.attributes.attendance.gender'), class: 'control-label'
           = form.select :gender, Gender.options_for_select
         .field{class: 'form-field'}
-          = form.label :cpf, class: 'control-label'
+          = form.label :cpf, class: 'control-label required'
           = form.text_field :cpf, class: 'form-control'
           .div{class: 'inline-hints'}
             = t('formtastic.hints.attendance.cpf')
@@ -41,27 +41,27 @@
       .form-background
         %h3= t('attendances.new.form.attendance_address')
         .field{class: 'form-field'}
-          = form.label t('activerecord.attributes.attendance.country'), class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.country'), class: 'control-label required'
           = form.localized_country_select :country, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:country].join(', ')
         .field{class: 'form-field'}
-          = form.label t('activerecord.attributes.attendance.city'), class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.city'), class: 'control-label required'
           = form.text_field :city, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:city].join(', ')
         .field{class: 'form-field'}
-          = form.label t('event_attendances.form.state'), class: 'control-label'
+          = form.label t('event_attendances.form.state'), class: 'control-label required'
           = form.text_field :state, class: 'form-control', maxlength: 2
           .div{class: 'error-field'}
             = @attendance.errors[:state].join(', ')
         .field{class: 'form-field'}
-          = form.label t('activerecord.attributes.attendance.email'), class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.email'), class: 'control-label required'
           = form.text_field :email, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:email].join(', ')
         .field{class: 'form-field'}
-          = form.label t('activerecord.attributes.attendance.phone'), class: 'control-label'
+          = form.label t('activerecord.attributes.attendance.phone'), class: 'control-label required'
           = form.text_field :phone, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:phone].join(', ')

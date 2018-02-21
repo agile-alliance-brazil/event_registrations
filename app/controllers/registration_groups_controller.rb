@@ -13,8 +13,8 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def destroy
-    @group.destroy
-    redirect_to event_registration_groups_path(@event), notice: t('registration_group.destroy.success')
+    return redirect_to event_registration_groups_path(@event), notice: t('registration_group.destroy.success') if @group.destroy
+    redirect_to(event_registration_groups_path(@event), flash: { error: @group.errors.full_messages.join(',') })
   end
 
   def create

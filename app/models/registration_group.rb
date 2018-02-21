@@ -32,13 +32,8 @@ class RegistrationGroup < ApplicationRecord
   belongs_to :leader, class_name: 'User', inverse_of: :led_groups
   belongs_to :registration_quota
 
-  before_destroy do |record|
-    group_attendances = Attendance.where(registration_group_id: record.id)
-    group_attendances.map(&:cancel)
-  end
-
-  has_many :attendances, dependent: :nullify
-  has_many :invoices, as: :invoiceable, dependent: :restrict_with_exception, inverse_of: :invoiceable
+  has_many :attendances, dependent: :restrict_with_error
+  has_many :invoices, as: :invoiceable, dependent: :destroy, inverse_of: :invoiceable
 
   validates :event, :name, presence: true
   validates :capacity, :amount, presence: true, if: :paid_in_advance?

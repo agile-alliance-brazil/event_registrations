@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EventsController < ApplicationController
   layout 'eventless', only: %i[index list_archived]
 

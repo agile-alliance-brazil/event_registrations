@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe AttendanceRepository, type: :repository do
   let(:event) { FactoryBot.create :event }
   describe '#search_for_list' do

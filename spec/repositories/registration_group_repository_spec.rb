@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe RegistrationGroupRepository, type: :repository do
   describe '#reserved_for_quota' do
     let(:quota) { FactoryBot.create :registration_quota }

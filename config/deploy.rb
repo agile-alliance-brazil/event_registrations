@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # config valid only for Capistrano 3.10.1
 lock '3.10.1'
 

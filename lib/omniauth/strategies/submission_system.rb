@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OmniAuth
   module Strategies
     class SubmissionSystem < OmniAuth::Strategies::OAuth2

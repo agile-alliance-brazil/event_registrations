@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe PagSeguroService do
   describe '.checkout' do
     let(:invoice) { FactoryBot.create :invoice }

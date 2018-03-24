@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: registration_groups
@@ -56,11 +58,11 @@ class RegistrationGroup < ApplicationRecord
   end
 
   def price?
-    total_price > 0
+    total_price.positive?
   end
 
   def leader_name
-    leader.full_name if leader
+    leader&.full_name
   end
 
   def update_invoice
@@ -99,7 +101,7 @@ class RegistrationGroup < ApplicationRecord
 
   def vacancies?
     return true if capacity.blank? || capacity.zero?
-    capacity_left > 0
+    capacity_left.positive?
   end
 
   private

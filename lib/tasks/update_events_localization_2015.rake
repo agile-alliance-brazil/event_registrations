@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :update_events_localization_2015 do
   desc 'Generates seeds'
   task seeds: :environment do

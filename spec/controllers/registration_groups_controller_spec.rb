@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe RegistrationGroupsController, type: :controller do
   let(:admin) { FactoryBot.create :admin }
   before { sign_in admin }

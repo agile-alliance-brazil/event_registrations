@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PerformGroupCheck
   def self.run(attendance, token)
     event = attendance.event

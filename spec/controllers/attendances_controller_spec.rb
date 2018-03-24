@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe AttendancesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   let(:event) { FactoryBot.create(:event, full_price: 930.00) }

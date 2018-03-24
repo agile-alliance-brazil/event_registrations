@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe ReportsController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #attendance_organization_size' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Invoice, type: :model do
   let(:event) { FactoryBot.create :event }
 

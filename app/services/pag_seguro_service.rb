@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PagSeguroService
   ENVIRONMENT = Rails.env.production? ? :production : :sandbox
 

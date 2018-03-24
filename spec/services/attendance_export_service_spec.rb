@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe AttendanceExportService, type: :service do
   describe '.to_csv' do
     context 'with attendances' do

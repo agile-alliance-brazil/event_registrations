@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe User, type: :model do
   context 'associations' do
     it { is_expected.to have_many :authentications }

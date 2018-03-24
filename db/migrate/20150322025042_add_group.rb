@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddGroup < ActiveRecord::Migration[4.2]
   def change
     remove_column(:attendances, :registration_groups_id, :integer) if column_exists?(:attendances, :registration_groups_id)
@@ -6,7 +8,7 @@ class AddGroup < ActiveRecord::Migration[4.2]
 
     if ActiveRecord::Base.connection.table_exists? 'registration_groups'
       drop_table :registration_groups do |t|
-        t.references	:event
+        t.references :event
 
         t.string :name
         t.integer :capacity
@@ -20,7 +22,7 @@ class AddGroup < ActiveRecord::Migration[4.2]
     end
 
     create_table :registration_groups do |t|
-      t.references	:event
+      t.references :event
 
       t.string :name
       t.integer :capacity

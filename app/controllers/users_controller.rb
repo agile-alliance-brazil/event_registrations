@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   layout 'eventless'
 
@@ -17,7 +19,7 @@ class UsersController < ApplicationController
     I18n.locale = locale if locale.present?
 
     @user = resource
-    if @user.update_attributes(update_user_params)
+    if @user.update(update_user_params)
       flash[:notice] = I18n.t('flash.user.update')
       redirect_to @user
     else

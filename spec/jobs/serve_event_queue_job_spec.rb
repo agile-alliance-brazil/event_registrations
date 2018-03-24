@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe ServeEventQueueJob, type: :job do
   context 'with active events' do
     let!(:event) { FactoryBot.create :event }

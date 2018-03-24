@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require File.join(File.dirname(__FILE__), '../../lib/registration_notifier')
 

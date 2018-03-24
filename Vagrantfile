@@ -4,7 +4,7 @@
 # vi: set ft=ruby :
 HERE = File.dirname(__FILE__)
 APP_DIR = HERE.freeze
-INFRA_DIR = "#{HERE}/puppet".freeze
+INFRA_DIR = "#{HERE}/puppet"
 
 # rubocop:disable Metrics/BlockLength
 Vagrant.configure('2') do |config|

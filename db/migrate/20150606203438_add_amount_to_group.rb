@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAmountToGroup < ActiveRecord::Migration[4.2]
   def change
     add_column(:registration_groups, :amount, :decimal)

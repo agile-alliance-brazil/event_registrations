@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class QueueService
   def self.serve_the_queue(event)
     return if event.full?

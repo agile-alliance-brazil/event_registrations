@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AttendanceHelper
   def attendance_price(attendance)
     attendance.registration_value

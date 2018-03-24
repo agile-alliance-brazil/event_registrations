@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Transfer
   include ActiveModel::Conversion
   extend ActiveModel::Naming

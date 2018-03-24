@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe TransfersController, type: :controller do
   let(:event) { FactoryBot.create(:event) }
   let(:user) { FactoryBot.create(:user) }

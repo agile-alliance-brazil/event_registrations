@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start 'rails' do
@@ -15,7 +17,7 @@ SimpleCov.start 'rails' do
   minimum_coverage 100
 end
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'mocha/api'
 require 'cancan/matchers'
@@ -61,7 +63,7 @@ RSpec.configure do |config|
   # Remove the disables once rubocop > 0.48.0
   config.include(ControllerMacros, type: :controller)
   config.include(DisableAuthorization, type: :controller)
-  # rubocop:enable Style/MixinGrouping
+
   config.include(TrimmerMacros)
 
   # == Mock Framework

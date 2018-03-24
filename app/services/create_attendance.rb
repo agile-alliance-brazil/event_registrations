@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAttendance
   def self.run_for(create_params)
     attributes = create_params.new_attributes

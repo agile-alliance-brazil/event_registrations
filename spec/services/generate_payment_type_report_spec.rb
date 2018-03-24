@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe GeneratePaymentTypeReport, type: :service do
   let(:event) { FactoryBot.create :event }
   describe '.run_for' do

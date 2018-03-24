@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:disable Metrics/BlockLength
 Current::Application.routes.draw do
   post '/auth/:provider/callback', to: 'sessions#create'
@@ -46,12 +48,9 @@ Current::Application.routes.draw do
     resources :registration_periods, only: %i[new create destroy edit update]
     resources :registration_quotas, only: %i[new create destroy edit update]
   end
-
-  # rubocop:disable Style/FormatStringToken
   # Due to https://github.com/bbatsov/rubocop/issues/4425
   get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
   post '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
-  # rubocop:enable Style/FormatStringToken
   resources :attendances, only: %i[show index] do
     member do
       put :confirm

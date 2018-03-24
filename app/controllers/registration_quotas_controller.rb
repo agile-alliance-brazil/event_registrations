@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RegistrationQuotasController < ApplicationController
   before_action :check_event
   before_action :find_quota, only: %i[destroy edit update]

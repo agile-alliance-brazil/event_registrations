@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 OmniAuth.config.logger = Rails.logger
 
 raise 'Twitter key/secret is not configured in config/config.yml file not found. Please check config/config.example for a sample' unless APP_CONFIG[:twitter]

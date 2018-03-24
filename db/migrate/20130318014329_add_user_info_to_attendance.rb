@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUserInfoToAttendance < ActiveRecord::Migration[4.2]
   def change
     add_column :attendances, :first_name, :string
@@ -19,7 +21,7 @@ class AddUserInfoToAttendance < ActiveRecord::Migration[4.2]
       common_attributes = attendance.user.attributes.reject do |attr_name, _value|
         %w[id created_at updated_at roles_mask default_locale].include?(attr_name)
       end
-      attendance.update_attributes!(common_attributes)
+      attendance.update!(common_attributes)
     end
   end
 end

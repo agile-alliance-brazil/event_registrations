@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RegistrationGroupsController < ApplicationController
   before_action :find_event
   before_action :find_group, except: %i[index create]

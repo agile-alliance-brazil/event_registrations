@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe WelcomeConfirmedAttendancesJob, type: :job do
   context 'with active events to advise' do
     let!(:event) { FactoryBot.create :event, start_date: Time.zone.now }

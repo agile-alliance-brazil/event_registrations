@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe RegistrationGroup, type: :model do
   let(:event) { FactoryBot.create :event }
   let(:group) { FactoryBot.create :registration_group, event: event }

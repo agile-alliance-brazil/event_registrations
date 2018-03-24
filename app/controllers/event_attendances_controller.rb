@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EventAttendancesController < ApplicationController
   rescue_from Net::OpenTimeout, with: :timeout
 
@@ -66,7 +68,7 @@ class EventAttendancesController < ApplicationController
   def timeout
     respond_to do |format|
       format.html { render file: Rails.root.join('public', '408'), layout: false, status: 408 }
-      format.js { render plain: '408 Request Timeout', status: 408 }
+      format.js { render plain: '408 Request Timeout', status: :request_timeout }
     end
   end
 

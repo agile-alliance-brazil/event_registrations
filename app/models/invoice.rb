@@ -22,7 +22,7 @@
 #
 
 class Invoice < ApplicationRecord
-  STATUSES = [PENDING = 'pending'.freeze, SENT = 'sent'.freeze, PAID = 'paid'.freeze, CANCELLED = 'cancelled'.freeze].freeze
+  STATUSES = [PENDING = 'pending', SENT = 'sent', PAID = 'paid', CANCELLED = 'cancelled'].freeze
 
   enum payment_type: { gateway: 1, bank_deposit: 2, statement_agreement: 3 }
 
@@ -52,7 +52,7 @@ class Invoice < ApplicationRecord
   def self.from_registration_group(group, payment_type)
     invoice = find_by(invoiceable: group)
     if invoice.present?
-      invoice.update_attributes(amount: group.total_price, payment_type: payment_type)
+      invoice.update(amount: group.total_price, payment_type: payment_type)
       return invoice
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe DateService, type: :service do
   describe '#skip_weekends' do
     let(:date) { Date.new(2017, 5, 6) }

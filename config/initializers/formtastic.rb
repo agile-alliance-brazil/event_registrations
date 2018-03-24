@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 begin
   Formtastic::FormBuilder.escape_html_entities_in_hints_and_labels = false
   Formtastic::FormBuilder.action_class_finder = Formtastic::ActionClassFinder

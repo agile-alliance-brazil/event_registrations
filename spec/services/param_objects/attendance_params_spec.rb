@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe AttendanceParams, type: :param_object do
   let(:user) { FactoryBot.create :user }
   let(:event) { FactoryBot.create :event }

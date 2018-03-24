@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 require File.expand_path('lib/omniauth/strategies/submission_system', Rails.root)

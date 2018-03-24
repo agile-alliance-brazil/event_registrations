@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Transfer, type: :model do
   let(:origin_date) { 1.month.from_now }
   let!(:origin) { FactoryBot.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }

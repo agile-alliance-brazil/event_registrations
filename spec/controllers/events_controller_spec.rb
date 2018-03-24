@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe EventsController, type: :controller do
   context 'ability stuff' do
     describe '#resource_class' do

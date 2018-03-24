@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe ReportService, type: :service do
   describe '#create_burnup_structure' do
     context 'having attendances' do

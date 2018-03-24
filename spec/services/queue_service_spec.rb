@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe QueueService, type: :service do
   describe '.serve_the_queue' do
     context 'with no vacancy' do

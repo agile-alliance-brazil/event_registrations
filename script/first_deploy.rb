@@ -19,7 +19,7 @@ end
 @type = ARGV[2].to_sym if ARGV.size > 2
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..')
 @key_path = ARGV[3] if ARGV.size > 3
-REMOTE_SHARED_FOLDER = '/srv/apps/registrations/shared'.freeze
+REMOTE_SHARED_FOLDER = '/srv/apps/registrations/shared'
 
 def files_to_upload
   [

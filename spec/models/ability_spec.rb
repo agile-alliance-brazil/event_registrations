@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Ability, type: :model do
   let(:user) { FactoryBot.create :user }
   let(:event) { FactoryBot.create :event }

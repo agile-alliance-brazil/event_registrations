@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe RegistrationPeriodsController, type: :controller do
   context 'ability stuff' do
     describe '#resource' do

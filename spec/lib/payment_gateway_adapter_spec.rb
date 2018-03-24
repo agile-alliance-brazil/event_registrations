@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.join(File.dirname(__FILE__), '../../lib/payment_gateway_adapter')
 
 describe PaymentGatewayAdapter do

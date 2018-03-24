@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe EmailNotifications, type: :mailer do
   let(:event) { FactoryBot.create :event }
   before { ActionMailer::Base.deliveries = [] }

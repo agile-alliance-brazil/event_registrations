@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe RegistrationQuotasController, type: :controller do
   context 'ability stuff' do
     describe '#resource' do

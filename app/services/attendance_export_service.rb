@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AttendanceExportService
   def self.to_csv(event)
     attendance_list = event.attendances.where(status: :showed_in)

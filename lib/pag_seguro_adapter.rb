@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'payment_gateway_adapter'
 
 class PagSeguroAdapter < PaymentGatewayAdapter

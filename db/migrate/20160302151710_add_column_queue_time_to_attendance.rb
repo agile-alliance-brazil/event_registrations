@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddColumnQueueTimeToAttendance < ActiveRecord::Migration[4.2]
   def change
     add_column :attendances, :queue_time, :integer

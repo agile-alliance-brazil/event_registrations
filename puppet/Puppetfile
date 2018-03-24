@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 forge 'http://forge.puppetlabs.com'
 
 mod 'puppetlabs/stdlib'
@@ -8,4 +10,3 @@ mod 'puppetlabs/stdlib'
 # mod 'apt',
 #   :git => 'https://github.com/puppetlabs/puppetlabs-apt.git',
 #   :ref => 'feature/master/dans_refactor'
-# rubocop:enable Naming/FileName

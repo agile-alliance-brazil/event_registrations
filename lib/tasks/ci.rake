@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 begin
   desc 'Task to run on CI: runs Konacha specs and RSpec specs'
   task ci: %i[rubocop brakeman spec codeclimate-test-reporter]

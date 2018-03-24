@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Gender
   class << self
     def options_for_select

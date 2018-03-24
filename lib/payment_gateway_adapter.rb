@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PaymentGatewayAdapter
   class << self
     def from_invoice(invoice, item_class)

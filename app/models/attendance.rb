@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attendances
@@ -107,7 +109,7 @@ class Attendance < ApplicationRecord
 
   def advise!
     advised_time = Time.zone.now
-    update_attributes(advised: true, advised_at: advised_time, due_date: [DateService.instance.skip_weekends(advised_time, event.days_to_charge), event.start_date].min)
+    update(advised: true, advised_at: advised_time, due_date: [DateService.instance.skip_weekends(advised_time, event.days_to_charge), event.start_date].min)
   end
 
   def free?

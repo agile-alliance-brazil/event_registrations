@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe EventAttendancesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   let(:valid_attendance) do

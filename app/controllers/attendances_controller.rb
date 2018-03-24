@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 class AttendancesController < ApplicationController
   # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
-  before_action :load_event, except: %i[index search]
+  before_action :load_event_from_resource, except: %i[index search]
   protect_from_forgery
 
   def index
-    @attendances_list = event_for_index.attendances.active.order(last_status_change_date: :desc)
-    @waiting_total = event_for_index.attendances.waiting.count
-    @pending_total = event_for_index.attendances.pending.count
-    @accepted_total = event_for_index.attendances.accepted.count
-    @paid_total = event_for_index.attendances.paid.count
-    @reserved_total = event_for_index.reserved_count
-    @accredited_total = event_for_index.attendances.showed_in.count
-    @cancelled_total = event_for_index.attendances.cancelled.count
-    @total = event_for_index.attendances_count
-    @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
+    @attendances_list = event.attendances.active.order(last_status_change_date: :desc)
+    @waiting_total = event.attendances.waiting.count
+    @pending_total = event.attendances.pending.count
+    @accepted_total = event.attendances.accepted.count
+    @paid_total = event.attendances.paid.count
+    @reserved_total = event.reserved_count
+    @accredited_total = event.attendances.showed_in.count
+    @cancelled_total = event.attendances.cancelled.count
+    @total = event.attendances_count
+    @burnup_registrations_data = ReportService.instance.create_burnup_structure(event)
   end
 
   def show
@@ -73,12 +75,12 @@ class AttendancesController < ApplicationController
   end
 
   def search
-    @attendances_list = AttendanceRepository.instance.search_for_list(event_for_index, params[:search], statuses_params)
+    @attendances_list = AttendanceRepository.instance.search_for_list(event, params[:search], statuses_params)
 
     respond_to do |format|
       format.js {}
       format.csv do
-        send_data AttendanceExportService.to_csv(event_for_index), filename: 'attendances_list.csv'
+        send_data AttendanceExportService.to_csv(event), filename: 'attendances_list.csv'
       end
     end
   end
@@ -93,11 +95,11 @@ class AttendancesController < ApplicationController
     Attendance.find(params[:id])
   end
 
-  def load_event
+  def load_event_from_resource
     @event = resource.event
   end
 
-  def event_for_index
+  def event
     @event ||= Event.includes(registration_periods: [:event]).find_by(id: params.require(:event_id))
   end
 

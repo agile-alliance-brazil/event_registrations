@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 ruby '2.4.3'
 gem 'rails', '~> 5.0', '>= 5.0.2'
@@ -18,7 +20,7 @@ gem 'httparty'
 gem 'jquery-rails'
 gem 'localized_country_select'
 gem 'money-rails'
-gem 'mysql2', '~> 0.4'
+gem 'mysql2', '< 0.5' # remove restriction when rails supports mysql2 0.5+
 gem 'omniauth', '~>1.3'
 gem 'omniauth-facebook', '~>4.0'
 gem 'omniauth-github', '~>1.1'

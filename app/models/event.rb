@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: events
@@ -38,12 +40,12 @@ class Event < ApplicationRecord
 
   def full?
     places_sold = reserved_count + attendances.active.size
-    attendance_limit.present? && attendance_limit > 0 && (attendance_limit <= places_sold)
+    attendance_limit.present? && attendance_limit.positive? && (attendance_limit <= places_sold)
   end
 
   def registration_price_for(attendance, payment_type)
     group = attendance.registration_group
-    return group.amount if group.present? && group.amount.present? && group.amount > 0
+    return group.amount if group.present? && group.amount.present? && group.amount.positive?
     not_amounted_group(attendance, payment_type)
   end
 

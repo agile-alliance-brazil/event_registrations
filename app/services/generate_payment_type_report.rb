@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GeneratePaymentTypeReport
   def self.run_for(event)
     return {} if event.blank?

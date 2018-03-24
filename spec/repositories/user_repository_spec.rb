@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe UserRepository, type: :repository do
   describe '#search_engine' do
     let!(:user) { FactoryBot.create :user, first_name: 'Foo', last_name: 'bar', email: 'foo@bar.com', roles_mask: 1, updated_at: 1.day.from_now }

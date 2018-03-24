@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe PaymentsController, type: :controller do
   describe '#checkout' do
     let!(:event) { FactoryBot.create :event }

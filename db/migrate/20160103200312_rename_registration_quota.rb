@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameRegistrationQuota < ActiveRecord::Migration[4.2]
   def change
     rename_table :registration_quota, :registration_quotas

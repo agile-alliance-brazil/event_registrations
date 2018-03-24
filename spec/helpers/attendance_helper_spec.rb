@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe AttendanceHelper, type: :helper do
   describe '#attendance_price' do
     it 'returns attendance price' do

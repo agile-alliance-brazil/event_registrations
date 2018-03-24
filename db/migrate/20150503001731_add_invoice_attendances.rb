@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddInvoiceAttendances < ActiveRecord::Migration[4.2]
   def change
     create_table :invoice_attendances do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe PaymentNotificationsController, type: :controller do
   before { WebMock.enable! }
   after { WebMock.disable! }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe UsersController, type: :controller do
   context 'unauthorized' do
     describe 'GET #show' do

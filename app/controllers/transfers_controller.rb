@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TransfersController < ApplicationController
   before_action :transfer
   before_action :attendance, only: [:new]

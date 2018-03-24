@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropTableInvoiceAttendances < ActiveRecord::Migration[4.2]
   def change
     drop_table :invoice_attendances do |t|

@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   helper :all
-  protect_from_forgery with: :exception
+  protect_from_forgery prepend: true, with: :exception
 
   before_action :set_locale
   before_action :set_timezone

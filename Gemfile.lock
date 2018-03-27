@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:correamarques/ruby.git
+  remote: https://github.com/correamarques/ruby
   revision: cabbf838dae8048d9ce080149aed23d5587e8b01
   specs:
     pagseguro-oficial (2.6.1)

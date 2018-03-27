@@ -59,8 +59,6 @@ RSpec.configure do |config|
   # This was broken in rubocop 0.48.0 but already fixed on master in 2017-03-30
   # Remove the disables once rubocop > 0.48.0
   config.include(ControllerMacros, type: :controller)
-  config.include(DisableAuthorization, type: :controller)
-
   config.include(TrimmerMacros)
 
   # == Mock Framework

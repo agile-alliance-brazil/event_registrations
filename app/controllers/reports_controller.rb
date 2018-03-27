@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ReportsController < ApplicationController
+  before_action :assign_event
+
   before_action :authorize_report
   skip_before_action :authorize_action
 
@@ -38,11 +40,15 @@ class ReportsController < ApplicationController
 
   private
 
+  def assign_event
+    @event = Event.find(params[:event_id])
+  end
+
   def authorize_report
     not_found unless can?(:read, ReportsController)
   end
 
   def gather_report_data(grouped_by)
-    event.attendances.active.group(grouped_by).count.to_a.map { |x| x.map { |x_part| x_part || I18n.t('report.common.unknown') } }
+    @event.attendances.active.group(grouped_by).count.to_a.map { |x| x.map { |x_part| x_part || I18n.t('report.common.unknown') } }
   end
 end

@@ -1,41 +1,37 @@
 # frozen_string_literal: true
 
 describe RegistrationPeriodsController, type: :controller do
-  context 'ability stuff' do
-    describe '#resource' do
-      it { expect(controller.send(:resource_class)).to eq RegistrationPeriod }
-    end
-  end
-
   context 'unauthenticated' do
     describe 'GET #new' do
-      it 'redirects to login' do
-        get :new, params: { event_id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { get :new, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to login_path }
     end
     describe 'POST #create' do
-      it 'redirects to login' do
-        post :create, params: { event_id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { post :create, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to login_path }
+    end
+    describe 'DELETE #destroy' do
+      before { delete :destroy, params: { event_id: 'foo', id: 'bar' } }
+      it { expect(response).to redirect_to login_path }
     end
   end
 
   context 'logged as normal user' do
     let(:user) { FactoryBot.create(:user) }
+    let(:event) { FactoryBot.create(:event) }
+
     before { sign_in user }
 
     describe 'GET #new' do
       it 'redirects to login' do
-        get :new, params: { event_id: 'foo' }
+        get :new, params: { event_id: event }
         expect(response).to redirect_to root_path
       end
     end
 
     describe 'POST #create' do
       it 'redirects to login' do
-        post :create, params: { event_id: 'foo' }
+        post :create, params: { event_id: event }
         expect(response).to redirect_to root_path
       end
     end

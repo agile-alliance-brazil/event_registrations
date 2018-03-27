@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe PaymentsController, type: :controller do
+RSpec.describe PaymentsController, type: :controller do
   describe '#checkout' do
     let!(:event) { FactoryBot.create :event }
 
@@ -36,13 +36,12 @@ describe PaymentsController, type: :controller do
     context 'with invalid event' do
       let(:invoice) { FactoryBot.create :invoice }
       before { post :checkout, params: { event_id: 'foo', id: invoice.id } }
-      it { expect(response).to have_http_status 404 }
+      it { expect(response).to have_http_status :not_found }
     end
 
     context 'with invalid invoice' do
       before { post :checkout, params: { event_id: event.id, id: 'foo' } }
-      it { expect(response).to redirect_to event_registration_groups_path event }
-      it { expect(flash[:alert]).to eq I18n.t('invoice.not_found') }
+      it { expect(response).to have_http_status :not_found }
     end
   end
 end

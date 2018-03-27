@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 class EventsController < ApplicationController
-  layout 'eventless', only: %i[index list_archived]
-
-  # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
-  before_action :find_event, only: %i[show destroy add_organizer remove_organizer edit update]
+  before_action :assign_event, only: %i[show destroy add_organizer remove_organizer edit update]
   skip_before_action :authenticate_user!, :authorize_action, only: %i[index show]
 
   def index
@@ -76,15 +73,13 @@ class EventsController < ApplicationController
     params.require(:event).permit(:name, :attendance_limit, :days_to_charge, :start_date, :end_date, :main_email_contact, :full_price, :price_table_link, :link, :logo)
   end
 
-  def find_event
+  def assign_event
     @event = Event.find(params[:id])
   end
 
-  def resource
-    Event.find(params[:id])
-  end
-
-  def resource_class
-    Event
+  # It overrides the super class method due to the difference on how it gets the @event
+  def current_ability
+    event = Event.find_by(id: params[:id])
+    @current_ability ||= Ability.new(current_user, event)
   end
 end

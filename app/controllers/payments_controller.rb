@@ -3,8 +3,8 @@
 class PaymentsController < ApplicationController
   skip_before_action :authenticate_user!, :authorize_action
 
-  # TODO: Finding things before actions is not the best way to go. Lazy fetch and use `event` method instead
-  before_action :find_event, :find_invoice
+  before_action :assign_event
+  before_action :assign_invoice
 
   def checkout
     PagSeguroService.config
@@ -25,6 +25,10 @@ class PaymentsController < ApplicationController
 
   private
 
+  def assign_event
+    @event = Event.find(params[:event_id])
+  end
+
   def back_url
     request.referer || root_path
   end
@@ -37,9 +41,7 @@ class PaymentsController < ApplicationController
     )
   end
 
-  def find_invoice
-    @invoice = Invoice.find params[:id]
-  rescue ActiveRecord::RecordNotFound
-    redirect_to event_registration_groups_path(@event), alert: t('invoice.not_found')
+  def assign_invoice
+    @invoice = Invoice.find(params[:id])
   end
 end

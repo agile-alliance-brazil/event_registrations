@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class RegistrationPeriodsController < ApplicationController
-  before_action :check_event
-  before_action :find_period, only: %i[destroy edit update]
+  before_action :assign_event
+  before_action :assign_period, only: %i[destroy edit update]
 
   def new
     @period = RegistrationPeriod.new
@@ -32,16 +32,16 @@ class RegistrationPeriodsController < ApplicationController
 
   private
 
-  def find_period
+  def assign_event
+    @event = Event.find(params[:event_id])
+  end
+
+  def assign_period
     @period = @event.registration_periods.find(params[:id])
   end
 
   def period_params
     params.require(:registration_period).permit(:title, :start_at, :end_at, :price)
-  end
-
-  def check_event
-    not_found if @event.blank?
   end
 
   def resource_class

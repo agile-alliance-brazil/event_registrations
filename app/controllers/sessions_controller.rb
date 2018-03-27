@@ -5,8 +5,6 @@ class SessionsController < ApplicationController
   skip_before_action :authorize_action
   skip_before_action :verify_authenticity_token
 
-  layout 'eventless'
-
   def new; end
 
   def create

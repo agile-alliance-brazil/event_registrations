@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class RegistrationGroupsController < ApplicationController
-  before_action :find_event
-  before_action :find_group, except: %i[index create]
+  before_action :assign_event
+  before_action :assign_group, except: %i[index create]
 
   def index
     @groups = @event.registration_groups
@@ -45,7 +45,11 @@ class RegistrationGroupsController < ApplicationController
     params.require(:registration_group).permit(:name, :discount, :minimum_size, :amount, :automatic_approval, :paid_in_advance, :capacity)
   end
 
-  def find_group
+  def assign_event
+    @event = Event.find(params[:event_id])
+  end
+
+  def assign_group
     @group = @event.registration_groups.find(params[:id])
   end
 

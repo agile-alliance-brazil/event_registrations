@@ -20,7 +20,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    @current_ability ||= Ability.new(current_user, event)
+    return if params[:event_id].blank?
+    @current_ability ||= Ability.new(current_user, Event.find(params[:event_id]))
   end
 
   def authenticate_user!
@@ -58,16 +59,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_timezone
-    # current_user.time_zone #=> 'London'
     Time.zone = params[:time_zone]
-  end
-
-  def event
-    @event ||= Event.find_by(id: params[:event_id])
-  end
-
-  def find_event
-    @event = Event.find(params[:event_id])
   end
 
   def authorize_action

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class RegistrationQuotasController < ApplicationController
-  before_action :check_event
-  before_action :find_quota, only: %i[destroy edit update]
+  before_action :assign_event
+  before_action :assign_quota, only: %i[destroy edit update]
 
   def new
     @registration_quota = RegistrationQuota.new
@@ -36,15 +36,11 @@ class RegistrationQuotasController < ApplicationController
     params.require(:registration_quota).permit(:order, :price, :quota)
   end
 
-  def check_event
-    not_found if @event.blank?
+  def assign_event
+    @event = Event.find(params[:event_id])
   end
 
-  def find_quota
+  def assign_quota
     @registration_quota = @event.registration_quotas.find(params[:id])
-  end
-
-  def resource_class
-    RegistrationQuota
   end
 end

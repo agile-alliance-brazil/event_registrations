@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 describe RegistrationQuotasController, type: :controller do
-  context 'ability stuff' do
-    describe '#resource' do
-      it { expect(controller.send(:resource_class)).to eq RegistrationQuota }
-    end
-  end
-
   context 'unauthenticated' do
     describe 'GET #new' do
       it 'redirects to login' do
@@ -47,31 +41,31 @@ describe RegistrationQuotasController, type: :controller do
     describe 'GET #new' do
       it 'redirects to root' do
         get :new, params: { event_id: 'foo' }
-        expect(response).to redirect_to root_path
+        expect(response).to have_http_status :not_found
       end
     end
     describe 'POST #create' do
       it 'redirects to root' do
         post :create, params: { event_id: 'foo' }
-        expect(response).to redirect_to root_path
+        expect(response).to have_http_status :not_found
       end
     end
     describe 'DELETE #destroy' do
       it 'redirects to root' do
         delete :destroy, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to root_path
+        expect(response).to have_http_status :not_found
       end
     end
     describe 'GET #edit' do
       it 'redirects to root' do
         get :edit, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to root_path
+        expect(response).to have_http_status :not_found
       end
     end
     describe 'PUT #update' do
       it 'redirects to login' do
         put :update, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to root_path
+        expect(response).to have_http_status :not_found
       end
     end
   end

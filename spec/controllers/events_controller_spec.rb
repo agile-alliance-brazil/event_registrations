@@ -1,22 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe EventsController, type: :controller do
-  context 'ability stuff' do
-    describe '#resource_class' do
-      it { expect(controller.send(:resource_class)).to eq Event }
-    end
-    describe '#resource' do
-      let(:event) { FactoryBot.create :event }
-      before { get :show, params: { id: event } }
-      it { expect(controller.send(:resource)).to eq event }
-    end
-  end
-
   context 'unauthenticated' do
     describe 'GET #index' do
       context 'without events at the right period' do
         before { get :index }
-        it { expect(assigns(:events)).to match_array [] }
+        it { expect(assigns(:events)).to eq [] }
       end
 
       context 'with events' do
@@ -104,57 +93,45 @@ RSpec.describe EventsController, type: :controller do
     before { sign_in user }
 
     describe 'GET #list_archived' do
-      it 'redirects to root' do
-        get :list_archived
-        expect(response).to redirect_to root_path
-      end
+      before { get :list_archived }
+      it { expect(response).to redirect_to root_path }
     end
 
     describe 'GET #new' do
-      it 'redirects to root' do
-        get :new
-        expect(response).to redirect_to root_path
-      end
+      before { get :new }
+      it { expect(response).to redirect_to root_path }
     end
 
     describe 'POST #create' do
-      it 'redirects to root' do
-        post :create
-        expect(response).to redirect_to root_path
-      end
+      before { post :create }
+      it { expect(response).to redirect_to root_path }
     end
 
     describe 'DELETE #destroy' do
-      it 'redirects to root' do
-        delete :destroy, params: { id: 'foo' }
-        expect(response).to redirect_to root_path
-      end
+      before { delete :destroy, params: { id: 'foo' } }
+      it { expect(response).to redirect_to root_path }
     end
 
     describe 'PATCH #add_organizer' do
-      it 'redirects to root' do
-        patch :add_organizer, params: { id: 'foo' }, xhr: true
-        expect(response).to redirect_to root_path
-      end
+      before { patch :add_organizer, params: { id: 'foo' }, xhr: true }
+      it { expect(response).to redirect_to root_path }
     end
 
     describe 'GET #edit' do
-      it 'redirects to root' do
-        get :edit, params: { id: 'foo' }
-        expect(response).to redirect_to root_path
-      end
+      before { get :edit, params: { id: 'foo' } }
+      it { expect(response).to redirect_to root_path }
     end
 
     describe 'PUT #update' do
-      it 'redirects to root' do
-        put :update, params: { id: 'foo' }
-        expect(response).to redirect_to root_path
-      end
+      before { put :update, params: { id: 'foo' } }
+      it { expect(response).to redirect_to root_path }
     end
   end
 
   context 'logged as organizer' do
     let(:organizer) { FactoryBot.create :organizer }
+    let(:event) { FactoryBot.create :event, organizers: [organizer] }
+
     before { sign_in organizer }
 
     describe 'DELETE #destroy' do
@@ -164,71 +141,51 @@ RSpec.describe EventsController, type: :controller do
       end
     end
 
-    context 'when is organizing' do
-      let(:event) { FactoryBot.create :event, organizers: [organizer] }
-      describe 'GET #edit' do
-        context 'and valid event ID' do
-          it 'assigns the instance variable and renders the template' do
-            get :edit, params: { id: event }
-            expect(response).to render_template :edit
-            expect(assigns(:event)).to eq event
-          end
-        end
-        context 'and invalid event ID' do
-          it 'responds 404' do
-            get :edit, params: { id: 'foo' }
-            expect(response).to have_http_status 404
-          end
+    describe 'GET #edit' do
+      context 'and valid event ID' do
+        it 'assigns the instance variable and renders the template' do
+          get :edit, params: { id: event }
+          expect(response).to render_template :edit
+          expect(assigns(:event)).to eq event
         end
       end
-
-      describe 'PUT #update' do
-        context 'with valid event ID' do
-          it 'updates the event' do
-            start_date = Time.zone.now
-            end_date = 1.week.from_now
-            put :update, params: { id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto', logo: 'bla.jpg' } }
-            event_updated = Event.last
-            expect(response).to redirect_to event
-            expect(event_updated.name).to eq 'name'
-            expect(event_updated.attendance_limit).to eq 65
-            expect(event_updated.days_to_charge).to eq 5
-            expect(event_updated.start_date.utc.to_i).to eq start_date.to_i
-            expect(event_updated.end_date.utc.to_i).to eq end_date.to_i
-            expect(event_updated.full_price).to eq 278
-            expect(event_updated.price_table_link).to eq 'http://xpto'
-            expect(event_updated.logo).to eq 'bla.jpg'
-          end
-        end
-        context 'with invalid event parameters' do
-          before { put :update, params: { id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '', price_table_link: '' } } }
-          it 'renderes the form with the errors' do
-            expect(response).to render_template :edit
-            expect(assigns(:event).errors.full_messages).to eq ['Inicia em não pode ficar em branco', 'Termina em não pode ficar em branco', 'Preço cheio não pode ficar em branco', 'Nome não pode ficar em branco', 'Capacidade não pode ficar em branco']
-          end
-        end
-        context 'with invalid event ID' do
-          it 'responds 404' do
-            get :edit, params: { id: 'foo' }
-            expect(response).to have_http_status 404
-          end
+      context 'and invalid event ID' do
+        it 'responds 404' do
+          get :edit, params: { id: 'foo' }
+          expect(response).to have_http_status :not_found
         end
       end
     end
 
-    context 'when is not organizing' do
-      let(:event) { FactoryBot.create :event }
-      describe 'GET #edit' do
-        it 'redirects to root' do
-          get :edit, params: { id: event }
-          expect(response).to redirect_to root_path
+    describe 'PUT #update' do
+      context 'with valid parameters' do
+        it 'updates the event' do
+          start_date = Time.zone.now
+          end_date = 1.week.from_now
+          put :update, params: { id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto', logo: 'bla.jpg' } }
+          event_updated = event.reload
+          expect(response).to redirect_to event_path(event_updated)
+          expect(event_updated.name).to eq 'name'
+          expect(event_updated.attendance_limit).to eq 65
+          expect(event_updated.days_to_charge).to eq 5
+          expect(event_updated.start_date.utc.to_i).to eq start_date.to_i
+          expect(event_updated.end_date.utc.to_i).to eq end_date.to_i
+          expect(event_updated.full_price).to eq 278
+          expect(event_updated.price_table_link).to eq 'http://xpto'
+          expect(event_updated.logo).to eq 'bla.jpg'
         end
       end
-
-      describe 'PUT #update' do
-        it 'redirects to root' do
-          put :update, params: { id: event }
-          expect(response).to redirect_to root_path
+      context 'with invalid parameters' do
+        before { put :update, params: { id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '', price_table_link: '' } } }
+        it 'renderes the form with the errors' do
+          expect(response).to render_template :edit
+          expect(assigns(:event).errors.full_messages).to eq ['Inicia em não pode ficar em branco', 'Termina em não pode ficar em branco', 'Preço cheio não pode ficar em branco', 'Nome não pode ficar em branco', 'Capacidade não pode ficar em branco']
+        end
+      end
+      context 'with invalid event ID' do
+        it 'responds 404' do
+          put :update, params: { id: 'foo' }
+          expect(response).to have_http_status 404
         end
       end
     end
@@ -418,9 +375,11 @@ RSpec.describe EventsController, type: :controller do
     let!(:event) { FactoryBot.create :event }
     context 'with an existent user' do
       before { get :show, params: { id: event.id } }
-      it { expect(assigns(:event)).to eq event }
-      it { expect(assigns(:last_attendance_for_user)).to be_nil }
-      it { expect(response).to render_template :show }
+      it 'assigns the instance variable and renders the template' do
+        expect(assigns(:event)).to eq event
+        expect(assigns(:last_attendance_for_user)).to be_nil
+        expect(response).to render_template :show
+      end
     end
 
     context 'with invalid parameters' do
@@ -432,10 +391,7 @@ RSpec.describe EventsController, type: :controller do
 
     context 'signed in' do
       let(:user) { FactoryBot.create(:user) }
-      before do
-        sign_in user
-        disable_authorization
-      end
+      before { sign_in user }
 
       context 'with two valid attendances, the first cancelled and second pending' do
         it 'returns the event_persisted created' do

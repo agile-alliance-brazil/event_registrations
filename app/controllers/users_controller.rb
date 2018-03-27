@@ -1,24 +1,20 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  layout 'eventless'
+  before_action :assign_user, except: :index
 
   def show
     params[:id] ||= current_user.id
-    @user = resource
     active_events = @user.attendances.active.map(&:event)
     @events_for_today = Event.active_for(Time.zone.today) - active_events
   end
 
-  def edit
-    @user = resource
-  end
+  def edit; end
 
   def update
     locale = params[:user][:default_locale].to_sym if params[:user][:default_locale]
     I18n.locale = locale if locale.present?
 
-    @user = resource
     if @user.update(update_user_params)
       flash[:notice] = I18n.t('flash.user.update')
       redirect_to @user
@@ -46,26 +42,17 @@ class UsersController < ApplicationController
     respond_js_to_toggle_roles('users/user')
   end
 
-  def resource
-    resource_class.find(params[:id])
-  end
-
-  # For our cancan ability check
-  def resource_class
-    User
-  end
-
-  protected
-
-  def update_user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :phone,
-                                 :country, :state, :city, :organization, :twitter_user, :default_locale)
-  end
-
   private
 
+  def assign_user
+    @user = User.find(params[:id])
+  end
+
+  def update_user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale)
+  end
+
   def toggle_role(role)
-    @user = resource
     if @user.roles.include?(role)
       @user.remove_role(role)
     else
@@ -76,8 +63,10 @@ class UsersController < ApplicationController
   end
 
   def respond_js_to_toggle_roles(partial)
-    respond_to do |format|
-      format.js { render partial }
-    end
+    respond_to { |format| format.js { render partial } }
+  end
+
+  def current_ability
+    @current_ability ||= UserAbility.new(current_user)
   end
 end

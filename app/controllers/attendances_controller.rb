@@ -31,7 +31,7 @@ class AttendancesController < ApplicationController
   end
 
   def waiting_list
-    @waiting_list = event.attendances.waiting
+    @waiting_list = @event.attendances.waiting
   end
 
   def index

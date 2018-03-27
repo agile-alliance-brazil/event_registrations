@@ -365,7 +365,6 @@ RSpec.describe AttendancesController, type: :controller do
       before do
         User.any_instance.stubs(:has_approved_session?).returns(true)
         sign_in user
-        disable_authorization
         stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', headers: {})
       end
 

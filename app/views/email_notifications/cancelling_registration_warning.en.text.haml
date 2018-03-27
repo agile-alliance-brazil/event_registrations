@@ -10,7 +10,7 @@ We noticed that you have a pending payment for #{@attendance.event_name}. If tha
 In order to complete the registration process, please follow the instructions on the page:
 
 
-= attendance_url(@attendance, :locale => 'en')
+= event_attendance_url(@attendance.event, @attendance, :locale => 'en')
 
 
 If you already settled your registration payment, please contact us - #{mail_to @attendance.event.main_email_contact}.

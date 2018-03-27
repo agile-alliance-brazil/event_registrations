@@ -11,7 +11,7 @@
         = "#{t('event.average_ticket')}: #{number_to_currency(@event.average_ticket)}"
 
     %div{class: 'row'}
-      %span{class: 'col-xs-3'}= render 'reports_menu', event: @event
+      %span{class: 'col-xs-3'}= render 'attendances/reports_menu', event: @event
 
     %div{class: 'row top10'}
       %span{class: 'col-xs-6'}
@@ -47,7 +47,7 @@
       %div{class: 'col-xs-2'}
         = link_to t('attendances.index.search'), '#', onclick: "submitSearch(#{@event.id});", class: 'btn btn-sm btn-primary'
       %div{class: 'col-xs-6'}
-        = link_to t('actions.download_csv'), search_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-sm btn-success'
+        = link_to t('actions.download_csv'), search_event_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-sm btn-success'
 
   %div{class: 'row'}
     %div{class: 'col-xs-12 col-sm-6'}

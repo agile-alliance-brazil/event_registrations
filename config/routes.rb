@@ -2,6 +2,12 @@
 
 # rubocop:disable Metrics/BlockLength
 Current::Application.routes.draw do
+  # To keep compatibility with old routes sent by email
+  get('attendances/:id', to: redirect do |params, request|
+    path = "events/#{Attendance.find_by(id: params[:id])&.event_id}/attendances/#{params[:id]}"
+    "http://#{request.host_with_port}/#{path}"
+  end)
+
   post '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/:provider/callback', to: 'sessions#create' # due problems without dev backdoor
 
@@ -26,7 +32,17 @@ Current::Application.routes.draw do
       delete :remove_organizer
     end
 
-    resources :attendances, only: %i[new create edit update], controller: :event_attendances do
+    resources :attendances, controller: :event_attendances do
+      member do
+        put :confirm
+        put :pay_it
+        put :accept_it
+        delete :destroy
+        put :recover_it
+        patch :dequeue_it
+        patch :receive_credential
+      end
+
       collection do
         get :by_state
         get :by_city
@@ -35,8 +51,12 @@ Current::Application.routes.draw do
         get :to_approval
         get :payment_type_report
         get :waiting_list
+        get :search
       end
     end
+
+    resources :transfers, only: %i[new create]
+
     resources :registration_groups, only: %i[index destroy show create edit update] do
       member { put :renew_invoice }
     end
@@ -51,24 +71,8 @@ Current::Application.routes.draw do
   # Due to https://github.com/bbatsov/rubocop/issues/4425
   get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
   post '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
-  resources :attendances, only: %i[show index] do
-    member do
-      put :confirm
-      put :pay_it
-      put :accept_it
-      delete :destroy
-      put :recover_it
-      patch :dequeue_it
-      patch :receive_credential
-    end
-
-    collection { get :search }
-
-    resources :transfers, only: :new
-  end
 
   resources :payment_notifications, only: :create
-  resources :transfers, only: :create
 
   controller :reports do
     get 'reports/:event_id/attendance_organization_size', to: 'reports#attendance_organization_size', as: :reports_attendance_organization_size

@@ -360,8 +360,8 @@ RSpec.describe RegistrationGroup, type: :model do
     context 'having no vacancies' do
       let(:group) { FactoryBot.create :registration_group, capacity: 2 }
       let!(:attendance) { FactoryBot.create :attendance, registration_group: group }
-      let!(:other_attendance) { FactoryBot.create :attendance, registration_group: group, status: :accepted }
       let!(:cancelled_attendance) { FactoryBot.create :attendance, registration_group: group, status: :cancelled }
+      let!(:other_attendance) { FactoryBot.create :attendance, registration_group: group, status: :accepted }
       it { expect(group.vacancies?).to eq false }
     end
     context 'having no capacity defined' do

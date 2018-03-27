@@ -45,6 +45,11 @@ pt:
         attendance_address: "Informações para contato"
         attendance_personal: "Informações Pessoais"
         educacional_information: "Informações Acadêmicas"
+    actions:
+      confirm: "Confirmar inscrição"
+      cancel: "Cancelar inscrição"
+      transfer: "Transferir inscrição"
+      recover: "Recuperar inscrição"
   events:
     form:
       event_basics: "Informações Básicas"

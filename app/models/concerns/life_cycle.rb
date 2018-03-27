@@ -11,6 +11,7 @@ module Concerns
       scope :paid, -> { where(status: %i[paid confirmed]) }
       scope :confirmed, -> { where(status: :confirmed) }
       scope :active, -> { where('status NOT IN (?)', %i[cancelled no_show waiting]) }
+      scope :not_cancelled, -> { where('status <> ?', :cancelled) }
       scope :waiting, -> { where(status: :waiting) }
       scope :showed_in, -> { where(status: :showed_in) }
 

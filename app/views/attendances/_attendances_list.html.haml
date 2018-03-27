@@ -11,4 +11,4 @@
     %th= t('general.actions.title')
 
     - attendances_list.each do |attendance|
-      = render partial: 'attendances/attendance', locals: { attendance: attendance }
+      = render partial: 'attendances/attendance', locals: { event: attendance.event, attendance: attendance }

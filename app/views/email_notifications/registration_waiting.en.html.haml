@@ -4,7 +4,7 @@
 
 %p You can check the status in the following page, but don' worry, we will notify you if we get a free vacancy to your subscription:
 
-%p= link_to attendance_url(@attendance, locale: 'pt'), attendance_url(@attendance, locale: 'pt')
+%p= link_to event_attendance_url(@attendance.event, @attendance, locale: 'pt'), event_attendance_url(@attendance.event, @attendance, locale: 'pt')
 
 %p Keep this e-mail and link for future reference.
 

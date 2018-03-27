@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12 col-md-9">
         <div class="breadcrumb">
-          <span class="fa fa-angle-left"></span> <%= link_to t('attendances.index.title'), attendances_path(event_id: @event) %>
+          <span class="fa fa-angle-left"></span> <%= link_to t('attendances.index.title'), event_attendances_path(event_id: @event) %>
         </div>
         <h1><%= t('attendance.reports.registrations_burnup') %></h1>
       </div>

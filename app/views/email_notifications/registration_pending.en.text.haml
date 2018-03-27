@@ -1,12 +1,12 @@
 Dear #{h(@attendance.full_name)},
 
-Your request for registration priced #{number_to_currency(@attendance.registration_value, locale: :pt)} at #{@attendance.event_name} was received successfully.
+Your request for registration priced #{number_to_currency(@attendance.registration_value)} at #{@attendance.event_name} was received successfully.
 
 
 In order to complete the registration process, please follow the instructions on the page:
 
 
-= attendance_url(@attendance, locale: 'en')
+= event_attendance_url(@attendance.event, @attendance, locale: 'en')
 
 
 You can access this page at any time to make the payment and check the status of your registration, so keep this e-mail and link for future reference.

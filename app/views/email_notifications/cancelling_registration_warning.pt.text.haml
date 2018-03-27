@@ -10,7 +10,7 @@ Existe uma pendência no pagamento da sua inscrição na #{@attendance.event_nam
 Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:
 
 
-= attendance_url(@attendance, :locale => 'pt')
+= event_attendance_url(@attendance.event, @attendance, :locale => 'pt')
 
 
 Caso a pendência já tenha sido regularizada, favor entrar em contato com a organização - #{mail_to @attendance.event.main_email_contact}

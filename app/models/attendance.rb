@@ -71,6 +71,9 @@ class Attendance < ApplicationRecord
   validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, length: { minimum: 6, maximum: 100 }
   validates :phone, format: { with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true }
 
+  validate :registration_group_valid?
+  validate :not_cancelled_email_event_uniqueness?, on: :create
+
   after_save :update_group_invoice
 
   delegate :token, to: :registration_group, allow_nil: true
@@ -140,5 +143,19 @@ class Attendance < ApplicationRecord
 
   def set_last_status_change
     self.last_status_change_date = Time.zone.now if last_status_change_date.blank?
+  end
+
+  def registration_group_valid?
+    if registration_group&.vacancies?
+      self.status = :accepted if registration_group.automatic_approval?
+    elsif registration_group.present? && !registration_group.vacancies?
+      errors.add(:registration_group, I18n.t('attendances.create.errors.group_full'))
+    end
+  end
+
+  def not_cancelled_email_event_uniqueness?
+    duplicated_attendance = event&.attendances&.not_cancelled&.find_by(email: email)
+    return if duplicated_attendance.blank?
+    errors.add(:email, I18n.t('flash.attendance.create.already_existent'))
   end
 end

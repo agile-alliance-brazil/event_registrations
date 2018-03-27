@@ -4,7 +4,7 @@
 
 %p Os detalhes podem ser encontrados no link abaixo
 
-%p= link_to attendance_url(@attendance, locale: 'pt'), attendance_url(@attendance, locale: 'pt')
+%p= link_to event_attendance_url(@attendance.event, @attendance, locale: 'pt'), event_attendance_url(@attendance.event, @attendance, locale: 'pt')
 
 
 %p Qualquer dúvida, entre em contato através do email #{@attendance.event.main_email_contact}

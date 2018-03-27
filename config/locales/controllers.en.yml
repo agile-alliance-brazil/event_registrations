@@ -45,6 +45,11 @@ en:
         attendance_address: "Contact Info"
         attendance_personal: "Personal Informations"
         educacional_information: "Educational Informations"
+    actions:
+      confirm: "Confirm Registration"
+      recover: "Recover Registration"
+      transfer: "Transfer Registration"
+      cancel: "Cancel Registration"
   events:
     form:
       event_basics: "Basic Informations"

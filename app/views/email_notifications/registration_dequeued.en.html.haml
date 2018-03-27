@@ -4,7 +4,7 @@
 
 %p In order to complete the registration process, please follow the instructions on the page:
 
-%p= link_to attendance_url(@attendance, locale: 'en'), attendance_url(@attendance, locale: 'en')
+%p= link_to event_attendance_url(@attendance.event, @attendance, locale: 'en'), event_attendance_url(@attendance.event, @attendance, locale: 'en')
 
 %p You can access this page at any time to make the payment and check the status of your registration, so keep this e-mail and link for future reference.
 

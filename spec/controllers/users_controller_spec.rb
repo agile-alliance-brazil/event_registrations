@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe UsersController, type: :controller do
+RSpec.describe UsersController, type: :controller do
   context 'unauthorized' do
     describe 'GET #show' do
       it 'redirects to login path' do

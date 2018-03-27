@@ -1,35 +1,35 @@
 %tr{ id: "attendance_#{attendance.id}" }
-  %td= link_to "#{attendance.last_name}, #{attendance.first_name}", attendance_path(attendance), method: :get
+  %td= link_to "#{attendance.last_name}, #{attendance.first_name}", event_attendance_path(event, attendance), method: :get
   %td= attendance.organization
 
   %td
     - if attendance.registration_group.present?
-      = link_to attendance.group_name, event_registration_group_path(@event, attendance.registration_group)
+      = link_to attendance.group_name, event_registration_group_path(event, attendance.registration_group)
   %td= attendance.state
   %td= t("report.payment_type.#{attendance.payment_type || 'nil'}")
   %td= attendance.registration_date.strftime('%d/%m/%Y %H:%M')
-  %td= number_to_currency(attendance.registration_value, locale: :pt)
+  %td= number_to_currency(attendance.registration_value)
   %td= t("attendance.enum.status.#{attendance.status}", count: 1)
   %td
     - if attendance.pending? && attendance.grouped?
-      = link_to accept_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, remote: true do
+      = link_to accept_it_event_attendance_path(event, attendance), method: :put, remote: true do
         %i{class: 'fa fa-check', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.accept')}
 
     - if attendance.payable?
-      = link_to pay_it_attendance_path(event_id: @event.id, id: attendance.id), method: :put, remote: true do
+      = link_to pay_it_event_attendance_path(event, attendance), method: :put, remote: true do
         %i{class: 'fa fa-credit-card', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.pay')}
 
     - if attendance.confirmed?
-      = link_to receive_credential_attendance_path(event_id: @event.id, id: attendance.id), method: :patch, remote: true do
+      = link_to receive_credential_event_attendance_path(event, attendance), method: :patch, remote: true do
         %i{class: 'fa fa-id-card-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => t('actions.receive_credential')}
 
     - if attendance.cancellable?
-      = link_to attendance, method: :delete, data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) } do
+      = link_to event_attendance_path(event, attendance), method: :delete, data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) } do
         %i{class: 'fa fa-ban', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.cancel')}
 
     - if can?(:dequeue, attendance) && (attendance.waiting?)
-      = link_to dequeue_it_attendance_path(attendance), method: :patch do
+      = link_to dequeue_it_event_attendance_path(event, attendance), method: :patch do
         %i{class: 'fa fa-thumbs-o-up', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('attendance.list.actions.dequeue')}
 
-    = link_to edit_event_attendance_path(event_id: @event.id, id: attendance.id), method: :get do
+    = link_to edit_event_attendance_path(event, attendance), method: :get do
       %i{class: 'fa fa-pencil', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.edit')}

@@ -4,7 +4,7 @@
 
 %p Você poderá acompanhar o status na seguinte página, mas não se preocupe, o avisaremos caso tenha vaga para a sua inscrição:
 
-%p= link_to attendance_url(@attendance, locale: 'pt'), attendance_url(@attendance, locale: 'pt')
+%p= link_to event_attendance_url(@attendance.event, @attendance, locale: 'pt'), event_attendance_url(@attendance.event, @attendance, locale: 'pt')
 
 %p Guarde esse e-mail e link para referência futura.
 

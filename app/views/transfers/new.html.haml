@@ -1,7 +1,7 @@
 - title t('title.transfer')
 .auto_focus
 
-= semantic_form_for(@transfer, class: :container) do |form|
+= semantic_form_for([@event, @transfer], class: :container) do |form|
   = form.inputs do
     #origin.badge.left
       = form.input('origin_id', as: :select, label: t('formtastic.labels.transfer.origin_id'), collection: attendance_as_select(@origins))
@@ -12,68 +12,4 @@
       %div.feedback
         = render partial: 'shared/badge', locals: {attendance: @transfer.destination}
     = form.actions(class: 'arrow_box center') do
-      = form.action(:submit, label: :new_transfer, button_html: {tabindex: autotab, disabled:  !@transfer.valid? , id: 'transfer_submit'})
-
-:javascript
-  (function($) {
-    var attendanceUrl = function(id) {
-      return "#{attendance_path(id: ':attendance_id:', format: :json)}".replace(":attendance_id:", id);
-    };
-
-    var fullnameFor = function(json_data) {
-      return json_data['first_name'] + ' ' + json_data['last_name'];
-    };
-
-    var idFor = function(json_data) {
-      return json_data['id'];
-    };
-
-    var statusFor = function(json_data) {
-      var status = {
-        pending: '#{t("attendance.status.pending")}',
-        paid: '#{t("attendance.status.paid")}',
-        confirmed: '#{t("attendance.status.confirmed")}',
-        cancelled: '#{t("attendance.status.cancelled")}',
-        empty: ''
-      };
-      return status[json_data['status']];
-    };
-
-    var updateAttendance = function(target, data) {
-      target.find('.full_name').html(fullnameFor(data));
-      target.find('.id').html(idFor(data));
-      target.find('.status').html(statusFor(data));
-    };
-
-    var updateCreateButton = function() {
-      var transfer_valid = $('#transfer_origin_id').val() != '' &&
-        $('#transfer_destination_id').val() != '';
-      if(transfer_valid) {
-        $('#transfer_submit').removeAttr('disabled');
-      } else {
-        $('#transfer_submit').attr('disabled', 'disabled');
-      }
-    };
-
-    var updateUserFeedback = function(event) {
-      var option = event.target;
-      var feedback = $(option).parent().parent().find('.feedback');
-      if(option.value != '') {
-        $.ajax({
-          url: attendanceUrl(option.value),
-          type: 'GET'
-        }).done(function(data, textStatus, jqXHR) {
-          updateAttendance(feedback, data);
-        });
-      } else {
-        updateAttendance(feedback, {id: '', first_name: '', last_name: '', status: 'empty'});
-      }
-      updateCreateButton();
-    };
-
-    $(document).ready(function() {
-      var selects = $('#transfer_origin_id,#transfer_destination_id');
-      selects.bind('change', updateUserFeedback);
-      selects.change();
-    });
-  })(jQuery);
+      = form.action(:submit, label: :new_transfer, button_html: {tabindex: autotab, disabled: !@transfer.valid? , id: 'transfer_submit'})

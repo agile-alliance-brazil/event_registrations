@@ -166,7 +166,7 @@ describe AttendanceRepository, type: :repository do
   describe '_older_than' do
     let(:user) { FactoryBot.create :user }
     let!(:attendance) { FactoryBot.create(:attendance, event: event, user: user, last_status_change_date: 2.days.ago) }
-    let!(:other_attendance) { FactoryBot.create(:attendance, event: event, user: user, last_status_change_date: 4.days.ago) }
+    let!(:other_attendance) { FactoryBot.create(:attendance, event: event, user: user, last_status_change_date: 4.days.ago, email: Faker::Internet.email) }
     it { expect(AttendanceRepository.instance.send(:older_than)).to match_array [attendance, other_attendance] }
     it { expect(AttendanceRepository.instance.send(:older_than, 3.days.ago)).to eq [other_attendance] }
   end

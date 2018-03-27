@@ -1,36 +1,36 @@
 # frozen_string_literal: true
 
 class TransfersController < ApplicationController
-  before_action :transfer
-  before_action :attendance, only: [:new]
-  layout 'eventless'
+  before_action :assign_event
+  before_action :assign_transfer
 
   def new
-    event = @attendance.event
-    can_see_all_attendances = current_user.organizer? || current_user.admin?
-    attendances = can_see_all_attendances ? event.attendances : current_user.attendances
+    attendances = can_manage_event? ? @event.attendances : current_user.attendances
     @origins = attendances.paid
-    @destinations = event.attendances.pending + event.attendances.accepted
-    @event = transfer.origin.event || transfer.destination.event || Event.new.tap { |e| e.name = 'missing' }
+    @destinations = @event.attendances.pending + @event.attendances.accepted
   end
 
   def create
-    if transfer.valid? && transfer.save
+    if @transfer.save
       flash[:notice] = t('flash.transfer.success')
-      redirect_to attendance_path(transfer.origin)
+      redirect_to event_attendance_path(@event, @transfer.origin)
     else
       flash[:error] = t('flash.transfer.failure')
       render :new
     end
   end
 
-  protected
+  private
 
-  def transfer
-    @transfer ||= Transfer.build(params[:transfer] || {})
+  def can_manage_event?
+    @event.organizers.include?(current_user) || current_user.admin?
   end
 
-  def attendance
-    @attendance = Attendance.find(params[:attendance_id])
+  def assign_event
+    @event = Event.find(params[:event_id])
+  end
+
+  def assign_transfer
+    @transfer = Transfer.build(params[:transfer] || {})
   end
 end

@@ -12,7 +12,7 @@
       = t('event.register.to_register_message')
 
     - if can? :update, event
-      = link_to attendances_path(event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed'), class: 'btn btn-link' do
+      = link_to event_attendances_path(event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed'), class: 'btn btn-link' do
         %span{class: 'fa fa-list'}
         = "#{t('actions.list_attendances')} (#{event.attendances_count})"
 

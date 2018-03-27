@@ -1,6 +1,6 @@
 - if @invoice&.gateway?
   .payments
-    %h4= "#{t('registration.payment.request.text', value: number_to_currency(@invoice.amount, locale: :pt)) }"
+    %h4= "#{t('registration.payment.request.text', value: number_to_currency(@invoice.amount)) }"
 
     .payment_type.left
       %p

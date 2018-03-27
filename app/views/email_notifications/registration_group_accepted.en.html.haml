@@ -4,7 +4,7 @@
 
 %p Please, complete the payment at the bellow location:
 
-%p= link_to attendance_url(@attendance, locale: 'en'), attendance_url(@attendance, locale: 'en')
+%p= link_to event_attendance_url(@attendance.event, @attendance, locale: 'en'), event_attendance_url(@attendance.event, @attendance, locale: 'en')
 
 
 %p If you have any questions, please contact us at #{@attendance.event.main_email_contact}

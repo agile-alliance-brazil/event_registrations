@@ -15,11 +15,8 @@ class Transfer
   end
 
   def self.initialize_attendance(id)
-    if id.nil?
-      Attendance.new.tap { |a| a.status = '' }
-    else
-      Attendance.find id
-    end
+    return Attendance.new.tap { |a| a.status = '' } if id.blank?
+    Attendance.find(id)
   end
 
   def valid?
@@ -28,6 +25,7 @@ class Transfer
   end
 
   def save
+    return false unless valid?
     destination.registration_value = origin.registration_value
     destination.pay if origin.paid?
     destination.confirm if origin.confirmed?
@@ -53,7 +51,7 @@ class Transfer
   private
 
   def transfer_invoice(origin, destination)
-    destination_invoice = destination.invoices.active.last
+    destination_invoice = destination.invoices.last
 
     if destination_invoice.present?
       destination_invoice.update(amount: origin.registration_value)

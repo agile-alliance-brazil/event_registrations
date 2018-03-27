@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe User, type: :model do
+RSpec.describe User, type: :model do
   context 'associations' do
     it { is_expected.to have_many :authentications }
     it { is_expected.to have_many :attendances }
@@ -12,7 +12,7 @@ describe User, type: :model do
       it 'only show event once if user has multiple attendances' do
         user = FactoryBot.create(:user)
         first_attendance = FactoryBot.create(:attendance, user: user)
-        FactoryBot.create(:attendance, user: user, event: first_attendance.event)
+        FactoryBot.create(:attendance, user: user, event: first_attendance.event, email: 'foo@bar.com')
 
         expect(user.events.size).to eq(1)
       end
@@ -132,9 +132,9 @@ describe User, type: :model do
       let(:user) { FactoryBot.create :user }
 
       it 'returns all the registrations' do
-        first = FactoryBot.create(:attendance, user: user, event: event)
-        second = FactoryBot.create(:attendance, user: user, event: event)
-        third = FactoryBot.create(:attendance, user: user, event: event)
+        first = FactoryBot.create(:attendance, user: user, event: event, email: Faker::Internet.email)
+        second = FactoryBot.create(:attendance, user: user, event: event, email: Faker::Internet.email)
+        third = FactoryBot.create(:attendance, user: user, event: event, email: Faker::Internet.email)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second, third]
       end
@@ -145,8 +145,8 @@ describe User, type: :model do
       let(:other_user) { FactoryBot.create :user }
 
       it 'returns all the registrations for the user' do
-        first = FactoryBot.create(:attendance, user: user, event: event)
-        second = FactoryBot.create(:attendance, user: user, event: event)
+        first = FactoryBot.create(:attendance, user: user, event: event, email: Faker::Internet.email)
+        second = FactoryBot.create(:attendance, user: user, event: event, email: Faker::Internet.email)
         FactoryBot.create(:attendance, user: other_user, event: event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]
@@ -158,8 +158,8 @@ describe User, type: :model do
       let(:other_event) { FactoryBot.create :event }
 
       it 'returns all the registrations for the user' do
-        first = FactoryBot.create(:attendance, user: user, event: event)
-        second = FactoryBot.create(:attendance, user: user, event: event)
+        first = FactoryBot.create(:attendance, user: user, event: event, email: Faker::Internet.email)
+        second = FactoryBot.create(:attendance, user: user, event: event, email: Faker::Internet.email)
         FactoryBot.create(:attendance, user: user, event: other_event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]

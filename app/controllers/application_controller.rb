@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  protect_from_forgery prepend: true, with: :exception
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   helper :all
-  protect_from_forgery prepend: true, with: :exception
+  helper_method :current_user
 
   before_action :set_locale
   before_action :set_timezone
@@ -23,14 +24,13 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    redirect_to login_path unless current_user
+    redirect_to login_path if current_user.blank?
   end
 
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
     @current_user
   end
-  helper_method :current_user
 
   def current_user=(user)
     session[:user_id] = user.try(:id)
@@ -67,14 +67,14 @@ class ApplicationController < ActionController::Base
   end
 
   def find_event
-    @event = Event.find params[:event_id]
+    @event = Event.find(params[:event_id])
   end
 
   def authorize_action
     obj = call_or_nil(:resource)
     clazz = call_or_nil(:resource_class)
     action = params[:action].to_sym
-    controller = obj || clazz || controller_name
+    controller = obj || clazz || self.class
     authorize!(action, controller)
   end
 

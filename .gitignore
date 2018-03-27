@@ -38,3 +38,4 @@ pickle-email-*.html
 certs/*
 !certs/*.example
 !certs/.gitkeep
+.ruby-version

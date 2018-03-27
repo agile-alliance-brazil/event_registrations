@@ -16,9 +16,9 @@
       - @user.registrations_for_event(event).each do |attendance|
         %li.list-group-item
           .status
-            = link_to "#{event.name}: #{t("attendance.status.#{attendance.status}")}", attendance_path(attendance)
+            = link_to "#{event.name}: #{t("attendance.status.#{attendance.status}")}", event_attendance_path(event, attendance)
             - if attendance.cancellable?
-              %span.badge= link_to 'X', attendance, method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: event.name) }
+              %span.badge= link_to 'X', event_attendance_path(event, attendance), method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: event.name) }
   - (@events_for_today).each do |event|
     %ul.event
       %li= link_to t('event.attendance.add', name: event.name), new_event_attendance_path(event), class: 'add_attendance'

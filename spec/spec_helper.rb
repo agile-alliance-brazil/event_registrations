@@ -46,18 +46,15 @@ RSpec.configure do |config|
   Rails.application.eager_load!
 
   config.before(:suite) do
-    # GC.disable
     ActionMailer::Base.deliveries.clear
-    DatabaseCleaner.clean_with(:truncation, except: %w[public.schema_migrations])
-  end
-
-  config.before(:each) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.start
+    DatabaseCleaner.clean_with :truncation, except: [ActiveRecord::InternalMetadata.table_name]
   end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
   end
   # This was broken in rubocop 0.48.0 but already fixed on master in 2017-03-30
   # Remove the disables once rubocop > 0.48.0

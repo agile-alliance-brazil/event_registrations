@@ -5,7 +5,7 @@ Your registration to #{@attendance.event_name} in the group #{@attendance.regist
 
 The details can be found following the link below:
 
-%p= link_to attendance_url(@attendance, locale: 'pt'), attendance_url(@attendance, locale: 'pt')
+%p= link_to event_attendance_url(@attendance.event, @attendance, locale: 'pt'), event_attendance_url(@attendance.event, @attendance, locale: 'pt')
 
 
 If you have any questions, please contact us at #{@attendance.event.main_email_contact}

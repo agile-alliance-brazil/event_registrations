@@ -7,7 +7,7 @@
 
 %p Para completar o processo de inscrição, por favor siga as instruções descritas na seguinte página:
 
-%p= link_to attendance_url(@attendance, :locale => 'pt'), attendance_url(@attendance, :locale => 'pt')
+%p= link_to event_attendance_url(@attendance.event, @attendance, :locale => 'pt'), event_attendance_url(@attendance.event, @attendance, :locale => 'pt')
 
 %p Caso a pendência já tenha sido regularizada, favor entrar em contato com a organização - #{mail_to @attendance.event.main_email_contact}
 

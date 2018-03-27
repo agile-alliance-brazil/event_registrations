@@ -7,7 +7,7 @@
 
 %p In order to complete the registration process, please follow the instructions on the page:
 
-%p= link_to attendance_url(@attendance, :locale => 'en'), attendance_url(@attendance, :locale => 'en')
+%p= link_to event_attendance_url(@attendance.event, @attendance, :locale => 'en'), event_attendance_url(@attendance.event, @attendance, :locale => 'en')
 
 %p If you already settled your registration payment, please contact us - #{mail_to @attendance.event.main_email_contact}.
 

@@ -20,6 +20,22 @@ class ReportsController < ApplicationController
     @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
   end
 
+  def by_state
+    @attendances_state_grouped = @event.attendances.active.group(:state).order('count_id desc').count('id')
+  end
+
+  def by_city
+    @attendances_city_grouped = @event.attendances.active.group(:city, :state).order('count_id desc').count('id')
+  end
+
+  def last_biweekly_active
+    @attendances_biweekly_grouped = @event.attendances.last_biweekly_active.group('date(created_at)').count(:id)
+  end
+
+  def payment_type_report
+    @payment_type_report = GeneratePaymentTypeReport.run_for(@event)
+  end
+
   private
 
   def authorize_report

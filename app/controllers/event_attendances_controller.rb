@@ -4,7 +4,7 @@ class EventAttendancesController < ApplicationController
   rescue_from Net::OpenTimeout, with: :timeout
 
   before_action :assign_event
-  before_action :assign_attendance, except: %i[index create new payment_type_report waiting_list last_biweekly_active by_city by_state search to_approval]
+  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval]
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -26,24 +26,8 @@ class EventAttendancesController < ApplicationController
     redirect_to event_attendances_path(event_id: @event)
   end
 
-  def by_state
-    @attendances_state_grouped = @event.attendances.active.group(:state).order('count_id desc').count('id')
-  end
-
-  def by_city
-    @attendances_city_grouped = @event.attendances.active.group(:city, :state).order('count_id desc').count('id')
-  end
-
-  def last_biweekly_active
-    @attendances_biweekly_grouped = @event.attendances.last_biweekly_active.group('date(created_at)').count(:id)
-  end
-
   def to_approval
     @attendances_to_approval = @event.attendances.waiting_approval
-  end
-
-  def payment_type_report
-    @payment_type_report = GeneratePaymentTypeReport.run_for(@event)
   end
 
   def waiting_list

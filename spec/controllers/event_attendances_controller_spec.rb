@@ -18,6 +18,14 @@ RSpec.describe EventAttendancesController, type: :controller do
       before { put :update, params: { event_id: 'foo', id: 'bar' } }
       it { expect(response).to redirect_to login_path }
     end
+    describe 'GET #search' do
+      before { get :search, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to login_path }
+    end
+    describe 'PATCH #receive_credential' do
+      before { patch :receive_credential, params: { event_id: 'foo', id: 'bar' } }
+      it { expect(response).to redirect_to login_path }
+    end
   end
 
   context 'authenticated' do
@@ -414,140 +422,17 @@ RSpec.describe EventAttendancesController, type: :controller do
       end
     end
 
-    context 'reports' do
-      describe '#by_state' do
-        let(:event) { FactoryBot.create(:event, organizers: [user]) }
-
-        context 'with no attendances' do
-          before { get :by_state, params: { event_id: event } }
-          it { expect(assigns(:attendances_state_grouped)).to eq({}) }
-        end
-
-        context 'with attendances' do
-          let!(:carioca_attendance) { FactoryBot.create(:attendance, event: event, state: 'RJ') }
-          context 'with one attendance' do
-            before { get :by_state, params: { event_id: event } }
-            it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
-          end
-
-          context 'with two attendances on same state' do
-            let!(:other_carioca) { FactoryBot.create(:attendance, event: event, state: 'RJ') }
-            before { get :by_state, params: { event_id: event } }
-            it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 2) }
-          end
-
-          context 'with two attendances in different states' do
-            let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP') }
-            before { get :by_state, params: { event_id: event } }
-            it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1, 'SP' => 1) }
-          end
-
-          context 'with two attendances one active and other not' do
-            let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP', status: 'cancelled') }
-            before { get :by_state, params: { event_id: event } }
-            it { expect(assigns(:attendances_state_grouped)).to eq('RJ' => 1) }
-          end
-        end
-      end
-
-      describe '#by_city' do
-        let(:event) { FactoryBot.create(:event, organizers: [user]) }
-
-        context 'with no attendances' do
-          before { get :by_city, params: { event_id: event } }
-          it { expect(assigns(:attendances_city_grouped)).to eq({}) }
-        end
-
-        context 'with attendances' do
-          let!(:carioca_attendance) { FactoryBot.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
-          context 'with one attendance' do
-            before { get :by_city, params: { event_id: event } }
-            it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
-          end
-
-          context 'with two attendances on same state' do
-            let!(:other_carioca) { FactoryBot.create(:attendance, event: event, state: 'RJ', city: 'Rio de Janeiro') }
-            before { get :by_city, params: { event_id: event } }
-            it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 2) }
-          end
-
-          context 'with two attendances in different states' do
-            let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo') }
-            before { get :by_city, params: { event_id: event } }
-            it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1, ['Sao Paulo', 'SP'] => 1) }
-          end
-
-          context 'with two attendances one active and other not' do
-            let!(:paulista_attendance) { FactoryBot.create(:attendance, event: event, state: 'SP', city: 'Sao Paulo', status: 'cancelled') }
-            before { get :by_city, params: { event_id: event } }
-            it { expect(assigns(:attendances_city_grouped)).to eq(['Rio de Janeiro', 'RJ'] => 1) }
-          end
-        end
-      end
-
-      describe '#last_biweekly_active' do
-        let(:event) { FactoryBot.create(:event, organizers: [user]) }
-
-        context 'with no attendances' do
-          before { get :last_biweekly_active, params: { event_id: event } }
-          it { expect(assigns(:attendances_biweekly_grouped)).to eq({}) }
-        end
-
-        context 'with attendances' do
-          it 'returns just the attendances within two weeks ago' do
-            now = Time.zone.local(2015, 4, 30, 0, 0, 0)
-            Timecop.freeze(now)
-            last_week = FactoryBot.create(:attendance, event: event, created_at: 7.days.ago)
-            FactoryBot.create(:attendance, event: event, created_at: 7.days.ago)
-            today = FactoryBot.create(:attendance, event: event)
-            FactoryBot.create(:attendance, event: event, created_at: 21.days.ago)
-            FactoryBot.create(:attendance)
-            get :last_biweekly_active, params: { event_id: event }
-            expect(assigns(:attendances_biweekly_grouped)).to eq(last_week.created_at.to_date => 2, today.created_at.to_date => 1)
-            Timecop.return
-          end
-        end
-      end
-
-      describe '#to_approval' do
-        let(:event) { FactoryBot.create(:event, organizers: [user]) }
-        let(:group) { FactoryBot.create(:registration_group, event: event) }
-        let!(:pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
-        let!(:other_pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
-        let!(:out_pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
-        let!(:accepted) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :accepted) }
-        let!(:paid) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :paid) }
-        let!(:confirmed) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :confirmed) }
-        before { get :to_approval, params: { event_id: event } }
-        it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
-      end
-
-      describe '#payment_type_report' do
-        let(:event) { FactoryBot.create(:event, organizers: [user]) }
-
-        context 'with no attendances' do
-          before { get :payment_type_report, params: { event_id: event } }
-          it { expect(assigns(:payment_type_report)).to eq({}) }
-        end
-
-        context 'with attendances' do
-          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, payment_type: 'gateway') }
-          let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
-          let!(:valued) { FactoryBot.create(:attendance, event: event, status: :paid, payment_type: 'gateway', registration_value: 123) }
-          let!(:grouped) { FactoryBot.create(:attendance, event: event, status: :paid, payment_type: 'gateway') }
-          let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, payment_type: 'bank_deposit') }
-          let!(:other_confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement') }
-          let!(:free) { FactoryBot.create(:attendance, event: event, status: :confirmed, payment_type: 'statement_agreement', registration_value: 0) }
-
-          let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled, payment_type: 'gateway') }
-          let!(:out_of_event) { FactoryBot.create(:attendance, status: :paid, payment_type: 'gateway') }
-
-          it 'returns the attendances with non free registration value grouped by payment type' do
-            get :payment_type_report, params: { event_id: event }
-            expect(assigns(:payment_type_report)).to eq(['bank_deposit', 400] => 1, ['gateway', 400] => 2, ['statement_agreement', 400] => 1, ['gateway', 123] => 1)
-          end
-        end
-      end
+    describe '#to_approval' do
+      let(:event) { FactoryBot.create(:event, organizers: [user]) }
+      let(:group) { FactoryBot.create(:registration_group, event: event) }
+      let!(:pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
+      let!(:other_pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
+      let!(:out_pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
+      let!(:accepted) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :accepted) }
+      let!(:paid) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :paid) }
+      let!(:confirmed) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :confirmed) }
+      before { get :to_approval, params: { event_id: event } }
+      it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
     end
 
     describe '#waiting_list' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe EventAttendancesController, type: :controller do
+RSpec.describe AttendancesController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do
       before { get :new, params: { event_id: 'foo' } }

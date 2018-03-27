@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class EventAttendancesController < ApplicationController
+class AttendancesController < ApplicationController
   rescue_from Net::OpenTimeout, with: :timeout
 
   before_action :assign_event

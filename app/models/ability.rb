@@ -38,7 +38,7 @@ class Ability
     can(:read, ReportsController) if @user.organized_events.include?(@event)
     can(:waiting_list, Attendance) if @user.organized_events.include?(@event)
     can(:show, User) { |user| @user.organized_user_present?(user) }
-    can(:manage, EventAttendancesController) if @user.organized_events.include?(@event)
+    can(:manage, AttendancesController) if @user.organized_events.include?(@event)
     can(:manage, TransfersController) if @user.organized_events.include?(@event)
     can(:manage, Attendance) if @user.organized_events.include?(@event)
     can(:manage, RegistrationPeriod) { |period| @user.organized_events.include?(period.event) }

@@ -31,7 +31,7 @@ Current::Application.routes.draw do
       delete :remove_organizer
     end
 
-    resources :attendances, controller: :event_attendances do
+    resources :attendances do
       member do
         patch 'change_status/:new_status', action: :change_status, as: 'change_status'
         delete :destroy

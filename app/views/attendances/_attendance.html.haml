@@ -12,15 +12,15 @@
   %td= t("attendance.enum.status.#{attendance.status}", count: 1)
   %td
     - if attendance.pending? && attendance.grouped?
-      = link_to accept_it_event_attendance_path(event, attendance), method: :put, remote: true do
+      = link_to change_status_event_attendance_path(event, attendance, :accept), method: :patch, remote: true do
         %i{class: 'fa fa-check', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.accept')}
 
     - if attendance.payable?
-      = link_to pay_it_event_attendance_path(event, attendance), method: :put, remote: true do
+      = link_to change_status_event_attendance_path(event, attendance, :pay), method: :patch, remote: true do
         %i{class: 'fa fa-credit-card', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.pay')}
 
     - if attendance.confirmed?
-      = link_to receive_credential_event_attendance_path(event, attendance), method: :patch, remote: true do
+      = link_to change_status_event_attendance_path(event, attendance, :mark_show), method: :patch, remote: true do
         %i{class: 'fa fa-id-card-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => t('actions.receive_credential')}
 
     - if attendance.cancellable?
@@ -28,7 +28,7 @@
         %i{class: 'fa fa-ban', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('actions.cancel')}
 
     - if can?(:dequeue, attendance) && (attendance.waiting?)
-      = link_to dequeue_it_event_attendance_path(event, attendance), method: :patch do
+      = link_to change_status_event_attendance_path(event, attendance, :dequeue), method: :patch, remote: true do
         %i{class: 'fa fa-thumbs-o-up', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  'title' => t('attendance.list.actions.dequeue')}
 
     = link_to edit_event_attendance_path(event, attendance), method: :get do

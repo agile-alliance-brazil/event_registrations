@@ -49,6 +49,10 @@ module Concerns
           end
         end
 
+        after_transition cancelled: :pending do |attendance|
+          attendance.invoices.order(:created_at).last&.recover_it!
+        end
+
         def try_user_notify(params)
           yield
         rescue StandardError => ex
@@ -87,17 +91,17 @@ module Concerns
     end
 
     def cancel_invoice!
-      change_invoice_status(user.invoices.order(created_at: :asc).last, :cancel_it)
+      change_invoice_status(user.invoices.order(created_at: :asc).last, :cancel_it!)
     end
 
     def recover_invoice!
       self.advised = false
       self.advised_at = nil
-      change_invoice_status(user.invoices.where(status: 'cancelled').last, :recover_it)
+      change_invoice_status(user.invoices.where(status: 'cancelled').last, :recover_it!)
     end
 
     def pay_invoice!
-      change_invoice_status(user.invoices.active.last, :pay_it)
+      change_invoice_status(user.invoices.active.last, :pay_it!)
     end
 
     def change_invoice_status(invoice, method)

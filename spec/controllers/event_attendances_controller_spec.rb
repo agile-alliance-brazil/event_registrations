@@ -22,8 +22,8 @@ RSpec.describe EventAttendancesController, type: :controller do
       before { get :search, params: { event_id: 'foo' } }
       it { expect(response).to redirect_to login_path }
     end
-    describe 'PATCH #receive_credential' do
-      before { patch :receive_credential, params: { event_id: 'foo', id: 'bar' } }
+    describe 'PATCH #change_status' do
+      before { put :update, params: { event_id: 'foo', id: 'bar', new_status: 'xpto' } }
       it { expect(response).to redirect_to login_path }
     end
   end
@@ -598,156 +598,49 @@ RSpec.describe EventAttendancesController, type: :controller do
       end
     end
 
-    describe 'PUT #confirm' do
-      context 'responding HTML' do
-        let!(:attendance) { FactoryBot.create(:attendance) }
-        it 'confirms attendance' do
-          EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
-          Attendance.any_instance.expects(:confirm)
-          put :confirm, params: { event_id: event, id: attendance }
-        end
-
-        it 'redirects back to status' do
-          EmailNotifications.stubs(:registration_confirmed).returns(stub(deliver_now: true))
-          put :confirm, params: { event_id: event, id: attendance }
-
-          expect(response).to redirect_to(event_attendance_path(event, attendance))
-        end
-
-        it 'notifies airbrake if cannot send email' do
-          exception = StandardError.new
-          action = :registration_confirmed
-          EmailNotifications.expects(action).raises(exception)
-
-          Airbrake.expects(:notify).with(exception.message, action: action, attendance: attendance)
-
-          put :confirm, params: { event_id: event, id: attendance }
-
-          expect(response).to redirect_to(event_attendance_path(event, attendance))
-        end
-
-        it 'ignores airbrake errors if cannot send email' do
-          exception = StandardError.new
-          action = :registration_confirmed
-          EmailNotifications.expects(action).raises(exception)
-          Airbrake.expects(:notify).with(exception.message, action: action, attendance: attendance).raises(exception)
-
-          put :confirm, params: { event_id: event, id: attendance }
-          expect(response).to redirect_to(event_attendance_path(event, attendance))
-        end
-      end
-
-      context 'responding JS' do
-        let!(:attendance) { FactoryBot.create(:attendance) }
-
-        it 'marks attendance as confirmed, save when this occurs and redirect to attendances index' do
-          put :confirm, params: { event_id: event, id: attendance }, xhr: true
-          expect(assigns(:attendance)).to eq attendance
-          expect(Attendance.last.status).to eq 'confirmed'
-        end
-      end
-    end
-
-    describe 'PUT #pay_it' do
+    describe 'PATCH #change_status' do
       let!(:event) { FactoryBot.create(:event, organizers: [user]) }
 
-      context 'pending attendance' do
-        context 'grouped attendance' do
-          let(:group) { FactoryBot.create :registration_group }
-          let(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, status: 'pending') }
-          let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
-          it 'marks attendance and related invoice as paid, save when this occurs and redirect to attendances index' do
-            put :pay_it, params: { event_id: event, id: attendance }, xhr: true
-            expect(assigns(:attendance)).to eq attendance
-            expect(Attendance.last.status).to eq 'paid'
-            expect(Invoice.last.status).to eq 'paid'
-          end
-        end
-
-        context 'individual attendance' do
-          let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
-          let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
-          it 'marks attendance as confirmed and related invoice as paid and redirect to attendances index' do
-            EmailNotifications.expects(:registration_confirmed).once
-            put :pay_it, params: { event_id: event, id: attendance }, xhr: true
-            expect(assigns(:attendance)).to eq attendance
-            expect(Attendance.last.status).to eq 'confirmed'
-            expect(Invoice.last.status).to eq 'paid'
-          end
-        end
-      end
-
-      context 'cancelled attendance' do
-        let!(:attendance) { FactoryBot.create(:attendance, event: event, status: 'cancelled') }
-        it 'doesnt mark as paid and redirect to attendances index with alert' do
-          put :pay_it, params: { event_id: event, id: attendance }, xhr: true
-          expect(assigns(:attendance)).to eq attendance
-          expect(Attendance.last.status).to eq 'cancelled'
-        end
-      end
-    end
-
-    describe 'PUT #accept_it' do
-      let!(:event) { FactoryBot.create(:event, organizers: [user]) }
-
-      context 'pending attendance' do
+      context 'accept' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
         it 'accepts attendance' do
-          put :accept_it, params: { event_id: event, id: attendance }, xhr: true
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'accept' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'accepted'
         end
       end
-
-      context 'cancelled attendance' do
-        let!(:attendance) { FactoryBot.create(:attendance, event: event, status: 'cancelled') }
-        it 'keeps cancelled' do
-          put :accept_it, params: { event_id: event, id: attendance }, xhr: true
-          expect(assigns(:attendance)).to eq attendance
-          expect(Attendance.last.status).to eq 'cancelled'
-        end
-      end
-    end
-
-    describe 'PUT #recover_it' do
-      context 'when is an individual registration' do
+      context 'confirm' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
-        it 'recovers the attendance' do
-          Invoice.from_attendance(attendance, 'gateway')
-          attendance.cancel
-          put :recover_it, params: { event_id: event, id: attendance }
-          expect(Attendance.last.status).to eq 'pending'
-          expect(Invoice.last.status).to eq 'pending'
-          expect(response).to redirect_to event_attendance_path(event, attendance)
+        it 'accepts attendance' do
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'confirm' }, xhr: true
+          expect(assigns(:attendance)).to eq attendance
+          expect(Attendance.last.status).to eq 'confirmed'
         end
       end
-    end
-
-    describe 'PATCH #dequeue' do
-      let(:invoice) { FactoryBot.create(:invoice, status: :pending) }
-      let(:event) { FactoryBot.create(:event, organizers: [user]) }
-      context 'when is an individual registration' do
-        let!(:attendance) { FactoryBot.create(:attendance, event: event, invoices: [invoice], status: 'waiting') }
-        it 'changes the status and redirects to the attendance page' do
-          patch :dequeue_it, params: { event_id: event, id: attendance }
+      context 'recover' do
+        let(:invoice) { FactoryBot.create(:invoice, status: :cancelled) }
+        let(:attendance) { FactoryBot.create(:attendance, event: event, invoices: [invoice], status: 'cancelled') }
+        it 'accepts attendance' do
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'recover' }, xhr: true
+          expect(assigns(:attendance)).to eq attendance
           expect(attendance.reload).to be_pending
-          expect(Invoice.last).to be_pending
-          expect(response).to redirect_to event_attendance_path(event, attendance)
+          expect(invoice.reload).to be_pending
         end
       end
-    end
-
-    describe 'PATCH #receive_credential' do
-      let(:invoice) { FactoryBot.create(:invoice, status: :pending) }
-      let!(:event) { FactoryBot.create(:event, organizers: [user]) }
-      context 'when is an individual registration' do
-        let(:attendance) { FactoryBot.create(:attendance, event: event, invoices: [invoice], status: 'confirmed') }
-        it 'changes the status and redirects to the attendance page' do
-          invoice = Invoice.from_attendance(attendance, 'gateway')
-          invoice.update(status: :paid)
-          patch :receive_credential, params: { event_id: event, id: attendance }, xhr: true
+      context 'dequeue' do
+        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'waiting') }
+        it 'accepts attendance' do
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'dequeue' }, xhr: true
+          expect(assigns(:attendance)).to eq attendance
+          expect(Attendance.last.status).to eq 'pending'
+        end
+      end
+      context 'mark_show' do
+        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'confirmed') }
+        it 'accepts attendance' do
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'mark_show' }, xhr: true
+          expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'showed_in'
-          expect(Invoice.last.status).to eq 'paid'
         end
       end
     end
@@ -816,10 +709,10 @@ RSpec.describe EventAttendancesController, type: :controller do
           end
 
           context 'and searching by organization' do
-            let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'bLa') }
-            let!(:other_pending) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'bLaXPTO') }
+            let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'sbbRUbles') }
+            let!(:other_pending) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'sbbRUblesXPTO') }
             let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, organization: 'foO') }
-            before { get :search, params: { event_id: event, pending: 'true', search: 'BLA' }, xhr: true }
+            before { get :search, params: { event_id: event, pending: 'true', search: 'sbbrubles' }, xhr: true }
             it { expect(assigns(:attendances_list)).to match_array [pending, other_pending] }
           end
 

@@ -24,9 +24,7 @@ Current::Application.routes.draw do
   end
 
   resources :events, only: %i[index show new create destroy edit update] do
-    collection do
-      get :list_archived
-    end
+    get :list_archived, on: :collection
 
     member do
       patch :add_organizer
@@ -35,13 +33,8 @@ Current::Application.routes.draw do
 
     resources :attendances, controller: :event_attendances do
       member do
-        put :confirm
-        put :pay_it
-        put :accept_it
+        patch 'change_status/:new_status', action: :change_status, as: 'change_status'
         delete :destroy
-        put :recover_it
-        patch :dequeue_it
-        patch :receive_credential
       end
 
       collection do

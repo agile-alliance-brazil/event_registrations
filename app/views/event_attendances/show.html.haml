@@ -8,6 +8,6 @@
 - if @attendance.grouped? && @attendance.pending?
   = render partial: 'attendances/group_registration', locals: { attendance: @attendance }
 - else
-  = render partial: "attendances/#{@attendance.status}", locals: { attendance: @attendance }
+  = render partial: "attendances/status_partials/#{@attendance.status}", locals: { attendance: @attendance }
 
 = render partial: 'attendances/attendance_actions', locals: { event: @event, attendance: @attendance }

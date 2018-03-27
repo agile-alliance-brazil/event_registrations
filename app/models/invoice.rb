@@ -65,25 +65,20 @@ class Invoice < ApplicationRecord
     )
   end
 
-  def pay
-    pay_it
-    save!
+  def pay_it!
+    update(status: Invoice::PAID)
   end
 
-  def pay_it
-    self.status = Invoice::PAID
+  def send_it!
+    update(status: Invoice::SENT)
   end
 
-  def send_it
-    self.status = Invoice::SENT
+  def cancel_it!
+    update(status: Invoice::CANCELLED)
   end
 
-  def cancel_it
-    self.status = Invoice::CANCELLED
-  end
-
-  def recover_it
-    self.status = Invoice::PENDING
+  def recover_it!
+    update(status: Invoice::PENDING)
   end
 
   def name

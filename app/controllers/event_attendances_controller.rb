@@ -60,43 +60,8 @@ class EventAttendancesController < ApplicationController
     redirect_to event_attendance_path(@event, @attendance)
   end
 
-  def confirm
-    begin
-      @attendance.confirm
-    rescue StandardError => ex
-      flash[:alert] = t('flash.attendance.mail.fail', email: @attendance.event.main_email_contact)
-      Rails.logger.error('Airbrake notification failed. Logging error locally only')
-      Rails.logger.error(ex.message)
-    end
-    respond_to do |format|
-      format.html { redirect_to event_attendance_path(@event, @attendance) }
-      format.js { responds_js }
-    end
-  end
-
-  def pay_it
-    @attendance.pay
-    responds_js
-  end
-
-  def accept_it
-    @attendance.accept
-    responds_js
-  end
-
-  def recover_it
-    @attendance.recover
-    redirect_to event_attendance_path(@event, @attendance)
-  end
-
-  def dequeue_it
-    @attendance.dequeue
-    redirect_to event_attendance_path(@event, @attendance)
-  end
-
-  def receive_credential
-    @attendance.mark_show
-    responds_js
+  def change_status
+    @attendance.send(params[:new_status])
   end
 
   def search
@@ -124,12 +89,6 @@ class EventAttendancesController < ApplicationController
     respond_to do |format|
       format.html { render file: Rails.root.join('public', '408'), layout: false, status: 408 }
       format.js { render plain: '408 Request Timeout', status: :request_timeout }
-    end
-  end
-
-  def responds_js
-    respond_to do |format|
-      format.js { render :attendance }
     end
   end
 

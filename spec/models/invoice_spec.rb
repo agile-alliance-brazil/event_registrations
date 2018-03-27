@@ -95,35 +95,15 @@ describe Invoice, type: :model do
     it { expect(Invoice.active).to match_array [invoice, paid_invoice] }
   end
 
-  describe '#pay' do
-    context 'an attendance invoice' do
-      let(:group) { FactoryBot.create :registration_group }
-      let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 100) }
-      subject(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
-      before { invoice.pay }
-      it { expect(invoice.status).to eq Invoice::PAID }
-      it { expect(invoice).to be_persisted }
-    end
-
-    context 'a group invoice' do
-      let(:user) { FactoryBot.create :user }
-      let(:group) { FactoryBot.create :registration_group, leader: user }
-      subject(:invoice) { Invoice.from_registration_group(group, 'gateway') }
-      before { invoice.pay }
-      it { expect(invoice.status).to eq Invoice::PAID }
-      it { expect(invoice).to be_persisted }
-    end
-  end
-
-  describe '#pay_it' do
+  describe '#pay_it!' do
     let(:invoice) { FactoryBot.create :invoice }
-    before { invoice.pay_it }
+    before { invoice.pay_it! }
     it { expect(invoice.status).to eq Invoice::PAID }
   end
 
-  describe '#send_it' do
+  describe '#send_it!' do
     let(:invoice) { FactoryBot.create :invoice }
-    before { invoice.send_it }
+    before { invoice.send_it! }
     it { expect(invoice.status).to eq Invoice::SENT }
   end
 
@@ -144,9 +124,9 @@ describe Invoice, type: :model do
     end
   end
 
-  describe '#cancel_it' do
+  describe '#cancel_it!' do
     let(:invoice) { FactoryBot.create :invoice }
-    before { invoice.cancel_it }
+    before { invoice.cancel_it! }
     it { expect(invoice.status).to eq Invoice::CANCELLED }
   end
 

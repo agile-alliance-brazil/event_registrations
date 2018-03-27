@@ -44,7 +44,7 @@ class PaymentNotification < ApplicationRecord
 
   def mark_invoicer_as_paid
     if pag_seguro_valid?(APP_CONFIG[params[:type]])
-      invoice.pay
+      invoice.pay_it!
       if invoice.invoiceable_type == 'Attendance'
         attendance = Attendance.where(id: invoice.invoiceable_id).last
         attendance.pay if attendance.present?

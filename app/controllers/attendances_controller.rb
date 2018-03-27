@@ -62,6 +62,7 @@ class AttendancesController < ApplicationController
 
   def change_status
     @attendance.send(params[:new_status])
+    redirect_to event_attendances_path(@event)
   end
 
   def search

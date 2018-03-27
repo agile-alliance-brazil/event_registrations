@@ -8,8 +8,9 @@ module Concerns
       scope :pending, -> { where(status: :pending) }
       scope :accepted, -> { where(status: :accepted) }
       scope :cancelled, -> { where(status: :cancelled) }
-      scope :paid, -> { where(status: %i[paid confirmed]) }
+      scope :paid, -> { where(status: :paid) }
       scope :confirmed, -> { where(status: :confirmed) }
+      scope :committed_to, -> { where(status: %i[paid confirmed showed_in]) }
       scope :active, -> { where('status NOT IN (?)', %i[cancelled no_show waiting]) }
       scope :not_cancelled, -> { where('status <> ?', :cancelled) }
       scope :waiting, -> { where(status: :waiting) }

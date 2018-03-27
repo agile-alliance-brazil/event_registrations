@@ -79,37 +79,43 @@ RSpec.describe Attendance, type: :model do
   end
 
   context 'scopes' do
-    context 'with five attendances created' do
-      before { 5.times { FactoryBot.create(:attendance) } }
+    context 'for statuses' do
+      let!(:pending) { FactoryBot.create(:attendance, status: :pending) }
+      let!(:accepted) { FactoryBot.create(:attendance, status: :accepted) }
+      let!(:paid) { FactoryBot.create(:attendance, status: :paid) }
+      let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
+      let!(:showed_in) { FactoryBot.create(:attendance, status: :showed_in) }
+      let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
+      let!(:no_show) { FactoryBot.create(:attendance, status: :no_show) }
+      let!(:waiting) { FactoryBot.create(:attendance, status: :waiting) }
 
-      it 'has scope accepted' do
-        Attendance.first.tap(&:accept).save
-        expect(Attendance.accepted).to include Attendance.first
+      describe '.pending' do
+        it { expect(Attendance.pending).to eq [pending] }
       end
-
-      it 'has scope paid' do
-        Attendance.first.tap(&:pay).save
-        expect(Attendance.paid).to eq([Attendance.first])
+      describe '.accepted' do
+        it { expect(Attendance.accepted).to eq [accepted] }
       end
-
-      it 'has scope active that excludes cancelled attendances' do
-        Attendance.first.tap(&:cancel).save
-        expect(Attendance.active).not_to include(Attendance.first)
+      describe '.waiting' do
+        it { expect(Attendance.waiting).to eq [waiting] }
+      end
+      describe '.confirmed' do
+        it { expect(Attendance.confirmed).to eq [confirmed] }
+      end
+      describe '.cancelled' do
+        it { expect(Attendance.cancelled).to eq [cancelled] }
+      end
+      describe '.paid' do
+        it { expect(Attendance.paid).to eq [paid] }
+      end
+      describe '.commited_to' do
+        it { expect(Attendance.committed_to).to match_array [confirmed, paid, showed_in] }
+      end
+      describe '.active' do
+        it { expect(Attendance.active).to eq [pending, accepted, paid, confirmed, showed_in] }
       end
     end
 
-    context 'with specific seed' do
-      describe '.active' do
-        let!(:pending) { FactoryBot.create(:attendance, status: :pending) }
-        let!(:accepted) { FactoryBot.create(:attendance, status: :accepted) }
-        let!(:paid) { FactoryBot.create(:attendance, status: :paid) }
-        let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
-        let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
-        let!(:no_show) { FactoryBot.create(:attendance, status: :no_show) }
-        let!(:waiting) { FactoryBot.create(:attendance, status: :waiting) }
-        it { expect(Attendance.active).to eq [pending, accepted, paid, confirmed] }
-      end
-
+    context 'complex ones' do
       describe '.last_biweekly_active' do
         let!(:last_week) { FactoryBot.create(:attendance, created_at: 7.days.ago) }
         let!(:other_last_week) { FactoryBot.create(:attendance, created_at: 7.days.ago) }
@@ -129,47 +135,10 @@ RSpec.describe Attendance, type: :model do
         it { expect(Attendance.waiting_approval).to eq [pending] }
       end
 
-      describe '.already_paid' do
-        let!(:pending) { FactoryBot.create(:attendance, status: :pending) }
-        let!(:accepted) { FactoryBot.create(:attendance, status: :accepted) }
-        let!(:paid) { FactoryBot.create(:attendance, status: :paid) }
-        let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
-        let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
-        it { expect(Attendance.already_paid).to eq [paid, confirmed] }
-      end
-
       describe '.non_free' do
         let!(:pending) { FactoryBot.create(:attendance, status: :pending, registration_value: 100) }
         let!(:accepted) { FactoryBot.create(:attendance, status: :accepted, registration_value: 0) }
         it { expect(Attendance.non_free).to eq [pending] }
-      end
-
-      describe '.pending' do
-        let!(:pending) { FactoryBot.create(:attendance, status: :pending) }
-        let!(:accepted) { FactoryBot.create(:attendance, status: :accepted) }
-        let!(:paid) { FactoryBot.create(:attendance, status: :paid) }
-        let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
-        let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
-        it { expect(Attendance.pending).to eq [pending] }
-      end
-
-      describe '.accepted' do
-        let!(:pending) { FactoryBot.create(:attendance, status: :pending) }
-        let!(:accepted) { FactoryBot.create(:attendance, status: :accepted) }
-        let!(:paid) { FactoryBot.create(:attendance, status: :paid) }
-        let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
-        let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
-        it { expect(Attendance.accepted).to eq [accepted] }
-      end
-
-      describe '.waiting' do
-        let!(:waiting) { FactoryBot.create(:attendance, status: :waiting) }
-        let!(:pending) { FactoryBot.create(:attendance, status: :pending) }
-        let!(:accepted) { FactoryBot.create(:attendance, status: :accepted) }
-        let!(:paid) { FactoryBot.create(:attendance, status: :paid) }
-        let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
-        let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
-        it { expect(Attendance.waiting).to eq [waiting] }
       end
 
       describe '.with_time_in_queue' do
@@ -177,17 +146,6 @@ RSpec.describe Attendance, type: :model do
         let!(:other_attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', queue_time: 2 }
         let!(:out_attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', queue_time: 0 }
         it { expect(Attendance.with_time_in_queue).to match_array [attendance, other_attendance] }
-      end
-
-      describe '.confirmed' do
-        let!(:waiting) { FactoryBot.create(:attendance, status: :waiting) }
-        let!(:pending) { FactoryBot.create(:attendance, status: :pending) }
-        let!(:accepted) { FactoryBot.create(:attendance, status: :accepted) }
-        let!(:paid) { FactoryBot.create(:attendance, status: :paid) }
-        let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
-        let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
-
-        it { expect(Attendance.confirmed).to eq [confirmed] }
       end
     end
   end

@@ -538,7 +538,7 @@ RSpec.describe AttendancesController, type: :controller do
               expect(assigns(:waiting_total)).to eq 1
               expect(assigns(:pending_total)).to eq 1
               expect(assigns(:accepted_total)).to eq 1
-              expect(assigns(:paid_total)).to eq 2
+              expect(assigns(:paid_total)).to eq 1
               expect(assigns(:reserved_total)).to eq 3
               expect(assigns(:accredited_total)).to eq 1
               expect(assigns(:cancelled_total)).to eq 1

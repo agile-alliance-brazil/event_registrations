@@ -6,7 +6,7 @@ class TransfersController < ApplicationController
 
   def new
     attendances = can_manage_event? ? @event.attendances : current_user.attendances
-    @origins = attendances.paid
+    @origins = attendances.committed_to
     @destinations = @event.attendances.pending + @event.attendances.accepted
   end
 

@@ -278,26 +278,6 @@ RSpec.describe RegistrationGroup, type: :model do
       it { expect(group.incomplete?).to be_falsey }
     end
 
-    context 'with minimum size of 1' do
-      let(:group) { FactoryBot.create(:registration_group, minimum_size: 1) }
-      context 'and one attendance pending' do
-        let!(:attendance) { FactoryBot.create(:attendance, registration_group: group, status: 'pending') }
-        it { expect(group.incomplete?).to be_truthy }
-      end
-      context 'and one attendance accepted' do
-        let!(:attendance) { FactoryBot.create(:attendance, registration_group: group, status: 'accepted') }
-        it { expect(group.incomplete?).to be_truthy }
-      end
-      context 'and one attendance paid' do
-        let!(:attendance) { FactoryBot.create(:attendance, registration_group: group, status: 'paid') }
-        it { expect(group.incomplete?).to be_falsey }
-      end
-      context 'and one attendance confirmed' do
-        let!(:attendance) { FactoryBot.create(:attendance, registration_group: group, status: 'confirmed') }
-        it { expect(group.incomplete?).to be_falsey }
-      end
-    end
-
     context 'with minimun_size of 2' do
       let(:group) { FactoryBot.create(:registration_group, minimum_size: 2) }
       context 'and two attendances pending' do

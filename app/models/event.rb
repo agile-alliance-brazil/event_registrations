@@ -110,7 +110,7 @@ class Event < ApplicationRecord
   end
 
   def average_ticket
-    attendances_confirmed = attendances.where("attendances.STATUS = 'confirmed' OR attendances.STATUS = 'showed_in'").includes(:invoices)
+    attendances_confirmed = attendances.committed_to.includes(:invoices)
     return 0 if attendances_confirmed.empty?
     attendances_confirmed.sum('invoices.amount') / attendances_confirmed.count
   end

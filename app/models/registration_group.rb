@@ -91,7 +91,7 @@ class RegistrationGroup < ApplicationRecord
 
   def incomplete?
     return false if minimum_size.blank?
-    attendances.paid.count < minimum_size
+    attendances.committed_to.count < minimum_size
   end
 
   def capacity_left

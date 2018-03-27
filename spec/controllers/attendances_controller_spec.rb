@@ -608,6 +608,14 @@ RSpec.describe AttendancesController, type: :controller do
           expect(Attendance.last.status).to eq 'accepted'
         end
       end
+      context 'pay' do
+        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
+        it 'accepts attendance' do
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'pay' }, xhr: true
+          expect(assigns(:attendance)).to eq attendance
+          expect(Attendance.last.status).to eq 'confirmed'
+        end
+      end
       context 'confirm' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
         it 'accepts attendance' do

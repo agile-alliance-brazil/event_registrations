@@ -61,7 +61,19 @@ class AttendancesController < ApplicationController
   end
 
   def change_status
-    @attendance.send(params[:new_status])
+    if params[:new_status] == 'accept'
+      @attendance.accept
+    elsif params[:new_status] == 'recover'
+      @attendance.recover
+    elsif params[:new_status] == 'pay'
+      @attendance.pay
+    elsif params[:new_status] == 'confirm'
+      @attendance.confirm
+    elsif params[:new_status] == 'mark_show'
+      @attendance.mark_show
+    else
+      @attendance.dequeue
+    end
     redirect_to event_attendances_path(@event)
   end
 

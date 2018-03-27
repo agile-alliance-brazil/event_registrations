@@ -27,17 +27,6 @@ class SessionsController < ApplicationController
     redirect_to origin == login_url ? current_user : origin
   end
 
-  def resource
-    current_user
-  end
-
-  def resource_name
-    'user'
-  end
-
-  helper_method :resource
-  helper_method :resource_name
-
   def failure
     flash[:error] = I18n.t('flash.user.failure')
     redirect_to login_path
@@ -76,5 +65,11 @@ class SessionsController < ApplicationController
 
   def auth_hash
     request.env['omniauth.auth']
+  end
+
+  private
+
+  def current_ability
+    @current_ability ||= UserAbility.new(current_user)
   end
 end

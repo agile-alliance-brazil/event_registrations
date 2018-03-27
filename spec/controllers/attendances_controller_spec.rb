@@ -340,6 +340,13 @@ RSpec.describe AttendancesController, type: :controller do
             end
           end
         end
+        context 'returning AWS error' do
+          it 'calls the Airbrake' do
+            CreateAttendance.stubs(:notify_attendance).raises(AWS::SES::ResponseError.new(stub(error: { code: 500, message: 'bla' })))
+            Airbrake.expects(:notify).once
+            post :create, params: { event_id: event, attendance: valid_attendance }
+          end
+        end
       end
     end
 

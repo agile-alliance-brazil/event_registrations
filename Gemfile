@@ -25,7 +25,7 @@ gem 'omniauth', '~>1.3'
 gem 'omniauth-facebook', '~>4.0'
 gem 'omniauth-github', '~>1.1'
 gem 'omniauth-twitter', '~>1.2'
-gem 'pagseguro-oficial'
+gem 'pagseguro-oficial', git: 'git@github.com:correamarques/ruby.git'
 gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud
 gem 'rake'
 gem 'sass'

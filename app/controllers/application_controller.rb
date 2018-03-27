@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery prepend: true, with: :exception
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from AWS::SES::ResponseError, with: :no_verified_receiver
 
   helper :all
   helper_method :current_user
@@ -74,5 +75,9 @@ class ApplicationController < ActionController::Base
     send(method)
   rescue StandardError
     nil
+  end
+
+  def no_verified_receiver
+    Airbrake.notify('MessageRejected - Email address is not verified. The following identities failed the check in region US-EAST-1', params)
   end
 end

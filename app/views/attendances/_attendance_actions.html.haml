@@ -4,7 +4,7 @@
   - if can?(:destroy, attendance) && (attendance.cancellable?)
     = button_to t('attendances.actions.cancel'), event_attendance_path(event, attendance), method: :delete, class: 'remove btn btn-danger', data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name) }
   - if can?(:transfer, attendance) && (attendance.transferrable?)
-    = link_to t('attendances.actions.transfer'), new_event_attendance_transfer_path(event, attendance, transfer: { origin_id: attendance.id }), class: 'btn btn-success'
+    = link_to t('attendances.actions.transfer'), new_event_transfer_path(event, attendance, transfer: { origin_id: attendance.id }), class: 'btn btn-success'
   - if can?(:recover, attendance) && (attendance.recoverable?)
     = link_to t('attendances.actions.recover'), change_status_event_attendance_path(event, attendance, :recover), method: :patch, remote: true, class: 'btn btn-success'
   - if can?(:dequeue, attendance) && (attendance.waiting?)

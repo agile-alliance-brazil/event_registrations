@@ -511,6 +511,9 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     describe 'GET #index' do
+      before { travel_to Time.zone.local(2018, 2, 20, 10, 0, 0) }
+      after { travel_back }
+
       context 'passing no search parameter' do
         context 'and no attendances' do
           let!(:event) { FactoryBot.create(:event, organizers: [user]) }
@@ -549,7 +552,7 @@ RSpec.describe AttendancesController, type: :controller do
               expect(assigns(:accredited_total)).to eq 1
               expect(assigns(:cancelled_total)).to eq 1
               expect(assigns(:total)).to eq 8
-              expect(assigns(:burnup_registrations_data).ideal.count).to eq 32
+              expect(assigns(:burnup_registrations_data).ideal.count).to eq 29
               expect(assigns(:burnup_registrations_data).actual.count).to eq 1
             end
           end

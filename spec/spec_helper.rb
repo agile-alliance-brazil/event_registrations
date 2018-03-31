@@ -45,6 +45,8 @@ end
 RSpec.configure do |config|
   Rails.application.eager_load!
 
+  config.include ActiveSupport::Testing::TimeHelpers
+
   config.before(:suite) do
     ActionMailer::Base.deliveries.clear
     DatabaseCleaner.strategy = :transaction

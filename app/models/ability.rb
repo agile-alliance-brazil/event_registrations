@@ -21,7 +21,7 @@ class Ability
     can(:manage, 'password_resets')
     can(:read, Event)
     can(%i[new create], AttendancesController)
-    can(%i[edit update], AttendancesController) { |attendance| attendance.user_id == @user.id || attendance.email == @user.email }
+    can(%i[show edit update], AttendancesController) { |attendance| attendance.user_id == @user.id || attendance.email == @user.email }
 
     can(:manage, @user)
     can(%i[show destroy], Attendance) { |attendance| attendance.user_id == @user.id || attendance.email == @user.email }

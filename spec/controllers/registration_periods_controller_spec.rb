@@ -86,7 +86,7 @@ describe RegistrationPeriodsController, type: :controller do
             period = assigns(:period)
 
             expect(period).to be_a RegistrationPeriod
-            expect(period.errors.full_messages).to eq ['Title não pode ficar em branco', 'Start at não pode ficar em branco', 'End at não pode ficar em branco']
+            expect(period.errors.full_messages).to eq ['Title: não pode ficar em branco', 'Start at: não pode ficar em branco', 'End at: não pode ficar em branco']
             expect(response).to render_template :new
           end
         end
@@ -188,7 +188,7 @@ describe RegistrationPeriodsController, type: :controller do
           it 'does not update and render form with errors' do
             put :update, params: { event_id: event, id: period, registration_period: { title: '', start_at: '', end_at: '' } }
             updated_period = assigns(:period)
-            expect(updated_period.errors.full_messages).to eq ['Title não pode ficar em branco', 'Start at não pode ficar em branco', 'End at não pode ficar em branco']
+            expect(updated_period.errors.full_messages).to eq ['Title: não pode ficar em branco', 'Start at: não pode ficar em branco', 'End at: não pode ficar em branco']
             expect(response).to render_template :edit
           end
         end

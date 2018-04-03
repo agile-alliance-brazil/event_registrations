@@ -70,9 +70,20 @@ RSpec.describe Attendance, type: :model do
       end
 
       context 'without a registration group' do
-        it 'updates the group invoice when add attendace to the group' do
+        it 'updates the group invoice when add attendance to the group' do
           RegistrationGroup.any_instance.expects(:update_invoice).never
           FactoryBot.create(:attendance, registration_value: 100)
+        end
+      end
+
+      context 'having no space in the group' do
+        let!(:previous_attendance) { FactoryBot.create(:attendance, event: event) }
+        let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 1, attendances: [previous_attendance]) }
+        let!(:attendance) { FactoryBot.build(:attendance, event: event, registration_group: group) }
+
+        it 'add errors to the registration group attribute' do
+          attendance.save
+          expect(attendance.errors[:registration_group]).to eq [I18n.t('attendances.create.errors.group_full')]
         end
       end
     end

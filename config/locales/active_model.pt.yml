@@ -1,6 +1,6 @@
 pt:
   errors:
-    format: "%{attribute} %{message}"
+    format: "%{attribute}: %{message}"
     messages:
       accepted: deve ser aceito
       blank: não pode ficar em branco

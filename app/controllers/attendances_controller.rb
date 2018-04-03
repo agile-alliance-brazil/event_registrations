@@ -13,9 +13,9 @@ class AttendancesController < ApplicationController
   def create
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
-    return render :new unless @attendance.valid?
-    redirect_to event_attendance_path(@event, @attendance)
-    flash[:notice] = t('flash.attendance.create.success')
+    return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('flash.attendance.create.success') }) if @attendance.valid?
+    flash[:error] = @attendance.errors.full_messages.join(', ')
+    render :new
   end
 
   def edit; end
@@ -25,7 +25,7 @@ class AttendancesController < ApplicationController
     attendance = UpdateAttendance.run_for(update_params)
     return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if attendance.valid?
     flash[:error] = attendance.errors.full_messages.join(', ')
-    event_attendances_path(event_id: @event)
+    render :edit
   end
 
   def to_approval

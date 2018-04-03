@@ -123,7 +123,7 @@ describe RegistrationGroupsController, type: :controller do
       before { post :create, params: { event_id: event, registration_group: invalid_params } }
       it 'does not create the group and re-render the form with the errors' do
         expect(RegistrationGroup.last).to be_nil
-        expect(assigns(:group).errors.full_messages).to eq ['Nome não pode ficar em branco', 'Desconto (%) Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.', 'Valor das inscrições no grupo Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.']
+        expect(assigns(:group).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Desconto (%): Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.', 'Valor das inscrições no grupo: Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.']
       end
     end
   end
@@ -202,7 +202,7 @@ describe RegistrationGroupsController, type: :controller do
         it 'does not update and render form with errors' do
           put :update, params: { event_id: event, id: group, registration_group: invalid_parameters }
           updated_group = assigns(:group)
-          expect(updated_group.errors.full_messages).to eq ['Nome não pode ficar em branco', 'Desconto (%) Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.', 'Valor das inscrições no grupo Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.']
+          expect(updated_group.errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Desconto (%): Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.', 'Valor das inscrições no grupo: Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.']
           expect(response).to render_template :edit
         end
       end

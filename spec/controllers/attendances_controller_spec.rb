@@ -284,7 +284,6 @@ RSpec.describe AttendancesController, type: :controller do
                 post :create, params: { event_id: event, registration_token: group.token, attendance: valid_attendance }
                 expect(response).to render_template :new
                 expect(assigns(:attendance).errors[:registration_group]).to eq [I18n.t('attendances.create.errors.group_full')]
-                expect(assigns(:attendance).registration_group).to eq group
               end
             end
           end
@@ -320,7 +319,7 @@ RSpec.describe AttendancesController, type: :controller do
           it 'renders the template again with errors' do
             post :create, params: { event_id: event, attendance: { event_id: event } }
             expect(response).to render_template :new
-            expect(assigns(:attendance).errors.full_messages).to eq ['Nome não pode ficar em branco', 'Sobrenome não pode ficar em branco', 'Email não pode ficar em branco', 'Email não é válido', 'Email é muito curto (mínimo: 6 caracteres)', 'Telefone não pode ficar em branco', 'País não pode ficar em branco', 'Cidade não pode ficar em branco', 'Estado não pode ficar em branco']
+            expect(assigns(:attendance).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco']
           end
         end
         context 'AA service response timeout' do
@@ -416,9 +415,10 @@ RSpec.describe AttendancesController, type: :controller do
             let!(:previous_attendance) { FactoryBot.create(:attendance, event: event) }
             let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 1, attendances: [previous_attendance]) }
 
-            it 'updates the user with the token' do
+            it 'render the template again with the error' do
               put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit', registration_token: group.token }
               expect(flash[:error]).to include I18n.t('attendances.create.errors.group_full')
+              expect(response).to render_template :edit
             end
           end
         end

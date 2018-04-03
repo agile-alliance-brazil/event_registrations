@@ -179,7 +179,7 @@ RSpec.describe EventsController, type: :controller do
         before { put :update, params: { id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '', price_table_link: '' } } }
         it 'renderes the form with the errors' do
           expect(response).to render_template :edit
-          expect(assigns(:event).errors.full_messages).to eq ['Inicia em não pode ficar em branco', 'Termina em não pode ficar em branco', 'Preço cheio não pode ficar em branco', 'Nome não pode ficar em branco', 'Capacidade não pode ficar em branco']
+          expect(assigns(:event).errors.full_messages).to eq ['Inicia em: não pode ficar em branco', 'Termina em: não pode ficar em branco', 'Preço cheio: não pode ficar em branco', 'Nome: não pode ficar em branco', 'Capacidade: não pode ficar em branco']
         end
       end
       context 'with invalid event ID' do
@@ -246,7 +246,7 @@ RSpec.describe EventsController, type: :controller do
 
         it 'renders form with the errors' do
           expect(event).to be_a Event
-          expect(event.errors.full_messages).to eq ['Inicia em não pode ficar em branco', 'Termina em não pode ficar em branco', 'Preço cheio não pode ficar em branco', 'Nome não pode ficar em branco', 'Contato para notificações não pode ficar em branco', 'Capacidade não pode ficar em branco']
+          expect(event.errors.full_messages).to eq ['Inicia em: não pode ficar em branco', 'Termina em: não pode ficar em branco', 'Preço cheio: não pode ficar em branco', 'Nome: não pode ficar em branco', 'Contato para notificações: não pode ficar em branco', 'Capacidade: não pode ficar em branco']
           expect(response).to render_template :new
         end
       end

@@ -113,7 +113,7 @@ describe RegistrationQuotasController, type: :controller do
             quota = assigns(:registration_quota)
 
             expect(quota).to be_a RegistrationQuota
-            expect(quota.errors.full_messages).to eq ['Order não pode ficar em branco', 'Quota não pode ficar em branco']
+            expect(quota.errors.full_messages).to eq ['Order: não pode ficar em branco', 'Quota: não pode ficar em branco']
             expect(response).to render_template :new
           end
         end
@@ -224,7 +224,7 @@ describe RegistrationQuotasController, type: :controller do
           it 'does not update and render form with errors' do
             put :update, params: { event_id: event, id: quota, registration_quota: invalid_parameters }
             updated_quota = assigns(:registration_quota)
-            expect(updated_quota.errors.full_messages).to eq ['Price não é um número', 'Order não pode ficar em branco', 'Quota não pode ficar em branco']
+            expect(updated_quota.errors.full_messages).to eq ['Price: não é um número', 'Order: não pode ficar em branco', 'Quota: não pode ficar em branco']
             expect(response).to render_template :edit
           end
         end

@@ -50,6 +50,8 @@ pt:
       cancel: "Cancelar inscrição"
       transfer: "Transferir inscrição"
       recover: "Recuperar inscrição"
+    update:
+      success: "Participante atualizado."
   events:
     form:
       event_basics: "Informações Básicas"
@@ -65,6 +67,8 @@ pt:
       attendance_years_of_experience: "Participante vs Anos de Experiência"
       attendance_job_role: "Participantes vs Cargo"
       registrations_burnup: "Burn-Up de Inscrições"
+    destroy:
+      success: "O participante foi cancelado."
   report:
     attendance_organization_size:
       title: "Agrupado por tamanho da empresa"

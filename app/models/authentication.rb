@@ -4,13 +4,13 @@
 #
 # Table name: authentications
 #
-#  created_at    :datetime
 #  id            :integer          not null, primary key
-#  provider      :string
-#  refresh_token :string
-#  uid           :string
-#  updated_at    :datetime
 #  user_id       :integer
+#  provider      :string(255)
+#  uid           :string(255)
+#  created_at    :datetime
+#  updated_at    :datetime
+#  refresh_token :string(255)
 #
 
 class Authentication < ApplicationRecord

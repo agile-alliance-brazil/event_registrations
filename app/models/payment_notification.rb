@@ -4,17 +4,17 @@
 #
 # Table name: payment_notifications
 #
-#  created_at      :datetime
 #  id              :integer          not null, primary key
-#  invoice_id      :integer
-#  notes           :text(65535)
 #  params          :text(65535)
-#  payer_email     :string
+#  status          :string(255)
+#  transaction_id  :string(255)
+#  payer_email     :string(255)
 #  settle_amount   :decimal(10, )
-#  settle_currency :string
-#  status          :string
-#  transaction_id  :string
+#  settle_currency :string(255)
+#  notes           :text(65535)
+#  created_at      :datetime
 #  updated_at      :datetime
+#  invoice_id      :integer
 #
 # Indexes
 #
@@ -22,7 +22,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_92030b1506  (invoice_id => invoices.id)
+#  fk_rails_...  (invoice_id => invoices.id)
 #
 
 class PaymentNotification < ApplicationRecord

@@ -50,6 +50,8 @@ en:
       recover: "Recover Registration"
       transfer: "Transfer Registration"
       cancel: "Cancel Registration"
+    update:
+      success: "Attendance updated."
   events:
     form:
       event_basics: "Basic Informations"
@@ -65,6 +67,8 @@ en:
       attendance_years_of_experience: "Attendance vs Years of Experience"
       attendance_job_role: "Attendances vs Job Role"
       registrations_burnup: "Registrations Burn-Up"
+    destroy:
+      success: "The attendance was cancelled."
   report:
     attendance_organization_size:
       title: "Grouped on organization size"

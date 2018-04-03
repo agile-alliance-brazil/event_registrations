@@ -4,43 +4,43 @@
 #
 # Table name: attendances
 #
-#  advised                 :boolean          default(FALSE)
-#  advised_at              :datetime
-#  badge_name              :string
-#  city                    :string
-#  country                 :string
-#  cpf                     :string
-#  created_at              :datetime
-#  due_date                :datetime
-#  education_level         :string
-#  email                   :string
-#  email_sent              :boolean          default(FALSE)
-#  event_id                :integer
-#  event_price             :decimal(10, )
-#  experience_in_agility   :string
-#  first_name              :string
-#  gender                  :string
 #  id                      :integer          not null, primary key
-#  job_role                :integer          default("not_informed")
-#  last_name               :string
-#  last_status_change_date :datetime
-#  notes                   :string
-#  organization            :string
-#  organization_size       :string
-#  payment_type            :string
-#  phone                   :string
-#  queue_time              :integer
-#  registration_date       :datetime
+#  event_id                :integer
+#  user_id                 :integer
 #  registration_group_id   :integer
-#  registration_period_id  :integer
+#  registration_date       :datetime
+#  status                  :string(255)
+#  email_sent              :boolean          default(FALSE)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  first_name              :string(255)
+#  last_name               :string(255)
+#  email                   :string(255)
+#  organization            :string(255)
+#  phone                   :string(255)
+#  country                 :string(255)
+#  state                   :string(255)
+#  city                    :string(255)
+#  badge_name              :string(255)
+#  cpf                     :string(255)
+#  gender                  :string(255)
+#  notes                   :string(255)
+#  event_price             :decimal(10, )
 #  registration_quota_id   :integer
 #  registration_value      :decimal(10, )
-#  school                  :string
-#  state                   :string
-#  status                  :string
-#  updated_at              :datetime
-#  user_id                 :integer
-#  years_of_experience     :string
+#  registration_period_id  :integer
+#  advised                 :boolean          default(FALSE)
+#  advised_at              :datetime
+#  payment_type            :string(255)
+#  organization_size       :string(255)
+#  years_of_experience     :string(255)
+#  experience_in_agility   :string(255)
+#  school                  :string(255)
+#  education_level         :string(255)
+#  queue_time              :integer
+#  last_status_change_date :datetime
+#  job_role                :integer          default("not_informed")
+#  due_date                :datetime
 #
 # Indexes
 #

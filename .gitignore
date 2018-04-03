@@ -39,3 +39,4 @@ certs/*
 !certs/*.example
 !certs/.gitkeep
 .ruby-version
+.idea/

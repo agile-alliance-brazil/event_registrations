@@ -4,15 +4,15 @@
 #
 # Table name: registration_periods
 #
-#  created_at     :datetime
-#  end_at         :datetime
-#  event_id       :integer
 #  id             :integer          not null, primary key
-#  price_cents    :integer          default(0), not null
-#  price_currency :string           default("BRL"), not null
+#  event_id       :integer
+#  title          :string(255)
 #  start_at       :datetime
-#  title          :string
+#  end_at         :datetime
+#  created_at     :datetime
 #  updated_at     :datetime
+#  price_cents    :integer          default(0), not null
+#  price_currency :string(255)      default("BRL"), not null
 #
 
 class RegistrationPeriod < ApplicationRecord

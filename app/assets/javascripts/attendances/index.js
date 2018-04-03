@@ -7,5 +7,5 @@ function submitSearch(event_id) {
 
     var searchText = $('#search').val();
 
-    $.get('/attendances/search', { event_id: event_id, search: searchText, pending: pending, accepted: accepted, paid: paid, showed_in: showed_in, cancelled: cancelled } );
+    $.get('/events/' + event_id + '/attendances/search', { event_id: event_id, search: searchText, pending: pending, accepted: accepted, paid: paid, showed_in: showed_in, cancelled: cancelled } );
 }

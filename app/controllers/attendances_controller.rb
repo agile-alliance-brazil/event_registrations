@@ -22,8 +22,10 @@ class AttendancesController < ApplicationController
 
   def update
     update_params = AttendanceParams.new(current_user, @event, params)
-    UpdateAttendance.run_for(update_params)
-    redirect_to event_attendances_path(event_id: @event)
+    attendance = UpdateAttendance.run_for(update_params)
+    return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if attendance.valid?
+    flash[:error] = attendance.errors.full_messages.join(', ')
+    event_attendances_path(event_id: @event)
   end
 
   def to_approval
@@ -57,7 +59,7 @@ class AttendancesController < ApplicationController
 
   def destroy
     @attendance.cancel
-    redirect_to event_attendance_path(@event, @attendance)
+    redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') })
   end
 
   def change_status

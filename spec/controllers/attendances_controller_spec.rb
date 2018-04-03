@@ -365,7 +365,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
     end
 
-    describe '#update' do
+    describe 'PUT #update' do
       let(:event) { FactoryBot.create(:event, organizers: [user], full_price: 840.00) }
       let(:attendance) { FactoryBot.create(:attendance, event: event) }
 
@@ -398,17 +398,28 @@ RSpec.describe AttendancesController, type: :controller do
             expect(Attendance.last.cpf).to eq user.cpf
             expect(Attendance.last.gender).to eq user.gender
             expect(Attendance.last.invoices.last.payment_type).to eq 'bank_deposit'
-            expect(response).to redirect_to event_attendances_path(event_id: event)
+            expect(response).to redirect_to event_attendances_path(event_id: event, flash: { notice: I18n.t('attendances.update.success') })
           end
         end
 
         context 'and with a group token informed' do
-          let(:group) { FactoryBot.create(:registration_group, event: event, discount: 50) }
+          context 'having space in the group' do
+            let(:group) { FactoryBot.create(:registration_group, event: event, discount: 50) }
 
-          it 'updates the user with the token' do
-            put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit', registration_token: group.token }
-            expect(Attendance.last.registration_group).to eq group
-            expect(Attendance.last.registration_value).to eq 420
+            it 'updates the user with the token' do
+              put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit', registration_token: group.token }
+              expect(Attendance.last.registration_group).to eq group
+              expect(Attendance.last.registration_value).to eq 420
+            end
+          end
+          context 'having no space in the group' do
+            let!(:previous_attendance) { FactoryBot.create(:attendance, event: event) }
+            let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 1, attendances: [previous_attendance]) }
+
+            it 'updates the user with the token' do
+              put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit', registration_token: group.token }
+              expect(flash[:error]).to include I18n.t('attendances.create.errors.group_full')
+            end
           end
         end
 

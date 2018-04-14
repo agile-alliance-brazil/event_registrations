@@ -10,6 +10,14 @@ RSpec.describe AttendancesController, type: :controller do
       before { post :create, params: { event_id: 'foo' } }
       it { expect(response).to redirect_to login_path }
     end
+    describe 'GET #show' do
+      before { get :show, params: { event_id: 'foo', id: 'bar' } }
+      it { expect(response).to redirect_to login_path }
+    end
+    describe 'GET #index' do
+      before { get :index, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to login_path }
+    end
     describe 'GET #edit' do
       before { get :edit, params: { event_id: 'foo', id: 'bar' } }
       it { expect(response).to redirect_to login_path }
@@ -559,6 +567,7 @@ RSpec.describe AttendancesController, type: :controller do
               expect(assigns(:pending_total)).to eq 1
               expect(assigns(:accepted_total)).to eq 1
               expect(assigns(:paid_total)).to eq 1
+              expect(assigns(:confirmed_total)).to eq 1
               expect(assigns(:reserved_total)).to eq 3
               expect(assigns(:accredited_total)).to eq 1
               expect(assigns(:cancelled_total)).to eq 1
@@ -691,6 +700,7 @@ RSpec.describe AttendancesController, type: :controller do
             let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLa') }
             let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, first_name: 'bLa') }
             let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled, first_name: 'bLa') }
+            let!(:showed_in) { FactoryBot.create(:attendance, event: event, status: :showed_in, first_name: 'bLa') }
 
             let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'foO') }
             context 'including all statuses' do
@@ -698,9 +708,9 @@ RSpec.describe AttendancesController, type: :controller do
               it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, cancelled] }
             end
 
-            context 'without all statuses' do
+            context 'some statuses' do
               context 'without cancelled' do
-                before { get :search, params: { event_id: event, search: 'bla', pending: 'true', accepted: 'true', paid: 'true' }, xhr: true }
+                before { get :search, params: { event_id: event, search: 'bla', pending: 'true', accepted: 'true', paid: 'true', confirmed: 'true' }, xhr: true }
                 it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed] }
               end
               context 'without cancelled, confirmed and paid' do

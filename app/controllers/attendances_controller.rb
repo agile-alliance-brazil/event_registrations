@@ -44,6 +44,7 @@ class AttendancesController < ApplicationController
     @paid_total = @event.attendances.paid.count
     @reserved_total = @event.reserved_count
     @accredited_total = @event.attendances.showed_in.count
+    @confirmed_total = @event.attendances.confirmed.count
     @cancelled_total = @event.attendances.cancelled.count
     @total = @event.attendances_count
     @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
@@ -108,12 +109,6 @@ class AttendancesController < ApplicationController
   end
 
   def statuses_params
-    statuses = []
-    statuses << :pending if params[:pending] == 'true'
-    statuses << :accepted if params[:accepted] == 'true'
-    statuses += %i[paid confirmed] if params[:paid] == 'true'
-    statuses << :cancelled if params[:cancelled] == 'true'
-    statuses << :showed_in if params[:showed_in] == 'true'
-    statuses
+    params.select { |_key, value| value == 'true' }.keys
   end
 end

@@ -49,7 +49,7 @@ class User < ApplicationRecord
 
   has_many :attendances, dependent: :destroy
   has_many :events, -> { distinct }, through: :attendances, dependent: :nullify
-  has_many :payment_notifications, through: :attendances, dependent: :destroy
+  has_many :payment_notifications, through: :invoices, dependent: :destroy
   has_many :led_groups, class_name: 'RegistrationGroup', inverse_of: :leader, foreign_key: :leader_id, dependent: :nullify
   has_many :invoices, dependent: :destroy
 

@@ -29,6 +29,8 @@ class Invoice < ApplicationRecord
   belongs_to :user
   belongs_to :invoiceable, polymorphic: true
 
+  has_many :payment_notifications, dependent: :destroy, inverse_of: :invoice
+
   delegate :email, :cpf, :gender, :phone, :address, :neighbourhood, :city, :state, :zipcode, to: :user
 
   scope :active, -> { where.not(status: :cancelled) }

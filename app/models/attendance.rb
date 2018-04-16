@@ -58,7 +58,6 @@ class Attendance < ApplicationRecord
   belongs_to :registration_period
   belongs_to :registration_group
   belongs_to :registration_quota
-  has_many :payment_notifications, as: :invoicer, dependent: :delete_all, inverse_of: :invoicer
 
   has_many :invoices, as: :invoiceable, dependent: :destroy, inverse_of: :invoiceable
 

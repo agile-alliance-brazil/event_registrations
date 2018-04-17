@@ -202,6 +202,7 @@ en:
       confirmed: "Confirmed"
       paid: "Payment received"
       cancelled: "Cancelled"
+      showed_in: 'Accredited'
       all: "All"
     cancel_confirmation: "Are you sure you want to cancel your registration at %{event}?\nIf you do, you will need to fill a new form to create a new registration."
     cancel_unauthorized: 'The attendance is at confirmed state, which can not be cancelled'

@@ -17,10 +17,9 @@ class CreateAttendance
     @attendance = PerformGroupCheck.run(@attendance, @params['registration_token'])
     put_band
     @attendance.registration_value = @event.registration_price_for(@attendance, create_params.payment_type_params)
-    invoice = Invoice.from_attendance(@attendance, create_params.payment_type_params)
-    @attendance.payment_type = invoice.payment_type
-    @attendance.invoices << invoice unless @attendance.invoices.include? invoice
+    @attendance.payment_type = create_params.payment_type_params
     save_attendance!
+    Invoice.from_attendance(@attendance)
   end
 
   def self.put_band

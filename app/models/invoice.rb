@@ -42,13 +42,16 @@ class Invoice < ApplicationRecord
     invoice = for_attendance(attendance.id).first
     return invoice if invoice.present?
 
-    Invoice.create(
+    invoice = Invoice.create(
       user: attendance.user,
       amount: attendance.registration_value,
       status: Invoice::PENDING,
       invoiceable: attendance,
       payment_type: payment_type
     )
+
+    attendance.invoices << invoice
+    invoice
   end
 
   def self.from_registration_group(group, payment_type)

@@ -4,7 +4,7 @@ describe QueueService, type: :service do
   describe '.serve_the_queue' do
     context 'with no vacancy' do
       let(:event) { FactoryBot.create :event, attendance_limit: 1 }
-      let!(:pending) { FactoryBot.create :attendance, event: event }
+      let!(:pending) { FactoryBot.create :attendance, event: event, status: :pending }
       let!(:waiting) { FactoryBot.create :attendance, event: event, status: :waiting }
 
       before { QueueService.serve_the_queue(event) }
@@ -13,7 +13,7 @@ describe QueueService, type: :service do
 
     context 'with one vacancy' do
       let(:event) { FactoryBot.create :event, attendance_limit: 2 }
-      let!(:pending) { FactoryBot.create :attendance, event: event }
+      let!(:pending) { FactoryBot.create :attendance, event: event, status: :pending }
       let!(:waiting) { FactoryBot.create :attendance, event: event, status: :waiting }
 
       before { QueueService.serve_the_queue(event) }
@@ -22,7 +22,7 @@ describe QueueService, type: :service do
 
     context 'with more attendances in the queue than vacancies' do
       let(:event) { FactoryBot.create :event, attendance_limit: 3 }
-      let!(:pending) { FactoryBot.create :attendance, event: event }
+      let!(:pending) { FactoryBot.create :attendance, event: event, status: :pending }
       let!(:first_waiting) { FactoryBot.create :attendance, event: event, status: :waiting, created_at: 1.day.from_now }
       let!(:second_waiting) { FactoryBot.create :attendance, event: event, status: :waiting, created_at: Time.zone.today }
       let!(:third_waiting) { FactoryBot.create :attendance, event: event, status: :waiting, created_at: 2.days.ago }

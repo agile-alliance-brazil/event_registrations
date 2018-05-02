@@ -97,7 +97,6 @@ RSpec.describe Attendance, type: :model do
       let!(:confirmed) { FactoryBot.create(:attendance, status: :confirmed) }
       let!(:showed_in) { FactoryBot.create(:attendance, status: :showed_in) }
       let!(:cancelled) { FactoryBot.create(:attendance, status: :cancelled) }
-      let!(:no_show) { FactoryBot.create(:attendance, status: :no_show) }
       let!(:waiting) { FactoryBot.create(:attendance, status: :waiting) }
 
       describe '.pending' do
@@ -161,393 +160,8 @@ RSpec.describe Attendance, type: :model do
     end
   end
 
-  context 'state machine' do
-    before { Timecop.freeze }
-    after { Timecop.return }
-    let(:past_status_date_change) { 2.days.ago }
-
-    describe '#pay' do
-      context 'when is group member' do
-        context 'and the group has a floor' do
-          let(:group) { FactoryBot.create(:registration_group, minimum_size: 10) }
-
-          context 'from pending' do
-            let(:attendance) { FactoryBot.create(:attendance, registration_group: group, last_status_change_date: past_status_date_change) }
-            context 'without invoice' do
-              it 'move to paid upon payment' do
-                attendance.pay
-                expect(attendance.status).to eq 'paid'
-                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-              end
-            end
-
-            context 'with an invoice' do
-              it 'move both attendance and invoice to paid upon payment' do
-                Invoice.from_attendance(attendance, 'gateway')
-                attendance.pay
-                expect(attendance.status).to eq 'paid'
-                expect(Invoice.last.status).to eq 'paid'
-                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-              end
-            end
-          end
-
-          context 'from accepted' do
-            it 'move to paid upon payment' do
-              attendance = FactoryBot.create :attendance, status: 'accepted', registration_group: group, last_status_change_date: past_status_date_change
-              attendance.pay
-              expect(attendance.status).to eq 'paid'
-              expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-            end
-          end
-
-          context 'from cancelled' do
-            it 'stay cancelled' do
-              attendance = FactoryBot.create :attendance, status: 'cancelled', registration_group: group, last_status_change_date: past_status_date_change
-              attendance.pay
-              expect(attendance.status).to eq 'cancelled'
-              expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-            end
-          end
-        end
-
-        context 'and the group having no floor' do
-          let(:group) { FactoryBot.create(:registration_group, minimum_size: 1) }
-
-          context 'from pending' do
-            let(:attendance) { FactoryBot.create(:attendance, registration_group: group, last_status_change_date: past_status_date_change) }
-            context 'without invoice' do
-              it 'move to confirm upon payment' do
-                EmailNotifications.expects(:registration_confirmed).once
-                attendance.pay
-                expect(attendance.status).to eq 'confirmed'
-                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-              end
-            end
-
-            context 'with an invoice' do
-              it 'move attendance to confirm and invoice to paid upon payment' do
-                EmailNotifications.expects(:registration_confirmed).once
-                Invoice.from_attendance(attendance, 'gateway')
-                attendance.pay
-                expect(attendance.status).to eq 'confirmed'
-                expect(Invoice.last.status).to eq 'paid'
-                expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-              end
-            end
-          end
-        end
-      end
-    end
-
-    describe '#cancel' do
-      context 'when is waiting' do
-        let(:attendance) { FactoryBot.create :attendance, status: :waiting, last_status_change_date: 2.days.from_now }
-        let!(:invoice) { FactoryBot.create :invoice, user: attendance.user, invoiceable: attendance }
-        it 'cancels the attendance and the invoice' do
-          attendance.cancel
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is pending' do
-        let(:attendance) { FactoryBot.create :attendance, status: :pending, last_status_change_date: past_status_date_change }
-        let!(:invoice) { FactoryBot.create :invoice, user: attendance.user, invoiceable: attendance }
-        it 'cancels the attendance and the invoice' do
-          attendance.cancel
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is accepted' do
-        let(:attendance) { FactoryBot.create :attendance, status: :accepted, last_status_change_date: past_status_date_change }
-        let!(:invoice) { FactoryBot.create :invoice, user: attendance.user, invoiceable: attendance }
-
-        it 'cancels the attendance' do
-          attendance.cancel
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is confirmed' do
-        let(:attendance) { FactoryBot.create :attendance, status: :confirmed, last_status_change_date: past_status_date_change }
-        let!(:invoice) { FactoryBot.create :invoice, user: attendance.user, invoiceable: attendance }
-        it 'cancels the attendance' do
-          attendance.cancel
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is paid' do
-        let(:attendance) { FactoryBot.create :attendance, status: :paid, last_status_change_date: past_status_date_change }
-        let!(:invoice) { FactoryBot.create :invoice, user: attendance.user, invoiceable: attendance }
-        it 'cancels the attendance' do
-          attendance.cancel
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.invoices.last.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-    end
-
-    describe '#accept' do
-      context 'when is waiting' do
-        it 'keeps the attendance waiting' do
-          EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryBot.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
-          attendance.accept
-          expect(attendance.status).to eq 'waiting'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is pending' do
-        it 'accept the attendance' do
-          EmailNotifications.expects(:registration_group_accepted).once
-          attendance = FactoryBot.create :attendance, last_status_change_date: past_status_date_change
-          attendance.accept
-          expect(attendance.status).to eq 'accepted'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is cancelled' do
-        it 'keep it cancelled' do
-          EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryBot.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
-          attendance.accept
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is paid' do
-        it 'keep it paid' do
-          EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryBot.create :attendance, status: :paid, last_status_change_date: past_status_date_change
-          attendance.accept
-          expect(attendance.status).to eq 'paid'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is already accepted' do
-        it 'keep it accepted' do
-          EmailNotifications.expects(:registration_group_accepted).never
-          attendance = FactoryBot.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
-          attendance.accept
-          expect(attendance.status).to eq 'accepted'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when belongs to a free group' do
-        it 'confirms' do
-          EmailNotifications.expects(:registration_group_accepted).never
-          group = FactoryBot.create :registration_group, discount: 100
-          attendance = FactoryBot.create :attendance, status: :pending, registration_group: group, last_status_change_date: past_status_date_change
-          attendance.accept
-          expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-    end
-
-    describe '#confirm' do
-      context 'when is waiting' do
-        it 'keeps waiting' do
-          EmailNotifications.expects(:registration_confirmed).never
-          attendance = FactoryBot.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
-          attendance.confirm
-          expect(attendance.status).to eq 'waiting'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is pending' do
-        it 'confirms the attendance' do
-          EmailNotifications.expects(:registration_confirmed).once
-          attendance = FactoryBot.create :attendance, last_status_change_date: past_status_date_change
-          Invoice.from_attendance(attendance, 'gateway')
-          attendance.confirm
-          expect(attendance.status).to eq 'confirmed'
-          expect(Invoice.last.status).to eq 'paid'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is accepted' do
-        it 'confirms the attendance' do
-          EmailNotifications.expects(:registration_confirmed).once
-          attendance = FactoryBot.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
-          attendance.confirm
-          expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is cancelled' do
-        it 'keep it cancelled' do
-          EmailNotifications.expects(:registration_confirmed).never
-          attendance = FactoryBot.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
-          attendance.confirm
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is paid' do
-        it 'keep it paid' do
-          EmailNotifications.expects(:registration_confirmed).once
-          attendance = FactoryBot.create :attendance, status: :paid, last_status_change_date: past_status_date_change
-          attendance.confirm
-          expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-    end
-
-    describe '#mark_no_show' do
-      context 'when is waiting' do
-        it 'keep it waiting' do
-          attendance = FactoryBot.create :attendance, status: :waiting, last_status_change_date: past_status_date_change
-          attendance.expects(:cancel_invoice!).never
-          attendance.mark_no_show
-          expect(attendance.status).to eq 'waiting'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is pending' do
-        it 'mark as no show' do
-          attendance = FactoryBot.create :attendance, last_status_change_date: past_status_date_change
-          attendance.expects(:cancel_invoice!).once
-          attendance.mark_no_show
-          expect(attendance.status).to eq 'no_show'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is accepted' do
-        it 'mark as no show' do
-          attendance = FactoryBot.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
-          attendance.expects(:cancel_invoice!).once
-          attendance.mark_no_show
-          expect(attendance.status).to eq 'no_show'
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-        end
-      end
-
-      context 'when is cancelled' do
-        it 'keep it cancelled' do
-          attendance = FactoryBot.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
-          attendance.expects(:cancel_invoice!).never
-          attendance.mark_no_show
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is paid' do
-        it 'keep it paid' do
-          attendance = FactoryBot.create :attendance, status: :paid, last_status_change_date: past_status_date_change
-          attendance.expects(:cancel_invoice!).never
-          attendance.mark_no_show
-          expect(attendance.status).to eq 'paid'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is confirmed' do
-        it 'keep it confirmed' do
-          attendance = FactoryBot.create :attendance, status: :confirmed, last_status_change_date: past_status_date_change
-          attendance.expects(:cancel_invoice!).never
-          attendance.mark_no_show
-          expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-    end
-
-    describe '#dequeue' do
-      context 'when is waiting' do
-        it 'removes the attendance from the queue' do
-          Timecop.freeze
-          now = Time.zone.now
-          creation_time = now.to_i - 10 * 24 * 60 * 60
-          attendance = FactoryBot.create :attendance, status: :waiting, created_at: Time.zone.at(creation_time), last_status_change_date: past_status_date_change
-          email = stub(deliver_now: true)
-          EmailNotifications.expects(:registration_dequeued).once.returns(email)
-          attendance.dequeue
-          expect(attendance.status).to eq 'pending'
-          expect(attendance.queue_time).to eq 240
-          expect(attendance.last_status_change_date.to_i).to eq Time.zone.now.to_i
-          Timecop.return
-        end
-      end
-
-      context 'when is pending' do
-        it 'keep it pending' do
-          attendance = FactoryBot.create :attendance, last_status_change_date: past_status_date_change
-          EmailNotifications.expects(:registration_dequeued).never
-          attendance.dequeue
-          expect(attendance.status).to eq 'pending'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is accepted' do
-        it 'keep it accepted' do
-          attendance = FactoryBot.create :attendance, status: :accepted, last_status_change_date: past_status_date_change
-          EmailNotifications.expects(:registration_dequeued).never
-          attendance.dequeue
-          expect(attendance.status).to eq 'accepted'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is cancelled' do
-        it 'keep it cancelled' do
-          attendance = FactoryBot.create :attendance, status: :cancelled, last_status_change_date: past_status_date_change
-          EmailNotifications.expects(:registration_dequeued).never
-          attendance.dequeue
-          expect(attendance.status).to eq 'cancelled'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is paid' do
-        it 'keep it paid' do
-          attendance = FactoryBot.create :attendance, status: :paid, last_status_change_date: past_status_date_change
-          EmailNotifications.expects(:registration_dequeued).never
-          attendance.dequeue
-          expect(attendance.status).to eq 'paid'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-
-      context 'when is confirmed' do
-        it 'keep it confirmed' do
-          attendance = FactoryBot.create :attendance, status: :confirmed, last_status_change_date: past_status_date_change
-          EmailNotifications.expects(:registration_dequeued).never
-          attendance.dequeue
-          expect(attendance.status).to eq 'confirmed'
-          expect(attendance.last_status_change_date.to_i).to eq past_status_date_change.to_i
-        end
-      end
-    end
-  end
-
   describe '#cancellable?' do
-    let(:attendance) { FactoryBot.build(:attendance) }
+    let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
 
     context 'when is waiting' do
       let(:waiting) { FactoryBot.build(:attendance, status: :waiting) }
@@ -559,62 +173,56 @@ RSpec.describe Attendance, type: :model do
     end
 
     context 'when is accepted' do
-      before { attendance.accept }
+      before { attendance.accepted! }
       it { expect(attendance).to be_cancellable }
     end
 
     context 'when is paid' do
-      before { attendance.pay }
+      before { attendance.paid! }
       it { expect(attendance).to be_cancellable }
     end
 
     context 'when is confirmed' do
-      before do
-        attendance.pay
-        attendance.confirm
-      end
+      before { attendance.confirmed! }
       it { expect(attendance).to be_cancellable }
     end
 
     context 'when is already cancelled' do
-      before { attendance.cancel }
+      before { attendance.cancelled! }
       it { expect(attendance).not_to be_cancellable }
     end
   end
 
   describe '#transferrable?' do
-    let(:attendance) { FactoryBot.build(:attendance) }
+    let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
     context 'when is pending' do
       it { expect(attendance).not_to be_transferrable }
     end
 
     context 'when is accepted' do
-      before { attendance.accept }
+      before { attendance.accepted! }
       it { expect(attendance).not_to be_transferrable }
     end
 
     context 'when is paid' do
-      before { attendance.pay }
+      before { attendance.paid! }
       it { expect(attendance).to be_transferrable }
     end
 
     context 'when is confirmed' do
-      before do
-        attendance.pay
-        attendance.confirm
-      end
+      before { attendance.confirmed! }
       it { expect(attendance).to be_transferrable }
     end
   end
 
   describe '#confirmable?' do
-    let(:attendance) { FactoryBot.build(:attendance) }
+    let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
     context 'when is pending' do
       it { expect(attendance).to be_confirmable }
     end
 
     context 'when is accepted' do
-      before { attendance.accept }
+      before { attendance.accepted! }
       it { expect(attendance).to be_confirmable }
     end
 
@@ -622,70 +230,62 @@ RSpec.describe Attendance, type: :model do
       context 'and grouped' do
         let(:group) { FactoryBot.create(:registration_group) }
         let(:grouped_attendance) { FactoryBot.create(:attendance, registration_group: group) }
-        before { grouped_attendance.pay }
+        before { grouped_attendance.paid! }
         it { expect(grouped_attendance).to be_confirmable }
-      end
-
-      context 'and individual the attendance is automatically confirmed' do
-        before { attendance.pay }
-        it { expect(attendance).not_to be_confirmable }
       end
     end
 
     context 'when it is already confirmed' do
-      before do
-        attendance.pay
-        attendance.confirm
-      end
+      before { attendance.confirmed! }
       it { expect(attendance).not_to be_confirmable }
     end
   end
 
   describe '#recoverable?' do
-    let(:attendance) { FactoryBot.build(:attendance) }
+    let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
     context 'when is pending' do
       it { expect(attendance).not_to be_recoverable }
     end
 
     context 'when it is accepted' do
-      before { attendance.accept }
+      before { attendance.accepted! }
       it { expect(attendance).not_to be_recoverable }
     end
 
     context 'when it is paid' do
-      before { attendance.pay }
+      before { attendance.paid! }
       it { expect(attendance).not_to be_recoverable }
     end
 
     context 'when it is cancelled' do
-      before { attendance.cancel }
+      before { attendance.cancelled! }
       it { expect(attendance).to be_recoverable }
     end
   end
 
   describe '#payable?' do
-    let(:attendance) { FactoryBot.build(:attendance) }
+    let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
     context 'when is pending' do
       it { expect(attendance).to be_payable }
     end
 
     context 'when it is accepted' do
-      before { attendance.accept }
+      before { attendance.accepted! }
       it { expect(attendance).to be_payable }
     end
 
     context 'when it is paid' do
-      before { attendance.pay }
+      before { attendance.paid! }
       it { expect(attendance).not_to be_payable }
     end
 
     context 'when it is cancelled' do
-      before { attendance.cancel }
+      before { attendance.cancelled! }
       it { expect(attendance).not_to be_payable }
     end
 
     context 'when it is confirmed' do
-      before { attendance.confirm }
+      before { attendance.confirmed! }
       it { expect(attendance).not_to be_payable }
     end
   end

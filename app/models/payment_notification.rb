@@ -47,7 +47,7 @@ class PaymentNotification < ApplicationRecord
       invoice.pay_it!
       if invoice.invoiceable_type == 'Attendance'
         attendance = Attendance.where(id: invoice.invoiceable_id).last
-        attendance.pay if attendance.present?
+        attendance.paid! if attendance.present?
       end
     else
       Airbrake.notify("Failed Payment Notification for invoicer: #{invoice.name}", params)

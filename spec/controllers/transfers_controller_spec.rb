@@ -87,7 +87,7 @@ RSpec.describe TransfersController, type: :controller do
         it 'changes the status and the registration value for an attendances and save them' do
           expect(flash[:notice]).to eq I18n.t('flash.transfer.success')
           expect(assigned_origin.status).to eq 'cancelled'
-          expect(assigned_destination.status).to eq 'confirmed'
+          expect(assigned_destination.status).to eq 'paid'
           expect(assigned_destination.registration_value).to eq 420
           expect(response).to redirect_to event_attendance_path(event, origin)
         end
@@ -108,7 +108,7 @@ RSpec.describe TransfersController, type: :controller do
         before { post :create, params: { event_id: event, transfer: { origin_id: origin, destination_id: destination } } }
         it 'changes the status and the registration value for an attendances and save them' do
           expect(assigned_origin.status).to eq 'cancelled'
-          expect(assigned_destination.status).to eq 'confirmed'
+          expect(assigned_destination.status).to eq 'paid'
           expect(assigned_destination.registration_value).to eq 420
         end
       end

@@ -203,7 +203,7 @@ RSpec.describe AttendancesController, type: :controller do
                     end
                   end
                 end
-                context 'with a cancelled attendance existent' do
+                context 'with an existent cancelled attendance' do
                   let!(:attendance) { FactoryBot.create(:attendance, event: event, user: user, status: :cancelled) }
                   it 'does not include the new attendance and send the user to show of attendance' do
                     AgileAllianceService.stubs(:check_member).returns(false)
@@ -603,7 +603,7 @@ RSpec.describe AttendancesController, type: :controller do
       subject(:attendance) { FactoryBot.create(:attendance) }
 
       it 'cancels attendance' do
-        Attendance.any_instance.expects(:cancel)
+        Attendance.any_instance.expects(:cancelled!)
         delete :destroy, params: { event_id: event, id: attendance }
       end
 
@@ -629,9 +629,10 @@ RSpec.describe AttendancesController, type: :controller do
 
     describe 'PATCH #change_status' do
       let!(:event) { FactoryBot.create(:event, organizers: [user]) }
+      let(:group) { FactoryBot.create(:registration_group, event: event) }
 
       context 'accept' do
-        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
+        let(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, status: 'pending') }
         it 'accepts attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'accept' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
@@ -643,7 +644,7 @@ RSpec.describe AttendancesController, type: :controller do
         it 'accepts attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'pay' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
-          expect(Attendance.last.status).to eq 'confirmed'
+          expect(Attendance.last.status).to eq 'paid'
         end
       end
       context 'confirm' do
@@ -657,7 +658,7 @@ RSpec.describe AttendancesController, type: :controller do
       context 'recover' do
         let(:invoice) { FactoryBot.create(:invoice, status: :cancelled) }
         let(:attendance) { FactoryBot.create(:attendance, event: event, invoices: [invoice], status: 'cancelled') }
-        it 'accepts attendance' do
+        it 'recovers the attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'recover' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(attendance.reload).to be_pending

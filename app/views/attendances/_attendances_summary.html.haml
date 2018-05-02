@@ -15,31 +15,31 @@
 
     %div{class: 'row top10'}
       %span{class: 'col-xs-6'}
-        = check_box_tag 'waiting', 'waiting', true, onclick: "submitSearch(#{@event.id});"
+        = check_box_tag 'waiting', 0, true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'waiting', "#{t('attendance.enum.status.waiting')} (#{@waiting_total})"
       %span{class: 'col-xs-6'}
-        = check_box_tag 'pending', 'pending', true, onclick: "submitSearch(#{@event.id});"
+        = check_box_tag 'pending', 1, true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'pending', "#{t('attendance.enum.status.pending', count: @pending_total)} (#{@pending_total})"
 
     %div{class: 'row'}
       %span{class: 'col-xs-6'}
-        = check_box_tag 'accepted', 'accepted', true, onclick: "submitSearch(#{@event.id});"
+        = check_box_tag 'accepted', 2, true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'accepted', "#{t('attendance.enum.status.accepted', count: @accepted_total)} (#{@accepted_total})"
       %span{class: 'col-xs-6'}
-        = check_box_tag 'paid', 'paid', true, onclick: "submitSearch(#{@event.id});"
+        = check_box_tag 'paid', 3, true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'paid', "#{t('attendance.enum.status.paid', count: @paid_total)} (#{@paid_total})"
 
     %div{class: 'row'}
       %span{class: 'col-xs-6'}
-        = check_box_tag 'confirmed', 'confirmed', true, onclick: "submitSearch(#{@event.id});"
+        = check_box_tag 'confirmed', 4, true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'confirmed', "#{t('attendance.enum.status.confirmed', count: @confirmed_total)} (#{@confirmed_total})"
       %span{class: 'col-xs-6'}
-        = check_box_tag 'showed_in', 'showed_in', true, onclick: "submitSearch(#{@event.id});"
+        = check_box_tag 'showed_in', 5, true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'showed_in', "#{t('attendance.enum.status.showed_in', count: @accredited_total)} (#{@accredited_total})"
 
     %div{class: 'row'}
       %span{class: 'col-xs-6'}
-        = check_box_tag 'cancelled', 'cancelled', false, onclick: "submitSearch(#{@event.id});"
+        = check_box_tag 'cancelled', 6, false, onclick: "submitSearch(#{@event.id});"
         = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"
 
     %div{class: 'row top20'}

@@ -8,7 +8,7 @@ class RegistrationNotifier
       AttendanceRepository.instance.for_cancelation(event).each do |attendance|
         Rails.logger.info("[Attendance] #{attendance.to_param}")
         try_with('CANCEL') do
-          attendance.cancel
+          attendance.cancelled!
           EmailNotifications.cancelling_registration(attendance).deliver_now
         end
       end

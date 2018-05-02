@@ -9,7 +9,8 @@ describe AttendanceRepository, type: :repository do
 
     context 'and having attendances' do
       let!(:for_other_event) { FactoryBot.create(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
-      let!(:attendance) { FactoryBot.create(:attendance, event: event, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
+      let!(:other_attendance) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'zoom', last_name: 'monkey', organization: 'beatles', email: 'john@lennon.com') }
 
       let(:all_statuses) { %w[pending accepted paid confirmed cancelled] }
 
@@ -25,7 +26,7 @@ describe AttendanceRepository, type: :repository do
           context 'field part' do
             it { expect(AttendanceRepository.instance.search_for_list(event, 'PT', all_statuses)).to match_array [attendance] }
             it { expect(AttendanceRepository.instance.search_for_list(event, 'bL', all_statuses)).to match_array [attendance] }
-            it { expect(AttendanceRepository.instance.search_for_list(event, 'oO', all_statuses)).to match_array [attendance] }
+            it { expect(AttendanceRepository.instance.search_for_list(event, 'oO', all_statuses)).to match_array [attendance, other_attendance] }
             it { expect(AttendanceRepository.instance.search_for_list(event, 'RUblEs', all_statuses)).to match_array [attendance] }
           end
         end
@@ -38,7 +39,9 @@ describe AttendanceRepository, type: :repository do
 
         context 'entire field' do
           it { expect(AttendanceRepository.instance.search_for_list(event, 'xPTo', all_statuses)).to match_array [attendance, other_attendance] }
-          it { expect(AttendanceRepository.instance.search_for_list(event, 'bLa', all_statuses)).to match_array [attendance, other_attendance] }
+          it do
+            expect(AttendanceRepository.instance.search_for_list(event, 'bLa', all_statuses)).to match_array [attendance, other_attendance]
+          end
           it { expect(AttendanceRepository.instance.search_for_list(event, 'FoO', all_statuses)).to match_array [attendance, other_attendance] }
           it { expect(AttendanceRepository.instance.search_for_list(event, 'sbRUblEs', all_statuses)).to match_array [attendance, other_attendance] }
           it { expect(AttendanceRepository.instance.search_for_list(event, attendance.id, all_statuses)).to match_array [attendance] }
@@ -133,11 +136,11 @@ describe AttendanceRepository, type: :repository do
 
   describe '#for_cancelation' do
     let(:invoice) { FactoryBot.create(:invoice, payment_type: 'gateway') }
-    let!(:to_cancel) { FactoryBot.create(:attendance, event: event, advised_at: 8.days.ago, due_date: 1.day.ago, advised: true, invoices: [invoice]) }
+    let!(:to_cancel) { FactoryBot.create(:attendance, event: event, status: :pending, advised_at: 8.days.ago, due_date: 1.day.ago, advised: true, invoices: [invoice]) }
     let(:out_invoice) { FactoryBot.create(:invoice, payment_type: 'gateway') }
-    let!(:out) { FactoryBot.create(:attendance, event: event, advised_at: 5.days.ago, advised: true, invoices: [out_invoice]) }
+    let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, advised_at: 5.days.ago, advised: true, invoices: [out_invoice]) }
     let(:other_out_invoice) { FactoryBot.create(:invoice, payment_type: 'gateway') }
-    let!(:other_out) { FactoryBot.create(:attendance, event: event, advised_at: nil, advised: false, created_at: 15.days.ago, invoices: [other_out_invoice]) }
+    let!(:other_out) { FactoryBot.create(:attendance, event: event, status: :pending, advised_at: nil, advised: false, created_at: 15.days.ago, invoices: [other_out_invoice]) }
     it { expect(AttendanceRepository.instance.for_cancelation(event)).to eq [to_cancel] }
   end
 

@@ -5,7 +5,7 @@ RSpec.describe PaymentNotificationsController, type: :controller do
   after { WebMock.disable! }
 
   describe 'POST #create' do
-    let(:attendance) { FactoryBot.create(:attendance) }
+    let(:attendance) { FactoryBot.create(:attendance, status: :pending) }
     let(:invoice) { FactoryBot.create(:invoice, invoiceable: attendance) }
 
     context 'when pagseguro' do
@@ -18,7 +18,7 @@ RSpec.describe PaymentNotificationsController, type: :controller do
             post :create, params: { type: 'pag_seguro', status: 'Aprovada', transacao_id: '12345678', pedido: invoice.id, store_code: APP_CONFIG[:pag_seguro][:store_code] }
             expect(PaymentNotification.count).to eq 1
             expect(Invoice.last.status).to eq 'paid'
-            expect(Attendance.last.status).to eq 'confirmed'
+            expect(Attendance.last.status).to eq 'paid'
           end
         end
 

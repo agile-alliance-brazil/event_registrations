@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :attendance do
-    status :pending
+    status { %i[pending accepted paid confirmed].sample }
     association :event
     association :user
     first_name { |a| a.user.first_name }

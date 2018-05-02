@@ -9,7 +9,7 @@
 #  user_id                 :integer
 #  registration_group_id   :integer
 #  registration_date       :datetime
-#  status                  :string(255)
+#  status                  :integer
 #  email_sent              :boolean          default(FALSE)
 #  created_at              :datetime
 #  updated_at              :datetime
@@ -48,10 +48,18 @@
 #
 
 class Attendance < ApplicationRecord
-  include Concerns::LifeCycle
   before_create :set_last_status_change
 
   enum job_role: %i[not_informed student analyst manager vp president clevel coach other developer]
+  enum status: { waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6 }
+
+  scope :committed_to, -> { where(status: %i[paid confirmed showed_in]) }
+  scope :active, -> { where('status <> 0 AND status <> 3') }
+  scope :not_cancelled, -> { where('status <> 3') }
+  scope :last_biweekly_active, -> { active.where('created_at > ?', 15.days.ago) }
+  scope :waiting_approval, -> { where('status = 1 AND registration_group_id IS NOT NULL') }
+  scope :non_free, -> { where('registration_value > 0') }
+  scope :with_time_in_queue, -> { where('queue_time > 0') }
 
   belongs_to :event
   belongs_to :user
@@ -71,7 +79,7 @@ class Attendance < ApplicationRecord
   validates :phone, format: { with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true }
 
   validate :registration_group_valid?
-  validate :not_cancelled_email_event_uniqueness?, on: :create
+  validate :duplicated_active_email_in_event?, on: :create
 
   after_save :update_group_invoice
 
@@ -80,11 +88,6 @@ class Attendance < ApplicationRecord
   delegate :name, to: :event, prefix: :event, allow_nil: true
 
   usar_como_cpf :cpf
-
-  scope :last_biweekly_active, -> { active.where('created_at > ?', 15.days.ago) }
-  scope :waiting_approval, -> { where("status = 'pending' AND registration_group_id IS NOT NULL") }
-  scope :non_free, -> { where('registration_value > 0') }
-  scope :with_time_in_queue, -> { where('queue_time > 0') }
 
   def full_name
     [first_name, last_name].join(' ')
@@ -113,10 +116,6 @@ class Attendance < ApplicationRecord
     update(advised: true, advised_at: advised_time, due_date: [DateService.instance.skip_weekends(advised_time, event.days_to_charge), event.start_date].min)
   end
 
-  def free?
-    registration_group.try(:free?)
-  end
-
   def to_pay_the_difference?
     (paid? || confirmed?) && grouped? && registration_group.incomplete?
   end
@@ -131,6 +130,26 @@ class Attendance < ApplicationRecord
 
   def band_value
     registration_period.try(:price) || registration_quota.try(:price)
+  end
+
+  def cancellable?
+    waiting? || pending? || accepted? || paid? || confirmed?
+  end
+
+  def transferrable?
+    paid? || confirmed?
+  end
+
+  def confirmable?
+    paid? || pending? || accepted?
+  end
+
+  def recoverable?
+    cancelled?
+  end
+
+  def payable?
+    pending? || accepted?
   end
 
   private
@@ -151,7 +170,7 @@ class Attendance < ApplicationRecord
     end
   end
 
-  def not_cancelled_email_event_uniqueness?
+  def duplicated_active_email_in_event?
     duplicated_attendance = event&.attendances&.not_cancelled&.find_by(email: email)
     return if duplicated_attendance.blank?
     errors.add(:email, I18n.t('flash.attendance.create.already_existent'))

@@ -397,7 +397,7 @@ RSpec.describe EventsController, type: :controller do
         it 'returns the event_persisted created' do
           now = Time.zone.local(2015, 4, 30, 0, 0, 0)
           Timecop.freeze(now)
-          FactoryBot.create(:attendance, event: event, user: user, status: 'cancelled')
+          FactoryBot.create(:attendance, event: event, user: user, status: :cancelled)
           Timecop.return
           other_attendance = FactoryBot.create(:attendance, event: event, user: user)
           get :show, params: { id: event.id }

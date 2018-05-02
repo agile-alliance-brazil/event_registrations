@@ -12,7 +12,7 @@ describe PaymentNotification, type: :model do
   context 'callbacks' do
     describe 'pagseguro payment' do
       before(:each) do
-        @attendance = FactoryBot.create(:attendance, registration_date: Time.zone.now)
+        @attendance = FactoryBot.create(:attendance, registration_date: Time.zone.now, status: :pending)
         @invoice = Invoice.from_attendance(@attendance, 'gateway')
         expect(@attendance).to be_pending
 

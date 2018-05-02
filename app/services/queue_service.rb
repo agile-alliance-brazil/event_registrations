@@ -7,7 +7,9 @@ class QueueService
 
     until event.full? || event_queue.empty?
       attendance = event_queue.shift
-      attendance.dequeue
+      attendance.pending!
+      attendance.update(queue_time: ((Time.zone.now - attendance.created_at) / 1.hour).round)
+      EmailNotifications.registration_dequeued(attendance).deliver_now if attendance.reload.pending?
     end
   end
 end

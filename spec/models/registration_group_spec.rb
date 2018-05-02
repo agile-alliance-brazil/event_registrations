@@ -88,7 +88,7 @@ RSpec.describe RegistrationGroup, type: :model do
       let(:group) { FactoryBot.create :registration_group, event: event }
       before do
         2.times { @last_attendance = FactoryBot.create(:attendance, registration_group: group) }
-        @last_attendance.cancel
+        @last_attendance.cancelled!
       end
       it { expect(group.qtd_attendances).to eq 1 }
     end
@@ -112,7 +112,7 @@ RSpec.describe RegistrationGroup, type: :model do
     context 'when has cancelled attendances' do
       let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 440.00) }
       let!(:other) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 530.00) }
-      before { other.cancel }
+      before { other.cancelled! }
       it { expect(group.total_price).to eq 440.00 }
     end
   end

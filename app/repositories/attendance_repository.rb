@@ -3,19 +3,19 @@
 class AttendanceRepository
   include Singleton
 
-  def search_for_list(event, text, status)
-    Attendance.where('event_id = ? AND ((first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?))',
-                     event.id, "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%", text.to_s, status).order(updated_at: :desc)
+  def search_for_list(event, text, statuses)
+    statuses_keys = statuses.map { |status| Attendance.statuses[status] }
+    Attendance.where('event_id = ? AND ((first_name LIKE ? OR last_name LIKE ? OR organization LIKE ? OR email LIKE ? OR id = ?) AND attendances.status IN (?))', event.id, "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%", text.to_s, statuses_keys).order(updated_at: :desc)
   end
 
   def for_cancelation_warning(event)
     older_than(event.days_to_charge.days.ago)
-      .where("event_id = ? AND (((attendances.status = 'pending' AND attendances.registration_group_id IS NULL) OR (attendances.status = 'accepted')) AND advised = ?)", event.id, false)
+      .where('event_id = ? AND (((attendances.status = 1 AND attendances.registration_group_id IS NULL) OR (attendances.status = 2)) AND advised = ?)', event.id, false)
       .joins(:invoices).where('invoices.payment_type = ?', Invoice.payment_types[:gateway])
   end
 
   def for_cancelation(event)
-    Attendance.where("event_id = ? AND (attendances.status IN ('pending', 'accepted') AND advised = true AND due_date < current_timestamp)", event.id)
+    Attendance.where('event_id = ? AND (attendances.status IN (1, 2) AND advised = true AND due_date < current_timestamp)', event.id)
               .joins(:invoices).where('invoices.payment_type = ?', Invoice.payment_types[:gateway])
   end
 

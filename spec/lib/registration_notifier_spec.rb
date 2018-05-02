@@ -16,7 +16,7 @@ describe RegistrationNotifier do
       let!(:event) { FactoryBot.create :event, start_date: 1.month.from_now, end_date: 2.months.from_now }
       context 'and one attendance pending' do
         context 'advised more than 7 days ago' do
-          let!(:attendance) { FactoryBot.create(:attendance, event: event, advised: true, advised_at: 8.days.ago, due_date: 8.days.ago) }
+          let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :pending, advised: true, advised_at: 8.days.ago, due_date: 8.days.ago) }
           let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
           it 'notifies and cancel the pending attendance' do
             EmailNotifications.expects(:cancelling_registration).once
@@ -26,7 +26,7 @@ describe RegistrationNotifier do
         end
 
         context 'advised less than 7 days ago' do
-          let!(:attendance) { FactoryBot.create(:attendance, event: event, advised: true, advised_at: 6.days.ago, due_date: 6.days.ago) }
+          let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :pending, advised: true, advised_at: 6.days.ago, due_date: 6.days.ago) }
           it 'not send the notification and keep the attendance pending' do
             EmailNotifications.expects(:cancelling_registration).never
             notifier.cancel
@@ -36,7 +36,7 @@ describe RegistrationNotifier do
       end
 
       context 'not advised' do
-        let!(:attendance) { FactoryBot.create(:attendance, event: event, advised: false) }
+        let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :pending, advised: false) }
         it 'not send the notification and keep the attendance pending' do
           EmailNotifications.expects(:cancelling_registration).never
           notifier.cancel
@@ -99,12 +99,12 @@ describe RegistrationNotifier do
       context 'and one attendance older than 7 days' do
         context 'with gateway as payment type' do
           context 'and not advised' do
-            let!(:attendance) { FactoryBot.create(:attendance, event: event, last_status_change_date: 7.days.ago, advised: false) }
+            let!(:attendance) { FactoryBot.create(:attendance, status: :pending, event: event, last_status_change_date: 7.days.ago, advised: false) }
             let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
             it 'notifies the pending attendance and mark as advised' do
               EmailNotifications.expects(:cancelling_registration_warning).once
               notifier.cancel_warning
-              expect(Attendance.last.advised).to be_truthy
+              expect(Attendance.last.advised).to be true
               expect(Attendance.last.advised_at).to be_within(30.seconds).of Time.zone.now
             end
           end

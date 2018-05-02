@@ -59,23 +59,27 @@ class AttendancesController < ApplicationController
   end
 
   def destroy
-    @attendance.cancel
+    @attendance.cancelled!
+    @attendance.invoices.map(&:cancel_it!)
     redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') })
   end
 
   def change_status
     if params[:new_status] == 'accept'
-      @attendance.accept
+      @attendance.accepted!
+      EmailNotifications.registration_group_accepted(@attendance).deliver_now
     elsif params[:new_status] == 'recover'
-      @attendance.recover
+      @attendance.pending!
+      @attendance.invoices.map(&:recover_it!)
     elsif params[:new_status] == 'pay'
-      @attendance.pay
+      @attendance.paid!
     elsif params[:new_status] == 'confirm'
-      @attendance.confirm
+      @attendance.confirmed!
+      EmailNotifications.registration_confirmed(@attendance).deliver_now
     elsif params[:new_status] == 'mark_show'
-      @attendance.mark_show
+      @attendance.showed_in!
     else
-      @attendance.dequeue
+      @attendance.pending!
     end
     redirect_to event_attendances_path(@event)
   end

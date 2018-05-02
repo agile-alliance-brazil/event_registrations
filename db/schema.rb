@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170507021846) do
+ActiveRecord::Schema.define(version: 20180502154501) do
 
   create_table "attendances", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "event_id"
     t.integer "user_id"
     t.integer "registration_group_id"
     t.datetime "registration_date"
-    t.string "status"
+    t.integer "status"
     t.boolean "email_sent", default: false
     t.datetime "created_at"
     t.datetime "updated_at"

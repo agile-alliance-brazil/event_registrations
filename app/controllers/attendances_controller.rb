@@ -13,6 +13,7 @@ class AttendancesController < ApplicationController
   def create
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
+    Invoice.from_attendance(@attendance) if @attendance.valid?
     return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('flash.attendance.create.success') }) if @attendance.valid?
     flash[:error] = @attendance.errors.full_messages.join(', ')
     render :new
@@ -107,7 +108,7 @@ class AttendancesController < ApplicationController
 
   def timeout
     respond_to do |format|
-      format.html { render file: Rails.root.join('public', '408'), layout: false, status: 408 }
+      format.html { render file: Rails.root.join('public', '408'), layout: false, status: :request_timeout }
       format.js { render plain: '408 Request Timeout', status: :request_timeout }
     end
   end

@@ -57,5 +57,7 @@ module Current
     config.assets.version = '1.0'
     # config.assets.css_compressor = :yui
     # config.assets.js_compressor = :uglifier
+    #
+    Rails.application.config.active_record.sqlite3.represent_boolean_as_integer = true
   end
 end

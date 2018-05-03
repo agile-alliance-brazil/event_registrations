@@ -588,13 +588,13 @@ RSpec.describe AttendancesController, type: :controller do
           let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
           before { get :show, params: { event_id: event, id: attendance } }
           it { expect(assigns[:attendance]).to eq attendance }
-          it { expect(response).to be_success }
+          it { expect(response).to be_successful }
         end
 
         context 'having no invoice' do
           before { get :show, params: { event_id: event, id: attendance } }
           it { expect(assigns[:attendance]).to eq attendance }
-          it { expect(response).to be_success }
+          it { expect(response).to be_successful }
         end
       end
     end

@@ -19,7 +19,6 @@ class CreateAttendance
     @attendance.registration_value = @event.registration_price_for(@attendance, create_params.payment_type_params)
     @attendance.payment_type = create_params.payment_type_params
     save_attendance!
-    Invoice.from_attendance(@attendance)
   end
 
   def self.put_band

@@ -42,7 +42,7 @@
         %h3= t('attendances.new.form.attendance_address')
         .field{class: 'form-field'}
           = form.label t('activerecord.attributes.attendance.country'), class: 'control-label required'
-          = form.localized_country_select :country, class: 'form-control'
+          = form.country_select :country, class: 'form-control'
           .div{class: 'error-field'}
             = @attendance.errors[:country].join(', ')
         .field{class: 'form-field'}

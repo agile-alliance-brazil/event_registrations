@@ -54,7 +54,7 @@ class RegistrationGroup < ApplicationRecord
   end
 
   def total_price
-    attendances.active.map(&:registration_value).sum
+    attendances.active.sum(:registration_value)
   end
 
   def price?

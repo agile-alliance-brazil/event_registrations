@@ -103,9 +103,10 @@ RSpec.describe RegistrationGroup, type: :model do
     end
 
     context 'with more attendances and 20% discount' do
-      let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 440.00) }
-      let!(:other) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 530.00) }
-      let!(:another) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 700.00) }
+      let!(:first_attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 440.00) }
+      let!(:second_attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 530.00) }
+      let!(:third_attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: 700.00) }
+      let!(:fourth_attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, registration_value: nil) }
       it { expect(group.total_price).to eq 1670.00 }
     end
 

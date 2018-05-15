@@ -1,6 +1,7 @@
 %tr{ id: "attendance_#{attendance.id}" }
   %td= link_to "#{attendance.last_name}, #{attendance.first_name}", event_attendance_path(event, attendance), method: :get
   %td= attendance.organization
+  %td= attendance.email
 
   %td
     - if attendance.registration_group.present?

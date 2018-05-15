@@ -2,11 +2,12 @@
 
 class AttendanceExportService
   def self.to_csv(event)
-    attendance_list = event.attendances.where(status: :showed_in)
+    attendance_list = event.attendances.sort_by(&:full_name)
     CSV.generate do |csv|
-      csv << %i[id registration_date first_name last_name organization email payment_type group_name city state value experience_in_agility education_level job_role]
+      csv << %i[id status registration_date first_name last_name organization email payment_type group_name city state value experience_in_agility education_level job_role]
       attendance_list.each do |attendance|
         csv << [attendance.id,
+                I18n.t("attendance.enum.status.#{attendance.status}", count: 1),
                 attendance.registration_date,
                 attendance.first_name,
                 attendance.last_name,

@@ -14,9 +14,10 @@ describe AttendanceExportService, type: :service do
       end
 
       let(:expected) do
-        title = "id,registration_date,first_name,last_name,organization,email,payment_type,group_name,city,state,value,experience_in_agility,education_level,job_role\n"
+        title = "id,status,registration_date,first_name,last_name,organization,email,payment_type,group_name,city,state,value,experience_in_agility,education_level,job_role\n"
         body =
           "#{attendance.id},"\
+          "#{I18n.t("attendance.enum.status.#{attendance.status}", count: 1)},"\
           "#{attendance.registration_date},"\
           "#{attendance.first_name},"\
           "#{attendance.last_name},"\

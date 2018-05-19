@@ -81,8 +81,6 @@ class Attendance < ApplicationRecord
   validate :registration_group_valid?
   validate :duplicated_active_email_in_event?, on: :create
 
-  after_save :update_group_invoice
-
   delegate :token, to: :registration_group, allow_nil: true
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
   delegate :name, to: :event, prefix: :event, allow_nil: true
@@ -153,10 +151,6 @@ class Attendance < ApplicationRecord
   end
 
   private
-
-  def update_group_invoice
-    registration_group.update_invoice if registration_group.present? && registration_value.present?
-  end
 
   def set_last_status_change
     self.last_status_change_date = Time.zone.now if last_status_change_date.blank?

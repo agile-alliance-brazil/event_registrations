@@ -14,6 +14,7 @@ class AttendancesController < ApplicationController
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
     Invoice.from_attendance(@attendance) if @attendance.valid?
+    @attendance.registration_group&.update_invoice
     return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('flash.attendance.create.success') }) if @attendance.valid?
     flash[:error] = @attendance.errors.full_messages.join(', ')
     render :new
@@ -62,6 +63,7 @@ class AttendancesController < ApplicationController
   def destroy
     @attendance.cancelled!
     @attendance.invoices.map(&:cancel_it!)
+    @attendance.registration_group&.update_invoice
     redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') })
   end
 
@@ -82,6 +84,7 @@ class AttendancesController < ApplicationController
     else
       @attendance.pending!
     end
+    @attendance.registration_group&.update_invoice
     redirect_to event_attendances_path(@event)
   end
 

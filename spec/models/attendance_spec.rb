@@ -60,15 +60,6 @@ RSpec.describe Attendance, type: :model do
   context 'callbacks' do
     let!(:event) { FactoryBot.create :event }
     describe '#update_group_invoice' do
-      context 'having a registration group' do
-        let(:group) { FactoryBot.create :registration_group, event: event }
-        let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, amount: 50.00 }
-        it 'updates the group invoice when add attendace to the group' do
-          RegistrationGroup.any_instance.expects(:update_invoice).once
-          FactoryBot.create(:attendance, registration_group: group, registration_value: 100)
-        end
-      end
-
       context 'without a registration group' do
         it 'updates the group invoice when add attendance to the group' do
           RegistrationGroup.any_instance.expects(:update_invoice).never

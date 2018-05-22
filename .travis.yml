@@ -1,10 +1,12 @@
+dist: trusty
+sudo: required
 language: ruby
+cache: bundler
 rvm:
-  - 2
-before_install:
-  - gem source -u
-  - gem uninstall -i /home/travis/.rvm/gems/ruby-2.5.1@global -x bundler
-  - gem install bundler -v 1.16.0
+  - 2.5.1
+before_install: gem install bundler
+services:
+  - mysql
 before_script:
   - cp ./config/config.{example,yml}
   - cp ./config/database.{travis,yml}
@@ -15,4 +17,3 @@ script:
   - RAILS_ENV=test bundle exec rake db:drop db:create db:migrate db:test:prepare
   - bundle exec rake ci
 bundler_args: --without development production
-

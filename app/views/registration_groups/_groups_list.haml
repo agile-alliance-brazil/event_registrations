@@ -12,14 +12,14 @@
         %td= link_to group.name, event_registration_group_path(event, group)
         %td= group.leader_name
         %td= "#{group.discount}%"
-        %td= number_to_currency(group.amount)
+        %td= number_to_currency(group.amount)3.10.1
         %td= group.qtd_attendances
         %td{class: 'form-actions'}
           = link_to event_registration_group_path(event, group), method: :delete, data: { confirm: t('registration_group.destroy_confirmation', registration_group: group.name ) } do
-            %span{ class: 'fa fa-trash' }
+            %span{ class: 'far fa-trash-alt' }
           = link_to edit_event_registration_group_path(event, group), class: 'btn btn-link' do
-            %span{ class: 'fa fa-pencil' }
+            %span{ class: 'far fa-edit' }
           %span{class: 'btn-token-clipboard', 'data-clipboard-text': group.token}
-            %i{ class: 'fa fa-clipboard hand-pointer', title: t('registration_groups.index.token_clipboard_tooltip'), 'data-toggle': 'tooltip' }
+            %i{ class: 'far fa-clipboard hand-pointer', title: t('registration_groups.index.token_clipboard_tooltip'), 'data-toggle': 'tooltip' }
 - else
   %h5= t('events.show.no_groups_message')

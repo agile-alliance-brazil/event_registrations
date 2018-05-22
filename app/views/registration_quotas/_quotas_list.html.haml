@@ -18,9 +18,9 @@
           %td= quota.attendances.active.count
           %td
             = link_to event_registration_quota_path(event, quota), method: :delete, class: 'btn btn-link' do
-              %span{ class: 'fa fa-trash' }
+              %span{ class: 'far fa-trash-alt' }
             = link_to edit_event_registration_quota_path(event, quota), class: 'btn btn-link' do
-              %span{ class: 'fa fa-pencil' }
+              %span{ class: 'far fa-edit' }
 
   - else
     %h5= t('events.show.no_quotas_message')

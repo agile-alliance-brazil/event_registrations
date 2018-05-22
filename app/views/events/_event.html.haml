@@ -21,19 +21,19 @@
         = "#{t('actions.list_groups')} (#{event.registration_groups.count})"
 
       = link_to to_approval_event_attendances_path(event), class: 'btn btn-link' do
-        %i{class: 'fa fa-check-square-o'}
+        %i{class: 'fa fa-check'}
         = "#{t('actions.to_approval')} (#{event.attendances.waiting_approval.count})"
 
       = link_to waiting_list_event_attendances_path(event), class: 'btn btn-link' do
-        %i{class: 'fa fa-check-square-o'}
+        %i{class: 'fa fa-list'}
         = "#{t('actions.waiting_list')} (#{event.attendances.waiting.count})"
 
     - if can? :edit, event
       = link_to edit_event_path(event), class: 'btn btn-link' do
-        %span{class: 'fa fa-pencil'}
+        %span{class: 'far fa-edit'}
         = t('events.edit.button')
 
     - if can? :destroy, event
       = link_to event_path(event), method: :delete, class: 'btn btn-link' do
-        %span{class: 'fa fa-trash'}
+        %span{class: 'far fa-trash-alt'}
         = t('events.delete.button')

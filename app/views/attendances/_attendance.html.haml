@@ -22,11 +22,11 @@
 
     - if attendance.confirmable?
       = link_to change_status_event_attendance_path(event, attendance, :confirm), method: :patch do
-        %i{class: 'fas fa-check', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', title: t('actions.confirm')}
+        %i{class: 'far fa-calendar-check', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', title: t('actions.confirm')}
 
     - if attendance.confirmed?
       = link_to change_status_event_attendance_path(event, attendance, :mark_show), method: :patch do
-        %i{class: 'fa fa-id-card-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', title: t('actions.receive_credential')}
+        %i{class: 'far fa-id-card', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', title: t('actions.receive_credential')}
 
     - if attendance.cancellable?
       = link_to event_attendance_path(event, attendance), method: :delete, data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) } do
@@ -34,7 +34,7 @@
 
     - if can?(:dequeue, attendance) && (attendance.waiting?)
       = link_to change_status_event_attendance_path(event, attendance, :dequeue), method: :patch do
-        %i{class: 'fa fa-thumbs-o-up', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  title: t('attendance.list.actions.dequeue')}
+        %i{class: 'far fa-thumbs-up', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  title: t('attendance.list.actions.dequeue')}
 
     = link_to edit_event_attendance_path(event, attendance), method: :get do
-      %i{class: 'fa fa-pencil', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  title: t('actions.edit')}
+      %i{class: 'far fa-edit', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  title: t('actions.edit')}

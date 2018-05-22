@@ -139,6 +139,6 @@ class Event < ApplicationRecord
 
   def period_valid?
     return unless start_date.present? && end_date.present?
-    errors.add(:end_date, :invalid_period) if start_date > end_date
+    errors.add(:end_date, I18n.t('activerecord.errors.models.event.attributes.end_date.invalid_period')) if start_date > end_date
   end
 end

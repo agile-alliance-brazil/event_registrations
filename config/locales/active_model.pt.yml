@@ -45,6 +45,11 @@ pt:
         restrict_dependent_destroy:
           has_one: Não é possível excluir o registro pois existe um %{record} dependente
           has_many: Não é possível excluir o registro pois existem %{record} dependentes
+      models:
+        event:
+          attributes:
+            end_date:
+              invalid_period: "A data final deve ser posterior à data inicial."
     models:
       event:
         one: Evento

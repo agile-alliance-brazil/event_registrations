@@ -9,7 +9,6 @@
     %meta{'http-equiv'=>'Content-Type', :content=>'text/html; charset=utf-8'}/
     %link{'rel' => 'shortcut icon', 'href' => '/favicon.ico'}/
     = csrf_meta_tag
-    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
     = stylesheet_link_tag :application
     = javascript_include_tag :application
     = yield(:head)
@@ -73,3 +72,6 @@
       })
 
   = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js'
+  = javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.8/js/solid.js'
+  = javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.8/js/regular.js'
+  = javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js'

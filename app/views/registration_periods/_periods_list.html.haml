@@ -19,8 +19,8 @@
           %td= number_to_currency period.price
           %td
             = link_to event_registration_period_path(event, period), method: :delete, class: 'btn btn-link' do
-              %span{ class: 'fa fa-trash' }
+              %span{ class: 'far fa-trash-alt' }
             = link_to edit_event_registration_period_path(event, period), class: 'btn btn-link' do
-              %span{ class: 'fa fa-pencil' }
+              %span{ class: 'far fa-edit' }
   - else
     %h5= t('events.show.no_periods_message')

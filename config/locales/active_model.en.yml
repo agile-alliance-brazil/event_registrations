@@ -45,6 +45,11 @@ en:
         restrict_dependent_destroy:
           has_one: Cannot delete record because a dependent %{record} exists
           has_many: Cannot delete record because dependent %{record} exist
+      models:
+        event:
+          attributes:
+            end_date:
+              invalid_period: "End date must be after the start date."
     attributes:
       attendance:
         full_name: "Name"

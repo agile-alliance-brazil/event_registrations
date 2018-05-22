@@ -408,21 +408,14 @@ RSpec.describe Event, type: :model do
     let(:event) { FactoryBot.create :event }
 
     context 'having attendances' do
-      let(:paid_invoice) { FactoryBot.create :invoice, amount: 150 }
-      let(:confirmed_invoice) { FactoryBot.create :invoice, amount: 500 }
-      let(:showed_invoice) { FactoryBot.create :invoice, amount: 800 }
-      let(:pending_invoice) { FactoryBot.create :invoice, amount: 140 }
-      let(:waiting_invoice) { FactoryBot.create :invoice, amount: 20 }
-      let(:cancelled_invoice) { FactoryBot.create :invoice, amount: 5000, status: :cancelled }
+      let!(:paid_attendance) { FactoryBot.create :attendance, event: event, status: :paid }
+      let!(:confirmed_attendance) { FactoryBot.create :attendance, event: event, status: :confirmed }
+      let!(:showed_attendance) { FactoryBot.create :attendance, event: event, status: :showed_in }
+      let!(:pending_attendance) { FactoryBot.create :attendance, event: event, status: :pending }
+      let!(:waiting_attendance) { FactoryBot.create :attendance, event: event, status: :waiting }
+      let!(:cancelled_attendance) { FactoryBot.create :attendance, event: event, status: :cancelled }
 
-      let!(:paid_attendance) { FactoryBot.create :attendance, event: event, invoices: [paid_invoice], status: :paid }
-      let!(:confirmed_attendance) { FactoryBot.create :attendance, event: event, invoices: [confirmed_invoice], status: :confirmed }
-      let!(:showed_attendance) { FactoryBot.create :attendance, event: event, invoices: [showed_invoice], status: :showed_in }
-      let!(:pending_attendance) { FactoryBot.create :attendance, event: event, invoices: [pending_invoice], status: :pending }
-      let!(:waiting_attendance) { FactoryBot.create :attendance, event: event, invoices: [waiting_invoice], status: :waiting }
-      let!(:cancelled_attendance) { FactoryBot.create :attendance, event: event, invoices: [cancelled_invoice], status: :cancelled }
-
-      it { expect(event.average_ticket).to eq 483 }
+      it { expect(event.average_ticket).to eq 400 }
     end
 
     context 'having no attendances' do

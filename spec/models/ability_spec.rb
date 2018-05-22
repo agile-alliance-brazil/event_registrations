@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Ability, type: :model do
+RSpec.describe Ability, type: :model do
   let(:user) { FactoryBot.create :user }
   let(:event) { FactoryBot.create :event }
   let(:deadline) { event.end_date }
@@ -54,15 +54,15 @@ describe Ability, type: :model do
 
     describe 'can create a new attendance if:' do
       it '- before deadline' do
-        Timecop.freeze(deadline - 1.day) do
-          expect(ability).to be_able_to(:create, Attendance)
-        end
+        travel_to(deadline - 1.day)
+        expect(ability).to be_able_to(:create, Attendance)
+        travel_back
       end
 
       it "- after deadline can't register" do
-        Timecop.freeze(deadline + 1.second) do
-          expect(ability).not_to be_able_to(:create, Attendance)
-        end
+        travel_to(deadline + 1.second)
+        expect(ability).not_to be_able_to(:create, Attendance)
+        travel_back
       end
     end
   end

@@ -10,13 +10,13 @@ class PagSeguroService
     end
   end
 
-  def self.checkout(invoice, payment_request)
-    payment_request.reference = invoice.id
+  def self.checkout(attendance, payment_request)
+    payment_request.reference = attendance.id
 
     payment_request.items << {
-      id: invoice.id,
-      description: invoice.name,
-      amount: invoice.amount,
+      id: attendance.id,
+      description: attendance.full_name,
+      amount: attendance.registration_value,
       weight: 0
     }
 

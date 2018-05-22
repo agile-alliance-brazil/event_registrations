@@ -30,8 +30,8 @@ describe AttendanceHelper, type: :helper do
 
   describe '#payment_types_options' do
     it 'returns the payment type values' do
-      options = Invoice.payment_types.map do |payment_type, _|
-        [I18n.t("activerecord.attributes.invoice.payment_types.#{payment_type}"), payment_type]
+      options = Attendance.payment_types.map do |payment_type, _|
+        [I18n.t("activerecord.attributes.attendance.payment_types.#{payment_type}"), payment_type]
       end
       expect(payment_types_options).to eq(options)
     end

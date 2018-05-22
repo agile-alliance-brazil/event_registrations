@@ -3,7 +3,6 @@
 RSpec.describe Transfer, type: :model do
   let(:origin_date) { 1.month.from_now }
   let!(:origin) { FactoryBot.create(:attendance, id: 1, status: :paid, registration_value: 420, registration_date: origin_date) }
-  let!(:origin_invoice) { Invoice.from_attendance(origin) }
   let!(:destination) { FactoryBot.create(:attendance, id: 2, status: :pending, registration_value: 540) }
   let(:transfer) { Transfer.build(origin_id: origin.id, destination_id: destination.id) }
 
@@ -72,30 +71,6 @@ RSpec.describe Transfer, type: :model do
       expect(assigned_destination.registration_date.to_i).to eq destination_date.to_i
       expect(assigned_destination.status).to eq 'paid'
       expect(assigned_destination.registration_value).to eq 420
-    end
-
-    context 'with paid origin' do
-      it 'also changes the related invoice' do
-        origin_invoice = Invoice.from_attendance(origin, 'gateway')
-        origin_invoice.pay_it!
-
-        Invoice.from_attendance(destination, 'gateway')
-        transfer.save
-        expect(assigned_origin.invoices.last.status).to eq 'cancelled'
-        expect(assigned_destination.invoices.last.status).to eq 'paid'
-        expect(assigned_destination.invoices.last.amount).to eq 420
-      end
-    end
-
-    context 'with confirmed origin' do
-      let!(:origin) { FactoryBot.create(:attendance, id: 1, status: :confirmed, registration_value: 420, registration_date: origin_date) }
-      it 'also changes the related invoice' do
-        origin_invoice = Invoice.from_attendance(origin, 'gateway')
-        origin_invoice.pay_it!
-        Invoice.from_attendance(destination, 'gateway')
-        transfer.save
-        expect(assigned_destination.invoices.last.status).to eq 'paid'
-      end
     end
   end
 

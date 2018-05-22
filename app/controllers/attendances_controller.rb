@@ -13,8 +13,6 @@ class AttendancesController < ApplicationController
   def create
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
-    Invoice.from_attendance(@attendance) if @attendance.valid?
-    @attendance.registration_group&.update_invoice
     return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('flash.attendance.create.success') }) if @attendance.valid?
     flash[:error] = @attendance.errors.full_messages.join(', ')
     render :new
@@ -53,7 +51,6 @@ class AttendancesController < ApplicationController
   end
 
   def show
-    @invoice = Invoice.for_attendance(@attendance.id).first
     respond_to do |format|
       format.html
       format.json
@@ -62,8 +59,6 @@ class AttendancesController < ApplicationController
 
   def destroy
     @attendance.cancelled!
-    @attendance.invoices.map(&:cancel_it!)
-    @attendance.registration_group&.update_invoice
     redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') })
   end
 
@@ -73,7 +68,6 @@ class AttendancesController < ApplicationController
       EmailNotifications.registration_group_accepted(@attendance).deliver_now
     elsif params[:new_status] == 'recover'
       @attendance.pending!
-      @attendance.invoices.map(&:recover_it!)
     elsif params[:new_status] == 'pay'
       @attendance.paid!
     elsif params[:new_status] == 'confirm'
@@ -84,7 +78,6 @@ class AttendancesController < ApplicationController
     else
       @attendance.pending!
     end
-    @attendance.registration_group&.update_invoice
     redirect_to event_attendances_path(@event)
   end
 

@@ -77,7 +77,6 @@ RSpec.describe TransfersController, type: :controller do
 
     describe 'POST #create' do
       let!(:origin) { FactoryBot.create(:attendance, event: event, status: :paid, registration_value: 420) }
-      let!(:origin_invoice) { Invoice.from_attendance(origin) }
       let!(:destination) { FactoryBot.create(:attendance, event: event, status: :pending, registration_value: 540) }
       subject(:assigned_origin) { Attendance.find(origin.id) }
       subject(:assigned_destination) { Attendance.find(destination.id) }

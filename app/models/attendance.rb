@@ -4,47 +4,57 @@
 #
 # Table name: attendances
 #
-#  id                      :integer          not null, primary key
-#  event_id                :integer
-#  user_id                 :integer
-#  registration_group_id   :integer
-#  registration_date       :datetime
-#  status                  :integer
-#  email_sent              :boolean          default(FALSE)
-#  created_at              :datetime
-#  updated_at              :datetime
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  email                   :string(255)
-#  organization            :string(255)
-#  phone                   :string(255)
-#  country                 :string(255)
-#  state                   :string(255)
-#  city                    :string(255)
-#  badge_name              :string(255)
-#  cpf                     :string(255)
-#  gender                  :string(255)
-#  notes                   :string(255)
-#  event_price             :decimal(10, )
-#  registration_quota_id   :integer
-#  registration_value      :decimal(10, )
-#  registration_period_id  :integer
 #  advised                 :boolean          default(FALSE)
 #  advised_at              :datetime
-#  payment_type            :string(255)
-#  organization_size       :string(255)
-#  years_of_experience     :string(255)
-#  experience_in_agility   :string(255)
-#  school                  :string(255)
-#  education_level         :string(255)
-#  queue_time              :integer
-#  last_status_change_date :datetime
-#  job_role                :integer          default("not_informed")
+#  badge_name              :string(255)
+#  city                    :string(255)
+#  country                 :string(255)
+#  cpf                     :string(255)
+#  created_at              :datetime
 #  due_date                :datetime
+#  education_level         :string(255)
+#  email                   :string(255)
+#  email_sent              :boolean          default(FALSE)
+#  event_id                :integer          not null, indexed
+#  event_price             :decimal(10, )
+#  experience_in_agility   :string(255)
+#  first_name              :string(255)
+#  gender                  :string(255)
+#  id                      :integer          not null, primary key
+#  job_role                :integer          default("not_informed")
+#  last_name               :string(255)
+#  last_status_change_date :datetime
+#  notes                   :string(255)
+#  organization            :string(255)
+#  organization_size       :string(255)
+#  payment_type            :integer
+#  phone                   :string(255)
+#  queue_time              :integer
+#  registration_date       :datetime
+#  registration_group_id   :integer
+#  registration_period_id  :integer          indexed
+#  registration_quota_id   :integer          indexed
+#  registration_value      :decimal(10, )
+#  school                  :string(255)
+#  state                   :string(255)
+#  status                  :integer
+#  updated_at              :datetime
+#  user_id                 :integer          not null, indexed
+#  years_of_experience     :string(255)
 #
 # Indexes
 #
+#  fk_rails_a2b9ca8d82                         (registration_period_id)
+#  index_attendances_on_event_id               (event_id)
 #  index_attendances_on_registration_quota_id  (registration_quota_id)
+#  index_attendances_on_user_id                (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id)
+#  fk_rails_777eb7170a  (event_id => events.id)
+#  fk_rails_77ad02f5c5  (user_id => users.id)
+#  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id)
 #
 
 class Attendance < ApplicationRecord
@@ -52,6 +62,7 @@ class Attendance < ApplicationRecord
 
   enum job_role: %i[not_informed student analyst manager vp president clevel coach other developer]
   enum status: { waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6 }
+  enum payment_type: { gateway: 1, bank_deposit: 2, statement_agreement: 3 }
 
   scope :committed_to, -> { where(status: %i[paid confirmed showed_in]) }
   scope :active, -> { where('status <> 0 AND status <> 3') }
@@ -67,7 +78,7 @@ class Attendance < ApplicationRecord
   belongs_to :registration_group
   belongs_to :registration_quota
 
-  has_many :invoices, as: :invoiceable, dependent: :destroy, inverse_of: :invoiceable
+  has_many :payment_notifications, dependent: :destroy
 
   validates :first_name, :last_name, :email, :phone, :country, :city, :state, :registration_date, :user, :event, presence: true
   validates :cpf, presence: true, if: ->(a) { a.in_brazil? }
@@ -116,10 +127,6 @@ class Attendance < ApplicationRecord
 
   def to_pay_the_difference?
     (paid? || confirmed?) && grouped? && registration_group.incomplete?
-  end
-
-  def payment_type
-    invoices.last.try(:payment_type)
   end
 
   def price_band?

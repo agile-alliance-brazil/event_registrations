@@ -4,29 +4,20 @@
 #
 # Table name: registration_groups
 #
-#  id                    :integer          not null, primary key
-#  event_id              :integer
-#  name                  :string(255)
-#  capacity              :integer
-#  discount              :integer
-#  token                 :string(255)
-#  created_at            :datetime
-#  updated_at            :datetime
-#  leader_id             :integer
-#  invoice_id            :integer
-#  minimum_size          :integer
 #  amount                :decimal(10, )
 #  automatic_approval    :boolean          default(FALSE)
-#  registration_quota_id :integer
+#  capacity              :integer
+#  created_at            :datetime
+#  discount              :integer
+#  event_id              :integer
+#  id                    :integer          not null, primary key
+#  leader_id             :integer
+#  minimum_size          :integer
+#  name                  :string(255)
 #  paid_in_advance       :boolean          default(FALSE)
-#
-# Indexes
-#
-#  fk_rails_9544e3707e  (invoice_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (invoice_id => invoices.id)
+#  registration_quota_id :integer
+#  token                 :string(255)
+#  updated_at            :datetime
 #
 
 class RegistrationGroup < ApplicationRecord
@@ -35,7 +26,6 @@ class RegistrationGroup < ApplicationRecord
   belongs_to :registration_quota
 
   has_many :attendances, dependent: :restrict_with_error
-  has_many :invoices, as: :invoiceable, dependent: :destroy, inverse_of: :invoiceable
 
   validates :event, :name, presence: true
   validates :capacity, :amount, presence: true, if: :paid_in_advance?
@@ -63,14 +53,6 @@ class RegistrationGroup < ApplicationRecord
 
   def leader_name
     leader&.full_name
-  end
-
-  def update_invoice
-    return if invoices.blank?
-    invoice = invoices.last
-    return unless invoice.pending?
-    invoice.amount = total_price
-    invoice.save!
   end
 
   def accept_members?

@@ -10,8 +10,3 @@
 %h5= RegistrationGroup.human_attribute_name(:attendances)
 
 = render partial: 'attendances/attendances_list', locals: { attendances_list: @attendance_list }
-
-- if @group.price? && !@group.paid?
-  = render 'shared/payment_request'
-
-= render partial: 'shared/invoices'

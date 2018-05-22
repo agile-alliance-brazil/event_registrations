@@ -47,9 +47,7 @@ Current::Application.routes.draw do
 
     resources :transfers, only: %i[new create]
 
-    resources :registration_groups, only: %i[index destroy show create edit update] do
-      member { put :renew_invoice }
-    end
+    resources :registration_groups, only: %i[index destroy show create edit update]
 
     resources :payments, only: :checkout do
       member { post :checkout }

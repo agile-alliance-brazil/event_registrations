@@ -394,12 +394,9 @@ RSpec.describe EventsController, type: :controller do
       before { sign_in user }
 
       context 'with two valid attendances, the first cancelled and second pending' do
-        it 'returns the event_persisted created' do
-          now = Time.zone.local(2015, 4, 30, 0, 0, 0)
-          Timecop.freeze(now)
-          FactoryBot.create(:attendance, event: event, user: user, status: :cancelled)
-          Timecop.return
-          other_attendance = FactoryBot.create(:attendance, event: event, user: user)
+        it 'assigns the instance variable with the last attendance and renders the template' do
+          FactoryBot.create(:attendance, event: event, user: user, status: :cancelled, created_at: 1.day.ago)
+          other_attendance = FactoryBot.create(:attendance, event: event, user: user, status: :pending, created_at: Time.zone.now)
           get :show, params: { id: event.id }
           expect(assigns[:last_attendance_for_user]).to eq other_attendance
         end

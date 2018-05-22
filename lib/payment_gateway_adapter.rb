@@ -2,24 +2,24 @@
 
 class PaymentGatewayAdapter
   class << self
-    def from_invoice(invoice, item_class)
-      create_items(invoice, item_class)
+    def from_attendance(attendance, item_class)
+      create_items(attendance, item_class)
     end
 
     private
 
-    def create_items(invoice, item_class)
+    def create_items(attendance, item_class)
       [].tap do |items|
-        items << item_class.send(:new, invoice.name, invoice.id, invoice.amount)
+        items << item_class.send(:new, attendance.full_name, attendance.id, attendance.registration_value)
       end
     end
   end
 
-  attr_reader :items, :invoice
+  attr_reader :items, :attendance
 
   def initialize(items, target)
     @items = items
-    @invoice = target
+    @attendance = target
   end
 
   def to_variables

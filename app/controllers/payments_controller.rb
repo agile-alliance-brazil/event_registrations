@@ -4,21 +4,21 @@ class PaymentsController < ApplicationController
   skip_before_action :authenticate_user!, :authorize_action
 
   before_action :assign_event
-  before_action :assign_invoice
+  before_action :assign_attendance
 
   def checkout
     PagSeguroService.config
     payment = PagSeguro::PaymentRequest.new
     payment.notification_url = notification_url
     payment.redirect_url = back_url
-    response = PagSeguroService.checkout(@invoice, payment)
+    response = PagSeguroService.checkout(@attendance, payment)
 
     if response[:errors].present?
       flash[:error] = I18n.t('payments_controller.checkout.error', reason: response[:errors])
       redirect_to event_registration_groups_path(@event)
     else
       flash[:notice] = I18n.t('payments_controller.checkout.success')
-      @invoice.send_it!
+      @attendance.paid!
       redirect_to response[:url]
     end
   end
@@ -36,12 +36,12 @@ class PaymentsController < ApplicationController
   def notification_url
     payment_notifications_url(
       type: 'pag_seguro',
-      pedido: @invoice.id,
+      pedido: @attendance.id,
       store_code: APP_CONFIG[:pag_seguro][:store_code]
     )
   end
 
-  def assign_invoice
-    @invoice = Invoice.find(params[:id])
+  def assign_attendance
+    @attendance = Attendance.find(params[:id])
   end
 end

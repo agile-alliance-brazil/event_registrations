@@ -9,18 +9,15 @@ class AttendanceRepository
   end
 
   def for_cancelation_warning(event)
-    older_than(event.days_to_charge.days.ago)
-      .where('event_id = ? AND (((attendances.status = 1 AND attendances.registration_group_id IS NULL) OR (attendances.status = 2)) AND advised = ?)', event.id, false)
-      .joins(:invoices).where('invoices.payment_type = ?', Invoice.payment_types[:gateway])
+    older_than(event.days_to_charge.days.ago).where('event_id = :event_id AND (((attendances.status = 1 AND attendances.registration_group_id IS NULL) OR (attendances.status = 2)) AND advised = false AND payment_type = 1)', event_id: event.id)
   end
 
   def for_cancelation(event)
-    Attendance.where('event_id = ? AND (attendances.status IN (1, 2) AND advised = true AND due_date < current_timestamp)', event.id)
-              .joins(:invoices).where('invoices.payment_type = ?', Invoice.payment_types[:gateway])
+    Attendance.where('event_id = ? AND (attendances.status IN (1, 2) AND advised = true AND due_date < current_timestamp AND payment_type = 1)', event.id)
   end
 
   def attendances_for(event, user_param)
-    Attendance.where('event_id = ? AND user_id = ?', event.id, user_param.id).order(created_at: :asc)
+    Attendance.where('event_id = :event_id AND user_id = :user_id', event_id: event.id, user_id: user_param.id).order(created_at: :asc)
   end
 
   def for_event(event)

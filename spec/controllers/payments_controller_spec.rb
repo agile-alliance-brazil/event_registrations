@@ -4,16 +4,15 @@ RSpec.describe PaymentsController, type: :controller do
   describe '#checkout' do
     let!(:event) { FactoryBot.create :event }
 
-    context 'with an invoice for group' do
-      let!(:group) { FactoryBot.create :registration_group, event: event }
-      let(:invoice) { FactoryBot.create :invoice, invoiceable: group }
+    context 'with valid parameters' do
+      let!(:attendance) { FactoryBot.create :attendance, event: event }
 
-      it 'call the register, changes the status of invoice and redirect to groups index' do
-        PagSeguroService.expects(:checkout).with(invoice, anything).once.returns(url: 'xpto.foo.bar')
+      it 'call the register, changes the status and redirect to groups index' do
+        PagSeguroService.expects(:checkout).with(attendance, anything).once.returns(url: 'xpto.foo.bar')
 
-        post :checkout, params: { event_id: event.id, id: invoice.id }
-        expect(Invoice.last.status).to eq Invoice::SENT
+        post :checkout, params: { event_id: event.id, id: attendance.id }
         expect(flash[:notice]).to eq I18n.t('payments_controller.checkout.success')
+        expect(attendance.reload.status).to eq 'paid'
         expect(response).to redirect_to 'xpto.foo.bar'
       end
     end
@@ -21,26 +20,19 @@ RSpec.describe PaymentsController, type: :controller do
     context 'with errors from service' do
       before(:each) { request.env['HTTP_REFERER'] = event_registration_groups_path(event) }
 
-      let!(:group) { FactoryBot.create :registration_group, event: event }
-      let(:invoice) { FactoryBot.create :invoice, invoiceable: group }
+      let!(:attendance) { FactoryBot.create :attendance, event: event }
 
       it 'redirects to event with the proper message if any errors' do
-        PagSeguroService.expects(:checkout).with(invoice, anything).once.returns(errors: 'xpto')
-        post :checkout, params: { event_id: event.id, id: invoice.id }
-        expect(Invoice.last.status).to eq Invoice::PENDING
+        PagSeguroService.expects(:checkout).with(attendance, anything).once.returns(errors: 'xpto')
+        post :checkout, params: { event_id: event.id, id: attendance.id }
         expect(flash[:error]).to eq I18n.t('payments_controller.checkout.error', reason: 'xpto')
         expect(response).to redirect_to event_registration_groups_path(event)
       end
     end
 
     context 'with invalid event' do
-      let(:invoice) { FactoryBot.create :invoice }
-      before { post :checkout, params: { event_id: 'foo', id: invoice.id } }
-      it { expect(response).to have_http_status :not_found }
-    end
-
-    context 'with invalid invoice' do
-      before { post :checkout, params: { event_id: event.id, id: 'foo' } }
+      let(:attendance) { FactoryBot.create :attendance }
+      before { post :checkout, params: { event_id: 'foo', id: attendance.id } }
       it { expect(response).to have_http_status :not_found }
     end
   end

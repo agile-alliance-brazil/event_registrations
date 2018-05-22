@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe RegistrationGroupsController, type: :controller do
+RSpec.describe RegistrationGroupsController, type: :controller do
   let(:admin) { FactoryBot.create :admin }
   before { sign_in admin }
 
@@ -12,7 +12,7 @@ describe RegistrationGroupsController, type: :controller do
     end
   end
 
-  describe '#index' do
+  describe 'GET #index' do
     context 'with valid data' do
       let!(:group) { FactoryBot.create :registration_group, event: event }
       let!(:other_group) { FactoryBot.create :registration_group, event: event }
@@ -35,11 +35,9 @@ describe RegistrationGroupsController, type: :controller do
 
   describe '#show' do
     let(:group) { FactoryBot.create :registration_group, event: event }
-    let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, status: Invoice::PAID, amount: group.total_price, payment_type: 'gateway' }
     context 'without attendances' do
       before { get :show, params: { event_id: event.id, id: group.id } }
       it { expect(assigns(:group)).to eq group }
-      it { expect(assigns(:invoice)).to eq invoice }
       it { expect(response).to render_template :show }
     end
 
@@ -52,34 +50,18 @@ describe RegistrationGroupsController, type: :controller do
     end
   end
 
-  describe '#destroy' do
+  describe 'DELETE #destroy' do
     let!(:group) { FactoryBot.create :registration_group, event: event }
     context 'with valid data' do
-      context 'having only invoices as dependencies' do
-        let!(:invoice) { FactoryBot.create(:invoice, invoiceable: group) }
-        it 'destroys the group and the invoices' do
-          expect(RegistrationGroup.count).to eq 1
-          expect(Invoice.count).to eq 1
-
-          delete :destroy, params: { event_id: event, id: group }
-          expect(RegistrationGroup.count).to eq 0
-          expect(Invoice.count).to eq 0
-          expect(response).to redirect_to event_registration_groups_path(event)
-          expect(flash[:notice]).to eq I18n.t('registration_group.destroy.success')
-        end
-      end
-      context 'having invoices and attendances as dependencies' do
-        let!(:invoice) { FactoryBot.create(:invoice, invoiceable: group) }
+      context 'having attendances as dependencies' do
         let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group) }
 
-        it 'does not destroy the group nor the invoices and redirects with an error message' do
+        it 'does not destroy the group and redirects with an error message' do
           expect(RegistrationGroup.count).to eq 1
-          expect(Invoice.count).to eq 1
           expect(Attendance.count).to eq 1
 
           delete :destroy, params: { event_id: event, id: group }
           expect(RegistrationGroup.count).to eq 1
-          expect(Invoice.count).to eq 1
           expect(Attendance.count).to eq 1
           expect(response).to redirect_to event_registration_groups_path(event)
           expect(flash[:error]).to eq 'Não é possível excluir o registro pois existem inscritos dependentes'
@@ -113,8 +95,6 @@ describe RegistrationGroupsController, type: :controller do
         expect(new_group.paid_in_advance?).to be_truthy
         expect(new_group.capacity).to eq 100
         expect(new_group.token).not_to be_blank
-        expect(new_group.invoices.count).to eq 1
-        expect(new_group.invoices.last.amount).to eq 0
       end
     end
 
@@ -124,20 +104,6 @@ describe RegistrationGroupsController, type: :controller do
       it 'does not create the group and re-render the form with the errors' do
         expect(RegistrationGroup.last).to be_nil
         expect(assigns(:group).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Desconto (%): Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.', 'Valor das inscrições no grupo: Ou o desconto ou o valor das inscrições no grupo deve estar preenchido.']
-      end
-    end
-  end
-
-  describe '#renew_invoice' do
-    let(:group) { FactoryBot.create :registration_group, event: event }
-    context 'with a pending invoice' do
-      let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, status: Invoice::PENDING, amount: 120.00 }
-      context 'and the group total price is different from current amount in invoice' do
-        it 'will update the invoice amount' do
-          RegistrationGroup.any_instance.stubs(:total_price).returns(240.00)
-          put :renew_invoice, params: { event_id: event, id: group.id }
-          expect(Invoice.last.amount).to eq 240.00
-        end
       end
     end
   end

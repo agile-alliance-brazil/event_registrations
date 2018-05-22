@@ -10,7 +10,6 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def show
-    @invoice = @group.invoices.last
     @attendance_list = @group.attendances.active.order(created_at: :desc)
   end
 
@@ -22,16 +21,10 @@ class RegistrationGroupsController < ApplicationController
   def create
     @group = RegistrationGroup.new(group_params.merge(event: @event, leader: current_user))
     if @group.save
-      create_invoice(@group)
       redirect_to event_registration_groups_path(@event)
     else
       render :index
     end
-  end
-
-  def renew_invoice
-    @group.update_invoice
-    redirect_to event_registration_group_path(@event, @group)
   end
 
   def update
@@ -51,10 +44,6 @@ class RegistrationGroupsController < ApplicationController
 
   def assign_group
     @group = @event.registration_groups.find(params[:id])
-  end
-
-  def create_invoice(group)
-    Invoice.from_registration_group(group, 'gateway')
   end
 
   def resource_class

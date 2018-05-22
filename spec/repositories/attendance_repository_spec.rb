@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe AttendanceRepository, type: :repository do
+RSpec.describe AttendanceRepository, type: :repository do
   let(:event) { FactoryBot.create :event }
   describe '#search_for_list' do
     context 'and no attendances' do
@@ -59,12 +59,12 @@ describe AttendanceRepository, type: :repository do
         let!(:event) { FactoryBot.create :event }
         it 'will order by created at descending' do
           now = Time.zone.local(2015, 4, 30, 0, 0, 0)
-          Timecop.freeze(now)
+          travel_to(now)
           attendance = FactoryBot.create(:attendance, event: event, first_name: 'April event')
           now = Time.zone.local(2014, 4, 30, 0, 0, 0)
-          Timecop.freeze(now)
+          travel_to(now)
           other_attendance = FactoryBot.create(:attendance, event: event, first_name: '2014 event')
-          Timecop.return
+          travel_back
           another_attendance = FactoryBot.create(:attendance, event: event, first_name: 'Today event')
 
           expect(AttendanceRepository.instance.search_for_list(event, 'event', all_statuses)).to eq [another_attendance, attendance, other_attendance]
@@ -76,71 +76,53 @@ describe AttendanceRepository, type: :repository do
   describe 'for_cancelation_warning' do
     context 'with valid status and gateway as payment type' do
       it 'returns the attendance' do
-        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        accepted_gateway = FactoryBot.create(:attendance, event: event, status: :accepted, last_status_change_date: 7.days.ago)
-        FactoryBot.create(:attendance, status: :accepted, registration_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, 'gateway')
-        Invoice.from_attendance(accepted_gateway, 'gateway')
+        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago)
+        accepted_gateway = FactoryBot.create(:attendance, event: event, status: :accepted, payment_type: :gateway, last_status_change_date: 7.days.ago)
+        FactoryBot.create(:attendance, status: :accepted, registration_date: 7.days.ago, payment_type: :gateway)
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to match_array [pending_gateway, accepted_gateway]
       end
     end
 
     context 'with two pending and gateway as payment type' do
       it 'returns the both attendances' do
-        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, 'gateway')
-
-        other_pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(other_pending_gateway, 'gateway')
-
+        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago)
+        other_pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago)
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to eq [pending_gateway, other_pending_gateway]
       end
     end
 
     context 'with one pending and gateway as payment type and other bank deposit' do
       it 'returns the attendance pending gateway' do
-        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, 'gateway')
-
-        pending_deposit = FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_deposit, 'bank_deposit')
-
+        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago)
+        FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to eq [pending_gateway]
       end
     end
 
     context 'with one pending and gateway as payment type and other statement of agreement' do
       it 'returns the attendance pending gateway' do
-        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_gateway, 'gateway')
-
-        pending_statement = FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
-        Invoice.from_attendance(pending_statement, 'statement_agreement')
-
+        pending_gateway = FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago)
+        FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago)
         expect(AttendanceRepository.instance.for_cancelation_warning(event)).to eq [pending_gateway]
       end
     end
 
     context 'with a pending status and belonging to a group' do
-      let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, last_status_change_date: 7.days.ago) }
-      let!(:invoice) { Invoice.from_attendance(pending, 'gateway') }
+      before { travel_to Time.zone.local(2018, 5, 16, 10, 0, 0) }
+      after { travel_back }
+      let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago) }
       let!(:group) { FactoryBot.create :registration_group, automatic_approval: false }
-      let!(:pending_in_a_group) { FactoryBot.create(:attendance, registration_group: group, event: event, last_status_change_date: 7.days.ago) }
-      let!(:other_invoice) { Invoice.from_attendance(pending_in_a_group, 'gateway') }
-      let!(:accepted_in_a_group) { FactoryBot.create(:attendance, status: :accepted, registration_group: group, event: event, last_status_change_date: 7.days.ago) }
-      let!(:other_invoice) { Invoice.from_attendance(accepted_in_a_group, 'gateway') }
+      let!(:pending_in_a_group) { FactoryBot.create(:attendance, registration_group: group, event: event, payment_type: :gateway, last_status_change_date: 7.days.ago) }
+      let!(:accepted_in_a_group) { FactoryBot.create(:attendance, status: :accepted, registration_group: group, event: event, payment_type: :gateway, last_status_change_date: 7.days.ago) }
 
       it { expect(AttendanceRepository.instance.for_cancelation_warning(event)).to match_array [pending, accepted_in_a_group] }
     end
   end
 
   describe '#for_cancelation' do
-    let(:invoice) { FactoryBot.create(:invoice, payment_type: 'gateway') }
-    let!(:to_cancel) { FactoryBot.create(:attendance, event: event, status: :pending, advised_at: 8.days.ago, due_date: 1.day.ago, advised: true, invoices: [invoice]) }
-    let(:out_invoice) { FactoryBot.create(:invoice, payment_type: 'gateway') }
-    let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, advised_at: 5.days.ago, advised: true, invoices: [out_invoice]) }
-    let(:other_out_invoice) { FactoryBot.create(:invoice, payment_type: 'gateway') }
-    let!(:other_out) { FactoryBot.create(:attendance, event: event, status: :pending, advised_at: nil, advised: false, created_at: 15.days.ago, invoices: [other_out_invoice]) }
+    let!(:to_cancel) { FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, advised_at: 8.days.ago, due_date: 1.day.ago, advised: true) }
+    let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, advised_at: 5.days.ago, advised: true) }
+    let!(:other_out) { FactoryBot.create(:attendance, event: event, status: :pending, advised_at: nil, advised: false, created_at: 15.days.ago) }
     it { expect(AttendanceRepository.instance.for_cancelation(event)).to eq [to_cancel] }
   end
 

@@ -3,9 +3,9 @@
 require 'payment_gateway_adapter'
 
 class PagSeguroAdapter < PaymentGatewayAdapter
-  def self.from_invoice(invoice)
-    items = PaymentGatewayAdapter.from_invoice(invoice, PagSeguroItem)
-    new(items, invoice)
+  def self.from_attendance(attendance)
+    items = PaymentGatewayAdapter.from_attendance(attendance, PagSeguroItem)
+    new(items, attendance)
   end
 
   def add_variables(_vars); end

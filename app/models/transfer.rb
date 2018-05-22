@@ -28,7 +28,6 @@ class Transfer
     return false unless valid?
     destination.registration_value = origin.registration_value
     destination.status = origin.status
-    transfer_invoice(origin, destination)
 
     origin.cancelled!
     origin.save && destination.save
@@ -45,25 +44,5 @@ class Transfer
     @origin_id = origin.id
     @destination = destination
     @destination_id = destination.id
-  end
-
-  private
-
-  def transfer_invoice(origin, destination)
-    origin_invoice = origin.invoices.active.last
-    destination_invoice = destination.invoices.last
-
-    if destination_invoice.present?
-      destination_invoice.update(amount: origin.registration_value, status: origin_invoice.status)
-    else
-      Invoice.create(
-        user: destination.user,
-        amount: origin.registration_value,
-        status: origin_invoice.status,
-        invoiceable: destination,
-        payment_type: origin_invoice.payment_type
-      )
-    end
-    origin_invoice.cancel_it!
   end
 end

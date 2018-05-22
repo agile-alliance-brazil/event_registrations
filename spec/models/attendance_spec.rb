@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
 RSpec.describe Attendance, type: :model do
+  context 'enums' do
+    it { is_expected.to define_enum_for(:status).with(waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6) }
+    it { is_expected.to define_enum_for(:job_role).with(%i[not_informed student analyst manager vp president clevel coach other developer]) }
+    it { is_expected.to define_enum_for(:payment_type).with(gateway: 1, bank_deposit: 2, statement_agreement: 3) }
+  end
+
   context 'associations' do
     it { is_expected.to belong_to :event }
     it { is_expected.to belong_to :user }
     it { is_expected.to belong_to :registration_group }
     it { is_expected.to belong_to :registration_quota }
-    it { is_expected.to have_many(:invoices) }
+    it { is_expected.to have_many :payment_notifications }
   end
 
   context 'validations' do
@@ -51,33 +57,6 @@ RSpec.describe Attendance, type: :model do
     it { is_expected.not_to allow_value('a@').for(:email) }
     it { is_expected.not_to allow_value('a@a').for(:email) }
     it { is_expected.not_to allow_value('@12.com').for(:email) }
-  end
-
-  context 'enums' do
-    it { is_expected.to define_enum_for(:job_role).with(%i[not_informed student analyst manager vp president clevel coach other developer]) }
-  end
-
-  context 'callbacks' do
-    let!(:event) { FactoryBot.create :event }
-    describe '#update_group_invoice' do
-      context 'without a registration group' do
-        it 'updates the group invoice when add attendance to the group' do
-          RegistrationGroup.any_instance.expects(:update_invoice).never
-          FactoryBot.create(:attendance, registration_value: 100)
-        end
-      end
-
-      context 'having no space in the group' do
-        let!(:previous_attendance) { FactoryBot.create(:attendance, event: event) }
-        let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 1, attendances: [previous_attendance]) }
-        let!(:attendance) { FactoryBot.build(:attendance, event: event, registration_group: group) }
-
-        it 'add errors to the registration group attribute' do
-          attendance.save
-          expect(attendance.errors[:registration_group]).to eq [I18n.t('attendances.create.errors.group_full')]
-        end
-      end
-    end
   end
 
   context 'scopes' do
@@ -428,18 +407,6 @@ RSpec.describe Attendance, type: :model do
       let(:group) { FactoryBot.create(:registration_group, minimum_size: 2) }
       let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :confirmed, registration_group: group }
       it { expect(attendance.to_pay_the_difference?).to be_truthy }
-    end
-  end
-
-  describe '#payment_type' do
-    context 'having invoices' do
-      let!(:attendance) { FactoryBot.create(:attendance) }
-      let!(:invoice) { Invoice.from_attendance(attendance) }
-      it { expect(attendance.payment_type).to eq 'gateway' }
-    end
-    context 'and without invoices' do
-      let!(:attendance) { FactoryBot.create(:attendance) }
-      it { expect(attendance.payment_type).to eq nil }
     end
   end
 

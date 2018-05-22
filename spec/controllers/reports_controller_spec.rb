@@ -184,7 +184,7 @@ RSpec.describe ReportsController, type: :controller do
         context 'with attendances' do
           it 'returns just the attendances within two weeks ago' do
             now = Time.zone.local(2015, 4, 30, 0, 0, 0)
-            Timecop.freeze(now)
+            travel_to(now)
             last_week = FactoryBot.create(:attendance, event: event, created_at: 7.days.ago)
             FactoryBot.create(:attendance, event: event, created_at: 7.days.ago)
             today = FactoryBot.create(:attendance, event: event)
@@ -192,7 +192,7 @@ RSpec.describe ReportsController, type: :controller do
             FactoryBot.create(:attendance)
             get :last_biweekly_active, params: { event_id: event }
             expect(assigns(:attendances_biweekly_grouped)).to eq(last_week.created_at.to_date => 2, today.created_at.to_date => 1)
-            Timecop.return
+            travel_back
           end
         end
       end

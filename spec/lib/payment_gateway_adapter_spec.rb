@@ -2,19 +2,18 @@
 
 require File.join(File.dirname(__FILE__), '../../lib/payment_gateway_adapter')
 
-describe PaymentGatewayAdapter do
-  let(:attendance) { FactoryBot.create(:attendance) }
-  let(:invoice) { FactoryBot.create(:invoice, invoiceable: attendance) }
+RSpec.describe PaymentGatewayAdapter do
+  let(:attendance) { FactoryBot.create(:attendance, payment_type: :gateway) }
 
-  context 'from invoice' do
-    it 'should generate list of items from invoice' do
-      items = PaymentGatewayAdapter.from_invoice(invoice, PaymentGatewayAdapter::Item)
+  context 'from_attendance' do
+    it 'generates a list of items from attendance' do
+      items = PaymentGatewayAdapter.from_attendance(attendance, PaymentGatewayAdapter::Item)
 
       expect(items).to have(1).item
       item = items.first
-      expect(item.name).to eq(invoice.name)
-      expect(item.number).to eq(invoice.id)
-      expect(item.amount).to eq(invoice.amount)
+      expect(item.name).to eq(attendance.full_name)
+      expect(item.number).to eq(attendance.id)
+      expect(item.amount).to eq(attendance.registration_value)
       expect(item.quantity).to eq(1)
     end
   end

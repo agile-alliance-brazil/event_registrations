@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180502154501) do
+ActiveRecord::Schema.define(version: 2018_05_21_195234) do
 
-  create_table "attendances", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "event_id"
-    t.integer "user_id"
+  create_table "attendances", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.integer "user_id", null: false
     t.integer "registration_group_id"
     t.datetime "registration_date"
     t.integer "status"
@@ -39,7 +39,6 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.integer "registration_period_id"
     t.boolean "advised", default: false
     t.datetime "advised_at"
-    t.string "payment_type"
     t.string "organization_size"
     t.string "years_of_experience"
     t.string "experience_in_agility"
@@ -49,10 +48,14 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.datetime "last_status_change_date"
     t.integer "job_role", default: 0
     t.datetime "due_date"
+    t.integer "payment_type"
+    t.index ["event_id"], name: "index_attendances_on_event_id"
+    t.index ["registration_period_id"], name: "fk_rails_a2b9ca8d82"
     t.index ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
+    t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
-  create_table "authentications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "authentications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.string "provider"
     t.string "uid"
@@ -61,7 +64,7 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.string "refresh_token"
   end
 
-  create_table "events", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "events", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "location_and_date"
     t.datetime "created_at"
@@ -78,7 +81,7 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.string "main_email_contact", default: "", null: false
   end
 
-  create_table "events_users", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "events_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "event_id"
     t.integer "user_id"
     t.datetime "created_at"
@@ -87,21 +90,7 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.index ["user_id"], name: "index_events_users_on_user_id"
   end
 
-  create_table "invoices", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "frete"
-    t.decimal "amount", precision: 10
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "user_id"
-    t.integer "registration_group_id"
-    t.string "status"
-    t.integer "payment_type", null: false
-    t.string "invoiceable_type"
-    t.integer "invoiceable_id"
-    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id"
-  end
-
-  create_table "payment_notifications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "payment_notifications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "params"
     t.string "status"
     t.string "transaction_id"
@@ -111,11 +100,11 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.text "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "invoice_id"
-    t.index ["invoice_id"], name: "fk_rails_92030b1506"
+    t.integer "attendance_id"
+    t.index ["attendance_id"], name: "index_payment_notifications_on_attendance_id"
   end
 
-  create_table "registration_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "registration_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "event_id"
     t.string "name"
     t.integer "capacity"
@@ -124,16 +113,14 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "leader_id"
-    t.integer "invoice_id"
     t.integer "minimum_size"
     t.decimal "amount", precision: 10
     t.boolean "automatic_approval", default: false
     t.integer "registration_quota_id"
     t.boolean "paid_in_advance", default: false
-    t.index ["invoice_id"], name: "fk_rails_9544e3707e"
   end
 
-  create_table "registration_periods", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "registration_periods", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "event_id"
     t.string "title"
     t.datetime "start_at"
@@ -144,7 +131,7 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.string "price_currency", default: "BRL", null: false
   end
 
-  create_table "registration_quotas", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "registration_quotas", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "quota"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -156,7 +143,7 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.string "price_currency", default: "BRL", null: false
   end
 
-  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "email"
@@ -180,7 +167,10 @@ ActiveRecord::Schema.define(version: 20180502154501) do
     t.index ["registration_group_id"], name: "fk_rails_ebe9fba698"
   end
 
-  add_foreign_key "payment_notifications", "invoices"
-  add_foreign_key "registration_groups", "invoices"
+  add_foreign_key "attendances", "events"
+  add_foreign_key "attendances", "registration_periods"
+  add_foreign_key "attendances", "registration_quotas"
+  add_foreign_key "attendances", "users"
+  add_foreign_key "payment_notifications", "attendances"
   add_foreign_key "users", "registration_groups"
 end

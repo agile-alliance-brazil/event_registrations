@@ -4,33 +4,33 @@
 #
 # Table name: payment_notifications
 #
+#  attendance_id   :integer          indexed
+#  created_at      :datetime
 #  id              :integer          not null, primary key
+#  notes           :text(65535)
 #  params          :text(65535)
-#  status          :string(255)
-#  transaction_id  :string(255)
 #  payer_email     :string(255)
 #  settle_amount   :decimal(10, )
 #  settle_currency :string(255)
-#  notes           :text(65535)
-#  created_at      :datetime
+#  status          :string(255)
+#  transaction_id  :string(255)
 #  updated_at      :datetime
-#  invoice_id      :integer
 #
 # Indexes
 #
-#  fk_rails_92030b1506  (invoice_id)
+#  index_payment_notifications_on_attendance_id  (attendance_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (invoice_id => invoices.id)
+#  fk_rails_2e64051bbf  (attendance_id => attendances.id)
 #
 
 class PaymentNotification < ApplicationRecord
-  belongs_to :invoice
+  belongs_to :attendance
   serialize :params
 
-  after_create :mark_invoicer_as_paid, if: ->(n) { n.status == 'Completed' }
-  validates :invoice, presence: true
+  after_create :mark_attendance_as_paid, if: ->(n) { n.status == 'Completed' }
+  validates :attendance, presence: true
 
   scope :pag_seguro, -> { where('params LIKE ?', '%type: pag_seguro%') }
   scope :completed, -> { where('status = ?', 'Completed') }
@@ -42,15 +42,11 @@ class PaymentNotification < ApplicationRecord
 
   private
 
-  def mark_invoicer_as_paid
+  def mark_attendance_as_paid
     if pag_seguro_valid?(APP_CONFIG[params[:type]])
-      invoice.pay_it!
-      if invoice.invoiceable_type == 'Attendance'
-        attendance = Attendance.where(id: invoice.invoiceable_id).last
-        attendance.paid! if attendance.present?
-      end
+      attendance.paid!
     else
-      Airbrake.notify("Failed Payment Notification for invoicer: #{invoice.name}", params)
+      Airbrake.notify("Failed Payment Notification for attendance: #{attendance.full_name}", params)
     end
   end
 
@@ -65,7 +61,7 @@ class PaymentNotification < ApplicationRecord
       PagSeguroService.config
       {
         params: params,
-        invoice: Invoice.find(params[:pedido]),
+        attendance: Attendance.find(params[:pedido]),
         status: params[:status],
         transaction_id: params[:transaction_code],
         notes: params[:transaction_inspect]

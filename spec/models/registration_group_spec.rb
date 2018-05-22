@@ -6,8 +6,6 @@ RSpec.describe RegistrationGroup, type: :model do
 
   context 'associations' do
     it { is_expected.to have_many(:attendances).dependent(:restrict_with_error) }
-    it { is_expected.to have_many(:invoices).dependent(:destroy) }
-
     it { is_expected.to belong_to :event }
     it { is_expected.to belong_to(:leader).class_name('User') }
     it { is_expected.to belong_to(:registration_quota) }
@@ -140,52 +138,10 @@ RSpec.describe RegistrationGroup, type: :model do
     end
   end
 
-  describe '#update_invoice' do
-    let(:group) { FactoryBot.create :registration_group, event: event, discount: 100 }
-    context 'with a pending invoice' do
-      let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, amount: 100.00 }
-      it 'will change the invoice amount' do
-        group.stubs(:total_price).returns 200.00
-        group.update_invoice
-        expect(Invoice.last.amount).to eq 200.00
-      end
-    end
-
-    context 'with a not pending invoice' do
-      let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, amount: 100.00, status: Invoice::PAID }
-      it 'will not change the invoice amount' do
-        group.stubs(:total_price).returns 200.00
-        group.update_invoice
-        expect(Invoice.last.amount).to eq 100.00
-      end
-    end
-  end
-
-  describe '#update_invoice' do
-    let(:group) { FactoryBot.create :registration_group, event: event, discount: 100 }
-    context 'with a pending invoice' do
-      let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, amount: 100.00 }
-      it 'will change the invoice amount' do
-        group.stubs(:total_price).returns 200.00
-        group.update_invoice
-        expect(Invoice.last.amount).to eq 200.00
-      end
-    end
-
-    context 'with a not pending invoice' do
-      let!(:invoice) { FactoryBot.create :invoice, invoiceable: group, amount: 100.00, status: Invoice::PAID }
-      it 'will not change the invoice amount' do
-        group.stubs(:total_price).returns 200.00
-        group.update_invoice
-        expect(Invoice.last.amount).to eq 100.00
-      end
-    end
-  end
-
   describe '#accept_members?' do
     let(:group) { FactoryBot.create :registration_group, event: event, discount: 100 }
 
-    context 'with a pending invoice' do
+    context 'with a pending attendance' do
       let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group, status: 'pending') }
       it { expect(group.accept_members?).to be_truthy }
     end

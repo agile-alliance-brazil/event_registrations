@@ -45,11 +45,6 @@ pt:
         restrict_dependent_destroy:
           has_one: Não é possível excluir o registro pois existe um %{record} dependente
           has_many: Não é possível excluir o registro pois existem %{record} dependentes
-      models:
-        attendance:
-          attributes:
-            invoices:
-              invalid: Suas faturas não são válidas. Contacte o administrador do sistema.
     models:
       event:
         one: Evento
@@ -57,9 +52,6 @@ pt:
       attendance:
         one: Participante
         other: Participantes
-      invoice:
-        one: Fatura
-        other: Faturas
       registration_group:
         one: Grupo de Inscrições
         other: Grupos de Inscrições
@@ -84,7 +76,6 @@ pt:
         school: Escola
         education_level: Nível educacional
         experience_in_agility: Experiência com agilidade (anos)
-        invoices: Faturas
         status: Status
         registration_value: Valor da inscrição
         registration_date: Data
@@ -92,6 +83,11 @@ pt:
         discount: Desconto
         twitter_user: Usuário no twitter
         default_locale: Local default
+        payment_type: Tipo de pagamento
+        payment_types:
+          gateway: Gateway
+          bank_deposit: Depósito bancário
+          statement_agreement: Empenho
       event:
         name: Nome
         attendance_limit: Capacidade
@@ -111,20 +107,10 @@ pt:
         paid_in_advance: Pago antecipadamente?
         automatic_approval: Aprovação automática?
         attendances: Inscritos
-      invoice:
-        payment_type: Tipo de pagamento
-        amount: Valor
-        payment_types:
-          gateway: Gateway
-          bank_deposit: Depósito bancário
-          statement_agreement: Empenho
       user:
         name: Nome
         email: Email
         roles: Papéis
-  invoices:
-    show:
-      title: "Fatura"
   attendance:
     enum:
       status:

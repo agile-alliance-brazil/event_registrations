@@ -92,7 +92,7 @@ RSpec.describe AttendancesController, type: :controller do
                   expect(created_attendance.event).to eq event
                   expect(created_attendance).to be_pending
                   expect(created_attendance.registration_group).to be_nil
-                  expect(created_attendance.payment_type).to eq Invoice.last.payment_type
+                  expect(created_attendance.payment_type).to eq 'gateway'
                   expect(created_attendance).to be_pending
                   expect(created_attendance.first_name).to eq user.first_name
                   expect(created_attendance.last_name).to eq user.last_name
@@ -219,7 +219,6 @@ RSpec.describe AttendancesController, type: :controller do
 
               let!(:aa_group) { FactoryBot.create(:registration_group, event: event, name: 'Membros da Agile Alliance') }
               it 'uses the AA group as attendance group and accept the entrance' do
-                Invoice.from_registration_group(aa_group, 'gateway')
                 AgileAllianceService.stubs(:check_member).returns(true)
                 RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
                 post :create, params: { event_id: event, attendance: valid_attendance }
@@ -269,7 +268,6 @@ RSpec.describe AttendancesController, type: :controller do
               context 'and it is not with automatic approval' do
                 let(:group) { FactoryBot.create(:registration_group, event: event, discount: 30) }
                 it 'defines the price using the group discount and keeps the registration pending' do
-                  Invoice.from_registration_group(group, 'gateway')
                   post :create, params: { event_id: event, registration_token: group.token, attendance: valid_attendance }
                   expect(assigns(:attendance).registration_value).to eq event.full_price * 0.7
                   expect(assigns(:attendance)).to be_pending
@@ -278,7 +276,6 @@ RSpec.describe AttendancesController, type: :controller do
               context 'when is an automatic approval group' do
                 let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 20, automatic_approval: true) }
                 it 'accepts the registration' do
-                  Invoice.from_registration_group(group, 'gateway')
                   post :create, params: { event_id: event, registration_token: group.token, attendance: valid_attendance }
                   expect(assigns(:attendance)).to be_accepted
                 end
@@ -383,7 +380,6 @@ RSpec.describe AttendancesController, type: :controller do
       end
 
       context 'with a valid attendance' do
-        let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
         context 'and no group token informed' do
           it 'updates the attendance' do
             put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit' }
@@ -404,7 +400,7 @@ RSpec.describe AttendancesController, type: :controller do
             expect(Attendance.last.badge_name).to eq user.badge_name
             expect(Attendance.last.cpf).to eq user.cpf
             expect(Attendance.last.gender).to eq user.gender
-            expect(Attendance.last.invoices.last.payment_type).to eq 'bank_deposit'
+            expect(Attendance.last.payment_type).to eq 'bank_deposit'
             expect(response).to redirect_to event_attendances_path(event_id: event, flash: { notice: I18n.t('attendances.update.success') })
           end
         end
@@ -584,18 +580,9 @@ RSpec.describe AttendancesController, type: :controller do
       context 'with a valid attendance' do
         let!(:event) { FactoryBot.create(:event, organizers: [user]) }
         let!(:attendance) { FactoryBot.create(:attendance, event: event, user: user) }
-        context 'having invoice' do
-          let!(:invoice) { Invoice.from_attendance(attendance, 'gateway') }
-          before { get :show, params: { event_id: event, id: attendance } }
-          it { expect(assigns[:attendance]).to eq attendance }
-          it { expect(response).to be_successful }
-        end
-
-        context 'having no invoice' do
-          before { get :show, params: { event_id: event, id: attendance } }
-          it { expect(assigns[:attendance]).to eq attendance }
-          it { expect(response).to be_successful }
-        end
+        before { get :show, params: { event_id: event, id: attendance } }
+        it { expect(assigns[:attendance]).to eq attendance }
+        it { expect(response).to be_successful }
       end
     end
 
@@ -615,15 +602,6 @@ RSpec.describe AttendancesController, type: :controller do
       it 'redirects back to status' do
         delete :destroy, params: { event_id: event, id: attendance }
         expect(response).to redirect_to(event_attendance_path(event, attendance))
-      end
-
-      context 'with invoice' do
-        it 'cancel the attendance and the invoice' do
-          Invoice.from_attendance(attendance, 'gateway')
-          delete :destroy, params: { event_id: event, id: attendance }
-          expect(Attendance.last.status).to eq 'cancelled'
-          expect(Invoice.last.status).to eq 'cancelled'
-        end
       end
     end
 
@@ -656,13 +634,11 @@ RSpec.describe AttendancesController, type: :controller do
         end
       end
       context 'recover' do
-        let(:invoice) { FactoryBot.create(:invoice, status: :cancelled) }
-        let(:attendance) { FactoryBot.create(:attendance, event: event, invoices: [invoice], status: 'cancelled') }
+        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'cancelled') }
         it 'recovers the attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'recover' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(attendance.reload).to be_pending
-          expect(invoice.reload).to be_pending
         end
       end
       context 'dequeue' do

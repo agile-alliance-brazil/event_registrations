@@ -46,15 +46,10 @@ en:
           has_one: Cannot delete record because a dependent %{record} exists
           has_many: Cannot delete record because dependent %{record} exist
     attributes:
-      invoice:
-        payment_types:
-          gateway: Gateway
-          bank_deposit: Bank Deposit
-          statement_agreement: Statement of Agreement
-        payment_type: "Payment type"
       attendance:
         full_name: "Name"
         status: "Status"
+        payment_type: "Payment type"
         organization_size: "Organization size"
         organization: "Organization"
         phone: "Phone"
@@ -74,13 +69,14 @@ en:
         experience_in_agility: "Experience in Agility"
         school: "School"
         education_level: "Education Level"
+        payment_types:
+          gateway: Gateway
+          bank_deposit: Bank Deposit
+          statement_agreement: Statement of Agreement
       user:
         roles: Roles
         email: Email
         name: Name
-  invoices:
-    show:
-      title: "Invoice"
   attendance:
     enum:
       status:

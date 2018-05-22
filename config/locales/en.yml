@@ -252,9 +252,6 @@ en:
       title: "Updating registration group"
     event_capacity_error: "The event has no capacity to receive your group! Sorry!"
     quota_capacity_error: "The registration quota has no capacity to receive your group! Sorry!"
-  invoice:
-    not_found: 'Invoice not found'
-
   generic:
     or: "or"
     and: "and"

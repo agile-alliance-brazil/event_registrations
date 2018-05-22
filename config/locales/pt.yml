@@ -339,9 +339,6 @@ pt:
       title: "Atualizando grupo de inscrição"
     event_capacity_error: "O evento não tem mais lugares para o seu grupo. Desculpe!"
     quota_capacity_error: "A cota não tem mais lugares para o seu grupo. Desculpe!"
-  invoice:
-    not_found: 'Fatura não encontrada'
-
   generic:
     or: "ou"
     and: "e"

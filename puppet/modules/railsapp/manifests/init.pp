@@ -8,14 +8,28 @@ class railsapp( $user, $app_name ) {
         name        => 'ruby-2.5.1',
         ensure      => 'present',
         build_opts  => '--disable-binary',
+        default_use => false
+    }
+
+    rvm_gem { 'bundler251':
+        name         => 'bundler',
+        ruby_version => 'ruby-2.5.1@global',
+        ensure       => '1.16.2',
+        require      => Rvm_system_ruby['ruby-2.5.1'];
+    }
+
+    rvm_system_ruby { 'ruby-2.4.3':
+        name        => 'ruby-2.4.3',
+        ensure      => 'present',
+        build_opts  => '--disable-binary',
         default_use => true
     }
 
     rvm_gem { 'bundler243':
         name         => 'bundler',
-        ruby_version => 'ruby-2.5.1@global',
-        ensure       => '1.16.0',
-        require      => Rvm_system_ruby['ruby-2.5.1'];
+        ruby_version => 'ruby-2.4.3@global',
+        ensure       => '1.16.2',
+        require      => Rvm_system_ruby['ruby-2.4.3'];
     }
   }
 

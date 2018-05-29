@@ -273,7 +273,7 @@ RSpec.describe AttendancesController, type: :controller do
                   expect(assigns(:attendance)).to be_pending
                 end
               end
-              context 'when is an automatic approval group' do
+              context 'when it is an automatic approval group' do
                 let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 20, automatic_approval: true) }
                 it 'accepts the registration' do
                   post :create, params: { event_id: event, registration_token: group.token, attendance: valid_attendance }

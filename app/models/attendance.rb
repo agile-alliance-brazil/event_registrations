@@ -164,11 +164,8 @@ class Attendance < ApplicationRecord
   end
 
   def registration_group_valid?
-    if registration_group&.vacancies?
-      self.status = :accepted if registration_group.automatic_approval?
-    elsif registration_group.present? && !registration_group.vacancies?
-      errors.add(:registration_group, I18n.t('attendances.create.errors.group_full'))
-    end
+    return if registration_group.blank? || registration_group.vacancies?
+    errors.add(:registration_group, I18n.t('attendances.create.errors.group_full'))
   end
 
   def duplicated_active_email_in_event?

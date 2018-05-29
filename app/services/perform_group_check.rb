@@ -12,6 +12,7 @@ class PerformGroupCheck
       attendance.update(registration_group: event.agile_alliance_discount_group)
       attendance.accepted!
     end
+    attendance.update(status: :accepted) if group&.automatic_approval?
     attendance
   end
 end

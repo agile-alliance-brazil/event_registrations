@@ -31,7 +31,7 @@ RSpec.describe AttendancesController, type: :controller do
       it { expect(response).to redirect_to login_path }
     end
     describe 'PATCH #change_status' do
-      before { put :update, params: { event_id: 'foo', id: 'bar', new_status: 'xpto' } }
+      before { patch :change_status, params: { event_id: 'foo', id: 'bar', new_status: 'xpto' } }
       it { expect(response).to redirect_to login_path }
     end
   end
@@ -281,16 +281,6 @@ RSpec.describe AttendancesController, type: :controller do
                 end
               end
             end
-            context 'and the group is full' do
-              let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 2) }
-              let!(:first_attendance) { FactoryBot.create(:attendance, event: event, registration_group: group) }
-              let!(:second_attendance) { FactoryBot.create(:attendance, event: event, registration_group: group) }
-              it 'render the form again with the error on flash' do
-                post :create, params: { event_id: event, registration_token: group.token, attendance: valid_attendance }
-                expect(response).to render_template :new
-                expect(assigns(:attendance).errors[:registration_group]).to eq [I18n.t('attendances.create.errors.group_full')]
-              end
-            end
           end
           context 'having period and no quotas or group' do
             let!(:full_registration_period) { FactoryBot.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
@@ -317,6 +307,9 @@ RSpec.describe AttendancesController, type: :controller do
             end
           end
         end
+
+        pending 'and has a registration group and it has vacancies'
+        pending 'and has a registration group and it has no vacancies'
       end
 
       context 'invalid' do
@@ -372,6 +365,7 @@ RSpec.describe AttendancesController, type: :controller do
     describe 'PUT #update' do
       let(:event) { FactoryBot.create(:event, organizers: [user], full_price: 840.00) }
       let(:attendance) { FactoryBot.create(:attendance, event: event) }
+      let!(:aa_group) { FactoryBot.create(:registration_group, event: event, name: 'Membros da Agile Alliance') }
 
       before do
         User.any_instance.stubs(:has_approved_session?).returns(true)
@@ -415,16 +409,6 @@ RSpec.describe AttendancesController, type: :controller do
               expect(Attendance.last.registration_value).to eq 420
             end
           end
-          context 'having no space in the group' do
-            let!(:previous_attendance) { FactoryBot.create(:attendance, event: event) }
-            let!(:group) { FactoryBot.create(:registration_group, event: event, capacity: 1, attendances: [previous_attendance]) }
-
-            it 'render the template again with the error' do
-              put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit', registration_token: group.token }
-              expect(flash[:error]).to include I18n.t('attendances.create.errors.group_full')
-              expect(response).to render_template :edit
-            end
-          end
         end
 
         context 'and the price band has changed' do
@@ -441,9 +425,39 @@ RSpec.describe AttendancesController, type: :controller do
           end
         end
       end
+
+      context 'invalid' do
+        let(:registration_group) { FactoryBot.create :registration_group, event: event }
+        context 'parameters' do
+          it 'renders the template again with errors' do
+            AgileAllianceService.stubs(:check_member).returns(false)
+            put :update, params: { event_id: event, id: attendance, attendance: { first_name: '', last_name: '', email: '', phone: '', country: '', state: '', city: '', badge_name: '', cpf: '', gender: '' } }
+            expect(response).to render_template :edit
+            expect(assigns(:attendance).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco']
+          end
+        end
+        context 'AA service response timeout' do
+          context 'calling html' do
+            it 'responds 408' do
+              AgileAllianceService.stubs(:check_member).raises(Net::OpenTimeout)
+              RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
+              put :update, params: { event_id: event, id: attendance, attendance: valid_attendance }
+              expect(response.status).to eq 408
+            end
+          end
+          context 'calling JS' do
+            it 'responds 408' do
+              AgileAllianceService.stubs(:check_member).raises(Net::OpenTimeout)
+              RegistrationGroup.any_instance.stubs(:find_by).returns(aa_group)
+              put :update, params: { event_id: event, id: attendance, attendance: valid_attendance }, xhr: true
+              expect(response.status).to eq 408
+            end
+          end
+        end
+      end
     end
 
-    describe '#to_approval' do
+    describe 'GET #to_approval' do
       let(:event) { FactoryBot.create(:event, organizers: [user]) }
       let(:group) { FactoryBot.create(:registration_group, event: event) }
       let!(:pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
@@ -456,7 +470,7 @@ RSpec.describe AttendancesController, type: :controller do
       it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
     end
 
-    describe '#waiting_list' do
+    describe 'GET #waiting_list' do
       context 'signed as organizer' do
         let(:organizer) { FactoryBot.create :organizer }
         before { sign_in organizer }

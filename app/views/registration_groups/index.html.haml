@@ -1,6 +1,6 @@
-%div{class: 'container'}
+%div{class: 'container-fluid'}
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-xs-offset-2'}
+    %div{class: 'col-xs-12'}
       %span= link_to 'ALL EVENTS', list_archived_events_path
       %span= '< '
       %span= link_to @event.name, event_path(@event)
@@ -8,12 +8,12 @@
       %h3= t('registration_group.list', event_name: @event.name)
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-xs-offset-2'}
+    %div{class: 'col-xs-12'}
       = form_for [@event, @group], class: 'form-horizontal' do |form|
         = render 'form', f: form
 
   %div{class: 'row'}
-    %div{class: 'col-xs-8 col-xs-offset-2'}
+    %div{class: 'col-xs-12'}
       = render partial: 'groups_list', locals: { event: @event }
 
   - content_for :javascript do

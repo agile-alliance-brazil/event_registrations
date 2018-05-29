@@ -15,9 +15,6 @@ pt:
         option_one: 'OPÇÃO 1: Pague com PagSeguro'
         text: 'Efetue o pagamento no valor de %{value}'
   attendances:
-    create:
-      errors:
-        group_full: "O grupo que você escolheu está cheio."
     summary:
       registration_total: "Total"
     index:
@@ -61,6 +58,7 @@ pt:
   registration_groups:
     index:
       token_clipboard_tooltip: "Copiar o token para a área de transferência"
+      title: "Grupos"
   attendance:
     reports:
       attendance_organization_size: "Participantes x Tamanho da Empresa"

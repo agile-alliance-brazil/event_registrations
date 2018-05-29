@@ -89,7 +89,6 @@ class Attendance < ApplicationRecord
   validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, length: { minimum: 6, maximum: 100 }
   validates :phone, format: { with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true }
 
-  validate :registration_group_valid?
   validate :duplicated_active_email_in_event?, on: :create
 
   delegate :token, to: :registration_group, allow_nil: true
@@ -161,11 +160,6 @@ class Attendance < ApplicationRecord
 
   def set_last_status_change
     self.last_status_change_date = Time.zone.now if last_status_change_date.blank?
-  end
-
-  def registration_group_valid?
-    return if registration_group.blank? || registration_group.vacancies?
-    errors.add(:registration_group, I18n.t('attendances.create.errors.group_full'))
   end
 
   def duplicated_active_email_in_event?

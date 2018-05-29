@@ -22,9 +22,9 @@ class AttendancesController < ApplicationController
 
   def update
     update_params = AttendanceParams.new(current_user, @event, params)
-    attendance = UpdateAttendance.run_for(update_params)
-    return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if attendance.valid?
-    flash[:error] = attendance.errors.full_messages.join(', ')
+    @attendance = UpdateAttendance.run_for(update_params)
+    return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if @attendance.valid?
+    flash[:error] = @attendance.errors.full_messages.join(', ')
     render :edit
   end
 

@@ -5,14 +5,14 @@ RSpec.describe PaymentsController, type: :controller do
     let!(:event) { FactoryBot.create :event }
 
     context 'with valid parameters' do
-      let!(:attendance) { FactoryBot.create :attendance, event: event }
+      let!(:attendance) { FactoryBot.create :attendance, event: event, status: :pending }
 
       it 'call the register, changes the status and redirect to groups index' do
         PagSeguroService.expects(:checkout).with(attendance, anything).once.returns(url: 'xpto.foo.bar')
 
         post :checkout, params: { event_id: event.id, id: attendance.id }
         expect(flash[:notice]).to eq I18n.t('payments_controller.checkout.success')
-        expect(attendance.reload.status).to eq 'paid'
+        expect(attendance.reload).to be_pending
         expect(response).to redirect_to 'xpto.foo.bar'
       end
     end

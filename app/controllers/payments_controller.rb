@@ -18,7 +18,6 @@ class PaymentsController < ApplicationController
       redirect_to event_registration_groups_path(@event)
     else
       flash[:notice] = I18n.t('payments_controller.checkout.success')
-      @attendance.paid!
       redirect_to response[:url]
     end
   end

@@ -134,6 +134,7 @@ en:
         success: 'Group registration accepted.'
     registration:
       attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
+      workshop: "By registering for the workshops, I declare being aware that the minimum attendance to each workshop is 12 people, and that if this number is not reached, I will have the opportunity to either join another workshop, or get a refund."
     registered_attendances:
       confirm:
         success: "Registration confirmed successfully. The participant was notified by email."

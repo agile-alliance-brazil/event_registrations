@@ -443,4 +443,21 @@ RSpec.describe Attendance, type: :model do
       it { expect(attendance.band_value).to be_nil }
     end
   end
+
+  describe '#accepted!' do
+    context 'when the value is not zero' do
+      let(:period) { FactoryBot.create(:registration_period) }
+      let!(:attendance) { FactoryBot.create(:attendance, registration_period: period, registration_value: 10) }
+      let!(:other_attendance) { FactoryBot.create(:attendance, registration_period: period, registration_value: -10) }
+      let!(:zero_attendance) { FactoryBot.create(:attendance, registration_period: period, registration_value: 0) }
+      before do
+        attendance.accepted!
+        other_attendance.accepted!
+        zero_attendance.accepted!
+      end
+      it { expect(attendance.reload).to be_accepted }
+      it { expect(other_attendance.reload).to be_accepted }
+      it { expect(zero_attendance.reload).to be_paid }
+    end
+  end
 end

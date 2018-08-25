@@ -14,7 +14,7 @@ class CreateAttendance
     @attendance = Attendance.new(attributes)
     @attendance.status = :waiting if @event.full? || @event.attendances_in_the_queue?
 
-    @attendance = PerformGroupCheck.run(@attendance, @params['registration_token'])
+    @attendance = PerformGroupCheck.instance.run(@attendance, @params['registration_token'])
     put_band
     @attendance.registration_value = @event.registration_price_for(@attendance, create_params.payment_type_params)
     @attendance.payment_type = create_params.payment_type_params

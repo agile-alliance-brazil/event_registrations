@@ -370,12 +370,12 @@ RSpec.describe AttendancesController, type: :controller do
       before do
         User.any_instance.stubs(:has_approved_session?).returns(true)
         sign_in user
-        stub_request(:post, 'http://cf.agilealliance.org/api/').to_return(status: 200, body: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><result>0</result></data>', headers: {})
       end
 
       context 'with a valid attendance' do
         context 'and no group token informed' do
           it 'updates the attendance' do
+            AgileAllianceService.stubs(:check_member).returns(false)
             put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit' }
             expect(Attendance.last.registration_group).to be_nil
             expect(Attendance.last.first_name).to eq user.first_name

@@ -156,6 +156,11 @@ class Attendance < ApplicationRecord
     pending? || accepted?
   end
 
+  def accepted!
+    return update(status: :paid) if registration_value&.zero?
+    update(status: :accepted)
+  end
+
   private
 
   def set_last_status_change

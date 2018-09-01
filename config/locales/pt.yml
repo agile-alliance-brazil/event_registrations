@@ -460,3 +460,5 @@ pt:
       create: Salvar %{model}
       submit: Salvar %{model}
       update: Atualizar %{model}
+  application:
+    title: "Agile Alliance Brazil - Sistema de Inscrições"

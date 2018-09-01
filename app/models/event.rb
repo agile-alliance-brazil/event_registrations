@@ -4,21 +4,21 @@
 #
 # Table name: events
 #
-#  id                 :integer          not null, primary key
-#  name               :string(255)
-#  location_and_date  :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
-#  price_table_link   :string(255)
 #  allow_voting       :boolean
 #  attendance_limit   :integer
-#  full_price         :decimal(10, )
-#  start_date         :datetime
-#  end_date           :datetime
-#  link               :string(255)
-#  logo               :string(255)
+#  created_at         :datetime
 #  days_to_charge     :integer          default(7)
+#  end_date           :datetime
+#  full_price         :decimal(10, )
+#  id                 :integer          not null, primary key
+#  link               :string(255)
+#  location_and_date  :string(255)
+#  logo               :string(255)
 #  main_email_contact :string(255)      default(""), not null
+#  name               :string(255)
+#  price_table_link   :string(255)
+#  start_date         :datetime
+#  updated_at         :datetime
 #
 
 class Event < ApplicationRecord

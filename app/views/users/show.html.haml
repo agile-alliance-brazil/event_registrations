@@ -6,8 +6,7 @@
       %li.list-group-item
         = t("activerecord.attributes.attendance.#{attribute}") + ': '
         %strong= @user.send(attribute)
-  - if can? :edit, @user
-    = link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-primary'
+  = link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-primary'
 
 .attendances
   %h3= t('event.attendance.list')
@@ -23,20 +22,3 @@
     %ul.event
       %li= link_to t('event.attendance.add', name: event.name), new_event_attendance_path(event), class: 'add_attendance'
 .clear
-
-.user-auth.providers
-  %h3= t('authentication.list')
-  .auth_providers
-    - @user.authentications.each do |authentication|
-      %div.thumbnail
-        = image_tag "#{authentication.provider}_64.png", size: '64x64'
-        %span= t("authentication.providers.#{authentication.provider}")
-        .uuid
-          %strong= authentication.uid
-.clear
-
-- providers = Authentication::PROVIDERS - @user.authentications.map(&:provider)
-- unless providers.empty?
-  .providers
-    %h3= t('authentication.add')
-    = render partial: 'shared/providers', locals: { providers: providers }

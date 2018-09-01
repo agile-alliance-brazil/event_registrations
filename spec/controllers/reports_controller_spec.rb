@@ -4,40 +4,40 @@ RSpec.describe ReportsController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #attendance_organization_size' do
       before { get :attendance_organization_size, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #attendance_years_of_experience' do
       before { get :attendance_years_of_experience, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #attendance_job_role' do
       before { get :attendance_years_of_experience, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #burnup_registrations' do
       before { get :attendance_years_of_experience, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #by_state' do
       before { get :by_state, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #by_city' do
       before { get :by_city, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #last_biweekly_active' do
       before { get :last_biweekly_active, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #payment_type_report' do
       before { get :payment_type_report, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
   end
 
   context 'authenticated as organizer' do
-    let(:user) { FactoryBot.create :user, roles: [:organizer] }
+    let(:user) { FactoryBot.create :organizer }
     before { sign_in user }
 
     context 'and is organizing the event' do
@@ -229,24 +229,24 @@ RSpec.describe ReportsController, type: :controller do
       describe 'GET #attendance_organization_size' do
         let(:event) { FactoryBot.create :event }
         before { get :attendance_organization_size, params: { event_id: event } }
-        it { expect(response).to be_not_found }
+        it { expect(response).to have_http_status :not_found }
       end
 
       describe 'GET #attendance_years_of_experience' do
         let(:event) { FactoryBot.create :event }
         before { get :attendance_years_of_experience, params: { event_id: event } }
-        it { expect(response).to be_not_found }
+        it { expect(response).to have_http_status :not_found }
       end
 
       describe 'GET #attendance_job_role' do
         let(:event) { FactoryBot.create :event }
         before { get :attendance_job_role, params: { event_id: event } }
-        it { expect(response).to be_not_found }
+        it { expect(response).to have_http_status :not_found }
       end
 
       describe 'GET #burnup_registrations' do
         before { get :burnup_registrations, params: { event_id: 'foo' } }
-        it { expect(response).to be_not_found }
+        it { expect(response).to have_http_status :not_found }
       end
     end
   end

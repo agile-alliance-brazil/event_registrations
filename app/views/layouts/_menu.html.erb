@@ -1,0 +1,11 @@
+<ul id="menu">
+  <%= link_to_menu_item(:li, t('title.events'), events_path) %>
+  <%= link_to_menu_item(:li, t('title.archived_events'), list_archived_events_path) %>
+  <%= link_to_menu_item(:li, t('title.users_list'), users_path) %>
+  <% if current_user.present? %>
+    <%= link_to_menu_item(:li, t('actions.account'), current_user) %>
+    <%= link_to_menu_item(:li, t('actions.logout'), destroy_user_session_path, method: :delete) %>
+  <% else %>
+    <%= link_to_menu_item(:li, t('actions.login'), new_user_session_path) %>
+  <% end %>
+</ul>

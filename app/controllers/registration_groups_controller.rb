@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RegistrationGroupsController < ApplicationController
+class RegistrationGroupsController < AuthenticatedController
   before_action :assign_event
   before_action :assign_group, except: %i[index create]
 

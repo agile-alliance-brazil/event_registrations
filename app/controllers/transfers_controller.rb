@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-class TransfersController < ApplicationController
+class TransfersController < AuthenticatedController
   before_action :assign_event
   before_action :assign_transfer
+  before_action :check_organizer
 
   def new
     attendances = can_manage_event? ? @event.attendances : current_user.attendances

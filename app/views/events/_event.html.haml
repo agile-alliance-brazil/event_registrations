@@ -11,29 +11,26 @@
       %span{class: 'fa fa-plus-square'}
       = t('event.register.to_register_message')
 
-    - if can? :update, event
-      = link_to event_attendances_path(event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed'), class: 'btn btn-link' do
-        %span{class: 'fa fa-list'}
-        = "#{t('actions.list_attendances')} (#{event.attendances_count})"
+    = link_to event_attendances_path(event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed'), class: 'btn btn-link' do
+      %span{class: 'fa fa-list'}
+      = "#{t('actions.list_attendances')} (#{event.attendances_count})"
 
-      = link_to event_registration_groups_path(event), class: 'btn btn-link' do
-        %i{class: 'fa fa-users'}
-        = "#{t('actions.list_groups')} (#{event.registration_groups.count})"
+    = link_to event_registration_groups_path(event), class: 'btn btn-link' do
+      %i{class: 'fa fa-users'}
+      = "#{t('actions.list_groups')} (#{event.registration_groups.count})"
 
-      = link_to to_approval_event_attendances_path(event), class: 'btn btn-link' do
-        %i{class: 'fa fa-check'}
-        = "#{t('actions.to_approval')} (#{event.attendances.waiting_approval.count})"
+    = link_to to_approval_event_attendances_path(event), class: 'btn btn-link' do
+      %i{class: 'fa fa-check'}
+      = "#{t('actions.to_approval')} (#{event.attendances.waiting_approval.count})"
 
-      = link_to waiting_list_event_attendances_path(event), class: 'btn btn-link' do
-        %i{class: 'fa fa-list'}
-        = "#{t('actions.waiting_list')} (#{event.attendances.waiting.count})"
+    = link_to waiting_list_event_attendances_path(event), class: 'btn btn-link' do
+      %i{class: 'fa fa-list'}
+      = "#{t('actions.waiting_list')} (#{event.attendances.waiting.count})"
 
-    - if can? :edit, event
-      = link_to edit_event_path(event), class: 'btn btn-link' do
-        %span{class: 'far fa-edit'}
-        = t('events.edit.button')
+    = link_to edit_event_path(event), class: 'btn btn-link' do
+      %span{class: 'far fa-edit'}
+      = t('events.edit.button')
 
-    - if can? :destroy, event
-      = link_to event_path(event), method: :delete, class: 'btn btn-link' do
-        %span{class: 'far fa-trash-alt'}
-        = t('events.delete.button')
+    = link_to event_path(event), method: :delete, class: 'btn btn-link' do
+      %span{class: 'far fa-trash-alt'}
+      = t('events.delete.button')

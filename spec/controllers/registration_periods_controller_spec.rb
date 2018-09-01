@@ -4,15 +4,15 @@ describe RegistrationPeriodsController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do
       before { get :new, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'POST #create' do
       before { post :create, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'DELETE #destroy' do
       before { delete :destroy, params: { event_id: 'foo', id: 'bar' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
   end
 
@@ -23,17 +23,13 @@ describe RegistrationPeriodsController, type: :controller do
     before { sign_in user }
 
     describe 'GET #new' do
-      it 'redirects to login' do
-        get :new, params: { event_id: event }
-        expect(response).to redirect_to root_path
-      end
+      before { get :new, params: { event_id: event } }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'POST #create' do
-      it 'redirects to login' do
-        post :create, params: { event_id: event }
-        expect(response).to redirect_to root_path
-      end
+      before { post :create, params: { event_id: event, registration_period: { title: 'foo', start_at: Time.zone.today, end_at: Time.zone.tomorrow, price: 100 } } }
+      it { expect(response).to have_http_status :not_found }
     end
   end
 
@@ -66,9 +62,8 @@ describe RegistrationPeriodsController, type: :controller do
         it 'creates the period and redirects to event' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          valid_parameters = { title: 'foo', start_at: start_date, end_at: end_date, price: 100 }
 
-          post :create, params: { event_id: event, registration_period: valid_parameters }
+          post :create, params: { event_id: event, registration_period: { title: 'foo', start_at: start_date, end_at: end_date, price: 100 } }
           period_persisted = RegistrationPeriod.last
           registration_period = assigns(:registration_period)
           expect(period_persisted.title).to eq 'foo'

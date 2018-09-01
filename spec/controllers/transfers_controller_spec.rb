@@ -4,11 +4,11 @@ RSpec.describe TransfersController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do
       before { get :new, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'POST #create' do
       before { post :create, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
   end
 
@@ -19,10 +19,7 @@ RSpec.describe TransfersController, type: :controller do
 
     describe 'GET #new' do
       before { get :new, params: { event_id: event } }
-      it 'redirects to root_path with a message' do
-        expect(response).to redirect_to root_path
-        expect(flash[:error]).to eq I18n.t('flash.unauthorised')
-      end
+      it { expect(response).to have_http_status :not_found }
     end
   end
 

@@ -1,12 +1,11 @@
 = form_for([@event, @attendance], class: 'form-horizontal') do |form|
   - @registration_token ||= params[:registration_token]
 
-  - if can? :update, @event
-    %div{class: 'row'}
-      %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
-        .form-background
-          = label_tag t('activerecord.attributes.attendance.payment_type')
-          = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
+  %div{class: 'row'}
+    %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}
+      .form-background
+        = label_tag t('activerecord.attributes.attendance.payment_type')
+        = select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control'
 
   %div{class: 'row'}
     %div{class: 'col-xs-12 col-sm-6 col-sm-offset-3'}

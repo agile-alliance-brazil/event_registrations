@@ -368,3 +368,5 @@ en:
         create: I want to register
       submit: Save %{model}
       update: Update %{model}
+  application:
+    title: "Agile Alliance Brazil - Registrations System"

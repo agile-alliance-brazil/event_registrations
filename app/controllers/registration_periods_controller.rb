@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class RegistrationPeriodsController < ApplicationController
+class RegistrationPeriodsController < AuthenticatedController
   before_action :assign_event
+  before_action :check_organizer
   before_action :assign_period, only: %i[destroy edit update]
 
   def new

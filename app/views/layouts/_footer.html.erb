@@ -1,0 +1,18 @@
+<div id="footer">
+  <div class="container">
+    <% if @event.present? %>
+      <p><%= t('footer.help', email: @event.main_email_contact) %></p>
+    <% else %>
+      <p><%= t('footer.help', email: 'inscricoes@agilebrazil.com') %></p>
+    <% end %>
+    <p><strong>Copyleft - Agile Brazil 2010 - 2018</strong></p>
+  </div>
+</div>
+
+<%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js' %>
+
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/solid.js' %>
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/regular.js' %>
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/brands.js' %>
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js' %>
+<%= javascript_include_tag 'application' %>

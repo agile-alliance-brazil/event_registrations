@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-class EventsController < ApplicationController
+class EventsController < AuthenticatedController
   before_action :assign_event, only: %i[show destroy add_organizer remove_organizer edit update]
-  skip_before_action :authenticate_user!, :authorize_action, only: %i[index show]
+
+  before_action :check_organizer, only: %i[edit update destroy add_organizer]
+  before_action :check_admin, only: %i[new create list_archived]
+
+  skip_before_action :authenticate_user!, only: %i[index show]
 
   def index
     @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date >= Time.zone.now }
@@ -75,11 +79,5 @@ class EventsController < ApplicationController
 
   def assign_event
     @event = Event.find(params[:id])
-  end
-
-  # It overrides the super class method due to the difference on how it gets the @event
-  def current_ability
-    event = Event.find_by(id: params[:id])
-    @current_ability ||= Ability.new(current_user, event)
   end
 end

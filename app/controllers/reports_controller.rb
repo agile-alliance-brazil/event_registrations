@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-class ReportsController < ApplicationController
+class ReportsController < AuthenticatedController
   before_action :assign_event
-
-  before_action :authorize_report
-  skip_before_action :authorize_action
+  before_action :check_organizer
 
   def attendance_organization_size
     @attendance_organization_size_data = gather_report_data(:organization_size)
@@ -42,10 +40,6 @@ class ReportsController < ApplicationController
 
   def assign_event
     @event = Event.find(params[:event_id])
-  end
-
-  def authorize_report
-    not_found unless can?(:read, ReportsController)
   end
 
   def gather_report_data(grouped_by)

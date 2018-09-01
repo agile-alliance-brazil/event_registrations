@@ -5,31 +5,31 @@ describe RegistrationQuotasController, type: :controller do
     describe 'GET #new' do
       it 'redirects to login' do
         get :new, params: { event_id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'POST #create' do
       it 'redirects to login' do
         post :create, params: { event_id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'DELETE #destroy' do
       it 'redirects to login' do
         delete :destroy, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'GET #edit' do
       it 'redirects to login' do
         get :edit, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'PUT #update' do
       it 'redirects to login' do
         put :update, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

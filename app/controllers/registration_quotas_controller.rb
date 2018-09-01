@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RegistrationQuotasController < ApplicationController
+class RegistrationQuotasController < AuthenticatedController
   before_action :assign_event
   before_action :assign_quota, only: %i[destroy edit update]
 

@@ -5,7 +5,6 @@ require 'simplecov'
 SimpleCov.start 'rails' do
   add_filter '/test/'
   add_filter '/spec/'
-  add_filter 'app/controllers/sessions_controller.rb'
 
   add_group 'Controllers', 'app/controllers'
   add_group 'Models', 'app/models'
@@ -20,7 +19,6 @@ end
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'mocha/api'
-require 'cancan/matchers'
 require 'shoulda-matchers'
 require 'rspec/collection_matchers'
 require 'webmock/rspec'
@@ -45,7 +43,17 @@ end
 RSpec.configure do |config|
   Rails.application.eager_load!
 
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
   config.include ActiveSupport::Testing::TimeHelpers
+  config.include Warden::Test::Helpers
+  Warden.test_mode!
+
+  # == Mock Framework
+  #
+  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
+  #
+  config.mock_with :mocha
 
   config.before(:suite) do
     ActionMailer::Base.deliveries.clear
@@ -62,12 +70,6 @@ RSpec.configure do |config|
   # Remove the disables once rubocop > 0.48.0
   config.include(ControllerMacros, type: :controller)
   config.include(TrimmerMacros)
-
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  config.mock_with :mocha
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -90,8 +92,4 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.render_views
-end
-
-def sign_in(user)
-  controller.current_user = user
 end

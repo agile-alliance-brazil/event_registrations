@@ -4,10 +4,7 @@
   %div{class: 'col-lg-4 line'}
     = user.email
   %div{class: 'col-lg-3 centered line'}
-    - user.roles.each do |role|
-      = link_to "x #{role}", self.send("toggle_#{role}_user_path", user), class: 'btn-sm btn-primary', remote: true, method: :patch
-  %div{class: 'col-lg-3 centered line'}
     - unless user.admin?
-      = link_to '+ admin', toggle_admin_user_path(user), class: 'btn-sm btn-danger', remote: true, method: :patch
+      = link_to '+ admin', update_to_admin_user_path(user), class: 'btn-sm btn-danger', remote: true, method: :patch
     - unless user.organizer?
-      = link_to '+ organizer', toggle_organizer_user_path(user), class: 'btn-sm btn-primary', remote: true, method: :patch
+      = link_to '+ organizer', update_to_organizer_user_path(user), class: 'btn-sm btn-primary', remote: true, method: :patch

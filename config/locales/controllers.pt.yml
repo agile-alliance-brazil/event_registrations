@@ -5,6 +5,7 @@ pt:
       save: "Salvar"
     actions:
       title: "Ações"
+    useful_links: "Links Úteis"
 
   registration:
     quantity: "Quantidade"
@@ -86,6 +87,8 @@ pt:
     show:
       edit:
         button: "Editar Perfil"
+    completed_login:
+      success: "Seu usuário foi ativado."
   event_attendances:
     form:
       state: "Estado - ex: SP"

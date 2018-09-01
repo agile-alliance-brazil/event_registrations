@@ -252,7 +252,7 @@ pt:
     form:
       invalid_data: "Ocorreu um problema."
   footer:
-    help: "Se tiver dúvidas, críticas ou sugestões entre em contato através do email %{email}"
+    help: "Contato"
 
   email:
     registration_pending:

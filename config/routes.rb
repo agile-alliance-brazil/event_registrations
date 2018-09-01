@@ -11,17 +11,12 @@ Current::Application.routes.draw do
     "http://#{request.host_with_port}/#{path}"
   end)
 
-  # post '/auth/:provider/callback', to: 'sessions#create'
-  # get '/auth/:provider/callback', to: 'sessions#create'
-
-  # get '/auth/failure', to: 'sessions#failure'
-  # get '/login', to: 'sessions#new', as: :login
-  # delete '/logout', to: 'sessions#destroy', as: :logout
-
   resources :users, only: %i[show edit update index] do
     member do
       patch :update_to_organizer
       patch :update_to_admin
+      get :edit_default_password
+      patch :update_default_password
     end
   end
 

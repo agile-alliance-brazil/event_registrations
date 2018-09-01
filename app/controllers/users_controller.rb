@@ -4,6 +4,8 @@ class UsersController < AuthenticatedController
   before_action :assign_user, except: :index
   before_action :check_admin, only: %i[index update_to_organizer update_to_admin]
 
+  skip_before_action :authenticate_user!, only: %i[edit_default_password update_default_password]
+
   def show
     params[:id] ||= current_user.id
     active_events = @user.attendances.active.map(&:event)
@@ -43,6 +45,19 @@ class UsersController < AuthenticatedController
     respond_js_to_toggle_roles('users/user')
   end
 
+  def edit_default_password; end
+
+  def update_default_password
+    @user.update(password: update_default_password_params[:password], password_confirmation: update_default_password_params[:update_default_password_params])
+    if @user.valid?
+      sign_in @user
+      redirect_to root_path, notice: I18n.t('users.completed_login.success')
+    else
+      flash[:error] = @user.errors.full_messages.join(', ')
+      render :edit_default_password
+    end
+  end
+
   private
 
   def assign_user
@@ -51,6 +66,10 @@ class UsersController < AuthenticatedController
 
   def update_user_params
     params.require(:user).permit(:first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale)
+  end
+
+  def update_default_password_params
+    params.require(:user).permit(:password, :password_confirmation)
   end
 
   def toggle_role(role)

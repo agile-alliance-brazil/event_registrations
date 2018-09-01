@@ -1,13 +1,25 @@
-<div id="footer">
-  <div class="container">
-    <% if @event.present? %>
-      <p><%= t('footer.help', email: @event.main_email_contact) %></p>
-    <% else %>
-      <p><%= t('footer.help', email: 'inscricoes@agilebrazil.com') %></p>
-    <% end %>
-    <p><strong>Copyleft - Agile Brazil 2010 - 2018</strong></p>
+<footer class="page-footer font-small blue pt-4">
+  <div class="container-fluid text-center text-md-left">
+    <div class="row">
+      <hr class="clearfix w-100 d-md-none pb-3">
+      <div class="col-md-3 mb-md-0 mb-3">
+        <h5 class="text-uppercase"><%= t('general.useful_links') %></h5>
+        <ul class="list-unstyled">
+          <li>
+            <% if @event.present? %>
+              <a href="mailto: <%= @event.main_email_contact %>"<%= t('footer.help') %></a>
+            <% else %>
+              <a href="mailto: inscricoes@agilebrazil.com"><%= t('footer.help') %></a>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-</div>
+  <div class="footer-copyright text-center py-3">2010-2018 Copyleft:
+    <a href="http://agilebrazil.com"> Agile Brazil</a>
+  </div>
+</footer>
 
 <%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js' %>
 

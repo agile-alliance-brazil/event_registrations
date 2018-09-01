@@ -5,6 +5,7 @@ en:
       save: "Save"
     actions:
       title: "Actions"
+    useful_links: "Useful Links"
   registration:
     quantity: "Quantity"
     details:
@@ -86,6 +87,8 @@ en:
     show:
       edit:
         button: "Update Profile"
+    completed_login:
+      success: "Your user was activated."
   event_attendances:
     form:
       state: "State"

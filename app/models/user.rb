@@ -63,7 +63,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :lockable, :omniauthable
 
-  devise :omniauthable, omniauth_providers: %i[github]
+  devise :omniauthable, omniauth_providers: %i[github facebook twitter linkedin]
 
   has_many :attendances, dependent: :destroy
   has_many :events, -> { distinct }, through: :attendances, dependent: :nullify

@@ -254,7 +254,7 @@ RSpec.describe Event, type: :model do
     end
     context 'with valid parameters' do
       context 'and the user has the organizer role' do
-        let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+        let(:organizer) { FactoryBot.create :organizer }
         it 'adds the user as organizer' do
           expect(event.add_organizer_by_email!(organizer.email)).to be true
           expect(event.reload.organizers).to include organizer
@@ -262,7 +262,7 @@ RSpec.describe Event, type: :model do
       end
 
       context 'and the user is already an organizer' do
-        let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+        let(:organizer) { FactoryBot.create :organizer }
         before do
           event.organizers << organizer
           event.save!
@@ -273,7 +273,7 @@ RSpec.describe Event, type: :model do
         end
       end
       context 'and the user has the admin role' do
-        let(:admin) { FactoryBot.create :user, roles: [:admin] }
+        let(:admin) { FactoryBot.create :admin }
         it 'adds the user as organizer' do
           expect(event.add_organizer_by_email!(admin.email)).to be true
           expect(event.reload.organizers).to include admin
@@ -284,7 +284,7 @@ RSpec.describe Event, type: :model do
 
   describe '#remove_organizer_by_email!' do
     let(:event) { FactoryBot.create :event }
-    let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+    let(:organizer) { FactoryBot.create :organizer }
 
     context 'with invalid parameters' do
       it 'returns false' do
@@ -304,7 +304,7 @@ RSpec.describe Event, type: :model do
         end
       end
       context 'and the user is not an organizer of the event' do
-        let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+        let(:organizer) { FactoryBot.create :organizer }
         it 'adds the user as organizer' do
           event.remove_organizer_by_email!(organizer.email)
           expect(event.reload.organizers.count).to eq 0

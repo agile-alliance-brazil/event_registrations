@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= I18n.t('application.title') %></title>
+
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+
+    <%= yield :stylesheet %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+
+    <div id="header" class="row">
+      <div class="col-xs-12">
+        <%= render 'layouts/header' %>
+      </div>
+      <div class="col-xs-12">
+        <%= render 'layouts/menu' %>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-xs-12">
+      <section class="alerts">
+        <%= notice %>
+        <%= alert %>
+        <%= error %>
+      </section>
+    </div>
+    </div>
+
+    <%= yield %>
+
+    <%= render 'layouts/footer' %>
+  </body>
+</html>

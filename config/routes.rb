@@ -2,6 +2,8 @@
 
 # rubocop:disable Metrics/BlockLength
 Current::Application.routes.draw do
+  devise_for :users, controllers: { registrations: 'devise_custom/registrations', omniauth_callbacks: 'devise_custom/omniauth_callbacks' }
+
   # To keep compatibility with old routes sent by email
   # In the future (new events) it can be removed
   get('attendances/:id', to: redirect do |params, request|
@@ -9,17 +11,17 @@ Current::Application.routes.draw do
     "http://#{request.host_with_port}/#{path}"
   end)
 
-  post '/auth/:provider/callback', to: 'sessions#create'
-  get '/auth/:provider/callback', to: 'sessions#create'
+  # post '/auth/:provider/callback', to: 'sessions#create'
+  # get '/auth/:provider/callback', to: 'sessions#create'
 
-  get '/auth/failure', to: 'sessions#failure'
-  get '/login', to: 'sessions#new', as: :login
-  delete '/logout', to: 'sessions#destroy', as: :logout
+  # get '/auth/failure', to: 'sessions#failure'
+  # get '/login', to: 'sessions#new', as: :login
+  # delete '/logout', to: 'sessions#destroy', as: :logout
 
   resources :users, only: %i[show edit update index] do
     member do
-      patch :toggle_organizer
-      patch :toggle_admin
+      patch :update_to_organizer
+      patch :update_to_admin
     end
   end
 

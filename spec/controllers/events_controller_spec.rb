@@ -39,52 +39,38 @@ RSpec.describe EventsController, type: :controller do
     end
 
     describe 'GET #list_archived' do
-      it 'redirects to login' do
-        get :list_archived
-        is_expected.to redirect_to login_path
-      end
+      before { get :list_archived }
+      it { expect(response).to redirect_to new_user_session_path }
     end
 
     describe 'GET #new' do
-      it 'redirects to login' do
-        get :new
-        is_expected.to redirect_to login_path
-      end
+      before { get :new }
+      it { expect(response).to redirect_to new_user_session_path }
     end
 
     describe 'POST #create' do
-      it 'redirects to login' do
-        post :create
-        is_expected.to redirect_to login_path
-      end
+      before { post :create }
+      it { expect(response).to redirect_to new_user_session_path }
     end
 
     describe 'DELETE destroy' do
-      it 'redirects to login' do
-        delete :destroy, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { delete :destroy, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
 
     describe 'PATCH #add_organizer' do
-      it 'redirects to login' do
-        patch :add_organizer, params: { id: 'foo' }, xhr: true
-        expect(response).to redirect_to login_path
-      end
+      before { patch :add_organizer, params: { id: 'foo' }, xhr: true }
+      it { expect(response).to have_http_status :unauthorized }
     end
 
     describe 'GET #edit' do
-      it 'redirects to login' do
-        get :edit, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { get :edit, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
 
     describe 'PUT #update' do
-      it 'redirects to login' do
-        put :update, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { put :update, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
   end
 
@@ -94,37 +80,37 @@ RSpec.describe EventsController, type: :controller do
 
     describe 'GET #list_archived' do
       before { get :list_archived }
-      it { expect(response).to redirect_to root_path }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'GET #new' do
       before { get :new }
-      it { expect(response).to redirect_to root_path }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'POST #create' do
       before { post :create }
-      it { expect(response).to redirect_to root_path }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'DELETE #destroy' do
       before { delete :destroy, params: { id: 'foo' } }
-      it { expect(response).to redirect_to root_path }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'PATCH #add_organizer' do
       before { patch :add_organizer, params: { id: 'foo' }, xhr: true }
-      it { expect(response).to redirect_to root_path }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'GET #edit' do
       before { get :edit, params: { id: 'foo' } }
-      it { expect(response).to redirect_to root_path }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'PUT #update' do
       before { put :update, params: { id: 'foo' } }
-      it { expect(response).to redirect_to root_path }
+      it { expect(response).to have_http_status :not_found }
     end
   end
 
@@ -135,16 +121,15 @@ RSpec.describe EventsController, type: :controller do
     before { sign_in organizer }
 
     describe 'DELETE #destroy' do
-      it 'redirects to root' do
-        delete :destroy, params: { id: 'foo' }
-        expect(response).to redirect_to root_path
-      end
+      before { delete :destroy, params: { id: 'foo' } }
+      it { expect(response).to have_http_status :not_found }
     end
 
     describe 'GET #edit' do
       context 'and valid event ID' do
         it 'assigns the instance variable and renders the template' do
           get :edit, params: { id: event }
+          expect(response).to have_http_status :ok
           expect(response).to render_template :edit
           expect(assigns(:event)).to eq event
         end
@@ -299,7 +284,7 @@ RSpec.describe EventsController, type: :controller do
       end
       context 'with valid parameters' do
         context 'and the user has the organizer role' do
-          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :organizer }
           it 'adds the user as organizer' do
             patch :add_organizer, params: { id: event, email: organizer.email }, xhr: true
             expect(response.status).to eq 200
@@ -308,7 +293,7 @@ RSpec.describe EventsController, type: :controller do
         end
 
         context 'and the user is already an organizer' do
-          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :organizer }
           before do
             event.organizers << organizer
             event.save!
@@ -320,7 +305,7 @@ RSpec.describe EventsController, type: :controller do
           end
         end
         context 'and the user has the admin role' do
-          let(:admin) { FactoryBot.create :user, roles: [:admin] }
+          let(:admin) { FactoryBot.create :admin }
           it 'adds the user as organizer' do
             patch :add_organizer, params: { id: event, email: admin.email }, xhr: true
             expect(response.status).to eq 200
@@ -350,7 +335,7 @@ RSpec.describe EventsController, type: :controller do
       end
       context 'with valid parameters' do
         context 'and the user is already an organizer' do
-          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :organizer }
           it 'removes the organizer' do
             delete :remove_organizer, params: { id: event, email: organizer.email }, xhr: true
             expect(response.status).to eq 200
@@ -359,8 +344,8 @@ RSpec.describe EventsController, type: :controller do
         end
 
         context 'and the user is not an organizer of the event' do
-          let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
-          let(:other_organizer) { FactoryBot.create :user, roles: [:organizer] }
+          let(:organizer) { FactoryBot.create :organizer }
+          let(:other_organizer) { FactoryBot.create :organizer }
           it 'adds the user as organizer' do
             event.add_organizer_by_email!(other_organizer.email)
             delete :remove_organizer, params: { id: event, email: organizer.email }, xhr: true

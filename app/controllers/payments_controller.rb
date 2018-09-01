@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class PaymentsController < ApplicationController
-  skip_before_action :authenticate_user!, :authorize_action
-
   before_action :assign_event
   before_action :assign_attendance
 

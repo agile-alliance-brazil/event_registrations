@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class PaymentNotificationsController < ApplicationController
-  skip_before_action :authenticate_user!
-  skip_before_action :authorize_action
   protect_from_forgery prepend: true, with: :exception, except: [:create]
 
   def create

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class UsersController < ApplicationController
+class UsersController < AuthenticatedController
   before_action :assign_user, except: :index
+  before_action :check_admin, only: %i[index update_to_organizer update_to_admin]
 
   def show
     params[:id] ||= current_user.id
@@ -32,12 +33,12 @@ class UsersController < ApplicationController
     end
   end
 
-  def toggle_organizer
+  def update_to_organizer
     toggle_role('organizer')
     respond_js_to_toggle_roles('users/user')
   end
 
-  def toggle_admin
+  def update_to_admin
     toggle_role('admin')
     respond_js_to_toggle_roles('users/user')
   end
@@ -53,20 +54,10 @@ class UsersController < ApplicationController
   end
 
   def toggle_role(role)
-    if @user.roles.include?(role)
-      @user.remove_role(role)
-    else
-      @user.add_role(role)
-    end
-
-    @user.save
+    @user.update(role: role)
   end
 
   def respond_js_to_toggle_roles(partial)
     respond_to { |format| format.js { render partial } }
-  end
-
-  def current_ability
-    @current_ability ||= UserAbility.new(current_user)
   end
 end

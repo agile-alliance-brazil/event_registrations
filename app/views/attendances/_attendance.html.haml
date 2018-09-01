@@ -32,7 +32,7 @@
       = link_to event_attendance_path(event, attendance), method: :delete, data: { confirm: t('attendance.cancel_confirmation', event: attendance.event_name ) } do
         %i{class: 'fa fa-ban', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', title: t('actions.cancel')}
 
-    - if can?(:dequeue, attendance) && (attendance.waiting?)
+    - if attendance.waiting?
       = link_to change_status_event_attendance_path(event, attendance, :dequeue), method: :patch do
         %i{class: 'far fa-thumbs-up', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom',  title: t('attendance.list.actions.dequeue')}
 

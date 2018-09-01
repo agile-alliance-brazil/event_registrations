@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class AttendancesController < ApplicationController
-  rescue_from Net::OpenTimeout, with: :timeout
-
+class AttendancesController < AuthenticatedController
   before_action :assign_event
   before_action :assign_attendance, except: %i[index create new waiting_list search to_approval]
+  before_action :check_organizer, only: :waiting_list
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -102,13 +101,6 @@ class AttendancesController < ApplicationController
 
   def assign_attendance
     @attendance = Attendance.find(params[:id])
-  end
-
-  def timeout
-    respond_to do |format|
-      format.html { render file: Rails.root.join('public', '408'), layout: false, status: :request_timeout }
-      format.js { render plain: '408 Request Timeout', status: :request_timeout }
-    end
   end
 
   def statuses_params

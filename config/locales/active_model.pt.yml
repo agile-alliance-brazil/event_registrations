@@ -113,9 +113,14 @@ pt:
         automatic_approval: Aprovação automática?
         attendances: Inscritos
       user:
-        name: Nome
+        first_name: Nome
+        last_name: Sobrenome
         email: Email
-        roles: Papéis
+        password: Senha
+        password_confirmation: Confirmação de senha
+        remember_me: Lembrar
+        name: "Nome"
+        roles: "Papéis"
   attendance:
     enum:
       status:

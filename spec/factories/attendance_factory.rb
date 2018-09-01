@@ -16,7 +16,7 @@ FactoryBot.define do
     badge_name { |a| a.user.badge_name }
     cpf { |a| a.user.cpf }
     gender { |a| a.user.gender }
-    registration_value 400.00
+    registration_value { 400.00 }
     organization_size { ['1 - 10', '11 - 30', '31 - 100', '100 - 500', '500 -'].sample }
     experience_in_agility { ['0 - 2', '3 - 7', '7 -'].sample }
     years_of_experience { ['0 - 5', '6 - 10', '11 - 20', '21 - 30', '31 -'].sample }

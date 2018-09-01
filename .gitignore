@@ -40,3 +40,5 @@ certs/*
 !certs/.gitkeep
 .ruby-version
 .idea/
+dump/
+lib/capistrano/

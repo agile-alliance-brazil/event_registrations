@@ -4,35 +4,35 @@ RSpec.describe AttendancesController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do
       before { get :new, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'POST #create' do
       before { post :create, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #show' do
       before { get :show, params: { event_id: 'foo', id: 'bar' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #index' do
       before { get :index, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #edit' do
       before { get :edit, params: { event_id: 'foo', id: 'bar' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PUT #update' do
       before { put :update, params: { event_id: 'foo', id: 'bar' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #search' do
       before { get :search, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PATCH #change_status' do
       before { patch :change_status, params: { event_id: 'foo', id: 'bar', new_status: 'xpto' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
   end
 
@@ -502,11 +502,8 @@ RSpec.describe AttendancesController, type: :controller do
           let(:event) { FactoryBot.create(:event) }
           context 'having attendances' do
             let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
-
-            it 'redirects to root_path' do
-              get :waiting_list, params: { event_id: event }
-              expect(response).to redirect_to root_path
-            end
+            before { get :waiting_list, params: { event_id: event } }
+            it { expect(response).to have_http_status :not_found }
           end
         end
       end

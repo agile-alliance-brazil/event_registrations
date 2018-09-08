@@ -5,12 +5,12 @@ This is a step by step guide on how to upgrade a ruby version for this applicati
 The whole process requires multiple commits and deployments but allows for a no-downtime and no manual intervention on hosting machines upgrade.
 The overall process is as follows:
 
-1. [Add the new ruby version to the infrastructure code](#Add-the-new-ruby-version-to-the-infrastructure-code)
-2. [Add the new ruby version to the host machines](#Add-the-new-ruby-version-to-the-host-machines)
-3. [Switch local development to use the new version and ensure everything works](#Switch-local-development-to-use-the-new-version-and-ensure-everything-works)
-4. [Change the host machines default ruby version for usage](#Change-the-host-machines-default-ruby-version-for-usage)
-5. [Remove the old ruby version from host machines](#Remove-the-old-ruby-version-from-host-machines)
-6. [Remove the old ruby version from the infrastructure code](#Remove-the-old-ruby-version-from-the-infrastructure-code)
+1. [Add the new ruby version to the infrastructure code](#add-the-new-ruby-version-to-the-infrastructure-code)
+2. [Add the new ruby version to the host machines](#add-the-new-ruby-version-to-the-host-machines)
+3. [Switch local development to use the new version and ensure everything works](#switch-local-development-to-use-the-new-version-and-ensure-everything-works)
+4. [Change the host machines default ruby version for usage](#change-the-host-machines-default-ruby-version-for-usage)
+5. [Remove the old ruby version from host machines](#remove-the-old-ruby-version-from-host-machines)
+6. [Remove the old ruby version from the infrastructure code](#remove-the-old-ruby-version-from-the-infrastructure-code)
 
 The following subsections will guide you through the whole process.
 

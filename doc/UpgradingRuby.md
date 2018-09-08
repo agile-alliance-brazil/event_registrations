@@ -49,7 +49,7 @@ Once your deployment is successful, your host machines should list the new ruby 
 You can do so by changing the [Gemfile](../Gemfile) to indicate the ruby version desired. This would mean switching `ruby '2.4.3'` for `ruby '2.5.1'`.
 With that done, you can run `bundle install` and `bundle exec rake ci`. If you're using rvm with autoruby load, after making the Gemfile change, you will need to `cd` out of the directory and back in before running `bundle install`.
 
-Once your tests are passing locally (make whichever changes you need to), make sure to update the [.travis.yml file](../.travis.yml) to reflect the new ruby version and, if you're using another CI tool, you might have to manually change the ruby version used for building this project.
+Once your tests are passing locally (make whichever changes you need to), make sure to update the [.travis.yml file](../.travis.yml) and the [circle config file](../.circleci/config.yml) to reflect the new ruby version and, if you're using another CI tool, you might have to manually change the ruby version used for building this project.
 
 Once all of that is happy, make a new commit. Don't push to your auto-deploy branch (or don't trigger a deploy) just yet.
 

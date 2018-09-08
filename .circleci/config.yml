@@ -55,7 +55,6 @@ jobs:
       command: /sbin/init
     steps:
     - checkout
-    - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     - restore_cache:
         keys:
         # This branch if available

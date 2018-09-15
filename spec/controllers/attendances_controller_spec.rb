@@ -112,7 +112,7 @@ RSpec.describe AttendancesController, type: :controller do
                   expect(created_attendance.cpf).to eq user.cpf
                   expect(created_attendance.gender).to eq user.gender
                   expect(response).to redirect_to event_attendance_path(event, created_attendance)
-                  expect(flash[:notice]).to eq I18n.t('flash.attendance.create.success')
+                  expect(flash[:notice]).to eq I18n.t('attendances.create.success')
                 end
               end
               context 'when attempt to register again' do
@@ -124,7 +124,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
 
@@ -147,7 +147,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
 
@@ -169,7 +169,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
                   context 'in other event' do
@@ -190,7 +190,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
                   context 'in other event' do
@@ -241,7 +241,7 @@ RSpec.describe AttendancesController, type: :controller do
                 post :create, params: { event_id: event, attendance: valid_attendance.merge(email: other_user.email) }
                 expect(attendance.status).to eq 'waiting'
                 expect(response).to redirect_to event_attendance_path(event, attendance)
-                expect(flash[:notice]).to eq I18n.t('flash.attendance.create.success')
+                expect(flash[:notice]).to eq I18n.t('attendances.create.success')
               end
             end
 

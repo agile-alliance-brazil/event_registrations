@@ -1,13 +1,13 @@
 - if current_user.try(:organizer?) || current_user.try(:admin?)
-  %h4= t('reistration_periods.list')
+  %h4= t('reistration_periods.index.title')
 
   - if event.registration_periods.present?
     %table.table
-      %th= t('formtastic.labels.registration_period.id')
-      %th= t('formtastic.labels.registration_period.title')
-      %th= t('formtastic.labels.registration_period.start_at')
-      %th= t('formtastic.labels.registration_period.end_at')
-      %th= t('formtastic.labels.registration_period.value')
+      %th= RegistrationPeriod.human_attribute_name :id
+      %th= RegistrationPeriod.human_attribute_name :title
+      %th= RegistrationPeriod.human_attribute_name :start_at
+      %th= RegistrationPeriod.human_attribute_name :end_at
+      %th= RegistrationPeriod.human_attribute_name :value
       %th= t('general.actions.title')
 
       - @event.registration_periods.each do |period|
@@ -23,4 +23,4 @@
             = link_to edit_event_registration_period_path(event, period), class: 'btn btn-link' do
               %span{ class: 'far fa-edit' }
   - else
-    %h5= t('events.show.no_periods_message')
+    %h5= t('general.no_data')

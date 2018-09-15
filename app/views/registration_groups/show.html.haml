@@ -1,4 +1,4 @@
-%h3= t('registration_group.show.title', group_name: @group.name)
+%h3= t('registration_groups.show.title', group_name: @group.name)
 
 %h5= "#{RegistrationGroup.human_attribute_name(:discount)}: #{number_with_precision(@group.discount, precisiom: 2)}"
 %h5= "#{RegistrationGroup.human_attribute_name(:minimum_size)}: #{@group.minimum_size}"

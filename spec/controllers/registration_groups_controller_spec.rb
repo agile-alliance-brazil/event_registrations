@@ -6,12 +6,6 @@ RSpec.describe RegistrationGroupsController, type: :controller do
 
   let(:event) { FactoryBot.create :event }
 
-  context 'ability stuff' do
-    describe '#resource' do
-      it { expect(controller.send(:resource_class)).to eq RegistrationGroup }
-    end
-  end
-
   describe 'GET #index' do
     context 'with valid data' do
       let!(:group) { FactoryBot.create :registration_group, event: event }

@@ -3,7 +3,7 @@
     %div{class: 'col-xs-8'}
       = text_field_tag :search, params[:search], placeholder: t('users.index.search.placeholder'), size: 50, class: 'form-control'
     %div{class: 'col-xs-4'}
-      = select_tag :roles, options_for_select(['guest', 'organizer', 'admin', 'admin e organizer']), { include_blank: t('users.index.role.placeholder') }
+      = select_tag :roles, options_for_select(['guest', 'organizer', 'admin', 'admin e organizer']), { include_blank: t('general.select') }
   %div{class: 'row'}
     %div{class: 'col-xs-4'}
       = link_to 'Search', '#', onclick: 'submitSearch();', class: 'btn btn-primary search-button'

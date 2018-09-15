@@ -1,11 +1,31 @@
-<ul id="menu">
-  <%= link_to_menu_item(:li, t('title.events'), events_path) %>
-  <%= link_to_menu_item(:li, t('title.archived_events'), list_archived_events_path) %>
-  <%= link_to_menu_item(:li, t('title.users_list'), users_path) %>
-  <% if current_user.present? %>
-    <%= link_to_menu_item(:li, t('actions.account'), current_user) %>
-    <%= link_to_menu_item(:li, t('actions.logout'), destroy_user_session_path, method: :delete) %>
-  <% else %>
-    <%= link_to_menu_item(:li, t('actions.login'), new_user_session_path) %>
-  <% end %>
-</ul>
+<div class="row">
+  <div class="col-xl-12">
+    <ul class="nav nav-tabs">
+
+      <li class="nav-item <%= 'active' if current_events_active %>">
+        <%= link_to t('events.index.title'), events_path, class: 'nav-link'%>
+      </li>
+
+      <li class="nav-item <%= 'active' if past_events_active %>">
+        <%= link_to t('events.index.archived'), list_archived_events_path, class: 'nav-link'%>
+      </li>
+
+      <li class="nav-item  <%= 'active' if users_list_active %>">
+        <%= link_to t('users.index.title'), users_path, class: 'nav-link'%>
+      </li>
+
+      <% if current_user.present? %>
+        <li class="nav-item  <%= 'active' if account_active %>">
+          <%= link_to t('users.account.self'), current_user, class: 'nav-link'%>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('devise.sessions.logout'), destroy_user_session_path, method: :delete, class: 'nav-link'%>
+        </li>
+      <% else %>
+        <li class="nav-item">
+          <%= link_to t('devise.sessions.login'), new_user_session_path, class: 'nav-link'%>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

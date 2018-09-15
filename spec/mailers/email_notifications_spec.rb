@@ -49,7 +49,7 @@ RSpec.describe EmailNotifications, type: :mailer do
           expect(ActionMailer::Base.deliveries.size).to eq 1
           expect(mail.to).to eq [attendance.email]
           expect(mail.text_part.body.to_s).to include("Oi #{attendance.full_name},")
-          expect(mail.text_part.body.to_s).to include("Quando: #{I18n.l(attendance.event.start_date.to_date)} #{I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}")
+          expect(mail.text_part.body.to_s).to include("Quando: #{I18n.l(attendance.event.start_date.to_date)} #{I18n.t('general.until')} #{I18n.l(attendance.event.end_date.to_date)}")
           expect(mail.text_part.body.to_s).to include(attendance.event.main_email_contact.to_s)
           expect(mail.subject).to eq("Inscrição para #{event.name} confirmada")
         end
@@ -87,7 +87,7 @@ RSpec.describe EmailNotifications, type: :mailer do
           expect(mail.to).to eq([attendance.email])
           I18n.with_locale(:en) do
             expect(mail.text_part.body.to_s).to include("Dear #{attendance.full_name},")
-            expect(mail.text_part.body.to_s).to include("When: #{I18n.l(attendance.event.start_date.to_date)} #{I18n.t('title.until')} #{I18n.l(attendance.event.end_date.to_date)}")
+            expect(mail.text_part.body.to_s).to include("When: #{I18n.l(attendance.event.start_date.to_date)} #{I18n.t('general.until')} #{I18n.l(attendance.event.end_date.to_date)}")
             expect(mail.text_part.body.to_s).to include(attendance.event.main_email_contact)
             expect(mail.subject).to eq("Registration request to #{event.name} confirmed")
           end

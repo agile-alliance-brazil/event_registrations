@@ -1,8 +1,5 @@
 //= require jquery
 //= require jquery_ujs
-//= require highcharts.js
-//= require exporting.js
-//= require bootstrap-sprockets
 //= require_self
 //= require_tree .
 

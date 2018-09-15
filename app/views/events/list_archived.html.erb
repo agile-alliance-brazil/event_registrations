@@ -1,0 +1,16 @@
+<%= render 'layouts/menu', past_events_active: true, current_events_active: false, users_list_active: false, account_active: false %>
+
+<div class="tab-container">
+  <div class="row">
+    <div class="col-xl-12 col-sm-8">
+      <div id="events">
+        <% if @events.empty? %>
+          <div class="no-data"><i class="far fa-calendar-alt fa-4x"></i></div>
+          <div class="no-data"><%= t('general.no_data') %></div>
+        <% else %>
+          <%= render 'events', events: @events %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,7 +5,13 @@ en:
       save: "Save"
     actions:
       title: "Actions"
-    useful_links: "Useful Links"
+    confirm: "Are you sure?"
+    edit: "Edit"
+    no_data: "There is no data"
+    total: "Total"
+    until: "until"
+    select: "Select"
+    download_csv: "Download CSV"
   registration:
     quantity: "Quantity"
     details:
@@ -26,6 +32,8 @@ en:
         active_by_city: "Active by city"
         active_last_biweek: "Active last biweek"
         grouped_by_payment_type: "Grouped by payment type"
+      waiting_approval: "To Approve"
+      queue: "Queue"
     new:
       form:
         job_role:
@@ -43,23 +51,62 @@ en:
         attendance_address: "Contact Info"
         attendance_personal: "Personal Informations"
         educacional_information: "Educational Informations"
+        token_field: "Discount Token"
+      title:
+        text: "New Registration for %{event_name}"
+      cpf:
+        help: "Leave blank if you are not brazilian"
+      agreement:
+        attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
+        workshop: "By registering for the workshops, I declare being aware that the minimum attendance to each workshop is 12 people, and that if this number is not reached, I will have the opportunity to either join another workshop, or get a refund."
     actions:
       confirm: "Confirm Registration"
       recover: "Recover Registration"
       transfer: "Transfer Registration"
       cancel: "Cancel Registration"
+      accept: "accept"
+      pay: "pay"
+      dequeue: "dequeue"
     update:
       success: "Attendance updated."
+    create:
+      success: "Registration saved"
+      already_existent: "Email already registered in this event"
+    charts:
+      by_state:
+        state: "State"
+      payment_type:
+        value_grouped: "Value Grouped"
+        quantity: "Qty"
+    show:
+      title: "Attendance"
+    edit:
+      title: "Edit Attendance"
   events:
-    form:
-      event_basics: "Basic Informations"
-      event_core: "Main informations"
     index:
       title: "Events"
+      archived: "Archived Events"
+    new:
+      title: "New Event"
+    show:
+      organizers:
+        list: "Index of Organizers"
+        remove: "Remove Organizer"
+      full_price: "Full price: %{value}"
+      average_queue_time: "Avg time in queue: %{value}"
+      attendance_limit: "Attendance limit: %{value}"
+    edit:
+      title: "Edit Event"
+    delete:
+      title: "Delete Event"
   registration_groups:
     index:
       token_clipboard_tooltip: "Copy group token to the clipboard"
       title: "Groups"
+    edit:
+      title: "Edit Group"
+    show:
+      title: "Registration Group"
   attendance:
     reports:
       attendance_organization_size: "Attendance x Organization Size"
@@ -87,10 +134,62 @@ en:
     show:
       edit:
         button: "Update Profile"
+      title: "Account Details"
     completed_login:
       success: "Your user was activated."
+    edit:
+      title: "Updating %{username}"
+    index:
+      title: "Users"
+      search:
+        placeholder: "search by name or email"
+    account:
+      self: "My Account"
+    organizer:
+      new:
+        title: "New Organizer"
+    update:
+      success: "User updated"
   event_attendances:
     form:
       state: "State"
   actions:
     receive_credential: "Credential"
+  application:
+    title: "Registrations System"
+  registration_periods:
+    edit:
+      title: "Update Period"
+    new:
+      title: "New Registration Period"
+  header:
+    aa:
+      members: "Members"
+  gender:
+    male: "Male"
+    female: "Female"
+    other: "Other"
+  reistration_quotas:
+    index: "Index of Registration Quotas"
+  registration_quotas:
+    index:
+      attendances: "Attendances"
+    new:
+      title: "New Registration Quota"
+    edit:
+      title: "Edit Registration Quota"
+  footer:
+    help: "Contact"
+    useful_links: "Useful Links"
+  attendandes:
+    new:
+      title: "New Registration"
+  registration_groupss:
+    new:
+      title: "New Group"
+  reistration_groups:
+    index:
+      title: "Index of Groups"
+  reistration_periods:
+    index:
+      title: "Index of Periods"

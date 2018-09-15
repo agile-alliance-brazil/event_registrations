@@ -77,7 +77,6 @@ pt:
         organization_size: Tamanho da empresa
         job_role: Cargo
         years_of_experience: Experiência profissional (anos)
-        experience_in_agility: Experiência com agilidade (anos)
         school: Escola
         education_level: Nível educacional
         experience_in_agility: Experiência com agilidade (anos)
@@ -89,10 +88,31 @@ pt:
         twitter_user: Usuário no twitter
         default_locale: Local default
         payment_type: Tipo de pagamento
-        payment_types:
-          gateway: Gateway
-          bank_deposit: Depósito bancário
-          statement_agreement: Empenho
+        enums:
+          payment_types:
+            gateway: Gateway
+            bank_deposit: Depósito bancário
+            statement_agreement: Empenho
+            nil: Sem Tipo de Pagamento
+          job_role:
+            not_informed: Not Informed
+            student: Student
+            analyst: Analyst
+            manager: Manager
+            vp: Vice President
+            president: President
+            clevel: C-Level
+            coach: Coach
+            other: Other
+            developer: Developer
+          status:
+            waiting: Waiting
+            pending: Pending
+            accepted: Accepted
+            cancelled: Cancelled
+            paid: Paid
+            confirmed: Confirmed
+            showed_in: Showed In
       event:
         name: Nome
         attendance_limit: Capacidade
@@ -159,5 +179,7 @@ pt:
       other: "Reservadas"
     errors:
       discount_or_amount_present: "Ou o desconto ou o valor das inscrições no grupo deve estar preenchido."
+    quota_capacity_error: "Sem capacidade na cota para esta inscrição"
+    event_capacity_error: "Sem capacidade no grupo para essa inscrição"
   event:
     average_ticket: "Ticket Médio"

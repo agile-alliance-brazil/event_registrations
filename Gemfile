@@ -7,7 +7,6 @@ gem 'rails'
 gem 'airbrake'
 
 gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
-gem 'bootstrap-sass'
 gem 'brcpfcnpj'
 gem 'coffee-rails'
 gem 'country_select'

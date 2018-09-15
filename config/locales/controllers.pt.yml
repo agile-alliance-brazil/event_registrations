@@ -5,7 +5,13 @@ pt:
       save: "Salvar"
     actions:
       title: "Ações"
-    useful_links: "Links Úteis"
+    confirm: "Tem certeza?"
+    edit: "Editar"
+    no_data: "Não há registros"
+    until: "até"
+    total: "Total"
+    select: "Selecione"
+    download_csv: "Baixar o CSV"
 
   registration:
     quantity: "Quantidade"
@@ -26,6 +32,8 @@ pt:
         active_by_city: "Ativos por cidade"
         active_last_biweek: "Ativos na última quizena"
         grouped_by_payment_type: "Agrupado por tipo de pagamento"
+      waiting_approval: "Para Aprovar"
+      queue: "Fila de Espera"
     new:
       form:
         job_role:
@@ -43,23 +51,62 @@ pt:
         attendance_address: "Informações para contato"
         attendance_personal: "Informações Pessoais"
         educacional_information: "Informações Acadêmicas"
+        token_field: "Cupom de Desconto"
+      title:
+        text: "Nova Inscrição para %{event_name}"
+      cpf:
+        help: "Deixe em branco caso não seja brasileiro"
+      agreement:
+        attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
+        workshop: "Ao me inscrever para workshops, declaro estar ciente de que o número mínimo de participantes para cada workshop é de 12 pessoas e que, se o número não for atingido, terei a chance de trocar de workshop ou receber meu dinheiro de volta."
     actions:
       confirm: "Confirmar inscrição"
       cancel: "Cancelar inscrição"
       transfer: "Transferir inscrição"
       recover: "Recuperar inscrição"
+      dequeue: "mover para o evento"
+      pay: "pagar"
+      accept: "aceitar"
     update:
       success: "Participante atualizado."
+    create:
+      success: "Inscrição salva"
+      already_existent: "Email já cadastrado neste evento"
+    charts:
+      by_state:
+        state: "Estado"
+      payment_type:
+        value_grouped: "Valor Agrupado"
+        quantity: "Qtd"
+    show:
+      title: "Participante"
+    edit:
+      title: "Editar Participante"
   events:
-    form:
-      event_basics: "Informações Básicas"
-      event_core: "Informações principais"
     index:
       title: "Eventos"
+      archived: "Eventos Arquivados"
+    new:
+      title: "Novo Evento"
+    show:
+      organizers:
+        list: "Lista de Organizadores"
+        remove: "Remover Organizador"
+      attendance_limit: "Limite de Inscritos: %{value}"
+      average_queue_time: "Tempo médio na fila: %{value}"
+      full_price: "Preço cheio: %{value}"
+    edit:
+      title: "Editar Evento"
+    delete:
+      title: "Excluir Evento"
   registration_groups:
     index:
       token_clipboard_tooltip: "Copiar o token para a área de transferência"
       title: "Grupos"
+    edit:
+      title: "Editar Grupo"
+    show:
+      title: "Grupo de Inscrição"
   attendance:
     reports:
       attendance_organization_size: "Participantes x Tamanho da Empresa"
@@ -87,10 +134,62 @@ pt:
     show:
       edit:
         button: "Editar Perfil"
+      title: "Detalhes da Conta"
     completed_login:
       success: "Seu usuário foi ativado."
+    edit:
+      title: "Atualização de %{username}"
+    index:
+      title: "Usuários"
+      search:
+        placeholder: "buscar por nome ou email"
+    account:
+      self: "Minha Conta"
+    organizer:
+      new:
+        title: "Novo(a) Organizador(a)"
+    update:
+      success: "Usuário atualizado"
   event_attendances:
     form:
       state: "Estado - ex: SP"
   actions:
     receive_credential: "Credenciar"
+  application:
+    title: "Sistema de Inscrições"
+  registration_periods:
+    edit:
+      title: "Editar período"
+    new:
+      title: "Novo Período de Inscrições"
+  header:
+    aa:
+      members: "Membros"
+  gender:
+    male: "Masculino"
+    female: "Feminino"
+    other: "Outro"
+  registration_quotas:
+    index:
+      attendances: "Participantes"
+    new:
+      title: "Nova Cota"
+    edit:
+      title: "Editar Cota"
+  footer:
+    help: "Contato"
+    useful_links: "Links Úteis"
+  reistration_quotas:
+    index: "Lista de Cotas"
+  attendandes:
+    new:
+      title: "Nova Inscrição"
+  registration_groupss:
+    new:
+      title: "Novo Grupo"
+  reistration_groups:
+    index:
+      title: "Lista de Grupos"
+  reistration_periods:
+    index:
+      title: "Lista de Períodos"

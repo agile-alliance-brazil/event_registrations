@@ -1,464 +1,199 @@
-  # encoding: UTF-8
+---
 pt:
-  # formatos de data e hora
+  "true": Sim
+  "false": Não
   date:
+    abbr_day_names:
+    - Dom
+    - Seg
+    - Ter
+    - Qua
+    - Qui
+    - Sex
+    - Sáb
+    abbr_month_names:
+    -
+    - Jan
+    - Fev
+    - Mar
+    - Abr
+    - Mai
+    - Jun
+    - Jul
+    - Ago
+    - Set
+    - Out
+    - Nov
+    - Dez
+    day_names:
+    - Domingo
+    - Segunda-feira
+    - Terça-feira
+    - Quarta-feira
+    - Quinta-feira
+    - Sexta-feira
+    - Sábado
     formats:
       default: "%d/%m/%Y"
+      long: "%A, %d de %B de %Y"
       short: "%d de %B"
-      long: "%d de %B de %Y"
-
-    day_names: [Domingo, Segunda, Terça, Quarta, Quinta, Sexta, Sábado]
-    abbr_day_names: [Dom, Seg, Ter, Qua, Qui, Sex, Sáb]
-    month_names: [~, Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro]
-    abbr_month_names: [~, Jan, Fev, Mar, Abr, Mai, Jun, Jul, Ago, Set, Out, Nov, Dez]
+      month_year: "%B/%Y"
+    month_names:
+    -
+    - Janeiro
+    - Fevereiro
+    - Março
+    - Abril
+    - Maio
+    - Junho
+    - Julho
+    - Agosto
+    - Setembro
+    - Outubro
+    - Novembro
+    - Dezembro
     order:
     - :day
     - :month
     - :year
-
-  time:
-    formats:
-      default: "%A, %d de %B de %Y, %H:%M h"
-      short: "%d/%m, %H:%M h"
-      long: "%A, %d de %B de %Y, %H:%M h"
-      date: "%d/%m/%Y"
-    am: ''
-    pm: ''
-
-  # distancia do tempo em palavras
   datetime:
     distance_in_words:
-      half_a_minute: 'meio minuto'
-      less_than_x_seconds:
-        one: 'menos de 1 segundo'
-        other: 'menos de %{count} segundos'
-
-      x_seconds:
-        one: '1 segundo'
-        other: '%{count} segundos'
-
-      less_than_x_minutes:
-        one: 'menos de um minuto'
-        other: 'menos de %{count} minutos'
-
-      x_minutes:
-        one: '1 minuto'
-        other: '%{count} minutos'
-
       about_x_hours:
-        one: 'aproximadamente 1 hora'
-        other: 'aproximadamente %{count} horas'
-
-      x_days:
-        one: '1 dia'
-        other: '%{count} dias'
-
+        one: aproximadamente 1 hora
+        other: aproximadamente %{count} horas
       about_x_months:
-        one: 'aproximadamente 1 mês'
-        other: 'aproximadamente %{count} meses'
-
-      x_months:
-        one: '1 mês'
-        other: '%{count} meses'
-
+        one: aproximadamente 1 mês
+        other: aproximadamente %{count} meses
       about_x_years:
-        one: 'aproximadamente 1 ano'
-        other: 'aproximadamente %{count} anos'
-
+        one: aproximadamente 1 ano
+        other: aproximadamente %{count} anos
+      almost_x_years:
+        one: quase 1 ano
+        other: quase %{count} anos
+      half_a_minute: meio minuto
+      less_than_x_minutes:
+        one: menos de um minuto
+        other: menos de %{count} minutos
+      less_than_x_seconds:
+        one: menos de 1 segundo
+        other: menos de %{count} segundos
       over_x_years:
-        one: 'mais de 1 ano'
-        other: 'mais de %{count} anos'
-
+        one: mais de 1 ano
+        other: mais de %{count} anos
+      x_days:
+        one: 1 dia
+        other: "%{count} dias"
+      x_minutes:
+        one: 1 minuto
+        other: "%{count} minutos"
+      x_months:
+        one: 1 mês
+        other: "%{count} meses"
+      x_seconds:
+        one: 1 segundo
+        other: "%{count} segundos"
     prompts:
-      year: "Ano"
-      month: "Mês"
-      day: "Dia"
-      hour: "Hora"
-      minute: "Minuto"
-      second: "Segundos"
+      day: Dia
+      hour: Hora
+      minute: Minuto
+      month: Mês
+      second: Segundo
+      year: Ano
+    date_attributes:
+      day:
+        one: dia
+        other: dias
+      hour:
+        one: hora
+        other: horas
+      minute:
+        one: minuto
+        other: minutos
+      month:
+        one: mês
+        other: meses
+      second:
+        one: segundo
+        other: segundos
+      year:
+        one: ano
+        other: anos
 
-  # numeros
+  helpers:
+    select:
+      prompt: Por favor selecione
+    submit:
+      create: Criar %{model}
+      submit: Salvar %{model}
+      update: Atualizar %{model}
   number:
-    format:
-      precision: 3
-      separator: ','
-      delimiter: '.'
     currency:
       format:
-        unit: 'R$'
+        delimiter: "."
+        format: "%u %n"
         precision: 2
-        format: '%u %n'
-        separator: ','
-        delimiter: '.'
-    percentage:
-      format:
-        delimiter: '.'
-    precision:
-      format:
-        delimiter: '.'
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: R$
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
     human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: bilhão
+            other: bilhões
+          million:
+            one: milhão
+            other: milhões
+          quadrillion:
+            one: quatrilhão
+            other: quatrilhões
+          thousand: mil
+          trillion:
+            one: trilhão
+            other: trilhões
+          unit: ''
       format:
-        precision: 1
-        delimiter: '.'
+        delimiter: "."
+        precision: 2
+        significant: true
+        strip_insignificant_zeros: true
       storage_units:
         format: "%n %u"
         units:
           byte:
-            one: "Byte"
-            other: "Bytes"
-          kb: "KB"
-          mb: "MB"
-          gb: "GB"
-          tb: "TB"
-
-  # Usado no Array.to_sentence
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: "."
+        format: "%n%"
+    precision:
+      format:
+        delimiter: "."
   support:
     array:
-      words_connector: ", "
-      two_words_connector: " e "
       last_word_connector: " e "
-
-  # Formtastic
-  formtastic:
-    :yes: "Sim"
-    :no: "Não"
-    fields:
-      search:
-        placeholder: 'procurar por ID, nome, organização ou email'
-      token:
-        placeholder: 'para se registrar através de um grupo, por favor entre com o token fornecido pela administração do evento'
-      email:
-        placeholder: "Entre com o email do usuário"
-    labels:
-      payment_notification:
-        transaction_id: "Código da transação"
-        paid_at: "Data do pagamento"
-        settle_amount: "Total pago"
-        notes: "Notas"
-      transfer:
-        origin_id: "Origem"
-        destination_id: "Destino"
-      registration_period:
-        title: 'Título do período'
-        id: 'ID'
-        start_at: 'Inicio em'
-        end_at: 'Termina em'
-        value: 'Valor'
-        active_attendances: 'Inscritos Ativos'
-        price: 'Preço da faixa'
-      registration_quota:
-        title: 'Faixas de incrições por cotas'
-        id: 'ID'
-        quota: 'Cota (qtd de inscritos)'
-        value: 'Valor'
-        active_attendances: 'Inscritos Ativos'
-        order: "Ordem"
-    hints:
-      attendance:
-        education_level: "Este campo está usando os níveis de escolaridade presentes no padrão de classificação ISCED 2011"
-        notes: "Deixe aqui qualquer anotação ou observação que considere relevante, para futura referência (por exemplo: número de confirmação do pagamento, ou alguma informação especial sobre essa inscrição)"
-        gender: "Deixe em branco caso prefira não responder"
-        cpf: "Deixe em branco caso não seja brasileiro"
-    actions:
-      new_registration: "Submeter inscrição"
-      edit_registration: "Atualizar inscrição"
-      confirm_registered_attendance: "Confirmar Pagamento"
-      update_pending_attendance: "Atualizar preço"
-      paid_pending_attendance: "Pagamento recebido"
-      search: "Buscar"
-      new_group: "Submeter grupo"
-
-  # Mensagens customizadas
-  title:
-    transfer: "Transferir inscrição"
-    attendance: "Detalhes da inscrição"
-    attendances_list: "Lista dos inscritos"
-    login: "Acessar"
-    profile: "Perfil de %{username}"
-    user: "Novo usuário"
-    events: "Eventos"
-    until: "a"
-    untitled: 'Untitled'
-
-    archived_events: "Eventos arquivados"
-    users_list: "Lista dos Usuários"
-  actions:
-    edit: "Editar"
-    destroy: "Remover"
-    cancel: "Cancelar"
-    registration: "Inscrição"
-    new_registration: "Individual"
-    new_speaker_registration: "Palestrante"
-    new_sponsor_registration: "Patrocinador"
-    registered_attendances: "Gerenciar Inscrições"
-    pending_attendances: "Atualizar inscrições pendentes"
-    attendances_summary: "Resumo das inscrições"
-    remove_authentication_option: "remover essa opção de autenticação"
-    login: "Acessar"
-    logout: "Sair"
-    list_attendances: "Inscritos"
-    list_groups: "Grupos"
-    to_approval: "Aguardando Aprovação"
-    click: 'Clique'
-    renew: 'renovar'
-    pay: 'Marcar com pago'
-    accept: 'Aceitar no grupo'
-    account: 'Minha conta'
-    download_csv: "Download do arquivo CSV"
-
-    waiting_list: "Lista de espera"
-    confirm: "Confirmar"
-  flash:
-    failure: "Por favor verifique os campos em destaque"
-    unauthorised: "Você não está autorizado a acessar esta página"
-    attendance:
-      create:
-        success: "Inscrição submetida com sucesso. Instruções para confirmação e pagamento foram enviadas por e-mail."
-        free_not_allowed: "Inscrição falhou. Inscrição gratuita não está disponível. Por favor escolha outro tipo de inscrição"
-        max_limit_reached: "Inscrição falhou. Este evento chegou ao número máximo de participantes."
-        already_existent: "você já possui uma inscrição válida neste evento"
-      news: "<a href='/registration_groups/new?locale=pt'>Clique aqui</a> para cadastro de empresa."
-      mail:
-        fail: "Ocorreu um problema para enviar o email de confirmação. Sua inscrição foi recebida mas não foi possível entregar o email de confirmação. Tentaremos mais tarde mas se não receber o email em 24 horas, entre em contato via %{email}."
-      payment:
-        success: 'Conferencista marcado como pago.'
-        error: 'Não foi possível marcar como pago.'
-      accepted:
-        success: 'Inscrição no grupo aceita.'
-    registration:
-      attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
-      workshop: "Ao me inscrever para workshops, declaro estar ciente de que o número mínimo de participantes para cada workshop é de 12 pessoas e que, se o número não for atingido, terei a chance de trocar de workshop ou receber meu dinheiro de volta."
-    registered_attendances:
-      confirm:
-        success: "Inscrição confirmada com sucesso. O participante foi notificado por e-mail."
-      update:
-        success: "Inscrição atualizada com sucesso."
-    pending_attendances:
-      confirm:
-        success: "Inscrição atualizada com sucesso."
-    user:
-      authentication:
-        new: "Serviço de autenticação adicionado com sucesso."
-        already_in_use: "Esse serviço de autenticação já está sendo usado por outro usuário. Você provavelmente acessou o sistema separadamente usando 2 serviços de autenticação diferentes, criando duas contas de usuário. Para associar o serviço de autenticação com esta conta, o outro usuário precisa ser removido. Entre em contato com inscricoes@agilebrazil.com para mais detalhes."
-      new: "Faltam algumas informações para salvar seu usuário. Complete as informações abaixo para completar a criação de sua conta."
-      create: "Este parece ser seu primeiro acesso ao sistema. Complete suas informações abaixo para ativar sua conta."
-      edit: "Faltam algumas informações para salvar seu usuário. Complete as informações abaixo para atualizar seu perfil."
-      update: "Informações atualizadas com sucesso. Obrigado!"
-      failure: "Não foi possível autenticar seu usuário. Queira, por favor, tentar novamente mais tarde ou utilize outro serviço."
-      invalid: "O serviço escolhido para autenticação não pôde nos informar seu nome. Por favor, preencha esta informação no serviço escolhido e tente autenticar-se novamente."
-    transfer:
-      success: "Transferência realizada com sucesso"
-      failure: "A transferência falhou. Verifique que a inscrição de origem está paga e/ou confirmada e a de destino está pendente.\n\nInscrições canceladas não podem receber uma transferência. Uma nova inscrição precisa ser criada neste caso."
-    form:
-      invalid_data: "Ocorreu um problema."
-  footer:
-    help: "Contato"
-
-  email:
-    registration_pending:
-      subject: "Pedido de inscrição para %{event_name} enviado"
-    registration_accepted:
-      subject: "Pedido de inscrição para %{event_name} aceito"
-    registration_confirmed:
-      subject: "Inscrição para %{event_name} confirmada"
-    registration_waiting:
-      subject: "Sua inscrição para %{event_name} está na fila de espera"
-    cancelling_registration:
-      subject: "Aviso de cancelamento da inscrição %{attendance_id} para %{event_name}"
-    cancelling_registration_warning:
-      subject: "Lembrete de pagamento da inscrição %{attendance_id} para %{event_name}"
-    registration_dequeued:
-      subject: "Aeee! Nossa fila andou e a sua inscrição para %{event_name} foi recebida!"
-    welcome_attendance:
-      subject: "Bem vindo ao %{event_name}! É amanhã!"
-
-  gender:
-    male: "Masculino"
-    female: "Feminino"
-    other: "Outro"
-  registration_total:
-    title: "Custo total da inscrição"
-    title_partial: "Custo parcial da inscrição"
-    base_price: "Inscrição"
-    discount: "Desconto"
-    total: "Total"
-
-  attendance:
-    status:
-      waiting: "Fila de espera"
-      pending: "Pendente"
-      accepted: "Aceito no grupo"
-      confirmed: "Confirmado"
-      paid: "Pagamento efetuado"
-      cancelled: "Cancelado"
-      showed_in: "Credenciado"
-      all: "Todos"
-    cancel_confirmation: "Tem certeza que deseja cancelar sua inscrição na %{event}?\nSe o fizer, você deverá preencher um novo formulário para criar uma nova inscrição."
-    cancel_unauthorized: 'Cancelamento não autorizado. Conferencista em estado inválido: %{status}'
-    confirm_confirmation: "Se confirmar essa inscrição na %{event}, o participante será notificado e  não será possível cancelar essa operação.\n\nTem certeza que deseja continuar?"
-    confirmed:
-      unpaid: "Boleto/Transferência/Empenho"
-    list:
-      actions:
-        dequeue: "Colocar para dentro"
-
-  authentication:
-    list: "Serviços de autenticação registrados"
-    add: "Adicione outro serviço de autenticação:"
-    new: "Autentique-se por um desses serviços:"
-    notice: "Atenção: caso você já tenha acessado o sistema anteriormente, use o mesmo serviço de autenticação para evitar criar contas duplicadas. Uma vez autenticado com sua conta existente, você pode associar outros serviços de autenticação."
-    providers:
-      github: "Github"
-      twitter: "Twitter"
-      facebook: "Facebook"
-      submission_system: "Sistema de Submissões"
-      developer: "Developer Backdoor"
-
-  event:
-    attendance:
-      list: "Inscrições em eventos"
-      add: "Adicionar inscrição para %{name}"
-    register:
-      to_register_message: 'Faça sua inscrição'
-    not_found: 'Evento não encontrado.'
-    no_upcoming: 'Sem eventos cadastrados'
-    show:
-      attendance_limit: "Lotação: %{value} pessoas"
-      full_price: "Preço cheio: %{value}"
-      average_queue_time: "Tempo médio na fila: %{value} hs"
-  registration_group:
-    list: 'Grupos de inscrições de %{event_name}'
-    destroy:
-      success: 'Grupo excluído com sucesso.'
-      error: 'Falha ao excluir o grupo.'
-    destroy_confirmation: "Tem certeza que deseja remover o grupo '%{registration_group}'?\nTodas as inscrições associadas a este grupo serão automaticamente canceladas."
-    show:
-      title: 'Detalhes para o grupo %{group_name}'
-    new:
-      title: "Novo grupo"
-    edit:
-      title: "Atualizando grupo de inscrição"
-    event_capacity_error: "O evento não tem mais lugares para o seu grupo. Desculpe!"
-    quota_capacity_error: "A cota não tem mais lugares para o seu grupo. Desculpe!"
-  generic:
-    or: "ou"
-    and: "e"
-    ago: "atrás"
-    confirmed: "Sim"
-    minutes: "minutos"
-    says: "diz"
-    are_you_sure: "Você tem certeza que quer %{action}?"
-    reviewed_by: "Avaliado por"
-    sort_by: "Ordernar %{direction}"
-    sort_up: "ascendente"
-    sort_down: "descendente"
-    show: "Exibir %{target}"
-    hide: "Esconder %{target}"
-    registration_id: "Número da inscrição"
-    here: 'aqui'
-
-  aa:
-    members: "Membros"
-
-  report:
-    title:
-      total: 'Total de inscritos'
-      payment_type: 'Tipo de pagamento'
-      quantity: "Quantidade"
-      value_grouped: "Valor agrupado"
-    payment_type:
-      description: 'Este relatório mostra a soma do valor da inscrição de todos os participantes pagos e confirmados'
-      gateway: 'Gateway'
-      bank_deposit: 'Depósito Bancário'
-      statement_agreement: 'Nota de Empenho'
-      total: 'Valor total'
-      count: 'Total de inscritos'
-      nil: "Sem tipo de pagamento"
-  events:
-    new:
-      title: "Novo evento"
-      submit: "Submeter evento"
-      cancel: "Cancelar"
-    create:
-      success_message: "Evento cadastrado."
-    show:
-      no_periods_message: "Não existem períodos registrados para esse evento."
-      no_quotas_message: "Não existem cotas registradas para esse evento."
-      user_registration: "Sua inscrição"
-      new_registration: "Inscreva-se"
-      register_other: "Inscrever outra pessoa"
-      registrations_ended: "Inscrições encerradas. O evento chegou no limite máximo de participantes."
-      no_groups_message: "Não existem grupos registrados para este evento."
-      no_organizers_message: "Não existem organizadores para este evento."
-    no_limit: "Este evento não tem limite de capacidade"
-    delete:
-      button: "Apagar evento"
-    edit:
-      title: "Editando evento %{event_name}"
-      button: "Editar evento"
-  layouts:
-    alert:
-      message_prefix: "Atenção!"
-  reistration_quotas:
-    list: "Cotas para inscricão"
-  reistration_periods:
-    list: "Períodos para inscrição"
-  registration_periods:
-    new:
-      title: "Novo período"
-      submit: "Submeter período"
-    edit:
-      title: "Atualizando período de inscrição"
-  commons:
-    button:
-      cancel: "Cancelar"
-  registration_quotas:
-    new:
-      title: "Nova cota"
-      submit: "Submeter cota"
-    edit:
-      title: "Atualizar cota de inscrição"
-  general:
-    actions:
-      title: "Ações"
-  attendances:
-    reports:
-      title: "Relatórios"
-      by_state:
-        state: "Estado"
-      general:
-        total: "Total de inscritos"
-    new:
-      title:
-        no_vacancy: "O evento %{event_name} está cheio. Faça o cadastro abaixo para entrar na fila."
-        vacancy: "Nova inscrição para %{event_name}"
-      form:
-        token_field: "Token de acesso ao grupo de desconto"
-    edit:
-      title: "Atualizar participante"
-  users:
-    index:
-      search:
-        placeholder: "Buscar por nome e email"
-      role:
-        placeholder: "Selecione uma role..."
-  reistration_groups:
-    list: "Grupos para inscrição"
-  organizers:
-    list: "Organizadores do evento"
-  organizer:
-    new:
-      title: "Novo organizador"
-    remove:
-      title: "Remover organizador"
-  helpers:
-    select:
-      prompt: Selecione uma opção
-    submit:
-      attendance:
-        create: Eu quero me registrar
-      create: Salvar %{model}
-      submit: Salvar %{model}
-      update: Atualizar %{model}
-  application:
-    title: "Agile Alliance Brazil - Sistema de Inscrições"
+      two_words_connector: " e "
+      words_connector: ", "
+  time:
+    am: ''
+    formats:
+      default: "%a, %d de %B de %Y, %H:%M:%S %z"
+      long: "%d de %B de %Y, %H:%M"
+      short: "%d/%m/%Y %H:%M"
+    pm: ''
+  geenral:
+    connector:
+      and: "e"

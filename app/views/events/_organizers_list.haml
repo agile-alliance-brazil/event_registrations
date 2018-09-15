@@ -1,5 +1,5 @@
 - if event.organizers.present?
-  %h4= t('organizers.list')
+  %h4= t('events.show.organizers.list')
   %table.table
     %th= t('activerecord.attributes.attendance.first_name')
     %th= t('activerecord.attributes.attendance.email')
@@ -8,6 +8,6 @@
       %tr
         %td= link_to "#{user.last_name}, #{user.first_name}", user_path(user), method: :get
         %td= user.email
-        %td= link_to t('organizer.remove.title'), '#', onclick: "removeOrganizer('#{user.email}', #{@event.id});", class: 'btn-sm btn-danger'
+        %td= link_to t('events.show.organizers.remove'), '#', onclick: "removeOrganizer('#{user.email}', #{@event.id});", class: 'btn-sm btn-danger'
 - else
-  %h5= t('events.show.no_organizers_message')
+  %h5= t('general.no_data')

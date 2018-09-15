@@ -45,8 +45,4 @@ class RegistrationPeriodsController < AuthenticatedController
   def period_params
     params.require(:registration_period).permit(:title, :start_at, :end_at, :price)
   end
-
-  def resource_class
-    RegistrationPeriod
-  end
 end

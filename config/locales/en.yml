@@ -1,372 +1,48 @@
-# encoding: UTF-8
-# Sample localization file for English. Add more files in this directory for other locales.
-# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  "true": Yes
+  "false": No
 
-  date:
-    datepicker:
-      default: "mm/dd/yyyy"
-      long: "MM dd, yyyy"
-    formats:
-      default: "%m/%d/%Y"
-      long: ! '%B %d, %Y'
-  time:
-    formats:
-      date: "%m/%d/%Y"
-
-  # ActiveRecord
-  activerecord:
-    errors:
-      messages:
-        existence: "does not exist"
-        email_format: "should look like an email address"
-        constant: "can't be changed"
-      models:
-        attendance:
-          attributes:
-            email:
-              free_not_allowed: "Free registration is only available to speaker emails."
-  formtastic:
-    :yes: "Yes"
-    :no: "No"
-    fields:
-      search:
-        placeholder: 'search by ID, name, organization or email'
-      token:
-        placeholder: 'to register within a group, please enter the token provided by the event administration'
-      email:
-        placeholder: "Put the user's email"
-    labels:
-      payment_notification:
-        transaction_id: "Transaction ID"
-        paid_at: "Payment date"
-        settle_amount: "Total amount paid"
-        notes: "Notes"
-      transfer:
-        origin_id: "Origin"
-        destination_id: "Destination"
-      registration_period:
-        title: 'Title'
-        id: 'ID'
-        start_at: 'Start at'
-        end_at: 'End at'
-        value: 'Value'
-        active_attendances: 'Active Attendances'
-        price: 'Price for period'
-      registration_quota:
-        title: 'Registration Quotas'
-        id: 'ID'
-        quota: 'Quota'
-        value: 'Value'
-        active_attendances: 'Active Attendances'
-        order: "Order"
-    hints:
-      attendance:
-        education_level: "This field is using the ISCED 2011 education levels"
-        notes: "Leave any notes or observations that you think are relevant, for future reference (e.g. payment confirmation number, or any special information about this participant)"
-        gender: "Leave blank if you prefer to not answer"
-        cpf: "Leave blank if you are not brazilian"
-    actions:
-      new_registration: "Submit registration"
-      edit_registration: "Update registration"
-      confirm_registered_attendance: "Confirm Payment"
-      update_pending_attendance: "Update Price"
-      paid_pending_attendance: "Payment Received"
-      search: "Search"
-      new_group: "Submit group"
-
-  # Custom messages
-  title:
-    transfer: "Transfer registration"
-    attendance: "Registration details"
-    attendances_list: "Attendances list"
-    login: "Log in"
-    profile: "Profile for %{username}"
-    user: "New user"
-    events: "Events"
-    until: "until"
-    untitled: 'Sem título'
-
-    archived_events: "Archived events"
-    users_list: "Users list"
-  actions:
-    edit: "Edit"
-    destroy: "Remove"
-    cancel: "Cancel"
-    registration: "Registration"
-    new_registration: "Individual"
-    new_speaker_registration: "Speaker"
-    new_sponsor_group: "Sponsor"
-    registered_attendances: "Manage registrations"
-    pending_attendances: "Update pending registrations"
-    attendances_summary: "Registration summary"
-    remove_authentication_option: "remove authentication option"
-    login: "Log in"
-    logout: "Log out"
-    list_attendances: "List attendances"
-    list_groups: "List groups"
-    to_approval: "Waiting for Approval"
-    click: 'Click'
-    renew: 'renew'
-    pay: 'Check as paid'
-    accept: 'Accept in Group'
-    account: 'My account'
-    download_csv: "Download CSV file"
-    waiting_list: "Waiting list"
-    confirm: "Confirm"
-  flash:
-    failure: "Please check the highlighted fields"
-    unauthorised: "You are not authorized to access this page"
-    attendance:
-      create:
-        success: "Registration submited successfully. Confirmation and payment instructions were sent to you via e-mail."
-        free_not_allowed: "Registration failed. Free registration is not available. Please select another registration type"
-        max_limit_reached: "Registration failed. This event reached the maximum number of participants."
-        already_existent: "you already have a registration in this event"
-      news: "<a href='/registration_groups/new?locale=en'>Click here</a> for company registration."
-      mail:
-        fail: "There was a problem while sending your confirmation email. Your registration was received but we could not deliver the confirmation email. We will try later but if you do not receive it in 24 hours, please contact us at %{email}."
-      payment:
-        success: 'Attendee check as paid.'
-        error: 'Could not check attendee as paid.'
-      accepted:
-        success: 'Group registration accepted.'
-    registration:
-      attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
-      workshop: "By registering for the workshops, I declare being aware that the minimum attendance to each workshop is 12 people, and that if this number is not reached, I will have the opportunity to either join another workshop, or get a refund."
-    registered_attendances:
-      confirm:
-        success: "Registration confirmed successfully. The participant was notified by email."
-      update:
-        success: "Registration updated successfully."
-    pending_attendances:
-      confirm:
-        success: "Registration updated successfully."
-    user:
-      authentication:
-        new: "Authentication provider added successfully."
-        already_in_use: "Authentication provider is already in use by another user account. You probably logged in using 2 different authentication providers, causing 2 user accounts to be created separately. To associate the authentication provider with this account, the other user has to be removed. Please contact inscricoes@agilebrazil.com to get more details."
-      new: "Some information is missing that stops your user from being saved. Fill in the missing data below to complete your account creation."
-      create: "This seems to be your first access to the system. Complete your information below to activate your account."
-      edit: "Some information is missing that stops your user from being saved. Fill in the missing data below to update your profile."
-      update: "Information updated successfully. Thank you!"
-      failure: "Failed to authenticate your user. Please try again later or use another system."
-      invalid: "The provider you chose could not inform us of your name. Please fill in this information with them and try to log in again."
-    transfer:
-      success: "Transfer applied successfully"
-      failure: "Transfer failed. Ensure the origin attendance is paid for and/or confirmed and the destination one is pending.\n\nCancelled attendances cannot receive a transfer. A new attendance has to be created in this case."
-    form:
-      invalid_data: "We had a problem processing your data."
-  footer:
-    help: "Contact"
-
-  email:
-    registration_pending:
-      subject: "Registration request to %{event_name} sent"
-    registration_accepted:
-      subject: "Registration request to %{event_name} accepted"
-    registration_confirmed:
-      subject: "Registration request to %{event_name} confirmed"
-    registration_waiting:
-      subject: "Your registration request to %{event_name} was queued"
-    cancelling_registration:
-      subject: "Notice about registration %{attendance_id} cancelation to %{event_name}"
-    cancelling_registration_warning:
-      subject: "Payment reminder about registration %{attendance_id} to %{event_name}"
-    registration_dequeued:
-      subject: 'Wooray! We accepted your registration for %{event_name} from the queue!'
-    welcome_attendance:
-      subject: 'Welcome to %{event_name}! It will be in place today!'
-
-  gender:
-    male: "Male"
-    female: "Female"
-    other: "Other"
-  registration_total:
-    title: "Total Registration Amount"
-    title_partial: "Partial Registration Amount"
-    base_price: "Registration"
-    discount: "Discount"
-    total: "Total"
-
-  attendance:
-    status:
-      waiting: "Event queue"
-      pending: "Pending"
-      accepted: "Accepted"
-      confirmed: "Confirmed"
-      paid: "Payment received"
-      cancelled: "Cancelled"
-      showed_in: 'Accredited'
-      all: "All"
-    cancel_confirmation: "Are you sure you want to cancel your registration at %{event}?\nIf you do, you will need to fill a new form to create a new registration."
-    cancel_unauthorized: 'The attendance is at confirmed state, which can not be cancelled'
-    confirm_confirmation: "If you confirm this registration to %{event}, you will notify the attendee and will not be able to cancel this operation.\n\nAre you sure you want to proceed?"
-    confirmed:
-      unpaid: "External/Delayed payment"
-    list:
-      actions:
-        dequeue: "Dequeue"
-
-  authentication:
-    list: "Registered authentications"
-    add: "Add another service to sign in with:"
-    new: "Sign in through one of these services:"
-    notice: "Attention: if you have already accessed the system before, use the same authentication service to avoid creating duplicate accounts. Once authenticated with your existing account, you can associate it with other authentication providers."
-    providers:
-      github: "Github"
-      twitter: "Twitter"
-      facebook: "Facebook"
-      submission_system: "Submissions System"
-      developer: "Developer Backdoor"
-
-  event:
-    attendance:
-      list: "Event registrations"
-      add: "Add Registration to %{name}"
-    register:
-      to_register_message: 'Buy your ticket'
-    not_found: 'Event not found'
-    no_upcoming: 'No upcoming event'
-
-    show:
-      attendance_limit: "Max capacity: %{value}"
-      full_price: "Full price: %{value}"
-      average_queue_time: "Average time in queue: %{value}"
-  registration_group:
-    list: 'Registration groups for %{event_name}'
-    destroy_confirmation: "Are you sure you want to delete the group named '%{registration_group}'?\nAll registrations associated to this group will be automatically canceled."
-    destroy:
-      success: 'Group deleted.'
-      error: 'An error occurred. The group was not deleted.'
-    show:
-      title: 'Details for group %{group_name}'
-    new:
-      title: "New group"
-    edit:
-      title: "Updating registration group"
-    event_capacity_error: "The event has no capacity to receive your group! Sorry!"
-    quota_capacity_error: "The registration quota has no capacity to receive your group! Sorry!"
-  generic:
-    or: "or"
-    and: "and"
-    ago: "ago"
-    confirmed: "Yes"
-    minutes: "minutes"
-    says: "says"
-    are_you_sure: "Are you sure you want to %{action}?"
-    reviewed_by: "Reviewed by"
-    sort_by: "Sort %{direction}"
-    sort_up: "ascendent"
-    sort_down: "descendent"
-    show: "Show %{target}"
-    hide: "Hide %{target}"
-    registration_id: "Registration number"
-    here: 'here'
-
-  aa:
-    members: "Members"
-
-  report:
-    title:
-      total: 'Attendances total'
-      payment_type: 'Payment type'
-      quantity: "Quantity"
-      value_grouped: "Grouped value"
-    payment_type:
-      description: 'This report shows all paid and confirmed attendances'
-      gateway: 'Gateway'
-      bank_deposit: 'Bank Deposit'
-      statement_agreement: 'Statement of Agreement'
-      total: 'Total value'
-      count: 'Total of attendances'
-      nil: "No payment type"
-  events:
-    new:
-      title: "New event"
-      submit: "Submit event"
-      cancel: "Cancel"
-    create:
-      success_message: "Event registered."
-    show:
-      no_periods_message: "There is no periods registered for this event."
-      no_quotas_message: "There is no quotas registered for this event."
-      user_registration: "Your registration"
-      new_registration: "Register"
-      register_other: "Register other person"
-      registrations_ended: "Registrations are closed.  The event has reached the maximum number of participants."
-      no_groups_message: "There is no groups registered to this event."
-      no_organizers_message: "There is no organizers to this event."
-    no_limit: "This event has no capacity limit"
-    delete:
-      button: "Delete event"
-    edit:
-      title: "Edit event %{event_name}"
-      button: "Edit event"
-  layouts:
-    alert:
-      message_prefix: "Attention!"
-  reistration_quotas:
-    list: "Registration quotas"
-  reistration_periods:
-    list: "Periods for registration"
-  registration_periods:
-    new:
-      title: "New period"
-      submit: "Submit period"
-    edit:
-      title: "Update registration period"
-  commons:
-    button:
-      cancel: "Cancel"
-  registration_quotas:
-    new:
-      title: "New quota"
-      submit: "Submit quota"
-    edit:
-      title: "Update registration quota"
-  general:
-    actions:
-      title: "Actions"
-  attendances:
-    reports:
-      title: "Reports"
-      by_state:
-        state: "State"
-      general:
-        total: "Attendances total"
-      active: "Active attentances"
-    new:
-      title:
-        no_vacancy: "The event %{event_name} is full. Please, register below to the event's queue."
-        vacancy: "New registration to %{event_name}"
-      form:
-        token_field: "Access token to discount group"
-    edit:
-      title: "Update attendance"
-  users:
-    index:
-      search:
-        placeholder: "Search in name and email"
-      role:
-        placeholder: "Select a role..."
-  reistration_groups:
-    list: "Groups for registrations"
-  organizers:
-    list: "Organizers list"
-  organizer:
-    new:
-      title: "New organizer"
-    remove:
-      title: "Remove organizer"
-  helpers:
-    select:
-      prompt: Please select
-    submit:
-      attendance:
-        create: I want to register
-      submit: Save %{model}
-      update: Update %{model}
-  application:
-    title: "Agile Alliance Brazil - Registrations System"
+  datetime:
+    date_attributes:
+      day:
+        one: day
+        other: days
+      hour:
+        one: hour
+        other: hours
+      minute:
+        one: minute
+        other: minutes
+      month:
+        one: month
+        other: months
+      second:
+        one: seconds
+        other: seconds
+      year:
+        one: year
+        other: year
+  geenral:
+    connector:
+      and: "and"

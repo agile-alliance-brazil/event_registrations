@@ -1,0 +1,19 @@
+en:
+  email:
+    registration_pending:
+      subject: "Registration request to %{event_name} sent"
+    registration_accepted:
+      subject: "Registration request to %{event_name} accepted"
+    registration_confirmed:
+      subject: "Registration request to %{event_name} confirmed"
+      fail: "There was a problem while sending your confirmation email. Your registration was received but we could not deliver the confirmation email. We will try later but if you do not receive it in 24 hours, please contact us at %{email}."
+    registration_waiting:
+      subject: "Your registration request to %{event_name} was queued"
+    cancelling_registration:
+      subject: "Notice about registration %{attendance_id} cancelation to %{event_name}"
+    cancelling_registration_warning:
+      subject: "Payment reminder about registration %{attendance_id} to %{event_name}"
+    registration_dequeued:
+      subject: 'Wooray! We accepted your registration for %{event_name} from the queue!'
+    welcome_attendance:
+      subject: 'Welcome to %{event_name}! It will be in place tomorrow!'

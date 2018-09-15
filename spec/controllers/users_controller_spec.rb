@@ -106,7 +106,6 @@ RSpec.describe UsersController, type: :controller do
         context 'with failed update attributes' do
           it 'does not update and re-render the form with the errors' do
             put :update, params: { id: user.id, user: { first_name: '' } }
-            expect(flash[:error]).to eq I18n.t('flash.user.edit')
             expect(response).to render_template :edit
             expect(User.last.first_name).to eq user.first_name
             expect(User.last.last_name).to eq user.last_name

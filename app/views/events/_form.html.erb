@@ -1,0 +1,62 @@
+<%= form_for event do |f| %>
+  <div class="row">
+    <div class="col-xl-6 form-group">
+      <%= f.label :name, class: 'control-label' %>
+      <%= f.text_field :name, class: 'form-control', autofocus: true %>
+      <span class="help-block"><%= event.errors[:name].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :attendance_limit, class: 'control-label' %>
+      <%= f.text_field :attendance_limit, class: 'form-control' %>
+      <span class="help-block"><%= event.errors[:attendance_limit].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 form-group">
+      <%= f.label :main_email_contact, class: 'control-label' %>
+      <%= f.text_field :main_email_contact, class: 'form-control' %>
+      <span class="help-block"><%= event.errors[:main_email_contact].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :days_to_charge, class: 'control-label' %>
+      <%= f.text_field :days_to_charge, class: 'form-control' %>
+      <span class="help-block"><%= event.errors[:days_to_charge].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 form-group">
+      <%= f.label :start_date, class: 'control-label' %>
+      <%= f.text_field :start_date, class: 'form-control datepicker' %>
+      <span class="help-block"><%= event.errors[:start_date].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :end_date, class: 'control-label' %>
+      <%= f.text_field :end_date, class: 'form-control datepicker' %>
+      <span class="help-block"><%= event.errors[:end_date].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-4 form-group">
+      <%= f.label :full_price, class: 'control-label' %>
+      <%= f.text_field :full_price, class: 'form-control' %>
+      <span class="help-block"><%= event.errors[:full_price].join(', ') %></span>
+    </div>
+    <div class="col-xl-4 form-group">
+      <%= f.label :link, class: 'control-label' %>
+      <%= f.text_field :link, class: 'form-control' %>
+    </div>
+    <div class="col-xl-4 form-group">
+      <%= f.label :logo, class: 'control-label' %>
+      <%= f.text_field :logo, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-12 form-group">
+      <%= f.submit class: 'btn btn-success text-label button-spacing' %>
+    </div>
+  </div>
+<% end %>

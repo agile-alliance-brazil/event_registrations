@@ -1,8 +1,5 @@
-//= require extensions/bootstrap-datepicker
-//= require extensions/locales/bootstrap-datepicker.pt-BR
-
 function set_datepicker(){
-    var opts = {
+    const opts = {
         format: "dd/mm/yyyy",
         autoclose: true,
         todayBtn: true,

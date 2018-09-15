@@ -1,0 +1,47 @@
+<div id="<%= "event_#{event.id}" %>">
+  <h5><%= link_to event.name, event_path(event) %></h5>
+  <div class="event-detail">
+    <% if event.start_date == event.end_date %>
+      <%= l(event.start_date.to_date) %>
+    <% else %>
+      <%= "#{ l(event.start_date.to_date) } #{ t('general.until')} #{l(event.end_date.to_date) }" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="event-actions">
+  <%= link_to new_event_attendance_path(event), class: 'event-action-item' do %>
+    <i class="fa fa-plus-square"></i>
+    <%= t('attendandes.new.title') %>
+  <% end %>
+
+  <%= link_to event_attendances_path(event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed'), class: 'event-action-item' do %>
+    <i class="fa fa-list"></i>
+    <%= "#{t('attendances.index.title')} (#{event.attendances_count})" %>
+  <% end %>
+
+  <%= link_to event_registration_groups_path(event), class: 'event-action-item' do %>
+    <i class="fa fa-users"></i>
+    <%= "#{t('registration_groups.index.title')} (#{event.registration_groups.count})" %>
+  <% end %>
+
+  <%= link_to to_approval_event_attendances_path(event), class: 'event-action-item' do %>
+    <i class="fa fa-check"></i>
+    <%= "#{t('attendances.index.waiting_approval')} (#{event.attendances.waiting_approval.count})" %>
+  <% end %>
+
+  <%= link_to waiting_list_event_attendances_path(event), class: 'event-action-item' do %>
+    <i class="fa fa-list"></i>
+    <%= "#{t('attendances.index.queue')} (#{event.attendances.waiting.count})" %>
+  <% end %>
+
+  <%= link_to edit_event_path(event), class: 'event-action-item' do %>
+    <i class="far fa-edit"></i>
+    <%= t('events.edit.title') %>
+  <% end %>
+
+  <%= link_to event_path(event), class: 'event-action-item', method: :delete do %>
+    <i class="far fa-trash-alt"></i>
+    <%= t('events.delete.title') %>
+  <% end %>
+</div>

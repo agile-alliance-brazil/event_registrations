@@ -47,8 +47,4 @@ class RegistrationGroupsController < AuthenticatedController
   def assign_group
     @group = @event.registration_groups.find(params[:id])
   end
-
-  def resource_class
-    RegistrationGroup
-  end
 end

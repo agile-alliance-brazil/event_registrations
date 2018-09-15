@@ -1,4 +1,4 @@
-- title t('title.profile', username: @user.full_name)
+- title t('users.show.title', username: @user.full_name)
 
 .profile
   %ul.list-group
@@ -9,16 +9,16 @@
   = link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-primary'
 
 .attendances
-  %h3= t('event.attendance.list')
+  %h3= t('attendances.index.title')
   - @user.events.each do |event|
     %ul.event.list-group
       - @user.registrations_for_event(event).each do |attendance|
         %li.list-group-item
           .status
-            = link_to "#{event.name}: #{t("attendance.status.#{attendance.status}")}", event_attendance_path(event, attendance)
+            = link_to "#{event.name}: #{t("activerecord.attributes.attendance.enums.status.#{attendance.status}")}", event_attendance_path(event, attendance)
             - if attendance.cancellable?
-              %span.badge= link_to 'X', event_attendance_path(event, attendance), method: :delete, class: 'remove', data: { confirm: t('attendance.cancel_confirmation', event: event.name) }
+              %span.badge= link_to 'X', event_attendance_path(event, attendance), method: :delete, class: 'remove', data: { confirm: t('general.confirm', event: event.name) }
   - (@events_for_today).each do |event|
     %ul.event
-      %li= link_to t('event.attendance.add', name: event.name), new_event_attendance_path(event), class: 'add_attendance'
+      %li= link_to t('attendances.new.title.text', event_name: event.name), new_event_attendance_path(event), class: 'add_attendance'
 .clear

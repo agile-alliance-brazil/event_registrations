@@ -74,10 +74,31 @@ en:
         experience_in_agility: "Experience in Agility"
         school: "School"
         education_level: "Education Level"
-        payment_types:
-          gateway: Gateway
-          bank_deposit: Bank Deposit
-          statement_agreement: Statement of Agreement
+        enums:
+          payment_types:
+            gateway: Gateway
+            bank_deposit: Bank Deposit
+            statement_agreement: Statement of Agreement
+            nil: No Payment Type
+          job_role:
+            not_informed: Not Informed
+            student: Student
+            analyst: Analyst
+            manager: Manager
+            vp: Vice President
+            president: President
+            clevel: C-Level
+            coach: Coach
+            other: Other
+            developer: Developer
+          status:
+            waiting: Waiting
+            pending: Pending
+            accepted: Accepted
+            cancelled: Cancelled
+            paid: Paid
+            confirmed: Confirmed
+            showed_in: Showed In
       user:
         roles: Roles
         email: Email
@@ -118,5 +139,7 @@ en:
     paid_in_advance: "Reserved"
     errors:
       discount_or_amount_present: "Discount or amount should be informed."
+    event_capacity_error: "No capacity in the group to this registration"
+    quota_capacity_error: "No capacity in the quota to this registration"
   event:
     average_ticket: "Average Ticket"

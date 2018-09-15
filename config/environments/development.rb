@@ -28,4 +28,6 @@ Current::Application.configure do
 
   # Loading classes policy. true to load at start. false to load as needed
   config.eager_load = false
+
+  config.force_ssl = false
 end

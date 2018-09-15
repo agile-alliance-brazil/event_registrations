@@ -1,14 +1,14 @@
-%h4= t('report.payment_type.description')
+%h4= t('activerecord.attributes.attendance.payment_type')
 %br
 %table.table
-  %th= t('report.title.payment_type')
-  %th= t('report.title.value_grouped')
-  %th= t('report.title.quantity')
-  %th= t('report.payment_type.total')
+  %th= t('activerecord.attributes.attendance.payment_type')
+  %th= t('attendances.charts.payment_type.value_grouped')
+  %th= t('attendances.charts.payment_type.quantity')
+  %th= t('general.total')
 
   - @payment_type_report.each do |key, value|
     %tr
-      %td= t("report.payment_type.#{key[0] || 'nil'}")
+      %td= t("activerecord.attributes.attendance.enums.payment_types.#{key[0] || 'nil'}")
       %td= number_to_currency(key[1])
       %td= value
       %td= number_to_currency(key[1] * value)

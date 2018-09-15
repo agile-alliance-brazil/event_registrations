@@ -12,9 +12,7 @@ class AttendancesController < AuthenticatedController
   def create
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
-    return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('flash.attendance.create.success') }) if @attendance.valid?
-
-    flash[:error] = @attendance.errors.full_messages.join(', ')
+    return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendances.create.success') }) if @attendance.valid?
     render :new
   end
 
@@ -24,7 +22,6 @@ class AttendancesController < AuthenticatedController
     update_params = AttendanceParams.new(current_user, @event, params)
     @attendance = UpdateAttendance.run_for(update_params)
     return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if @attendance.valid?
-
     flash[:error] = @attendance.errors.full_messages.join(', ')
     render :edit
   end

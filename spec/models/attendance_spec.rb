@@ -163,28 +163,6 @@ RSpec.describe Attendance, type: :model do
     end
   end
 
-  describe '#transferrable?' do
-    let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
-    context 'when is pending' do
-      it { expect(attendance).not_to be_transferrable }
-    end
-
-    context 'when is accepted' do
-      before { attendance.accepted! }
-      it { expect(attendance).not_to be_transferrable }
-    end
-
-    context 'when is paid' do
-      before { attendance.paid! }
-      it { expect(attendance).to be_transferrable }
-    end
-
-    context 'when is confirmed' do
-      before { attendance.confirmed! }
-      it { expect(attendance).to be_transferrable }
-    end
-  end
-
   describe '#confirmable?' do
     let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
     context 'when is pending' do

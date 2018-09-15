@@ -44,14 +44,14 @@
 
     %div{class: 'row top20'}
       %div{class: 'col-xs-12'}
-        = label_tag t('formtastic.fields.search.placeholder'), nil, class: 'control-label'
+        = label_tag t('attendances.index.search'), nil, class: 'control-label'
         = text_field_tag :search, params[:search], class: 'form-control'
 
     %div{class: 'row top10'}
       %div{class: 'col-xs-2'}
         = link_to t('attendances.index.search'), '#', onclick: "submitSearch(#{@event.id});", class: 'btn btn-sm btn-primary'
       %div{class: 'col-xs-6'}
-        = link_to t('actions.download_csv'), search_event_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-sm btn-success'
+        = link_to t('general.download_csv'), search_event_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-sm btn-success'
 
   %div{class: 'row'}
     %div{class: 'col-xs-12 col-sm-6'}

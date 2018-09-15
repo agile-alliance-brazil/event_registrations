@@ -1,4 +1,4 @@
-- title t('title.profile', username: @user.full_name)
+- title t('users.edit.title', username: @user.full_name)
 .auto_focus
 
 = semantic_form_for @user, as: :user, url: user_path(@user), html: {method: :put} do |form|

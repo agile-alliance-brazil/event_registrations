@@ -1,3 +1,4 @@
+
 <%= render 'layouts/aa' %>
 
 <div class="logo">
@@ -5,7 +6,7 @@
     <%= link_to @event.link do %>
       <%= image_tag @event.logo, size: '243x100' %>
       <% if @event.full? || @event.attendances_in_the_queue? %>
-        <div class='pull-right'>
+        <div class='float-right'>
           <%= image_tag 'soldout_960_720.png', size: '170x170' %>
         </div>
       <% end %>

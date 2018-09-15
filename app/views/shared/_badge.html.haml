@@ -7,4 +7,4 @@
     %div.last= attendance.id
   %div.badge-item
     %div.first #{t('activerecord.attributes.attendance.status')}:
-    %div.last= t("attendance.status.#{attendance.status}") if attendance.status.present?
+    %div.last= t("activerecord.attributes.attendance.enums.status.#{attendance.status}") if attendance.status.present?

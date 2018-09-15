@@ -16,7 +16,6 @@ Current::Application.routes.draw do
       patch :update_to_organizer
       patch :update_to_admin
       get :edit_default_password
-      patch :update_default_password
     end
   end
 

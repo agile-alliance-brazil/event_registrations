@@ -184,7 +184,7 @@ RSpec.describe EventsController, type: :controller do
       context 'without events' do
         before { get :list_archived }
         it { expect(assigns(:events)).to match_array [] }
-        it { expect(response).to render_template :index }
+        it { expect(response).not_to render_template :index }
       end
 
       context 'having events' do

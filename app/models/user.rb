@@ -110,16 +110,4 @@ class User < ApplicationRecord
 
     organized_events.include?(event)
   end
-
-  def self.extract_names(hash)
-    if hash[:name] && (hash[:first_name].nil? || hash[:last_name].nil?)
-      hash[:name].split(' ')
-    else
-      [hash[:first_name], hash[:last_name]]
-    end
-  end
-
-  def self.extract_twitter_user(hash)
-    hash[:provider] == 'twitter' ? hash[:info][:nickname] : hash[:info][:twitter_user]
-  end
 end

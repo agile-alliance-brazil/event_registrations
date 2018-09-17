@@ -10,9 +10,6 @@
       %span{class: 'col-xs-12'}
         = "#{t('event.average_ticket')}: #{number_to_currency(@event.average_ticket)}"
 
-    %div{class: 'row'}
-      %span{class: 'col-xs-3'}= render 'attendances/reports_menu', event: @event
-
     %div{class: 'row top10'}
       %span{class: 'col-xs-6'}
         = check_box_tag 'waiting', 1, true, onclick: "submitSearch(#{@event.id});"
@@ -52,9 +49,4 @@
         = link_to t('attendances.index.search'), '#', onclick: "submitSearch(#{@event.id});", class: 'btn btn-sm btn-primary'
       %div{class: 'col-xs-6'}
         = link_to t('general.download_csv'), search_event_attendances_path(event_id: @event, format: 'csv', paid: 'true'), class: 'btn btn-sm btn-success'
-
-  %div{class: 'row'}
-    %div{class: 'col-xs-12 col-sm-6'}
-      %div{ id: 'burnup_div', class: 'small-attendance-chart top-minus-50', 'data-ideal' => @burnup_registrations_data.ideal.to_json, 'data-actual' => @burnup_registrations_data.actual.to_json }
-
 %br

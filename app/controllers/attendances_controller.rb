@@ -2,7 +2,7 @@
 
 class AttendancesController < AuthenticatedController
   before_action :assign_event
-  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval]
+  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info]
   before_action :check_organizer, only: :waiting_list
 
   def new
@@ -45,7 +45,6 @@ class AttendancesController < AuthenticatedController
     @confirmed_total = @event.attendances.confirmed.count
     @cancelled_total = @event.attendances.cancelled.count
     @total = @event.attendances_count
-    @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
   end
 
   def show
@@ -88,6 +87,12 @@ class AttendancesController < AuthenticatedController
         send_data AttendanceExportService.to_csv(@event), filename: 'attendances_list.csv'
       end
     end
+  end
+
+  def attendance_past_info
+    @attendance = Attendance.where(email: params[:email]).order(created_at: :desc).first.dup if params[:email].present?
+    @attendance = Attendance.new(email: params[:email]) if @attendance.blank?
+    render 'attendances/attendance_info'
   end
 
   private

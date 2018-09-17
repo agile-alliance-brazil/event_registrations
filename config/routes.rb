@@ -38,6 +38,7 @@ Current::Application.routes.draw do
         get :to_approval
         get :waiting_list
         get :search
+        get :attendance_past_info
       end
     end
 
@@ -51,17 +52,6 @@ Current::Application.routes.draw do
 
     resources :registration_periods, only: %i[new create destroy edit update]
     resources :registration_quotas, only: %i[new create destroy edit update]
-
-    controller :reports do
-      get :attendance_organization_size
-      get :attendance_years_of_experience
-      get :attendance_job_role
-      get :burnup_registrations
-      get :by_state
-      get :by_city
-      get :last_biweekly_active
-      get :payment_type_report
-    end
   end
 
   # Due to https://github.com/bbatsov/rubocop/issues/4425

@@ -34,6 +34,10 @@ RSpec.describe AttendancesController, type: :controller do
       before { patch :change_status, params: { event_id: 'foo', id: 'bar', new_status: 'xpto' } }
       it { expect(response).to redirect_to new_user_session_path }
     end
+    describe 'GET #attendance_past_info' do
+      before { get :attendance_past_info, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
   end
 
   context 'authenticated' do
@@ -579,8 +583,6 @@ RSpec.describe AttendancesController, type: :controller do
               expect(assigns(:accredited_total)).to eq 1
               expect(assigns(:cancelled_total)).to eq 1
               expect(assigns(:total)).to eq 8
-              expect(assigns(:burnup_registrations_data).ideal.count).to eq 29
-              expect(assigns(:burnup_registrations_data).actual.count).to eq 1
             end
           end
         end
@@ -770,6 +772,99 @@ RSpec.describe AttendancesController, type: :controller do
           expected_disposition = 'attachment; filename="attendances_list.csv"'
           expect(response.body).to eq AttendanceExportService.to_csv(event)
           expect(response.headers['Content-Disposition']).to eq expected_disposition
+        end
+      end
+    end
+
+    describe 'GET #attendance_past_info' do
+      context 'valid parameters' do
+        context 'when there is another attendance to the user' do
+          let(:event) { FactoryBot.create :event }
+          let!(:attendance) { FactoryBot.create :attendance, event: event, user: user, created_at: 1.day.ago }
+          let!(:other_attendance) { FactoryBot.create :attendance, user: user, email: attendance.email, created_at: Time.zone.now }
+
+          it 'assigns a clone of the last attendance to the form' do
+            get :attendance_past_info, params: { event_id: event, email: attendance.email }, xhr: true
+            expect(response).to render_template 'attendances/attendance_info'
+            expect(assigns(:attendance).id).to be_nil
+            expect(assigns(:attendance).registration_group).to eq other_attendance.registration_group
+            expect(assigns(:attendance).first_name).to eq other_attendance.first_name
+            expect(assigns(:attendance).last_name).to eq other_attendance.last_name
+            expect(assigns(:attendance).email).to eq other_attendance.email
+            expect(assigns(:attendance).organization).to eq other_attendance.organization
+            expect(assigns(:attendance).organization_size).to eq other_attendance.organization_size
+            expect(assigns(:attendance).job_role).to eq other_attendance.job_role
+            expect(assigns(:attendance).years_of_experience).to eq other_attendance.years_of_experience
+            expect(assigns(:attendance).experience_in_agility).to eq other_attendance.experience_in_agility
+            expect(assigns(:attendance).education_level).to eq other_attendance.education_level
+            expect(assigns(:attendance).phone).to eq other_attendance.phone
+            expect(assigns(:attendance).country).to eq other_attendance.country
+            expect(assigns(:attendance).state).to eq other_attendance.state
+            expect(assigns(:attendance).city).to eq other_attendance.city
+            expect(assigns(:attendance).badge_name).to eq other_attendance.badge_name
+            expect(assigns(:attendance).cpf).to eq other_attendance.cpf
+            expect(assigns(:attendance).gender).to eq other_attendance.gender
+            expect(assigns(:attendance).payment_type).to eq other_attendance.payment_type
+          end
+        end
+        context 'when there is no another attendance to the user' do
+          let(:event) { FactoryBot.create :event }
+
+          it 'assigns a clone of the last attendance to the form' do
+            get :attendance_past_info, params: { event_id: event, email: 'foo@bar.com' }, xhr: true
+            expect(response).to render_template 'attendances/attendance_info'
+            expect(assigns(:attendance).registration_group).to be_nil
+            expect(assigns(:attendance).first_name).to be_nil
+            expect(assigns(:attendance).last_name).to be_nil
+            expect(assigns(:attendance).email).to eq 'foo@bar.com'
+            expect(assigns(:attendance).organization).to be_nil
+            expect(assigns(:attendance).organization_size).to be_nil
+            expect(assigns(:attendance).job_role).to eq 'not_informed'
+            expect(assigns(:attendance).years_of_experience).to be_nil
+            expect(assigns(:attendance).experience_in_agility).to be_nil
+            expect(assigns(:attendance).education_level).to be_nil
+            expect(assigns(:attendance).phone).to be_nil
+            expect(assigns(:attendance).country).to be_nil
+            expect(assigns(:attendance).state).to be_nil
+            expect(assigns(:attendance).city).to be_nil
+            expect(assigns(:attendance).badge_name).to be_nil
+            expect(assigns(:attendance).cpf).to be_nil
+            expect(assigns(:attendance).gender).to be_nil
+            expect(assigns(:attendance).payment_type).to be_nil
+          end
+          context 'when the email in params is blank' do
+            let(:event) { FactoryBot.create :event }
+
+            it 'assigns a clone of the last attendance to the form' do
+              Attendance.expects(:where).never
+              get :attendance_past_info, params: { event_id: event, email: '' }, xhr: true
+              expect(response).to render_template 'attendances/attendance_info'
+              expect(assigns(:attendance).registration_group).to be_nil
+              expect(assigns(:attendance).first_name).to be_nil
+              expect(assigns(:attendance).last_name).to be_nil
+              expect(assigns(:attendance).email).to eq ''
+              expect(assigns(:attendance).organization).to be_nil
+              expect(assigns(:attendance).organization_size).to be_nil
+              expect(assigns(:attendance).job_role).to eq 'not_informed'
+              expect(assigns(:attendance).years_of_experience).to be_nil
+              expect(assigns(:attendance).experience_in_agility).to be_nil
+              expect(assigns(:attendance).education_level).to be_nil
+              expect(assigns(:attendance).phone).to be_nil
+              expect(assigns(:attendance).country).to be_nil
+              expect(assigns(:attendance).state).to be_nil
+              expect(assigns(:attendance).city).to be_nil
+              expect(assigns(:attendance).badge_name).to be_nil
+              expect(assigns(:attendance).cpf).to be_nil
+              expect(assigns(:attendance).gender).to be_nil
+              expect(assigns(:attendance).payment_type).to be_nil
+            end
+          end
+        end
+      end
+      context 'invalid' do
+        context 'event' do
+          before { get :attendance_past_info, params: { event_id: 'foo', email: 'bar' }, xhr: true }
+          it { expect(response).to have_http_status :not_found }
         end
       end
     end

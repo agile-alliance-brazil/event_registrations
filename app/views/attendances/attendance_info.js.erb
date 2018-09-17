@@ -1,0 +1,3 @@
+$('#attendance-form').html("<%= escape_javascript(render 'form', event: @event, attendance: @attendance) %>");
+
+bindBlurToAttendanceEmail();

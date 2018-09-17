@@ -95,16 +95,16 @@ pt:
             statement_agreement: Empenho
             nil: Sem Tipo de Pagamento
           job_role:
-            not_informed: Not Informed
-            student: Student
-            analyst: Analyst
-            manager: Manager
-            vp: Vice President
-            president: President
+            not_informed: Não Informado
+            student: Estudante
+            analyst: Analista
+            manager: Gerente
+            vp: Vice Presidente
+            president: Presidente
             clevel: C-Level
             coach: Coach
-            other: Other
-            developer: Developer
+            other: Outro
+            developer: Desenvolvedor
           status:
             waiting: Waiting
             pending: Pending
@@ -113,6 +113,14 @@ pt:
             paid: Paid
             confirmed: Confirmed
             showed_in: Showed In
+          education_level:
+            primary: "Ensino Fundamental"
+            secondary: "Ensino Médio"
+            tec_secondary: "Ensino Médio Técnico"
+            tec_terciary: "Tecnólogo"
+            bachelor: "Bacharelado"
+            master: "Mestrado"
+            doctoral: "Doutorado"
       event:
         name: Nome
         attendance_limit: Capacidade
@@ -165,14 +173,6 @@ pt:
         showed_in:
           one: "Credenciado(a)"
           other: "Credenciados(as)"
-      education_level:
-        primary: "Ensino Fundamental"
-        secondary: "Ensino Médio"
-        tec_secondary: "Ensino Médio Técnico"
-        tec_terciary: "Tecnólogo"
-        bachelor: "Bacharelado"
-        master: "Mestrado"
-        doctoral: "Doutorado"
   registration_group:
     paid_in_advance:
       one: "Reservada"

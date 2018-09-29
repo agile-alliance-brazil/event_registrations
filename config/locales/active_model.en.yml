@@ -85,13 +85,27 @@ en:
   attendance:
     enum:
       status:
-        waiting: "In line"
-        pending: "Pending"
-        accepted: "Accepted"
-        paid: "Paid"
-        cancelled: "Cancelled"
-        confirmed: "Confirmed"
-        showed_in: "Accredited"
+        waiting:
+          one: "In line"
+          other: "In line"
+        pending:
+          one: "Pending"
+          other: "Pending"
+        accepted:
+          one: "Accepted"
+          other: "Accepted"
+        paid:
+          one: "Accepted"
+          other: "Accepted"
+        cancelled:
+          one: "Cancelled"
+          other: "Cancelled"
+        confirmed:
+          one: "Confirmed"
+          other: "Confirmed"
+        showed_in:
+          one: "Accredited"
+          other: "Accredited"
       education_level:
         primary: "Primary Education"
         secondary: "Secondary Education"

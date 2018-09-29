@@ -16,7 +16,7 @@
     %div{class: 'row top10'}
       %span{class: 'col-xs-6'}
         = check_box_tag 'waiting', 1, true, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'waiting', "#{t('attendance.enum.status.waiting')} (#{@waiting_total})"
+        = label_tag 'waiting', "#{t('attendance.enum.status.waiting', count: @waiting_total)} (#{@waiting_total})"
       %span{class: 'col-xs-6'}
         = check_box_tag 'pending', 2, true, onclick: "submitSearch(#{@event.id});"
         = label_tag 'pending', "#{t('attendance.enum.status.pending', count: @pending_total)} (#{@pending_total})"

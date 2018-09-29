@@ -119,7 +119,9 @@ pt:
   attendance:
     enum:
       status:
-        waiting: Na fila
+        waiting:
+          one: "Na fila"
+          other: "Na fila"
         pending:
           one: "Pendente"
           other: "Pendentes"

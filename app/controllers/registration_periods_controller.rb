@@ -27,6 +27,7 @@ class RegistrationPeriodsController < ApplicationController
 
   def update
     return redirect_to @event if @period.update(period_params)
+
     render :edit
   end
 

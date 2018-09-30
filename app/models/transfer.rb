@@ -16,6 +16,7 @@ class Transfer
 
   def self.initialize_attendance(id)
     return Attendance.new.tap { |a| a.status = '' } if id.blank?
+
     Attendance.find(id)
   end
 
@@ -26,6 +27,7 @@ class Transfer
 
   def save
     return false unless valid?
+
     destination.registration_value = origin.registration_value
     destination.status = origin.status
 

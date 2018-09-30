@@ -158,6 +158,7 @@ class Attendance < ApplicationRecord
 
   def accepted!
     return update(status: :paid) if registration_value&.zero?
+
     update(status: :accepted)
   end
 
@@ -170,6 +171,7 @@ class Attendance < ApplicationRecord
   def duplicated_active_email_in_event?
     duplicated_attendance = event&.attendances&.not_cancelled&.find_by(email: email)
     return if duplicated_attendance.blank?
+
     errors.add(:email, I18n.t('flash.attendance.create.already_existent'))
   end
 end

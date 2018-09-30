@@ -22,6 +22,7 @@ class ApplicationController < ActionController::Base
 
   def current_ability
     return if params[:event_id].blank?
+
     @current_ability ||= Ability.new(current_user, Event.find(params[:event_id]))
   end
 

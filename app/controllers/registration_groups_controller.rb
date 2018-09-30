@@ -15,6 +15,7 @@ class RegistrationGroupsController < ApplicationController
 
   def destroy
     return redirect_to event_registration_groups_path(@event), notice: t('registration_group.destroy.success') if @group.destroy
+
     redirect_to(event_registration_groups_path(@event), flash: { error: @group.errors.full_messages.join(',') })
   end
 
@@ -29,6 +30,7 @@ class RegistrationGroupsController < ApplicationController
 
   def update
     return redirect_to @event if @group.update(group_params)
+
     render :edit
   end
 

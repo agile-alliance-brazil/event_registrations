@@ -46,6 +46,7 @@ class Event < ApplicationRecord
   def registration_price_for(attendance, payment_type)
     group = attendance.registration_group
     return group.amount if group.present? && group.amount.present? && group.amount.positive?
+
     not_amounted_group(attendance, payment_type)
   end
 
@@ -64,6 +65,7 @@ class Event < ApplicationRecord
   def add_organizer_by_email!(email)
     user = User.find_by(email: email)
     return false unless user.present? && (user.organizer? || user.admin?)
+
     organizers << user unless organizers.include?(user)
     save
   end
@@ -71,6 +73,7 @@ class Event < ApplicationRecord
   def remove_organizer_by_email!(email)
     user = User.find_by(email: email)
     return false if user.blank?
+
     organizers.delete(user)
     save
   end
@@ -86,6 +89,7 @@ class Event < ApplicationRecord
   def queue_average_time
     attendances_passed_by_queue = attendances.active.with_time_in_queue
     return 0 if attendances_passed_by_queue.empty?
+
     attendances_passed_by_queue.sum(:queue_time) / attendances_passed_by_queue.count
   end
 
@@ -112,6 +116,7 @@ class Event < ApplicationRecord
   def average_ticket
     attendances_confirmed = attendances.committed_to
     return 0 if attendances_confirmed.empty?
+
     attendances_confirmed.sum(:registration_value) / attendances_confirmed.count
   end
 
@@ -139,6 +144,7 @@ class Event < ApplicationRecord
 
   def period_valid?
     return unless start_date.present? && end_date.present?
+
     errors.add(:end_date, I18n.t('activerecord.errors.models.event.attributes.end_date.invalid_period')) if start_date > end_date
   end
 end

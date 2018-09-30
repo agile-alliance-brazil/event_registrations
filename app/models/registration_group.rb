@@ -73,16 +73,19 @@ class RegistrationGroup < ApplicationRecord
 
   def incomplete?
     return false if minimum_size.blank?
+
     attendances.committed_to.count < minimum_size
   end
 
   def capacity_left
     return 0 if capacity.blank?
+
     capacity - attendances.active.count
   end
 
   def vacancies?
     return true if capacity.blank? || capacity.zero?
+
     capacity_left.positive?
   end
 
@@ -94,6 +97,7 @@ class RegistrationGroup < ApplicationRecord
 
   def enough_capacity
     return if capacity.blank?
+
     if registration_quota.present? && registration_quota.capacity_left < capacity
       errors.add(:capacity, I18n.t('registration_group.quota_capacity_error'))
     elsif event.capacity_left < capacity
@@ -103,6 +107,7 @@ class RegistrationGroup < ApplicationRecord
 
   def discount_or_amount_present?
     return true if discount.present? || amount.present?
+
     errors.add(:discount, I18n.t('registration_group.errors.discount_or_amount_present'))
     errors.add(:amount, I18n.t('registration_group.errors.discount_or_amount_present'))
   end

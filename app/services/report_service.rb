@@ -5,6 +5,7 @@ class ReportService
 
   def create_burnup_structure(event)
     return BurnupPresenter.new([], []) if event.attendances.empty?
+
     registration_start_period = event.attendances.minimum(:created_at).to_date
     registration_end_period = event.start_date.to_date
     period_difference = registration_end_period - registration_start_period

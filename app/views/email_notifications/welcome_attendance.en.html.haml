@@ -12,6 +12,7 @@ Hi #{h(@attendance.full_name)},
   %li The welcome coffee and the registration will be in place at #{@attendance.event.start_date.to_date.strftime('%H:%M')}
   %li Check #{@attendance.event.link} for address and how to get there details.
 
+%p We came to know some issues around hailing Uber cars from Campinas airport. We highly recommend that you hail a cab instead or arrange alternative ways of getting to the conference venue without getting delayed. We apologise for the inconvenience this may cause.
 %p If you have any questions, please contact us at #{mail_to @attendance.event.main_email_contact}
 
 %p See you there

@@ -270,7 +270,7 @@ pt:
     registration_dequeued:
       subject: "Aeee! Nossa fila andou e a sua inscrição para %{event_name} foi recebida!"
     welcome_attendance:
-      subject: "Bem vindo ao %{event_name}! É amanhã!"
+      subject: "Bem vindo ao %{event_name}! É hoje!"
 
   gender:
     male: "Masculino"

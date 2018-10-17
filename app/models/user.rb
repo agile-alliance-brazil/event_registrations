@@ -41,6 +41,7 @@
 #  unconfirmed_email      :string(255)
 #  unlock_token           :string(255)      indexed
 #  updated_at             :datetime
+#  user_image             :string(255)
 #  zipcode                :string(255)
 #
 # Indexes
@@ -65,6 +66,8 @@ class User < ApplicationRecord
 
   devise :omniauthable, omniauth_providers: %i[github facebook twitter linkedin]
 
+  mount_uploader :user_image, RegistrationsImageUploader
+
   has_many :attendances, dependent: :destroy
   has_many :events, -> { distinct }, through: :attendances, dependent: :nullify
   has_many :payment_notifications, through: :attendances, dependent: :destroy
@@ -82,8 +85,14 @@ class User < ApplicationRecord
   def self.from_omniauth(omniauth_params)
     name = omniauth_params.info.name
     where(email: omniauth_params.info.email).first_or_create do |user|
-      user.first_name = name.split(' ')[0]
-      user.last_name = name.split(' ')[1]
+      name_parts = name.split(' ')
+      user.first_name = name_parts.shift
+      user.last_name = if name_parts.empty?
+                         user.first_name
+                       else
+                         name_parts.join(' ')
+                       end
+
       user.password = Devise.friendly_token[0, 20]
     end
   end

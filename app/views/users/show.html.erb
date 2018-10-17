@@ -1,0 +1,104 @@
+<div class="breadcrumb">
+  <div class="row">
+    <div class="col-xl-12">
+      <%= link_to t('events.index.title'), events_path %>
+      >
+      <%= t('users.show.title') %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-2">
+    <div class="row">
+      <div class="col-xl-12">
+        <% if @user.user_image.present? %>
+          <%= image_tag @user.user_image.url, size: '100x100', class: 'user-avatar' %>
+        <% else %>
+          <%= image_tag 'img-empty.png', size: '100x100', class: 'user-avatar' %>
+        <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <%= link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-sm btn-primary' %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-10">
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('users.show.full_name')}: " %></b> <%= @user.full_name %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('activerecord.attributes.user.email')}: " %></b> <%= @user.email %>
+      </div>
+    </div>
+    <% if @user.city.present? && @user.state.present? %>
+      <div class="row">
+        <div class="col-xl-12">
+          <b><%= "#{t('users.show.city_state')}: " %></b> <%= "#{@user.city} / #{@user.state}" %>
+        </div>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('activerecord.attributes.user.country')}: " %></b> <%= @user.country %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('activerecord.attributes.user.organization')}: " %></b> <%= @user.organization %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('activerecord.attributes.user.zip_code')}: " %></b> <%= @user.organization %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('activerecord.attributes.user.twitter_user')}: " %></b> <%= @user.twitter_user %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('activerecord.attributes.user.phone')}: " %></b> <%= @user.phone %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <b><%= "#{t('activerecord.attributes.user.default_locale')}: " %></b> <%= @user.default_locale %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--- title t('users.show.title', username: @user.full_name)-->
+
+<!--.profile-->
+<!--  %ul.list-group-->
+<!--    - [:first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale].each do |attribute|-->
+<!--      %li.list-group-item-->
+<!--        = t("activerecord.attributes.attendance.#{attribute}") + ': '-->
+<!--        %strong= @user.send(attribute)-->
+<!--  = link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-primary'-->
+
+<!--.attendances-->
+<!--  %h3= t('attendances.index.title')-->
+<!--  - @user.events.each do |event|-->
+<!--    %ul.event.list-group-->
+<!--      - @user.registrations_for_event(event).each do |attendance|-->
+<!--        %li.list-group-item-->
+<!--          .status-->
+<!--            = link_to "#{event.name}: #{t("activerecord.attributes.attendance.enums.status.#{attendance.status}")}", event_attendance_path(event, attendance)-->
+<!--            - if attendance.cancellable?-->
+<!--              %span.badge= link_to 'X', event_attendance_path(event, attendance), method: :delete, class: 'remove', data: { confirm: t('general.confirm', event: event.name) }-->
+<!--  - (@events_for_today).each do |event|-->
+<!--    %ul.event-->
+<!--      %li= link_to t('attendances.new.title.text', event_name: event.name), new_event_attendance_path(event), class: 'add_attendance'-->
+<!--.clear-->

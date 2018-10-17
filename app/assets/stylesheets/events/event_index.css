@@ -3,10 +3,4 @@
     font-size: smaller;
 }
 
-.event-action-item {
-    padding-right: 10px;
-}
-
-.event-detail {
-    font-size: small;
-}
+a { color: inherit; }

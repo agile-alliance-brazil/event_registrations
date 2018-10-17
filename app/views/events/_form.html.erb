@@ -1,5 +1,18 @@
 <%= form_for event do |f| %>
   <div class="row">
+    <div class="col-xl-2 form-group">
+      <% if @event.event_image.present? %>
+        <%= image_tag @event.event_image.url, size: '150x100' %>
+      <% else %>
+        <%= image_tag 'img-empty.png', size: '150x100' %>
+      <% end %>
+    </div>
+    <div class="col-xl-10 form-group">
+      <%= f.file_field :event_image, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-xl-6 form-group">
       <%= f.label :name, class: 'control-label' %>
       <%= f.text_field :name, class: 'form-control', autofocus: true %>

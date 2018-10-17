@@ -9,6 +9,7 @@
 #  created_at         :datetime
 #  days_to_charge     :integer          default(7)
 #  end_date           :datetime
+#  event_image        :string(255)
 #  full_price         :decimal(10, )
 #  id                 :integer          not null, primary key
 #  link               :string(255)
@@ -22,6 +23,8 @@
 #
 
 class Event < ApplicationRecord
+  mount_uploader :event_image, RegistrationsImageUploader
+
   has_many :attendances, dependent: :restrict_with_exception
   has_many :registration_periods, dependent: :destroy
   has_many :registration_quotas, dependent: :destroy

@@ -63,7 +63,7 @@
   <div class="row">
     <div class="col-xl-12 col-sm-6 form-group">
       <%= form.label :country, class: 'control-label required' %>
-      <%= form.country_select :country, priority_countries = ["Brazil"], options = {}, html_options = {:class => "form-control"} %>
+      <%= form.country_select :country, priority_countries = ["Brazil"], options = {}, html_options = { class: 'form-control' } %>
       <span class="help-block"><%= attendance.errors[:country].join(', ') %></span>
     </div>
   </div>

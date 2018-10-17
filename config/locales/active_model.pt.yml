@@ -149,6 +149,12 @@ pt:
         remember_me: Lembrar
         name: "Nome"
         roles: "Papéis"
+        country: "País"
+        organization: "Organização"
+        zip_code: "CEP"
+        twitter_user: "Usuário no Twitter"
+        phone: "Telefone"
+        default_locale: "Localização Padrão"
   attendance:
     enum:
       status:

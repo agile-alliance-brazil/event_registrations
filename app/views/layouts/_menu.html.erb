@@ -13,19 +13,6 @@
       <li class="nav-item  <%= 'active' if users_list_active %>">
         <%= link_to t('users.index.title'), users_path, class: 'nav-link'%>
       </li>
-
-      <% if current_user.present? %>
-        <li class="nav-item  <%= 'active' if account_active %>">
-          <%= link_to t('users.account.self'), current_user, class: 'nav-link'%>
-        </li>
-        <li class="nav-item">
-          <%= link_to t('devise.sessions.logout'), destroy_user_session_path, method: :delete, class: 'nav-link'%>
-        </li>
-      <% else %>
-        <li class="nav-item">
-          <%= link_to t('devise.sessions.login'), new_user_session_path, class: 'nav-link'%>
-        </li>
-      <% end %>
     </ul>
   </div>
 </div>

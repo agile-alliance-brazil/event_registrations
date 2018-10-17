@@ -1,4 +1,6 @@
-<%= render 'layouts/menu', past_events_active: false, current_events_active: true, users_list_active: false, account_active: false %>
+<% if current_user&.admin? %>
+  <%= render 'layouts/menu', past_events_active: false, current_events_active: true, users_list_active: false, account_active: false %>
+<% end %>
 
 <div class="tab-container">
   <% if current_user&.admin? %>

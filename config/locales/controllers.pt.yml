@@ -135,10 +135,12 @@ pt:
       edit:
         button: "Editar Perfil"
       title: "Detalhes da Conta"
+      full_name: "Nome Completo"
+      city_state: "Cidade/Estado"
     completed_login:
       success: "Seu usuário foi ativado."
     edit:
-      title: "Atualização de %{username}"
+      title: "Atualização do Perfil"
     index:
       title: "Usuários"
       search:

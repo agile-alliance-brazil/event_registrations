@@ -147,9 +147,10 @@ RSpec.describe EventsController, type: :controller do
         it 'updates the event' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          put :update, params: { id: event, event: { name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto', logo: 'bla.jpg' } }
+          put :update, params: { id: event, event: { event_image: 'bla', name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto', logo: 'bla.jpg' } }
           event_updated = event.reload
           expect(response).to redirect_to event_path(event_updated)
+          expect(event_updated.event_image).not_to be_nil
           expect(event_updated.name).to eq 'name'
           expect(event_updated.attendance_limit).to eq 65
           expect(event_updated.days_to_charge).to eq 5
@@ -209,9 +210,10 @@ RSpec.describe EventsController, type: :controller do
         it 'creates the event and redirects to index of events' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          post :create, params: { event: { name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla', logo: 'bla.jpg' } }
+          post :create, params: { event: { event_image: 'bla', name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla', logo: 'bla.jpg' } }
           expect(Event.count).to eq 1
           event_persisted = Event.last
+          expect(event_persisted.event_image).not_to be_nil
           expect(event_persisted.name).to eq 'foo'
           expect(event_persisted.attendance_limit).to eq 10
           expect(event_persisted.days_to_charge).to eq 3

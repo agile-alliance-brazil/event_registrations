@@ -135,10 +135,12 @@ en:
       edit:
         button: "Update Profile"
       title: "Account Details"
+      full_name: "Full Name"
+      city_state: "City/State"
     completed_login:
       success: "Your user was activated."
     edit:
-      title: "Updating %{username}"
+      title: "Profile Update"
     index:
       title: "Users"
       search:

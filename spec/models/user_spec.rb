@@ -107,4 +107,68 @@ RSpec.describe User, type: :model do
     it { expect(admin.organizer_of?(event)).to be true }
     it { expect(admin.organizer_of?(other_event)).to be true }
   end
+
+  describe '.from_omniauth' do
+    context 'with a valid OmniAuth::AuthHas' do
+      context 'when the user does not exist' do
+        context 'and the name has two parts' do
+          let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo bar', email: 'foo@bar.com.br' }) }
+          subject(:user) { User.from_omniauth(user_hash) }
+
+          it 'creates the user using the attributes' do
+            new_user = user.reload
+            expect(new_user).to be_persisted
+            expect(new_user.first_name).to eq 'foo'
+            expect(new_user.last_name).to eq 'bar'
+            expect(new_user.email).to eq 'foo@bar.com.br'
+          end
+        end
+
+        context 'and the name has four parts' do
+          let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo bar xpto bla', email: 'foo@bar.com.br' }) }
+          subject(:user) { User.from_omniauth(user_hash) }
+
+          it 'creates the user using the attributes' do
+            expect(user).to be_persisted
+            expect(user.first_name).to eq 'foo'
+            expect(user.last_name).to eq 'bar xpto bla'
+            expect(user.email).to eq 'foo@bar.com.br'
+          end
+        end
+      end
+      context 'and the name has one part' do
+        let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo', email: 'foo@bar.com.br' }) }
+        subject(:user) { User.from_omniauth(user_hash) }
+
+        it 'creates the user using the attributes' do
+          expect(user).to be_persisted
+          expect(user.first_name).to eq 'foo'
+          expect(user.last_name).to eq 'foo'
+          expect(user.email).to eq 'foo@bar.com.br'
+        end
+      end
+      context 'having no name' do
+        let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: '', email: 'foo@bar.com.br' }) }
+        subject(:user) { User.from_omniauth(user_hash) }
+
+        it 'creates the user using the attributes' do
+          expect(user).not_to be_persisted
+          expect(user.first_name).to eq nil
+          expect(user.last_name).to eq nil
+          expect(user.email).to eq 'foo@bar.com.br'
+        end
+      end
+      context 'having no email' do
+        let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo bar', email: '' }) }
+        subject(:user) { User.from_omniauth(user_hash) }
+
+        it 'creates the user using the attributes' do
+          expect(user).not_to be_persisted
+          expect(user.first_name).to eq 'foo'
+          expect(user.last_name).to eq 'bar'
+          expect(user.email).to eq ''
+        end
+      end
+    end
+  end
 end

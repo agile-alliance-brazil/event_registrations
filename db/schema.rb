@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_02_214422) do
+ActiveRecord::Schema.define(version: 2018_09_30_220853) do
 
   create_table "attendances", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "event_id", null: false
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 2018_06_02_214422) do
     t.string "logo"
     t.integer "days_to_charge", default: 7
     t.string "main_email_contact", default: "", null: false
+    t.string "event_image"
   end
 
   create_table "events_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -181,6 +182,7 @@ ActiveRecord::Schema.define(version: 2018_06_02_214422) do
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
     t.datetime "locked_at"
+    t.string "user_image"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["registration_group_id"], name: "fk_rails_ebe9fba698"

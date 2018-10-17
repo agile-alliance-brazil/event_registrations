@@ -103,6 +103,12 @@ en:
         roles: Roles
         email: Email
         name: Name
+        country: "Country"
+        organization: "Organization"
+        zip_code: "Zip Code"
+        default_locale: "Default Locale"
+        phone: "Phone"
+        twitter_user: "Twiter User"
   attendance:
     enum:
       status:

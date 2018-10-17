@@ -33,6 +33,7 @@ pickle-email-*.html
 .env
 .byebug_history
 /public/assets/
+public/uploads/
 .ruby-gemset
 
 certs/*

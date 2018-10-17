@@ -3,39 +3,63 @@
 RSpec.describe UsersController, type: :controller do
   context 'unauthorized' do
     describe 'GET #show' do
-      it 'redirects to login path' do
-        get :show, params: { id: 'foo' }
-        expect(response).to redirect_to new_user_session_path
-      end
+      before { get :show, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #edit' do
-      it 'redirects to login path' do
-        get :edit, params: { id: 'foo' }
-        expect(response).to redirect_to new_user_session_path
-      end
+      before { get :edit, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PUT #update' do
-      it 'redirects to login path' do
-        put :update, params: { id: 'foo' }
-        expect(response).to redirect_to new_user_session_path
-      end
+      before { put :update, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #index' do
-      it 'redirects to login path' do
-        get :index
-        expect(response).to redirect_to new_user_session_path
-      end
+      before { get :index }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PATCH #update_to_organizer' do
-      it 'redirects to login path' do
-        patch :update_to_organizer, params: { id: 'foo' }
-        expect(response).to redirect_to new_user_session_path
-      end
+      before { patch :update_to_organizer, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PATCH #update_to_admin' do
-      it 'redirects to login path' do
-        patch :update_to_admin, params: { id: 'foo' }
-        expect(response).to redirect_to new_user_session_path
+      before { patch :update_to_admin, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
+
+    describe 'PATCH #update_default_password' do
+      let(:user) { FactoryBot.create :user }
+      context 'with valid paramenters' do
+        it 'updates the password and authenticate the user in the system' do
+          User.any_instance.expects(:save).twice
+          patch :update_default_password, params: { id: user, user: { password: 'foobar', password_confirmation: 'foobar' } }
+          expect(response).to redirect_to root_path
+        end
+      end
+      context 'with invalid paramenters' do
+        context 'when the password and the confirmation do not match' do
+          it 'updates the password and authenticate the user in the system' do
+            User.any_instance.expects(:save).never
+            patch :update_default_password, params: { id: user, user: { password: 'bla', password_confirmation: 'xpto' } }
+            expect(response).to render_template :edit_default_password
+            expect(flash[:error]).to eq assigns(:user).errors.full_messages.join(', ')
+          end
+        end
+        context 'when the password and the confirmation are blank' do
+          it 'updates the password and authenticate the user in the system' do
+            User.any_instance.expects(:save).never
+            patch :update_default_password, params: { id: user, user: { password: '', password_confirmation: '' } }
+            expect(response).to render_template :edit_default_password
+            expect(flash[:error]).to eq assigns(:user).errors.full_messages.join(', ')
+          end
+        end
+        context 'when the user does not exist' do
+          it 'updates the password and authenticate the user in the system' do
+            User.any_instance.expects(:save).never
+            patch :update_default_password, params: { id: 'foo', user: { password: 'foobar', password_confirmation: 'foobar' } }
+            expect(response).to have_http_status :not_found
+          end
+        end
       end
     end
   end

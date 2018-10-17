@@ -46,8 +46,11 @@ class UsersController < AuthenticatedController
   def edit_default_password; end
 
   def update_default_password
-    @user.update(password: update_default_password_params[:password], password_confirmation: update_default_password_params[:update_default_password_params])
+    @user.password = update_default_password_params[:password]
+    @user.password_confirmation = update_default_password_params[:update_default_password_params]
+
     if @user.valid?
+      @user.save
       sign_in @user
       redirect_to root_path, notice: I18n.t('users.completed_login.success')
     else

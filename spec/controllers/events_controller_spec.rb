@@ -210,7 +210,7 @@ RSpec.describe EventsController, type: :controller do
         it 'creates the event and redirects to index of events' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          post :create, params: { event: { event_image: 'bla', name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla', logo: 'bla.jpg' } }
+          post :create, params: { event: { event_image: 'bla', name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla', logo: 'bla.jpg', city: 'foo', state: 'bar', country: 'BR' } }
           expect(Event.count).to eq 1
           event_persisted = Event.last
           expect(event_persisted.event_image).not_to be_nil
@@ -233,7 +233,7 @@ RSpec.describe EventsController, type: :controller do
 
         it 'renders form with the errors' do
           expect(event).to be_a Event
-          expect(event.errors.full_messages).to eq ['Inicia em: não pode ficar em branco', 'Termina em: não pode ficar em branco', 'Preço cheio: não pode ficar em branco', 'Nome: não pode ficar em branco', 'Contato para notificações: não pode ficar em branco', 'Capacidade: não pode ficar em branco']
+          expect(event.errors.full_messages).to eq ['Inicia em: não pode ficar em branco', 'Termina em: não pode ficar em branco', 'Preço cheio: não pode ficar em branco', 'Nome: não pode ficar em branco', 'Contato para notificações: não pode ficar em branco', 'Capacidade: não pode ficar em branco', 'Country: não pode ficar em branco', 'State: não pode ficar em branco', 'City: não pode ficar em branco']
           expect(response).to render_template :new
         end
       end

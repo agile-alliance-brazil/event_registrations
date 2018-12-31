@@ -13,6 +13,9 @@ RSpec.describe Event, type: :model do
     it { is_expected.to validate_presence_of :start_date }
     it { is_expected.to validate_presence_of :end_date }
     it { is_expected.to validate_presence_of :main_email_contact }
+    it { is_expected.to validate_presence_of :state }
+    it { is_expected.to validate_presence_of :country }
+    it { is_expected.to validate_presence_of :city }
 
     context 'with start date before end date' do
       let(:event) { FactoryBot.build :event, start_date: Date.new(2016, 5, 20).in_time_zone, end_date: Date.new(2016, 5, 21).in_time_zone }

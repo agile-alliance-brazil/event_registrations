@@ -6,6 +6,8 @@
 #
 #  allow_voting       :boolean
 #  attendance_limit   :integer
+#  city               :string(255)      not null
+#  country            :string(255)      not null
 #  created_at         :datetime
 #  days_to_charge     :integer          default(7)
 #  end_date           :datetime
@@ -19,6 +21,7 @@
 #  name               :string(255)
 #  price_table_link   :string(255)
 #  start_date         :datetime
+#  state              :string(255)      not null
 #  updated_at         :datetime
 #
 
@@ -33,7 +36,7 @@ class Event < ApplicationRecord
 
   has_and_belongs_to_many :organizers, class_name: 'User'
 
-  validates :start_date, :end_date, :full_price, :name, :main_email_contact, :attendance_limit, presence: true
+  validates :start_date, :end_date, :full_price, :name, :main_email_contact, :attendance_limit, :country, :state, :city, presence: true
   validate :period_valid?
 
   scope :active_for, ->(date) { where('end_date > ?', date) }

@@ -171,4 +171,34 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '#toggle_admin' do
+    context 'when it is an admin' do
+      let(:user) { FactoryBot.create :user, role: :admin }
+      before { user.toggle_admin }
+      it { expect(User.last.admin?).to be false }
+      it { expect(User.last.user?).to be true }
+    end
+    context 'when it is not an admin' do
+      let(:user) { FactoryBot.create :user, role: :user }
+      before { user.toggle_admin }
+      it { expect(User.last.admin?).to be true }
+      it { expect(User.last.user?).to be false }
+    end
+  end
+
+  describe '#toggle_organizer' do
+    context 'when it is an organizer' do
+      let(:user) { FactoryBot.create :user, role: :organizer }
+      before { user.toggle_organizer }
+      it { expect(User.last.organizer?).to be false }
+      it { expect(User.last.user?).to be true }
+    end
+    context 'when it is not an organizer' do
+      let(:user) { FactoryBot.create :user, role: :user }
+      before { user.toggle_organizer }
+      it { expect(User.last.organizer?).to be true }
+      it { expect(User.last.user?).to be false }
+    end
+  end
 end

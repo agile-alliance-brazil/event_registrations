@@ -86,6 +86,7 @@ RSpec.describe UsersController, type: :controller do
             let!(:already_attending) { FactoryBot.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
             let!(:attendance) { FactoryBot.create(:attendance, user: user, event: already_attending) }
             let!(:cancelled_attendance) { FactoryBot.create(:attendance, user: user, event: other_event, status: :cancelled) }
+
             before { get :show, params: { id: user.id } }
             it { expect(assigns(:user)).to eq user }
             it { expect(assigns(:events_for_today)).to match_array [event, other_event] }
@@ -144,12 +145,12 @@ RSpec.describe UsersController, type: :controller do
       end
 
       describe 'PATCH #update_to_organizer' do
-        before { patch :update_to_organizer, params: { id: user }, xhr: true }
+        before { patch :update_to_organizer, params: { id: user } }
         it { expect(response).to have_http_status :not_found }
       end
 
       describe 'PATCH #update_to_admin' do
-        before { patch :update_to_admin, params: { id: user }, xhr: true }
+        before { patch :update_to_admin, params: { id: user } }
         it { expect(response).to have_http_status :not_found }
       end
     end
@@ -158,8 +159,8 @@ RSpec.describe UsersController, type: :controller do
       let(:admin) { FactoryBot.create :admin }
       before { sign_in admin }
 
-      describe 'GET #index' do
-        context 'html response' do
+      context 'valid parameters' do
+        describe 'GET #index' do
           it 'assign the variables and renders template' do
             UserRepository.instance.expects(:search_engine).returns([admin])
             get :index
@@ -167,34 +168,38 @@ RSpec.describe UsersController, type: :controller do
           end
         end
 
-        context 'ajax request' do
-          it 'renders the template' do
-            get :index, xhr: true
-            expect(response).to have_http_status :ok
-            expect(response).to render_template 'users/index.js.haml'
+        describe 'GET #search_users' do
+          it 'assign the variables and renders template' do
+            UserRepository.instance.expects(:search_engine).returns([admin])
+            get :search_users, xhr: true
+            expect(response).to render_template 'users/search_users'
           end
         end
-      end
 
-      context 'valid parameters' do
         describe 'PATCH #update_to_organizer' do
           context 'when the user is organizer' do
             let(:organizer) { FactoryBot.create :organizer }
-            before { patch :update_to_organizer, params: { id: organizer }, xhr: true }
-            it { expect(response).to render_template 'users/user' }
-            it { expect(organizer.reload.organizer?).to be true }
+            before { patch :update_to_organizer, params: { id: organizer } }
+            it 'updates the role and redirects' do
+              expect(organizer.reload.organizer?).to be false
+              expect(response).to redirect_to users_path
+            end
           end
           context 'when the user is not an organizer' do
             let(:user) { FactoryBot.create :user }
-            before { patch :update_to_organizer, params: { id: user }, xhr: true }
-            it { expect(user.reload.organizer?).to be true }
+            before { patch :update_to_organizer, params: { id: user } }
+            it 'updates the role and redirects' do
+              expect(user.reload.organizer?).to be true
+              expect(response).to redirect_to users_path
+            end
           end
         end
+
         describe 'PATCH #update_to_admin' do
           context 'when the user is admin' do
             let(:admin) { FactoryBot.create :admin }
-            before { patch :update_to_admin, params: { id: admin }, xhr: true }
-            it { expect(admin.reload.admin?).to be true }
+            before { patch :update_to_admin, params: { id: admin } }
+            it { expect(admin.reload.admin?).to be false }
           end
           context 'when the user is not an admin' do
             let(:user) { FactoryBot.create :user }

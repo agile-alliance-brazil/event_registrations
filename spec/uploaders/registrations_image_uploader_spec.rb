@@ -18,6 +18,8 @@ RSpec.describe RegistrationsImageUploader, type: :image_uploader do
   end
 
   describe '#store_dir' do
-    it { expect(subject.store_dir).to eq 'uploads' }
+    let(:uploader) { RegistrationsImageUploader.new(Event.new(id: 1)) }
+    before { uploader.store!(File.open('spec/fixtures/default_image.png')) }
+    it { expect(uploader.store_dir).to eq 'uploads/event/1' }
   end
 end

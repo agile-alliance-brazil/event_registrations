@@ -106,13 +106,14 @@ pt:
             other: Outro
             developer: Desenvolvedor
           status:
-            waiting: Waiting
-            pending: Pending
-            accepted: Accepted
-            cancelled: Cancelled
-            paid: Paid
-            confirmed: Confirmed
-            showed_in: Showed In
+            waiting: Na Fila
+            accepted: Aceita no Grupo
+            pending: Pendente
+            accepted: Aceita
+            cancelled: Cancelada
+            paid: Paga
+            confirmed: Confirmada
+            showed_in: Credenciada
           education_level:
             primary: "Ensino Fundamental"
             secondary: "Ensino Médio"
@@ -155,30 +156,12 @@ pt:
         twitter_user: "Usuário no Twitter"
         phone: "Telefone"
         default_locale: "Localização Padrão"
-  attendance:
-    enum:
-      status:
-        waiting:
-          one: "Na fila"
-          other: "Na fila"
-        pending:
-          one: "Pendente"
-          other: "Pendentes"
-        accepted:
-          one: "Aceita"
-          other: "Aceitas"
-        paid:
-          one: "Paga"
-          other: "Pagas"
-        cancelled:
-          one: "Cancelada"
-          other: "Canceladas"
-        confirmed:
-          one: "Confirmada"
-          other: "Confirmadas"
-        showed_in:
-          one: "Credenciado(a)"
-          other: "Credenciados(as)"
+        enums:
+          role:
+            admin: Administrador
+            user: Usuário
+            organizer: Organizador
+        role: Função no Sistema
   registration_group:
     paid_in_advance:
       one: "Reservada"

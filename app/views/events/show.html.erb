@@ -1,0 +1,48 @@
+
+<h1 class="event-title"><%= @event.name %></h1>
+
+<%= render 'events/event_tabs', event: @event, details_tab: true %>
+
+<div class="tab-container">
+  <p><%= "#{t('activerecord.attributes.event.full_price')}: #{number_to_currency(@event.full_price)}" %></p>
+
+</div>
+
+<!--%section{class: 'event-details-box'}-->
+<!--  %h3= @event.name-->
+<!--  - if @event.start_date.present? && @event.end_date.present?-->
+<!--    %h4= "#{l(@event.start_date, format: :short)} #{t('general.until')} #{l(@event.end_date, format: :short)}"-->
+
+<!--  %div= t('events.show.attendance_limit', value: @event.attendance_limit)-->
+<!--  %div= t('events.show.average_queue_time', value: @event.queue_average_time)-->
+<!--  %div= t('events.show.full_price', value: number_to_currency(@event.full_price))-->
+
+<!--  %div{class: 'register-button'}-->
+<!--    = render partial: 'registrations', locals: { event: @event }-->
+
+<!--%section-->
+<!--  %hr-->
+
+<!--  %div-->
+<!--    = render partial: 'registration_periods/periods_list', locals: { event: @event }-->
+<!--    = link_to t('registration_periods.new.title'), new_event_registration_period_path(@event), class: 'btn-sm btn-primary'-->
+
+<!--  %hr-->
+<!--    %div-->
+<!--      = render partial: 'registration_quotas/quotas_list', locals: { event: @event }-->
+<!--      = link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn-sm btn-primary'-->
+
+<!--  %hr-->
+
+<!--  %div-->
+<!--    = render partial: 'registration_groups/groups_list', locals: { event: @event }-->
+<!--    = link_to t('registration_groupss.new.title'), event_registration_groups_path(@event), class: 'btn-sm btn-primary'-->
+
+<!--  %hr-->
+
+<!--  %div-->
+<!--    %div{id: 'organizers_list'}-->
+<!--      = render partial: 'events/organizers_list', locals: { event: @event }-->
+
+<!--    = text_field_tag :email, params[:email], size: 50, class: 'form-control line'-->
+<!--    = link_to t('users.organizer.new.title'), '#', onclick: "submitOrganizer(#{@event.id});", class: 'btn-sm btn-primary'-->

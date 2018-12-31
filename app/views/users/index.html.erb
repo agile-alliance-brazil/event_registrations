@@ -1,0 +1,27 @@
+<div class="breadcrumb">
+  <div class="row">
+    <div class="col-xl-12">
+      <%= link_to t('events.index.title'), events_path %>
+      >
+      <%= t('users.index.title') %>
+    </div>
+  </div>
+</div>
+
+<%= form_tag search_users_users_path, class: 'form', method: :get, remote: true do %>
+  <div class="row">
+    <div class='col-xl-4 form-group'>
+      <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: t('users.index.search_email') %>
+    </div>
+    <div class='col-xl-4 form-group'>
+      <%= select_tag :roles, options_for_select(User.roles.map { |role, _| [I18n.t("activerecord.attributes.user.enums.role.#{role}"), role] }), { include_blank: t('users.index.search_roles'), class: 'form-control' } %>
+    </div>
+    <div class="input-group-btn">
+      <button class="btn btn-light" type="submit"><i class="fa fa-search"></i></button>
+    </div>
+  </div>
+<% end %>
+
+<div id="users_list">
+  <%= render partial: 'users_list' %>
+</div>

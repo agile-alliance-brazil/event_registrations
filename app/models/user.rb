@@ -119,4 +119,20 @@ class User < ApplicationRecord
 
     organized_events.include?(event)
   end
+
+  def toggle_admin
+    if admin?
+      update(role: :user)
+    else
+      update(role: :admin)
+    end
+  end
+
+  def toggle_organizer
+    if organizer?
+      update(role: :user)
+    else
+      update(role: :organizer)
+    end
+  end
 end

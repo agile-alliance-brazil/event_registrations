@@ -3,4 +3,8 @@
     font-size: smaller;
 }
 
+.event-title {
+    margin-bottom: 20px;
+}
+
 a { color: inherit; }

@@ -13,31 +13,31 @@
     %div{class: 'row top10'}
       %span{class: 'col-xs-6'}
         = check_box_tag 'waiting', 1, true, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'waiting', "#{t('attendance.enum.status.waiting', count: @waiting_total)} (#{@waiting_total})"
+        = label_tag 'waiting', "#{t('activerecord.attributes.attendance.enums.status.waiting', count: @waiting_total)} (#{@waiting_total})"
       %span{class: 'col-xs-6'}
         = check_box_tag 'pending', 2, true, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'pending', "#{t('attendance.enum.status.pending', count: @pending_total)} (#{@pending_total})"
+        = label_tag 'pending', "#{t('activerecord.attributes.attendance.enums.status.pending', count: @pending_total)} (#{@pending_total})"
 
     %div{class: 'row'}
       %span{class: 'col-xs-6'}
         = check_box_tag 'accepted', 3, true, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'accepted', "#{t('attendance.enum.status.accepted', count: @accepted_total)} (#{@accepted_total})"
+        = label_tag 'accepted', "#{t('activerecord.attributes.attendance.enums.status.accepted', count: @accepted_total)} (#{@accepted_total})"
       %span{class: 'col-xs-6'}
         = check_box_tag 'paid', 4, true, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'paid', "#{t('attendance.enum.status.paid', count: @paid_total)} (#{@paid_total})"
+        = label_tag 'paid', "#{t('activerecord.attributes.attendance.enums.status.paid', count: @paid_total)} (#{@paid_total})"
 
     %div{class: 'row'}
       %span{class: 'col-xs-6'}
         = check_box_tag 'confirmed', 5, true, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'confirmed', "#{t('attendance.enum.status.confirmed', count: @confirmed_total)} (#{@confirmed_total})"
+        = label_tag 'confirmed', "#{t('activerecord.attributes.attendance.enums.status.confirmed', count: @confirmed_total)} (#{@confirmed_total})"
       %span{class: 'col-xs-6'}
         = check_box_tag 'showed_in', 6, true, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'showed_in', "#{t('attendance.enum.status.showed_in', count: @accredited_total)} (#{@accredited_total})"
+        = label_tag 'showed_in', "#{t('activerecord.attributes.attendance.enums.status.showed_in', count: @accredited_total)} (#{@accredited_total})"
 
     %div{class: 'row'}
       %span{class: 'col-xs-6'}
         = check_box_tag 'cancelled', 7, false, onclick: "submitSearch(#{@event.id});"
-        = label_tag 'cancelled', "#{t('attendance.enum.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"
+        = label_tag 'cancelled', "#{t('activerecord.attributes.attendance.enums.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})"
 
     %div{class: 'row top20'}
       %div{class: 'col-xs-12'}

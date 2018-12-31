@@ -12,6 +12,8 @@ pt:
     total: "Total"
     select: "Selecione"
     download_csv: "Baixar o CSV"
+    details:
+      title: "Detalhes"
 
   registration:
     quantity: "Quantidade"
@@ -143,8 +145,8 @@ pt:
       title: "Atualização do Perfil"
     index:
       title: "Usuários"
-      search:
-        placeholder: "buscar por nome ou email"
+      search_email: "Procurar por nome ou email"
+      search_roles: "Selecione o papel..."
     account:
       self: "Minha Conta"
     organizer:
@@ -195,3 +197,8 @@ pt:
   reistration_periods:
     index:
       title: "Lista de Períodos"
+  activerecord:
+    attributes:
+      user:
+        admin: "Admin?"
+        organizer: "Organizador?"

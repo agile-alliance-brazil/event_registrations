@@ -6,7 +6,7 @@ class RegistrationsImageUploader < CarrierWave::Uploader::Base
   storage :file
 
   def store_dir
-    'uploads'
+    "uploads/#{model.class.to_s.underscore}/#{model.id}"
   end
 
   version :thumb do

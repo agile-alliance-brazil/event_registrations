@@ -80,6 +80,9 @@ ActiveRecord::Schema.define(version: 2018_09_30_220853) do
     t.integer "days_to_charge", default: 7
     t.string "main_email_contact", default: "", null: false
     t.string "event_image"
+    t.string "country", null: false
+    t.string "state", null: false
+    t.string "city", null: false
   end
 
   create_table "events_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

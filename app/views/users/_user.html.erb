@@ -5,6 +5,6 @@
     = user.email
   %div{class: 'col-lg-3 centered line'}
     - unless user.admin?
-      = link_to '+ admin', update_to_admin_user_path(user), class: 'btn-sm btn-danger', remote: true, method: :patch
-    - unless user.organizer?
+      =
+    - unless
       = link_to '+ organizer', update_to_organizer_user_path(user), class: 'btn-sm btn-primary', remote: true, method: :patch

@@ -18,6 +18,8 @@ Current::Application.routes.draw do
       get :edit_default_password
       patch :update_default_password
     end
+
+    get :search_users, on: :collection
   end
 
   resources :events, only: %i[index show new create destroy edit update] do

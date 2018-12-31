@@ -17,8 +17,10 @@
           <%= t('attendandes.new.title') %>
         <% end %>
 
-        <%= link_to event_path(event), class: 'float-right' do %>
-          <i class="fas fa-cogs"></i>
+        <% if current_user&.admin? %>
+          <%= link_to event_path(event), class: 'float-right' do %>
+            <i class="fas fa-cogs"></i>
+          <% end %>
         <% end %>
       </div>
     </div>

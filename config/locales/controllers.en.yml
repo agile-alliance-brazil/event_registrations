@@ -12,6 +12,8 @@ en:
     until: "until"
     select: "Select"
     download_csv: "Download CSV"
+    details:
+      title: "Details"
   registration:
     quantity: "Quantity"
     details:
@@ -143,8 +145,8 @@ en:
       title: "Profile Update"
     index:
       title: "Users"
-      search:
-        placeholder: "search by name or email"
+      search_email: "Search by email"
+      search_roles: "Select Role..."
     account:
       self: "My Account"
     organizer:
@@ -195,3 +197,8 @@ en:
   reistration_periods:
     index:
       title: "Index of Periods"
+  activerecord:
+    attributes:
+      user:
+        admin: "Admin?"
+        organizer: "Organizer?"

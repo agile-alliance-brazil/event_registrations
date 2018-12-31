@@ -157,7 +157,7 @@ pt:
         phone: "Telefone"
         default_locale: "Localização Padrão"
         enums:
-          role:
+          roles:
             admin: Administrador
             user: Usuário
             organizer: Organizador

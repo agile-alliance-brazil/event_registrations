@@ -1,0 +1,44 @@
+<div class="breadcrumb">
+  <div class="row">
+    <div class="col-xl-12">
+      <%= link_to t('events.index.title'), events_path %>
+      >
+
+      <%= link_to @event.name, event_path(@event) %>
+      >
+
+      <% if current_user.organizer_of?(@event) %>
+        <%= link_to t('attendances.index.title'), event_attendances_path(@event) %>
+        >
+      <% end %>
+
+      <%= t('attendances.show.title') %>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xl-4">
+    <p>
+      <% if @event.event_image.present? %>
+        <%= image_tag @event.event_image.url, class: 'card-img-top' %>
+      <% else %>
+        <%= image_tag 'img-empty.png' %>
+      <% end %>
+    </p>
+    <p><h4><%= @event.name %></h4></p>
+  </div>
+  <div class="col-xl-8">
+    <p><h3><%= @attendance.full_name %></h3></p>
+    <p><h6><%= @attendance.email %></h6></p>
+    <p><%= "Inscrito em: #{l(@attendance.created_at, format: :short)}" %></p>
+    <p><b><%= number_to_currency(@attendance.registration_value) %></b></p>
+
+    <% if @attendance.grouped? && @attendance.pending? %>
+      <%= render 'attendances/group_registration', { attendance: @attendance } %>
+    <% else %>
+      <%= render partial: "attendances/status_partials/#{@attendance.status}", locals: { attendance: @attendance } %>
+    <% end %>
+  </div>
+</div>

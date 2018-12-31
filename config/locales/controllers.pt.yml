@@ -28,7 +28,7 @@ pt:
       registration_total: "Total"
     index:
       title: "Participantes"
-      search: "Buscar"
+      search: "Buscar por nome, empresa, email ou ID"
       reports:
         active_by_state: "Ativos por estado"
         active_by_city: "Ativos por cidade"

@@ -1,0 +1,7 @@
+.attendance-information-header {
+    border-bottom: 6px solid red;
+    background-color: lightgrey;
+    font-size: unset;
+    font-weight: bold;
+    padding: 10px;
+}

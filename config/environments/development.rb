@@ -15,7 +15,7 @@ Current::Application.configure do
   host = 'http://127.0.0.1'
   config.action_mailer.default_url_options = { host: host, port: 3000 }
   config.action_mailer.asset_host = host
-  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.raise_delivery_errors = false
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log

@@ -140,10 +140,6 @@ class Attendance < ApplicationRecord
     waiting? || pending? || accepted? || paid? || confirmed?
   end
 
-  def transferrable?
-    paid? || confirmed?
-  end
-
   def confirmable?
     paid? || pending? || accepted?
   end

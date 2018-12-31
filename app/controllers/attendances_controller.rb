@@ -75,7 +75,7 @@ class AttendancesController < AuthenticatedController
     else
       @attendance.pending!
     end
-    redirect_to event_attendances_path(@event)
+    respond_to { |format| format.js { render 'attendances/attendance' } }
   end
 
   def search

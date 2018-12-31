@@ -1,6 +1,6 @@
 
 - if @attendance.registration_value&.positive?
-  %h4 Instruções para completar o processo de inscrição
+  %h6 Instruções para completar o processo de inscrição
   = render partial: 'shared/payment_request', locals: { attendance: @attendance }
 
 - else

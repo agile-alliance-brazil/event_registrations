@@ -18,7 +18,7 @@
           <div class="no-data"><i class="far fa-calendar-alt fa-4x"></i></div>
           <div class="no-data"><%= t('general.no_data') %></div>
         <% else %>
-          <%= render 'events', events: @events %>
+          <%= render 'events/events', events: @events %>
         <% end %>
       </div>
     </div>

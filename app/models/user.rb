@@ -111,7 +111,7 @@ class User < ApplicationRecord
   end
 
   def full_name
-    [first_name, last_name].join(' ')
+    [first_name.titleize, last_name.titleize].join(' ')
   end
 
   def organizer_of?(event)

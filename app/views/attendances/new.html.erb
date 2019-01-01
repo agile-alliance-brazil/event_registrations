@@ -1,12 +1,8 @@
 <div class="breadcrumb">
   <div class="row">
-    <div class="col-xl-2">
+    <div class="col-xl-12">
       <%= link_to t('events.index.title'), events_path %>
-    </div>
-    <div class="col-xl-1">
       >
-    </div>
-    <div class="col-xl-9">
       <%= t('attendances.new.title.text', event_name: @event.name) %>
     </div>
   </div>

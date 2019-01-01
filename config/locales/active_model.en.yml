@@ -108,6 +108,7 @@ en:
             bachelor: Bachelor or equivalent
             master: Master or equivalent
             doctoral: Doctoral or equivalent
+        user_for_attendance: "Attendance for User"
       user:
         role: Role in System
         email: Email
@@ -123,6 +124,7 @@ en:
             admin: Admin
             user: User
             organizer: Organizer
+        cpf: "CPF"
       event:
         full_price: "Full price"
   registration_group:

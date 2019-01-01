@@ -60,29 +60,3 @@
     </div>
   </div>
 </div>
-
-
-<!--- title t('users.show.title', username: @user.full_name)-->
-
-<!--.profile-->
-<!--  %ul.list-group-->
-<!--    - [:first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale].each do |attribute|-->
-<!--      %li.list-group-item-->
-<!--        = t("activerecord.attributes.attendance.#{attribute}") + ': '-->
-<!--        %strong= @user.send(attribute)-->
-<!--  = link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-primary'-->
-
-<!--.attendances-->
-<!--  %h3= t('attendances.index.title')-->
-<!--  - @user.events.each do |event|-->
-<!--    %ul.event.list-group-->
-<!--      - @user.registrations_for_event(event).each do |attendance|-->
-<!--        %li.list-group-item-->
-<!--          .status-->
-<!--            = link_to "#{event.name}: #{t("activerecord.attributes.attendance.enums.status.#{attendance.status}")}", event_attendance_path(event, attendance)-->
-<!--            - if attendance.cancellable?-->
-<!--              %span.badge= link_to 'X', event_attendance_path(event, attendance), method: :delete, class: 'remove', data: { confirm: t('general.confirm', event: event.name) }-->
-<!--  - (@events_for_today).each do |event|-->
-<!--    %ul.event-->
-<!--      %li= link_to t('attendances.new.title.text', event_name: event.name), new_event_attendance_path(event), class: 'add_attendance'-->
-<!--.clear-->

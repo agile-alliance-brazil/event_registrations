@@ -60,6 +60,12 @@ pt:
       registration_group:
         one: Grupo de Inscrições
         other: Grupos de Inscrições
+      registration_period:
+        one: Período de Inscrições
+        other: Períodos de Inscrições
+      registration_qupta:
+        one: Cota de Inscrições
+        other: Cotas de Inscrições
     attributes:
       attendance:
         first_name: Nome
@@ -126,13 +132,17 @@ pt:
       event:
         name: Nome
         attendance_limit: Capacidade
-        main_email_contact: Contato para notificações
+        main_email_contact: Contato
         days_to_charge: Dias para cobrar pendentes
         start_date: Inicia em
         end_date: Termina em
         full_price: Preço cheio
         link: Link para a página do evento
         logo: Logo do evento
+        country: País
+        state: Estado
+        city: Cidade
+        registered_by_user: Inscrito por
       registration_group:
         name: Nome
         discount: Desconto (%)
@@ -142,6 +152,16 @@ pt:
         paid_in_advance: Pago antecipadamente?
         automatic_approval: Aprovação automática?
         attendances: Inscritos
+      registration_period:
+        title: Título
+        price: Preço
+        start_at: Começa em
+        end_at: Termina em
+      registration_quota:
+        id: Id
+        order: Ordem
+        quota: Cota
+        price: Preço
       user:
         first_name: Nome
         last_name: Sobrenome

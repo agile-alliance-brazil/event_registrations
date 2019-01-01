@@ -65,12 +65,11 @@ describe RegistrationPeriodsController, type: :controller do
 
           post :create, params: { event_id: event, registration_period: { title: 'foo', start_at: start_date, end_at: end_date, price: 100 } }
           period_persisted = RegistrationPeriod.last
-          registration_period = assigns(:registration_period)
           expect(period_persisted.title).to eq 'foo'
           expect(period_persisted.start_at.utc.to_i).to eq start_date.to_i
           expect(period_persisted.end_at.utc.to_i).to eq end_date.to_i
           expect(period_persisted.price.to_d).to eq 100
-          expect(response).to redirect_to new_event_registration_period_path(event, registration_period)
+          expect(response).to redirect_to event_path(event)
         end
       end
 
@@ -81,7 +80,7 @@ describe RegistrationPeriodsController, type: :controller do
             period = assigns(:period)
 
             expect(period).to be_a RegistrationPeriod
-            expect(period.errors.full_messages).to eq ['Title: não pode ficar em branco', 'Start at: não pode ficar em branco', 'End at: não pode ficar em branco']
+            expect(period.errors.full_messages).to eq ['Título: não pode ficar em branco', 'Começa em: não pode ficar em branco', 'Termina em: não pode ficar em branco']
             expect(response).to render_template :new
           end
         end
@@ -183,7 +182,7 @@ describe RegistrationPeriodsController, type: :controller do
           it 'does not update and render form with errors' do
             put :update, params: { event_id: event, id: period, registration_period: { title: '', start_at: '', end_at: '' } }
             updated_period = assigns(:period)
-            expect(updated_period.errors.full_messages).to eq ['Title: não pode ficar em branco', 'Start at: não pode ficar em branco', 'End at: não pode ficar em branco']
+            expect(updated_period.errors.full_messages).to eq ['Título: não pode ficar em branco', 'Começa em: não pode ficar em branco', 'Termina em: não pode ficar em branco']
             expect(response).to render_template :edit
           end
         end

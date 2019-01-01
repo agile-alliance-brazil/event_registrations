@@ -1,0 +1,15 @@
+<div class="breadcrumb">
+  <div class="row">
+    <div class="col-xl-12">
+      <%= link_to t('events.index.title'), events_path %>
+      >
+
+      <%= link_to @event.name, event_path(@event) %>
+      >
+
+      <%= t('registration_periods.edit.title') %>
+    </div>
+  </div>
+</div>
+
+<%= render 'form' %>

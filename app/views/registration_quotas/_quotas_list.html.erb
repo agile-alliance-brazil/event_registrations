@@ -1,0 +1,33 @@
+<h5><%= t('registration_quotas.index.title') %></h5>
+
+<%= link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn btn-sm btn-success bottom-spaced-component float-right' %>
+
+<% if event.registration_quotas.present? %>
+  <table class="table">
+    <thead>
+      <th><%= RegistrationQuota.human_attribute_name :id %></th>
+      <th><%= RegistrationQuota.human_attribute_name :order %></th>
+      <th><%= RegistrationQuota.human_attribute_name :quota %></th>
+      <th><%= RegistrationQuota.human_attribute_name :price %></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% event.registration_quotas.each do |quota| %>
+        <tr id="<%="quota_#{quota.id}" %>">
+          <td><%= quota.id %></td>
+          <td><%= quota.order %></td>
+          <td><%= quota.quota %></td>
+          <td><%= number_to_currency(quota.price) %></td>
+          <td>
+            <%= link_to event_registration_quota_path(event, quota), method: :delete do %>
+              <i class="far fa-trash-alt"></i>
+            <% end %>
+            <%= link_to edit_event_registration_quota_path(event, quota) do %>
+              <i class="far fa-edit"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

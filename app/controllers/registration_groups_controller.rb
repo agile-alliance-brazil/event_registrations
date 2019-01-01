@@ -2,10 +2,9 @@
 
 class RegistrationGroupsController < AuthenticatedController
   before_action :assign_event
-  before_action :assign_group, except: %i[index create]
+  before_action :assign_group, except: %i[new create]
 
-  def index
-    @groups = @event.registration_groups
+  def new
     @group = RegistrationGroup.new
   end
 
@@ -14,7 +13,7 @@ class RegistrationGroupsController < AuthenticatedController
   end
 
   def destroy
-    return redirect_to event_registration_groups_path(@event), notice: t('registration_group.destroy.success') if @group.destroy
+    return redirect_to event_registration_groups_path(@event) if @group.destroy
 
     redirect_to(event_registration_groups_path(@event), flash: { error: @group.errors.full_messages.join(',') })
   end
@@ -22,9 +21,9 @@ class RegistrationGroupsController < AuthenticatedController
   def create
     @group = RegistrationGroup.new(group_params.merge(event: @event, leader: current_user))
     if @group.save
-      redirect_to event_registration_groups_path(@event)
+      redirect_to event_path(@event)
     else
-      render :index
+      render :new
     end
   end
 

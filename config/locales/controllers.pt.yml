@@ -106,6 +106,9 @@ pt:
       attendance_limit: "Limite de Inscritos: %{value}"
       average_queue_time: "Tempo médio na fila: %{value}"
       full_price: "Preço cheio: %{value}"
+      current_price: "Valor atual"
+      statement_agreement_price: "Valor para Empenho"
+      student_price: "Valor para Estudante"
     edit:
       title: "Editar Evento"
     delete:
@@ -118,6 +121,8 @@ pt:
       title: "Editar Grupo"
     show:
       title: "Grupo de Inscrição"
+    new:
+      title: "Novo Grupo de Inscrições"
   attendance:
     reports:
       attendance_organization_size: "Participantes x Tamanho da Empresa"
@@ -185,6 +190,7 @@ pt:
   registration_quotas:
     index:
       attendances: "Participantes"
+      title: "Lista de Cotas de Inscrição"
     new:
       title: "Nova Cota"
     edit:
@@ -203,11 +209,11 @@ pt:
   reistration_groups:
     index:
       title: "Lista de Grupos"
-  reistration_periods:
-    index:
-      title: "Lista de Períodos"
   activerecord:
     attributes:
       user:
         admin: "Admin?"
         organizer: "Organizador?"
+  reistration_periods:
+    index:
+      title: "Lista de Períodos de Inscrição"

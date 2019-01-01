@@ -106,6 +106,9 @@ en:
       full_price: "Full price: %{value}"
       average_queue_time: "Avg time in queue: %{value}"
       attendance_limit: "Attendance limit: %{value}"
+      current_price: "Current Price"
+      statement_agreement_price: "Value for Statement of Agreement"
+      student_price: "Student Value"
     edit:
       title: "Edit Event"
     delete:
@@ -118,6 +121,8 @@ en:
       title: "Edit Group"
     show:
       title: "Registration Group"
+    new:
+      title: "New Registration Group"
   attendance:
     reports:
       attendance_organization_size: "Attendance x Organization Size"
@@ -187,6 +192,7 @@ en:
   registration_quotas:
     index:
       attendances: "Attendances"
+      title: "Index of Quotas"
     new:
       title: "New Registration Quota"
     edit:
@@ -203,11 +209,11 @@ en:
   reistration_groups:
     index:
       title: "Index of Groups"
-  reistration_periods:
-    index:
-      title: "Index of Periods"
   activerecord:
     attributes:
       user:
         admin: "Admin?"
         organizer: "Organizer?"
+  reistration_periods:
+    index:
+      title: "Index of Event Periods"

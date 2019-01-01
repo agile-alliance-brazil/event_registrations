@@ -14,6 +14,8 @@ en:
     download_csv: "Download CSV"
     details:
       title: "Details"
+    form:
+      reset: "Clean Form"
   registration:
     quantity: "Quantity"
     details:
@@ -61,6 +63,13 @@ en:
       agreement:
         attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
         workshop: "By registering for the workshops, I declare being aware that the minimum attendance to each workshop is 12 people, and that if this number is not reached, I will have the opportunity to either join another workshop, or get a refund."
+      user_for_attendance:
+        help: "In order to guarantee the user access, if you are registering for a third part, the user must have been signed up to the system"
+      load:
+        not_found: "Informations not found"
+        title: "Load Info"
+      load_user:
+        title: "Load Signed User Info"
     actions:
       confirm: "Confirm Registration"
       recover: "Recover Registration"

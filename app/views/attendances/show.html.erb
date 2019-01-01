@@ -32,7 +32,9 @@
   <div class="col-xl-8">
     <p><h3><%= @attendance.full_name %></h3></p>
     <p><h6><%= @attendance.email %></h6></p>
+    <p><h6><%= @attendance.organization %></h6></p>
     <p><%= "Inscrito em: #{l(@attendance.created_at, format: :short)}" %></p>
+    <p><i><%= t("activerecord.attributes.attendance.enums.status.#{@attendance.status}") %></i></p>
     <p><b><%= number_to_currency(@attendance.registration_value) %></b></p>
 
     <% if @attendance.grouped? && @attendance.pending? %>

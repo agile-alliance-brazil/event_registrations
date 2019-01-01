@@ -27,4 +27,8 @@
     font-weight: bold;
 }
 
+.bottom-spaced-component {
+    margin-bottom: 15px;
+}
+
 label.required:after{content: " *"}

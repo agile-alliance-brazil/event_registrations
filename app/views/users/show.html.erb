@@ -10,74 +10,53 @@
 
 <div class="row">
   <div class="col-xl-4">
-    <div class="row">
-      <div class="col-xl-12">
-        <% if @user.user_image.present? %>
-          <%= image_tag @user.user_image.url, size: '100x100', class: 'user-avatar' %>
-        <% else %>
-          <%= image_tag 'img-empty.png', size: '100x100', class: 'user-avatar' %>
-        <% end %>
-      </div>
+    <p>
+      <% if @user.user_image.present? %>
+        <%= image_tag @user.user_image.url, class: 'card-img-top' %>
+      <% else %>
+        <%= image_tag 'img-empty.png' %>
+      <% end %>
+    </p>
+    <div class="col-xl-12">
+      <b><%= @user.full_name %></b>
     </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= @user.full_name %></b>
-      </div>
+    <div class="col-xl-12">
+      <p><%= t("activerecord.attributes.user.enums.roles.#{@user.role}") %></p>
     </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <p><%= t("activerecord.attributes.user.enums.roles.#{@user.role}") %></p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <%= link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-sm btn-primary' %>
-      </div>
+    <div class="col-xl-12">
+      <%= link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-sm btn-primary' %>
     </div>
   </div>
 
   <div class="col-xl-8">
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= "#{t('activerecord.attributes.user.email')}: " %></b> <%= @user.email %>
-      </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.email')}: " %></b> <%= @user.email %>
+    </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.cpf')}: " %></b> <%= @user.cpf %>
     </div>
     <% if @user.city.present? && @user.state.present? %>
-      <div class="row">
-        <div class="col-xl-12">
-          <b><%= "#{t('users.show.city_state')}: " %></b> <%= "#{@user.city} / #{@user.state}" %>
-        </div>
+      <div class="col-xl-12">
+        <b><%= "#{t('users.show.city_state')}: " %></b> <%= "#{@user.city} / #{@user.state}" %>
       </div>
     <% end %>
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= "#{t('activerecord.attributes.user.country')}: " %></b> <%= @user.country %>
-      </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.country')}: " %></b> <%= @user.country %>
     </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= "#{t('activerecord.attributes.user.organization')}: " %></b> <%= @user.organization %>
-      </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.organization')}: " %></b> <%= @user.organization %>
     </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= "#{t('activerecord.attributes.user.zip_code')}: " %></b> <%= @user.organization %>
-      </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.zip_code')}: " %></b> <%= @user.organization %>
     </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= "#{t('activerecord.attributes.user.twitter_user')}: " %></b> <%= @user.twitter_user %>
-      </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.twitter_user')}: " %></b> <%= @user.twitter_user %>
     </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= "#{t('activerecord.attributes.user.phone')}: " %></b> <%= @user.phone %>
-      </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.phone')}: " %></b> <%= @user.phone %>
     </div>
-    <div class="row">
-      <div class="col-xl-12">
-        <b><%= "#{t('activerecord.attributes.user.default_locale')}: " %></b> <%= @user.default_locale %>
-      </div>
+    <div class="col-xl-12">
+      <b><%= "#{t('activerecord.attributes.user.default_locale')}: " %></b> <%= @user.default_locale %>
     </div>
   </div>
 </div>

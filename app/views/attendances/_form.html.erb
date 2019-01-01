@@ -2,19 +2,55 @@
   <%= hidden_field_tag :registration_token, params[:registration_token] %>
   <%= hidden_field_tag :event_id, @event.id %>
 
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
-      <%= label_tag t('activerecord.attributes.attendance.payment_type') %>
-      <%= select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control' %>
-      <span class="help-block"><%= attendance.errors[:name].join(', ') %></span>
+  <%= hidden_field_tag :user_email, current_user.email %>
+  <%= hidden_field_tag :user_cpf, current_user.cpf %>
+  <%= hidden_field_tag :user_first_name, current_user.first_name %>
+  <%= hidden_field_tag :user_last_name, current_user.last_name %>
+  <%= hidden_field_tag :user_badge_name, current_user.badge_name %>
+  <%= hidden_field_tag :user_gender, current_user.gender %>
+  <%= hidden_field_tag :user_country, current_user.country %>
+  <%= hidden_field_tag :user_state, current_user.state %>
+  <%= hidden_field_tag :user_city, current_user.city %>
+  <%= hidden_field_tag :user_phone, current_user.phone %>
+  <%= hidden_field_tag :user_organization, current_user.organization %>
+
+  <div class="row bottom-spaced-component">
+    <div class="col-xl-3 col-sm-6">
+      <%= link_to t('attendances.new.load_user.title'), '#', id: 'load-current-user-btn', class: 'btn btn-primary'%>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+      <%= submit_tag(t('general.form.reset'), { name: 'reset', id: 'reset', type: 'reset', class: 'btn btn-primary' }) %>
     </div>
   </div>
 
+  <% if current_user.organizer_of?(@event) %>
+    <div class="row">
+      <div class="col-xl-12 col-sm-6 form-group">
+        <%= label_tag t('activerecord.attributes.attendance.user_for_attendance') %>
+        <%= select_tag :user_for_attendance, options_for_select(User.all.order(:first_name, :last_name).map { |u| [u.full_name, u.id] }), class: 'form-control' %>
+        <span class="inline-hints"><%= t('attendances.new.user_for_attendance.help') %></span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-12 col-sm-6 form-group">
+        <%= label_tag t('activerecord.attributes.attendance.payment_type') %>
+        <%= select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control' %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-10 col-sm-6 form-group">
       <%= form.label :email, class: 'control-label required' %>
       <%= form.text_field :email, class: 'form-control', id: 'attendance_email' %>
-      <span class="help-block"><%= attendance.errors[:email].join(', ') %></span>
+      <span class="help-block" id="help-block-email"><%= attendance.errors[:email].join(', ') %></span>
+    </div>
+    <div class="col-xl-2 col-sm-6">
+      <%= link_to '#', id: 'search-attendance-btn', class: 'btn btn-light' do %>
+        <i class="fas fa-download"></i> <%= t('attendances.new.load.title') %>
+      <% end %>
     </div>
   </div>
 

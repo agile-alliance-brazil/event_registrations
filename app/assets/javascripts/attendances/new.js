@@ -1,1 +1,2 @@
-bindBlurToAttendanceEmail();
+bindClickToAttendanceSearch();
+bindClickToLoadUser();

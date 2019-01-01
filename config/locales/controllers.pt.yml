@@ -14,6 +14,8 @@ pt:
     download_csv: "Baixar o CSV"
     details:
       title: "Detalhes"
+    form:
+      reset: "Limpar Formulário"
 
   registration:
     quantity: "Quantidade"
@@ -61,6 +63,13 @@ pt:
       agreement:
         attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
         workshop: "Ao me inscrever para workshops, declaro estar ciente de que o número mínimo de participantes para cada workshop é de 12 pessoas e que, se o número não for atingido, terei a chance de trocar de workshop ou receber meu dinheiro de volta."
+      user_for_attendance:
+        help: Para garantir que o usuário tenha acesso à sua inscrição, se você está cadastrando a inscrição para terceiros, essa pessoa deve ter entrado no sistema
+      load:
+        not_found: "Informações não encontradas"
+        title: "Carregar Info"
+      load_user:
+        title: "Carregar Info do Usuário Logado"
     actions:
       confirm: "Confirmar inscrição"
       cancel: "Cancelar inscrição"

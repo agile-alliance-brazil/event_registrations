@@ -49,7 +49,9 @@ ActiveRecord::Schema.define(version: 2018_09_30_220853) do
     t.integer "job_role", default: 0
     t.datetime "due_date"
     t.integer "payment_type"
+    t.integer "registered_by_id", null: false
     t.index ["event_id"], name: "index_attendances_on_event_id"
+    t.index ["registered_by_id"], name: "fk_rails_4eb9f97929"
     t.index ["registration_period_id"], name: "fk_rails_a2b9ca8d82"
     t.index ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
     t.index ["user_id"], name: "index_attendances_on_user_id"
@@ -197,6 +199,7 @@ ActiveRecord::Schema.define(version: 2018_09_30_220853) do
   add_foreign_key "attendances", "registration_periods"
   add_foreign_key "attendances", "registration_quotas"
   add_foreign_key "attendances", "users"
+  add_foreign_key "attendances", "users", column: "registered_by_id"
   add_foreign_key "payment_notifications", "attendances"
   add_foreign_key "users", "registration_groups"
 end

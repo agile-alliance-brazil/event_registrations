@@ -30,6 +30,7 @@
 #  payment_type            :integer
 #  phone                   :string(255)
 #  queue_time              :integer
+#  registered_by_id        :integer          not null, indexed
 #  registration_date       :datetime
 #  registration_group_id   :integer
 #  registration_period_id  :integer          indexed
@@ -44,6 +45,7 @@
 #
 # Indexes
 #
+#  fk_rails_4eb9f97929                         (registered_by_id)
 #  fk_rails_a2b9ca8d82                         (registration_period_id)
 #  index_attendances_on_event_id               (event_id)
 #  index_attendances_on_registration_quota_id  (registration_quota_id)
@@ -52,6 +54,7 @@
 # Foreign Keys
 #
 #  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id)
+#  fk_rails_4eb9f97929  (registered_by_id => users.id)
 #  fk_rails_777eb7170a  (event_id => events.id)
 #  fk_rails_77ad02f5c5  (user_id => users.id)
 #  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id)
@@ -74,6 +77,7 @@ class Attendance < ApplicationRecord
 
   belongs_to :event
   belongs_to :user
+  belongs_to :registered_by_user, class_name: 'User', foreign_key: :registered_by_id, inverse_of: :registered_attendances
   belongs_to :registration_period
   belongs_to :registration_group
   belongs_to :registration_quota

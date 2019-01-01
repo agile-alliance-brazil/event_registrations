@@ -6,16 +6,8 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many :events }
     it { is_expected.to have_and_belong_to_many(:organized_events).class_name('Event') }
     it { is_expected.to have_many(:payment_notifications).through(:attendances).dependent(:destroy) }
-
-    context 'events uniqueness' do
-      it 'only show event once if user has multiple attendances' do
-        user = FactoryBot.create(:user)
-        first_attendance = FactoryBot.create(:attendance, user: user)
-        FactoryBot.create(:attendance, user: user, event: first_attendance.event, email: 'foo@bar.com')
-
-        expect(user.events.size).to eq(1)
-      end
-    end
+    it { is_expected.to have_many(:led_groups).class_name('RegistrationGroup').dependent(:nullify) }
+    it { is_expected.to have_many(:registered_attendances).class_name('Attendance').dependent(:restrict_with_exception) }
   end
 
   context 'validations' do
@@ -30,6 +22,16 @@ RSpec.describe User, type: :model do
     it { is_expected.not_to allow_value('a@').for(:email) }
     it { is_expected.not_to allow_value('a@a').for(:email) }
     it { is_expected.not_to allow_value('@12.com').for(:email) }
+
+    context 'events uniqueness' do
+      it 'only show event once if user has multiple attendances' do
+        user = FactoryBot.create(:user)
+        first_attendance = FactoryBot.create(:attendance, user: user)
+        FactoryBot.create(:attendance, user: user, event: first_attendance.event, email: 'foo@bar.com')
+
+        expect(user.events.size).to eq(1)
+      end
+    end
 
     context 'uniqueness' do
       let!(:user) { FactoryBot.create :user }

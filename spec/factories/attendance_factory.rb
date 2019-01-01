@@ -5,6 +5,7 @@ FactoryBot.define do
     status { %i[pending accepted paid confirmed].sample }
     association :event
     association :user
+    registered_by_user(&:user)
     first_name { |a| a.user.first_name }
     last_name { |a| a.user.last_name }
     email { |a| a.user.email }

@@ -40,8 +40,10 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
-  context 'authenticated' do
+  context 'authenticated as organizer' do
     let(:user) { FactoryBot.create :organizer }
+    let(:user_for_attendance) { FactoryBot.create :user, role: :user }
+
     let(:event) { FactoryBot.create :event, organizers: [user] }
 
     let(:valid_attendance) do
@@ -91,9 +93,11 @@ RSpec.describe AttendancesController, type: :controller do
               context 'and it is a fresh new registration' do
                 it 'creates the attendance and redirects to the show' do
                   EmailNotifications.expects(:registration_pending).returns(email)
-                  post :create, params: { event_id: event, attendance: valid_attendance }
+                  post :create, params: { event_id: event, attendance: valid_attendance.merge(user_for_attendance: user_for_attendance) }
                   created_attendance = assigns(:attendance)
                   expect(created_attendance.event).to eq event
+                  expect(created_attendance.user).to eq user_for_attendance
+                  expect(created_attendance.registered_by_user).to eq user
                   expect(created_attendance).to be_pending
                   expect(created_attendance.registration_group).to be_nil
                   expect(created_attendance.payment_type).to eq 'gateway'

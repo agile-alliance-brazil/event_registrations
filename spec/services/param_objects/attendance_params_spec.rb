@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe AttendanceParams, type: :param_object do
-  let(:user) { FactoryBot.create :user }
-  let(:event) { FactoryBot.create :event }
+  let(:user) { FactoryBot.create :user, role: :organizer }
+  let(:user_for_attendance) { FactoryBot.create :user }
+  let(:event) { FactoryBot.create :event, organizers: [user] }
 
   describe '#new_attributes' do
     it 'returns all parameters for attendance' do
@@ -10,6 +11,7 @@ RSpec.describe AttendanceParams, type: :param_object do
                              {
                                event_id: event.id,
                                user_id: user.id,
+                               user_for_attendance: user_for_attendance.id,
                                first_name: user.first_name,
                                last_name: user.last_name,
                                email: user.email,
@@ -27,7 +29,8 @@ RSpec.describe AttendanceParams, type: :param_object do
       params = ActionController::Parameters.new(valid_attendance)
       params_object = AttendanceParams.new(user, event, params)
       expect(params_object.new_attributes[:event_id]).to eq event.id
-      expect(params_object.new_attributes[:user_id]).to eq user.id
+      expect(params_object.new_attributes[:user_id]).to eq user_for_attendance.id
+      expect(params_object.new_attributes[:registered_by_id]).to eq user.id
       expect(params_object.new_attributes[:first_name]).to eq user.first_name
       expect(params_object.new_attributes[:last_name]).to eq user.last_name
       expect(params_object.new_attributes[:email]).to eq user.email
@@ -40,7 +43,6 @@ RSpec.describe AttendanceParams, type: :param_object do
       expect(params_object.new_attributes[:cpf]).to eq user.cpf.numero
 
       expect(params_object.event).to eq event
-      expect(params_object.user).to eq user
     end
   end
 
@@ -61,6 +63,7 @@ RSpec.describe AttendanceParams, type: :param_object do
                              {
                                event_id: event.id,
                                user_id: user.id,
+                               user_for_attendance: user_for_attendance.id,
                                first_name: user.first_name,
                                last_name: user.last_name,
                                email: user.email,
@@ -79,6 +82,7 @@ RSpec.describe AttendanceParams, type: :param_object do
       expected_return = {
         'event_id' => event.id,
         'user_id' => user.id,
+        'user_for_attendance' => user_for_attendance.id,
         'first_name' => user.first_name,
         'last_name' => user.last_name,
         'email' => user.email,

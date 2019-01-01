@@ -1,0 +1,1 @@
+$('#organizers-list').html("<%= escape_javascript(render 'users/event_organizers_list', organizers_list: @event.organizers.order(:first_name, :last_name)) %>")

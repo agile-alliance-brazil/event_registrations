@@ -13,6 +13,7 @@ class EventsController < AuthenticatedController
   end
 
   def show
+    assign_organizers
     @last_attendance_for_user = AttendanceRepository.instance.attendances_for(@event, current_user).last if current_user.present?
   end
 
@@ -41,23 +42,18 @@ class EventsController < AuthenticatedController
   end
 
   def add_organizer
-    if @event.add_organizer_by_email!(params['email'])
-      respond_to do |format|
-        format.js {}
-      end
-    else
-      not_found
-    end
+    organizer = User.find(params[:organizer])
+    return not_found unless organizer.organizer? || organizer.admin?
+    @event.add_organizer(organizer)
+    assign_organizers
+    respond_to { |format| format.js {} }
   end
 
   def remove_organizer
-    if @event.remove_organizer_by_email!(params['email'])
-      respond_to do |format|
-        format.js { render 'events/add_organizer' }
-      end
-    else
-      not_found
-    end
+    organizer = User.find(params[:organizer])
+    @event.remove_organizer(organizer)
+    assign_organizers
+    respond_to { |format| format.js { render 'events/add_organizer' } }
   end
 
   def edit; end
@@ -71,6 +67,10 @@ class EventsController < AuthenticatedController
   end
 
   private
+
+  def assign_organizers
+    @organizers_to_select = User.organizer.order(:first_name, :last_name) - @event.organizers
+  end
 
   def event_params
     params.require(:event).permit(:event_image, :name, :attendance_limit, :days_to_charge, :start_date, :end_date, :city, :state, :country, :main_email_contact, :full_price, :price_table_link, :link, :logo)

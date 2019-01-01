@@ -269,16 +269,16 @@ RSpec.describe EventsController, type: :controller do
           end
         end
         context 'and invalid organizer email' do
-          context 'passing an invalid email' do
+          context 'passing an invalid organizer' do
             it 'responds 404' do
-              patch :add_organizer, params: { id: event, email: 'bla' }, xhr: true
+              patch :add_organizer, params: { id: event, organizer: 'foo' }, xhr: true
               expect(response.status).to eq 404
             end
           end
           context 'passing a valid email and the user is not organizer' do
             let(:not_organizer) { FactoryBot.create :user }
             it 'responds 404' do
-              patch :add_organizer, params: { id: event, email: not_organizer.email }, xhr: true
+              patch :add_organizer, params: { id: event, organizer: not_organizer }, xhr: true
               expect(response.status).to eq 404
             end
           end
@@ -288,7 +288,7 @@ RSpec.describe EventsController, type: :controller do
         context 'and the user has the organizer role' do
           let(:organizer) { FactoryBot.create :organizer }
           it 'adds the user as organizer' do
-            patch :add_organizer, params: { id: event, email: organizer.email }, xhr: true
+            patch :add_organizer, params: { id: event, organizer: organizer }, xhr: true
             expect(response.status).to eq 200
             expect(event.reload.organizers).to include organizer
           end
@@ -301,7 +301,7 @@ RSpec.describe EventsController, type: :controller do
             event.save!
           end
           it 'adds the user as organizer' do
-            patch :add_organizer, params: { id: event, email: organizer.email }, xhr: true
+            patch :add_organizer, params: { id: event, organizer: organizer }, xhr: true
             expect(response.status).to eq 200
             expect(event.reload.organizers.count).to eq 1
           end
@@ -309,7 +309,7 @@ RSpec.describe EventsController, type: :controller do
         context 'and the user has the admin role' do
           let(:admin) { FactoryBot.create :admin }
           it 'adds the user as organizer' do
-            patch :add_organizer, params: { id: event, email: admin.email }, xhr: true
+            patch :add_organizer, params: { id: event, organizer: admin }, xhr: true
             expect(response.status).to eq 200
             expect(event.reload.organizers).to include admin
           end
@@ -329,7 +329,7 @@ RSpec.describe EventsController, type: :controller do
         context 'and invalid organizer email' do
           context 'passing an invalid email' do
             it 'responds 404' do
-              delete :remove_organizer, params: { id: event, email: 'bla' }, xhr: true
+              delete :remove_organizer, params: { id: event, organizer: 'bla' }, xhr: true
               expect(response.status).to eq 404
             end
           end
@@ -337,11 +337,11 @@ RSpec.describe EventsController, type: :controller do
       end
       context 'with valid parameters' do
         context 'and the user is already an organizer' do
-          let(:organizer) { FactoryBot.create :organizer }
+          let!(:organizer) { FactoryBot.create :organizer }
           it 'removes the organizer' do
-            delete :remove_organizer, params: { id: event, email: organizer.email }, xhr: true
-            expect(response.status).to eq 200
+            delete :remove_organizer, params: { id: event, organizer: organizer }, xhr: true
             expect(event.reload.organizers).not_to include organizer
+            expect(response).to render_template 'events/add_organizer'
           end
         end
 
@@ -349,8 +349,8 @@ RSpec.describe EventsController, type: :controller do
           let(:organizer) { FactoryBot.create :organizer }
           let(:other_organizer) { FactoryBot.create :organizer }
           it 'adds the user as organizer' do
-            event.add_organizer_by_email!(other_organizer.email)
-            delete :remove_organizer, params: { id: event, email: organizer.email }, xhr: true
+            event.add_organizer(other_organizer)
+            delete :remove_organizer, params: { id: event, organizer: organizer }, xhr: true
             expect(event.reload.organizers.count).to eq 1
           end
         end

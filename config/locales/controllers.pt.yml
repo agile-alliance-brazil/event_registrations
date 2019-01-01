@@ -103,6 +103,7 @@ pt:
       organizers:
         list: "Lista de Organizadores"
         remove: "Remover Organizador"
+        select: "Selecione um organizador..."
       attendance_limit: "Limite de Inscritos: %{value}"
       average_queue_time: "Tempo médio na fila: %{value}"
       full_price: "Preço cheio: %{value}"

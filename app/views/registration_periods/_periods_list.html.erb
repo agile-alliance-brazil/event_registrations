@@ -1,0 +1,38 @@
+<h5><%= t('reistration_periods.index.title') %></h5>
+
+<%= link_to t('registration_periods.new.title'), new_event_registration_period_path(@event), class: 'btn btn-sm btn-success bottom-spaced-component float-right' %>
+
+<% if event.registration_periods.present? %>
+  <table class="table">
+    <thead>
+      <th><%= RegistrationPeriod.human_attribute_name :id %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :title %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :start_at %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :end_at %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :price %></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% event.registration_periods.each do |period| %>
+        <tr id="<%="period_#{period.id}" %>">
+          <td><%= period.id %></td>
+          <td><%= period.title %></td>
+          <td><%= l(period.start_at, format: :short) %></td>
+          <td><%= l(period.end_at, format: :short) %></td>
+          <td><%= number_to_currency(period.price) %></td>
+          <td>
+            <%= link_to event_registration_period_path(event, period), method: :delete do %>
+              <i class="far fa-trash-alt"></i>
+            <% end %>
+            <%= link_to edit_event_registration_period_path(event, period) do %>
+              <i class="far fa-edit"></i>
+            <% end %>
+          </td>
+        </tr>
+
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <h5><i><%= t('general.no_data') %></i></h5>
+<% end %>

@@ -12,7 +12,7 @@ class RegistrationQuotasController < AuthenticatedController
     @registration_quota = RegistrationQuota.new(quota_params.merge(event: @event))
     if @registration_quota.save
       @registration_quota = RegistrationQuota.new
-      redirect_to new_event_registration_quota_path(@event, @registration_quota)
+      redirect_to event_path(@event)
     else
       render :new
     end

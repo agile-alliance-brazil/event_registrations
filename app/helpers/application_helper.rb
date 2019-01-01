@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  def autotab
-    @current_tab ||= 0
-    @current_tab += 1
-  end
-
   def alert
     render('layouts/alert', message: flash[:alert]) if flash[:alert].present?
   end

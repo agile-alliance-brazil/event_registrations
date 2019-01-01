@@ -6,28 +6,26 @@ RSpec.describe RegistrationGroupsController, type: :controller do
 
   let(:event) { FactoryBot.create :event }
 
-  describe 'GET #index' do
+  describe 'GET #new' do
     context 'with valid data' do
       let!(:group) { FactoryBot.create :registration_group, event: event }
       let!(:other_group) { FactoryBot.create :registration_group, event: event }
       let!(:other_event_group) { FactoryBot.create :registration_group }
 
       it 'assign the instance variables and renders the template' do
-        get :index, params: { event_id: event }
-        expect(assigns(:groups)).to match_array [group, other_group]
-        expect(assigns(:group)).not_to be_nil
-        expect(response).to render_template :index
-        expect(response).to render_template :index
+        get :new, params: { event_id: event }
+        expect(assigns(:group)).to be_a_new RegistrationGroup
+        expect(response).to render_template :new
       end
     end
 
     context 'with invalid event' do
-      before { get :index, params: { event_id: 'foo' } }
+      before { get :new, params: { event_id: 'foo' } }
       it { expect(response).to have_http_status :not_found }
     end
   end
 
-  describe '#show' do
+  describe 'GET #show' do
     let(:group) { FactoryBot.create :registration_group, event: event }
     context 'without attendances' do
       before { get :show, params: { event_id: event.id, id: group.id } }
@@ -75,7 +73,7 @@ RSpec.describe RegistrationGroupsController, type: :controller do
     end
   end
 
-  describe '#create' do
+  describe 'POST #create' do
     context 'with valid parameters' do
       let(:valid_params) { { name: 'new_group', discount: 5, minimum_size: 10, amount: 137, capacity: 100, paid_in_advance: true } }
       before { post :create, params: { event_id: event, registration_group: valid_params } }
@@ -89,6 +87,8 @@ RSpec.describe RegistrationGroupsController, type: :controller do
         expect(new_group.paid_in_advance?).to be_truthy
         expect(new_group.capacity).to eq 100
         expect(new_group.token).not_to be_blank
+
+        expect(response).to redirect_to event_path(event)
       end
     end
 

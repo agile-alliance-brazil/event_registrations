@@ -13,7 +13,7 @@ class RegistrationPeriodsController < AuthenticatedController
     @period = RegistrationPeriod.new(period_params.merge(event: @event))
     if @period.save
       @period = RegistrationPeriod.new
-      redirect_to new_event_registration_period_path(@event, @period)
+      redirect_to event_path(@event)
     else
       render :new
     end

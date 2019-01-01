@@ -1,0 +1,38 @@
+<h5><%= t('registration_groups.index.title') %></h5>
+
+<%= link_to t('registration_groups.new.title'), new_event_registration_group_path(@event), class: 'btn btn-sm btn-success bottom-spaced-component float-right' %>
+
+<% if event.registration_groups.present? %>
+  <table class="table">
+    <thead>
+      <th><%= RegistrationPeriod.human_attribute_name :name %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :leader %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :discount %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :amount %></th>
+      <th><%= RegistrationPeriod.human_attribute_name :attendances %></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% event.registration_groups.each do |group| %>
+        <tr>
+          <td><%= link_to group.name, event_registration_group_path(@event, group) %></td>
+          <td><%= group.leader.full_name %></td>
+          <td><%= number_to_percentage(group.discount) %></td>
+          <td><%= number_to_currency(group.amount) %></td>
+          <td><%= group.qtd_attendances %></td>
+          <td>
+            <%= link_to event_registration_group_path(event, group), method: :delete do %>
+              <i class="far fa-trash-alt"></i>
+            <% end %>
+            <%= link_to edit_event_registration_group_path(event, group) do %>
+              <i class="far fa-edit"></i>
+            <% end %>
+          </td>
+        </tr>
+
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <h5><i><%= t('general.no_data') %></i></h5>
+<% end %>

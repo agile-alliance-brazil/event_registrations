@@ -2,9 +2,9 @@
   <div class="row">
     <div class="col-xl-2 form-group">
       <% if @user.user_image.present? %>
-        <%= image_tag @user.user_image.url, size: '100x100', class: 'user-avatar' %>
+        <%= image_tag @user.user_image.url, class: 'card-img-top' %>
       <% else %>
-        <%= image_tag 'img-empty.png', size: '100x100', class: 'user-avatar' %>
+        <%= image_tag 'img-empty.png', class: 'card-img-top' %>
       <% end %>
     </div>
     <div class="col-xl-10 form-group">

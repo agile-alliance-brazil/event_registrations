@@ -1,48 +1,50 @@
+<div class="breadcrumb">
+  <div class="row">
+    <div class="col-xl-12">
+      <%= link_to t('events.index.title'), events_path %>
+      >
 
-<h1 class="event-title"><%= @event.name %></h1>
-
-<%= render 'events/event_tabs', event: @event, details_tab: true %>
-
-<div class="tab-container">
-  <p><%= "#{t('activerecord.attributes.event.full_price')}: #{number_to_currency(@event.full_price)}" %></p>
-
+      <%= @event.name %>
+    </div>
+  </div>
 </div>
 
-<!--%section{class: 'event-details-box'}-->
-<!--  %h3= @event.name-->
-<!--  - if @event.start_date.present? && @event.end_date.present?-->
-<!--    %h4= "#{l(@event.start_date, format: :short)} #{t('general.until')} #{l(@event.end_date, format: :short)}"-->
+<div class="row">
+  <div class="col-xl-4">
+    <p>
+      <% if @event.event_image.present? %>
+        <%= image_tag @event.event_image.url, class: 'card-img-top' %>
+      <% else %>
+        <%= image_tag 'img-empty.png' %>
+      <% end %>
+    </p>
+    <p><h4><%= @event.name %></h4></p>
+    <% if current_user&.organizer_of?(@event) %>
+      <p><%= link_to t('events.edit.title'), edit_event_path(@event), class: 'btn btn-sm btn-primary' %></p>
+    <% end %>
+  </div>
 
-<!--  %div= t('events.show.attendance_limit', value: @event.attendance_limit)-->
-<!--  %div= t('events.show.average_queue_time', value: @event.queue_average_time)-->
-<!--  %div= t('events.show.full_price', value: number_to_currency(@event.full_price))-->
+  <div class="col-xl-8">
+    <p><h3><%= @event.name %></h3></p>
+    <b><%= "#{@event.city} / #{@event.state} - #{@event.country}" %></b>
+    <p><h6><%= "#{Event.human_attribute_name(:full_price)}: #{number_to_currency(@event.full_price)}" %></h6></p>
+    <p><h7><%= "#{t('events.show.current_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, :gateway))}" %></h7></p>
+    <p><h7><%= "#{t('events.show.statement_agreement_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement'))}" %></h7></p>
+    <p><h7><%= "#{t('events.show.student_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement') / 2)}" %></h7></p>
+    <p><%= "#{Event.human_attribute_name(:main_email_contact)}: "%> <%= mail_to @event.main_email_contact, @event.main_email_contact %></p>
+  </div>
+</div>
 
-<!--  %div{class: 'register-button'}-->
-<!--    = render partial: 'registrations', locals: { event: @event }-->
+<% if current_user&.organizer_of?(@event) %>
+  <hr/>
 
-<!--%section-->
-<!--  %hr-->
+  <%= render 'registration_periods/periods_list', event: @event %>
 
-<!--  %div-->
-<!--    = render partial: 'registration_periods/periods_list', locals: { event: @event }-->
-<!--    = link_to t('registration_periods.new.title'), new_event_registration_period_path(@event), class: 'btn-sm btn-primary'-->
+  <hr/>
 
-<!--  %hr-->
-<!--    %div-->
-<!--      = render partial: 'registration_quotas/quotas_list', locals: { event: @event }-->
-<!--      = link_to t('registration_quotas.new.title'), new_event_registration_quota_path(@event), class: 'btn-sm btn-primary'-->
+  <%= render 'registration_quotas/quotas_list', event: @event %>
 
-<!--  %hr-->
+  <hr/>
 
-<!--  %div-->
-<!--    = render partial: 'registration_groups/groups_list', locals: { event: @event }-->
-<!--    = link_to t('registration_groupss.new.title'), event_registration_groups_path(@event), class: 'btn-sm btn-primary'-->
-
-<!--  %hr-->
-
-<!--  %div-->
-<!--    %div{id: 'organizers_list'}-->
-<!--      = render partial: 'events/organizers_list', locals: { event: @event }-->
-
-<!--    = text_field_tag :email, params[:email], size: 50, class: 'form-control line'-->
-<!--    = link_to t('users.organizer.new.title'), '#', onclick: "submitOrganizer(#{@event.id});", class: 'btn-sm btn-primary'-->
+  <%= render 'registration_groups/groups_list', event: @event %>
+<% end %>

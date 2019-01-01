@@ -233,7 +233,7 @@ RSpec.describe EventsController, type: :controller do
 
         it 'renders form with the errors' do
           expect(event).to be_a Event
-          expect(event.errors.full_messages).to eq ['Inicia em: não pode ficar em branco', 'Termina em: não pode ficar em branco', 'Preço cheio: não pode ficar em branco', 'Nome: não pode ficar em branco', 'Contato para notificações: não pode ficar em branco', 'Capacidade: não pode ficar em branco', 'Country: não pode ficar em branco', 'State: não pode ficar em branco', 'City: não pode ficar em branco']
+          expect(event.errors.full_messages).to eq ['Inicia em: não pode ficar em branco', 'Termina em: não pode ficar em branco', 'Preço cheio: não pode ficar em branco', 'Nome: não pode ficar em branco', 'Contato: não pode ficar em branco', 'Capacidade: não pode ficar em branco', 'País: não pode ficar em branco', 'Estado: não pode ficar em branco', 'Cidade: não pode ficar em branco']
           expect(response).to render_template :new
         end
       end

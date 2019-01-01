@@ -103,6 +103,7 @@ en:
       organizers:
         list: "Index of Organizers"
         remove: "Remove Organizer"
+        select: "Select an organizer..."
       full_price: "Full price: %{value}"
       average_queue_time: "Avg time in queue: %{value}"
       attendance_limit: "Attendance limit: %{value}"

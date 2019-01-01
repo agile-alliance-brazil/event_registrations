@@ -236,82 +236,52 @@ RSpec.describe Event, type: :model do
     end
   end
 
-  describe '#add_organizer_by_email!' do
+  describe '#add_organizer' do
     let(:event) { FactoryBot.create :event }
-    context 'with invalid parameters' do
-      context 'and invalid organizer email' do
-        context 'passing an invalid email' do
-          it 'responds false' do
-            expect(event.add_organizer_by_email!('bla')).to be false
-            expect(event.organizers).to be_empty
-          end
-        end
-        context 'passing a valid email and the user is not organizer' do
-          let(:not_organizer) { FactoryBot.create :user }
-          it 'responds false' do
-            expect(event.add_organizer_by_email!(not_organizer.email)).to be false
-            expect(event.organizers).to be_empty
-          end
-        end
+    context 'and the user is not an organizer' do
+      let(:organizer) { FactoryBot.create :organizer }
+      it 'adds the user' do
+        event.add_organizer(organizer)
+        expect(event.reload.organizers).to eq [organizer]
       end
     end
-    context 'with valid parameters' do
-      context 'and the user has the organizer role' do
-        let(:organizer) { FactoryBot.create :organizer }
-        it 'adds the user as organizer' do
-          expect(event.add_organizer_by_email!(organizer.email)).to be true
-          expect(event.reload.organizers).to include organizer
-        end
+    context 'and the user is already an organizer' do
+      let(:organizer) { FactoryBot.create :organizer }
+      before do
+        event.organizers << organizer
+        event.save!
       end
-
-      context 'and the user is already an organizer' do
-        let(:organizer) { FactoryBot.create :organizer }
-        before do
-          event.organizers << organizer
-          event.save!
-        end
-        it 'does not add the user twice' do
-          expect(event.add_organizer_by_email!(organizer.email)).to be true
-          expect(event.reload.organizers.count).to eq 1
-        end
+      it 'does not add the user twice' do
+        expect(event.add_organizer(organizer)).to be true
+        expect(event.reload.organizers.count).to eq 1
       end
-      context 'and the user has the admin role' do
-        let(:admin) { FactoryBot.create :admin }
-        it 'adds the user as organizer' do
-          expect(event.add_organizer_by_email!(admin.email)).to be true
-          expect(event.reload.organizers).to include admin
-        end
+    end
+    context 'and the user has the admin role' do
+      let(:admin) { FactoryBot.create :admin }
+      it 'adds the user as organizer' do
+        expect(event.add_organizer(admin)).to be true
+        expect(event.reload.organizers).to include admin
       end
     end
   end
 
-  describe '#remove_organizer_by_email!' do
+  describe '#remove_organizer' do
     let(:event) { FactoryBot.create :event }
     let(:organizer) { FactoryBot.create :organizer }
 
-    context 'with invalid parameters' do
-      it 'returns false' do
+    context 'and the user is already an organizer' do
+      it 'removes the user as organizer' do
         event.organizers << organizer
         event.save!
-        expect(event.remove_organizer_by_email!('foo')).to be false
-        expect(event.reload.organizers.count).to eq 1
+        event.remove_organizer(organizer)
+        expect(event.reload.organizers.count).to eq 0
       end
     end
-    context 'with valid parameters' do
-      context 'and the user is already an organizer' do
-        it 'removes the user as organizer' do
-          event.organizers << organizer
-          event.save!
-          event.remove_organizer_by_email!(organizer.email)
-          expect(event.reload.organizers.count).to eq 0
-        end
-      end
-      context 'and the user is not an organizer of the event' do
-        let(:organizer) { FactoryBot.create :organizer }
-        it 'adds the user as organizer' do
-          event.remove_organizer_by_email!(organizer.email)
-          expect(event.reload.organizers.count).to eq 0
-        end
+    context 'and the user is not an organizer of the event' do
+      let(:organizer) { FactoryBot.create :organizer }
+      it 'does nothing' do
+        event.remove_organizer(organizer)
+        expect(event.reload.organizers.count).to eq 0
       end
     end
   end

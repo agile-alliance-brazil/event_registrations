@@ -38,6 +38,12 @@
 <% if current_user&.organizer_of?(@event) %>
   <hr/>
 
+  <div id="organizers-list">
+    <%= render 'users/event_organizers_list', organizers_list: @event.organizers.order(:first_name, :last_name) %>
+  </div>
+
+  <hr/>
+
   <%= render 'registration_periods/periods_list', event: @event %>
 
   <hr/>

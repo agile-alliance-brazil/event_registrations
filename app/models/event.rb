@@ -68,18 +68,12 @@ class Event < ApplicationRecord
     Time.zone.today >= start_date
   end
 
-  def add_organizer_by_email!(email)
-    user = User.find_by(email: email)
-    return false unless user.present? && (user.organizer? || user.admin?)
-
+  def add_organizer(user)
     organizers << user unless organizers.include?(user)
     save
   end
 
-  def remove_organizer_by_email!(email)
-    user = User.find_by(email: email)
-    return false if user.blank?
-
+  def remove_organizer(user)
     organizers.delete(user)
     save
   end

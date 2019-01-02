@@ -1,1 +1,1 @@
-= render partial: 'attendances/attendances_list', locals: { attendances_list: @waiting_list }
+= render 'attendances/attendances_list', attendances_list: @waiting_list, list_title: t('attendances.index.title')

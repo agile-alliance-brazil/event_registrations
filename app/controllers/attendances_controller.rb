@@ -4,6 +4,7 @@ class AttendancesController < AuthenticatedController
   before_action :assign_event
   before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info]
   before_action :check_organizer, only: :waiting_list
+  before_action :check_user, only: :show
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -47,12 +48,7 @@ class AttendancesController < AuthenticatedController
     @total = @event.attendances_count
   end
 
-  def show
-    respond_to do |format|
-      format.html
-      format.json
-    end
-  end
+  def show; end
 
   def destroy
     @attendance.cancelled!
@@ -107,5 +103,10 @@ class AttendancesController < AuthenticatedController
 
   def statuses_params
     params.select { |_key, value| value == 'true' }.keys
+  end
+
+  def check_user
+    return if current_user.organizer_of?(@event)
+    not_found if current_user.id != @attendance.user.id
   end
 end

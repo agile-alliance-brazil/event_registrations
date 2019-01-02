@@ -29,7 +29,7 @@ pt:
     summary:
       registration_total: "Total"
     index:
-      title: "Participantes"
+      title: "Participações"
       search: "Buscar por nome, empresa, email ou ID"
       reports:
         active_by_state: "Ativos por estado"
@@ -38,6 +38,7 @@ pt:
         grouped_by_payment_type: "Agrupado por tipo de pagamento"
       waiting_approval: "Para Aprovar"
       queue: "Fila de Espera"
+      other_attendances: "Pessoas Inscritas por Você"
     new:
       form:
         job_role:

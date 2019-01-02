@@ -1,8 +1,6 @@
 - if @attendance.gateway?
   .payments
-    %h4= "#{t('registration.payment.request.text', value: number_to_currency(@attendance.registration_value)) }"
-
-    .payment_type.left
+    .payment_type{ class: 'float-right'}
       %p
         = form_tag checkout_event_payment_path(event_id: @event, id: @attendance), method: :post do
           = image_submit_tag 'https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif', alt: 'Pague com PagSeguro', class: 'pagseguro'

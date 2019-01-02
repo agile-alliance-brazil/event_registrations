@@ -66,7 +66,7 @@ RSpec.describe UsersController, type: :controller do
 
   context 'authorized' do
     context 'as a normal user' do
-      let!(:user) { FactoryBot.create :user }
+      let!(:user) { FactoryBot.create :user, role: :user }
       before { sign_in user }
 
       pending 'when the user is not the same as the signed user'
@@ -98,6 +98,12 @@ RSpec.describe UsersController, type: :controller do
           before { get :show, params: { id: 'foo' } }
           it { expect(response).to have_http_status :not_found }
         end
+
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :show, params: { id: other_user } }
+          it { expect(response).to have_http_status :not_found }
+        end
       end
 
       describe 'GET #edit' do
@@ -111,20 +117,24 @@ RSpec.describe UsersController, type: :controller do
           before { get :edit, params: { id: 'foo' } }
           it { expect(response).to have_http_status :not_found }
         end
+
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :edit, params: { id: other_user } }
+          it { expect(response).to have_http_status :not_found }
+        end
       end
 
       describe 'PUT #update' do
-        let(:valid_params) { { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } }
-
         context 'with an existent user' do
-          before { put :update, params: { id: user.id, user: valid_params } }
+          before { put :update, params: { id: user.id, user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } } }
           it { expect(User.last.first_name).to eq 'xpto' }
           it { expect(User.last.last_name).to eq 'bla' }
           it { expect(User.last.email).to eq 'xpto@bla.com' }
         end
 
         context 'with an inexistent user' do
-          before { put :update, params: { id: 'foo', user: valid_params } }
+          before { put :update, params: { id: 'foo', user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } } }
           it { expect(response).to have_http_status :not_found }
         end
 
@@ -136,6 +146,12 @@ RSpec.describe UsersController, type: :controller do
             expect(User.last.last_name).to eq user.last_name
             expect(User.last.email).to eq user.email
           end
+        end
+
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { put :update, params: { id: other_user } }
+          it { expect(response).to have_http_status :not_found }
         end
       end
 
@@ -217,6 +233,29 @@ RSpec.describe UsersController, type: :controller do
         describe 'PATCH #update_to_admin' do
           before { patch :update_to_admin, params: { id: 'foo' } }
           it { expect(response).to have_http_status :not_found }
+        end
+      end
+
+      describe 'GET #show' do
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :show, params: { id: other_user } }
+          it { expect(response).to render_template :show }
+        end
+      end
+
+      describe 'GET #edit' do
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :edit, params: { id: other_user } }
+          it { expect(response).to render_template :edit }
+        end
+      end
+      describe 'PUT #update' do
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { put :update, params: { id: other_user, user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } } }
+          it { expect(response).to redirect_to user_path(other_user) }
         end
       end
     end

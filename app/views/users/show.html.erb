@@ -60,3 +60,9 @@
     </div>
   </div>
 </div>
+
+<hr />
+
+<%= render 'attendances/attendances_list', attendances_list: @user.attendances, list_title: t('attendances.index.title') %>
+
+<%= render 'attendances/attendances_list', attendances_list: @user.registered_attendances, list_title: t('attendances.index.other_attendances') %>

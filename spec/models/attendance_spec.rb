@@ -358,36 +358,6 @@ RSpec.describe Attendance, type: :model do
     it { expect(attendance.to_s).to eq 'bar, foo' }
   end
 
-  describe '#to_pay_the_difference?' do
-    context 'not paid attendance' do
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar' }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'paid attendance not grouped' do
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'confirmed attendance not grouped' do
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :confirmed }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'paid and grouped, but the group is complete' do
-      let(:group) { FactoryBot.create(:registration_group, minimum_size: 1) }
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid, registration_group: group }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'paid and grouped, but the group is incomplete' do
-      let(:group) { FactoryBot.create(:registration_group, minimum_size: 2) }
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid, registration_group: group }
-      it { expect(attendance.to_pay_the_difference?).to be_truthy }
-    end
-    context 'confirmed and grouped, but the group is incomplete' do
-      let(:group) { FactoryBot.create(:registration_group, minimum_size: 2) }
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :confirmed, registration_group: group }
-      it { expect(attendance.to_pay_the_difference?).to be_truthy }
-    end
-  end
-
   describe '#price_band?' do
     context 'having period' do
       let(:period) { FactoryBot.create(:registration_period) }

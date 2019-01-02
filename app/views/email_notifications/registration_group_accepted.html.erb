@@ -1,0 +1,13 @@
+<html>
+  <body>
+    <%= render 'email_header' %>
+
+    <div style="padding-left: 100px;padding-right: 100px;padding-top: 30px;">
+      <%= render 'greetings', event: @event, attendance: @attendance %>
+
+      <p><%= I18n.t('attendances.accepted_group_message', event_name: @event.name, group_name: @attendance.registration_group.name) %></p>
+
+      <%= render 'email_signature', event: @event, attendance: @attendance %>
+    </div>
+  </body>
+</html>

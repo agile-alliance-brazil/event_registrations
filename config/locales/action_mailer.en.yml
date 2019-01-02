@@ -17,3 +17,30 @@ en:
       subject: 'Wooray! We accepted your registration for %{event_name} from the queue!'
     welcome_attendance:
       subject: 'Welcome to %{event_name}! It will be in place tomorrow!'
+  attendances:
+    status:
+      pending:
+        bank_deposit_message: "This is a bank deposit payment. As soon as we receive the transfer's document we will confirm the registration."
+        statement_of_agreement_message: "This is a statement of agreement payment. The event organizers will make contact with you to confirm it."
+    greetings: "Hi, %{attendance_name}"
+    pending_message_on_value: "Your request for registration priced %{attendance_value} was received successfully and the status is %{status_name}."
+    message_on_group: "You were registered in the group %{group_name} and the registration is waiting for approval."
+    registrations_page: "Registration Details"
+    you_can_reply: "You can reply this message to contact us."
+    say_goodbye: "Best Regards,"
+    event_team: "%{event_name} Team"
+    accepted_group_message: "Your registrations to %{event_name} was accepted in the group %{group_name}."
+    waiting_message: "Your registration request to %{event_name} was queued."
+    waiting_vacancy_message: "You can check the status in the following page, but don' worry, we will notify you if we get a free vacancy to your subscription."
+    confirmed_message: "Your registration to %{event_name} was confirmed."
+    confirmed_message_event_date: "Be prepared to %{event_start_date}."
+    dequeued_message: "We bring great news! Your registration was accepted and you was removed from the queue!"
+    follow_process: "In order to complete the process, please follow the instructions on your attendance page."
+    welcome_message: "The %{event_name} is about to start."
+    welcome_instructions_title: "You should remember to check the event's page in order to get informations to checkin."
+    cancelled_registrations_first_message: "Thank you for your interest on %{event_name}, but, unfortunately, we had to cancel your registration due to the expiration of the payment deadline."
+    cancelled_registrations_second_message: "If you already settled your registration payment, please contact us with your payment confirmation so we can restore your registration."
+    cancelled_registrations_new_registration: "New Registration"
+    cancel_warning_registrations_first_message: "We noticed that you have a pending payment for %{event_name}. If that payment is not realized until %{due_date} at %{due_time} we, unfortunately, will have to cancel your registration due to the expiration of the payment deadline."
+    cancel_warning_registrations_full_message: "The is pretty full and we now have a waiting list. If you do not complete your registration in time and our automated system cancels it, you will have to submit a new registration which will add you to our waiting list."
+    cancel_warning_registrations_second_message: "If you already settled your registration payment, please contact us."

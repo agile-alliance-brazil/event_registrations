@@ -1,0 +1,17 @@
+<nav style="background-color: #5C95B6;height: 30px;line-height: 30px;padding-right: 1em;padding-left: 1em;">
+  <ul style="float: right;list-style: none;">
+    <li style="float: left;margin-right: 15px;margin-top: -15px;">
+      <%= link_to 'Agile Alliance', 'http://agilealliance.org/pt/' %>
+    </li>
+
+    <li style="float: left;margin-right: 15px;margin-top: -15px;">
+      <%= link_to t('header.aa.members'), 'http://agilealliance.org/pt/membresia' %>
+    </li>
+
+    <li style="float: left;">
+      <%= link_to 'http://agilealliance.org/pt' do %>
+        <%= image_tag(attachments['logo.png'].url, style: 'margin-top: -15px;width: 96px;') %>
+      <% end %>
+    </li>
+  </ul>
+</nav>

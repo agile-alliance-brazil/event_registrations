@@ -128,10 +128,6 @@ class Attendance < ApplicationRecord
     update(advised: true, advised_at: advised_time, due_date: [DateService.instance.skip_weekends(advised_time, event.days_to_charge), event.start_date].min)
   end
 
-  def to_pay_the_difference?
-    (paid? || confirmed?) && grouped? && registration_group.incomplete?
-  end
-
   def price_band?
     registration_period || registration_quota
   end

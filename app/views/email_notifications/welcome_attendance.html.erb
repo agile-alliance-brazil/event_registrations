@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <%= render 'email_header' %>
+
+    <div style="padding-left: 100px;padding-right: 100px;padding-top: 30px;">
+      <%= render 'greetings', event: @event, attendance: @attendance %>
+
+      <p><%= I18n.t('attendances.welcome_message', event_name: @event.name) %></p>
+
+      <p><%= link_to I18n.t('attendances.welcome_instructions_title'), @event.link %></p>
+
+      <%= render 'email_signature', event: @event, attendance: @attendance %>
+    </div>
+  </body>
+</html>

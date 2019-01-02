@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class UsersController < AuthenticatedController
-  before_action :assign_user, except: %i[index search_users]
+  before_action :assign_user, except: %i[index search_users search_users]
   before_action :check_admin, only: %i[index update_to_organizer update_to_admin]
+  before_action :check_user, only: %i[show edit update]
   skip_before_action :authenticate_user!, only: %i[edit_default_password update_default_password]
 
   def show
@@ -19,7 +20,7 @@ class UsersController < AuthenticatedController
 
     if @user.update(update_user_params)
       flash[:notice] = I18n.t('users.update.success')
-      return redirect_to @user
+      return redirect_to user_path(@user)
     end
 
     render :edit
@@ -72,5 +73,10 @@ class UsersController < AuthenticatedController
 
   def update_default_password_params
     params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def check_user
+    return if current_user.admin?
+    not_found if current_user.id != @user.id
   end
 end

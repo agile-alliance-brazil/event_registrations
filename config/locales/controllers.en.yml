@@ -38,6 +38,7 @@ en:
         grouped_by_payment_type: "Grouped by payment type"
       waiting_approval: "To Approve"
       queue: "Queue"
+      other_attendances: "Other Attendances Registered by You"
     new:
       form:
         job_role:

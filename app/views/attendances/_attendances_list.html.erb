@@ -1,4 +1,4 @@
-<h5><%= t('attendances.index.title') %></h5>
+<h5><%= list_title %></h5>
 
 <div id="attendances_list">
   <% if attendances_list.present? %>
@@ -13,7 +13,9 @@
         <th><%= Attendance.human_attribute_name :registration_date %></th>
         <th><%= Attendance.human_attribute_name :registration_value %></th>
         <th><%= Attendance.human_attribute_name :status %></th>
-        <th></th>
+        <% if current_user.organizer? || current_user.admin? %>
+          <th></th>
+        <% end %>
       </thead>
       <tbody>
         <% attendances_list.each do |attendance| %>

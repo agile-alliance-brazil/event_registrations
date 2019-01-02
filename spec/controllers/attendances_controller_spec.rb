@@ -40,6 +40,31 @@ RSpec.describe AttendancesController, type: :controller do
     end
   end
 
+  context 'authenticated as usere' do
+    let(:user) { FactoryBot.create :user, role: :user }
+    let(:event) { FactoryBot.create :event, organizers: [user] }
+
+    before { sign_in user }
+
+    describe 'GET #show' do
+      context 'when the page required is for the logged user' do
+        let!(:attendance) { FactoryBot.create :attendance, user: user }
+        before { get :show, params: { event_id: event, id: attendance } }
+
+        it 'loads the page' do
+          expect(response).to render_template :show
+          expect(assigns(:attendance)).to eq attendance
+        end
+      end
+      context 'when the page required is not for the logged user' do
+        let!(:attendance) { FactoryBot.create :attendance }
+        before { get :show, params: { event_id: event, id: attendance } }
+
+        it { expect(response).to have_http_status :not_found }
+      end
+    end
+  end
+
   context 'authenticated as organizer' do
     let(:user) { FactoryBot.create :organizer }
     let(:user_for_attendance) { FactoryBot.create :user, role: :user }
@@ -594,13 +619,11 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     describe 'GET #show' do
-      context 'with a valid attendance' do
-        let!(:event) { FactoryBot.create(:event, organizers: [user]) }
-        let!(:attendance) { FactoryBot.create(:attendance, event: event, user: user) }
-        before { get :show, params: { event_id: event, id: attendance } }
-        it { expect(assigns[:attendance]).to eq attendance }
-        it { expect(response).to be_successful }
-      end
+      let!(:event) { FactoryBot.create(:event, organizers: [user]) }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event) }
+      before { get :show, params: { event_id: event, id: attendance } }
+      it { expect(assigns[:attendance]).to eq attendance }
+      it { expect(response).to be_successful }
     end
 
     describe 'DELETE #destroy' do

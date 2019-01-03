@@ -13,6 +13,6 @@ FactoryBot.define do
     main_email_contact { 'bla@xpto.com' }
     attendance_limit { 1000 }
     days_to_charge { 2 }
-    link 'www.foo.com'
+    link { 'www.foo.com' }
   end
 end

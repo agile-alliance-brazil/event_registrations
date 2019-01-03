@@ -40,4 +40,8 @@ module AttendanceHelper
   def payment_types_options
     Attendance.payment_types.map { |payment_type, _| [I18n.t("activerecord.attributes.attendance.enums.payment_types.#{payment_type}"), payment_type] }
   end
+
+  def gender_options
+    { I18n.t('gender.male') => 'M', I18n.t('gender.female') => 'F', I18n.t('gender.other') => 'O' }
+  end
 end

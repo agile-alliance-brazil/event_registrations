@@ -37,6 +37,7 @@ class AttendanceParams
 
   def user_for_attendance
     return @registered_by if @registered_by.user? || attributes_hash.try(:[], :user_for_attendance).blank?
+
     User.find(attributes_hash[:user_for_attendance])
   end
 end

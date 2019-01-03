@@ -7,19 +7,19 @@
     </div>
     <div class="col-xl-6 form-group">
       <%= f.label :price, class: 'control-label' %>
-      <%= f.text_field :price, class: 'form-control' %>
+      <%= f.number_field :price, class: 'form-control' %>
       <span class="help-block"><%= @period.errors[:price].join(', ') %></span>
     </div>
   </div>
   <div class="row">
     <div class="col-xl-6 form-group">
       <%= f.label :start_at, class: 'control-label' %>
-      <%= f.text_field :start_at, class: 'form-control datepicker' %>
+      <%= f.datetime_field :start_at, class: 'form-control' %>
       <span class="help-block"><%= @period.errors[:start_at].join(', ') %></span>
     </div>
     <div class="col-xl-6 form-group">
       <%= f.label :end_at, class: 'control-label' %>
-      <%= f.text_field :end_at, class: 'form-control datepicker' %>
+      <%= f.datetime_field :end_at, class: 'form-control' %>
       <span class="help-block"><%= @period.errors[:end_at].join(', ') %></span>
     </div>
   </div>

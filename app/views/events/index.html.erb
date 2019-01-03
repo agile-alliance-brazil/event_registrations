@@ -2,7 +2,7 @@
   <%= render 'layouts/menu', past_events_active: false, current_events_active: true, users_list_active: false, account_active: false %>
 <% end %>
 
-<div class="tab-container">
+<div class="tab-container-<%= current_user&.admin? ? 'admin' : 'user' %>">
   <% if current_user&.admin? %>
     <div class="row">
       <div class="col-xl-12 col-sm-8">

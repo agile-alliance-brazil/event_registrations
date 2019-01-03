@@ -25,6 +25,7 @@ module DeviseCustom
 
       if @user.persisted?
         return redirect_to edit_default_password_user_path(@user) if @user.sign_in_count.zero?
+
         sign_in_and_redirect(@user, event: :authentication)
         set_flash_message(:notice, :success, kind: omniauth_provider) if is_navigational_format?
       else

@@ -1,4 +1,16 @@
-.tab-container {
+.tab-container-admin {
+    border-bottom: solid #DFE2E6 1px;
+    border-left: solid #DFE2E6 1px;
+    border-right: solid #DFE2E6 1px;
+
+    background-color: #FAFBFC;
+
+    min-height: 400px;
+    padding: 15px;
+}
+
+.tab-container-user {
+    border-top: solid #DFE2E6 1px;
     border-bottom: solid #DFE2E6 1px;
     border-left: solid #DFE2E6 1px;
     border-right: solid #DFE2E6 1px;

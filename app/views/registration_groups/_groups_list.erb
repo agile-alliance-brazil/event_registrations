@@ -27,6 +27,9 @@
             <%= link_to edit_event_registration_group_path(event, group) do %>
               <i class="far fa-edit"></i>
             <% end %>
+            <span class="btn-token-clipboard" data-clipboard-text="<%= group.token %>" style="cursor: pointer;">
+              <i class="far fa-clipboard" title="<%= t('registration_groups.index.token_clipboard_tooltip') %>" data-toggle='tooltip'></i>
+            </span>
           </td>
         </tr>
 

@@ -92,8 +92,26 @@ en:
         quantity: "Qty"
     show:
       title: "Attendance"
+      status:
+        accepted:
+          title: "Instructions to complete the registration process"
+        cancelled:
+          title: "This registration was cancelled. If you wish to register again, please fill the registration form."
+        confirmed:
+          title: "Your registration is confirmed!"
+        paid:
+          title: "We have received your payment. After reviewing your registration details, we will send a confirmation e-mail."
+        showed_in:
+          title: "Your presence in the event was confirmed!"
     edit:
       title: "Edit Attendance"
+    status:
+      waiting:
+        title: "You are in the waiting list. We will inform you when capacity changes."
+    grouped_attendance:
+      title: "Your registration has been through the group %{group_name}."
+      paid_group_title: "Your registration in group is pending of administration approval. You will receive more information soon."
+      free_group_title: "You made the registration through a free group. Wait until the administrator confirm your registration."
   events:
     index:
       title: "Events"

@@ -1,8 +1,0 @@
-
-- if @attendance.registration_value&.positive?
-  %h6 Instruções para completar o processo de inscrição
-  = render partial: 'shared/payment_request', locals: { attendance: @attendance }
-
-- else
-  %h6 Você realizou a inscrição através de um grupo gratuito. Sua inscrição está confirmada.
-%hr/

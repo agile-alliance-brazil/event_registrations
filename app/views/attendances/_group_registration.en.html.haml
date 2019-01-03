@@ -1,5 +1,0 @@
-%h5 Your registration has been through the group #{@attendance.registration_group.name}
-- if @attendance.event.registration_price_for(attendance, 'gateway').to_d > 0
-  %h6 Your registration in group is pending of administration approval. You will receive more information soon.
-- else
-  %h6 You made the registration through a free group. Wait until the administrator confirm your registration.

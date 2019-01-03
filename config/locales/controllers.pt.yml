@@ -92,8 +92,26 @@ pt:
         quantity: "Qtd"
     show:
       title: "Participante"
+      status:
+        accepted:
+          title: "Instruções para completar o processo de inscrição"
+        cancelled:
+          title: "Esta inscrição foi cancelada. Caso queira inscrever-se novamente, por favor preencha o formulário de inscrição."
+        confirmed:
+          title: "Sua inscrição está confirmada!"
+        paid:
+          title: "Recebemos o pagamento da sua inscrição. Caso não tenha recebido o email de confirmação, cheque sua caixa de spam e entre em contato com a organização no email abaixo."
+        showed_in:
+          title: "Você está credenciado."
     edit:
       title: "Editar Participante"
+    status:
+      waiting:
+        title: "Você entrou na lista de espera. Nós informaremos assim que dispormos de mais vagas."
+    grouped_attendance:
+      title: "Você se registrou através do grupo %{group_name}."
+      paid_group_title: "Sua entrada precisará ser aprovada por um administrador. Você receberá mais informações em breve."
+      free_group_title: "Você realizou a inscrição através de um grupo gratuito. Aguarde até o administrador confirmar a sua inscrição."
   events:
     index:
       title: "Eventos"

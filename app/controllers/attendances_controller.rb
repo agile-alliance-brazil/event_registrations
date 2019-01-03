@@ -3,8 +3,8 @@
 class AttendancesController < AuthenticatedController
   before_action :assign_event
   before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info]
-  before_action :check_organizer, only: :waiting_list
-  before_action :check_user, only: :show
+  before_action :check_organizer, only: %i[waiting_list to_approval index search]
+  before_action :check_user, only: %i[show edit update]
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -14,6 +14,7 @@ class AttendancesController < AuthenticatedController
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
     return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendances.create.success') }) if @attendance.valid?
+
     render :new
   end
 
@@ -23,6 +24,7 @@ class AttendancesController < AuthenticatedController
     update_params = AttendanceParams.new(current_user, @event, params)
     @attendance = UpdateAttendance.run_for(update_params)
     return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if @attendance.valid?
+
     flash[:error] = @attendance.errors.full_messages.join(', ')
     render :edit
   end
@@ -107,6 +109,7 @@ class AttendancesController < AuthenticatedController
 
   def check_user
     return if current_user.organizer_of?(@event)
+
     not_found if current_user.id != @attendance.user.id
   end
 end

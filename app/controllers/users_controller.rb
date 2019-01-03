@@ -77,6 +77,7 @@ class UsersController < AuthenticatedController
 
   def check_user
     return if current_user.admin?
+
     not_found if current_user.id != @user.id
   end
 end

@@ -16,7 +16,7 @@ pt:
       title: "Detalhes"
     form:
       reset: "Limpar Formulário"
-
+    include_blank: "Selecione..."
   registration:
     quantity: "Quantidade"
     details:
@@ -41,17 +41,6 @@ pt:
       other_attendances: "Pessoas Inscritas por Você"
     new:
       form:
-        job_role:
-          not_informed: "Não Informado"
-          analyst: "Analista"
-          student: "Estudante"
-          manager: "Gerente"
-          clevel: "C-Level"
-          vp: "Vice presidente"
-          president: "Presidente"
-          other: "Outro"
-          coach: "Coach"
-          developer: "Desenvolvedor(a)"
         professional_informations: "Informações Profissionais"
         attendance_address: "Informações para contato"
         attendance_personal: "Informações Pessoais"
@@ -71,6 +60,8 @@ pt:
         title: "Carregar Info"
       load_user:
         title: "Carregar Info do Usuário Logado"
+      gender:
+        help: "deixe em branco caso não queira responder"
     actions:
       confirm: "Confirmar inscrição"
       cancel: "Cancelar inscrição"

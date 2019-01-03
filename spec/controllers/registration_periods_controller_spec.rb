@@ -80,7 +80,7 @@ describe RegistrationPeriodsController, type: :controller do
             period = assigns(:period)
 
             expect(period).to be_a RegistrationPeriod
-            expect(period.errors.full_messages).to eq ['Título: não pode ficar em branco', 'Começa em: não pode ficar em branco', 'Termina em: não pode ficar em branco']
+            expect(period.errors.full_messages).to eq ['Título: não pode ficar em branco', 'Começa em: não pode ficar em branco', 'Termina em: não pode ficar em branco', 'Preço: não pode ficar em branco']
             expect(response).to render_template :new
           end
         end

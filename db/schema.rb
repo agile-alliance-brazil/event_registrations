@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_30_220853) do
+ActiveRecord::Schema.define(version: 2019_01_03_134846) do
 
   create_table "attendances", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "event_id", null: false
@@ -133,8 +133,7 @@ ActiveRecord::Schema.define(version: 2018_09_30_220853) do
     t.datetime "end_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "price_cents", default: 0, null: false
-    t.string "price_currency", default: "BRL", null: false
+    t.decimal "price", precision: 10, null: false
   end
 
   create_table "registration_quotas", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -145,8 +144,7 @@ ActiveRecord::Schema.define(version: 2018_09_30_220853) do
     t.integer "registration_price_id"
     t.integer "order"
     t.boolean "closed", default: false
-    t.integer "price_cents", default: 0, null: false
-    t.string "price_currency", default: "BRL", null: false
+    t.decimal "price", precision: 10, null: false
   end
 
   create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

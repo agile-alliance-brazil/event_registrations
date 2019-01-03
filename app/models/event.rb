@@ -53,7 +53,7 @@ class Event < ApplicationRecord
     group = attendance.registration_group
     return group.amount if group.present? && group.amount.present? && group.amount.positive?
 
-    not_amounted_group(attendance, payment_type)
+    extract_value(attendance, payment_type)
   end
 
   def period_for(today = Time.zone.today)
@@ -122,15 +122,10 @@ class Event < ApplicationRecord
 
   private
 
-  def not_amounted_group(attendance, payment_type)
-    value = extract_value(attendance, payment_type)
-    Money.new(value, :BRL)
-  end
-
   def extract_value(attendance, payment_type)
     quota = find_quota
     if payment_type == 'statement_agreement'
-      (full_price * 100)
+      full_price
     elsif attendance.price_band?
       attendance.band_value * attendance.discount
     elsif period_for.present?
@@ -138,7 +133,7 @@ class Event < ApplicationRecord
     elsif quota.first.present?
       quota.first.price * attendance.discount
     else
-      (full_price * 100) * attendance.discount
+      full_price * attendance.discount
     end
   end
 

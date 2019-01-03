@@ -40,4 +40,8 @@ RSpec.describe AttendanceHelper, type: :helper do
   describe '#job_role_options' do
     it { expect(job_role_options).to eq Attendance.job_roles.map { |job_role| [t("activerecord.attributes.attendance.enums.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] } }
   end
+
+  describe '#gender_options' do
+    it { expect(gender_options).to eq('Feminino' => 'F', 'Masculino' => 'M', 'Outro' => 'O') }
+  end
 end

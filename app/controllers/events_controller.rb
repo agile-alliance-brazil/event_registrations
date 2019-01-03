@@ -44,6 +44,7 @@ class EventsController < AuthenticatedController
   def add_organizer
     organizer = User.find(params[:organizer])
     return not_found unless organizer.organizer? || organizer.admin?
+
     @event.add_organizer(organizer)
     assign_organizers
     respond_to { |format| format.js {} }

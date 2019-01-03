@@ -1,4 +1,4 @@
-<p><%= t('attendances.grouped_attendance.title', group_name: @attendance.registration_group_name) %></p>
+<p><%= t('attendances.grouped_attendance.title', group_name: @attendance.group_name) %></p>
 
 <% if @attendance.registration_value.positive? %>
   <p><%= t('attendances.grouped_attendance.paid_group_title') %></p>

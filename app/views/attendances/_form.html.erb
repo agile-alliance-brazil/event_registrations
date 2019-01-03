@@ -42,7 +42,13 @@
   <% end %>
 
   <div class="row">
-    <div class="col-xl-10 col-sm-6 form-group">
+    <div class="col-xl-4 col-sm-6 form-group">
+      <%= form.label :cpf, class: 'control-label required' %>
+      <%= form.text_field :cpf, class: 'form-control' %>
+      <span class="inline-hints"><%= t('attendances.new.cpf.help') %></span>
+      <span class="help-block"><%= attendance.errors[:cpf].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 col-sm-6 form-group">
       <%= form.label :email, class: 'control-label required' %>
       <%= form.text_field :email, class: 'form-control', id: 'attendance_email' %>
       <span class="help-block" id="help-block-email"><%= attendance.errors[:email].join(', ') %></span>
@@ -55,73 +61,46 @@
   </div>
 
   <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
-      <%= form.label :cpf, class: 'control-label required' %>
-      <%= form.text_field :cpf, class: 'form-control' %>
-      <span class="inline-hints"><%= t('attendances.new.cpf.help') %></span>
-      <span class="help-block"><%= attendance.errors[:cpf].join(', ') %></span>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :first_name, class: 'control-label required' %>
       <%= form.text_field :first_name, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:first_name].join(', ') %></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :last_name, class: 'control-label required' %>
       <%= form.text_field :last_name, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:last_name].join(', ') %></span>
     </div>
-
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :badge_name, class: 'control-label required' %>
       <%= form.text_field :badge_name, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:badge_name].join(', ') %></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :gender, class: 'control-label' %>
-      <%= form.text_field :gender, class: 'form-control' %>
+      <%= select_tag :gender, options_for_select(gender_options, @attendance.gender), { include_blank: t('general.include_blank'), class: 'form-control' } %>
       <span class="help-block"><%= attendance.errors[:gender].join(', ') %></span>
+      <span class="inline-hints"><%= t('attendances.new.gender.help') %></span>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :country, class: 'control-label required' %>
       <%= form.country_select :country, priority_countries = ["Brazil"], options = {}, html_options = { class: 'form-control' } %>
       <span class="help-block"><%= attendance.errors[:country].join(', ') %></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :state, class: 'control-label required' %>
       <%= form.text_field :state, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:state].join(', ') %></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :city, class: 'control-label required' %>
       <%= form.text_field :city, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:city].join(', ') %></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :phone, class: 'control-label required' %>
       <%= form.text_field :phone, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:phone].join(', ') %></span>
@@ -129,56 +108,41 @@
   </div>
 
   <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-4 col-sm-6 form-group">
       <%= form.label :organization, class: 'control-label' %>
       <%= form.text_field :organization, class: 'form-control' %>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-4 col-sm-6 form-group">
       <%= form.label :organization_size, class: 'control-label' %>
-      <%= form.select :organization_size, organization_size_options, {}, class: 'form-control' %>
+      <%= form.select :organization_size, organization_size_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-4 col-sm-6 form-group">
       <%= form.label :job_role, class: 'control-label' %>
-      <%= form.select :job_role, job_role_options, {}, class: 'form-control' %>
+      <%= form.select :job_role, job_role_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-6 col-sm-6 form-group">
       <%= form.label :years_of_experience, class: 'control-label' %>
-      <%= form.select :years_of_experience, year_of_experience_options, {}, class: 'form-control' %>
+      <%= form.select :years_of_experience, year_of_experience_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-6 col-sm-6 form-group">
       <%= form.label :experience_in_agility, class: 'control-label' %>
-      <%= form.select :experience_in_agility, experience_in_agility_options, {}, class: 'form-control' %>
+      <%= form.select :experience_in_agility, experience_in_agility_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-4 col-sm-6 form-group">
       <%= form.label :school, class: 'control-label' %>
       <%= form.text_field :school, class: 'form-control' %>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-4 col-sm-6 form-group">
       <%= form.label :education_level, class: 'control-label' %>
-      <%= form.select :education_level, education_level_options, {}, class: 'form-control' %>
+      <%= form.select :education_level, education_level_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-12 col-sm-6 form-group">
+    <div class="col-xl-4 col-sm-6 form-group">
       <%= label_tag t('attendances.new.form.token_field'), nil, class: 'control-label' %>
       <%= text_field_tag :registration_token, nil, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:registration_group].join(', ') %></span>

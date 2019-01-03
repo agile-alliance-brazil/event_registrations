@@ -72,7 +72,7 @@ pt:
         last_name: Sobrenome
         full_name: Nome
         badge_name: Nome no crachá
-        gender: Gênero (deixe em branco caso não queira responder)
+        gender: Gênero
         cpf: CPF
         country: País
         city: Cidade

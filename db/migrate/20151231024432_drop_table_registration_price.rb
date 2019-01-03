@@ -2,8 +2,11 @@
 
 class DropTableRegistrationPrice < ActiveRecord::Migration[4.2]
   def change
-    add_money :registration_periods, :price, default: 0, null: false
-    add_money :registration_quota, :price, default: 0, null: false
+    add_column :registration_periods, :price_cents, :decimal
+    add_column :registration_periods, :price_currency, :string
+
+    add_column :registration_quota, :price_cents, :decimal
+    add_column :registration_quota, :price_currency, :string
 
     drop_table :registration_prices do |t|
       t.references :registration_type

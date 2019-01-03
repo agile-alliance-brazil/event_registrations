@@ -7,6 +7,7 @@ class AddDeviseToUsers < ActiveRecord::Migration[5.2]
     duplicated_emails = User.select('users.email').having('COUNT(1) >= 2').where('email IS NOT NULL').group(:email).order(:email)
     duplicated_emails.map do |value|
       next if value.blank?
+
       users_duplicated = User.where(email: value.email)
       attendances_to_duplicated_users = Attendance.where(user_id: users_duplicated.map(&:id))
       last_attendance_id = attendances_to_duplicated_users.map(&:id).max

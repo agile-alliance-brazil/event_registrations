@@ -4,7 +4,9 @@ language: ruby
 cache: bundler
 rvm:
   - 2.4.3
-before_install: gem install bundler
+before_install:
+  - gem update --system
+  - gem install bundler
 services:
   - mysql
 before_script:

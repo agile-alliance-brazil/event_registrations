@@ -18,4 +18,9 @@ class railsapp::db ($app_name = 'rails-app', $password) {
     user => "${app_name}_db",
     password => $password,
   }
+
+	package { "libmysqlclient-dev":
+		ensure => "installed",
+		require => Package["mysql-client"],
+	}
 }

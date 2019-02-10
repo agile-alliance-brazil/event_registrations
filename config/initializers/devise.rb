@@ -280,8 +280,8 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
-  config.omniauth :github, APP_CONFIG[:github][:key], APP_CONFIG[:github][:secret]
-  config.omniauth :facebook, APP_CONFIG[:facebook][:key], APP_CONFIG[:facebook][:secret], token_params: { parse: :json }
-  config.omniauth :twitter, APP_CONFIG[:twitter][:key], APP_CONFIG[:twitter][:secret]
-  config.omniauth :linkedin, APP_CONFIG[:linkedin][:key], APP_CONFIG[:linkedin][:secret]
+  config.omniauth :github, APP_CONFIG[:github][:key], APP_CONFIG[:github][:secret] if APP_CONFIG[:github]
+  config.omniauth :facebook, APP_CONFIG[:facebook][:key], APP_CONFIG[:facebook][:secret], token_params: { parse: :json } if APP_CONFIG[:facebook]
+  config.omniauth :twitter, APP_CONFIG[:twitter][:key], APP_CONFIG[:twitter][:secret] if APP_CONFIG[:twitter]
+  config.omniauth :linkedin, APP_CONFIG[:linkedin][:key], APP_CONFIG[:linkedin][:secret] if APP_CONFIG[:linkedin]
 end

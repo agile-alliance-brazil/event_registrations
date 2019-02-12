@@ -5,6 +5,8 @@ require 'net/https'
 require 'uri'
 require 'English'
 require 'dotenv'
+require 'erb'
+require 'ostruct'
 
 APP_NAME='inscricoes'
 
@@ -62,13 +64,24 @@ body = {
   names: ["#{APP_NAME}-#{format('%02d', machine_id)}#{POSTFIX}.agilebrazil.com"],
   region: 'nyc3',
   size: '1gb',
-  image: 'ubuntu-14-04-x64',
+  image: 'ubuntu-18-04-x64',
   ssh_keys: [SSH],
   backups: false,
   ipv6: true,
   user_data: bootstrap_info,
   private_networking: nil
 }
+
+def generate_deploy_config(ip, template_path)
+  destination = "#{ROOT}/config/deploy/#{ip}.rb"
+  return if File.exist?(destination)
+
+  template = ERB.new(File.read(template_path))
+  namespace = OpenStruct.new(ip: ip)
+  File.open(destination, 'w') do |f|
+    f.puts template.result(namespace.instance_eval { binding })
+  end
+end
 
 def setup_droplet(droplet)
   setup = "cd #{ROOT}/config && #{link_files(droplet[:ipv4], 'config.yml')} &&\
@@ -85,6 +98,7 @@ def setup_droplet(droplet)
   key_path = "#{ROOT}/certs/digital_ocean#{POSTFIX.tr('-', '_')}"
   ssh_command = "ssh -i #{key_path} -o LogLevel=quiet -o StrictHostKeyChecking=no ubuntu@#{droplet[:ipv4]} 'echo \"SSH Successful!\"'"
   `#{ssh_command}` # Adding new machine to known hosts
+  generate_deploy_config(droplet[:ipv4], "#{ROOT}/config/deploy/#{TYPE}.erb")
   first_deploy = "bundle exec ruby script/first_deploy.rb ubuntu #{droplet[:ipv4]} #{TYPE} #{key_path}"
   deploy_result = `#{first_deploy}`
   return "ERROR: Deploy failed on #{droplet[:ipv4]}\n\#{deploy_result}" unless $CHILD_STATUS.to_i == 0

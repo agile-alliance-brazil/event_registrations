@@ -20,11 +20,11 @@ class RemoveMoneyGem < ActiveRecord::Migration[5.2]
 
   def down
     add_column :registration_periods, :price_cents, :decimal
-    add_column :registration_periods, :price_currency, :decimal
+    add_column :registration_periods, :price_currency, :string
     execute("UPDATE registration_periods period SET price_cents = (period.price * 100), price_currency = 'BRL'")
 
-    add_column :registration_quotas, :price, :decimal
-    add_column :registration_quotas, :price_currency, :decimal
+    add_column :registration_quotas, :price_cents, :decimal
+    add_column :registration_quotas, :price_currency, :string
     execute("UPDATE registration_quotas quota SET price_cents = (quota.price * 100), price_currency = 'BRL'")
 
     remove_column :registration_periods, :price

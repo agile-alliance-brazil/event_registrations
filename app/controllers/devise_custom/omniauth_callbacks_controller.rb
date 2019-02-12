@@ -29,7 +29,7 @@ module DeviseCustom
         sign_in_and_redirect(@user, event: :authentication)
         set_flash_message(:notice, :success, kind: omniauth_provider) if is_navigational_format?
       else
-        session[omniauth_session] = request.env['omniauth.auth']
+        session[omniauth_session] = request.env['omniauth.auth'].except('extra')
         redirect_to new_user_registration_url
       end
     end

@@ -7,4 +7,9 @@
     margin-bottom: 20px;
 }
 
+.event-card {
+    max-width: 337px;
+    margin-bottom: 15px;
+}
+
 a { color: inherit; }

@@ -109,43 +109,55 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(:email) { stub(deliver_now: true) }
+      let(:email) { stub(deliver: true) }
 
       context 'valid parameters' do
         context 'easy attributes' do
           context 'and the event has vacancies' do
             context 'not an AA member' do
               context 'and it is a fresh new registration' do
-                it 'creates the attendance and redirects to the show' do
+                context 'and it is for the same user signed in' do
+                  it 'creates the attendance and redirects to the show' do
+                    EmailNotifications.expects(:registration_pending).returns(email)
+                    post :create, params: { event_id: event, attendance: valid_attendance }
+                    created_attendance = assigns(:attendance)
+                    expect(created_attendance.event).to eq event
+                    expect(created_attendance.user).to eq user
+                    expect(created_attendance.registered_by_user).to eq user
+                    expect(created_attendance).to be_pending
+                    expect(created_attendance.registration_group).to be_nil
+                    expect(created_attendance.payment_type).to eq 'gateway'
+                    expect(created_attendance).to be_pending
+                    expect(created_attendance.first_name).to eq user.first_name
+                    expect(created_attendance.last_name).to eq user.last_name
+                    expect(created_attendance.email).to eq user.email
+                    expect(created_attendance.organization).to eq user.organization
+                    expect(created_attendance.organization_size).to eq 'bla'
+                    expect(created_attendance.job_role).to eq 'analyst'
+                    expect(created_attendance.years_of_experience).to eq '6'
+                    expect(created_attendance.experience_in_agility).to eq '9'
+                    expect(created_attendance.school).to eq 'school'
+                    expect(created_attendance.education_level).to eq 'level'
+                    expect(created_attendance.phone).to eq user.phone
+                    expect(created_attendance.country).to eq user.country
+                    expect(created_attendance.state).to eq user.state
+                    expect(created_attendance.city).to eq user.city
+                    expect(created_attendance.badge_name).to eq user.badge_name
+                    expect(created_attendance.cpf).to eq user.cpf
+                    expect(created_attendance.gender).to eq user.gender
+                    expect(response).to redirect_to event_attendance_path(event, created_attendance)
+                    expect(flash[:notice]).to eq I18n.t('attendances.create.success')
+                  end
+                end
+              end
+
+              context 'and it is for a different user' do
+                it 'creates the attendance to the specified user' do
                   EmailNotifications.expects(:registration_pending).returns(email)
                   post :create, params: { event_id: event, attendance: valid_attendance.merge(user_for_attendance: user_for_attendance) }
                   created_attendance = assigns(:attendance)
                   expect(created_attendance.event).to eq event
                   expect(created_attendance.user).to eq user_for_attendance
-                  expect(created_attendance.registered_by_user).to eq user
-                  expect(created_attendance).to be_pending
-                  expect(created_attendance.registration_group).to be_nil
-                  expect(created_attendance.payment_type).to eq 'gateway'
-                  expect(created_attendance).to be_pending
-                  expect(created_attendance.first_name).to eq user.first_name
-                  expect(created_attendance.last_name).to eq user.last_name
-                  expect(created_attendance.email).to eq user.email
-                  expect(created_attendance.organization).to eq user.organization
-                  expect(created_attendance.organization_size).to eq 'bla'
-                  expect(created_attendance.job_role).to eq 'analyst'
-                  expect(created_attendance.years_of_experience).to eq '6'
-                  expect(created_attendance.experience_in_agility).to eq '9'
-                  expect(created_attendance.school).to eq 'school'
-                  expect(created_attendance.education_level).to eq 'level'
-                  expect(created_attendance.phone).to eq user.phone
-                  expect(created_attendance.country).to eq user.country
-                  expect(created_attendance.state).to eq user.state
-                  expect(created_attendance.city).to eq user.city
-                  expect(created_attendance.badge_name).to eq user.badge_name
-                  expect(created_attendance.cpf).to eq user.cpf
-                  expect(created_attendance.gender).to eq user.gender
-                  expect(response).to redirect_to event_attendance_path(event, created_attendance)
-                  expect(flash[:notice]).to eq I18n.t('attendances.create.success')
                 end
               end
               context 'when attempt to register again' do

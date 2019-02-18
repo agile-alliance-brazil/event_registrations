@@ -33,9 +33,9 @@ class CreateAttendance
 
   def self.notify_attendance
     if @attendance.pending?
-      EmailNotifications.registration_pending(@attendance).deliver_now
+      EmailNotifications.registration_pending(@attendance).deliver
     elsif @attendance.waiting?
-      EmailNotifications.registration_waiting(@attendance).deliver_now
+      EmailNotifications.registration_waiting(@attendance).deliver
     end
   end
 end

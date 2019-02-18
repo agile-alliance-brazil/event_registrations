@@ -12,7 +12,7 @@ describe WelcomeConfirmedAttendancesJob, type: :job do
     let!(:out) { FactoryBot.create :attendance, event: other_event, status: :pending }
 
     it 'calls the queue server twice' do
-      mail = stub(deliver_now: true)
+      mail = stub(deliver: true)
       EmailNotifications.expects(:welcome_attendance).twice.returns(mail)
       WelcomeConfirmedAttendancesJob.perform_now
     end

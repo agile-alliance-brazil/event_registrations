@@ -171,6 +171,8 @@ pt:
         remember_me: Lembrar
         name: "Nome"
         roles: "Papéis"
+        city: "Cidade"
+        state: "Estado"
         country: "País"
         organization: "Organização"
         zip_code: "CEP"

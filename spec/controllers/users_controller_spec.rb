@@ -145,6 +145,7 @@ RSpec.describe UsersController, type: :controller do
             expect(User.last.first_name).to eq user.first_name
             expect(User.last.last_name).to eq user.last_name
             expect(User.last.email).to eq user.email
+            expect(flash[:error]).to eq 'Nome: não pode ficar em branco'
           end
         end
 

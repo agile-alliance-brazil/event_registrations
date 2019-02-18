@@ -35,6 +35,7 @@
     <p><%= "Inscrito em: #{l(@attendance.created_at, format: :short)}" %></p>
     <p><i><%= t("activerecord.attributes.attendance.enums.status.#{@attendance.status}") %></i></p>
     <p><b><%= number_to_currency(@attendance.registration_value) %></b></p>
+    <p><%= link_to t('general.cancel'),event_attendance_path(@event, @attendance), method: :delete, class: 'btn btn-danger', data: { confirm: t('general.confirm', event: @attendance.event_name ) } %></p>
 
     <% if @attendance.grouped? && @attendance.pending? %>
       <%= render 'attendances/group_registration', { attendance: @attendance } %>

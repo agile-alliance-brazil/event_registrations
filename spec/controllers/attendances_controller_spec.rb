@@ -661,7 +661,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'pay' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
-        it 'accepts attendance' do
+        it 'pays the attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'pay' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'paid'
@@ -669,7 +669,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'confirm' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
-        it 'accepts attendance' do
+        it 'confirms attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'confirm' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'confirmed'
@@ -685,7 +685,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'dequeue' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'waiting') }
-        it 'accepts attendance' do
+        it 'dequeues attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'dequeue' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'pending'
@@ -693,10 +693,19 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'mark_show' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'confirmed') }
-        it 'accepts attendance' do
+        it 'marks as showed' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'mark_show' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'showed_in'
+        end
+      end
+      context 'respond to html' do
+        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'confirmed') }
+        it 'marks as showed and redirect to show page' do
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'mark_show' }
+          expect(assigns(:attendance)).to eq attendance
+          expect(Attendance.last.status).to eq 'showed_in'
+          expect(response).to redirect_to event_attendance_path(event, attendance)
         end
       end
     end

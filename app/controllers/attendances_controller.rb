@@ -55,7 +55,10 @@ class AttendancesController < AuthenticatedController
 
   def destroy
     @attendance.cancelled!
-    redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') })
+    respond_to do |format|
+      format.js { return render 'attendances/attendance' }
+      format.html { redirect_to event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') } }
+    end
   end
 
   def change_status
@@ -74,6 +77,7 @@ class AttendancesController < AuthenticatedController
     else
       @attendance.pending!
     end
+
     respond_to do |format|
       format.js { render 'attendances/attendance' }
       format.html { redirect_to event_attendance_path(@event, @attendance) }

@@ -38,6 +38,10 @@ RSpec.describe AttendancesController, type: :controller do
       before { get :attendance_past_info, params: { event_id: 'foo' } }
       it { expect(response).to redirect_to new_user_session_path }
     end
+    describe 'DELETE #destroy' do
+      before { delete :destroy, params: { event_id: 'foo', id: 'bar' } }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
   end
 
   context 'authenticated as usere' do
@@ -643,19 +647,20 @@ RSpec.describe AttendancesController, type: :controller do
     describe 'DELETE #destroy' do
       subject(:attendance) { FactoryBot.create(:attendance) }
 
-      it 'cancels attendance' do
-        Attendance.any_instance.expects(:cancelled!)
-        delete :destroy, params: { event_id: event, id: attendance }
-      end
+      context 'when it is not ajax' do
+        it 'redirects back to show' do
+          Attendance.any_instance.expects(:cancelled!)
+          Attendance.any_instance.expects(:destroy).never
 
-      it 'not delete attendance' do
-        Attendance.any_instance.expects(:destroy).never
-        delete :destroy, params: { event_id: event, id: attendance }
+          delete :destroy, params: { event_id: event, id: attendance }
+          expect(response).to redirect_to(event_attendance_path(event, attendance))
+        end
       end
-
-      it 'redirects back to status' do
-        delete :destroy, params: { event_id: event, id: attendance }
-        expect(response).to redirect_to(event_attendance_path(event, attendance))
+      context 'when it is ajax' do
+        it 'redirects back to show' do
+          delete :destroy, params: { event_id: event, id: attendance }, xhr: true
+          expect(response).to render_template 'attendances/attendance'
+        end
       end
     end
 

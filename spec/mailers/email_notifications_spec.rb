@@ -14,7 +14,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee and cc the events organizer' do
-        mail = EmailNotifications.registration_pending(attendance).deliver_now
+        mail = EmailNotifications.registration_pending(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq ['xpto@sbbrubles.com']
@@ -31,7 +31,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee cc the events organizer' do
-        mail = EmailNotifications.registration_waiting(attendance).deliver_now
+        mail = EmailNotifications.registration_waiting(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq ['xpto@sbbrubles.com']
@@ -45,7 +45,7 @@ RSpec.describe EmailNotifications, type: :mailer do
     context 'when the attendance is brazilian' do
       context 'and event start date before end date' do
         it 'sends the confirmation' do
-          mail = EmailNotifications.registration_confirmed(attendance).deliver_now
+          mail = EmailNotifications.registration_confirmed(attendance).deliver
           expect(ActionMailer::Base.deliveries.size).to eq 1
           expect(mail.to).to eq [attendance.email]
           expect(mail.subject).to eq("Inscrição para #{event.name} confirmada")
@@ -59,7 +59,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
 
       it 'sends to attendee cc the events organizer' do
-        mail = EmailNotifications.registration_confirmed(attendance).deliver_now
+        mail = EmailNotifications.registration_confirmed(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq ['xpto@sbbrubles.com']
@@ -70,7 +70,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       context 'and event start date before end date' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, registration_date: Time.zone.local(2013, 5, 1, 12, 0, 0), country: 'US') }
         it 'sends the confirmation in english' do
-          mail = EmailNotifications.registration_confirmed(attendance).deliver_now
+          mail = EmailNotifications.registration_confirmed(attendance).deliver
           expect(ActionMailer::Base.deliveries.size).to eq(1)
           expect(mail.to).to eq([attendance.email])
           expect(mail.subject).to eq("Registration request to #{event.name} confirmed")
@@ -84,7 +84,7 @@ RSpec.describe EmailNotifications, type: :mailer do
     let(:attendance) { FactoryBot.create :attendance, event: event }
 
     it 'sends to pending attendee' do
-      mail = EmailNotifications.cancelling_registration(attendance).deliver_now
+      mail = EmailNotifications.cancelling_registration(attendance).deliver
       expect(ActionMailer::Base.deliveries.size).to eq 1
       expect(mail.to).to eq([attendance.email])
       expect(mail.subject).to eq("Aviso de cancelamento da inscrição #{attendance.id} para #{event.name}")
@@ -92,7 +92,7 @@ RSpec.describe EmailNotifications, type: :mailer do
 
     it 'sends to attendee according to country' do
       attendance.country = 'US'
-      mail = EmailNotifications.cancelling_registration(attendance).deliver_now
+      mail = EmailNotifications.cancelling_registration(attendance).deliver
       expect(ActionMailer::Base.deliveries.size).to eq 1
       expect(mail.to).to eq([attendance.email])
       expect(mail.subject).to eq("Notice about registration #{attendance.id} cancelation to #{event.name}")
@@ -104,7 +104,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee cc the events organizer' do
-        mail = EmailNotifications.cancelling_registration(attendance).deliver_now
+        mail = EmailNotifications.cancelling_registration(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq [event.main_email_contact]
@@ -117,7 +117,7 @@ RSpec.describe EmailNotifications, type: :mailer do
     let(:attendance) { FactoryBot.create :attendance, event: event }
 
     it 'should be sent to pending attendee' do
-      mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
+      mail = EmailNotifications.cancelling_registration_warning(attendance).deliver
       expect(ActionMailer::Base.deliveries.size).to eq 1
       expect(mail.to).to eq([attendance.email])
       expect(mail.subject).to eq("Lembrete de pagamento da inscrição #{attendance.id} para #{event.name}")
@@ -125,7 +125,7 @@ RSpec.describe EmailNotifications, type: :mailer do
 
     it 'sends to attendee according to country' do
       attendance.country = 'US'
-      mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
+      mail = EmailNotifications.cancelling_registration_warning(attendance).deliver
       expect(ActionMailer::Base.deliveries.size).to eq 1
       expect(mail.to).to eq([attendance.email])
       expect(mail.subject).to eq("Payment reminder about registration #{attendance.id} to #{event.name}")
@@ -137,7 +137,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee cc the events organizer' do
-        mail = EmailNotifications.cancelling_registration_warning(attendance).deliver_now
+        mail = EmailNotifications.cancelling_registration_warning(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq [event.main_email_contact]
@@ -154,7 +154,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       let!(:event) { FactoryBot.create :event, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee and cc the events organizer' do
-        mail = EmailNotifications.registration_dequeued(attendance).deliver_now
+        mail = EmailNotifications.registration_dequeued(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq [event.main_email_contact]
@@ -174,7 +174,7 @@ RSpec.describe EmailNotifications, type: :mailer do
       let!(:event) { FactoryBot.create :event, start_date: 1.day.from_now, organizers: [organizer, other_organizer] }
 
       it 'sends to attendee and cc the events organizer' do
-        mail = EmailNotifications.welcome_attendance(attendance).deliver_now
+        mail = EmailNotifications.welcome_attendance(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
         expect(mail.cc).to eq [event.main_email_contact]

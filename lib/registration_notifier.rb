@@ -9,7 +9,7 @@ class RegistrationNotifier
         Rails.logger.info("[Attendance] #{attendance.to_param}")
         try_with('CANCEL') do
           attendance.cancelled!
-          EmailNotifications.cancelling_registration(attendance).deliver_now
+          EmailNotifications.cancelling_registration(attendance).deliver
         end
       end
     end
@@ -25,7 +25,7 @@ class RegistrationNotifier
         try_with('WARN') do
           Rails.logger.info('[Sending warning]')
           attendance.advise!
-          EmailNotifications.cancelling_registration_warning(attendance).deliver_now
+          EmailNotifications.cancelling_registration_warning(attendance).deliver
         end
       end
     end

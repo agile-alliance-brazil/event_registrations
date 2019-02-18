@@ -28,7 +28,7 @@
     <div class="row">
       <div class="col-xl-12 col-sm-6 form-group">
         <%= label_tag t('activerecord.attributes.attendance.user_for_attendance') %>
-        <%= select_tag :user_for_attendance, options_for_select(User.all.order(:first_name, :last_name).map { |u| [u.full_name, u.id] }), class: 'form-control' %>
+        <%= select_tag :user_for_attendance, options_for_select(User.all.order(:first_name, :last_name).map { |u| [u.full_name, u.id] }), class: 'form-control', include_blank: t('general.select') %>
         <span class="inline-hints"><%= t('attendances.new.user_for_attendance.help') %></span>
       </div>
     </div>

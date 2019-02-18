@@ -70,7 +70,6 @@ group :development do
 end
 
 group :test do
-  gem 'codeclimate-test-reporter'
   gem 'mocha', require: false
   gem 'shoulda-matchers', git: 'https://github.com/wuakitv/shoulda-matchers', ref: 'd576b2d'
   gem 'simplecov'

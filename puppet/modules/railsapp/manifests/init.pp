@@ -79,8 +79,15 @@ class railsapp( $user, $app_name ) {
     require => Exec["update"],
   }
 
+  # required for rvm
   package { 'gnupg2':
     ensure => "installed",
     require => Exec["update"],
+  }
+
+  # required for paperclip
+  package { "imagemagick":
+    ensure => "installed",
+    require => Exec["update"]
   }
 }

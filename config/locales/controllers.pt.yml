@@ -59,7 +59,7 @@ pt:
         not_found: "Informações não encontradas"
         title: "Carregar Info"
       load_user:
-        title: "Carregar Info do Usuário Logado"
+        title: "Carregar Informações"
       gender:
         help: "deixe em branco caso não queira responder"
     actions:

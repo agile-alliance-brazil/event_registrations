@@ -23,6 +23,7 @@ class UsersController < AuthenticatedController
       return redirect_to user_path(@user)
     end
 
+    flash[:error] = @user.errors.full_messages.join(' | ')
     render :edit
   end
 

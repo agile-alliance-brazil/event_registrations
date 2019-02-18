@@ -42,22 +42,24 @@
   <% end %>
 
   <div class="row">
-    <div class="col-xl-4 col-sm-6 form-group">
+    <div class="col-xl col-sm-6 form-group">
       <%= form.label :cpf, class: 'control-label required' %>
       <%= form.text_field :cpf, class: 'form-control' %>
       <span class="inline-hints"><%= t('attendances.new.cpf.help') %></span>
       <span class="help-block"><%= attendance.errors[:cpf].join(', ') %></span>
     </div>
-    <div class="col-xl-6 col-sm-6 form-group">
+    <div class="col-xl col-sm-6 form-group">
       <%= form.label :email, class: 'control-label required' %>
       <%= form.text_field :email, class: 'form-control', id: 'attendance_email' %>
       <span class="help-block" id="help-block-email"><%= attendance.errors[:email].join(', ') %></span>
     </div>
-    <div class="col-xl-2 col-sm-6">
-      <%= link_to '#', id: 'search-attendance-btn', class: 'btn btn-light' do %>
-        <i class="fas fa-download"></i> <%= t('attendances.new.load.title') %>
-      <% end %>
-    </div>
+    <% if current_user.organizer_of?(@event) %>
+      <div class="col-xl col-sm-6">
+        <%= link_to '#', id: 'search-attendance-btn', class: 'btn btn-light' do %>
+          <i class="fas fa-download"></i> <%= t('attendances.new.load.title') %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 
   <div class="row">

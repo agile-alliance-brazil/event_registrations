@@ -20,6 +20,8 @@ Once inside the vagrant box, run `/srv/apps/registrations/current/dev.sh`. Note 
 
 ## Deployment
 
+Images are handled by ImageMagick and you must have it installed in your environment: https://www.imagemagick.org/
+
 Provisioning is handled by [Puppet](https://puppetlabs.com/) [4.3.1](http://docs.puppetlabs.com/puppet/latest/reference/install_pre.html). It can be tested with [Vagrant](https://www.vagrantup.com/) [1.8.1](https://releases.hashicorp.com/vagrant/1.8.1/).
 
 Deployment is handled by [Capistrano](http://capistranorb.com/). And can also be tested using the vagrant set up.

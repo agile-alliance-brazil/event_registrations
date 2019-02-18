@@ -15,6 +15,7 @@ class AttendancesController < AuthenticatedController
     @attendance = CreateAttendance.run_for(create_params)
     return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendances.create.success') }) if @attendance.valid?
 
+    flash[:error] = @attendance.errors.full_messages.join(' | ')
     render :new
   end
 
@@ -25,7 +26,7 @@ class AttendancesController < AuthenticatedController
     @attendance = UpdateAttendance.run_for(update_params)
     return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if @attendance.valid?
 
-    flash[:error] = @attendance.errors.full_messages.join(', ')
+    flash[:error] = @attendance.errors.full_messages.join(' | ')
     render :edit
   end
 

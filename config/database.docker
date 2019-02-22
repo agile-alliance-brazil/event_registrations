@@ -1,0 +1,6 @@
+development:
+  adapter: mysql2
+  host: db
+  username: registrations_db
+  password: registrations_db
+  database: agilebrazil_development

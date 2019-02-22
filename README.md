@@ -19,8 +19,8 @@ docker-compose build
 For populating the db and configuration for the first time:
 
 ```sh
-mv config/config.example config/config.yml
-mv config/database.docker config/database.yml
+cp config/config.example config/config.yml
+cp config/database.docker config/database.yml
 docker-compose up -d db
 docker-compose run app bundle exec rake db:create db:schema:load --trace
 ````
@@ -30,6 +30,8 @@ For running the application:
 ```sh
 docker-compose up
 ````
+
+The application will be available at http://localhost:3000
 
 ## Deployment
 

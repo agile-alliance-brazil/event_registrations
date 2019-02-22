@@ -6,7 +6,6 @@ HERE = File.dirname(__FILE__)
 APP_DIR = HERE.freeze
 INFRA_DIR = "#{HERE}/puppet"
 
-# rubocop:disable Metrics/BlockLength
 Vagrant.configure('2') do |config|
   # Production is Ubuntu 14.04 in an AWS micro instance/Digital Ocean basic droplet so is our Vagrant box
   config.vm.box     = 'ubuntu/trusty64'
@@ -40,4 +39,3 @@ Vagrant.configure('2') do |config|
     vm_config.vm.network :forwarded_port, guest: 80, host: 8081
   end
 end
-# rubocop:enable Metrics/BlockLength

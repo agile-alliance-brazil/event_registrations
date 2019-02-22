@@ -1,5 +1,5 @@
 # Event Registrations 
-[![Build Status](https://circleci.com/gh/agile-alliance-brazil/event_registrations.svg?style=svg)](https://circleci.com/gh/agile-alliance-brazil/event_registrations) [![Dependency Status](https://gemnasium.com/agile-alliance-brazil/event_registrations.svg)](https://gemnasium.com/agile-alliance-brazil/event_registrations) [![Code Climate](https://codeclimate.com/github/agile-alliance-brazil/event_registrations/badges/gpa.svg)](https://codeclimate.com/github/agile-alliance-brazil/event_registrations) [![Test Coverage](https://codeclimate.com/github/agile-alliance-brazil/event_registrations/badges/coverage.svg)](https://codeclimate.com/github/agile-alliance-brazil/event_registrations) [![security](https://hakiri.io/github/agile-alliance-brazil/event_registrations/master.svg)](https://hakiri.io/github/agile-alliance-brazil/event_registrations/master)
+[![Build Status](https://circleci.com/gh/agile-alliance-brazil/event_registrations.svg?style=svg)](https://circleci.com/gh/agile-alliance-brazil/event_registrations) [![Code Climate](https://codeclimate.com/github/agile-alliance-brazil/event_registrations/badges/gpa.svg)](https://codeclimate.com/github/agile-alliance-brazil/event_registrations) [![Test Coverage](https://codeclimate.com/github/agile-alliance-brazil/event_registrations/badges/coverage.svg)](https://codeclimate.com/github/agile-alliance-brazil/event_registrations) [![security](https://hakiri.io/github/agile-alliance-brazil/event_registrations/master.svg)](https://hakiri.io/github/agile-alliance-brazil/event_registrations/master)
 ===================
 
 An app to handle event registrations. Intended to be lightweight and rest queriable to allow integration with third party systems.
@@ -8,15 +8,28 @@ Feature requests, bug reports and questions are to be sent to GitHub's issue sys
 
 # Development
 
-Just clone this repo (including submodules so ensure you run `git clone https://github.com/agilealliancebrazil/submissions.git  --recursive` or if you already cloned, use `git submodule foreach git pull origin master`), enter it and run `./dev.sh`. This should be enough to install whatever is needed on your machine and start guard to run specs and front end tests.
+Just clone this repo (including submodules so ensure you run `git clone https://github.com/agilealliancebrazil/event_registrations.git  --recursive` or if you already cloned, use `git submodule foreach git pull origin master`), enter it and run `./dev.sh`. This should be enough to install whatever is needed on your machine and start guard to run specs and front end tests.
 
-If you don't want to mess with your own machine, an option to use [Vagrant](https://www.vagrantup.com/) for development is available. Download [Vagrant 1.8.1](https://releases.hashicorp.com/vagrant/1.8.1/) and [Virtual Box](https://www.virtualbox.org/wiki/Downloads), install both and then run:
+If you don't want to mess with your own machine, an option to use [Docker](https://www.docker.com/) for development is available.
 
 ```sh
-vagrant destroy -f dev && vagrant up dev && vagrant ssh dev
+docker-compose build
 ````
 
-Once inside the vagrant box, run `/srv/apps/registrations/current/dev.sh`. Note that the code will be sync'ed between the virtual machine and your machine so you can still use your favorite editor and handle version control from your machine if you prefer.
+For populating the db and configuration for the first time:
+
+```sh
+mv config/config.example config/config.yml
+mv config/database.docker config/database.yml
+docker-compose up -d db
+docker-compose run app bundle exec rake db:create db:schema:load --trace
+````
+
+For running the application:
+
+```sh
+docker-compose up
+````
 
 ## Deployment
 

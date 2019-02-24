@@ -1,1 +1,1 @@
-$("#attendances_list").replaceWith("#{escape_javascript(render('attendances/attendances_list', attendances_list: @attendances_list, list_title: t('attendances.index.title') ))}");
+$("#attendances_list").html("<%= escape_javascript(render('attendances/attendances_list', attendances_list: @attendances_list, list_title: t('attendances.index.title') )).html_safe %>");

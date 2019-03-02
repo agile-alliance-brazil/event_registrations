@@ -107,6 +107,7 @@ RSpec.describe AttendanceRepository, type: :repository do
       end
     end
 
+    # Flaky
     context 'with a pending status and belonging to a group' do
       before { travel_to Time.zone.local(2018, 5, 16, 10, 0, 0) }
       after { travel_back }

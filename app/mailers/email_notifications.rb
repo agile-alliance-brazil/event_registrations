@@ -44,8 +44,10 @@ class EmailNotifications < ApplicationMailer
     I18n.with_locale(l) do
       subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
       Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
-      from = @attendance.event.main_email_contact || 'no-reply@agilebrazil.com'
-      mail(from: from, to: attendance.email, subject: subject, cc: from, date: sent_at)
+
+      headers = {from: 'no-reply@agilebrazil.com', to: attendance.email, subject: subject, date: sent_at}
+      headers[:cc] = @attendance.event.main_email_contact if @attendance.event.main_email_contact
+      mail(headers)
     end
   end
 end

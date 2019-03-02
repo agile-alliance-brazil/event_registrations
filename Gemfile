@@ -22,7 +22,7 @@ gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-github'
-gem 'omniauth-linkedin'
+gem 'omniauth-linkedin-oauth2'
 gem 'omniauth-twitter'
 gem 'pagseguro-oficial', git: 'https://github.com/correamarques/ruby'
 gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud

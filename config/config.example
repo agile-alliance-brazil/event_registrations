@@ -32,9 +32,6 @@
   github:
     key: http://developer.github.com/
     secret: http://developer.github.com/
-  linkedin:
-    key: key
-    secret: secret
   pag_seguro:
     url: https://ws.pagseguro.uol.com.br/v2/checkout
     email: alexandra.martins@agilealliance.org

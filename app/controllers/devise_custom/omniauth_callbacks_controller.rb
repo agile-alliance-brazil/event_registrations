@@ -14,10 +14,6 @@ module DeviseCustom
       process_omniauth('devise.twitter_data', 'twitter')
     end
 
-    def linkedin
-      process_omniauth('devise.linkedin_data', 'linkedin')
-    end
-
     private
 
     def process_omniauth(omniauth_session, omniauth_provider)

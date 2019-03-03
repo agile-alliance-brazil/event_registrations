@@ -26,7 +26,7 @@ pt:
     pending_message_on_value: "Seu pedido de inscrição no valor de %{attendance_value} foi realizado com sucesso e está com status %{status_name}."
     message_on_group: "A sua inscrição foi realizada no grupo %{group_name} e está em processo de aprovação."
     registrations_page: "Detalhes da Inscrição"
-    you_can_reply: "Você pode responder a esta mensagem para nos contactar."
+    reply_instructions: "Este email não é monitorado. Por favor entre em contato com os organizadores usando %{organizer_email}"
     say_goodbye: "Atenciosamente,"
     event_team: "Time do %{event_name}"
     accepted_group_message: "Sua inscrição para %{event_name} foi aceita no grupo %{group_name}."

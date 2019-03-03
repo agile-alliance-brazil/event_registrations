@@ -26,7 +26,7 @@ en:
     pending_message_on_value: "Your request for registration priced %{attendance_value} was received successfully and the status is %{status_name}."
     message_on_group: "You were registered in the group %{group_name} and the registration is waiting for approval."
     registrations_page: "Registration Details"
-    you_can_reply: "You can reply this message to contact us."
+    reply_instructions: "This is an unmonitored address. Please contact the event organizer using %{organizer_email}"
     say_goodbye: "Best Regards,"
     event_team: "%{event_name} Team"
     accepted_group_message: "Your registrations to %{event_name} was accepted in the group %{group_name}."

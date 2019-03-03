@@ -764,11 +764,11 @@ RSpec.describe AttendancesController, type: :controller do
               end
               context 'without cancelled, confirmed, paid and accepted' do
                 before { get :search, params: { event_id: event, search: 'bla', pending: 'true' }, xhr: true }
-                it { expect(assigns(:attendances_list)).to match_array [pending] }
+                it { expect(assigns(:attendances_list)).to eq [pending] }
               end
               context 'without statuses' do
                 before { get :search, params: { event_id: event, search: 'bla' }, xhr: true }
-                it { expect(assigns(:attendances_list)).to match_array [] }
+                it { expect(assigns(:attendances_list)).to eq [] }
               end
             end
           end

@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 ruby '2.4.3'
 gem 'rails'
 
-gem 'airbrake'
+gem 'airbrake-ruby'
 
 gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
 gem 'brcpfcnpj'

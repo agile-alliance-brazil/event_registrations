@@ -27,4 +27,8 @@ class ApplicationController < ActionController::Base
       format.js { render plain: '408 Request Timeout', status: :request_timeout }
     end
   end
+
+  def assign_event
+    @event = Event.find(params[:event_id])
+  end
 end

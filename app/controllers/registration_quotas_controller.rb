@@ -37,10 +37,6 @@ class RegistrationQuotasController < AuthenticatedController
     params.require(:registration_quota).permit(:order, :price, :quota)
   end
 
-  def assign_event
-    @event = Event.find(params[:event_id])
-  end
-
   def assign_quota
     @registration_quota = @event.registration_quotas.find(params[:id])
   end

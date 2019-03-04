@@ -2,8 +2,8 @@
 
 class AttendancesController < AuthenticatedController
   before_action :assign_event
-  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info]
-  before_action :check_organizer, only: %i[waiting_list to_approval index search]
+  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info user_info]
+  before_action :check_organizer, only: %i[waiting_list to_approval index search user_info]
   before_action :check_user, only: %i[show edit update]
 
   def new
@@ -101,11 +101,13 @@ class AttendancesController < AuthenticatedController
     render 'attendances/attendance_info'
   end
 
-  private
-
-  def assign_event
-    @event = Event.find(params[:event_id])
+  def user_info
+    @user = User.where(id: params[:user_id]).first_or_initialize
+    @attendance = Attendance.new
+    respond_to { |format| format.js { render 'attendances/user_info' } }
   end
+
+  private
 
   def assign_attendance
     @attendance = Attendance.find(params[:id])

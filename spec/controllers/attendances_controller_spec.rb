@@ -42,9 +42,14 @@ RSpec.describe AttendancesController, type: :controller do
       before { delete :destroy, params: { event_id: 'foo', id: 'bar' } }
       it { expect(response).to redirect_to new_user_session_path }
     end
+
+    describe 'GET #user_info' do
+      before { get :user_info, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
   end
 
-  context 'authenticated as usere' do
+  context 'authenticated as user' do
     let(:user) { FactoryBot.create :user, role: :user }
     let(:event) { FactoryBot.create :event, organizers: [user] }
 
@@ -66,6 +71,11 @@ RSpec.describe AttendancesController, type: :controller do
 
         it { expect(response).to have_http_status :not_found }
       end
+    end
+
+    describe 'GET #user_info' do
+      before { get :user_info, params: { event_id: 'foo' } }
+      it { expect(response).to have_http_status :not_found }
     end
   end
 
@@ -920,6 +930,41 @@ RSpec.describe AttendancesController, type: :controller do
         context 'event' do
           before { get :attendance_past_info, params: { event_id: 'foo', email: 'bar' }, xhr: true }
           it { expect(response).to have_http_status :not_found }
+        end
+      end
+    end
+
+    describe 'GET #user_info' do
+      context 'with valid attributes' do
+        context 'and no user ID' do
+          it 'assigns the instance variables and renders the template' do
+            get :user_info, params: { event_id: event }, xhr: true
+            expect(assigns(:attendance)).to be_a_new Attendance
+            expect(assigns(:user)).to be_a_new User
+            expect(response).to render_template 'attendances/user_info'
+          end
+        end
+        context 'passing the user ID' do
+          it 'assigns the instance variables and renders the template' do
+            get :user_info, params: { event_id: event, user_id: user }, xhr: true
+            expect(assigns(:attendance)).to be_a_new Attendance
+            expect(assigns(:user)).to eq user
+            expect(response).to render_template 'attendances/user_info'
+          end
+        end
+      end
+
+      context 'invalid' do
+        context 'event' do
+          context 'not found' do
+            before { get :user_info, params: { event_id: 'foo' }, xhr: true }
+            it { expect(response).to have_http_status :not_found }
+          end
+          context 'not permitted' do
+            let(:event) { FactoryBot.create :event }
+            before { get :user_info, params: { event_id: event }, xhr: true }
+            it { expect(response).to have_http_status :not_found }
+          end
         end
       end
     end

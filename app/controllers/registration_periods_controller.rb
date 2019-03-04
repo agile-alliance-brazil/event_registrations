@@ -34,10 +34,6 @@ class RegistrationPeriodsController < AuthenticatedController
 
   private
 
-  def assign_event
-    @event = Event.find(params[:event_id])
-  end
-
   def assign_period
     @period = @event.registration_periods.find(params[:id])
   end

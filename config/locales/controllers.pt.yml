@@ -63,6 +63,7 @@ pt:
         title: "Carregar Informações"
       gender:
         help: "deixe em branco caso não queira responder"
+      load_info_by_email_hint: "Carregue informações da última inscrição em que usou o email ao lado."
     actions:
       confirm: "Confirmar inscrição"
       cancel: "Cancelar inscrição"

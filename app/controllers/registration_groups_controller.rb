@@ -39,10 +39,6 @@ class RegistrationGroupsController < AuthenticatedController
     params.require(:registration_group).permit(:name, :discount, :minimum_size, :amount, :automatic_approval, :paid_in_advance, :capacity)
   end
 
-  def assign_event
-    @event = Event.find(params[:event_id])
-  end
-
   def assign_group
     @group = @event.registration_groups.find(params[:id])
   end

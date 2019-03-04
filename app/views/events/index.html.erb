@@ -4,7 +4,7 @@
 
 <div class="tab-container-<%= current_user&.admin? ? 'admin' : 'user' %>">
   <% if current_user&.admin? %>
-    <div class="row">
+    <div class="row bottom-spaced-component">
       <div class="col-xl-12 col-sm-8">
         <div class="float-right"><%= link_to t('events.new.title'), new_event_path, class: 'btn btn-sm btn-success' %></div>
       </div>

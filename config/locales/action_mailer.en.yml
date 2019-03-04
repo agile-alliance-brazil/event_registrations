@@ -44,3 +44,5 @@ en:
     cancel_warning_registrations_first_message: "We noticed that you have a pending payment for %{event_name}. If that payment is not realized until %{due_date} at %{due_time} we, unfortunately, will have to cancel your registration due to the expiration of the payment deadline."
     cancel_warning_registrations_full_message: "The is pretty full and we now have a waiting list. If you do not complete your registration in time and our automated system cancels it, you will have to submit a new registration which will add you to our waiting list."
     cancel_warning_registrations_second_message: "If you already settled your registration payment, please contact us."
+    new:
+      load_info_by_email_hint: "Load the info you used in the last registration using the email beside."

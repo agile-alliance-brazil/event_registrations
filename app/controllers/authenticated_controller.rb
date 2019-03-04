@@ -6,6 +6,8 @@ class AuthenticatedController < ApplicationController
   private
 
   def check_organizer
+    return if current_user.admin?
+
     not_found unless current_user.organizer_of?(@event)
   end
 

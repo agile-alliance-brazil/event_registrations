@@ -24,10 +24,6 @@ class PaymentsController < ApplicationController
 
   private
 
-  def assign_event
-    @event = Event.find(params[:event_id])
-  end
-
   def back_url
     request.referer || root_path
   end

@@ -11,7 +11,7 @@
 <div class="form-container">
   <div class="row justify-content-center">
     <div class="col-xl-12" id="attendance-form">
-      <%= render 'form', event: @event, attendance: @attendance %>
+      <%= render 'form', event: @event, attendance: @attendance, user: current_user %>
     </div>
   </div>
 </div>

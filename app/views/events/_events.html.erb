@@ -1,11 +1,11 @@
 <div class="row">
   <% events.each do |event| %>
-    <div class="col-xl">
+    <div class="col-xl-4">
       <div class="card event-card">
         <% if event.event_image.present? %>
-          <%= image_tag event.event_image.url, class: 'card-img-top' %>
+          <%= image_tag event.event_image.resized.url, class: 'card-img-top' %>
         <% else %>
-          <%= image_tag 'img-empty.png' %>
+          <%= image_tag 'img-empty.png', class: 'card-img-top' %>
         <% end %>
 
         <div class="card-body">

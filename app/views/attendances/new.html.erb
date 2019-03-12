@@ -1,0 +1,22 @@
+<div class="breadcrumb">
+  <div class="row">
+    <div class="col-xl-12">
+      <%= link_to t('events.index.title'), events_path %>
+      >
+      <%= t('attendances.new.title.text', event_name: @event.name) %>
+    </div>
+  </div>
+</div>
+
+<div class="form-container">
+  <div class="row justify-content-center">
+    <div class="col-xl-12" id="attendance-form">
+      <%= render 'form', event: @event, attendance: @attendance, user: current_user %>
+    </div>
+  </div>
+</div>
+
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'attendances/attendance_form_events' %>
+  <%= javascript_include_tag 'attendances/new' %>
+<% end %>

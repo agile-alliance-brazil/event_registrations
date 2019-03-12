@@ -6,7 +6,6 @@ HERE = File.dirname(__FILE__)
 APP_DIR = HERE.freeze
 INFRA_DIR = "#{HERE}/puppet"
 
-# rubocop:disable Metrics/BlockLength
 Vagrant.configure('2') do |config|
   # Production is Ubuntu 14.04 in an AWS micro instance/Digital Ocean basic droplet so is our Vagrant box
   config.vm.box     = 'ubuntu/trusty64'
@@ -34,23 +33,9 @@ Vagrant.configure('2') do |config|
   config.ssh.insert_key = false
   config.ssh.private_key_path = "#{APP_DIR}/certs/insecure_private_key"
 
-  config.vm.define :dev do |vm_config|
-    # Setting up a share so we can edit locally but run in vagrant
-    vm_config.vm.synced_folder APP_DIR, '/srv/apps/registrations/current'
-
-    vm_config.vm.network :private_network, ip: '10.11.12.13'
-    vm_config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2202
-    vm_config.vm.network :forwarded_port, guest: 9292, host: 9293
-
-    vm_config.vm.provision :shell, inline:
-      "/opt/puppetlabs/bin/puppet apply --modulepath=/srv/apps/registrations/current/puppet/modules /srv/apps/registrations/current/puppet/manifests/vagrant-dev.pp &&\
-      /opt/puppetlabs/bin/puppet apply --modulepath=/srv/apps/registrations/current/puppet/modules /srv/apps/registrations/current/puppet/manifests/vagrant-dev.pp"
-  end
-
   config.vm.define :deploy do |vm_config|
     vm_config.vm.network :private_network, ip: '10.11.12.14'
     vm_config.vm.network :forwarded_port, id: 'ssh', guest: 22, host: 2203
     vm_config.vm.network :forwarded_port, guest: 80, host: 8081
   end
 end
-# rubocop:enable Metrics/BlockLength

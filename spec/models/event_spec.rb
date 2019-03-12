@@ -13,6 +13,9 @@ RSpec.describe Event, type: :model do
     it { is_expected.to validate_presence_of :start_date }
     it { is_expected.to validate_presence_of :end_date }
     it { is_expected.to validate_presence_of :main_email_contact }
+    it { is_expected.to validate_presence_of :state }
+    it { is_expected.to validate_presence_of :country }
+    it { is_expected.to validate_presence_of :city }
 
     context 'with start date before end date' do
       let(:event) { FactoryBot.build :event, start_date: Date.new(2016, 5, 20).in_time_zone, end_date: Date.new(2016, 5, 21).in_time_zone }
@@ -76,7 +79,7 @@ RSpec.describe Event, type: :model do
       let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
 
       subject!(:event_value) { event.registration_price_for(attendance, 'gateway') }
-      it { expect(event_value).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event_value).to eq final_price }
     end
 
     context 'with two registrations periods, one passed and one current' do
@@ -85,20 +88,20 @@ RSpec.describe Event, type: :model do
       let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:period_passed) { FactoryBot.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago, price: past_price }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq final_price }
     end
 
     context 'with one registration quota with vacancy and opened' do
       let(:final_price) { 40 }
       let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25 }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq final_price }
     end
 
     context 'with one registration quota with vacancy and closed' do
       let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25, closed: true }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(event.full_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq event.full_price }
     end
 
     context 'with one passed period and one registration quota with vacancy and opened' do
@@ -106,7 +109,7 @@ RSpec.describe Event, type: :model do
       let!(:period_passed) { FactoryBot.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
       let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25, price: final_price }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq final_price }
     end
 
     context 'with one period and one registration quota with vacancy and opened' do
@@ -114,12 +117,12 @@ RSpec.describe Event, type: :model do
       let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25 }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq final_price }
     end
 
     context 'with one passed period and no quota vacancy' do
       let!(:period_passed) { FactoryBot.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(event.full_price * 100, :BRL) }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq event.full_price }
     end
 
     context 'and with three quotas, one with limit reached, and other two not' do
@@ -133,7 +136,7 @@ RSpec.describe Event, type: :model do
           final_price = 470
           FactoryBot.create :registration_quota, event: event, quota: 40, order: 2, price: final_price
 
-          expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL)
+          expect(event.registration_price_for(attendance, 'gateway')).to eq final_price
         end
       end
 
@@ -143,7 +146,7 @@ RSpec.describe Event, type: :model do
           final_price = 360
           FactoryBot.create :registration_quota, event: event, attendances: forty_attendances, quota: 25, order: 1, price: final_price
 
-          expect(event.registration_price_for(attendance, 'gateway')).to eq Money.new(final_price * 100, :BRL)
+          expect(event.registration_price_for(attendance, 'gateway')).to eq final_price
         end
       end
     end
@@ -151,15 +154,13 @@ RSpec.describe Event, type: :model do
     context 'when attendace is member of a registration group' do
       let(:group_30) { FactoryBot.create :registration_group, event: event, discount: 30 }
       let(:grouped_attendance) { FactoryBot.create(:attendance, event: event, registration_group: group_30) }
-      let(:discounted_value) { full_price * (1.00 - (group_30.discount / 100.00)) }
-      let(:discounted_price) { Money.new(discounted_value * 100, :BRL) }
 
-      it { expect(event.registration_price_for(grouped_attendance, 'gateway')).to eq discounted_price }
+      it { expect(event.registration_price_for(grouped_attendance, 'gateway')).to eq full_price * (1.00 - (group_30.discount / 100.00)) }
     end
 
     context 'when payment type is statement of agreement' do
       subject!(:event_value) { event.registration_price_for(attendance, 'statement_agreement') }
-      it { expect(event_value).to eq Money.new(event.full_price * 100, :BRL) }
+      it { expect(event_value).to eq event.full_price }
     end
   end
 
@@ -233,82 +234,52 @@ RSpec.describe Event, type: :model do
     end
   end
 
-  describe '#add_organizer_by_email!' do
+  describe '#add_organizer' do
     let(:event) { FactoryBot.create :event }
-    context 'with invalid parameters' do
-      context 'and invalid organizer email' do
-        context 'passing an invalid email' do
-          it 'responds false' do
-            expect(event.add_organizer_by_email!('bla')).to be false
-            expect(event.organizers).to be_empty
-          end
-        end
-        context 'passing a valid email and the user is not organizer' do
-          let(:not_organizer) { FactoryBot.create :user }
-          it 'responds false' do
-            expect(event.add_organizer_by_email!(not_organizer.email)).to be false
-            expect(event.organizers).to be_empty
-          end
-        end
+    context 'and the user is not an organizer' do
+      let(:organizer) { FactoryBot.create :organizer }
+      it 'adds the user' do
+        event.add_organizer(organizer)
+        expect(event.reload.organizers).to eq [organizer]
       end
     end
-    context 'with valid parameters' do
-      context 'and the user has the organizer role' do
-        let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
-        it 'adds the user as organizer' do
-          expect(event.add_organizer_by_email!(organizer.email)).to be true
-          expect(event.reload.organizers).to include organizer
-        end
+    context 'and the user is already an organizer' do
+      let(:organizer) { FactoryBot.create :organizer }
+      before do
+        event.organizers << organizer
+        event.save!
       end
-
-      context 'and the user is already an organizer' do
-        let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
-        before do
-          event.organizers << organizer
-          event.save!
-        end
-        it 'does not add the user twice' do
-          expect(event.add_organizer_by_email!(organizer.email)).to be true
-          expect(event.reload.organizers.count).to eq 1
-        end
+      it 'does not add the user twice' do
+        expect(event.add_organizer(organizer)).to be true
+        expect(event.reload.organizers.count).to eq 1
       end
-      context 'and the user has the admin role' do
-        let(:admin) { FactoryBot.create :user, roles: [:admin] }
-        it 'adds the user as organizer' do
-          expect(event.add_organizer_by_email!(admin.email)).to be true
-          expect(event.reload.organizers).to include admin
-        end
+    end
+    context 'and the user has the admin role' do
+      let(:admin) { FactoryBot.create :admin }
+      it 'adds the user as organizer' do
+        expect(event.add_organizer(admin)).to be true
+        expect(event.reload.organizers).to include admin
       end
     end
   end
 
-  describe '#remove_organizer_by_email!' do
+  describe '#remove_organizer' do
     let(:event) { FactoryBot.create :event }
-    let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
+    let(:organizer) { FactoryBot.create :organizer }
 
-    context 'with invalid parameters' do
-      it 'returns false' do
+    context 'and the user is already an organizer' do
+      it 'removes the user as organizer' do
         event.organizers << organizer
         event.save!
-        expect(event.remove_organizer_by_email!('foo')).to be false
-        expect(event.reload.organizers.count).to eq 1
+        event.remove_organizer(organizer)
+        expect(event.reload.organizers.count).to eq 0
       end
     end
-    context 'with valid parameters' do
-      context 'and the user is already an organizer' do
-        it 'removes the user as organizer' do
-          event.organizers << organizer
-          event.save!
-          event.remove_organizer_by_email!(organizer.email)
-          expect(event.reload.organizers.count).to eq 0
-        end
-      end
-      context 'and the user is not an organizer of the event' do
-        let(:organizer) { FactoryBot.create :user, roles: [:organizer] }
-        it 'adds the user as organizer' do
-          event.remove_organizer_by_email!(organizer.email)
-          expect(event.reload.organizers.count).to eq 0
-        end
+    context 'and the user is not an organizer of the event' do
+      let(:organizer) { FactoryBot.create :organizer }
+      it 'does nothing' do
+        event.remove_organizer(organizer)
+        expect(event.reload.organizers.count).to eq 0
       end
     end
   end

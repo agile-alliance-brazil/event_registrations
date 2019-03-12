@@ -1,0 +1,36 @@
+.tab-container-admin {
+    border-bottom: solid #DFE2E6 1px;
+    border-left: solid #DFE2E6 1px;
+    border-right: solid #DFE2E6 1px;
+
+    background-color: #FAFBFC;
+
+    min-height: 400px;
+    padding: 15px;
+}
+
+.tab-container-user {
+    border-top: solid #DFE2E6 1px;
+    border-bottom: solid #DFE2E6 1px;
+    border-left: solid #DFE2E6 1px;
+    border-right: solid #DFE2E6 1px;
+
+    background-color: #FAFBFC;
+
+    min-height: 400px;
+    padding: 15px;
+}
+
+/* active tab color */
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+    background-color: #FAFBFC;
+    border-top: solid #DFE2E6 1px;
+    border-left: solid #DFE2E6 1px;
+    border-right: solid #DFE2E6 1px;
+}
+
+/* hover tab color */
+.nav-tabs>li>a:hover {
+    border-color: #000000;
+    background-color: #d9d9da;
+}

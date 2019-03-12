@@ -14,7 +14,7 @@ class railsapp( $user, $app_name ) {
     rvm_gem { 'bundler243':
         name         => 'bundler',
         ruby_version => 'ruby-2.4.3@global',
-        ensure       => '1.16.0',
+        ensure       => '1.16.6',
         require      => Rvm_system_ruby['ruby-2.4.3'];
     }
   }
@@ -75,7 +75,19 @@ class railsapp( $user, $app_name ) {
   # required for asset pipeline
   package { 'java':
     ensure => "installed",
-    name => "openjdk-6-jre-headless",
+    name => "openjdk-11-jre-headless",
     require => Exec["update"],
+  }
+
+  # required for rvm
+  package { 'gnupg2':
+    ensure => "installed",
+    require => Exec["update"],
+  }
+
+  # required for paperclip
+  package { "imagemagick":
+    ensure => "installed",
+    require => Exec["update"]
   }
 }

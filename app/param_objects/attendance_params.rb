@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class AttendanceParams
-  attr_reader :new_attributes, :user, :event, :request_params
+  attr_reader :new_attributes, :registered_by, :event, :request_params
   def initialize(user, event, request_params)
-    @user = user
+    @registered_by = user
     @event = event
     @request_params = request_params
     @new_attributes = build_attributes
@@ -11,7 +11,7 @@ class AttendanceParams
 
   def attributes_hash
     @request_params[:attendance] && @request_params.require(:attendance).permit(
-      :payment_type, :event_id, :user_id, :registration_group_id, :registration_date, :first_name, :last_name, :email,
+      :payment_type, :event_id, :user_id, :user_for_attendance, :registration_group_id, :registration_date, :first_name, :last_name, :email,
       :organization, :organization_size, :job_role, :years_of_experience, :experience_in_agility,
       :school, :education_level, :phone, :country, :state, :city, :badge_name, :cpf, :gender
     )
@@ -27,9 +27,17 @@ class AttendanceParams
     attributes = attributes_hash || {}
     attributes[:status] = :pending
     attributes[:event_id] = @event.id
-    attributes[:user_id] = @user.id
+    attributes[:user_id] = user_for_attendance.id
+    attributes[:registered_by_id] = @registered_by.id
     attributes[:registration_date] ||= Time.zone.now
     attributes[:state] = attributes[:state].try(:upcase)
+    attributes.delete(:user_for_attendance)
     attributes
+  end
+
+  def user_for_attendance
+    return @registered_by if @registered_by.user? || attributes_hash.try(:[], :user_for_attendance).blank?
+
+    User.find(attributes_hash[:user_for_attendance])
   end
 end

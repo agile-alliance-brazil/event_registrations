@@ -1,0 +1,32 @@
+<h5><%= list_title %></h5>
+
+<div id="attendances_list">
+  <% if attendances_list.present? %>
+    <table class="table table-striped table-sm">
+      <thead>
+        <th><%= t('activerecord.attributes.attendance.full_name') %></th>
+        <th><%= Attendance.human_attribute_name :event %></th>
+        <th><%= Attendance.human_attribute_name :organization %></th>
+        <th><%= Attendance.human_attribute_name :email %></th>
+        <th><%= Attendance.human_attribute_name :registration_group %></th>
+        <th><%= Attendance.human_attribute_name :state %></th>
+        <th><%= Attendance.human_attribute_name :payment_type %></th>
+        <th><%= Attendance.human_attribute_name :registration_date %></th>
+        <th><%= Attendance.human_attribute_name :registration_value %></th>
+        <th><%= Attendance.human_attribute_name :status %></th>
+        <% if current_user.organizer? || current_user.admin? %>
+          <th></th>
+        <% end %>
+      </thead>
+      <tbody>
+        <% attendances_list.each do |attendance| %>
+          <tr id=<%= "attendance_#{attendance.id}" %>>
+            <%= render 'attendances/attendance', event: attendance.event, attendance: attendance %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <h5><i><%= t('general.no_data') %></i></h5>
+  <% end %>
+</div>

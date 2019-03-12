@@ -1,0 +1,2 @@
+bindClickToAttendanceSearch();
+bindClickToLoadUser();

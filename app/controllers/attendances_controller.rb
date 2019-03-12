@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class AttendancesController < ApplicationController
-  rescue_from Net::OpenTimeout, with: :timeout
-
+class AttendancesController < AuthenticatedController
   before_action :assign_event
-  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval]
+  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info user_info]
+  before_action :check_organizer, only: %i[waiting_list to_approval index search user_info]
+  before_action :check_user, only: %i[show edit update]
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -13,9 +13,9 @@ class AttendancesController < ApplicationController
   def create
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
-    return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('flash.attendance.create.success') }) if @attendance.valid?
+    return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendances.create.success') }) if @attendance.valid?
 
-    flash[:error] = @attendance.errors.full_messages.join(', ')
+    flash[:error] = @attendance.errors.full_messages.join(' | ')
     render :new
   end
 
@@ -26,7 +26,7 @@ class AttendancesController < ApplicationController
     @attendance = UpdateAttendance.run_for(update_params)
     return redirect_to event_attendances_path(event_id: @event, flash: { notice: I18n.t('attendances.update.success') }) if @attendance.valid?
 
-    flash[:error] = @attendance.errors.full_messages.join(', ')
+    flash[:error] = @attendance.errors.full_messages.join(' | ')
     render :edit
   end
 
@@ -49,38 +49,39 @@ class AttendancesController < ApplicationController
     @confirmed_total = @event.attendances.confirmed.count
     @cancelled_total = @event.attendances.cancelled.count
     @total = @event.attendances_count
-    @burnup_registrations_data = ReportService.instance.create_burnup_structure(@event)
   end
 
-  def show
-    respond_to do |format|
-      format.html
-      format.json
-    end
-  end
+  def show; end
 
   def destroy
     @attendance.cancelled!
-    redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') })
+    respond_to do |format|
+      format.js { return render 'attendances/attendance' }
+      format.html { redirect_to event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendance.destroy.success') } }
+    end
   end
 
   def change_status
     if params[:new_status] == 'accept'
       @attendance.accepted!
-      EmailNotifications.registration_group_accepted(@attendance).deliver_now
+      EmailNotifications.registration_group_accepted(@attendance).deliver
     elsif params[:new_status] == 'recover'
       @attendance.pending!
     elsif params[:new_status] == 'pay'
       @attendance.paid!
     elsif params[:new_status] == 'confirm'
       @attendance.confirmed!
-      EmailNotifications.registration_confirmed(@attendance).deliver_now
+      EmailNotifications.registration_confirmed(@attendance).deliver
     elsif params[:new_status] == 'mark_show'
       @attendance.showed_in!
     else
       @attendance.pending!
     end
-    redirect_to event_attendances_path(@event)
+
+    respond_to do |format|
+      format.js { render 'attendances/attendance' }
+      format.html { redirect_to event_attendance_path(@event, @attendance) }
+    end
   end
 
   def search
@@ -94,24 +95,31 @@ class AttendancesController < ApplicationController
     end
   end
 
-  private
-
-  def assign_event
-    @event = Event.find(params[:event_id])
+  def attendance_past_info
+    @attendance = Attendance.where(email: params[:email]).order(created_at: :desc).first.dup if params[:email].present?
+    @attendance = Attendance.new(email: params[:email]) if @attendance.blank?
+    render 'attendances/attendance_info'
   end
+
+  def user_info
+    @user = User.where(id: params[:user_id]).first_or_initialize
+    @attendance = Attendance.new
+    respond_to { |format| format.js { render 'attendances/user_info' } }
+  end
+
+  private
 
   def assign_attendance
     @attendance = Attendance.find(params[:id])
   end
 
-  def timeout
-    respond_to do |format|
-      format.html { render file: Rails.root.join('public', '408'), layout: false, status: :request_timeout }
-      format.js { render plain: '408 Request Timeout', status: :request_timeout }
-    end
-  end
-
   def statuses_params
     params.select { |_key, value| value == 'true' }.keys
+  end
+
+  def check_user
+    return if current_user.organizer_of?(@event)
+
+    not_found if current_user.id != @attendance.user.id
   end
 end

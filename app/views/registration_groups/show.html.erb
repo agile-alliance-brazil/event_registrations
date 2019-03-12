@@ -1,0 +1,38 @@
+<div class="breadcrumb">
+  <div class="row">
+    <div class="col-xl-12">
+      <%= link_to t('events.index.title'), events_path %>
+      >
+
+      <%= link_to @event.name, event_path(@event) %>
+      >
+
+      <%= t('registration_groups.show.title') %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12">
+    <h3><%= @group.name %></h3>
+  </div>
+  <div class="col-xl-12">
+    <b><%= "#{RegistrationGroup.human_attribute_name(:discount)}: " %></b> <%= number_to_percentage(@group.discount) %>
+  </div>
+  <div class="col-xl-12">
+    <b><%= "#{RegistrationGroup.human_attribute_name(:minimum_size)}: " %></b> <%= @group.minimum_size %>
+  </div>
+  <div class="col-xl-12">
+    <b><%= "#{RegistrationGroup.human_attribute_name(:capacity)}: " %></b> <%= @group.capacity %>
+  </div>
+  <div class="col-xl-12">
+    <b><%= "#{RegistrationGroup.human_attribute_name(:amount)}: " %></b> <%= number_to_currency(@group.amount) %>
+  </div>
+  <div class="col-xl-12">
+    <b><%= "#{RegistrationGroup.human_attribute_name(:total_price)}: " %></b> <%= number_to_currency(@group.total_price) %>
+  </div>
+</div>
+
+<hr />
+
+<%= render 'attendances/attendances_list', attendances_list: @attendance_list, list_title: t('attendances.index.title') %>

@@ -4,26 +4,23 @@
 #
 # Table name: registration_quotas
 #
-#  id                    :integer          not null, primary key
-#  quota                 :integer
-#  created_at            :datetime
-#  updated_at            :datetime
-#  event_id              :integer
-#  registration_price_id :integer
-#  order                 :integer
 #  closed                :boolean          default(FALSE)
-#  price_cents           :integer          default(0), not null
-#  price_currency        :string(255)      default("BRL"), not null
+#  created_at            :datetime
+#  event_id              :integer
+#  id                    :integer          not null, primary key
+#  order                 :integer
+#  price                 :decimal(10, )    not null
+#  quota                 :integer
+#  registration_price_id :integer
+#  updated_at            :datetime
 #
 
 class RegistrationQuota < ApplicationRecord
   belongs_to :event
 
-  monetize :price_cents
-
   has_many :attendances, dependent: :restrict_with_exception
 
-  validates :order, :quota, presence: true
+  validates :order, :quota, :price, presence: true
 
   def vacancy?
     places_sold = reserved + attendances.active.size

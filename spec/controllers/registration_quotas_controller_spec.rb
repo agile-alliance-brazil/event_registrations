@@ -5,37 +5,37 @@ describe RegistrationQuotasController, type: :controller do
     describe 'GET #new' do
       it 'redirects to login' do
         get :new, params: { event_id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'POST #create' do
       it 'redirects to login' do
         post :create, params: { event_id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'DELETE #destroy' do
       it 'redirects to login' do
         delete :destroy, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'GET #edit' do
       it 'redirects to login' do
         get :edit, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
     describe 'PUT #update' do
       it 'redirects to login' do
         put :update, params: { event_id: 'foo', id: 'foo' }
-        expect(response).to redirect_to login_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
 
   context 'logged as normal user' do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { FactoryBot.create(:user, role: :user) }
     before { sign_in user }
 
     describe 'GET #new' do
@@ -98,11 +98,10 @@ describe RegistrationQuotasController, type: :controller do
         it 'creates the quota and redirects to event' do
           post :create, params: { event_id: event, registration_quota: { order: 1, price: 100, quota: 45 } }
           quota_persisted = RegistrationQuota.last
-          registration_quota = assigns(:registration_quota)
           expect(quota_persisted.order).to eq 1
           expect(quota_persisted.price.to_d).to eq 100
           expect(quota_persisted.quota).to eq 45
-          expect(response).to redirect_to new_event_registration_quota_path(event, registration_quota)
+          expect(response).to redirect_to event_path(event)
         end
       end
 
@@ -113,7 +112,7 @@ describe RegistrationQuotasController, type: :controller do
             quota = assigns(:registration_quota)
 
             expect(quota).to be_a RegistrationQuota
-            expect(quota.errors.full_messages).to eq ['Order: não pode ficar em branco', 'Quota: não pode ficar em branco']
+            expect(quota.errors.full_messages).to eq ['Ordem: não pode ficar em branco', 'Cota: não pode ficar em branco', 'Preço: não pode ficar em branco']
             expect(response).to render_template :new
           end
         end
@@ -224,7 +223,7 @@ describe RegistrationQuotasController, type: :controller do
           it 'does not update and render form with errors' do
             put :update, params: { event_id: event, id: quota, registration_quota: invalid_parameters }
             updated_quota = assigns(:registration_quota)
-            expect(updated_quota.errors.full_messages).to eq ['Price: não é um número', 'Order: não pode ficar em branco', 'Quota: não pode ficar em branco']
+            expect(updated_quota.errors.full_messages).to eq ['Ordem: não pode ficar em branco', 'Cota: não pode ficar em branco', 'Preço: não pode ficar em branco']
             expect(response).to render_template :edit
           end
         end

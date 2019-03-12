@@ -4,21 +4,20 @@ source 'https://rubygems.org'
 ruby '2.4.3'
 gem 'rails'
 
-gem 'airbrake'
+gem 'airbrake-ruby'
 
 gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
-gem 'bootstrap-sass'
 gem 'brcpfcnpj'
-gem 'cancancan'
+gem 'carrierwave'
 gem 'coffee-rails'
 gem 'country_select'
+gem 'devise'
 gem 'erubis'
 gem 'faker'
 gem 'formtastic'
-gem 'haml'
 gem 'httparty'
 gem 'jquery-rails'
-gem 'money-rails'
+gem 'mini_magick'
 gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-facebook'
@@ -49,6 +48,7 @@ group :development, :test do
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
   gem 'rubocop', require: false
+  gem 'rubocop-rspec'
   gem 'selenium-webdriver'
   gem 'spring'
   gem 'spring-commands-rspec'
@@ -69,7 +69,6 @@ group :development do
 end
 
 group :test do
-  gem 'codeclimate-test-reporter'
   gem 'mocha', require: false
   gem 'shoulda-matchers', git: 'https://github.com/wuakitv/shoulda-matchers', ref: 'd576b2d'
   gem 'simplecov'

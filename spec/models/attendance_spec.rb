@@ -163,28 +163,6 @@ RSpec.describe Attendance, type: :model do
     end
   end
 
-  describe '#transferrable?' do
-    let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
-    context 'when is pending' do
-      it { expect(attendance).not_to be_transferrable }
-    end
-
-    context 'when is accepted' do
-      before { attendance.accepted! }
-      it { expect(attendance).not_to be_transferrable }
-    end
-
-    context 'when is paid' do
-      before { attendance.paid! }
-      it { expect(attendance).to be_transferrable }
-    end
-
-    context 'when is confirmed' do
-      before { attendance.confirmed! }
-      it { expect(attendance).to be_transferrable }
-    end
-  end
-
   describe '#confirmable?' do
     let(:attendance) { FactoryBot.build(:attendance, status: :pending) }
     context 'when is pending' do
@@ -378,36 +356,6 @@ RSpec.describe Attendance, type: :model do
   describe '#to_s' do
     let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar' }
     it { expect(attendance.to_s).to eq 'bar, foo' }
-  end
-
-  describe '#to_pay_the_difference?' do
-    context 'not paid attendance' do
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar' }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'paid attendance not grouped' do
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'confirmed attendance not grouped' do
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :confirmed }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'paid and grouped, but the group is complete' do
-      let(:group) { FactoryBot.create(:registration_group, minimum_size: 1) }
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid, registration_group: group }
-      it { expect(attendance.to_pay_the_difference?).to be_falsey }
-    end
-    context 'paid and grouped, but the group is incomplete' do
-      let(:group) { FactoryBot.create(:registration_group, minimum_size: 2) }
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :paid, registration_group: group }
-      it { expect(attendance.to_pay_the_difference?).to be_truthy }
-    end
-    context 'confirmed and grouped, but the group is incomplete' do
-      let(:group) { FactoryBot.create(:registration_group, minimum_size: 2) }
-      let(:attendance) { FactoryBot.create :attendance, first_name: 'foo', last_name: 'bar', status: :confirmed, registration_group: group }
-      it { expect(attendance.to_pay_the_difference?).to be_truthy }
-    end
   end
 
   describe '#price_band?' do

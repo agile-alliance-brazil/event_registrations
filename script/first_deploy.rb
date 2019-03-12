@@ -51,7 +51,7 @@ def missing_files
   origin_files.reject { |file| File.exist?(file) }
 end
 
-if missing_files.empty?
+unless missing_files.empty?
   puts 'Cannot deploy until the following files are available.'
   puts ''
   missing_files.each do |file|

@@ -3,51 +3,75 @@
 RSpec.describe UsersController, type: :controller do
   context 'unauthorized' do
     describe 'GET #show' do
-      it 'redirects to login path' do
-        get :show, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { get :show, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #edit' do
-      it 'redirects to login path' do
-        get :edit, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { get :edit, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PUT #update' do
-      it 'redirects to login path' do
-        put :update, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+      before { put :update, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #index' do
-      it 'redirects to login path' do
-        get :index
-        expect(response).to redirect_to login_path
-      end
+      before { get :index }
+      it { expect(response).to redirect_to new_user_session_path }
     end
-    describe 'PATCH #toggle_organizer' do
-      it 'redirects to login path' do
-        patch :toggle_organizer, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
-      end
+    describe 'PATCH #update_to_organizer' do
+      before { patch :update_to_organizer, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
-    describe 'PATCH #toggle_admin' do
-      it 'redirects to login path' do
-        patch :toggle_admin, params: { id: 'foo' }
-        expect(response).to redirect_to login_path
+    describe 'PATCH #update_to_admin' do
+      before { patch :update_to_admin, params: { id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
+
+    describe 'PATCH #update_default_password' do
+      let(:user) { FactoryBot.create :user }
+      context 'with valid paramenters' do
+        it 'updates the password and authenticate the user in the system' do
+          User.any_instance.expects(:save).twice
+          patch :update_default_password, params: { id: user, user: { password: 'foobar', password_confirmation: 'foobar' } }
+          expect(response).to redirect_to root_path
+        end
+      end
+      context 'with invalid paramenters' do
+        context 'when the password and the confirmation do not match' do
+          it 'updates the password and authenticate the user in the system' do
+            User.any_instance.expects(:save).never
+            patch :update_default_password, params: { id: user, user: { password: 'bla', password_confirmation: 'xpto' } }
+            expect(response).to render_template :edit_default_password
+            expect(flash[:error]).to eq assigns(:user).errors.full_messages.join(', ')
+          end
+        end
+        context 'when the password and the confirmation are blank' do
+          it 'updates the password and authenticate the user in the system' do
+            User.any_instance.expects(:save).never
+            patch :update_default_password, params: { id: user, user: { password: '', password_confirmation: '' } }
+            expect(response).to render_template :edit_default_password
+            expect(flash[:error]).to eq assigns(:user).errors.full_messages.join(', ')
+          end
+        end
+        context 'when the user does not exist' do
+          it 'updates the password and authenticate the user in the system' do
+            User.any_instance.expects(:save).never
+            patch :update_default_password, params: { id: 'foo', user: { password: 'foobar', password_confirmation: 'foobar' } }
+            expect(response).to have_http_status :not_found
+          end
+        end
       end
     end
   end
 
   context 'authorized' do
     context 'as a normal user' do
-      let!(:user) { FactoryBot.create :user }
+      let!(:user) { FactoryBot.create :user, role: :user }
       before { sign_in user }
 
       pending 'when the user is not the same as the signed user'
 
-      describe '#show' do
+      describe 'GET #show' do
         context 'with an existent user' do
           context 'with only one event available for date' do
             let!(:event) { FactoryBot.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
@@ -62,6 +86,7 @@ RSpec.describe UsersController, type: :controller do
             let!(:already_attending) { FactoryBot.create :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
             let!(:attendance) { FactoryBot.create(:attendance, user: user, event: already_attending) }
             let!(:cancelled_attendance) { FactoryBot.create(:attendance, user: user, event: other_event, status: :cancelled) }
+
             before { get :show, params: { id: user.id } }
             it { expect(assigns(:user)).to eq user }
             it { expect(assigns(:events_for_today)).to match_array [event, other_event] }
@@ -73,9 +98,15 @@ RSpec.describe UsersController, type: :controller do
           before { get :show, params: { id: 'foo' } }
           it { expect(response).to have_http_status :not_found }
         end
+
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :show, params: { id: other_user } }
+          it { expect(response).to have_http_status :not_found }
+        end
       end
 
-      describe '#edit' do
+      describe 'GET #edit' do
         context 'with an existent user' do
           before { get :edit, params: { id: user.id } }
           it { expect(assigns(:user)).to eq user }
@@ -86,48 +117,58 @@ RSpec.describe UsersController, type: :controller do
           before { get :edit, params: { id: 'foo' } }
           it { expect(response).to have_http_status :not_found }
         end
+
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :edit, params: { id: other_user } }
+          it { expect(response).to have_http_status :not_found }
+        end
       end
 
-      describe '#update' do
-        let(:valid_params) { { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } }
-
+      describe 'PUT #update' do
         context 'with an existent user' do
-          before { put :update, params: { id: user.id, user: valid_params } }
+          before { put :update, params: { id: user.id, user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } } }
           it { expect(User.last.first_name).to eq 'xpto' }
           it { expect(User.last.last_name).to eq 'bla' }
           it { expect(User.last.email).to eq 'xpto@bla.com' }
         end
 
         context 'with an inexistent user' do
-          before { put :update, params: { id: 'foo', user: valid_params } }
+          before { put :update, params: { id: 'foo', user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } } }
           it { expect(response).to have_http_status :not_found }
         end
 
         context 'with failed update attributes' do
           it 'does not update and re-render the form with the errors' do
             put :update, params: { id: user.id, user: { first_name: '' } }
-            expect(flash[:error]).to eq I18n.t('flash.user.edit')
             expect(response).to render_template :edit
             expect(User.last.first_name).to eq user.first_name
             expect(User.last.last_name).to eq user.last_name
             expect(User.last.email).to eq user.email
+            expect(flash[:error]).to eq 'Nome: não pode ficar em branco'
           end
+        end
+
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { put :update, params: { id: other_user } }
+          it { expect(response).to have_http_status :not_found }
         end
       end
 
       describe 'GET #index' do
-        it 'redirects to root path' do
-          get :index
-          expect(response).to redirect_to root_path
-        end
+        before { get :index }
+        it { expect(response).to have_http_status :not_found }
       end
-      describe 'PATCH #toggle_organizer' do
-        before { patch :toggle_organizer, params: { id: 'foo' } }
-        it { expect(response).to redirect_to root_path }
+
+      describe 'PATCH #update_to_organizer' do
+        before { patch :update_to_organizer, params: { id: user } }
+        it { expect(response).to have_http_status :not_found }
       end
-      describe 'PATCH #toggle_admin' do
-        before { patch :toggle_admin, params: { id: 'foo' } }
-        it { expect(response).to redirect_to root_path }
+
+      describe 'PATCH #update_to_admin' do
+        before { patch :update_to_admin, params: { id: user } }
+        it { expect(response).to have_http_status :not_found }
       end
     end
 
@@ -135,8 +176,8 @@ RSpec.describe UsersController, type: :controller do
       let(:admin) { FactoryBot.create :admin }
       before { sign_in admin }
 
-      describe 'GET #index' do
-        context 'html response' do
+      context 'valid parameters' do
+        describe 'GET #index' do
           it 'assign the variables and renders template' do
             UserRepository.instance.expects(:search_engine).returns([admin])
             get :index
@@ -144,55 +185,78 @@ RSpec.describe UsersController, type: :controller do
           end
         end
 
-        context 'ajax request' do
-          it 'renders the template' do
-            get :index, xhr: true
-            expect(response).to render_template 'users/index.js.haml'
+        describe 'GET #search_users' do
+          it 'assign the variables and renders template' do
+            UserRepository.instance.expects(:search_engine).returns([admin])
+            get :search_users, xhr: true
+            expect(response).to render_template 'users/search_users'
           end
         end
-      end
 
-      context 'valid parameters' do
-        describe 'PATCH #toggle_organizer' do
+        describe 'PATCH #update_to_organizer' do
           context 'when the user is organizer' do
             let(:organizer) { FactoryBot.create :organizer }
-            it 'removes the role' do
-              patch :toggle_organizer, params: { id: organizer }, xhr: true
-              expect(response).to render_template 'users/user'
-              expect(organizer.reload.roles).not_to include('organizer')
+            before { patch :update_to_organizer, params: { id: organizer } }
+            it 'updates the role and redirects' do
+              expect(organizer.reload.organizer?).to be false
+              expect(response).to redirect_to users_path
             end
           end
           context 'when the user is not an organizer' do
             let(:user) { FactoryBot.create :user }
-            before { patch :toggle_organizer, params: { id: user }, xhr: true }
-            it { expect(user.reload.roles).to include('organizer') }
+            before { patch :update_to_organizer, params: { id: user } }
+            it 'updates the role and redirects' do
+              expect(user.reload.organizer?).to be true
+              expect(response).to redirect_to users_path
+            end
           end
         end
-        describe 'PATCH #toggle_admin' do
+
+        describe 'PATCH #update_to_admin' do
           context 'when the user is admin' do
             let(:admin) { FactoryBot.create :admin }
-            it 'removes the role' do
-              patch :toggle_admin, params: { id: admin }, xhr: true
-              expect(response).to render_template 'users/user'
-              expect(admin.reload.roles).not_to include('admin')
-            end
+            before { patch :update_to_admin, params: { id: admin } }
+            it { expect(admin.reload.admin?).to be false }
           end
-          context 'when the user is not an organizer' do
+          context 'when the user is not an admin' do
             let(:user) { FactoryBot.create :user }
-            before { patch :toggle_admin, params: { id: user }, xhr: true }
-            it { expect(user.reload.roles).to include('admin') }
+            before { patch :update_to_admin, params: { id: user }, xhr: true }
+            it { expect(user.reload.admin?).to be true }
           end
         end
       end
 
       context 'invalid parameters' do
-        describe 'PATCH #toggle_organizer' do
-          before { patch :toggle_organizer, params: { id: 'foo' } }
+        describe 'PATCH #update_to_organizer' do
+          before { patch :update_to_organizer, params: { id: 'foo' } }
           it { expect(response).to have_http_status :not_found }
         end
-        describe 'PATCH #toggle_admin' do
-          before { patch :toggle_admin, params: { id: 'foo' } }
+        describe 'PATCH #update_to_admin' do
+          before { patch :update_to_admin, params: { id: 'foo' } }
           it { expect(response).to have_http_status :not_found }
+        end
+      end
+
+      describe 'GET #show' do
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :show, params: { id: other_user } }
+          it { expect(response).to render_template :show }
+        end
+      end
+
+      describe 'GET #edit' do
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { get :edit, params: { id: other_user } }
+          it { expect(response).to render_template :edit }
+        end
+      end
+      describe 'PUT #update' do
+        context 'with a different user' do
+          let!(:other_user) { FactoryBot.create :user, role: :user }
+          before { put :update, params: { id: other_user, user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } } }
+          it { expect(response).to redirect_to user_path(other_user) }
         end
       end
     end

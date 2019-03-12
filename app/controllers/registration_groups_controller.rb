@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-class RegistrationGroupsController < ApplicationController
+class RegistrationGroupsController < AuthenticatedController
   before_action :assign_event
-  before_action :assign_group, except: %i[index create]
+  before_action :assign_group, except: %i[new create]
 
-  def index
-    @groups = @event.registration_groups
+  def new
     @group = RegistrationGroup.new
   end
 
@@ -14,7 +13,7 @@ class RegistrationGroupsController < ApplicationController
   end
 
   def destroy
-    return redirect_to event_registration_groups_path(@event), notice: t('registration_group.destroy.success') if @group.destroy
+    return redirect_to event_registration_groups_path(@event) if @group.destroy
 
     redirect_to(event_registration_groups_path(@event), flash: { error: @group.errors.full_messages.join(',') })
   end
@@ -22,9 +21,9 @@ class RegistrationGroupsController < ApplicationController
   def create
     @group = RegistrationGroup.new(group_params.merge(event: @event, leader: current_user))
     if @group.save
-      redirect_to event_registration_groups_path(@event)
+      redirect_to event_path(@event)
     else
-      render :index
+      render :new
     end
   end
 
@@ -40,15 +39,7 @@ class RegistrationGroupsController < ApplicationController
     params.require(:registration_group).permit(:name, :discount, :minimum_size, :amount, :automatic_approval, :paid_in_advance, :capacity)
   end
 
-  def assign_event
-    @event = Event.find(params[:event_id])
-  end
-
   def assign_group
     @group = @event.registration_groups.find(params[:id])
-  end
-
-  def resource_class
-    RegistrationGroup
   end
 end

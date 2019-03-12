@@ -1,0 +1,14 @@
+<html>
+  <body>
+    <%= render 'email_header' %>
+
+    <div style="padding-left: 100px;padding-right: 100px;padding-top: 30px;">
+      <%= render 'greetings', event: @event, attendance: @attendance %>
+
+      <p><%= I18n.t('attendances.confirmed_message', event_name: @event.name) %></p>
+      <p><%= I18n.t('attendances.confirmed_message_event_date', event_start_date: l(@event.start_date, format: :short)) %></p>
+
+      <%= render 'email_signature', event: @event, attendance: @attendance %>
+    </div>
+  </body>
+</html>

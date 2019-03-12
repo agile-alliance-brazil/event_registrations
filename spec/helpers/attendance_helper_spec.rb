@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe AttendanceHelper, type: :helper do
+RSpec.describe AttendanceHelper, type: :helper do
   describe '#attendance_price' do
     it 'returns attendance price' do
       attendance = FactoryBot.build(:attendance, registration_value: 250)
@@ -31,13 +31,17 @@ describe AttendanceHelper, type: :helper do
   describe '#payment_types_options' do
     it 'returns the payment type values' do
       options = Attendance.payment_types.map do |payment_type, _|
-        [I18n.t("activerecord.attributes.attendance.payment_types.#{payment_type}"), payment_type]
+        [I18n.t("activerecord.attributes.attendance.enums.payment_types.#{payment_type}"), payment_type]
       end
       expect(payment_types_options).to eq(options)
     end
   end
 
   describe '#job_role_options' do
-    it { expect(job_role_options).to eq Attendance.job_roles.map { |job_role| [t("attendances.new.form.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] } }
+    it { expect(job_role_options).to eq Attendance.job_roles.map { |job_role| [t("activerecord.attributes.attendance.enums.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] } }
+  end
+
+  describe '#gender_options' do
+    it { expect(gender_options).to eq('Feminino' => 'F', 'Masculino' => 'M', 'Outro' => 'O') }
   end
 end

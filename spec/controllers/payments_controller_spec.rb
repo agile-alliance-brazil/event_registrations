@@ -25,8 +25,8 @@ RSpec.describe PaymentsController, type: :controller do
       it 'redirects to event with the proper message if any errors' do
         PagSeguroService.expects(:checkout).with(attendance, anything).once.returns(errors: 'xpto')
         post :checkout, params: { event_id: event.id, id: attendance.id }
-        expect(flash[:error]).to eq I18n.t('payments_controller.checkout.error', reason: 'xpto')
-        expect(response).to redirect_to event_registration_groups_path(event)
+        expect(flash[:error]).to eq I18n.t('payments_controller.checkout.error', reason: 'xpto<ul></ul>')
+        expect(response).to redirect_to event_attendance_path(event, attendance)
       end
     end
 

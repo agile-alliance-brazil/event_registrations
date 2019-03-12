@@ -1,0 +1,43 @@
+.help-block {
+    margin-bottom: 0;
+
+    font-size: 0.7rem;
+    text-align: left;
+    color: red;
+}
+
+.form-title {
+    padding-top: 10px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.form-container {
+    border: solid #DFE2E6 1px;
+    background-color: #FAFBFC;
+    padding: 15px;
+}
+
+.inline-hints {
+    font-size: 0.7rem;
+}
+
+.agreed-message {
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.bottom-spaced-component {
+    margin-bottom: 15px;
+}
+
+.aligned-center {
+    text-align: center;
+}
+
+.main-action {
+    font-size: large;
+}
+
+
+label.required:after{content: " *"}

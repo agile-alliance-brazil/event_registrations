@@ -1,0 +1,21 @@
+.event-actions {
+    margin-top: 3px;
+    font-size: smaller;
+}
+
+.event-title {
+    margin-bottom: 20px;
+}
+
+.event-card {
+    max-width: 337px;
+    margin-bottom: 15px;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;
+}
+
+a { color: inherit; }

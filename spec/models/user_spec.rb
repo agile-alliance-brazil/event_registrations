@@ -2,11 +2,26 @@
 
 RSpec.describe User, type: :model do
   context 'associations' do
-    it { is_expected.to have_many :authentications }
     it { is_expected.to have_many :attendances }
     it { is_expected.to have_many :events }
     it { is_expected.to have_and_belong_to_many(:organized_events).class_name('Event') }
     it { is_expected.to have_many(:payment_notifications).through(:attendances).dependent(:destroy) }
+    it { is_expected.to have_many(:led_groups).class_name('RegistrationGroup').dependent(:nullify) }
+    it { is_expected.to have_many(:registered_attendances).class_name('Attendance').dependent(:restrict_with_exception) }
+  end
+
+  context 'validations' do
+    it { is_expected.to validate_presence_of :first_name }
+    it { is_expected.to validate_presence_of :last_name }
+
+    it { is_expected.not_to allow_value('').for(:email) }
+    it { is_expected.to allow_value('a@a.com').for(:email) }
+    it { is_expected.to allow_value('user@domain.com.br').for(:email) }
+    it { is_expected.to allow_value('test_user.name@a.co.uk').for(:email) }
+    it { is_expected.not_to allow_value('a').for(:email) }
+    it { is_expected.not_to allow_value('a@').for(:email) }
+    it { is_expected.not_to allow_value('a@a').for(:email) }
+    it { is_expected.not_to allow_value('@12.com').for(:email) }
 
     context 'events uniqueness' do
       it 'only show event once if user has multiple attendances' do
@@ -17,24 +32,6 @@ RSpec.describe User, type: :model do
         expect(user.events.size).to eq(1)
       end
     end
-  end
-
-  it_should_trim_attributes User, :first_name, :last_name, :email, :organization, :phone,
-                            :country, :state, :city, :badge_name, :twitter_user,
-                            :address, :neighbourhood, :zipcode
-
-  context 'validations' do
-    it { is_expected.to validate_presence_of :first_name }
-    it { is_expected.to validate_presence_of :last_name }
-
-    it { is_expected.to allow_value('').for(:email) }
-    it { is_expected.to allow_value('a@a.com').for(:email) }
-    it { is_expected.to allow_value('user@domain.com.br').for(:email) }
-    it { is_expected.to allow_value('test_user.name@a.co.uk').for(:email) }
-    it { is_expected.not_to allow_value('a').for(:email) }
-    it { is_expected.not_to allow_value('a@').for(:email) }
-    it { is_expected.not_to allow_value('a@a').for(:email) }
-    it { is_expected.not_to allow_value('@12.com').for(:email) }
 
     context 'uniqueness' do
       let!(:user) { FactoryBot.create :user }
@@ -54,75 +51,6 @@ RSpec.describe User, type: :model do
         user = FactoryBot.build(:user, twitter_user: 'agilebrazil')
         expect(user.twitter_user).to eq('agilebrazil')
       end
-    end
-  end
-
-  context 'new from auth hash' do
-    it 'initializes user with names and email' do
-      hash = { info: { name: 'John Doe', email: 'john@doe.com' } }
-      user = User.new_from_auth_hash(hash)
-      expect(user.first_name).to eq('John')
-      expect(user.last_name).to eq('Doe')
-      expect(user.email).to eq('john@doe.com')
-    end
-
-    it 'works without name and email' do
-      hash = { info: { email: 'john@doe.com' } }
-      user = User.new_from_auth_hash(hash)
-      expect(user.first_name).to be_nil
-      expect(user.last_name).to be_nil
-      expect(user.email).to eq('john@doe.com')
-    end
-
-    it 'prefers first and last name rather than name' do
-      hash = { info: { email: 'john@doe.com', name: 'John of Doe', first_name: 'John', last_name: 'of Doe' } }
-      user = User.new_from_auth_hash(hash)
-      expect(user.first_name).to eq('John')
-      expect(user.last_name).to eq('of Doe')
-      expect(user.email).to eq('john@doe.com')
-    end
-
-    it 'assigns twitter_user if using twitter as provider' do
-      hash = { info: { name: 'John Doe', email: 'john@doe.com', nickname: 'johndoe' }, provider: 'twitter' }
-      user = User.new_from_auth_hash(hash)
-      expect(user.twitter_user).to eq('johndoe')
-    end
-
-    it 'works when more information is passed' do
-      hash = { info: {
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'john@doe.com',
-        twitter_user: '@jdoe',
-        organization: 'Company',
-        phone: '12342',
-        country: 'BR',
-        state: 'SP',
-        city: 'São Paulo'
-      } }
-      user = User.new_from_auth_hash(hash)
-      expect(user.first_name).to eq('John')
-      expect(user.last_name).to eq('Doe')
-      expect(user.email).to eq('john@doe.com')
-      expect(user.twitter_user).to eq('jdoe')
-      expect(user.organization).to eq('Company')
-      expect(user.phone).to eq('12342')
-      expect(user.country).to eq('BR')
-      expect(user.state).to eq('SP')
-      expect(user.city).to eq('São Paulo')
-    end
-
-    context 'no email informed by auth provider' do
-      let(:hash) { { info: { name: 'John Doe', email: nil } } }
-      let(:user) { FactoryBot.create(:user, email: nil) }
-      subject(:user_from_hash) { User.new_from_auth_hash(hash) }
-      it { expect(user_from_hash).not_to eq user }
-    end
-    context 'email informed by auth provider' do
-      let(:hash) { { info: { name: 'John Doe', email: 'bla@xpto.com' } } }
-      let!(:user) { FactoryBot.create(:user, email: 'bla@xpto.com') }
-      subject(:user_from_hash) { User.new_from_auth_hash(hash) }
-      it { expect(user_from_hash).to eq user }
     end
   end
 
@@ -167,17 +95,112 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#organized_user_present?' do
+  describe '#organizer_of?' do
     let(:event) { FactoryBot.create :event }
     let!(:organizer) { FactoryBot.create :organizer, organized_events: [event] }
-    let(:user) { FactoryBot.create :user }
-    let!(:attendance) { FactoryBot.create :attendance, user: user, event: event }
+    let(:user) { FactoryBot.create :user, organized_events: [event] }
+    let(:admin) { FactoryBot.create :admin }
 
     let(:other_event) { FactoryBot.create :event }
-    let(:other_user) { FactoryBot.create :user }
-    let!(:other_attendance) { FactoryBot.create :attendance, user: other_user, event: other_event }
 
-    it { expect(organizer.organized_user_present?(user)).to be_truthy }
-    it { expect(organizer.organized_user_present?(other_user)).to be_falsey }
+    it { expect(organizer.organizer_of?(event)).to be true }
+    it { expect(user.organizer_of?(event)).to be false }
+    it { expect(organizer.organizer_of?(other_event)).to be false }
+    it { expect(admin.organizer_of?(event)).to be true }
+    it { expect(admin.organizer_of?(other_event)).to be true }
+  end
+
+  describe '.from_omniauth' do
+    context 'with a valid OmniAuth::AuthHas' do
+      context 'when the user does not exist' do
+        context 'and the name has two parts' do
+          let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo bar', email: 'foo@bar.com.br' }) }
+          subject(:user) { User.from_omniauth(user_hash) }
+
+          it 'creates the user using the attributes' do
+            new_user = user.reload
+            expect(new_user).to be_persisted
+            expect(new_user.first_name).to eq 'foo'
+            expect(new_user.last_name).to eq 'bar'
+            expect(new_user.email).to eq 'foo@bar.com.br'
+          end
+        end
+
+        context 'and the name has four parts' do
+          let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo bar xpto bla', email: 'foo@bar.com.br' }) }
+          subject(:user) { User.from_omniauth(user_hash) }
+
+          it 'creates the user using the attributes' do
+            expect(user).to be_persisted
+            expect(user.first_name).to eq 'foo'
+            expect(user.last_name).to eq 'bar xpto bla'
+            expect(user.email).to eq 'foo@bar.com.br'
+          end
+        end
+      end
+      context 'and the name has one part' do
+        let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo', email: 'foo@bar.com.br' }) }
+        subject(:user) { User.from_omniauth(user_hash) }
+
+        it 'creates the user using the attributes' do
+          expect(user).to be_persisted
+          expect(user.first_name).to eq 'foo'
+          expect(user.last_name).to eq 'foo'
+          expect(user.email).to eq 'foo@bar.com.br'
+        end
+      end
+      context 'having no name' do
+        let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: '', email: 'foo@bar.com.br' }) }
+        subject(:user) { User.from_omniauth(user_hash) }
+
+        it 'creates the user using the attributes' do
+          expect(user).not_to be_persisted
+          expect(user.first_name).to eq nil
+          expect(user.last_name).to eq nil
+          expect(user.email).to eq 'foo@bar.com.br'
+        end
+      end
+      context 'having no email' do
+        let!(:user_hash) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123545', info: { name: 'foo bar', email: '' }) }
+        subject(:user) { User.from_omniauth(user_hash) }
+
+        it 'creates the user using the attributes' do
+          expect(user).not_to be_persisted
+          expect(user.first_name).to eq 'foo'
+          expect(user.last_name).to eq 'bar'
+          expect(user.email).to eq ''
+        end
+      end
+    end
+  end
+
+  describe '#toggle_admin' do
+    context 'when it is an admin' do
+      let(:user) { FactoryBot.create :user, role: :admin }
+      before { user.toggle_admin }
+      it { expect(User.last.admin?).to be false }
+      it { expect(User.last.user?).to be true }
+    end
+    context 'when it is not an admin' do
+      let(:user) { FactoryBot.create :user, role: :user }
+      before { user.toggle_admin }
+      it { expect(User.last.admin?).to be true }
+      it { expect(User.last.user?).to be false }
+    end
+  end
+
+  describe '#toggle_organizer' do
+    context 'when it is an organizer' do
+      let(:user) { FactoryBot.create :user, role: :organizer }
+      before { user.toggle_organizer }
+      it { expect(User.last.organizer?).to be false }
+      it { expect(User.last.user?).to be true }
+    end
+    context 'when it is not an organizer' do
+      let(:user) { FactoryBot.create :user, role: :user }
+      before { user.toggle_organizer }
+      it { expect(User.last.organizer?).to be true }
+      it { expect(User.last.user?).to be false }
+    end
   end
 end

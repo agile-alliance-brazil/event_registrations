@@ -1,0 +1,46 @@
+<footer class="page-footer">
+  <div class="container-fluid text-center text-md-left">
+    <div class="row">
+      <hr class="clearfix w-100 d-md-none pb-3">
+      <div class="col-md-3 mb-md-0 mb-3">
+        <div class="text-uppercase"><%= t('footer.useful_links') %></div>
+        <ul class="list-unstyled">
+          <li>
+            <% if @event.present? %>
+              <a href="mailto: <%= @event.main_email_contact %>"><%= t('footer.help') %></a>
+            <% else %>
+              <a href="mailto: inscricoes@agilebrazil.com"><%= t('footer.help') %></a>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-copyright text-center py-3"><%= "2010-#{Time.zone.today.year} Copyleft:" %>
+    <a href="http://agilebrazil.com"> Agile Brazil</a>
+  </div>
+</footer>
+
+<%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js' %>
+<%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js' %>
+<%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' %>
+<%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.js' %>
+
+<%= javascript_include_tag 'https://code.highcharts.com/highcharts.js' %>
+<%= javascript_include_tag 'https://code.highcharts.com/highcharts-more.js' %>
+<%= javascript_include_tag 'https://code.highcharts.com/themes/dark-unica.js' %>
+<%= javascript_include_tag 'https://code.highcharts.com/modules/exporting.js' %>
+<%= javascript_include_tag 'https://code.highcharts.com/modules/solid-gauge.js' %>
+
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/solid.js' %>
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/regular.js' %>
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/brands.js' %>
+<%= javascript_include_tag 'https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js' %>
+
+<%= javascript_include_tag 'https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js' %>
+
+<%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js' %>
+
+<%= javascript_include_tag 'application' %>
+<%= yield :javascript %>

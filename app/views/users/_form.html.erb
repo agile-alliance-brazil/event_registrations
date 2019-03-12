@@ -1,0 +1,85 @@
+<%= form_for @user do |f| %>
+  <div class="row">
+    <div class="col-xl-2 form-group">
+      <% if @user.user_image.present? %>
+        <%= image_tag @user.user_image.url, class: 'card-img-top' %>
+      <% else %>
+        <%= image_tag 'img-empty.png', class: 'card-img-top' %>
+      <% end %>
+    </div>
+    <div class="col-xl-10 form-group">
+      <%= f.file_field :user_image, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 form-group">
+      <%= f.label :first_name, class: 'control-label' %>
+      <%= f.text_field :first_name, class: 'form-control', autofocus: true %>
+      <span class="help-block"><%= @user.errors[:first_name].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :last_name, class: 'control-label' %>
+      <%= f.text_field :last_name, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:last_name].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 form-group">
+      <%= f.label :email, class: 'control-label' %>
+      <%= f.text_field :email, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:email].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :phone, class: 'control-label' %>
+      <%= f.text_field :phone, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:phone].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 col-sm-6 form-group">
+      <%= f.label :country, class: 'control-label' %>
+      <%= f.country_select :country, priority_countries = ["Brazil"], options = {}, html_options = { class: 'form-control' } %>
+      <span class="help-block"><%= @user.errors[:country].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :state, class: 'control-label' %>
+      <%= f.text_field :state, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:state].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 form-group">
+      <%= f.label :city, class: 'control-label' %>
+      <%= f.text_field :city, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:city].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :organization, class: 'control-label' %>
+      <%= f.text_field :organization, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:organization].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 form-group">
+      <%= f.label :twitter_user, class: 'control-label' %>
+      <%= f.text_field :twitter_user, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:twitter_user].join(', ') %></span>
+    </div>
+    <div class="col-xl-6 form-group">
+      <%= f.label :default_locale, class: 'control-label' %>
+      <%= f.select :default_locale, [%w(Português pt), %w(English en)], {}, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:default_locale].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-12 form-group">
+      <%= f.submit class: 'btn btn-success text-label button-spacing' %>
+    </div>
+  </div>
+<% end %>

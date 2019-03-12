@@ -5,7 +5,19 @@ pt:
       save: "Salvar"
     actions:
       title: "Ações"
-
+    confirm: "Tem certeza?"
+    edit: "Editar"
+    no_data: "Não há registros"
+    until: "até"
+    total: "Total"
+    select: "Selecione"
+    download_csv: "Baixar o CSV"
+    details:
+      title: "Detalhes"
+    form:
+      reset: "Limpar Formulário"
+    include_blank: "Selecione..."
+    cancel: "Cancelar"
   registration:
     quantity: "Quantidade"
     details:
@@ -18,47 +30,112 @@ pt:
     summary:
       registration_total: "Total"
     index:
-      title: "Participantes"
-      search: "Buscar"
+      title: "Participações"
+      search: "Buscar por nome, empresa, email ou ID"
       reports:
         active_by_state: "Ativos por estado"
         active_by_city: "Ativos por cidade"
         active_last_biweek: "Ativos na última quizena"
         grouped_by_payment_type: "Agrupado por tipo de pagamento"
+      waiting_approval: "Para Aprovar"
+      queue: "Fila de Espera"
+      other_attendances: "Pessoas Inscritas por Você"
     new:
       form:
-        job_role:
-          not_informed: "Não Informado"
-          analyst: "Analista"
-          student: "Estudante"
-          manager: "Gerente"
-          clevel: "C-Level"
-          vp: "Vice presidente"
-          president: "Presidente"
-          other: "Outro"
-          coach: "Coach"
-          developer: "Desenvolvedor(a)"
         professional_informations: "Informações Profissionais"
         attendance_address: "Informações para contato"
         attendance_personal: "Informações Pessoais"
         educacional_information: "Informações Acadêmicas"
+        token_field: "Cupom de Desconto"
+      title:
+        text: "Nova Inscrição para %{event_name}"
+      cpf:
+        help: "Deixe em branco caso não seja brasileiro"
+      agreement:
+        attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
+        workshop: "Ao me inscrever para workshops, declaro estar ciente de que o número mínimo de participantes para cada workshop é de 12 pessoas e que, se o número não for atingido, terei a chance de trocar de workshop ou receber meu dinheiro de volta."
+      user_for_attendance:
+        help: Para garantir que o usuário tenha acesso à sua inscrição, se você está cadastrando a inscrição para terceiros, essa pessoa deve ter entrado no sistema
+      load:
+        not_found: "Informações não encontradas"
+        title: "Carregar Info"
+      load_user:
+        title: "Carregar Informações"
+      gender:
+        help: "deixe em branco caso não queira responder"
+      load_info_by_email_hint: "Carregue informações da última inscrição em que usou o email ao lado."
     actions:
       confirm: "Confirmar inscrição"
       cancel: "Cancelar inscrição"
       transfer: "Transferir inscrição"
       recover: "Recuperar inscrição"
+      dequeue: "mover para o evento"
+      pay: "pagar"
+      accept: "aceitar"
     update:
       success: "Participante atualizado."
+    create:
+      success: "Inscrição salva"
+      already_existent: "Email já cadastrado neste evento"
+    charts:
+      by_state:
+        state: "Estado"
+      payment_type:
+        value_grouped: "Valor Agrupado"
+        quantity: "Qtd"
+    show:
+      title: "Participante"
+      status:
+        accepted:
+          title: "Instruções para completar o processo de inscrição"
+        cancelled:
+          title: "Esta inscrição foi cancelada. Caso queira inscrever-se novamente, por favor preencha o formulário de inscrição."
+        confirmed:
+          title: "Sua inscrição está confirmada!"
+        paid:
+          title: "Recebemos o pagamento da sua inscrição. Caso não tenha recebido o email de confirmação, cheque sua caixa de spam e entre em contato com a organização no email abaixo."
+        showed_in:
+          title: "Você está credenciado."
+    edit:
+      title: "Editar Participante"
+    status:
+      waiting:
+        title: "Você entrou na lista de espera. Nós informaremos assim que dispormos de mais vagas."
+    grouped_attendance:
+      title: "Você se registrou através do grupo %{group_name}."
+      paid_group_title: "Sua entrada precisará ser aprovada por um administrador. Você receberá mais informações em breve."
+      free_group_title: "Você realizou a inscrição através de um grupo gratuito. Aguarde até o administrador confirmar a sua inscrição."
   events:
-    form:
-      event_basics: "Informações Básicas"
-      event_core: "Informações principais"
     index:
       title: "Eventos"
+      archived: "Eventos Arquivados"
+    new:
+      title: "Novo Evento"
+    show:
+      organizers:
+        list: "Lista de Organizadores"
+        remove: "Remover Organizador"
+        select: "Selecione um organizador..."
+      attendance_limit: "Limite de Inscritos: %{value}"
+      average_queue_time: "Tempo médio na fila: %{value}"
+      full_price: "Preço cheio: %{value}"
+      current_price: "Valor atual"
+      statement_agreement_price: "Valor para Empenho"
+      student_price: "Valor para Estudante"
+    edit:
+      title: "Editar Evento"
+    delete:
+      title: "Excluir Evento"
   registration_groups:
     index:
       token_clipboard_tooltip: "Copiar o token para a área de transferência"
       title: "Grupos"
+    edit:
+      title: "Editar Grupo"
+    show:
+      title: "Grupo de Inscrição"
+    new:
+      title: "Novo Grupo de Inscrições"
   attendance:
     reports:
       attendance_organization_size: "Participantes x Tamanho da Empresa"
@@ -86,8 +163,70 @@ pt:
     show:
       edit:
         button: "Editar Perfil"
+      title: "Detalhes da Conta"
+      full_name: "Nome Completo"
+      city_state: "Cidade/Estado"
+    completed_login:
+      success: "Seu usuário foi ativado."
+    edit:
+      title: "Atualização do Perfil"
+    index:
+      title: "Usuários"
+      search_email: "Procurar por nome ou email"
+      search_roles: "Selecione o papel..."
+    account:
+      self: "Minha Conta"
+    organizer:
+      new:
+        title: "Novo(a) Organizador(a)"
+    update:
+      success: "Usuário atualizado"
   event_attendances:
     form:
       state: "Estado - ex: SP"
   actions:
     receive_credential: "Credenciar"
+  application:
+    title: "Sistema de Inscrições"
+  registration_periods:
+    edit:
+      title: "Editar período"
+    new:
+      title: "Novo Período de Inscrições"
+  header:
+    aa:
+      members: "Membros"
+  gender:
+    male: "Masculino"
+    female: "Feminino"
+    other: "Outro"
+  registration_quotas:
+    index:
+      attendances: "Participantes"
+      title: "Lista de Cotas de Inscrição"
+    new:
+      title: "Nova Cota"
+    edit:
+      title: "Editar Cota"
+  footer:
+    help: "Contato"
+    useful_links: "Links Úteis"
+  reistration_quotas:
+    index: "Lista de Cotas"
+  attendandes:
+    new:
+      title: "Nova Inscrição"
+  registration_groupss:
+    new:
+      title: "Novo Grupo"
+  reistration_groups:
+    index:
+      title: "Lista de Grupos"
+  activerecord:
+    attributes:
+      user:
+        admin: "Admin?"
+        organizer: "Organizador?"
+  reistration_periods:
+    index:
+      title: "Lista de Períodos de Inscrição"

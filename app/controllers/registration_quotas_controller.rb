@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RegistrationQuotasController < ApplicationController
+class RegistrationQuotasController < AuthenticatedController
   before_action :assign_event
   before_action :assign_quota, only: %i[destroy edit update]
 
@@ -12,7 +12,7 @@ class RegistrationQuotasController < ApplicationController
     @registration_quota = RegistrationQuota.new(quota_params.merge(event: @event))
     if @registration_quota.save
       @registration_quota = RegistrationQuota.new
-      redirect_to new_event_registration_quota_path(@event, @registration_quota)
+      redirect_to event_path(@event)
     else
       render :new
     end
@@ -35,10 +35,6 @@ class RegistrationQuotasController < ApplicationController
 
   def quota_params
     params.require(:registration_quota).permit(:order, :price, :quota)
-  end
-
-  def assign_event
-    @event = Event.find(params[:event_id])
   end
 
   def assign_quota

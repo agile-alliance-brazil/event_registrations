@@ -1,0 +1,10 @@
+%div{id: "user_#{user.id}", class: 'row'}
+  %div{class: 'col-lg-2 line'}
+    = link_to "#{user.last_name}, #{user.first_name}", user_path(user), method: :get
+  %div{class: 'col-lg-4 line'}
+    = user.email
+  %div{class: 'col-lg-3 centered line'}
+    - unless user.admin?
+      =
+    - unless
+      = link_to '+ organizer', update_to_organizer_user_path(user), class: 'btn-sm btn-primary', remote: true, method: :patch

@@ -1,20 +1,24 @@
 # frozen_string_literal: true
 
-class EventsController < ApplicationController
+class EventsController < AuthenticatedController
   before_action :assign_event, only: %i[show destroy add_organizer remove_organizer edit update]
-  skip_before_action :authenticate_user!, :authorize_action, only: %i[index show]
+
+  before_action :check_organizer, only: %i[edit update destroy add_organizer]
+  before_action :check_admin, only: %i[new create list_archived]
+
+  skip_before_action :authenticate_user!, only: %i[index show]
 
   def index
     @events = Event.includes(:registration_periods).all.select { |event| event.end_date.present? && event.end_date >= Time.zone.now }
   end
 
   def show
+    assign_organizers
     @last_attendance_for_user = AttendanceRepository.instance.attendances_for(@event, current_user).last if current_user.present?
   end
 
   def list_archived
     @events = Event.includes(:registration_periods).ended.order(start_date: :desc)
-    render :index
   end
 
   def new
@@ -38,23 +42,19 @@ class EventsController < ApplicationController
   end
 
   def add_organizer
-    if @event.add_organizer_by_email!(params['email'])
-      respond_to do |format|
-        format.js {}
-      end
-    else
-      not_found
-    end
+    organizer = User.find(params[:organizer])
+    return not_found unless organizer.organizer? || organizer.admin?
+
+    @event.add_organizer(organizer)
+    assign_organizers
+    respond_to { |format| format.js {} }
   end
 
   def remove_organizer
-    if @event.remove_organizer_by_email!(params['email'])
-      respond_to do |format|
-        format.js { render 'events/add_organizer' }
-      end
-    else
-      not_found
-    end
+    organizer = User.find(params[:organizer])
+    @event.remove_organizer(organizer)
+    assign_organizers
+    respond_to { |format| format.js { render 'events/add_organizer' } }
   end
 
   def edit; end
@@ -69,17 +69,15 @@ class EventsController < ApplicationController
 
   private
 
+  def assign_organizers
+    @organizers_to_select = User.organizer.order(:first_name, :last_name) - @event.organizers
+  end
+
   def event_params
-    params.require(:event).permit(:name, :attendance_limit, :days_to_charge, :start_date, :end_date, :main_email_contact, :full_price, :price_table_link, :link, :logo)
+    params.require(:event).permit(:event_image, :name, :attendance_limit, :days_to_charge, :start_date, :end_date, :city, :state, :country, :main_email_contact, :full_price, :price_table_link, :link, :logo)
   end
 
   def assign_event
     @event = Event.find(params[:id])
-  end
-
-  # It overrides the super class method due to the difference on how it gets the @event
-  def current_ability
-    event = Event.find_by(id: params[:id])
-    @current_ability ||= Ability.new(current_user, event)
   end
 end

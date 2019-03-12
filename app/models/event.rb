@@ -4,24 +4,30 @@
 #
 # Table name: events
 #
-#  id                 :integer          not null, primary key
-#  name               :string(255)
-#  location_and_date  :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
-#  price_table_link   :string(255)
 #  allow_voting       :boolean
 #  attendance_limit   :integer
-#  full_price         :decimal(10, )
-#  start_date         :datetime
-#  end_date           :datetime
-#  link               :string(255)
-#  logo               :string(255)
+#  city               :string(255)      not null
+#  country            :string(255)      not null
+#  created_at         :datetime
 #  days_to_charge     :integer          default(7)
+#  end_date           :datetime
+#  event_image        :string(255)
+#  full_price         :decimal(10, )
+#  id                 :integer          not null, primary key
+#  link               :string(255)
+#  location_and_date  :string(255)
+#  logo               :string(255)
 #  main_email_contact :string(255)      default(""), not null
+#  name               :string(255)
+#  price_table_link   :string(255)
+#  start_date         :datetime
+#  state              :string(255)      not null
+#  updated_at         :datetime
 #
 
 class Event < ApplicationRecord
+  mount_uploader :event_image, RegistrationsImageUploader
+
   has_many :attendances, dependent: :restrict_with_exception
   has_many :registration_periods, dependent: :destroy
   has_many :registration_quotas, dependent: :destroy
@@ -30,7 +36,7 @@ class Event < ApplicationRecord
 
   has_and_belongs_to_many :organizers, class_name: 'User'
 
-  validates :start_date, :end_date, :full_price, :name, :main_email_contact, :attendance_limit, presence: true
+  validates :start_date, :end_date, :full_price, :name, :main_email_contact, :attendance_limit, :country, :state, :city, presence: true
   validate :period_valid?
 
   scope :active_for, ->(date) { where('end_date > ?', date) }
@@ -47,7 +53,7 @@ class Event < ApplicationRecord
     group = attendance.registration_group
     return group.amount if group.present? && group.amount.present? && group.amount.positive?
 
-    not_amounted_group(attendance, payment_type)
+    extract_value(attendance, payment_type)
   end
 
   def period_for(today = Time.zone.today)
@@ -62,18 +68,12 @@ class Event < ApplicationRecord
     Time.zone.today >= start_date
   end
 
-  def add_organizer_by_email!(email)
-    user = User.find_by(email: email)
-    return false unless user.present? && (user.organizer? || user.admin?)
-
+  def add_organizer(user)
     organizers << user unless organizers.include?(user)
     save
   end
 
-  def remove_organizer_by_email!(email)
-    user = User.find_by(email: email)
-    return false if user.blank?
-
+  def remove_organizer(user)
     organizers.delete(user)
     save
   end
@@ -122,15 +122,10 @@ class Event < ApplicationRecord
 
   private
 
-  def not_amounted_group(attendance, payment_type)
-    value = extract_value(attendance, payment_type)
-    Money.new(value, :BRL)
-  end
-
   def extract_value(attendance, payment_type)
     quota = find_quota
     if payment_type == 'statement_agreement'
-      (full_price * 100)
+      full_price
     elsif attendance.price_band?
       attendance.band_value * attendance.discount
     elsif period_for.present?
@@ -138,7 +133,7 @@ class Event < ApplicationRecord
     elsif quota.first.present?
       quota.first.price * attendance.discount
     else
-      (full_price * 100) * attendance.discount
+      full_price * attendance.discount
     end
   end
 

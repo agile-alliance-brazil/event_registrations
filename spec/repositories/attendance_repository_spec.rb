@@ -107,12 +107,13 @@ RSpec.describe AttendanceRepository, type: :repository do
       end
     end
 
+    # Flaky
     context 'with a pending status and belonging to a group' do
       before { travel_to Time.zone.local(2018, 5, 16, 10, 0, 0) }
       after { travel_back }
       let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago) }
       let!(:group) { FactoryBot.create :registration_group, automatic_approval: false }
-      let!(:pending_in_a_group) { FactoryBot.create(:attendance, registration_group: group, event: event, payment_type: :gateway, last_status_change_date: 7.days.ago) }
+      let!(:pending_in_a_group) { FactoryBot.create(:attendance, registration_group: group, status: :pending, event: event, payment_type: :gateway, last_status_change_date: 7.days.ago) }
       let!(:accepted_in_a_group) { FactoryBot.create(:attendance, status: :accepted, registration_group: group, event: event, payment_type: :gateway, last_status_change_date: 7.days.ago) }
 
       it { expect(AttendanceRepository.instance.for_cancelation_warning(event)).to match_array [pending, accepted_in_a_group] }

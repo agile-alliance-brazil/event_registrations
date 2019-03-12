@@ -46,6 +46,15 @@ class DropTableInvoices < ActiveRecord::Migration[5.2]
       t.integer :registration_group_id
     end
 
+    remove_foreign_key :attendances, :registration_quotas
+    remove_foreign_key :attendances, :registration_periods
+    remove_foreign_key :attendances, :users
+    remove_foreign_key :attendances, :events
+    remove_foreign_key :payment_notifications, :attendances
+
+    remove_index :attendances, :event_id
+    remove_index :attendances, :user_id
+
     remove_column :payment_notifications, :attendance_id
 
     add_column :payment_notifications, :invoice_id, :integer

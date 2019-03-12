@@ -1,0 +1,30 @@
+<% if current_user&.admin? %>
+  <%= render 'layouts/menu', past_events_active: false, current_events_active: true, users_list_active: false, account_active: false %>
+<% end %>
+
+<div class="tab-container-<%= current_user&.admin? ? 'admin' : 'user' %>">
+  <% if current_user&.admin? %>
+    <div class="row bottom-spaced-component">
+      <div class="col-xl-12 col-sm-8">
+        <div class="float-right"><%= link_to t('events.new.title'), new_event_path, class: 'btn btn-sm btn-success' %></div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-xl-12 col-sm-8">
+      <div id="events">
+        <% if @events.empty? %>
+          <div class="no-data"><i class="far fa-calendar-alt fa-4x"></i></div>
+          <div class="no-data"><%= t('general.no_data') %></div>
+        <% else %>
+          <%= render 'events/events', events: @events %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'shared/nav_tabs' %>
+<% end %>

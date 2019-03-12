@@ -4,40 +4,85 @@ RSpec.describe AttendancesController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do
       before { get :new, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'POST #create' do
       before { post :create, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #show' do
       before { get :show, params: { event_id: 'foo', id: 'bar' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #index' do
       before { get :index, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #edit' do
       before { get :edit, params: { event_id: 'foo', id: 'bar' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PUT #update' do
       before { put :update, params: { event_id: 'foo', id: 'bar' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'GET #search' do
       before { get :search, params: { event_id: 'foo' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
     end
     describe 'PATCH #change_status' do
       before { patch :change_status, params: { event_id: 'foo', id: 'bar', new_status: 'xpto' } }
-      it { expect(response).to redirect_to login_path }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
+    describe 'GET #attendance_past_info' do
+      before { get :attendance_past_info, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
+    describe 'DELETE #destroy' do
+      before { delete :destroy, params: { event_id: 'foo', id: 'bar' } }
+      it { expect(response).to redirect_to new_user_session_path }
+    end
+
+    describe 'GET #user_info' do
+      before { get :user_info, params: { event_id: 'foo' } }
+      it { expect(response).to redirect_to new_user_session_path }
     end
   end
 
-  context 'authenticated' do
+  context 'authenticated as user' do
+    let(:user) { FactoryBot.create :user, role: :user }
+    let(:event) { FactoryBot.create :event, organizers: [user] }
+
+    before { sign_in user }
+
+    describe 'GET #show' do
+      context 'when the page required is for the logged user' do
+        let!(:attendance) { FactoryBot.create :attendance, user: user }
+        before { get :show, params: { event_id: event, id: attendance } }
+
+        it 'loads the page' do
+          expect(response).to render_template :show
+          expect(assigns(:attendance)).to eq attendance
+        end
+      end
+      context 'when the page required is not for the logged user' do
+        let!(:attendance) { FactoryBot.create :attendance }
+        before { get :show, params: { event_id: event, id: attendance } }
+
+        it { expect(response).to have_http_status :not_found }
+      end
+    end
+
+    describe 'GET #user_info' do
+      before { get :user_info, params: { event_id: 'foo' } }
+      it { expect(response).to have_http_status :not_found }
+    end
+  end
+
+  context 'authenticated as organizer' do
     let(:user) { FactoryBot.create :organizer }
+    let(:user_for_attendance) { FactoryBot.create :user, role: :user }
+
     let(:event) { FactoryBot.create :event, organizers: [user] }
 
     let(:valid_attendance) do
@@ -78,41 +123,55 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(:email) { stub(deliver_now: true) }
+      let(:email) { stub(deliver: true) }
 
       context 'valid parameters' do
         context 'easy attributes' do
           context 'and the event has vacancies' do
             context 'not an AA member' do
               context 'and it is a fresh new registration' do
-                it 'creates the attendance and redirects to the show' do
+                context 'and it is for the same user signed in' do
+                  it 'creates the attendance and redirects to the show' do
+                    EmailNotifications.expects(:registration_pending).returns(email)
+                    post :create, params: { event_id: event, attendance: valid_attendance }
+                    created_attendance = assigns(:attendance)
+                    expect(created_attendance.event).to eq event
+                    expect(created_attendance.user).to eq user
+                    expect(created_attendance.registered_by_user).to eq user
+                    expect(created_attendance).to be_pending
+                    expect(created_attendance.registration_group).to be_nil
+                    expect(created_attendance.payment_type).to eq 'gateway'
+                    expect(created_attendance).to be_pending
+                    expect(created_attendance.first_name).to eq user.first_name
+                    expect(created_attendance.last_name).to eq user.last_name
+                    expect(created_attendance.email).to eq user.email
+                    expect(created_attendance.organization).to eq user.organization
+                    expect(created_attendance.organization_size).to eq 'bla'
+                    expect(created_attendance.job_role).to eq 'analyst'
+                    expect(created_attendance.years_of_experience).to eq '6'
+                    expect(created_attendance.experience_in_agility).to eq '9'
+                    expect(created_attendance.school).to eq 'school'
+                    expect(created_attendance.education_level).to eq 'level'
+                    expect(created_attendance.phone).to eq user.phone
+                    expect(created_attendance.country).to eq user.country
+                    expect(created_attendance.state).to eq user.state
+                    expect(created_attendance.city).to eq user.city
+                    expect(created_attendance.badge_name).to eq user.badge_name
+                    expect(created_attendance.cpf).to eq user.cpf
+                    expect(created_attendance.gender).to eq user.gender
+                    expect(response).to redirect_to event_attendance_path(event, created_attendance)
+                    expect(flash[:notice]).to eq I18n.t('attendances.create.success')
+                  end
+                end
+              end
+
+              context 'and it is for a different user' do
+                it 'creates the attendance to the specified user' do
                   EmailNotifications.expects(:registration_pending).returns(email)
-                  post :create, params: { event_id: event, attendance: valid_attendance }
+                  post :create, params: { event_id: event, attendance: valid_attendance.merge(user_for_attendance: user_for_attendance) }
                   created_attendance = assigns(:attendance)
                   expect(created_attendance.event).to eq event
-                  expect(created_attendance).to be_pending
-                  expect(created_attendance.registration_group).to be_nil
-                  expect(created_attendance.payment_type).to eq 'gateway'
-                  expect(created_attendance).to be_pending
-                  expect(created_attendance.first_name).to eq user.first_name
-                  expect(created_attendance.last_name).to eq user.last_name
-                  expect(created_attendance.email).to eq user.email
-                  expect(created_attendance.organization).to eq user.organization
-                  expect(created_attendance.organization_size).to eq 'bla'
-                  expect(created_attendance.job_role).to eq 'analyst'
-                  expect(created_attendance.years_of_experience).to eq '6'
-                  expect(created_attendance.experience_in_agility).to eq '9'
-                  expect(created_attendance.school).to eq 'school'
-                  expect(created_attendance.education_level).to eq 'level'
-                  expect(created_attendance.phone).to eq user.phone
-                  expect(created_attendance.country).to eq user.country
-                  expect(created_attendance.state).to eq user.state
-                  expect(created_attendance.city).to eq user.city
-                  expect(created_attendance.badge_name).to eq user.badge_name
-                  expect(created_attendance.cpf).to eq user.cpf
-                  expect(created_attendance.gender).to eq user.gender
-                  expect(response).to redirect_to event_attendance_path(event, created_attendance)
-                  expect(flash[:notice]).to eq I18n.t('flash.attendance.create.success')
+                  expect(created_attendance.user).to eq user_for_attendance
                 end
               end
               context 'when attempt to register again' do
@@ -124,7 +183,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
 
@@ -147,7 +206,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
 
@@ -169,7 +228,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
                   context 'in other event' do
@@ -190,7 +249,7 @@ RSpec.describe AttendancesController, type: :controller do
                       post :create, params: { event_id: event, attendance: valid_attendance }
                       expect(Attendance.count).to eq 1
                       expect(response).to render_template :new
-                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('flash.attendance.create.already_existent')]
+                      expect(assigns(:attendance).errors[:email]).to eq [I18n.t('attendances.create.already_existent')]
                     end
                   end
                   context 'in other event' do
@@ -241,7 +300,7 @@ RSpec.describe AttendancesController, type: :controller do
                 post :create, params: { event_id: event, attendance: valid_attendance.merge(email: other_user.email) }
                 expect(attendance.status).to eq 'waiting'
                 expect(response).to redirect_to event_attendance_path(event, attendance)
-                expect(flash[:notice]).to eq I18n.t('flash.attendance.create.success')
+                expect(flash[:notice]).to eq I18n.t('attendances.create.success')
               end
             end
 
@@ -318,6 +377,7 @@ RSpec.describe AttendancesController, type: :controller do
             post :create, params: { event_id: event, attendance: { event_id: event } }
             expect(response).to render_template :new
             expect(assigns(:attendance).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco']
+            expect(flash[:error]).to eq 'Nome: não pode ficar em branco | Sobrenome: não pode ficar em branco | Email: não pode ficar em branco | Email: não é válido | Email: é muito curto (mínimo: 6 caracteres) | Telefone: não pode ficar em branco | País: não pode ficar em branco | Cidade: não pode ficar em branco | Estado: não pode ficar em branco'
           end
         end
         context 'AA service response timeout' do
@@ -434,6 +494,7 @@ RSpec.describe AttendancesController, type: :controller do
             put :update, params: { event_id: event, id: attendance, attendance: { first_name: '', last_name: '', email: '', phone: '', country: '', state: '', city: '', badge_name: '', cpf: '', gender: '' } }
             expect(response).to render_template :edit
             expect(assigns(:attendance).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco']
+            expect(flash[:error]).to eq 'Nome: não pode ficar em branco | Sobrenome: não pode ficar em branco | Email: não pode ficar em branco | Email: não é válido | Email: é muito curto (mínimo: 6 caracteres) | Telefone: não pode ficar em branco | País: não pode ficar em branco | Cidade: não pode ficar em branco | Estado: não pode ficar em branco'
           end
         end
         context 'AA service response timeout' do
@@ -502,11 +563,8 @@ RSpec.describe AttendancesController, type: :controller do
           let(:event) { FactoryBot.create(:event) }
           context 'having attendances' do
             let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
-
-            it 'redirects to root_path' do
-              get :waiting_list, params: { event_id: event }
-              expect(response).to redirect_to root_path
-            end
+            before { get :waiting_list, params: { event_id: event } }
+            it { expect(response).to have_http_status :not_found }
           end
         end
       end
@@ -582,8 +640,6 @@ RSpec.describe AttendancesController, type: :controller do
               expect(assigns(:accredited_total)).to eq 1
               expect(assigns(:cancelled_total)).to eq 1
               expect(assigns(:total)).to eq 8
-              expect(assigns(:burnup_registrations_data).ideal.count).to eq 29
-              expect(assigns(:burnup_registrations_data).actual.count).to eq 1
             end
           end
         end
@@ -591,31 +647,30 @@ RSpec.describe AttendancesController, type: :controller do
     end
 
     describe 'GET #show' do
-      context 'with a valid attendance' do
-        let!(:event) { FactoryBot.create(:event, organizers: [user]) }
-        let!(:attendance) { FactoryBot.create(:attendance, event: event, user: user) }
-        before { get :show, params: { event_id: event, id: attendance } }
-        it { expect(assigns[:attendance]).to eq attendance }
-        it { expect(response).to be_successful }
-      end
+      let!(:event) { FactoryBot.create(:event, organizers: [user]) }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event) }
+      before { get :show, params: { event_id: event, id: attendance } }
+      it { expect(assigns[:attendance]).to eq attendance }
+      it { expect(response).to be_successful }
     end
 
     describe 'DELETE #destroy' do
       subject(:attendance) { FactoryBot.create(:attendance) }
 
-      it 'cancels attendance' do
-        Attendance.any_instance.expects(:cancelled!)
-        delete :destroy, params: { event_id: event, id: attendance }
-      end
+      context 'when it is not ajax' do
+        it 'redirects back to show' do
+          Attendance.any_instance.expects(:cancelled!)
+          Attendance.any_instance.expects(:destroy).never
 
-      it 'not delete attendance' do
-        Attendance.any_instance.expects(:destroy).never
-        delete :destroy, params: { event_id: event, id: attendance }
+          delete :destroy, params: { event_id: event, id: attendance }
+          expect(response).to redirect_to(event_attendance_path(event, attendance))
+        end
       end
-
-      it 'redirects back to status' do
-        delete :destroy, params: { event_id: event, id: attendance }
-        expect(response).to redirect_to(event_attendance_path(event, attendance))
+      context 'when it is ajax' do
+        it 'redirects back to show' do
+          delete :destroy, params: { event_id: event, id: attendance }, xhr: true
+          expect(response).to render_template 'attendances/attendance'
+        end
       end
     end
 
@@ -633,7 +688,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'pay' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
-        it 'accepts attendance' do
+        it 'pays the attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'pay' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'paid'
@@ -641,7 +696,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'confirm' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'pending') }
-        it 'accepts attendance' do
+        it 'confirms attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'confirm' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'confirmed'
@@ -657,7 +712,7 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'dequeue' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'waiting') }
-        it 'accepts attendance' do
+        it 'dequeues attendance' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'dequeue' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'pending'
@@ -665,10 +720,19 @@ RSpec.describe AttendancesController, type: :controller do
       end
       context 'mark_show' do
         let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'confirmed') }
-        it 'accepts attendance' do
+        it 'marks as showed' do
           patch :change_status, params: { event_id: event, id: attendance, new_status: 'mark_show' }, xhr: true
           expect(assigns(:attendance)).to eq attendance
           expect(Attendance.last.status).to eq 'showed_in'
+        end
+      end
+      context 'respond to html' do
+        let(:attendance) { FactoryBot.create(:attendance, event: event, status: 'confirmed') }
+        it 'marks as showed and redirect to show page' do
+          patch :change_status, params: { event_id: event, id: attendance, new_status: 'mark_show' }
+          expect(assigns(:attendance)).to eq attendance
+          expect(Attendance.last.status).to eq 'showed_in'
+          expect(response).to redirect_to event_attendance_path(event, attendance)
         end
       end
     end
@@ -710,11 +774,11 @@ RSpec.describe AttendancesController, type: :controller do
               end
               context 'without cancelled, confirmed, paid and accepted' do
                 before { get :search, params: { event_id: event, search: 'bla', pending: 'true' }, xhr: true }
-                it { expect(assigns(:attendances_list)).to match_array [pending] }
+                it { expect(assigns(:attendances_list)).to eq [pending] }
               end
               context 'without statuses' do
                 before { get :search, params: { event_id: event, search: 'bla' }, xhr: true }
-                it { expect(assigns(:attendances_list)).to match_array [] }
+                it { expect(assigns(:attendances_list)).to eq [] }
               end
             end
           end
@@ -773,6 +837,134 @@ RSpec.describe AttendancesController, type: :controller do
           expected_disposition = 'attachment; filename="attendances_list.csv"'
           expect(response.body).to eq AttendanceExportService.to_csv(event)
           expect(response.headers['Content-Disposition']).to eq expected_disposition
+        end
+      end
+    end
+
+    describe 'GET #attendance_past_info' do
+      context 'valid parameters' do
+        context 'when there is another attendance to the user' do
+          let(:event) { FactoryBot.create :event }
+          let!(:attendance) { FactoryBot.create :attendance, event: event, user: user, created_at: 1.day.ago }
+          let!(:other_attendance) { FactoryBot.create :attendance, user: user, email: attendance.email, created_at: Time.zone.now }
+
+          it 'assigns a clone of the last attendance to the form' do
+            get :attendance_past_info, params: { event_id: event, email: attendance.email }, xhr: true
+            expect(response).to render_template 'attendances/attendance_info'
+            expect(assigns(:attendance).id).to be_nil
+            expect(assigns(:attendance).registration_group).to eq other_attendance.registration_group
+            expect(assigns(:attendance).first_name).to eq other_attendance.first_name
+            expect(assigns(:attendance).last_name).to eq other_attendance.last_name
+            expect(assigns(:attendance).email).to eq other_attendance.email
+            expect(assigns(:attendance).organization).to eq other_attendance.organization
+            expect(assigns(:attendance).organization_size).to eq other_attendance.organization_size
+            expect(assigns(:attendance).job_role).to eq other_attendance.job_role
+            expect(assigns(:attendance).years_of_experience).to eq other_attendance.years_of_experience
+            expect(assigns(:attendance).experience_in_agility).to eq other_attendance.experience_in_agility
+            expect(assigns(:attendance).education_level).to eq other_attendance.education_level
+            expect(assigns(:attendance).phone).to eq other_attendance.phone
+            expect(assigns(:attendance).country).to eq other_attendance.country
+            expect(assigns(:attendance).state).to eq other_attendance.state
+            expect(assigns(:attendance).city).to eq other_attendance.city
+            expect(assigns(:attendance).badge_name).to eq other_attendance.badge_name
+            expect(assigns(:attendance).cpf).to eq other_attendance.cpf
+            expect(assigns(:attendance).gender).to eq other_attendance.gender
+            expect(assigns(:attendance).payment_type).to eq other_attendance.payment_type
+          end
+        end
+        context 'when there is no another attendance to the user' do
+          let(:event) { FactoryBot.create :event }
+
+          it 'assigns a clone of the last attendance to the form' do
+            get :attendance_past_info, params: { event_id: event, email: 'foo@bar.com' }, xhr: true
+            expect(response).to render_template 'attendances/attendance_info'
+            expect(assigns(:attendance).registration_group).to be_nil
+            expect(assigns(:attendance).first_name).to be_nil
+            expect(assigns(:attendance).last_name).to be_nil
+            expect(assigns(:attendance).email).to eq 'foo@bar.com'
+            expect(assigns(:attendance).organization).to be_nil
+            expect(assigns(:attendance).organization_size).to be_nil
+            expect(assigns(:attendance).job_role).to eq 'not_informed'
+            expect(assigns(:attendance).years_of_experience).to be_nil
+            expect(assigns(:attendance).experience_in_agility).to be_nil
+            expect(assigns(:attendance).education_level).to be_nil
+            expect(assigns(:attendance).phone).to be_nil
+            expect(assigns(:attendance).country).to be_nil
+            expect(assigns(:attendance).state).to be_nil
+            expect(assigns(:attendance).city).to be_nil
+            expect(assigns(:attendance).badge_name).to be_nil
+            expect(assigns(:attendance).cpf).to be_nil
+            expect(assigns(:attendance).gender).to be_nil
+            expect(assigns(:attendance).payment_type).to be_nil
+          end
+          context 'when the email in params is blank' do
+            let(:event) { FactoryBot.create :event }
+
+            it 'assigns a clone of the last attendance to the form' do
+              Attendance.expects(:where).never
+              get :attendance_past_info, params: { event_id: event, email: '' }, xhr: true
+              expect(response).to render_template 'attendances/attendance_info'
+              expect(assigns(:attendance).registration_group).to be_nil
+              expect(assigns(:attendance).first_name).to be_nil
+              expect(assigns(:attendance).last_name).to be_nil
+              expect(assigns(:attendance).email).to eq ''
+              expect(assigns(:attendance).organization).to be_nil
+              expect(assigns(:attendance).organization_size).to be_nil
+              expect(assigns(:attendance).job_role).to eq 'not_informed'
+              expect(assigns(:attendance).years_of_experience).to be_nil
+              expect(assigns(:attendance).experience_in_agility).to be_nil
+              expect(assigns(:attendance).education_level).to be_nil
+              expect(assigns(:attendance).phone).to be_nil
+              expect(assigns(:attendance).country).to be_nil
+              expect(assigns(:attendance).state).to be_nil
+              expect(assigns(:attendance).city).to be_nil
+              expect(assigns(:attendance).badge_name).to be_nil
+              expect(assigns(:attendance).cpf).to be_nil
+              expect(assigns(:attendance).gender).to be_nil
+              expect(assigns(:attendance).payment_type).to be_nil
+            end
+          end
+        end
+      end
+      context 'invalid' do
+        context 'event' do
+          before { get :attendance_past_info, params: { event_id: 'foo', email: 'bar' }, xhr: true }
+          it { expect(response).to have_http_status :not_found }
+        end
+      end
+    end
+
+    describe 'GET #user_info' do
+      context 'with valid attributes' do
+        context 'and no user ID' do
+          it 'assigns the instance variables and renders the template' do
+            get :user_info, params: { event_id: event }, xhr: true
+            expect(assigns(:attendance)).to be_a_new Attendance
+            expect(assigns(:user)).to be_a_new User
+            expect(response).to render_template 'attendances/user_info'
+          end
+        end
+        context 'passing the user ID' do
+          it 'assigns the instance variables and renders the template' do
+            get :user_info, params: { event_id: event, user_id: user }, xhr: true
+            expect(assigns(:attendance)).to be_a_new Attendance
+            expect(assigns(:user)).to eq user
+            expect(response).to render_template 'attendances/user_info'
+          end
+        end
+      end
+
+      context 'invalid' do
+        context 'event' do
+          context 'not found' do
+            before { get :user_info, params: { event_id: 'foo' }, xhr: true }
+            it { expect(response).to have_http_status :not_found }
+          end
+          context 'not permitted' do
+            let(:event) { FactoryBot.create :event }
+            before { get :user_info, params: { event_id: event }, xhr: true }
+            it { expect(response).to have_http_status :not_found }
+          end
         end
       end
     end

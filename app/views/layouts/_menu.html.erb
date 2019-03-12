@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-xl-12">
+    <ul class="nav nav-tabs">
+
+      <li class="nav-item <%= 'active' if current_events_active %>">
+        <%= link_to t('events.index.title'), events_path, class: 'nav-link'%>
+      </li>
+
+      <li class="nav-item <%= 'active' if past_events_active %>">
+        <%= link_to t('events.index.archived'), list_archived_events_path, class: 'nav-link'%>
+      </li>
+
+      <li class="nav-item  <%= 'active' if users_list_active %>">
+        <%= link_to t('users.index.title'), users_path, class: 'nav-link'%>
+      </li>
+    </ul>
+  </div>
+</div>

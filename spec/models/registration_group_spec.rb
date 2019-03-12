@@ -36,7 +36,7 @@ RSpec.describe RegistrationGroup, type: :model do
         let(:group) { FactoryBot.build :registration_group, event: event, paid_in_advance: true, capacity: 10, amount: 100 }
         it 'not consider the group as valid and gives the correct error message' do
           expect(group.valid?).to be_falsey
-          expect(group.errors.full_messages).to eq ['Capacidade: O evento não tem mais lugares para o seu grupo. Desculpe!']
+          expect(group.errors[:capacity]).to eq [I18n.t('registration_group.event_capacity_error')]
         end
       end
       context 'for quota' do
@@ -44,7 +44,7 @@ RSpec.describe RegistrationGroup, type: :model do
         let(:group) { FactoryBot.build :registration_group, registration_quota: quota, paid_in_advance: true, capacity: 10, amount: 100 }
         it 'not consider the group as valid and gives the correct error message' do
           expect(group.valid?).to be_falsey
-          expect(group.errors.full_messages).to eq ['Capacidade: A cota não tem mais lugares para o seu grupo. Desculpe!']
+          expect(group.errors[:capacity]).to eq [I18n.t('registration_group.quota_capacity_error')]
         end
       end
     end

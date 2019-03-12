@@ -5,6 +5,19 @@ en:
       save: "Save"
     actions:
       title: "Actions"
+    confirm: "Are you sure?"
+    edit: "Edit"
+    no_data: "There is no data"
+    total: "Total"
+    until: "until"
+    select: "Select"
+    download_csv: "Download CSV"
+    details:
+      title: "Details"
+    form:
+      reset: "Clean Form"
+    include_blank: "Select..."
+    cancel: "Cancel"
   registration:
     quantity: "Quantity"
     details:
@@ -19,46 +32,110 @@ en:
       registration_total: "Total"
     index:
       title: "Attendances"
-      search: "Search"
+      search: "Search by name, company, email or ID"
       reports:
         active_by_state: "Active by state"
         active_by_city: "Active by city"
         active_last_biweek: "Active last biweek"
         grouped_by_payment_type: "Grouped by payment type"
+      waiting_approval: "To Approve"
+      queue: "Queue"
+      other_attendances: "Other Attendances Registered by You"
     new:
       form:
-        job_role:
-          not_informed: "Not informed"
-          analyst: "Analyst"
-          other: "Other"
-          clevel: "C-Level"
-          president: "President"
-          vp: "Vice president"
-          manager: "Manager"
-          student: "Student"
-          coach: "Coach"
-          developer: "Developer"
         professional_informations: "Professional Informations"
         attendance_address: "Contact Info"
         attendance_personal: "Personal Informations"
         educacional_information: "Educational Informations"
+        token_field: "Discount Token"
+      title:
+        text: "New Registration for %{event_name}"
+      cpf:
+        help: "Leave blank if you are not brazilian"
+      agreement:
+        attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
+        workshop: "By registering for the workshops, I declare being aware that the minimum attendance to each workshop is 12 people, and that if this number is not reached, I will have the opportunity to either join another workshop, or get a refund."
+      user_for_attendance:
+        help: "In order to guarantee the user access, if you are registering for a third part, the user must have been signed up to the system"
+      load:
+        not_found: "Informations not found"
+        title: "Load Info"
+      load_user:
+        title: "Load Signed User Info"
+      gender:
+        help: "Leave blank if you prefer to not answer"
     actions:
       confirm: "Confirm Registration"
       recover: "Recover Registration"
       transfer: "Transfer Registration"
       cancel: "Cancel Registration"
+      accept: "accept"
+      pay: "pay"
+      dequeue: "dequeue"
     update:
       success: "Attendance updated."
+    create:
+      success: "Registration saved"
+      already_existent: "Email already registered in this event"
+    charts:
+      by_state:
+        state: "State"
+      payment_type:
+        value_grouped: "Value Grouped"
+        quantity: "Qty"
+    show:
+      title: "Attendance"
+      status:
+        accepted:
+          title: "Instructions to complete the registration process"
+        cancelled:
+          title: "This registration was cancelled. If you wish to register again, please fill the registration form."
+        confirmed:
+          title: "Your registration is confirmed!"
+        paid:
+          title: "We have received your payment. After reviewing your registration details, we will send a confirmation e-mail."
+        showed_in:
+          title: "Your presence in the event was confirmed!"
+    edit:
+      title: "Edit Attendance"
+    status:
+      waiting:
+        title: "You are in the waiting list. We will inform you when capacity changes."
+    grouped_attendance:
+      title: "Your registration has been through the group %{group_name}."
+      paid_group_title: "Your registration in group is pending of administration approval. You will receive more information soon."
+      free_group_title: "You made the registration through a free group. Wait until the administrator confirm your registration."
   events:
-    form:
-      event_basics: "Basic Informations"
-      event_core: "Main informations"
     index:
       title: "Events"
+      archived: "Archived Events"
+    new:
+      title: "New Event"
+    show:
+      organizers:
+        list: "Index of Organizers"
+        remove: "Remove Organizer"
+        select: "Select an organizer..."
+      full_price: "Full price: %{value}"
+      average_queue_time: "Avg time in queue: %{value}"
+      attendance_limit: "Attendance limit: %{value}"
+      current_price: "Current Price"
+      statement_agreement_price: "Value for Statement of Agreement"
+      student_price: "Student Value"
+    edit:
+      title: "Edit Event"
+    delete:
+      title: "Delete Event"
   registration_groups:
     index:
       token_clipboard_tooltip: "Copy group token to the clipboard"
       title: "Groups"
+    edit:
+      title: "Edit Group"
+    show:
+      title: "Registration Group"
+    new:
+      title: "New Registration Group"
   attendance:
     reports:
       attendance_organization_size: "Attendance x Organization Size"
@@ -86,8 +163,70 @@ en:
     show:
       edit:
         button: "Update Profile"
+      title: "Account Details"
+      full_name: "Full Name"
+      city_state: "City/State"
+    completed_login:
+      success: "Your user was activated."
+    edit:
+      title: "Profile Update"
+    index:
+      title: "Users"
+      search_email: "Search by email"
+      search_roles: "Select Role..."
+    account:
+      self: "My Account"
+    organizer:
+      new:
+        title: "New Organizer"
+    update:
+      success: "User updated"
   event_attendances:
     form:
       state: "State"
   actions:
     receive_credential: "Credential"
+  application:
+    title: "Registrations System"
+  registration_periods:
+    edit:
+      title: "Update Period"
+    new:
+      title: "New Registration Period"
+  header:
+    aa:
+      members: "Members"
+  gender:
+    male: "Male"
+    female: "Female"
+    other: "Other"
+  reistration_quotas:
+    index: "Index of Registration Quotas"
+  registration_quotas:
+    index:
+      attendances: "Attendances"
+      title: "Index of Quotas"
+    new:
+      title: "New Registration Quota"
+    edit:
+      title: "Edit Registration Quota"
+  footer:
+    help: "Contact"
+    useful_links: "Useful Links"
+  attendandes:
+    new:
+      title: "New Registration"
+  registration_groupss:
+    new:
+      title: "New Group"
+  reistration_groups:
+    index:
+      title: "Index of Groups"
+  activerecord:
+    attributes:
+      user:
+        admin: "Admin?"
+        organizer: "Organizer?"
+  reistration_periods:
+    index:
+      title: "Index of Event Periods"

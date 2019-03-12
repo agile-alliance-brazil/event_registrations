@@ -1,0 +1,51 @@
+<td><%= link_to "#{attendance.last_name}, #{attendance.first_name}", event_attendance_path(event, attendance) %></td>
+<td><%= attendance.event_name %></td>
+<td><%= attendance.organization %></td>
+<td><%= attendance.email %></td>
+<td>
+  <% if attendance.registration_group.present? %>
+    <%= link_to attendance.group_name, event_registration_group_path(event, attendance.registration_group) %>
+  <% end %>
+</td>
+
+<td><%= attendance.state %></td>
+<td><%= t("activerecord.attributes.attendance.enums.payment_types.#{attendance.payment_type || 'nil'}") %></td>
+<td><%= l(attendance.registration_date, format: :short) %></td>
+<td><%= number_to_currency(attendance.registration_value) %></td>
+<td><%= t("activerecord.attributes.attendance.enums.status.#{attendance.status}", count: 1) %></td>
+<% if current_user.organizer_of?(event) %>
+  <td>
+    <% if attendance.pending? && attendance.grouped? %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :accept), method: :patch, remote: true do %>
+        <i class="fa fa-check" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.accept')}" %>></i>
+      <% end %>
+    <% end %>
+
+    <% if attendance.payable? %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :pay), method: :patch, remote: true do %>
+        <i class="fa fa-credit-card" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.pay')}" %>></i>
+      <% end %>
+    <% end %>
+
+    <% if attendance.confirmable? %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :confirm), method: :patch, remote: true do %>
+        <i class="fa fa-calendar-check" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.confirm')}" %>></i>
+      <% end %>
+    <% end %>
+
+    <% if attendance.cancellable? %>
+      <%= link_to event_attendance_path(event, attendance), method: :delete, data: { confirm: t('general.confirm', event: attendance.event_name ) }, remote: true do %>
+        <i class="fa fa-ban" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.cancel')}" %>></i>
+      <% end %>
+    <% end %>
+
+    <% if attendance.waiting? %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :dequeue), method: :patch, remote: true do %>
+        <i class="fa fa-thumbs-up" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.dequeue')}" %>></i>
+      <% end %>
+    <% end %>
+    <%= link_to edit_event_attendance_path(event, attendance) do %>
+      <i class="fa fa-edit" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('general.edit')}" %>></i>
+    <% end %>
+  </td>
+<% end %>

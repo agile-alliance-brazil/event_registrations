@@ -3,8 +3,14 @@
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-xl-12">
+  <div class="row bottom-spaced-component">
+    <div class="col-xl-6">
+      <% if @event.present? && @event.logo.present? %>
+        <%= image_tag @event.logo, size: '220x80' %>
+      <% end %>
+    </div>
+
+    <div class="col-xl-6">
       <div class="dropdown topnav-right">
         <% if current_user.present? && current_user.user_image.present? %>
           <%= image_tag current_user.user_image.url, size: '50x50', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>

@@ -36,6 +36,7 @@ pt:
     omniauth_callbacks:
       failure: "Não foi possível autenticá-lo como %{kind} porque \"%{reason}\"."
       success: "Autenticado com sucesso com uma conta de %{kind}."
+      missing_email: "Email ausente no seu cadasto de oauth."
     passwords:
       change_password:
         button: "Altere a minha senha"

@@ -17,6 +17,11 @@ module DeviseCustom
     private
 
     def process_omniauth(omniauth_session, omniauth_provider)
+      if request.env['omniauth.auth']['info']['email'].blank?
+        flash[:error] = I18n.t('devise.omniauth_callbacks.missing_email')
+        return redirect_to new_user_session_path
+      end
+
       @user = User.from_omniauth(request.env['omniauth.auth'])
 
       if @user.persisted?

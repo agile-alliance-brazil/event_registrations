@@ -17,10 +17,19 @@ pt:
     mailer:
       confirmation_instructions:
         subject: "Instruções de confirmação"
+        message: "Você pode confirmar a sua conta usando o link abaixo"
+        link_text: "Confirmar minha conta"
       reset_password_instructions:
         subject: "Instruções de troca de senha"
+        message: "Uma mudança na sua senha foi solicitada. Você poderá completar o processo usando o link abaixo."
+        link_text: "Alterar minha senha"
+        warning_first_paragraph: "Se você não solicitou esta alteração, por favor ignore este email."
+        warning_second_paragraph: "Sua senha não será alterada até que você acesse o link acima e complete o processo."
       unlock_instructions:
         subject: "Instruções de desbloqueio"
+        first_paragraph: "Sua conta foi bloqueada devido a muitas tentativas de logar sem sucesso."
+        second_paragraph: "Clique no link abaixo para desbloquear."
+        link_text: "Debloqueie minha conta"
       email_changed:
         subject: "Email Changed"
       password_change:
@@ -28,6 +37,7 @@ pt:
         title: 'Nova senha'
         message: 'Olá! Sua senha foi alterada com sucesso.'
         instructions: "Este contato é para informar que a sua senha mudou."
+        notification: "Este é um aviso de que seu email foi alterado."
       forgot_password:
         title: 'Esqueceu sua senha?'
         message: 'Sem problemas! Você pode criar uma nova:'
@@ -93,3 +103,5 @@ pt:
       not_saved:
         one: "Não foi possível salvar %{resource}: 1 erro"
         other: "Não foi possível salvar %{resource}: %{count} erros."
+  attendances:
+    aab_team: "Time de Desenvolvimento da Agile Alliance Brazil"

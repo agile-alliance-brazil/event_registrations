@@ -19,15 +19,25 @@ en:
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
+        message: "You can confirm your account email through the link below"
+        link_text: "Confirm my account"
       reset_password_instructions:
         subject: "Reset password instructions"
+        message: "Someone has requested a link to change your password. You can do this through the link below."
+        link_text: "Change my password"
+        warning_first_paragraph: "If you didn't request this, please ignore this email."
+        warning_second_paragraph: "Your password won't change until you access the link above and create a new one."
       unlock_instructions:
         subject: "Unlock instructions"
+        first_paragraph: "Your account has been locked due to an excessive number of unsuccessful sign in attempts."
+        second_paragraph: "Click the link below to unlock."
+        link_text: "Unlock my account"
       email_changed:
         subject: "Email Changed"
       password_change:
         subject: "Password Changed"
         instructions: "We are contacting you to notify you that your password has been changed."
+        notification: "We're contacting you to notify you that your password has been changed."
     omniauth_callbacks:
       failure: "Could not authenticate you from %{kind} because \"%{reason}\"."
       success: "Successfully authenticated from %{kind} account."
@@ -84,3 +94,5 @@ en:
       not_saved:
         one: "1 error prohibited this %{resource} from being saved:"
         other: "%{count} errors prohibited this %{resource} from being saved:"
+  attendances:
+    aab_team: "Agile Alliance Brazil Development Team"

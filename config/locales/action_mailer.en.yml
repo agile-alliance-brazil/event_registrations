@@ -22,7 +22,7 @@ en:
       pending:
         bank_deposit_message: "This is a bank deposit payment. As soon as we receive the transfer's document we will confirm the registration."
         statement_of_agreement_message: "This is a statement of agreement payment. The event organizers will make contact with you to confirm it."
-    greetings: "Hi, %{attendance_name}"
+    greetings: "Hi, %{receiver_name}"
     pending_message_on_value: "Your request for registration priced %{attendance_value} was received successfully and the status is %{status_name}."
     message_on_group: "You were registered in the group %{group_name} and the registration is waiting for approval."
     registrations_page: "Registration Details"

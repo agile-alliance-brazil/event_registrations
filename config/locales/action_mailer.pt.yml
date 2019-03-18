@@ -22,7 +22,7 @@ pt:
       pending:
         bank_deposit_message: "O pagamento desta inscrição é por depósito bancário. Assim que o comprovante de depósito for enviado, a organização do evento confirmará o pagamento"
         statement_of_agreement_message: "O pagamento desta inscrição é por nota de empenho. A organização entrará em contato com você para confirmá-la."
-    greetings: "Olá, %{attendance_name}"
+    greetings: "Olá, %{receiver_name}"
     pending_message_on_value: "Seu pedido de inscrição no valor de %{attendance_value} foi realizado com sucesso e está com status %{status_name}."
     message_on_group: "A sua inscrição foi realizada no grupo %{group_name} e está em processo de aprovação."
     registrations_page: "Detalhes da Inscrição"

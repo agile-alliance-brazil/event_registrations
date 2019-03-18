@@ -13,6 +13,7 @@ class EmailNotificationsPreview < ActionMailer::Preview
 
   def registration_group_accepted
     attendance = Attendance.last
+    attendance.update(registration_group: RegistrationGroup.last)
     EmailNotifications.with(attendance).registration_group_accepted(attendance)
   end
 

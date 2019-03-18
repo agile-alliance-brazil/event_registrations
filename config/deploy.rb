@@ -38,7 +38,7 @@ set :branch, ENV['BRANCH'] if ENV['BRANCH']
 set :linked_files, %w[config/database.yml config/config.yml certs/paypal_cert.pem certs/app_cert.pem certs/app_key.pem]
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w[bin log certs tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
+set :linked_dirs, %w[bin log certs tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads]
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

@@ -22,13 +22,13 @@
     <% end %>
 
     <% if attendance.payable? %>
-      <%= link_to change_status_event_attendance_path(event, attendance, :pay), method: :patch, remote: true do %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :pay), method: :patch, data: { confirm: t('general.confirm' ) }, remote: true do %>
         <i class="fa fa-credit-card" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.pay')}" %>></i>
       <% end %>
     <% end %>
 
     <% if attendance.confirmable? %>
-      <%= link_to change_status_event_attendance_path(event, attendance, :confirm), method: :patch, remote: true do %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :confirm), method: :patch, data: { confirm: t('general.confirm' ) }, remote: true do %>
         <i class="fa fa-calendar-check" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.confirm')}" %>></i>
       <% end %>
     <% end %>
@@ -40,7 +40,7 @@
     <% end %>
 
     <% if attendance.waiting? %>
-      <%= link_to change_status_event_attendance_path(event, attendance, :dequeue), method: :patch, remote: true do %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :dequeue), method: :patch, data: { confirm: t('general.confirm' ) }, remote: true do %>
         <i class="fa fa-thumbs-up" data-toggle="tooltip" data-placement="bottom" title=<%= "#{t('attendances.actions.dequeue')}" %>></i>
       <% end %>
     <% end %>

@@ -116,12 +116,19 @@ pt:
         list: "Lista de Organizadores"
         remove: "Remover Organizador"
         select: "Selecione um organizador..."
+        tab: "Organizadores"
       attendance_limit: "Limite de Inscritos: %{value}"
       average_queue_time: "Tempo médio na fila: %{value}"
       full_price: "Preço cheio: %{value}"
       current_price: "Valor atual"
       statement_agreement_price: "Valor para Empenho"
       student_price: "Valor para Estudante"
+      registration_periods:
+        tab: "Períodos de Inscrição"
+      registration_quotes:
+        tab: "Cotas de Inscrição"
+      registration_groups:
+        tab: "Grupos de Inscrições"
     edit:
       title: "Editar Evento"
     delete:
@@ -193,6 +200,11 @@ pt:
       title: "Editar período"
     new:
       title: "Novo Período de Inscrições"
+    attendances:
+      pending: "Pendente"
+      paid: "Pago"
+      confirmed: "Confirmado"
+      total: "Total"
   header:
     aa:
       members: "Membros"
@@ -208,17 +220,17 @@ pt:
       title: "Nova Cota"
     edit:
       title: "Editar Cota"
+    attendances:
+      pending: "Pendente"
+      paid: "Pago"
+      confirmed: "Confirmado"
+      total: "Total"
   footer:
     help: "Contato"
     useful_links: "Links Úteis"
-  reistration_quotas:
-    index: "Lista de Cotas"
   attendandes:
     new:
       title: "Nova Inscrição"
-  registration_groupss:
-    new:
-      title: "Novo Grupo"
   reistration_groups:
     index:
       title: "Lista de Grupos"

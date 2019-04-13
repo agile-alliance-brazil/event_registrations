@@ -116,12 +116,19 @@ en:
         list: "Index of Organizers"
         remove: "Remove Organizer"
         select: "Select an organizer..."
+        tab: "Organizers"
       full_price: "Full price: %{value}"
       average_queue_time: "Avg time in queue: %{value}"
       attendance_limit: "Attendance limit: %{value}"
       current_price: "Current Price"
       statement_agreement_price: "Value for Statement of Agreement"
       student_price: "Student Value"
+      registration_periods:
+        tab: "Registration Periods"
+      registration_quotes:
+        tab: "Registration Quotes"
+      registration_groups:
+        tab: "Registration Groups"
     edit:
       title: "Edit Event"
     delete:
@@ -193,6 +200,11 @@ en:
       title: "Update Period"
     new:
       title: "New Registration Period"
+    attendances:
+      pending: "Pending"
+      paid: "Paid"
+      confirmed: "Confirmed"
+      total: "Total"
   header:
     aa:
       members: "Members"
@@ -200,8 +212,6 @@ en:
     male: "Male"
     female: "Female"
     other: "Other"
-  reistration_quotas:
-    index: "Index of Registration Quotas"
   registration_quotas:
     index:
       attendances: "Attendances"
@@ -210,15 +220,17 @@ en:
       title: "New Registration Quota"
     edit:
       title: "Edit Registration Quota"
+    attendances:
+      pending: "Pending"
+      paid: "Paid"
+      confirmed: "Confirmed"
+      total: "Total"
   footer:
     help: "Contact"
     useful_links: "Useful Links"
   attendandes:
     new:
       title: "New Registration"
-  registration_groupss:
-    new:
-      title: "New Group"
   reistration_groups:
     index:
       title: "Index of Groups"

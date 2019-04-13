@@ -9,6 +9,10 @@
       <th><%= RegistrationPeriod.human_attribute_name :title %></th>
       <th><%= RegistrationPeriod.human_attribute_name :start_at %></th>
       <th><%= RegistrationPeriod.human_attribute_name :end_at %></th>
+      <th><%= I18n.t('registration_periods.attendances.pending') %></th>
+      <th><%= I18n.t('registration_periods.attendances.paid') %></th>
+      <th><%= I18n.t('registration_periods.attendances.confirmed') %></th>
+      <th><%= I18n.t('registration_periods.attendances.total') %></th>
       <th><%= RegistrationPeriod.human_attribute_name :price %></th>
       <th></th>
     </thead>
@@ -19,6 +23,10 @@
           <td><%= period.title %></td>
           <td><%= l(period.start_at, format: :short) %></td>
           <td><%= l(period.end_at, format: :short) %></td>
+          <td><%= period.attendances.pending.count %></td>
+          <td><%= period.attendances.paid.count %></td>
+          <td><%= period.attendances.confirmed.count %></td>
+          <td><%= period.attendances.not_cancelled.count %></td>
           <td><%= number_to_currency(period.price) %></td>
           <td>
             <%= link_to event_registration_period_path(event, period), method: :delete do %>

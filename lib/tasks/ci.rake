@@ -18,5 +18,5 @@ begin
     sh 'if [[ -n ${CODECLIMATE_REPO_TOKEN} ]]; then bundle exec codeclimate-test-reporter; fi'
   end
 rescue LoadError
-  STDERR.puts("RSpec, Rubocop or Konacha isn't loaded! Either remove this rake task or ensure those are available.")
+  warn("RSpec, Rubocop or Konacha isn't loaded! Either remove this rake task or ensure those are available.")
 end

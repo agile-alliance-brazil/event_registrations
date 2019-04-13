@@ -11,5 +11,5 @@ begin
     end
   end
 rescue LoadError
-  STDERR.puts("Metric fu isn't loaded! Either remove this rake task or ensure MetricFu is loaded.")
+  warn("Metric fu isn't loaded! Either remove this rake task or ensure MetricFu is loaded.")
 end

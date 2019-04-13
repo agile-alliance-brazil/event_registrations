@@ -8,6 +8,10 @@
       <th><%= RegistrationQuota.human_attribute_name :id %></th>
       <th><%= RegistrationQuota.human_attribute_name :order %></th>
       <th><%= RegistrationQuota.human_attribute_name :quota %></th>
+      <th><%= I18n.t('registration_quotas.attendances.pending') %></th>
+      <th><%= I18n.t('registration_quotas.attendances.paid') %></th>
+      <th><%= I18n.t('registration_quotas.attendances.confirmed') %></th>
+      <th><%= I18n.t('registration_quotas.attendances.total') %></th>
       <th><%= RegistrationQuota.human_attribute_name :price %></th>
       <th></th>
     </thead>
@@ -17,6 +21,10 @@
           <td><%= quota.id %></td>
           <td><%= quota.order %></td>
           <td><%= quota.quota %></td>
+          <td><%= quota.attendances.pending.count %></td>
+          <td><%= quota.attendances.paid.count %></td>
+          <td><%= quota.attendances.confirmed.count %></td>
+          <td><%= quota.attendances.not_cancelled.count %></td>
           <td><%= number_to_currency(quota.price) %></td>
           <td>
             <%= link_to event_registration_quota_path(event, quota), method: :delete do %>

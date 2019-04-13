@@ -18,10 +18,6 @@
         <%= image_tag 'img-empty.png' %>
       <% end %>
     </p>
-    <p><h4><%= @event.name %></h4></p>
-    <% if current_user&.organizer_of?(@event) %>
-      <p><%= link_to t('events.edit.title'), edit_event_path(@event), class: 'btn btn-sm btn-primary' %></p>
-    <% end %>
   </div>
 
   <div class="col-xl-8">
@@ -32,25 +28,42 @@
     <p><h7><%= "#{t('events.show.statement_agreement_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement'))}" %></h7></p>
     <p><h7><%= "#{t('events.show.student_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement') / 2)}" %></h7></p>
     <p><%= "#{Event.human_attribute_name(:main_email_contact)}: "%> <%= mail_to @event.main_email_contact, @event.main_email_contact %></p>
+    <% if current_user&.organizer_of?(@event) %>
+      <p><%= link_to t('events.edit.title'), edit_event_path(@event), class: 'btn btn-sm btn-success float-right' %></p>
+    <% end %>
   </div>
 </div>
 
 <% if current_user&.organizer_of?(@event) %>
-  <hr/>
+  <ul class="nav nav-tabs bottom-spaced-component">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#organizers-list"><%= I18n.t('events.show.organizers.tab') %></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#periods-list"><%= I18n.t('events.show.registration_periods.tab') %></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#quotas-list"><%= I18n.t('events.show.registration_quotes.tab') %></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#groups-list"><%= I18n.t('events.show.registration_groups.tab') %></a>
+    </li>
+  </ul>
 
-  <div id="organizers-list">
-    <%= render 'users/event_organizers_list', organizers_list: @event.organizers.order(:first_name, :last_name) %>
+  <div class="tab-content">
+    <div class="tab-pane container active" id="organizers-list">
+      <%= render 'users/event_organizers_list', organizers_list: @event.organizers.order(:first_name, :last_name) %>
+    </div>
+
+    <div class="tab-pane container fade" id="periods-list">
+      <%= render 'registration_periods/periods_list', event: @event %>
+    </div>
+    <div class="tab-pane container fade" id="quotas-list">
+      <%= render 'registration_quotas/quotas_list', event: @event %>
+    </div>
+    <div class="tab-pane container fade" id="groups-list">
+      <%= render 'registration_groups/groups_list', event: @event %>
+    </div>
   </div>
 
-  <hr/>
-
-  <%= render 'registration_periods/periods_list', event: @event %>
-
-  <hr/>
-
-  <%= render 'registration_quotas/quotas_list', event: @event %>
-
-  <hr/>
-
-  <%= render 'registration_groups/groups_list', event: @event %>
 <% end %>

@@ -48,7 +48,8 @@ group :development, :test do
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
   gem 'rubocop', require: false
-  gem 'rubocop-rspec'
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rspec', require: false
   gem 'selenium-webdriver'
   gem 'spring'
   gem 'spring-commands-rspec'

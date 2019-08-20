@@ -73,6 +73,7 @@ en:
       accept: "accept"
       pay: "pay"
       dequeue: "dequeue"
+      mark_show: "Accredit"
     update:
       success: "Attendance updated."
     create:

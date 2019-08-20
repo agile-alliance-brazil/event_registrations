@@ -73,6 +73,7 @@ pt:
       dequeue: "mover para o evento"
       pay: "pagar"
       accept: "aceitar"
+      mark_show: ""
     update:
       success: "Participante atualizado."
     create:

@@ -34,7 +34,7 @@ describe AttendanceExportService, type: :service do
           "#{attendance.job_role}\n"
         title + body
       end
-      it { expect(AttendanceExportService.to_csv(event)).to eq expected }
+      it { expect(AttendanceExportService.to_csv(event.attendances)).to eq expected }
     end
   end
 end

@@ -10,6 +10,7 @@ class RegistrationGroupsController < AuthenticatedController
 
   def show
     @attendance_list = @group.attendances.active.order(created_at: :desc)
+    @attendance_list_csv = AttendanceExportService.to_csv(@attendance_list)
   end
 
   def destroy

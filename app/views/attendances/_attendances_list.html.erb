@@ -1,4 +1,10 @@
-<h5><%= list_title %></h5>
+<h5>
+  <%= list_title %>
+  <span class="btn-token-clipboard" data-clipboard-text="<%= attendances_list_csv %>" style="cursor: pointer;">
+    <i class="far fa-copy" title="<%= t('attendances.index.search_csv') %>" data-toggle='tooltip'></i>
+  </span>
+</h5>
+
 
 <div id="attendances_list">
   <% if attendances_list.present? %>

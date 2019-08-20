@@ -34,11 +34,18 @@ RSpec.describe RegistrationGroupsController, type: :controller do
     end
 
     context 'with attendances' do
-      let!(:third_attendance) { FactoryBot.create(:attendance, registration_group: group, created_at: 5.days.ago) }
       let!(:first_attendance) { FactoryBot.create(:attendance, registration_group: group, created_at: 2.days.ago) }
       let!(:second_attendance) { FactoryBot.create(:attendance, registration_group: group, created_at: 3.days.ago) }
-      before { get :show, params: { event_id: event.id, id: group.id } }
-      it { expect(assigns(:attendance_list)).to eq [first_attendance, second_attendance, third_attendance] }
+      let!(:third_attendance) { FactoryBot.create(:attendance, registration_group: group, created_at: 5.days.ago) }
+
+      it 'assigns the group and the attendance list and renders the template' do
+        get :show, params: { event_id: event.id, id: group.id }
+
+        attendance_list = Attendance.all.order(created_at: :desc)
+        expect(assigns(:attendance_list)).to eq attendance_list
+        expect(assigns(:attendance_list_csv)).to eq AttendanceExportService.to_csv(attendance_list)
+        expect(response).to render_template 'registration_groups/show'
+      end
     end
   end
 

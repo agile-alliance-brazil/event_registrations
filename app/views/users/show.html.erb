@@ -63,6 +63,6 @@
 
 <hr />
 
-<%= render 'attendances/attendances_list', attendances_list: @user.attendances.order(created_at: :desc), list_title: t('attendances.index.title') %>
+<%= render 'attendances/attendances_list', attendances_list: @user.attendances.order(created_at: :desc), attendances_list_csv: AttendanceExportService.to_csv(@user.attendances.order(created_at: :desc)), list_title: t('attendances.index.title') %>
 
-<%= render 'attendances/attendances_list', attendances_list: @user.registered_attendances.order(created_at: :desc), list_title: t('attendances.index.other_attendances') %>
+<%= render 'attendances/attendances_list', attendances_list: @user.registered_attendances.order(created_at: :desc), attendances_list_csv: AttendanceExportService.to_csv(@user.registered_attendances.order(created_at: :desc)), list_title: t('attendances.index.other_attendances') %>

@@ -40,7 +40,7 @@ class RegistrationGroup < ApplicationRecord
   end
 
   def qtd_attendances
-    attendances.active.size
+    attendances.active.count
   end
 
   def total_price

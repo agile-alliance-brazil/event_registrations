@@ -2,9 +2,9 @@
 
 class AttendancesController < AuthenticatedController
   before_action :assign_event
-  before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info user_info]
+  before_action :assign_attendance, except: %i[index create new search attendance_past_info user_info]
 
-  before_action :check_organizer, only: %i[waiting_list to_approval index search user_info]
+  before_action :check_organizer, only: %i[index search user_info]
   before_action :check_user, only: %i[show edit update]
 
   def new
@@ -31,16 +31,9 @@ class AttendancesController < AuthenticatedController
     render :edit
   end
 
-  def to_approval
-    @attendances_to_approval = @event.attendances.waiting_approval
-  end
-
-  def waiting_list
-    @waiting_list = @event.attendances.waiting
-  end
-
   def index
-    @attendances_list = @event.attendances.active.order(last_status_change_date: :desc)
+    @attendances_list = @event.attendances.active.order(updated_at: :desc)
+    @attendances_list_csv = AttendanceExportService.to_csv(@attendances_list)
     @waiting_total = @event.attendances.waiting.count
     @pending_total = @event.attendances.pending.count
     @accepted_total = @event.attendances.accepted.count
@@ -86,14 +79,10 @@ class AttendancesController < AuthenticatedController
   end
 
   def search
-    @attendances_list = AttendanceRepository.instance.search_for_list(@event, params[:search], statuses_params)
+    @attendances_list = AttendanceRepository.instance.search_for_list(@event, params[:search], statuses_params).order(updated_at: :desc)
+    @attendances_list_csv = AttendanceExportService.to_csv(@attendances_list)
 
-    respond_to do |format|
-      format.js {}
-      format.csv do
-        send_data AttendanceExportService.to_csv(@event), filename: 'attendances_list.csv'
-      end
-    end
+    respond_to { |format| format.js { render 'attendances/search' } }
   end
 
   def attendance_past_info

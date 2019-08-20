@@ -41,6 +41,7 @@ en:
       waiting_approval: "To Approve"
       queue: "Queue"
       other_attendances: "Other Attendances Registered by You"
+      search_csv: "Copy the CSV list"
     new:
       form:
         professional_informations: "Professional Informations"

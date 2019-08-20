@@ -19,9 +19,12 @@
 <div class="row">
   <div class="col-xl-12 col-sm-10 col-sm-offset-1">
     <div id="attendances_list">
-      <%= render 'attendances/attendances_list', attendances_list: @attendances_list, list_title: t('attendances.index.title')  %>
+      <%= render 'attendances/attendances_list', attendances_list: @attendances_list, attendances_list_csv: @attendances_list_csv, list_title: t('attendances.index.title')  %>
     </div>
   </div>
 </div>
 
-<%= javascript_include_tag 'attendances/index' %>
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'attendances/search' %>
+  <%= javascript_include_tag 'attendances/index' %>
+<% end %>

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  if (typeof Clipboard !== 'undefined') {
-    new Clipboard('.btn-token-clipboard');
+  if (typeof ClipboardJS !== 'undefined') {
+    new ClipboardJS('.btn-token-clipboard');
   }
 });

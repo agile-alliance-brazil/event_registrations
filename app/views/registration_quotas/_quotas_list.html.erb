@@ -27,7 +27,7 @@
           <td><%= quota.attendances.not_cancelled.count %></td>
           <td><%= number_to_currency(quota.price) %></td>
           <td>
-            <%= link_to event_registration_quota_path(event, quota), method: :delete do %>
+            <%= link_to event_registration_quota_path(event, quota), data: { confirm: t('general.confirm' ) }, method: :delete do %>
               <i class="far fa-trash-alt"></i>
             <% end %>
             <%= link_to edit_event_registration_quota_path(event, quota) do %>

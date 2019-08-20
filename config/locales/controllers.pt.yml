@@ -40,6 +40,7 @@ pt:
       waiting_approval: "Para Aprovar"
       queue: "Fila de Espera"
       other_attendances: "Pessoas Inscritas por Você"
+      search_csv: "Copiar a lista em CSV"
     new:
       form:
         professional_informations: "Informações Profissionais"

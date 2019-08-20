@@ -38,8 +38,6 @@ Current::Application.routes.draw do
 
       collection do
         get :pending_attendances
-        get :to_approval
-        get :waiting_list
         get :search
         get :attendance_past_info
         get :user_info

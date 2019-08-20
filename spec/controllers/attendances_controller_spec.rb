@@ -519,85 +519,6 @@ RSpec.describe AttendancesController, type: :controller do
       end
     end
 
-    describe 'GET #to_approval' do
-      let(:event) { FactoryBot.create(:event, organizers: [user]) }
-      let(:group) { FactoryBot.create(:registration_group, event: event) }
-      let!(:pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
-      let!(:other_pending) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :pending) }
-      let!(:out_pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
-      let!(:accepted) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :accepted) }
-      let!(:paid) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :paid) }
-      let!(:confirmed) { FactoryBot.create(:attendance, event: event, registration_group: group, status: :confirmed) }
-      before { get :to_approval, params: { event_id: event } }
-      it { expect(assigns(:attendances_to_approval)).to eq [pending, other_pending] }
-    end
-
-    describe 'GET #waiting_list' do
-      context 'signed as organizer' do
-        let(:organizer) { FactoryBot.create :organizer }
-        before { sign_in organizer }
-        context 'and it is organizing the event' do
-          let(:event) { FactoryBot.create(:event, organizers: [organizer]) }
-
-          context 'having no attendances' do
-            before { get :waiting_list, params: { event_id: event } }
-            it { expect(response).to render_template :waiting_list }
-            it { expect(assigns(:waiting_list)).to eq [] }
-          end
-          context 'having attendances' do
-            let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
-            let!(:other_waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
-            let!(:out_waiting) { FactoryBot.create(:attendance, status: :waiting) }
-            let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
-            let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }
-            let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid) }
-            let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed) }
-            let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled) }
-
-            it 'returns just the waiting attendances' do
-              get :waiting_list, params: { event_id: event }
-              expect(assigns(:waiting_list)).to match_array [waiting, other_waiting]
-            end
-          end
-        end
-        context 'and it does not organize the event' do
-          let(:event) { FactoryBot.create(:event) }
-          context 'having attendances' do
-            let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
-            before { get :waiting_list, params: { event_id: event } }
-            it { expect(response).to have_http_status :not_found }
-          end
-        end
-      end
-
-      context 'signed as admin' do
-        let(:event) { FactoryBot.create(:event) }
-        let(:admin) { FactoryBot.create :admin }
-        before { sign_in admin }
-
-        context 'with no attendances' do
-          before { get :waiting_list, params: { event_id: event } }
-          it { expect(response).to render_template :waiting_list }
-          it { expect(assigns(:waiting_list)).to eq [] }
-        end
-        context 'with attendances' do
-          let!(:waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
-          let!(:other_waiting) { FactoryBot.create(:attendance, event: event, status: :waiting) }
-          let!(:out_waiting) { FactoryBot.create(:attendance, status: :waiting) }
-          let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending) }
-          let!(:accepted) { FactoryBot.create(:attendance, event: event, status: :accepted) }
-          let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid) }
-          let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed) }
-          let!(:cancelled) { FactoryBot.create(:attendance, event: event, status: :cancelled) }
-
-          it 'returns just the waiting attendances' do
-            get :waiting_list, params: { event_id: event }
-            expect(assigns(:waiting_list)).to match_array [waiting, other_waiting]
-          end
-        end
-      end
-    end
-
     describe 'GET #index' do
       before { travel_to Time.zone.local(2018, 2, 20, 10, 0, 0) }
       after { travel_back }
@@ -631,7 +552,10 @@ RSpec.describe AttendancesController, type: :controller do
             before { get :index, params: { event_id: event, pending: 'pending', accepted: 'accepted', paid: 'paid', confirmed: 'confirmed', showed_in: 'showed_in', cancelled: 'cancelled' } }
             it 'assigns the instance variables and renders the template' do
               expect(response).to render_template :index
-              expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, showed_in]
+              attendances_list = [pending, accepted, paid, confirmed, showed_in]
+              expect(assigns(:attendances_list)).to eq attendances_list
+              expect(assigns(:attendances_list_csv)).to eq AttendanceExportService.to_csv(attendances_list)
+
               expect(assigns(:waiting_total)).to eq 1
               expect(assigns(:pending_total)).to eq 1
               expect(assigns(:accepted_total)).to eq 1
@@ -761,7 +685,12 @@ RSpec.describe AttendancesController, type: :controller do
             let!(:out) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'foO') }
             context 'including all statuses' do
               before { get :search, params: { event_id: event, search: 'bla', pending: 'true', accepted: 'true', paid: 'true', confirmed: 'true', cancelled: 'true' }, xhr: true }
-              it { expect(assigns(:attendances_list)).to match_array [pending, accepted, paid, confirmed, cancelled] }
+              it 'assigns the resuts and renders the template' do
+                expect(response).to render_template 'attendances/search'
+                attendances_list = [pending, accepted, paid, confirmed, cancelled]
+                expect(assigns(:attendances_list)).to eq attendances_list
+                expect(assigns(:attendances_list_csv)).to eq AttendanceExportService.to_csv(attendances_list)
+              end
             end
 
             context 'some statuses' do
@@ -824,20 +753,6 @@ RSpec.describe AttendancesController, type: :controller do
             before { get :search, params: { event_id: event, pending: 'true', search: pending.id }, xhr: true }
             it { expect(assigns(:attendances_list)).to eq [pending] }
           end
-        end
-      end
-
-      context 'with csv format' do
-        let!(:attendance) { FactoryBot.create(:attendance, event: event, status: :showed_in, first_name: 'bLa', updated_at: 1.day.ago) }
-        let!(:other) { FactoryBot.create(:attendance, event: event, status: :showed_in, first_name: 'bLaXPTO') }
-        let!(:pending) { FactoryBot.create(:attendance, event: event, status: :pending, first_name: 'bLaXPTO') }
-        let!(:confirmed) { FactoryBot.create(:attendance, event: event, status: :confirmed, first_name: 'bLaXPTO') }
-        let!(:paid) { FactoryBot.create(:attendance, event: event, status: :paid, first_name: 'bLaXPTO') }
-        before { get :search, params: { event_id: event, paid: 'true', format: :csv } }
-        it 'returns the attendances in the csv format' do
-          expected_disposition = 'attachment; filename="attendances_list.csv"'
-          expect(response.body).to eq AttendanceExportService.to_csv(event)
-          expect(response.headers['Content-Disposition']).to eq expected_disposition
         end
       end
     end

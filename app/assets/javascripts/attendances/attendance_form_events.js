@@ -10,9 +10,9 @@ function bindClickToAttendanceSearch() {
 }
 
 function bindClickToLoadUser() {
-    $('#user_for_attendance').on('change', function(){
+    $('.user-select').on('change', function(){
         const eventId = $('#event_id').val();
-        const userId = $('#user_for_attendance').val();
+        const userId = $('.user-select').val();
 
         jQuery.ajax({
             url: `/events/${eventId}/attendances/user_info.js`,

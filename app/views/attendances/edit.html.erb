@@ -1,20 +1,20 @@
 <div class="breadcrumb">
   <div class="row">
     <div class="col-xl-12">
-      <%= link_to t('events.index.title'), events_path %>
+      <%= link_to I18n.t('events.index.title'), events_path %>
       >
 
       <% if current_user.organizer_of?(@event) %>
-        <%= link_to t('attendances.index.title'), event_attendances_path(@event) %>
+        <%= link_to I18n.t('attendances.index.title'), event_attendances_path(@event) %>
         >
       <% end %>
 
       <%= link_to @attendance.full_name, event_attendance_path(@event) %>
       >
 
-      <% t('attendances.edit.title') %>
+      <%= I18n.t('attendances.edit.title') %>
     </div>
   </div>
 </div>
 
-<%= render 'form', event: @event, attendance: @attendance, user: current_user %>
+<%= render 'attendances/form', event: @event, attendance: @attendance, user: current_user %>

@@ -88,7 +88,7 @@ RSpec.describe AttendancesController, type: :controller do
     let(:valid_attendance) do
       {
         event_id: event.id,
-        user_id: user.id,
+        user_id: user_for_attendance.id,
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
@@ -136,7 +136,7 @@ RSpec.describe AttendancesController, type: :controller do
                     post :create, params: { event_id: event, attendance: valid_attendance }
                     created_attendance = assigns(:attendance)
                     expect(created_attendance.event).to eq event
-                    expect(created_attendance.user).to eq user
+                    expect(created_attendance.user).to eq user_for_attendance
                     expect(created_attendance.registered_by_user).to eq user
                     expect(created_attendance).to be_pending
                     expect(created_attendance.registration_group).to be_nil
@@ -168,7 +168,7 @@ RSpec.describe AttendancesController, type: :controller do
               context 'and it is for a different user' do
                 it 'creates the attendance to the specified user' do
                   EmailNotifications.expects(:registration_pending).returns(email)
-                  post :create, params: { event_id: event, attendance: valid_attendance.merge(user_for_attendance: user_for_attendance) }
+                  post :create, params: { event_id: event, attendance: valid_attendance }
                   created_attendance = assigns(:attendance)
                   expect(created_attendance.event).to eq event
                   expect(created_attendance.user).to eq user_for_attendance
@@ -437,6 +437,7 @@ RSpec.describe AttendancesController, type: :controller do
           it 'updates the attendance' do
             AgileAllianceService.stubs(:check_member).returns(false)
             put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit' }
+            expect(Attendance.last.user).to eq user_for_attendance
             expect(Attendance.last.registration_group).to be_nil
             expect(Attendance.last.first_name).to eq user.first_name
             expect(Attendance.last.last_name).to eq user.last_name

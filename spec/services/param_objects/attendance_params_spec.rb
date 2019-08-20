@@ -10,7 +10,7 @@ RSpec.describe AttendanceParams, type: :param_object do
       valid_attendance = { attendance:
                              {
                                event_id: event.id,
-                               user_id: user.id,
+                               user_id: user_for_attendance.id,
                                user_for_attendance: user_for_attendance.id,
                                first_name: user.first_name,
                                last_name: user.last_name,
@@ -62,8 +62,7 @@ RSpec.describe AttendanceParams, type: :param_object do
       valid_attendance = { attendance:
                              {
                                event_id: event.id,
-                               user_id: user.id,
-                               user_for_attendance: user_for_attendance.id,
+                               user_id: user_for_attendance.id,
                                first_name: user.first_name,
                                last_name: user.last_name,
                                email: user.email,
@@ -81,8 +80,7 @@ RSpec.describe AttendanceParams, type: :param_object do
       params_object = AttendanceParams.new(user, event, params)
       expected_return = {
         'event_id' => event.id,
-        'user_id' => user.id,
-        'user_for_attendance' => user_for_attendance.id,
+        'user_id' => user_for_attendance.id,
         'first_name' => user.first_name,
         'last_name' => user.last_name,
         'email' => user.email,

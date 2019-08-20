@@ -102,23 +102,35 @@ RSpec.describe Event, type: :model do
     context 'with one registration quota with vacancy and closed' do
       let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25, closed: true }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq event.full_price }
+      context 'and not null event full price' do
+        it { expect(event.registration_price_for(attendance, 'gateway')).to eq event.full_price }
+      end
+    end
+
+    context 'with no quotas or period' do
+      let(:event_nil_full_price) { FactoryBot.build(:event, full_price: nil) }
+
+      context 'with a valid event full price' do
+        it { expect(event.registration_price_for(attendance, 'gateway')).to eq event.full_price }
+      end
+
+      context 'with an invalid event full price' do
+        it { expect(event_nil_full_price.registration_price_for(attendance, 'gateway')).to eq 0 }
+      end
     end
 
     context 'with one passed period and one registration quota with vacancy and opened' do
-      let(:final_price) { 20 }
       let!(:period_passed) { FactoryBot.create :registration_period, event: event, start_at: 1.month.ago, end_at: 2.weeks.ago }
-      let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25, price: final_price }
+      let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25, price: 20 }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq final_price }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq registration_quota.price }
     end
 
-    context 'with one period and one registration quota with vacancy and opened' do
-      let(:final_price) { 100 }
+    context 'with one valid period and one registration quota with vacancy and opened' do
       let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25 }
 
-      it { expect(event.registration_price_for(attendance, 'gateway')).to eq final_price }
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq registration_period.price }
     end
 
     context 'with one passed period and no quota vacancy' do

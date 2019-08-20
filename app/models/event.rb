@@ -133,7 +133,7 @@ class Event < ApplicationRecord
     elsif quota.first.present?
       quota.first.price * attendance.discount
     else
-      full_price * attendance.discount
+      (full_price || 0) * attendance.discount
     end
   end
 

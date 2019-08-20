@@ -5,8 +5,8 @@
   <% if current_user.organizer_of?(@event) %>
     <div class="row">
       <div class="col-xl-12 col-sm-6 form-group">
-        <%= label_tag t('activerecord.attributes.attendance.user_for_attendance') %>
-        <%= select_tag :user_for_attendance, options_for_select(User.all.order(:first_name, :last_name).map { |u| [u.full_name, u.id] }, user.id), class: 'form-control', include_blank: t('general.select') %>
+        <%= form.label I18n.t('activerecord.attributes.attendance.user_for_attendance') %>
+        <%= form.select :user_id, options_for_select(User.all.order(:first_name, :last_name).map { |user| [user.full_name, user.id] }, (params[:user_id] || @attendance&.user&.id)), { include_blank: t('general.include_blank') }, class: 'form-control user-select' %>
         <span class="inline-hints"><%= t('attendances.new.user_for_attendance.help') %></span>
       </div>
     </div>

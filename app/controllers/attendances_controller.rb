@@ -3,6 +3,7 @@
 class AttendancesController < AuthenticatedController
   before_action :assign_event
   before_action :assign_attendance, except: %i[index create new waiting_list search to_approval attendance_past_info user_info]
+
   before_action :check_organizer, only: %i[waiting_list to_approval index search user_info]
   before_action :check_user, only: %i[show edit update]
 

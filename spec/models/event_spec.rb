@@ -74,6 +74,7 @@ RSpec.describe Event, type: :model do
     let(:full_price) { 930.00 }
     let(:event) { FactoryBot.create(:event, full_price: full_price) }
     let!(:attendance) { FactoryBot.create :attendance, event: event }
+
     context 'with one registration period' do
       let(:final_price) { 100 }
       let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }

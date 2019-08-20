@@ -11,9 +11,6 @@ AllCops:
     - 'config/deploy/**/*'
     - 'deploy/**/*'
 
-Rails:
-  Enabled: true
-
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
   Max: 10
@@ -29,9 +26,6 @@ Style/Documentation:
   Description: 'Document classes and non-namespace modules.'
   Enabled: false # 59 violations
 
-Rails/BulkChangeTable:
-  Enabled: false # 11 violations in migrations
-
 Metrics/LineLength:
   Max: 80
   # To make it possible to copy or click on URIs in the code, we allow lines
@@ -44,12 +38,6 @@ Metrics/BlockLength:
     - '**/*_spec.rb'
     - 'spec/factories/**/*.rb'
     - 'lib/tasks/auto_annotate_models.rake'
-
-Rails/HasAndBelongsToMany:
-  Enabled: false
-
-Rails/HttpPositionalArguments:
-  Enabled: false # TODO: Requires rails 5 to be enabled. Check branch bugfix/rubocop_0_44_new_offenses_fixes for fixes
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false

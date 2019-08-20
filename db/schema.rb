@@ -193,6 +193,12 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "users_dup_temp", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "id", default: 0, null: false
+    t.string "first_name", null: false
+    t.string "email", null: false
+  end
+
   add_foreign_key "attendances", "events"
   add_foreign_key "attendances", "registration_periods"
   add_foreign_key "attendances", "registration_quotas"

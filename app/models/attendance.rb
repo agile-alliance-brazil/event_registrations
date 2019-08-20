@@ -111,7 +111,7 @@ class Attendance < ApplicationRecord
 
   def discount
     amount = 1
-    amount = 1 - (registration_group.discount / 100.00) if registration_group.present?
+    amount = 1 - (registration_group.discount / 100.00) if registration_group.present? && registration_group.discount.present?
     amount
   end
 

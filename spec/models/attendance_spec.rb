@@ -256,6 +256,12 @@ RSpec.describe Attendance, type: :model do
       let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group) }
       it { expect(attendance.discount).to eq 0 }
     end
+
+    context 'when the discount is nil' do
+      let(:group) { FactoryBot.create(:registration_group, event: event, discount: nil, amount: 100) }
+      let!(:attendance) { FactoryBot.create(:attendance, event: event, registration_group: group) }
+      it { expect(attendance.discount).to eq 1 }
+    end
   end
 
   describe '#group_name' do

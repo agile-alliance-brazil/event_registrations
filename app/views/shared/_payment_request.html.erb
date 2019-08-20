@@ -1,4 +1,4 @@
-<% if @attendance.gateway? %>
+<% if @attendance.gateway? && @attendance.registration_value.positive? %>
   <div class="payments">
     <div class="payment_type float-right">
       <%= form_tag checkout_event_payment_path(event_id: @event, id: @attendance), method: :post do %>

@@ -92,6 +92,12 @@ RSpec.describe Event, type: :model do
       it { expect(event.registration_price_for(attendance, 'gateway')).to eq final_price }
     end
 
+    context 'with a period ending yesterday in the end of the day' do
+      let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: Time.zone.yesterday.end_of_day, price: 100 }
+
+      it { expect(event.registration_price_for(attendance, 'gateway')).to eq event.full_price }
+    end
+
     context 'with one registration quota with vacancy and opened' do
       let(:final_price) { 40 }
       let!(:registration_quota) { FactoryBot.create :registration_quota, event: event, quota: 25 }
@@ -213,9 +219,11 @@ RSpec.describe Event, type: :model do
 
   describe '#period_for' do
     let(:event) { FactoryBot.build(:event) }
-    context 'with one period' do
+    context 'with periods' do
       let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
+      let!(:other_registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.month.from_now, end_at: 2.months.from_now }
       it { expect(event.period_for).to eq registration_period }
+      it { expect(event.period_for(35.days.from_now)).to eq other_registration_period }
     end
 
     context 'with no period' do

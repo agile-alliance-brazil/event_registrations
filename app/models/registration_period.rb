@@ -19,7 +19,7 @@ class RegistrationPeriod < ApplicationRecord
 
   has_many :attendances, dependent: :restrict_with_exception
 
-  scope :for, ->(datetime) { where('CAST(? AS DATE) BETWEEN CAST(start_at AS DATE) AND CAST(end_at AS DATE)', datetime).order('id desc') }
+  scope :for, ->(analysed_date) { where(':analysed_date BETWEEN start_at AND end_at', analysed_date: analysed_date).order('id desc') }
   scope :ending_after, ->(datetime) { where('? < end_at', datetime).order('id desc') }
 
   validates :event, :title, :start_at, :end_at, :price, presence: true

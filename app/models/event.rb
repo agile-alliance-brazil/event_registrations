@@ -56,8 +56,8 @@ class Event < ApplicationRecord
     extract_value(attendance, payment_type)
   end
 
-  def period_for(today = Time.zone.today)
-    registration_periods.for(today).first if registration_periods.present?
+  def period_for(now = Time.zone.now)
+    registration_periods.for(now).first if registration_periods.present?
   end
 
   def find_quota

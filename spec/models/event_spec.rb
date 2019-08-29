@@ -222,6 +222,7 @@ RSpec.describe Event, type: :model do
     context 'with periods' do
       let!(:registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.week.ago, end_at: 1.month.from_now }
       let!(:other_registration_period) { FactoryBot.create :registration_period, event: event, start_at: 1.month.from_now, end_at: 2.months.from_now }
+
       it { expect(event.period_for).to eq registration_period }
       it { expect(event.period_for(35.days.from_now)).to eq other_registration_period }
     end
@@ -394,6 +395,14 @@ RSpec.describe Event, type: :model do
     let!(:group) { FactoryBot.create :registration_group, event: event, paid_in_advance: true, capacity: 3, amount: 100 }
     let!(:attendance) { FactoryBot.create :attendance, event: event, registration_group: group }
     it { expect(event.reserved_count).to eq 2 }
+  end
+
+  describe '#ended?' do
+    let(:event) { FactoryBot.create :event, start_date: 1.day.ago, end_date: 1.hour.ago }
+    let(:other_event) { FactoryBot.create :event, start_date: 1.day.ago, end_date: 1.hour.from_now }
+
+    it { expect(event.ended?).to be true }
+    it { expect(other_event.ended?).to be false }
   end
 
   describe '#average_ticket' do

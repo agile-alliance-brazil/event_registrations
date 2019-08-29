@@ -114,11 +114,22 @@ RSpec.describe AttendancesController, type: :controller do
     before { sign_in user }
 
     describe 'GET #new' do
-      it 'renders new template' do
-        get :new, params: { event_id: event }
-        expect(response).to render_template :new
-        expect(assigns(:attendance)).to be_a_new Attendance
-        expect(assigns(:attendance).event).to eq event
+      context 'with running event' do
+        it 'renders new template' do
+          get :new, params: { event_id: event }
+          expect(response).to render_template :new
+          expect(assigns(:attendance)).to be_a_new Attendance
+          expect(assigns(:attendance).event).to eq event
+        end
+      end
+
+      context 'with past event' do
+        let(:event) { FactoryBot.create :event, organizers: [user], attendance_limit: 1, start_date: 3.hours.ago, end_date: 1.hour.ago }
+
+        it 'puts the attendance in the queue' do
+          get :new, params: { event_id: event }
+          expect(response).to have_http_status :not_found
+        end
       end
     end
 
@@ -315,6 +326,15 @@ RSpec.describe AttendancesController, type: :controller do
               end
             end
           end
+
+          context 'with past event' do
+            let(:event) { FactoryBot.create :event, organizers: [user], attendance_limit: 1, start_date: 3.hours.ago, end_date: 1.hour.ago }
+
+            it 'puts the attendance in the queue' do
+              post :create, params: { event_id: event, attendance: valid_attendance }
+              expect(response).to have_http_status :not_found
+            end
+          end
         end
 
         context 'registration_value definition' do
@@ -341,6 +361,7 @@ RSpec.describe AttendancesController, type: :controller do
               end
             end
           end
+
           context 'having period and no quotas or group' do
             let!(:full_registration_period) { FactoryBot.create(:registration_period, start_at: 2.days.ago, end_at: 1.day.from_now, event: event, price: 740) }
             it 'adds the period to the attendance and the correct price' do
@@ -349,6 +370,7 @@ RSpec.describe AttendancesController, type: :controller do
               expect(assigns(:attendance).registration_value).to eq 740
             end
           end
+
           context 'having no period and one quota' do
             let!(:quota) { FactoryBot.create :registration_quota, event: event, quota: 40, order: 1, price: 350 }
             it 'adds the quota to the attendance and the correct price' do

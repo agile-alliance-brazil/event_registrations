@@ -6,6 +6,7 @@ class AttendancesController < AuthenticatedController
 
   before_action :check_organizer, only: %i[index search user_info]
   before_action :check_user, only: %i[show edit update]
+  before_action :check_event, only: %i[new create]
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -111,5 +112,9 @@ class AttendancesController < AuthenticatedController
     return if current_user.organizer_of?(@event)
 
     not_found if current_user.id != @attendance.user.id
+  end
+
+  def check_event
+    not_found if @event.ended?
   end
 end

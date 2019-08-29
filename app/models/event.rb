@@ -120,6 +120,10 @@ class Event < ApplicationRecord
     attendances_confirmed.sum(:registration_value) / attendances_confirmed.count
   end
 
+  def ended?
+    end_date < Time.zone.now
+  end
+
   private
 
   def extract_value(attendance, payment_type)

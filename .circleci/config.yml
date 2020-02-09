@@ -50,7 +50,7 @@ jobs:
         path: /tmp/circleci-test-results
   deploy:
     docker:
-    - image: circleci/ruby:2.4.3
+    - image: circleci/ruby:2.6.4
     steps:
     - checkout
     - restore_cache:

@@ -56,10 +56,6 @@ Current::Application.routes.draw do
     resources :registration_quotas, only: %i[new create destroy edit update]
   end
 
-  # Due to https://github.com/bbatsov/rubocop/issues/4425
-  get '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
-  post '/attendance_statuses/:id', to: redirect('/attendances/%{id}')
-
   resources :payment_notifications, only: :create
 
   root to: 'events#index'

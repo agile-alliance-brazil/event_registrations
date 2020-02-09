@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.4.3'
+ruby '2.6.4'
 gem 'rails'
 
 gem 'airbrake-ruby'
@@ -71,7 +71,7 @@ end
 
 group :test do
   gem 'mocha', require: false
-  gem 'shoulda-matchers', git: 'https://github.com/wuakitv/shoulda-matchers', ref: 'd576b2d'
+  gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'webmock'
 end

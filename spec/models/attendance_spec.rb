@@ -2,9 +2,9 @@
 
 RSpec.describe Attendance, type: :model do
   context 'enums' do
-    it { is_expected.to define_enum_for(:status).with(waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6) }
-    it { is_expected.to define_enum_for(:job_role).with(%i[not_informed student analyst manager vp president clevel coach other developer]) }
-    it { is_expected.to define_enum_for(:payment_type).with(gateway: 1, bank_deposit: 2, statement_agreement: 3) }
+    it { is_expected.to define_enum_for(:status).with_values(waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6) }
+    it { is_expected.to define_enum_for(:job_role).with_values(%i[not_informed student analyst manager vp president clevel coach other developer]) }
+    it { is_expected.to define_enum_for(:payment_type).with_values(gateway: 1, bank_deposit: 2, statement_agreement: 3) }
   end
 
   context 'associations' do

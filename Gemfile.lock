@@ -1,6 +1,7 @@
 GIT
-  remote: https://github.com/correamarques/ruby
-  revision: cabbf838dae8048d9ce080149aed23d5587e8b01
+  remote: https://github.com/jpaulomotta/ruby
+  revision: 59c30b842430a38dc8bf8870aa2ff93a412297d7
+  branch: sandbox-find-by-notification-code
   specs:
     pagseguro-oficial (2.6.1)
       aitch (~> 0.2)

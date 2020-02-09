@@ -23,7 +23,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-github'
 gem 'omniauth-twitter'
-gem 'pagseguro-oficial', git: 'https://github.com/correamarques/ruby'
+gem 'pagseguro-oficial', git: 'https://github.com/jpaulomotta/ruby', branch: 'sandbox-find-by-notification-code' # due to the BigDecimal error on pagseguro bank ticket (boleto)
 gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud
 gem 'rake'
 gem 'sass'

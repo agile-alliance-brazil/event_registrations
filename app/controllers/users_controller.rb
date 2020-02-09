@@ -59,7 +59,7 @@ class UsersController < AuthenticatedController
 
   def search_users
     @users_list = UserRepository.instance.search_engine(params[:roles], params[:search])
-    respond_to { |format| format.js { render file: 'users/search_users' } }
+    respond_to { |format| format.js { render 'users/search_users' } }
   end
 
   private

@@ -5,6 +5,7 @@ jobs:
     docker:
     - image: circleci/ruby:2.6.4
     - image: mysql:5.5
+      command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
       environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         MYSQL_ROOT_PASSWORD: ''

@@ -28,6 +28,7 @@ class railsapp( $user, $app_name ) {
         name         => 'bundler',
         ruby_version => 'ruby-2.6.4@global',
         ensure       => '1.17.3',
+        source       => "https://rubygems.org/",
         require      => Rvm_system_ruby['ruby-2.6.4'];
     }
   }

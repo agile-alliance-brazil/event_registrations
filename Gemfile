@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.4.3'
+ruby '2.6.4'
 gem 'rails'
 
 gem 'airbrake-ruby'
@@ -23,7 +23,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-github'
 gem 'omniauth-twitter'
-gem 'pagseguro-oficial', git: 'https://github.com/correamarques/ruby'
+gem 'pagseguro-oficial', git: 'https://github.com/jpaulomotta/ruby', branch: 'sandbox-find-by-notification-code' # due to the BigDecimal error on pagseguro bank ticket (boleto)
 gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud
 gem 'rake'
 gem 'sass'
@@ -71,7 +71,7 @@ end
 
 group :test do
   gem 'mocha', require: false
-  gem 'shoulda-matchers', git: 'https://github.com/wuakitv/shoulda-matchers', ref: 'd576b2d'
+  gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'webmock'
 end

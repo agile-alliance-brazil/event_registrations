@@ -3,3 +3,6 @@ test:
   database: circleci
   username: root
   host: 127.0.0.1
+  charset: latin1
+  encoding: latin1
+  collation: latin1_swedish_ci

@@ -31,4 +31,6 @@ Current::Application.configure do
   config.eager_load = false
 
   config.force_ssl = false
+
+  config.hosts << '53aa21ae.ngrok.io'
 end

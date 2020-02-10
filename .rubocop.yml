@@ -26,7 +26,7 @@ Style/Documentation:
   Description: 'Document classes and non-namespace modules.'
   Enabled: false # 59 violations
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 80
   # To make it possible to copy or click on URIs in the code, we allow lines
   # contaning a URI to be longer than Max.

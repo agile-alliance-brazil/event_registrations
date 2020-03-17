@@ -25,7 +25,7 @@ class railsapp( $user, $app_name ) {
     }
 
     rvm_gem { 'rubygems308':
-        name         => 'bundler',
+        name         => 'rubygems',
         ruby_version => 'ruby-2.6.4@global',
         ensure       => '3.0.8',
         source       => "https://rubygems.org/",

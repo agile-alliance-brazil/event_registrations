@@ -36,7 +36,7 @@ class railsapp( $user, $app_name ) {
         name         => 'bundler',
         ruby_version => 'ruby-2.6.4@global',
         ensure       => '1.17.3',
-        require      => Rvm_gem['rubygems301'];
+        require      => Rvm_gem['rubygems308'];
     }
   }
 

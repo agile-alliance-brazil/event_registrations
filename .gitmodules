@@ -3,7 +3,7 @@
 	url = https://github.com/puppetlabs/puppetlabs-stdlib
 [submodule "puppet/modules/rvm"]
 	path = puppet/modules/rvm
-	url = https://github.com/maestrodev/puppet-rvm
+	url = https://github.com/agile-alliance-brazil/puppet-rvm
 [submodule "puppet/modules/apache"]
 	path = puppet/modules/apache
 	url = https://github.com/puppetlabs/puppetlabs-apache

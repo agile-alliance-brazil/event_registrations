@@ -24,8 +24,8 @@ class railsapp( $user, $app_name ) {
         require      => Rvm_system_ruby['ruby-2.4.3'];
     }
 
-    rvm_gem { 'rubygems308':
-        name         => 'rubygems',
+    rvm_gem { 'rubygemsupdate308':
+        name         => 'rubygems-update',
         ruby_version => 'ruby-2.6.4@global',
         ensure       => '3.0.8',
         source       => "https://rubygems.org/",
@@ -37,7 +37,7 @@ class railsapp( $user, $app_name ) {
         ruby_version => 'ruby-2.6.4@global',
         ensure       => '1.17.3',
         source       => "https://rubygems.org/",
-        require      => Rvm_gem['rubygems308'];
+        require      => Rvm_gem['rubygemsupdate308'];
     }
   }
 

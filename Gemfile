@@ -2,21 +2,21 @@
 
 source 'https://rubygems.org'
 ruby '2.6.4'
-gem 'rails'
+gem 'rails', '>= 6.0.2.2'
 
 gem 'airbrake-ruby'
 
 gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
-gem 'brcpfcnpj'
+gem 'brcpfcnpj', '>= 3.3.0'
 gem 'carrierwave'
-gem 'coffee-rails'
+gem 'coffee-rails', '>= 5.0.0'
 gem 'country_select'
-gem 'devise'
+gem 'devise', '>= 4.7.1'
 gem 'erubis'
 gem 'faker'
-gem 'formtastic'
+gem 'formtastic', '>= 3.1.5'
 gem 'httparty'
-gem 'jquery-rails'
+gem 'jquery-rails', '>= 4.3.5'
 gem 'mini_magick'
 gem 'mysql2'
 gem 'omniauth'
@@ -27,7 +27,7 @@ gem 'pagseguro-oficial', git: 'https://github.com/jpaulomotta/ruby', branch: 'sa
 gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud
 gem 'rake'
 gem 'sass'
-gem 'sass-rails'
+gem 'sass-rails', '>= 6.0.0'
 gem 'therubyracer', platforms: :ruby
 gem 'will_paginate'
 gem 'yui-compressor', require: 'yui/compressor'
@@ -37,23 +37,23 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'byebug', require: false
   gem 'database_cleaner'
-  gem 'dotenv-rails', require: false
-  gem 'factory_bot_rails'
+  gem 'dotenv-rails', '>= 2.7.5', require: false
+  gem 'factory_bot_rails', '>= 5.1.1'
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'metric_fu'
   gem 'parser'
   gem 'poltergeist', require: 'capybara/poltergeist'
-  gem 'rails-controller-testing'
+  gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-collection_matchers'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>= 3.9.0'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rspec', require: false
   gem 'selenium-webdriver'
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'sprockets-rails'
+  gem 'sprockets-rails', '>= 3.2.1'
   gem 'sqlite3'
 end
 

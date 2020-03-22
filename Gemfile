@@ -41,7 +41,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'guard-rspec'
   gem 'guard-rubocop'
-  gem 'metric_fu'
+  gem 'metric_fu', '>= 4.12.0'
   gem 'parser'
   gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'rails-controller-testing'
@@ -66,7 +66,7 @@ group :development do
   gem 'foreman'
   gem 'net-ssh'
   gem 'pry'
-  gem 'travis-lint'
+  gem 'travis-lint', '>= 2.0.0'
 end
 
 group :test do

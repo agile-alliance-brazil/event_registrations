@@ -557,7 +557,7 @@ DEPENDENCIES
   guard-rubocop
   httparty
   jquery-rails
-  metric_fu
+  metric_fu (>= 4.12.0)
   mini_magick
   mocha
   mysql2
@@ -589,7 +589,7 @@ DEPENDENCIES
   sprockets-rails
   sqlite3
   therubyracer
-  travis-lint
+  travis-lint (>= 2.0.0)
   webmock
   will_paginate
   yui-compressor

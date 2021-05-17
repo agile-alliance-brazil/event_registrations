@@ -1,1 +1,3 @@
-web: bundle exec rails server -p $PORT
+release: bin/rails db:migrate
+web: bundle exec puma -C config/puma.rb
+worker: bundle exec sidekiq -C config/sidekiq.yml

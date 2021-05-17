@@ -33,7 +33,7 @@ class PaymentNotification < ApplicationRecord
   validates :attendance, presence: true
 
   scope :pag_seguro, -> { where('params LIKE ?', '%type: pag_seguro%') }
-  scope :completed, -> { where('status = ?', 'Completed') }
+  scope :completed, -> { where(status: 'Completed') }
 
   def self.create_for_pag_seguro(params)
     attributes = from_pag_seguro_params(params)

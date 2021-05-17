@@ -34,5 +34,5 @@ Current::Application.configure do
   # Loading classes policy. true to load at start. false to load as needed
   config.eager_load = false
 
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
 end

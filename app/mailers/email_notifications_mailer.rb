@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class EmailNotifications < ApplicationMailer
+class EmailNotificationsMailer < ApplicationMailer
   def registration_pending(attendance, sent_at = Time.zone.now)
     mail_attendance(attendance, sent_at, 'email.registration_pending.subject')
   end
@@ -40,14 +40,11 @@ class EmailNotifications < ApplicationMailer
     @event = attendance.event
     attachments.inline['logo.png'] = File.read('app/assets/images/logoAgileAlliance.png')
 
-    l = attendance.country == 'BR' ? :pt : :en
-    I18n.with_locale(l) do
-      subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
-      Rails.logger.info("[EmailNotifications:mail_attendance] { mail informations: { subject: #{subject} } }")
+    subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
+    Rails.logger.info("[EmailNotificationsMailer:mail_attendance] { mail informations: { subject: #{subject} } }")
 
-      headers = { from: 'no-reply@agilebrazil.com', to: attendance.email, subject: subject, date: sent_at }
-      headers[:cc] = @attendance.event.main_email_contact if @attendance.event.main_email_contact
-      mail(headers)
-    end
+    headers = { from: 'no-reply@agilebrazil.com', to: attendance.email, subject: subject, date: sent_at }
+    headers[:cc] = @attendance.event.main_email_contact if @attendance.event.main_email_contact
+    mail(headers)
   end
 end

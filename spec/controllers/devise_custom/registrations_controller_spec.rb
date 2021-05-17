@@ -15,6 +15,7 @@ RSpec.describe DeviseCustom::RegistrationsController, type: :controller do
           expect(User.last.email).to eq 'foo@bar.com.br'
         end
       end
+
       context 'with invalid parameters' do
         it 'does not create the user and render the form again' do
           post :create, params: { user: { first_name: '', last_name: '', email: '', password: '', password_confirmation: '' } }

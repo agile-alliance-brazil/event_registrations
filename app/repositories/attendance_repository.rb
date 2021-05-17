@@ -5,7 +5,7 @@ class AttendanceRepository
 
   def search_for_list(event, text, statuses)
     statuses_keys = statuses.map { |status| Attendance.statuses[status] }
-    event.attendances.where(status: statuses_keys).where('((first_name LIKE :first_name OR last_name LIKE :last_name OR organization LIKE :organization OR email LIKE :email OR attendances.id = :attendance_id))', first_name: "%#{text}%", last_name: "%#{text}%", organization: "%#{text}%", email: "%#{text}%", attendance_id: text.to_s).order(updated_at: :desc)
+    event.attendances.where(status: statuses_keys).where('((first_name ILIKE :search_param OR last_name ILIKE :search_param OR organization ILIKE :search_param OR email ILIKE :search_param))', search_param: "%#{text&.downcase}%").order(updated_at: :desc)
   end
 
   def for_cancelation_warning(event)

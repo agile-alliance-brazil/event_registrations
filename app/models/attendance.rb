@@ -63,7 +63,7 @@
 class Attendance < ApplicationRecord
   before_create :set_last_status_change
 
-  enum job_role: %i[not_informed student analyst manager vp president clevel coach other developer]
+  enum job_role: { not_informed: 0, student: 1, analyst: 2, manager: 3, vp: 4, president: 5, clevel: 6, coach: 7, other: 8, developer: 9 }
   enum status: { waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6 }
   enum payment_type: { gateway: 1, bank_deposit: 2, statement_agreement: 3 }
 
@@ -90,8 +90,8 @@ class Attendance < ApplicationRecord
   validates :first_name, :last_name, presence: true, length: { maximum: 100 }
   validates :phone, :city, :organization, length: { maximum: 100, allow_blank: true }
 
-  validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, length: { minimum: 6, maximum: 100 }
-  validates :phone, format: { with: /\A[0-9\(\) .\-\+]+\Z/i, allow_blank: true }
+  validates :email, format: { with: /\A([\w.%+\-]+)@([\w\-]+\.)+(\w{2,})\z/i }, length: { minimum: 6, maximum: 100 }
+  validates :phone, format: { with: /\A[0-9() .\-+]+\Z/i, allow_blank: true }
 
   validate :duplicated_active_email_in_event?, on: :create
 

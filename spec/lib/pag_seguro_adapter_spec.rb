@@ -3,10 +3,10 @@
 require File.join(File.dirname(__FILE__), '../../lib/pag_seguro_adapter')
 
 describe PagSeguroAdapter do
-  let(:attendance) { FactoryBot.create(:attendance) }
+  let(:attendance) { Fabricate(:attendance) }
 
   it 'generates list of items from attendance' do
-    adapter = PagSeguroAdapter.from_attendance(attendance)
+    adapter = described_class.from_attendance(attendance)
 
     variables = adapter.to_variables
     expect(variables).to have(5).item

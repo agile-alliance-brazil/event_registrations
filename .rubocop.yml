@@ -1,53 +1,123 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-rspec
+  - rubocop-rake
+
 AllCops:
-  DisplayCopNames: true
+  TargetRubyVersion: 3.0
   Exclude:
-    - 'puppet/modules/stdlib/**/*' # Pulled from Puppetfile
-    - 'puppet/modules/apache/**/*' # Pulled from Puppetfile
-    - 'puppet/modules/concat/**/*' # Pulled from Puppetfile
-    - 'puppet/modules/rvm/**/*' # Pulled from Puppetfile
-    - 'puppet/.tmp/**/*' # Temporary files
-    - 'vendor/**/*' # Pulled from Gemfile
-    - 'db/schema.rb' # Auto-generated file
-    - 'config/deploy/**/*'
-    - 'deploy/**/*'
+    # You could specify set of files or dirs while you want to be ignored by rubocop
+    - 'vendor/**/*'
+    - 'bin/*'
+    - 'db/schema.rb'
+    - 'Gemfile.lock'
+    - !ruby/regexp /old_and_unused\.rb$/
+    - 'app/helpers/**/*'
+    - 'config/environments/**/*'
+    - 'app/jobs/**/*'
+  NewCops: enable
 
 Metrics/MethodLength:
-  CountComments: false  # count full line comments?
-  Max: 10
-  Enabled: false # 10 violations
-
-Metrics/AbcSize:
-  # The ABC size is a calculated magnitude, so this number can be a Fixnum or
-  # a Float.
-  Max: 15
-  Enabled: false # 15 violations
-
-Style/Documentation:
-  Description: 'Document classes and non-namespace modules.'
-  Enabled: false # 59 violations
-
-Layout/LineLength:
-  Max: 80
-  # To make it possible to copy or click on URIs in the code, we allow lines
-  # contaning a URI to be longer than Max.
-  AllowURI: true
-  Enabled: false # 263 violations
+  Exclude:
+    - 'app/routes/**/*'
+    - 'db/migrate/**/*'
+    - 'app/services/attendance_export_service.rb'
+  Max: 20
 
 Metrics/BlockLength:
   Exclude:
-    - '**/*_spec.rb'
-    - 'spec/factories/**/*.rb'
-    - 'lib/tasks/auto_annotate_models.rake'
+    - 'app/routes/**/*'
+    - 'config/routes.rb'
+    - 'db/migrate/**/*'
+    - 'lib/**/*'
+    - 'spec/**/*'
+    - 'app/services/attendance_export_service.rb'
 
-Lint/AmbiguousBlockAssociation:
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'lib/**/*'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/**/*'
+    -
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/routes/**/*'
+    - 'db/migrate/**/*'
+    - 'lib/**/*'
+    - 'app/services/attendance_export_service.rb'
+  Max: 30
+
+Rails/BulkChangeTable:
+  Exclude:
+    - 'db/migrate/20190103134846_remove_money_gem.rb'
+    - 'db/migrate/20180930220853_add_image_field_to_event_and_user.rb'
+    - 'db/migrate/20180602214422_add_devise_to_users.rb'
+    - 'db/migrate/20180521195234_drop_table_invoices.rb'
+    - 'db/migrate/20180502154501_change_status_field_for_attendance.rb'
+    - 'db/migrate/20170425042251_change_job_role_to_integer.rb'
+    - 'db/migrate/20170311160016_change_payment_type_on_invoice_to_enum.rb'
+    - 'db/migrate/20160217002804_remove_fields_from_attendance_and_add_others.rb'
+    - 'db/migrate/20160215142848_add_event_link_and_image_to_event.rb'
+    - 'db/migrate/20160104003728_drop_table_invoice_attendances.rb'
+    - 'db/migrate/20151231024432_drop_table_registration_price.rb'
+    - 'db/migrate/20150628062128_add_advised_to_attendance.rb'
+    - 'db/migrate/20150503072125_add_start_and_end_date_to_event.rb'
+    - 'db/migrate/20130318014329_add_user_info_to_attendance.rb'
+
+Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
-Style/HashEachMethods:
-  Enabled: true
+Layout/LineLength:
+  Enabled: false
 
-Style/HashTransformKeys:
-  Enabled: true
+Style/Documentation:
+  Enabled: false
 
-Style/HashTransformValues:
-  Enabled: true
-  
+Style/AsciiComments:
+  Enabled: false
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Rails/NotNullColumn:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/ScatteredLet:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/ScatteredSetup:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false

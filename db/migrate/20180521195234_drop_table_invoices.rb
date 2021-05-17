@@ -2,19 +2,13 @@
 
 class DropTableInvoices < ActiveRecord::Migration[5.2]
   def up
-    execute 'SET FOREIGN_KEY_CHECKS=0;'
-
     remove_column :attendances, :payment_type
     add_column :attendances, :payment_type, :integer
 
-    execute('UPDATE attendances INNER JOIN invoices ON invoices.user_id = attendances.user_id SET attendances.payment_type = invoices.payment_type;')
-    execute('UPDATE attendances SET attendances.payment_type = 1 WHERE attendances.payment_type IS NULL;')
+    execute 'DROP TABLE invoices CASCADE'
 
-    drop_table :invoices
     remove_column :payment_notifications, :invoice_id
     remove_column :registration_groups, :invoice_id
-
-    execute 'SET FOREIGN_KEY_CHECKS=1;'
 
     add_column :payment_notifications, :attendance_id, :integer
     add_foreign_key :payment_notifications, :attendances, column: :attendance_id

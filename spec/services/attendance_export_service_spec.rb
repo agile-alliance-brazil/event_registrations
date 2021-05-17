@@ -3,14 +3,14 @@
 describe AttendanceExportService, type: :service do
   describe '.to_csv' do
     context 'with attendances' do
-      let(:event) { FactoryBot.create :event }
-      let(:group) { FactoryBot.create :registration_group, event: event, name: 'Group for to csv test' }
+      let(:event) { Fabricate :event }
+      let(:group) { Fabricate :registration_group, event: event, name: 'Group for to csv test' }
       let!(:attendance) do
-        FactoryBot.create(:attendance,
-                          event: event,
-                          status: :showed_in,
-                          first_name: 'bLa',
-                          registration_group: group)
+        Fabricate(:attendance,
+                  event: event,
+                  status: :showed_in,
+                  first_name: 'bLa',
+                  registration_group: group)
       end
 
       let(:expected) do
@@ -35,7 +35,8 @@ describe AttendanceExportService, type: :service do
           "#{attendance.job_role}\n"
         title + body
       end
-      it { expect(AttendanceExportService.to_csv(event.attendances)).to eq expected }
+
+      it { expect(described_class.to_csv(event.attendances)).to eq expected }
     end
   end
 end

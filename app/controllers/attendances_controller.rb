@@ -57,17 +57,16 @@ class AttendancesController < AuthenticatedController
   end
 
   def change_status
-    if params[:new_status] == 'accept'
+    case params[:new_status]
+    when 'accept'
       @attendance.accepted!
-      EmailNotifications.registration_group_accepted(@attendance).deliver
-    elsif params[:new_status] == 'recover'
-      @attendance.pending!
-    elsif params[:new_status] == 'pay'
+      EmailNotificationsMailer.registration_group_accepted(@attendance).deliver
+    when 'pay'
       @attendance.paid!
-    elsif params[:new_status] == 'confirm'
+    when 'confirm'
       @attendance.confirmed!
-      EmailNotifications.registration_confirmed(@attendance).deliver
-    elsif params[:new_status] == 'mark_show'
+      EmailNotificationsMailer.registration_confirmed(@attendance).deliver
+    when 'mark_show'
       @attendance.showed_in!
     else
       @attendance.pending!

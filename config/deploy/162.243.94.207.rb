@@ -1,4 +1,5 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary
@@ -15,7 +16,7 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server '162.243.94.207', user: 'ubuntu', roles: %w(web app db)
+server '162.243.94.207', user: 'ubuntu', roles: %w[web app db]
 set :manifest, 'default'
 set :server_url, 'inscricoes.agilebrazil.com'
 
@@ -26,7 +27,7 @@ set :server_url, 'inscricoes.agilebrazil.com'
 set :ssh_options, {
   keys: [File.join(File.dirname(__FILE__), '../../certs/digital_ocean')],
   forward_agent: true,
-  auth_methods: %w(publickey)
+  auth_methods: %w[publickey]
   # password: 'please use keys'
 }
 # and/or per server

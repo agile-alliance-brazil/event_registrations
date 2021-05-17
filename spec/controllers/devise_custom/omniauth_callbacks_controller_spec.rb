@@ -15,7 +15,7 @@ RSpec.describe DeviseCustom::OmniauthCallbacksController, type: :controller do
 
     context 'when the user does not exist' do
       it 'redirects the user to complete the registration' do
-        User.expects(:from_omniauth).once.returns User.new
+        expect(User).to(receive(:from_omniauth)).once.and_return(User.new)
         get :facebook
         expect(response).to redirect_to new_user_registration_path
         expect(controller.user_signed_in?).to be false
@@ -24,20 +24,21 @@ RSpec.describe DeviseCustom::OmniauthCallbacksController, type: :controller do
 
     context 'when the user exists' do
       context 'and it was the first login' do
-        let!(:user) { FactoryBot.create :user, sign_in_count: 0 }
+        let!(:user) { Fabricate :user, sign_in_count: 0 }
 
         it 'redirects the user to complete the registration' do
-          User.expects(:from_omniauth).once.returns user
+          expect(User).to(receive(:from_omniauth)).once.and_return(user)
           get :facebook
           expect(response).to redirect_to edit_default_password_user_path(user)
           expect(controller.user_signed_in?).to be false
         end
       end
+
       context 'and it was not the first login' do
-        let!(:user) { FactoryBot.create :user, sign_in_count: 1 }
+        let!(:user) { Fabricate :user, sign_in_count: 1 }
 
         it 'redirects the user to complete the registration' do
-          User.expects(:from_omniauth).once.returns user
+          expect(User).to(receive(:from_omniauth)).once.and_return(user)
           get :facebook
           expect(response).to redirect_to root_path
           expect(controller.user_signed_in?).to be true
@@ -59,7 +60,7 @@ RSpec.describe DeviseCustom::OmniauthCallbacksController, type: :controller do
 
       context 'when the user does not exist' do
         it 'redirects the user to complete the registration' do
-          User.expects(:from_omniauth).once.returns User.new
+          expect(User).to(receive(:from_omniauth)).once.and_return(User.new)
           get :github
           expect(response).to redirect_to new_user_registration_path
           expect(controller.user_signed_in?).to be false
@@ -68,20 +69,21 @@ RSpec.describe DeviseCustom::OmniauthCallbacksController, type: :controller do
 
       context 'when the user exists' do
         context 'and it was the first login' do
-          let!(:user) { FactoryBot.create :user, sign_in_count: 0 }
+          let!(:user) { Fabricate :user, sign_in_count: 0 }
 
           it 'redirects the user to complete the registration' do
-            User.expects(:from_omniauth).once.returns user
+            expect(User).to(receive(:from_omniauth)).once.and_return(user)
             get :github
             expect(response).to redirect_to edit_default_password_user_path(user)
             expect(controller.user_signed_in?).to be false
           end
         end
+
         context 'and it was not the first login' do
-          let!(:user) { FactoryBot.create :user, sign_in_count: 1 }
+          let!(:user) { Fabricate :user, sign_in_count: 1 }
 
           it 'redirects the user to complete the registration' do
-            User.expects(:from_omniauth).once.returns user
+            expect(User).to(receive(:from_omniauth)).once.and_return(user)
             get :github
             expect(response).to redirect_to root_path
             expect(controller.user_signed_in?).to be true
@@ -123,7 +125,7 @@ RSpec.describe DeviseCustom::OmniauthCallbacksController, type: :controller do
 
       context 'when the user does not exist' do
         it 'redirects the user to complete the registration' do
-          User.expects(:from_omniauth).once.returns User.new
+          expect(User).to(receive(:from_omniauth)).once.and_return(User.new)
           get :twitter
           expect(response).to redirect_to new_user_registration_path
           expect(controller.user_signed_in?).to be false
@@ -132,20 +134,21 @@ RSpec.describe DeviseCustom::OmniauthCallbacksController, type: :controller do
 
       context 'when the user exists' do
         context 'and it was the first login' do
-          let!(:user) { FactoryBot.create :user, sign_in_count: 0 }
+          let!(:user) { Fabricate :user, sign_in_count: 0 }
 
           it 'redirects the user to complete the registration' do
-            User.expects(:from_omniauth).once.returns user
+            expect(User).to(receive(:from_omniauth)).once.and_return(user)
             get :twitter
             expect(response).to redirect_to edit_default_password_user_path(user)
             expect(controller.user_signed_in?).to be false
           end
         end
+
         context 'and it was not the first login' do
-          let!(:user) { FactoryBot.create :user, sign_in_count: 1 }
+          let!(:user) { Fabricate :user, sign_in_count: 1 }
 
           it 'redirects the user to complete the registration' do
-            User.expects(:from_omniauth).once.returns user
+            expect(User).to(receive(:from_omniauth)).once.and_return(user)
             get :twitter
             expect(response).to redirect_to root_path
             expect(controller.user_signed_in?).to be true

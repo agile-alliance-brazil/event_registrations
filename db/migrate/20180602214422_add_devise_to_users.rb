@@ -4,10 +4,6 @@ class AddDeviseToUsers < ActiveRecord::Migration[5.2]
   def self.up
     con = ActiveRecord::Base.connection
 
-    ## Remove invalid users
-    con.execute('UPDATE users u LEFT JOIN attendances a on a.user_id = u.id SET u.email = a.email WHERE u.email IS NULL;')
-    con.execute('DELETE FROM users WHERE email IS NULL')
-
     result_for_emails = con.select_all('SELECT u.email FROM users u WHERE email IS NOT NULL GROUP BY u.email HAVING COUNT(1) >= 2')
     result_for_emails.map do |email|
       result_for_ids = con.select_all("SELECT u.id AS user_id FROM users u WHERE u.email = #{con.quote(email['email'])}")

@@ -3,11 +3,11 @@
 require File.join(File.dirname(__FILE__), '../../lib/payment_gateway_adapter')
 
 RSpec.describe PaymentGatewayAdapter do
-  let(:attendance) { FactoryBot.create(:attendance, payment_type: :gateway) }
+  let(:attendance) { Fabricate(:attendance, payment_type: :gateway) }
 
   context 'from_attendance' do
     it 'generates a list of items from attendance' do
-      items = PaymentGatewayAdapter.from_attendance(attendance, PaymentGatewayAdapter::Item)
+      items = described_class.from_attendance(attendance, PaymentGatewayAdapter::Item)
 
       expect(items).to have(1).item
       item = items.first

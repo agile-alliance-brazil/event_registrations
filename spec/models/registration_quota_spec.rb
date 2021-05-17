@@ -13,29 +13,39 @@ describe RegistrationQuota, type: :model do
 
   describe '#vacancy?' do
     context 'with no paid registration_groups registered during the quota' do
-      let(:registration_quota) { FactoryBot.create :registration_quota, quota: 23 }
+      let(:registration_quota) { Fabricate :registration_quota, quota: 23 }
+
       context 'with vacancy' do
-        let(:attendances) { FactoryBot.create_list(:attendance, 20) }
+        let(:attendances) { Fabricate.times(20, :attendance) }
+
         before { registration_quota.attendances = attendances }
-        it { expect(registration_quota.vacancy?).to be_truthy }
+
+        it { expect(registration_quota).to be_vacancy }
       end
+
       context 'without vacancy' do
-        let(:attendances) { FactoryBot.create_list(:attendance, 23) }
+        let(:attendances) { Fabricate.times(23, :attendance) }
+
         before { registration_quota.attendances = attendances }
-        it { expect(registration_quota.vacancy?).to be_falsey }
+
+        it { expect(registration_quota).not_to be_vacancy }
       end
     end
 
     context 'with paid registration_groups registered during the quota' do
-      let(:quota) { FactoryBot.create :registration_quota, quota: 10 }
+      let(:quota) { Fabricate :registration_quota, quota: 10 }
+
       context 'with no vacancy' do
-        let!(:group) { FactoryBot.create :registration_group, paid_in_advance: true, capacity: 5, amount: 100, registration_quota: quota }
-        let!(:other_group) { FactoryBot.create :registration_group, paid_in_advance: true, capacity: 5, amount: 100, registration_quota: quota }
-        it { expect(quota.vacancy?).to be_falsey }
+        let!(:group) { Fabricate :registration_group, paid_in_advance: true, capacity: 5, amount: 100, registration_quota: quota }
+        let!(:other_group) { Fabricate :registration_group, paid_in_advance: true, capacity: 5, amount: 100, registration_quota: quota }
+
+        it { expect(quota).not_to be_vacancy }
       end
+
       context 'with vacancy' do
-        let!(:group) { FactoryBot.create :registration_group, paid_in_advance: true, capacity: 5, amount: 100, registration_quota: quota }
-        it { expect(quota.vacancy?).to be_truthy }
+        let!(:group) { Fabricate :registration_group, paid_in_advance: true, capacity: 5, amount: 100, registration_quota: quota }
+
+        it { expect(quota).to be_vacancy }
       end
     end
   end

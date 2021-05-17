@@ -47,7 +47,7 @@ class EventsController < AuthenticatedController
 
     @event.add_organizer(organizer)
     assign_organizers
-    respond_to { |format| format.js {} }
+    respond_to { |format| format.js { render 'events/add_organizer' } }
   end
 
   def remove_organizer

@@ -7,6 +7,8 @@ class ChangePaymentTypeOnInvoiceToEnum < ActiveRecord::Migration[4.2]
     execute("UPDATE invoices SET type_number = 2 WHERE payment_type='bank_deposit'")
     execute("UPDATE invoices SET type_number = 3 WHERE payment_type='statement_agreement'")
 
+    remove_column :invoices, :payment_type
+    add_column :invoices, :payment_type, :integer
     change_column_null :invoices, :payment_type, true
     execute('UPDATE invoices SET payment_type = null')
     change_column :invoices, :payment_type, :integer

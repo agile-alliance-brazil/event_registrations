@@ -12,8 +12,8 @@ class PaymentsController < ApplicationController
     response = PagSeguroService.checkout(@attendance, payment)
 
     if response[:errors].present?
-      pagseguro_errors_array = response[:errors].split(/\\n/)
-      error_message = "#{pagseguro_errors_array.shift}<ul>#{pagseguro_errors_array.map { |pagseguro_error| "<li>#{pagseguro_error}</li>" if pagseguro_error }.flatten.join('')}</ul>"
+      pagseguro_errors_array = response[:errors].split('\\n')
+      error_message = "#{pagseguro_errors_array.shift}<ul>#{pagseguro_errors_array.map { |pagseguro_error| "<li>#{pagseguro_error}</li>" if pagseguro_error }.flatten.join}</ul>"
       flash[:error] = I18n.t('payments_controller.checkout.error', reason: error_message)
       redirect_to event_attendance_path(@event, @attendance)
     else

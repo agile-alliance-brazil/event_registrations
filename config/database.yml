@@ -1,0 +1,28 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: agilebrazil_development
+  username: postgres
+  password: postgres
+
+test:
+  <<: *default
+  database: agilebrazil_test
+  username: postgres
+  password: postgres
+
+staging:
+  <<: *default
+  database: agilebrazil_staging
+  username: postgres
+  password: postgres
+
+production:
+  <<: *default
+  database: registrations_production
+  username: registrations_db
+  password: <%= Figaro.env.registrations_database_password %>

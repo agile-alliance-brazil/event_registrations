@@ -43,7 +43,7 @@ class EmailNotificationsMailer < ApplicationMailer
     subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
     Rails.logger.info("[EmailNotificationsMailer:mail_attendance] { mail informations: { subject: #{subject} } }")
 
-    headers = { from: 'no-reply@agilebrazil.com', to: attendance.email, subject: subject, date: sent_at }
+    headers = { from: 'inscricoes@agilebrazil.com', to: attendance.email, subject: subject, date: sent_at }
     headers[:cc] = @attendance.event.main_email_contact if @attendance.event.main_email_contact
     mail(headers)
   end

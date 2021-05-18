@@ -17,6 +17,7 @@ Current::Application.configure do
   config.action_mailer.asset_host = host
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.show_previews = true
+  config.action_mailer.delivery_method = :smtp
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log

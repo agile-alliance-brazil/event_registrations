@@ -32,7 +32,7 @@ class PaymentsController < ApplicationController
     payment_notifications_url(
       type: 'pag_seguro',
       pedido: @attendance.id,
-      store_code: APP_CONFIG[:pag_seguro][:store_code]
+      store_code: Figaro.env.pag_seguro_store_code
     )
   end
 

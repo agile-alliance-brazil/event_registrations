@@ -5,9 +5,9 @@ RSpec.describe AgileAllianceService do
 
   after { WebMock.disable! }
 
-  let(:token) { APP_CONFIG[:agile_alliance][:api_token] }
+  let(:token) { Figaro.env.agile_alliance_api_token }
   let(:headers) { { 'Authorization' => token } }
-  let(:host) { "#{APP_CONFIG[:agile_alliance][:api_host]}/check_member/bla" }
+  let(:host) { "#{Figaro.env.agile_alliance_api_host}/check_member/bla" }
 
   describe '.check_member' do
     context 'valid data returned' do

@@ -33,15 +33,7 @@ set :ssh_options, {
   auth_methods: %w[publickey]
   # password: 'please use keys'
 }
-# and/or per server
-# server 'example.com',
-#   user: 'user_name',
-#   roles: %w{web app},
-#   ssh_options: {
-#     user: 'user_name', # overrides user setting above
-#     keys: %w(/home/user_name/.ssh/id_rsa),
-#     forward_agent: false,
-#     auth_methods: %w(publickey password)
-#     # password: 'please use keys'
-#   }
-# setting per server overrides global ssh_options
+
+host = 'https://event-registrations-staging.herokuapp.com/'
+config.action_mailer.default_url_options = { host: host }
+config.action_mailer.asset_host = host

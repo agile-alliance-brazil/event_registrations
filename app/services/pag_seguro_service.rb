@@ -5,8 +5,8 @@ class PagSeguroService
 
   def self.config
     PagSeguro.configure do |config|
-      config.token = APP_CONFIG[:pag_seguro][:token]
-      config.email = APP_CONFIG[:pag_seguro][:email]
+      config.token = Figaro.env.pag_seguro_token
+      config.email = Figaro.env.pag_seguro_email
     end
   end
 

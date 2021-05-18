@@ -43,15 +43,11 @@ class PaymentNotification < ApplicationRecord
   private
 
   def mark_attendance_as_paid
-    if pag_seguro_valid?(APP_CONFIG[params[:type]])
+    if params[:store_code] == Figaro.env.pag_seguro_store_code
       attendance.paid!
     else
       Airbrake.notify("Failed Payment Notification for attendance: #{attendance.full_name}", params)
     end
-  end
-
-  def pag_seguro_valid?(hash)
-    params[:store_code] == hash[:store_code]
   end
 
   class << self

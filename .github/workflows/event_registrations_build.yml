@@ -75,6 +75,8 @@ jobs:
           PG_PASSWORD: "postgres"
           PG_PORT: ${{ job.services.postgres.ports['5432'] }}
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+          AGILE_ALLIANCE_API_HOST: 'https://aa-service-bus.herokuapp.com'
+          PAG_SEGURO_STORE_CODE: 'pagseguro_store_code'
 
   deploy-staging:
     runs-on: ubuntu-latest

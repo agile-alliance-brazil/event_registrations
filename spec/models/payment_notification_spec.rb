@@ -12,7 +12,7 @@ RSpec.describe PaymentNotification, type: :model do
   context 'callbacks' do
     describe 'pagseguro payment' do
       let(:attendance) { Fabricate(:attendance, registration_date: Time.zone.now, status: :pending) }
-      let(:valid_params) { { type: 'pag_seguro', secret: Figaro.env.pag_seguro_token, transacao_id: '12345678', status: 'Aprovada', pedido: attendance.id, store_code: Figaro.env.pag_seguro_store_code } }
+      let(:valid_params) { { type: 'pag_seguro', secret: Figaro.env.pag_seguro_token, transacao_id: '12345678', status: 'Aprovada', pedido: attendance.id, store_code: 'pagseguro_store_code' } }
       let(:valid_args) { { status: 'Completed', attendance: attendance, params: valid_params } }
 
       it 'succeed if status is Aprovada and params are valid' do

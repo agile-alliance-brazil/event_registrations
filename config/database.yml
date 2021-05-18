@@ -5,12 +5,14 @@ default: &default
 
 development:
   <<: *default
+  host: localhost
   database: agilebrazil_development
   username: postgres
   password: postgres
 
 test:
   <<: *default
+  host: localhost
   database: agilebrazil_test
   username: postgres
   password: postgres

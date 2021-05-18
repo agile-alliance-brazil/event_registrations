@@ -39,7 +39,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_DB: "agilebrazil_test"
+          RAILS_ENV: test
+          POSTGRES_PORT: 5432
           POSTGRES_USER: "postgres"
           POSTGRES_PASSWORD: "postgres"
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -62,17 +63,21 @@ jobs:
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
-
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.7.5
+      - name: Setup Database
+        run: |
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
         env:
           RAILS_ENV: test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-        with:
-          coverageCommand: bundle exec rspec
-          debug: true
+
+      - name: Test & publish code coverage
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        run: bundle exec rspec
 
   deploy-staging:
     runs-on: ubuntu-latest

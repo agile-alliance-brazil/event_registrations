@@ -44,3 +44,5 @@ certs/*
 .idea/
 dump/
 lib/capistrano/
+
+/config/master.key

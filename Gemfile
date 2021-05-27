@@ -20,8 +20,9 @@ gem 'mini_magick'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-github'
+gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-twitter'
-gem 'pagseguro-oficial'
+gem 'pagseguro-oficial', git: 'https://github.com/celsoMartins/ruby', branch: 'sandbox-find-by-notification-code' # due to the BigDecimal error on pagseguro bank ticket (boleto)
 gem 'pg'
 gem 'rake'
 gem 'sass'
@@ -51,14 +52,7 @@ end
 
 group :development do
   gem 'annotate'
-  gem 'flamegraph'
-  gem 'listen'
-  gem 'memory_profiler'
   gem 'rack-mini-profiler', require: false
-  gem 'rails_best_practices', require: false
-  gem 'rubycritic', require: false
-  gem 'stackprof'
-  gem 'traceroute'
   gem 'web-console'
 end
 

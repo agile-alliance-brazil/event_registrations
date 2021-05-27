@@ -1,42 +1,24 @@
 # encoding: UTF-8
 ---
-  ses:
-    access_key_id: "your_aws_access_key_id"
-    secret_access_key: "your_aws_secret_access_key"
-    from: "no-reply@domain.com"
-    server: "email.us-east-1.amazonaws.com"
-  host: localhost:3000
-  organizer:
-    name: Organizer
-    email: organizer@domain.com
-    cced: Organizer Helper
-    cced_email: helper@domain.com
-    contact: Registration Help
-    contact_email: help@domain.com
-  airbrake:
-    access_key: '093239928ab2837fe239fad322dbaecf' # Deprecated. To be removed after airbrake 5 is in
-    project_id: '12345'
-    project_key: '093239928ab2837fe239fad322dbaecf'
-    environment: 'development'
-  google:
-    tracker_id: 365434-1
-    conversion_id: 736473
-    conversion_label: fo37tf9fIGF3GD
-  secret_key_base: 917cc0a9e91b58e1e6f8e9e6ff443f16b19832b1ad628b1e33f1307bc1caf342d1d4356f8048406f9361689b36a707fdefb820b27a9b5e22
-  twitter:
-    key: https://dev.twitter.com/apps/new
-    secret: https://dev.twitter.com/apps/new
-  facebook:
-    key: https://developers.facebook.com/apps
-    secret: https://developers.facebook.com/apps
-  github:
-    key: http://developer.github.com/
-    secret: http://developer.github.com/
-  pag_seguro:
-    url: https://ws.pagseguro.uol.com.br/v2/checkout
-    email: alexandra.martins@agilealliance.org
-    token: 4C7157623D554340996998DECB83BDD8
-    store_code: pagseguro_store_code
-  agile_alliance:
-    api_host: https://aa-service-bus.herokuapp.com
-    api_token: xpto
+airbrake_access_key: ''
+airbrake_project_id: ''
+airbrake_project_key: ''
+airbrake_environment: ''
+google_tracker_id: ''
+google_conversion_id: ''
+google_conversion_label: ''
+secret_key_base: ''
+twitter_key: ''
+twitter_secret: ''
+facebook_key: ''
+facebook_secret: ''
+github_key: ''
+github_secret: ''
+pag_seguro_url: ''
+pag_seguro_email: ''
+pag_seguro_token: ''
+pag_seguro_env: ''
+pag_seguro_store_code: ''
+agile_alliance_api_host: ''
+agile_alliance_api_token: ''
+sendgrid_api_key: ''

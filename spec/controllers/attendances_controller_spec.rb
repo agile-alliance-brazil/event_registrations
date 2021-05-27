@@ -453,8 +453,8 @@ RSpec.describe AttendancesController, type: :controller do
           it 'renders the template again with errors' do
             post :create, params: { event_id: event, attendance: { event_id: event } }
             expect(response).to render_template :new
-            expect(assigns(:attendance).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)']
-            expect(flash[:error]).to eq 'Nome: não pode ficar em branco | Sobrenome: não pode ficar em branco | Email: não pode ficar em branco | Telefone: não pode ficar em branco | País: não pode ficar em branco | Cidade: não pode ficar em branco | Estado: não pode ficar em branco | Email: não é válido | Email: é muito curto (mínimo: 6 caracteres)'
+            expect(assigns(:attendance).errors.full_messages).to match_array ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)']
+            expect(flash[:error]).not_to be_blank
           end
         end
 
@@ -565,8 +565,8 @@ RSpec.describe AttendancesController, type: :controller do
             allow(AgileAllianceService).to(receive(:check_member)).and_return(false)
             put :update, params: { event_id: event, id: attendance, attendance: { first_name: '', last_name: '', email: '', phone: '', country: '', state: '', city: '', badge_name: '', cpf: '', gender: '' } }
             expect(response).to render_template :edit
-            expect(assigns(:attendance).errors.full_messages).to eq ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)']
-            expect(flash[:error]).to eq 'Nome: não pode ficar em branco | Sobrenome: não pode ficar em branco | Email: não pode ficar em branco | Telefone: não pode ficar em branco | País: não pode ficar em branco | Cidade: não pode ficar em branco | Estado: não pode ficar em branco | Email: não é válido | Email: é muito curto (mínimo: 6 caracteres)'
+            expect(assigns(:attendance).errors.full_messages).to match_array ['Nome: não pode ficar em branco', 'Sobrenome: não pode ficar em branco', 'Email: não pode ficar em branco', 'Telefone: não pode ficar em branco', 'País: não pode ficar em branco', 'Cidade: não pode ficar em branco', 'Estado: não pode ficar em branco', 'Email: não é válido', 'Email: é muito curto (mínimo: 6 caracteres)']
+            expect(flash[:error]).not_to be_blank
           end
         end
 

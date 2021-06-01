@@ -6,7 +6,7 @@ gem 'rails'
 
 gem 'airbrake-ruby'
 
-gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
+gem 'aws-ses', '~> 0.7.0', require: 'aws/ses'
 gem 'brcpfcnpj'
 gem 'carrierwave'
 gem 'coffee-rails'

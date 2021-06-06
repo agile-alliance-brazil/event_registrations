@@ -6,6 +6,7 @@ gem 'rails'
 
 gem 'airbrake-ruby'
 
+gem 'barnes'
 gem 'brcpfcnpj'
 gem 'carrierwave'
 gem 'coffee-rails'

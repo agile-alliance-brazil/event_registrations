@@ -1,77 +1,66 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.6.4'
+ruby '3.0.1'
 gem 'rails'
 
 gem 'airbrake-ruby'
 
-gem 'aws-ses', '~> 0.7.0', require: 'aws/ses'
+gem 'barnes'
 gem 'brcpfcnpj'
 gem 'carrierwave'
 gem 'coffee-rails'
 gem 'country_select'
 gem 'devise'
 gem 'erubis'
-gem 'faker'
-gem 'formtastic'
+gem 'figaro'
 gem 'httparty'
 gem 'jquery-rails'
 gem 'mini_magick'
-gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-github'
+gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-twitter'
-gem 'pagseguro-oficial', git: 'https://github.com/jpaulomotta/ruby', branch: 'sandbox-find-by-notification-code' # due to the BigDecimal error on pagseguro bank ticket (boleto)
-gem 'pry-rails' # should be in the development group, but we ran the console under the production environment in the cloud
+gem 'pagseguro-oficial', git: 'https://github.com/celsoMartins/ruby', branch: 'sandbox-find-by-notification-code' # due to the BigDecimal error on pagseguro bank ticket (boleto)
+gem 'pg'
 gem 'rake'
 gem 'sass'
 gem 'sass-rails'
-gem 'therubyracer', platforms: :ruby
 gem 'will_paginate'
 gem 'yui-compressor', require: 'yui/compressor'
 
 group :development, :test do
-  gem 'annotate'
-  gem 'brakeman', require: false
-  gem 'byebug', require: false
+  gem 'brakeman'
+  gem 'bullet'
   gem 'database_cleaner'
-  gem 'dotenv-rails', require: false
-  gem 'factory_bot_rails'
-  gem 'guard-rspec'
-  gem 'guard-rubocop'
-  gem 'metric_fu', '>= 4.12.0'
+  gem 'fabrication'
+  gem 'faker'
   gem 'parser'
-  gem 'poltergeist', require: 'capybara/poltergeist'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
-  gem 'rubocop', require: false
-  gem 'rubocop-performance', require: false
-  gem 'rubocop-rspec', require: false
-  gem 'selenium-webdriver'
-  gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'sprockets-rails'
-  gem 'sqlite3'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rake'
+  gem 'rubocop-rspec'
+  gem 'shoulda-matchers'
+  gem 'simplecov', '~> 0.16.1'
+  gem 'webmock'
 end
 
 group :development do
-  gem 'capistrano', '3.10.1', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-git-with-submodules', require: false
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-rvm', require: false
-  gem 'foreman'
-  gem 'net-ssh'
-  gem 'pry'
-  gem 'travis-lint', '>= 2.0.0'
+  gem 'annotate'
+  gem 'rack-mini-profiler', require: false
+  gem 'web-console'
 end
 
 group :test do
-  gem 'mocha', require: false
-  gem 'shoulda-matchers'
-  gem 'simplecov'
-  gem 'webmock'
+  gem 'rspec_junit_formatter'
+end
+
+group :production do
+  gem 'puma'
+  gem 'rails_12factor'
 end

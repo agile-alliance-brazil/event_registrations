@@ -19,7 +19,8 @@ class AddUserInfoToAttendance < ActiveRecord::Migration[4.2]
     add_column :attendances, :zipcode, :string
     Attendance.all.each do |attendance|
       common_attributes = attendance.user.attributes.reject do |attr_name, _value|
-        %w[id created_at updated_at roles_mask default_locale].include?(attr_name)
+        attendance_attributes = %w[id created_at updated_at roles_mask default_locale]
+        attendance_attributes.include?(attr_name)
       end
       attendance.update!(common_attributes)
     end

@@ -58,7 +58,7 @@
 #
 
 class User < ApplicationRecord
-  enum role: %i[user organizer admin]
+  enum role: { user: 0, organizer: 1, admin: 2 }
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
@@ -78,7 +78,7 @@ class User < ApplicationRecord
 
   validates :default_locale, inclusion: %w[en pt]
   validates :first_name, :last_name, presence: true, length: { maximum: 100 }
-  validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i, allow_blank: true }
+  validates :email, format: { with: /\A([\w.%+\-]+)@([\w\-]+\.)+(\w{2,})\z/i, allow_blank: true }
   validates :email, uniqueness: { case_sensitive: false, allow_blank: true }
 
   usar_como_cpf :cpf
@@ -86,7 +86,7 @@ class User < ApplicationRecord
   def self.from_omniauth(omniauth_params)
     name = omniauth_params.info.name
     where(email: omniauth_params.info.email).first_or_create do |user|
-      name_parts = name.split(' ')
+      name_parts = name.split
       user.first_name = name_parts.shift
       user.last_name = if name_parts.empty?
                          user.first_name
@@ -107,7 +107,7 @@ class User < ApplicationRecord
   end
 
   def twitter_user=(value)
-    self[:twitter_user] = value.try(:start_with?, '@') ? value[1..-1] : value
+    self[:twitter_user] = value.try(:start_with?, '@') ? value[1..] : value
   end
 
   def full_name

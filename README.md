@@ -19,7 +19,7 @@ docker-compose build
 For populating the db and configuration for the first time:
 
 ```sh
-cp config/config.example config/config.yml
+cp config/application.example config/application.yml
 cp config/database.docker config/database.yml
 docker-compose up -d db
 docker-compose run app bundle exec rake db:create db:schema:load --trace

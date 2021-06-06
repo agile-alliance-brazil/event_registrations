@@ -1,4 +1,5 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary
@@ -15,7 +16,7 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'inscricoes-staging.agilebrazil.com', user: 'ubuntu', roles: %w(web app db)
+server 'inscricoes-staging.agilebrazil.com', user: 'ubuntu', roles: %w[web app db]
 set :manifest, 'default'
 set :server_url, 'inscricoes-staging.agilebrazil.com'
 
@@ -29,18 +30,10 @@ set :ssh_options, {
     File.expand_path('~/.ssh/id_inscricoes-staging.agilebrazil.com')
   ],
   forward_agent: true,
-  auth_methods: %w(publickey)
+  auth_methods: %w[publickey]
   # password: 'please use keys'
 }
-# and/or per server
-# server 'example.com',
-#   user: 'user_name',
-#   roles: %w{web app},
-#   ssh_options: {
-#     user: 'user_name', # overrides user setting above
-#     keys: %w(/home/user_name/.ssh/id_rsa),
-#     forward_agent: false,
-#     auth_methods: %w(publickey password)
-#     # password: 'please use keys'
-#   }
-# setting per server overrides global ssh_options
+
+host = 'https://event-registrations-staging.herokuapp.com/'
+config.action_mailer.default_url_options = { host: host }
+config.action_mailer.asset_host = host

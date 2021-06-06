@@ -7,10 +7,8 @@ class RegistrationNotifier
     Event.not_started.each do |event|
       AttendanceRepository.instance.for_cancelation(event).each do |attendance|
         Rails.logger.info("[Attendance] #{attendance.to_param}")
-        try_with('CANCEL') do
-          attendance.cancelled!
-          EmailNotifications.cancelling_registration(attendance).deliver
-        end
+        attendance.cancelled!
+        EmailNotificationsMailer.cancelling_registration(attendance).deliver
       end
     end
   end
@@ -22,24 +20,10 @@ class RegistrationNotifier
       Rails.logger.info("Warning #{attendances_to_advise.count} attendances")
       attendances_to_advise.each do |attendance|
         Rails.logger.info("[Warning attendance] #{attendance.to_param}")
-        try_with('WARN') do
-          Rails.logger.info('[Sending warning]')
-          attendance.advise!
-          EmailNotifications.cancelling_registration_warning(attendance).deliver
-        end
+        Rails.logger.info('[Sending warning]')
+        attendance.advise!
+        EmailNotificationsMailer.cancelling_registration_warning(attendance).deliver
       end
     end
-  end
-
-  private
-
-  def try_with(action)
-    Rails.logger.info(" processing [#{action}]")
-    yield
-  rescue StandardError => e
-    Airbrake.notify(e.message, action: action)
-    Rails.logger.info("  [FAILED #{action}] #{e.message}")
-  ensure
-    Rails.logger.flush
   end
 end

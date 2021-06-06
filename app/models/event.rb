@@ -126,6 +126,7 @@ class Event < ApplicationRecord
 
   private
 
+  # TODO: bad logic here - fixing needed
   def extract_value(attendance, payment_type)
     quota = find_quota
     if payment_type == 'statement_agreement'

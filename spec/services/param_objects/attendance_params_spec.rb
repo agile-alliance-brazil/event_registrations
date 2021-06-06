@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe AttendanceParams, type: :param_object do
-  let(:user) { FactoryBot.create :user, role: :organizer }
-  let(:user_for_attendance) { FactoryBot.create :user }
-  let(:event) { FactoryBot.create :event, organizers: [user] }
+  let(:user) { Fabricate :user, role: :organizer }
+  let(:user_for_attendance) { Fabricate :user }
+  let(:event) { Fabricate :event, organizers: [user] }
 
   describe '#new_attributes' do
     it 'returns all parameters for attendance' do
@@ -24,10 +24,8 @@ RSpec.describe AttendanceParams, type: :param_object do
                                cpf: user.cpf.numero,
                                gender: user.gender
                              } }
-      now = Time.zone.now
-      Time.stubs(:now).returns(now)
       params = ActionController::Parameters.new(valid_attendance)
-      params_object = AttendanceParams.new(user, event, params)
+      params_object = described_class.new(user, event, params)
       expect(params_object.new_attributes[:event_id]).to eq event.id
       expect(params_object.new_attributes[:user_id]).to eq user_for_attendance.id
       expect(params_object.new_attributes[:registered_by_id]).to eq user.id
@@ -51,7 +49,7 @@ RSpec.describe AttendanceParams, type: :param_object do
       valid_attendance = { payment_type: 'bank_deposit' }
 
       params = ActionController::Parameters.new(valid_attendance)
-      params_object = AttendanceParams.new(user, event, params)
+      params_object = described_class.new(user, event, params)
 
       expect(params_object.payment_type_params).to eq 'bank_deposit'
     end
@@ -77,7 +75,7 @@ RSpec.describe AttendanceParams, type: :param_object do
                              } }
 
       params = ActionController::Parameters.new(valid_attendance)
-      params_object = AttendanceParams.new(user, event, params)
+      params_object = described_class.new(user, event, params)
       expected_return = {
         'event_id' => event.id,
         'user_id' => user_for_attendance.id,

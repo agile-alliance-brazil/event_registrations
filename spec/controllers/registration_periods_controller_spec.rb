@@ -4,42 +4,51 @@ describe RegistrationPeriodsController, type: :controller do
   context 'unauthenticated' do
     describe 'GET #new' do
       before { get :new, params: { event_id: 'foo' } }
+
       it { expect(response).to redirect_to new_user_session_path }
     end
+
     describe 'POST #create' do
       before { post :create, params: { event_id: 'foo' } }
+
       it { expect(response).to redirect_to new_user_session_path }
     end
+
     describe 'DELETE #destroy' do
       before { delete :destroy, params: { event_id: 'foo', id: 'bar' } }
+
       it { expect(response).to redirect_to new_user_session_path }
     end
   end
 
   context 'logged as normal user' do
-    let(:user) { FactoryBot.create(:user) }
-    let(:event) { FactoryBot.create(:event) }
+    let(:user) { Fabricate(:user) }
+    let(:event) { Fabricate(:event) }
 
     before { sign_in user }
 
     describe 'GET #new' do
       before { get :new, params: { event_id: event } }
+
       it { expect(response).to have_http_status :not_found }
     end
 
     describe 'POST #create' do
       before { post :create, params: { event_id: event, registration_period: { title: 'foo', start_at: Time.zone.today, end_at: Time.zone.tomorrow, price: 100 } } }
+
       it { expect(response).to have_http_status :not_found }
     end
   end
 
   context 'logged as admin user' do
-    let(:admin) { FactoryBot.create(:admin) }
+    let(:admin) { Fabricate(:user, role: :admin) }
+
     before { sign_in admin }
 
     describe 'GET #new' do
       context 'with a valid event' do
-        let!(:event) { FactoryBot.create :event }
+        let!(:event) { Fabricate :event }
+
         it 'assigns the variables and render the template' do
           get :new, params: { event_id: event }
           expect(assigns(:event)).to eq event
@@ -47,16 +56,17 @@ describe RegistrationPeriodsController, type: :controller do
           expect(response).to render_template :new
         end
       end
+
       context 'with an invalid event' do
         it 'renders 404' do
           get :new, params: { event_id: 'foo' }
-          expect(response).to have_http_status 404
+          expect(response).to have_http_status :not_found
         end
       end
     end
 
     describe 'POST #create' do
-      let(:event) { FactoryBot.create :event }
+      let(:event) { Fabricate :event }
 
       context 'with valid parameters' do
         it 'creates the period and redirects to event' do
@@ -88,15 +98,15 @@ describe RegistrationPeriodsController, type: :controller do
         context 'and invalid event' do
           it 'renders 404' do
             post :create, params: { event_id: 'foo', registration_period: { title: '' } }
-            expect(response).to have_http_status 404
+            expect(response).to have_http_status :not_found
           end
         end
       end
     end
 
     describe 'DELETE #destroy' do
-      let(:event) { FactoryBot.create :event }
-      let!(:period) { FactoryBot.create :registration_period, event: event }
+      let(:event) { Fabricate :event }
+      let!(:period) { Fabricate :registration_period, event: event }
 
       context 'with valid parameters' do
         context 'and responding to HTML' do
@@ -115,6 +125,7 @@ describe RegistrationPeriodsController, type: :controller do
             expect(response.status).to eq 404
           end
         end
+
         context 'and a invalid event' do
           it 'responds 404' do
             delete :destroy, params: { event_id: 'foo', id: period }
@@ -125,8 +136,9 @@ describe RegistrationPeriodsController, type: :controller do
     end
 
     describe 'GET #edit' do
-      let(:event) { FactoryBot.create :event }
-      let(:period) { FactoryBot.create :registration_period, event: event }
+      let(:event) { Fabricate :event }
+      let(:period) { Fabricate :registration_period, event: event }
+
       context 'with valid IDs' do
         it 'assigns the instance variable and renders the template' do
           get :edit, params: { event_id: event, id: period }
@@ -134,6 +146,7 @@ describe RegistrationPeriodsController, type: :controller do
           expect(response).to render_template :edit
         end
       end
+
       context 'with invalid IDs' do
         context 'and no valid event and period' do
           it 'does not assign the instance variable responds 404' do
@@ -142,15 +155,18 @@ describe RegistrationPeriodsController, type: :controller do
             expect(response.status).to eq 404
           end
         end
+
         context 'and an invalid event' do
           it 'responds 404' do
             get :edit, params: { event_id: 'foo', id: period }
             expect(response.status).to eq 404
           end
         end
+
         context 'and a period for other event' do
-          let(:other_event) { FactoryBot.create :event }
-          let(:period) { FactoryBot.create :registration_period, event: other_event }
+          let(:other_event) { Fabricate :event }
+          let(:period) { Fabricate :registration_period, event: other_event }
+
           it 'does not assign the instance variable responds 404' do
             get :edit, params: { event_id: event, id: period }
             expect(assigns(:period)).to be_nil
@@ -161,11 +177,12 @@ describe RegistrationPeriodsController, type: :controller do
     end
 
     describe 'PUT #update' do
-      let(:event) { FactoryBot.create :event }
-      let(:period) { FactoryBot.create :registration_period, event: event }
+      let(:event) { Fabricate :event }
+      let(:period) { Fabricate :registration_period, event: event }
       let(:start_date) { Time.zone.now }
       let(:end_date) { 1.week.from_now }
       let(:valid_parameters) { { title: 'foo', start_at: start_date, end_at: end_date, price: 100 } }
+
       context 'with valid parameters' do
         it 'updates and redirects to event show' do
           put :update, params: { event_id: event, id: period, registration_period: valid_parameters }
@@ -177,6 +194,7 @@ describe RegistrationPeriodsController, type: :controller do
           expect(response).to redirect_to event
         end
       end
+
       context 'with invalid parameters' do
         context 'and valid event and period, but invalid update parameters' do
           it 'does not update and render form with errors' do
@@ -195,15 +213,18 @@ describe RegistrationPeriodsController, type: :controller do
               expect(response.status).to eq 404
             end
           end
+
           context 'and an invalid event' do
             it 'responds 404' do
               put :update, params: { event_id: 'bar', id: period, registration_period: valid_parameters }
               expect(response.status).to eq 404
             end
           end
+
           context 'and a period for other event' do
-            let(:other_event) { FactoryBot.create :event }
-            let(:period) { FactoryBot.create :registration_period, event: other_event }
+            let(:other_event) { Fabricate :event }
+            let(:period) { Fabricate :registration_period, event: other_event }
+
             it 'does not assign the instance variable responds 404' do
               put :update, params: { event_id: event, id: period, registration_period: valid_parameters }
               expect(assigns(:period)).to be_nil

@@ -6,7 +6,8 @@ class ChangeStatusFieldForAttendance < ActiveRecord::Migration[5.1]
     execute('UPDATE attendances SET status_string = status;')
     execute('UPDATE attendances SET status = null;')
 
-    change_column :attendances, :status, :integer
+    remove_column :attendances, :status
+    add_column :attendances, :status, :integer
 
     Attendance.all.each { |attendance| attendance.update(status: Attendance.statuses[attendance.status_string]) if attendance.status_string.present? }
 

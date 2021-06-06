@@ -15,19 +15,20 @@ describe RegistrationPeriod, type: :model do
 
   describe '.for' do
     before { travel_to Time.zone.local(2019, 9, 3, 16, 0, 0) }
+
     after { travel_back }
 
-    let(:event) { FactoryBot.create :event }
-    let!(:first_period) { FactoryBot.create :registration_period, start_at: 2.days.ago, end_at: 1.day.from_now.end_of_day, event: event }
-    let!(:second_period) { FactoryBot.create :registration_period, start_at: 2.days.from_now, end_at: 4.days.from_now.end_of_day, event: event }
+    let(:event) { Fabricate :event }
+    let!(:first_period) { Fabricate :registration_period, start_at: 2.days.ago, end_at: 1.day.from_now.end_of_day, event: event }
+    let!(:second_period) { Fabricate :registration_period, start_at: 2.days.from_now, end_at: 4.days.from_now.end_of_day, event: event }
 
     context 'appropriate period' do
-      it { expect(RegistrationPeriod.for(Time.zone.yesterday).first).to eq first_period }
-      it { expect(RegistrationPeriod.for(Time.zone.today).first).to eq first_period }
-      it { expect(RegistrationPeriod.for(Time.zone.tomorrow).first).to eq first_period }
-      it { expect(RegistrationPeriod.for(2.days.from_now).first).to eq second_period }
-      it { expect(RegistrationPeriod.for(3.days.from_now).first).to eq second_period }
-      it { expect(RegistrationPeriod.for(4.days.from_now).first).to eq second_period }
+      it { expect(described_class.for(Time.zone.yesterday).first).to eq first_period }
+      it { expect(described_class.for(Time.zone.today).first).to eq first_period }
+      it { expect(described_class.for(Time.zone.tomorrow).first).to eq first_period }
+      it { expect(described_class.for(2.days.from_now).first).to eq second_period }
+      it { expect(described_class.for(3.days.from_now).first).to eq second_period }
+      it { expect(described_class.for(4.days.from_now).first).to eq second_period }
     end
   end
 end

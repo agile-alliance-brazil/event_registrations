@@ -2,22 +2,24 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2019_01_03_134846) do
 
-  create_table "attendances", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "attendances", id: :serial, force: :cascade do |t|
     t.integer "event_id", null: false
     t.integer "user_id", null: false
     t.integer "registration_group_id"
     t.datetime "registration_date"
-    t.integer "status"
     t.boolean "email_sent", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -33,7 +35,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.string "cpf"
     t.string "gender"
     t.string "notes"
-    t.decimal "event_price", precision: 10
+    t.decimal "event_price"
     t.integer "registration_quota_id"
     t.decimal "registration_value", precision: 10
     t.integer "registration_period_id"
@@ -48,16 +50,15 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.datetime "last_status_change_date"
     t.integer "job_role", default: 0
     t.datetime "due_date"
+    t.integer "status"
     t.integer "payment_type"
     t.integer "registered_by_id", null: false
     t.index ["event_id"], name: "index_attendances_on_event_id"
-    t.index ["registered_by_id"], name: "fk_rails_4eb9f97929"
-    t.index ["registration_period_id"], name: "fk_rails_a2b9ca8d82"
     t.index ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
-  create_table "authentications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "authentications", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "provider"
     t.string "uid"
@@ -66,7 +67,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.string "refresh_token"
   end
 
-  create_table "events", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "events", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "location_and_date"
     t.datetime "created_at"
@@ -74,7 +75,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.string "price_table_link"
     t.boolean "allow_voting"
     t.integer "attendance_limit"
-    t.decimal "full_price", precision: 10
+    t.decimal "full_price"
     t.datetime "start_date"
     t.datetime "end_date"
     t.string "link"
@@ -87,7 +88,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.string "city", null: false
   end
 
-  create_table "events_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "events_users", id: false, force: :cascade do |t|
     t.integer "event_id"
     t.integer "user_id"
     t.datetime "created_at"
@@ -96,12 +97,12 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.index ["user_id"], name: "index_events_users_on_user_id"
   end
 
-  create_table "payment_notifications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "payment_notifications", id: :serial, force: :cascade do |t|
     t.text "params"
     t.string "status"
     t.string "transaction_id"
     t.string "payer_email"
-    t.decimal "settle_amount", precision: 10
+    t.decimal "settle_amount"
     t.string "settle_currency"
     t.text "notes"
     t.datetime "created_at"
@@ -110,7 +111,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.index ["attendance_id"], name: "index_payment_notifications_on_attendance_id"
   end
 
-  create_table "registration_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "registration_groups", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.string "name"
     t.integer "capacity"
@@ -120,23 +121,23 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.datetime "updated_at"
     t.integer "leader_id"
     t.integer "minimum_size"
-    t.decimal "amount", precision: 10
+    t.decimal "amount"
     t.boolean "automatic_approval", default: false
     t.integer "registration_quota_id"
     t.boolean "paid_in_advance", default: false
   end
 
-  create_table "registration_periods", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "registration_periods", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.string "title"
     t.datetime "start_at"
     t.datetime "end_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal "price", precision: 10, null: false
+    t.decimal "price", null: false
   end
 
-  create_table "registration_quotas", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "registration_quotas", id: :serial, force: :cascade do |t|
     t.integer "quota"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -144,10 +145,10 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.integer "registration_price_id"
     t.integer "order"
     t.boolean "closed", default: false
-    t.decimal "price", precision: 10, null: false
+    t.decimal "price", null: false
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "email", null: false
@@ -188,15 +189,8 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.string "user_image"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["registration_group_id"], name: "fk_rails_ebe9fba698"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
-  end
-
-  create_table "users_dup_temp", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
-    t.string "first_name", null: false
-    t.string "email", null: false
   end
 
   add_foreign_key "attendances", "events"

@@ -24,13 +24,13 @@
       </div>
 
       <div class="form-group">
-        <%= link_to user_github_omniauth_authorize_path do %>
+        <%= link_to user_github_omniauth_authorize_path, method: :post do %>
           <i class="fab fa-github fa-2x"></i>
         <% end %>
-        <%= link_to user_facebook_omniauth_authorize_path do %>
+        <%= link_to user_facebook_omniauth_authorize_path, method: :post do %>
           <i class="fab fa-facebook-square fa-2x"></i>
         <% end %>
-        <%= link_to user_twitter_omniauth_authorize_path do %>
+        <%= link_to user_twitter_omniauth_authorize_path, method: :post do %>
           <i class="fab fa-twitter-square fa-2x"></i>
         <% end %>
       </div>

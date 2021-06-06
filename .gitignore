@@ -27,7 +27,8 @@ capybara-*.html
 **.orig
 rerun.txt
 pickle-email-*.html
-/config/*.yml
+/config/secrets.yml
+/config/application.yml
 .vagrant
 .DS_Store
 .env
@@ -43,3 +44,5 @@ certs/*
 .idea/
 dump/
 lib/capistrano/
+
+/config/master.key

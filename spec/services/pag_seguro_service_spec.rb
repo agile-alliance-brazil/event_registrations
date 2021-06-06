@@ -2,14 +2,15 @@
 
 describe PagSeguroService do
   describe '.checkout' do
-    let(:attendance) { FactoryBot.create :attendance }
+    let(:attendance) { Fabricate :attendance }
+
     context 'with valid parameters' do
       it 'returns an empty hash if no errors' do
-        PagSeguro::PaymentRequest.any_instance.expects(:register).once.returns PagSeguro::PaymentRequest::Response.new(nil)
-        PagSeguro::PaymentRequest::Response.any_instance.expects(:url).once.returns 'xpto.foo.bar'
+        expect_any_instance_of(PagSeguro::PaymentRequest).to(receive(:register)).once.and_return(PagSeguro::PaymentRequest::Response.new(nil))
+        allow_any_instance_of(PagSeguro::PaymentRequest::Response).to(receive(:url)).and_return('xpto.foo.bar')
 
         payment = PagSeguro::PaymentRequest.new
-        response = PagSeguroService.checkout(attendance, payment)
+        response = described_class.checkout(attendance, payment)
         expect(payment.items.first.id).to eq attendance.id
         expect(payment.items.first.description).to eq attendance.full_name
         expect(payment.items.first.amount).to eq attendance.registration_value
@@ -18,9 +19,9 @@ describe PagSeguroService do
       end
 
       it 'returns internal server error when response is nil' do
-        PagSeguro::PaymentRequest.any_instance.expects(:register).once.returns
+        expect_any_instance_of(PagSeguro::PaymentRequest).to(receive(:register)).once.and_return(nil)
         payment = PagSeguro::PaymentRequest.new
-        response = PagSeguroService.checkout(attendance, payment)
+        response = described_class.checkout(attendance, payment)
         expect(response).to eq(errors: 'Internal server error')
       end
     end
@@ -29,10 +30,10 @@ describe PagSeguroService do
       it 'will answer with the errors' do
         pag_seguro_response = PagSeguro::PaymentRequest::Response.new(nil)
         pag_seguro_response.instance_variable_set(:@errors, %w[bla foo])
-        PagSeguro::PaymentRequest.any_instance.expects(:register).returns pag_seguro_response
+        expect_any_instance_of(PagSeguro::PaymentRequest).to(receive(:register)).once.and_return(pag_seguro_response)
 
         payment = PagSeguro::PaymentRequest.new
-        response = PagSeguroService.checkout(attendance, payment)
+        response = described_class.checkout(attendance, payment)
         expect(response).to eq(errors: 'bla\\nfoo')
       end
     end

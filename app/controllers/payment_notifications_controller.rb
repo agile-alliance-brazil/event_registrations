@@ -3,6 +3,8 @@
 class PaymentNotificationsController < ApplicationController
   protect_from_forgery prepend: true, with: :exception, except: [:create]
 
+  # rubocop disabled due to gem implementation out of the pattern
+  # rubocop:disable Rails/DynamicFindBy
   def create
     transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
 
@@ -15,4 +17,5 @@ class PaymentNotificationsController < ApplicationController
     end
     head :ok
   end
+  # rubocop:enable Rails/DynamicFindBy
 end

@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
 Current::Application.routes.draw do
   devise_for :users, controllers: { registrations: 'devise_custom/registrations', omniauth_callbacks: 'devise_custom/omniauth_callbacks' }
-
-  # To keep compatibility with old routes sent by email
-  # In the future (new events) it can be removed
-  get('attendances/:id', to: redirect do |params, request|
-    path = "events/#{Attendance.find_by(id: params[:id])&.event_id}/attendances/#{params[:id]}"
-    "http://#{request.host_with_port}/#{path}"
-  end)
 
   resources :users, only: %i[show edit update index] do
     member do
@@ -60,4 +52,3 @@ Current::Application.routes.draw do
 
   root to: 'events#index'
 end
-# rubocop:enable Metrics/BlockLength

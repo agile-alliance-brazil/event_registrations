@@ -2,6 +2,7 @@
 
 class AttendanceParams
   attr_reader :new_attributes, :registered_by, :event, :request_params
+
   def initialize(user, event, request_params)
     @registered_by = user
     @event = event

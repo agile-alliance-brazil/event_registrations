@@ -18,7 +18,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'no-reply@agilebrazil.com'
+  config.mailer_sender = 'inscricoes@agilebrazil.com'
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'Devise::Mailer'
@@ -280,7 +280,7 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
-  config.omniauth :github, APP_CONFIG[:github][:key], APP_CONFIG[:github][:secret] if APP_CONFIG[:github]
-  config.omniauth :facebook, APP_CONFIG[:facebook][:key], APP_CONFIG[:facebook][:secret] if APP_CONFIG[:facebook]
-  config.omniauth :twitter, APP_CONFIG[:twitter][:key], APP_CONFIG[:twitter][:secret] if APP_CONFIG[:twitter]
+  config.omniauth :github, Figaro.env.github_key, Figaro.env.github_secret if Figaro.env.github_key.present?
+  config.omniauth :facebook, Figaro.env.facebook_key, Figaro.env.facebook_secret if Figaro.env.facebook_key.present?
+  config.omniauth :twitter, Figaro.env.twitter_key, Figaro.env.twitter_secret if Figaro.env.twitter_key.present?
 end

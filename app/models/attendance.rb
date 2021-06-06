@@ -10,60 +10,64 @@
 #  city                    :string(255)
 #  country                 :string(255)
 #  cpf                     :string(255)
-#  created_at              :datetime
+#  created_at              :datetime         not null
 #  due_date                :datetime
 #  education_level         :string(255)
 #  email                   :string(255)
 #  email_sent              :boolean          default(FALSE)
-#  event_id                :integer          not null, indexed
+#  event_id                :bigint(8)        not null, indexed
 #  event_price             :decimal(10, )
 #  experience_in_agility   :string(255)
 #  first_name              :string(255)
 #  gender                  :string(255)
-#  id                      :integer          not null, primary key
-#  job_role                :integer          default("not_informed")
+#  id                      :bigint(8)        not null, primary key
+#  job_role                :bigint(8)        default("not_informed")
 #  last_name               :string(255)
 #  last_status_change_date :datetime
 #  notes                   :string(255)
 #  organization            :string(255)
 #  organization_size       :string(255)
-#  payment_type            :integer
+#  other_job_role          :string
+#  payment_type            :bigint(8)
 #  phone                   :string(255)
-#  queue_time              :integer
-#  registered_by_id        :integer          not null, indexed
+#  queue_time              :bigint(8)
+#  registered_by_id        :bigint(8)        not null, indexed
 #  registration_date       :datetime
-#  registration_group_id   :integer
-#  registration_period_id  :integer          indexed
-#  registration_quota_id   :integer          indexed
+#  registration_group_id   :bigint(8)
+#  registration_period_id  :bigint(8)        indexed
+#  registration_quota_id   :bigint(8)        indexed
 #  registration_value      :decimal(10, )
 #  school                  :string(255)
 #  state                   :string(255)
-#  status                  :integer
-#  updated_at              :datetime
-#  user_id                 :integer          not null, indexed
+#  status                  :bigint(8)
+#  updated_at              :datetime         not null
+#  user_id                 :bigint(8)        not null, indexed
 #  years_of_experience     :string(255)
 #
 # Indexes
 #
-#  fk_rails_4eb9f97929                         (registered_by_id)
-#  fk_rails_a2b9ca8d82                         (registration_period_id)
-#  index_attendances_on_event_id               (event_id)
-#  index_attendances_on_registration_quota_id  (registration_quota_id)
-#  index_attendances_on_user_id                (user_id)
+#  idx_4524756_fk_rails_4eb9f97929                         (registered_by_id)
+#  idx_4524756_fk_rails_a2b9ca8d82                         (registration_period_id)
+#  idx_4524756_index_attendances_on_event_id               (event_id)
+#  idx_4524756_index_attendances_on_registration_quota_id  (registration_quota_id)
+#  idx_4524756_index_attendances_on_user_id                (user_id)
 #
 # Foreign Keys
 #
-#  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id)
-#  fk_rails_4eb9f97929  (registered_by_id => users.id)
-#  fk_rails_777eb7170a  (event_id => events.id)
-#  fk_rails_77ad02f5c5  (user_id => users.id)
-#  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id)
+#  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_4eb9f97929  (registered_by_id => users.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_777eb7170a  (event_id => events.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_77ad02f5c5  (user_id => users.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id) ON DELETE => restrict ON UPDATE => restrict
 #
 
 class Attendance < ApplicationRecord
   before_create :set_last_status_change
 
-  enum job_role: { not_informed: 0, student: 1, analyst: 2, manager: 3, vp: 4, president: 5, clevel: 6, coach: 7, other: 8, developer: 9 }
+  enum job_role: { not_informed: 0, student: 1, analyst: 2, manager: 3, vp: 4, president: 5, designer: 6, coach: 7,
+                   other: 8, developer: 9, teacher: 10, independent_worker: 11, team_manager: 12, portfolio_manager: 13,
+                   human_resources: 14 }
+
   enum status: { waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6 }
   enum payment_type: { gateway: 1, bank_deposit: 2, statement_agreement: 3 }
 

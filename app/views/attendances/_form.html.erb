@@ -93,17 +93,21 @@
   </div>
 
   <div class="row">
-    <div class="col-xl-4 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :organization, class: 'control-label' %>
       <%= form.text_field :organization, value: (attendance.organization || user.organization || current_user.organization), class: 'form-control' %>
     </div>
-    <div class="col-xl-4 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :organization_size, class: 'control-label' %>
       <%= form.select :organization_size, organization_size_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
     </div>
-    <div class="col-xl-4 col-sm-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :job_role, class: 'control-label' %>
-      <%= form.select :job_role, job_role_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
+      <%= form.select :job_role, job_role_options, {}, class: 'form-control' %>
+    </div>
+    <div class="col-xl-3 col-sm-6 form-group">
+      <%= form.label :other_job_role, class: 'control-label' %>
+      <%= form.text_field :other_job_role, class: 'form-control' %>
     </div>
   </div>
 

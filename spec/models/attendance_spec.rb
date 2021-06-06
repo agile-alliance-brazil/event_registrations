@@ -3,7 +3,7 @@
 RSpec.describe Attendance, type: :model do
   context 'enums' do
     it { is_expected.to define_enum_for(:status).with_values(waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6) }
-    it { is_expected.to define_enum_for(:job_role).with_values(%i[not_informed student analyst manager vp president clevel coach other developer]) }
+    it { is_expected.to define_enum_for(:job_role).with_values(not_informed: 0, student: 1, analyst: 2, manager: 3, vp: 4, president: 5, designer: 6, coach: 7, other: 8, developer: 9, teacher: 10, independent_worker: 11, team_manager: 12, portfolio_manager: 13, human_resources: 14) }
     it { is_expected.to define_enum_for(:payment_type).with_values(gateway: 1, bank_deposit: 2, statement_agreement: 3) }
   end
 

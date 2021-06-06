@@ -94,6 +94,7 @@ pt:
         twitter_user: Usuário no twitter
         default_locale: Local default
         payment_type: Tipo de pagamento
+        other_job_role: Outro (Função)
         enums:
           payment_types:
             gateway: Gateway
@@ -102,15 +103,20 @@ pt:
             nil: Sem Tipo de Pagamento
           job_role:
             not_informed: Não Informado
-            student: Estudante
-            analyst: Analista
-            manager: Gerente
-            vp: Vice Presidente
-            president: Presidente
-            clevel: C-Level
-            coach: Coach
+            student: Estudante, pesquisador(a), academia
+            analyst: Analista de negócios / sistemas
+            manager: Gerente de gerentes (middle management)
+            vp: VP, Diretoria, alta gestão, conselho
+            president: C-level / Presidente
+            coach: Agilista, agile/scrum master, agile coach, etc
             other: Outro
-            developer: Desenvolvedor
+            developer: Desenvolvimento, data, sustentação, etc
+            teacher: Professor(a) / Instrutor(a)
+            independent_worker: Pessoa Autônoma, consultoria independente
+            team_manager: Gerente de time, líder de squad
+            portfolio_manager: Gerente/owner de produto, projeto ou programa
+            human_resources: RH, área de pessoas
+            designer: Designer, UX, QA, Marketing, etc
           status:
             waiting: Na Fila
             accepted: Aceita no Grupo

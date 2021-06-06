@@ -11,13 +11,13 @@ module AttendanceHelper
 
   def education_level_options
     [
-      [t('activerecord.attributes.attendance.enums.education_level.primary'), 'Primary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.secondary'), 'Secondary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.tec_secondary'), 'Post-secondary non-tertiary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.tec_terciary'), 'Short-cycle tertiary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.bachelor'), 'Bachelor or equivalent'],
-      [t('activerecord.attributes.attendance.enums.education_level.master'), 'Master or equivalent'],
-      [t('activerecord.attributes.attendance.enums.education_level.doctoral'), 'Doctoral or equivalent']
+      [I18n.t('activerecord.attributes.attendance.enums.education_level.primary'), 'Primary education'],
+      [I18n.t('activerecord.attributes.attendance.enums.education_level.secondary'), 'Secondary education'],
+      [I18n.t('activerecord.attributes.attendance.enums.education_level.tec_secondary'), 'Post-secondary non-tertiary education'],
+      [I18n.t('activerecord.attributes.attendance.enums.education_level.tec_terciary'), 'Short-cycle tertiary education'],
+      [I18n.t('activerecord.attributes.attendance.enums.education_level.bachelor'), 'Bachelor or equivalent'],
+      [I18n.t('activerecord.attributes.attendance.enums.education_level.master'), 'Master or equivalent'],
+      [I18n.t('activerecord.attributes.attendance.enums.education_level.doctoral'), 'Doctoral or equivalent']
     ]
   end
 
@@ -34,7 +34,7 @@ module AttendanceHelper
   end
 
   def job_role_options
-    Attendance.job_roles.map { |job_role| [t("activerecord.attributes.attendance.enums.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] }
+    Attendance.job_roles.map { |job_role| [I18n.t("activerecord.attributes.attendance.enums.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] }
   end
 
   def payment_types_options

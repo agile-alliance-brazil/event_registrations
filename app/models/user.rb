@@ -12,16 +12,16 @@
 #  confirmed_at           :datetime
 #  country                :string(255)
 #  cpf                    :string(255)
-#  created_at             :datetime
+#  created_at             :datetime         not null
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string(255)
 #  default_locale         :string(255)      default("pt")
 #  email                  :string(255)      not null, indexed
 #  encrypted_password     :string(255)      default(""), not null
-#  failed_attempts        :integer          default(0), not null
+#  failed_attempts        :bigint(8)        default(0), not null
 #  first_name             :string(255)      not null
 #  gender                 :string(255)
-#  id                     :integer          not null, primary key
+#  id                     :bigint(8)        not null, primary key
 #  last_name              :string(255)      not null
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :string(255)
@@ -29,32 +29,32 @@
 #  neighbourhood          :string(255)
 #  organization           :string(255)
 #  phone                  :string(255)
-#  registration_group_id  :integer          indexed
+#  registration_group_id  :bigint(8)        indexed
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)      indexed
-#  role                   :integer          default("user"), not null
-#  roles_mask             :integer
-#  sign_in_count          :integer          default(0), not null
+#  role                   :bigint(8)        default("user"), not null
+#  roles_mask             :bigint(8)
+#  sign_in_count          :bigint(8)        default(0), not null
 #  state                  :string(255)
 #  twitter_user           :string(255)
 #  unconfirmed_email      :string(255)
 #  unlock_token           :string(255)      indexed
-#  updated_at             :datetime
+#  updated_at             :datetime         not null
 #  user_image             :string(255)
 #  zipcode                :string(255)
 #
 # Indexes
 #
-#  fk_rails_ebe9fba698                  (registration_group_id)
-#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
-#  index_users_on_unlock_token          (unlock_token) UNIQUE
+#  idx_4524864_fk_rails_ebe9fba698                  (registration_group_id)
+#  idx_4524864_index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  idx_4524864_index_users_on_email                 (email) UNIQUE
+#  idx_4524864_index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  idx_4524864_index_users_on_unlock_token          (unlock_token) UNIQUE
 #
 # Foreign Keys
 #
-#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id)
+#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id) ON DELETE => restrict ON UPDATE => restrict
 #
 
 class User < ApplicationRecord

@@ -6,16 +6,16 @@
 #
 #  amount                :decimal(10, )
 #  automatic_approval    :boolean          default(FALSE)
-#  capacity              :integer
+#  capacity              :bigint(8)
 #  created_at            :datetime
-#  discount              :integer
-#  event_id              :integer
-#  id                    :integer          not null, primary key
-#  leader_id             :integer
-#  minimum_size          :integer
+#  discount              :bigint(8)
+#  event_id              :bigint(8)
+#  id                    :bigint(8)        not null, primary key
+#  leader_id             :bigint(8)
+#  minimum_size          :bigint(8)
 #  name                  :string(255)
 #  paid_in_advance       :boolean          default(FALSE)
-#  registration_quota_id :integer
+#  registration_quota_id :bigint(8)
 #  token                 :string(255)
 #  updated_at            :datetime
 #

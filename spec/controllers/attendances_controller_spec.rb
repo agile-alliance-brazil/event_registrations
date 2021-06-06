@@ -119,6 +119,7 @@ RSpec.describe AttendancesController, type: :controller do
         organization: user.organization,
         organization_size: 'bla',
         job_role: :analyst,
+        other_job_role: 'xpto bla',
         years_of_experience: '6',
         experience_in_agility: '9',
         school: 'school',
@@ -182,6 +183,7 @@ RSpec.describe AttendancesController, type: :controller do
                     expect(created_attendance.organization).to eq user.organization
                     expect(created_attendance.organization_size).to eq 'bla'
                     expect(created_attendance.job_role).to eq 'analyst'
+                    expect(created_attendance.other_job_role).to eq 'xpto bla'
                     expect(created_attendance.years_of_experience).to eq '6'
                     expect(created_attendance.experience_in_agility).to eq '9'
                     expect(created_attendance.school).to eq 'school'
@@ -506,26 +508,29 @@ RSpec.describe AttendancesController, type: :controller do
         context 'and no group token informed' do
           it 'updates the attendance' do
             allow(AgileAllianceService).to(receive(:check_member)).and_return(false)
+
             put :update, params: { event_id: event, id: attendance, attendance: valid_attendance, payment_type: 'bank_deposit' }
-            expect(Attendance.last.user).to eq user_for_attendance
-            expect(Attendance.last.registration_group).to be_nil
-            expect(Attendance.last.first_name).to eq user.first_name
-            expect(Attendance.last.last_name).to eq user.last_name
-            expect(Attendance.last.email).to eq user.email
-            expect(Attendance.last.organization).to eq user.organization
-            expect(Attendance.last.organization_size).to eq 'bla'
-            expect(Attendance.last.analyst?).to be true
-            expect(Attendance.last.years_of_experience).to eq '6'
-            expect(Attendance.last.experience_in_agility).to eq '9'
-            expect(Attendance.last.education_level).to eq 'level'
-            expect(Attendance.last.phone).to eq user.phone
-            expect(Attendance.last.country).to eq user.country
-            expect(Attendance.last.state).to eq user.state
-            expect(Attendance.last.city).to eq user.city
-            expect(Attendance.last.badge_name).to eq user.badge_name
-            expect(Attendance.last.cpf).to eq user.cpf
-            expect(Attendance.last.gender).to eq user.gender
-            expect(Attendance.last.payment_type).to eq 'bank_deposit'
+            updated_attendance = Attendance.last
+            expect(updated_attendance.user).to eq user_for_attendance
+            expect(updated_attendance.registration_group).to be_nil
+            expect(updated_attendance.first_name).to eq user.first_name
+            expect(updated_attendance.last_name).to eq user.last_name
+            expect(updated_attendance.email).to eq user.email
+            expect(updated_attendance.organization).to eq user.organization
+            expect(updated_attendance.organization_size).to eq 'bla'
+            expect(updated_attendance.job_role).to eq 'analyst'
+            expect(updated_attendance.other_job_role).to eq 'xpto bla'
+            expect(updated_attendance.years_of_experience).to eq '6'
+            expect(updated_attendance.experience_in_agility).to eq '9'
+            expect(updated_attendance.education_level).to eq 'level'
+            expect(updated_attendance.phone).to eq user.phone
+            expect(updated_attendance.country).to eq user.country
+            expect(updated_attendance.state).to eq user.state
+            expect(updated_attendance.city).to eq user.city
+            expect(updated_attendance.badge_name).to eq user.badge_name
+            expect(updated_attendance.cpf).to eq user.cpf
+            expect(updated_attendance.gender).to eq user.gender
+            expect(updated_attendance.payment_type).to eq 'bank_deposit'
             expect(response).to redirect_to event_attendances_path(event_id: event, flash: { notice: I18n.t('attendances.update.success') })
           end
         end

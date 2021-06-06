@@ -7,6 +7,7 @@ SimpleCov.start
 SimpleCov.minimum_coverage 100
 SimpleCov.start do
   add_filter 'config/initializers/rack_profiler.rb'
+  add_filter 'config/initializers/ses.rb'
 end
 
 require File.expand_path('../config/environment', __dir__)

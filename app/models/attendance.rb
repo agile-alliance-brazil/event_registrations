@@ -11,7 +11,7 @@
 #  country                 :string(255)
 #  created_at              :datetime         not null
 #  due_date                :datetime
-#  education_level         :integer          default("no_education_informed"), indexed
+#  education_level         :integer          default(0), indexed
 #  email_sent              :boolean          default(FALSE)
 #  event_id                :bigint(8)        not null, indexed
 #  event_price             :decimal(10, )

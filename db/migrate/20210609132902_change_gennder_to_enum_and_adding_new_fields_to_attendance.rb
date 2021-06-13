@@ -86,6 +86,7 @@ class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migratio
       t.remove :neighbourhood
       t.remove :zipcode
       t.remove :address
+      t.remove :phone
     end
     add_index :users, :gender
 
@@ -142,6 +143,7 @@ class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migratio
       t.string :neighbourhood
       t.string :zipcode
       t.string :address
+      t.string :phone
     end
 
     remove_index :users, :gender

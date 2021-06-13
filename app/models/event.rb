@@ -124,6 +124,12 @@ class Event < ApplicationRecord
     end_date < Time.zone.now
   end
 
+  def event_image_valid?
+    return false if event_image.blank?
+
+    NetServices.instance.url_found?(event_image.url)
+  end
+
   private
 
   # TODO: bad logic here - fixing needed

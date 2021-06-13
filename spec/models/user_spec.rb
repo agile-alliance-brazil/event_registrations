@@ -209,4 +209,25 @@ RSpec.describe User, type: :model do
       it { expect(described_class.last.user?).to be false }
     end
   end
+
+  describe '#avatar_valid?' do
+    let(:user) { Fabricate :user }
+
+    it 'returns false when the URL is not valid' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(false)
+      allow(NetServices.instance).to(receive(:url_found?)).and_return(false)
+      expect(user.avatar_valid?).to be false
+    end
+
+    it 'returns false when the image is null' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(true)
+      expect(user.avatar_valid?).to be false
+    end
+
+    it 'returns true when the URL was found' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(false)
+      allow(NetServices.instance).to(receive(:url_found?)).and_return(true)
+      expect(user.avatar_valid?).to be true
+    end
+  end
 end

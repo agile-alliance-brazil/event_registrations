@@ -20,10 +20,10 @@
 <div class="row">
   <div class="col-xl-4">
     <p>
-      <% if @event.event_image.present? %>
+      <% if @event.event_image_valid? %>
         <%= image_tag @event.event_image.url, class: 'card-img-top' %>
       <% else %>
-        <%= image_tag 'img-empty.png' %>
+        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623597789/img-empty_b8hdek.png' %>
       <% end %>
     </p>
     <p><h4><%= @event.name %></h4></p>

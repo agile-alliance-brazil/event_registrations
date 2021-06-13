@@ -38,7 +38,6 @@ class EmailNotificationsMailer < ApplicationMailer
   def mail_attendance(attendance, sent_at, title)
     @attendance = attendance
     @event = attendance.event
-    attachments.inline['logo.png'] = File.read('app/assets/images/logoAgileAlliance.png')
 
     subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
     Rails.logger.info("[EmailNotificationsMailer:mail_attendance] { mail informations: { subject: #{subject} } }")

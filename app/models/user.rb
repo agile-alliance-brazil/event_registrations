@@ -29,7 +29,6 @@
 #  last_sign_in_ip        :string(255)
 #  locked_at              :datetime
 #  other_job_role         :string
-#  phone                  :string(255)
 #  registration_group_id  :bigint(8)        indexed
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -133,5 +132,11 @@ class User < ApplicationRecord
     else
       update(role: :organizer)
     end
+  end
+
+  def avatar_valid?
+    return false if user_image.blank?
+
+    NetServices.instance.url_found?(user_image.url)
   end
 end

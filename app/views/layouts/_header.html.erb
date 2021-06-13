@@ -12,10 +12,10 @@
 
     <div class="col-xl-6">
       <div class="dropdown topnav-right">
-        <% if current_user.present? && current_user.user_image.present? %>
+        <% if current_user&.avatar_valid? %>
           <%= image_tag current_user.user_image.url, size: '50x50', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>
         <% else %>
-          <%= image_tag 'img-empty.png', size: '50x50', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>
+          <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623596492/150-1503945_transparent-user-png-default-user-image-png-png_jsthbv.png', size: '50x50', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>
         <% end %>
 
         <div class="dropdown-menu">

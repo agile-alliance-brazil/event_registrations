@@ -68,33 +68,28 @@ pt:
         other: Cotas de Inscrições
     attributes:
       attendance:
-        first_name: Nome
-        last_name: Sobrenome
-        full_name: Nome
-        badge_name: Nome no crachá
-        gender: Gênero
-        cpf: CPF
-        country: País
-        city: Cidade
-        state: Estado
-        email: Email
-        phone: Telefone
-        organization: Empresa
-        organization_size: Tamanho da empresa
-        job_role: Cargo
-        years_of_experience: Experiência profissional (anos)
-        school: Escola
-        education_level: Nível educacional
-        experience_in_agility: Experiência com agilidade (anos)
-        status: Status
-        registration_value: Valor da inscrição
-        registration_date: Data
-        registration_group: Grupo
-        discount: Desconto
-        twitter_user: Usuário no twitter
-        default_locale: Local default
-        payment_type: Tipo de pagamento
-        other_job_role: Outro (Função)
+        full_name: "Nome"
+        badge_name: "Nome no crachá"
+        gender: "Gênero"
+        cpf: "CPF"
+        country: "País"
+        city: "Cidade"
+        state: "Estado"
+        email: "Email"
+        organization: "Empresa"
+        organization_size: "Tamanho da empresa"
+        job_role: "Cargo"
+        years_of_experience: "Experiência profissional (anos)"
+        education_level: "Educação"
+        experience_in_agility: "Experiência com agilidade (anos)"
+        status: "Status"
+        registration_value: "Valor da inscrição"
+        registration_date: "Data"
+        registration_group: "Grupo"
+        discount: "Desconto"
+        payment_type: "Tipo de pagamento"
+        other_job_role: "Outro (Função)"
+        source_of_interest: "Como soube da conferência?"
         enums:
           payment_types:
             gateway: Gateway
@@ -102,38 +97,58 @@ pt:
             statement_agreement: Empenho
             nil: Sem Tipo de Pagamento
           job_role:
-            not_informed: Não Informado
-            student: Estudante, pesquisador(a), academia
-            analyst: Analista de negócios / sistemas
-            manager: Gerente de gerentes (middle management)
-            vp: VP, Diretoria, alta gestão, conselho
-            president: C-level / Presidente
-            coach: Agilista, agile/scrum master, agile coach, etc
-            other: Outro
-            developer: Desenvolvimento, data, sustentação, etc
-            teacher: Professor(a) / Instrutor(a)
-            independent_worker: Pessoa Autônoma, consultoria independente
-            team_manager: Gerente de time, líder de squad
-            portfolio_manager: Gerente/owner de produto, projeto ou programa
-            human_resources: RH, área de pessoas
-            designer: Designer, UX, QA, Marketing, etc
+            not_informed: "Não Informado"
+            student: "Estudante, pesquisador(a), academia"
+            analyst: "Analista de negócios / sistemas"
+            manager: "Gerente de gerentes (middle management)"
+            vp: "VP, Diretoria, alta gestão, conselho"
+            president: "C-level / Presidente"
+            coach: "Agilista, agile/scrum master, agile coach, etc"
+            other: "Outro"
+            developer: "Desenvolvimento, data, sustentação, etc"
+            teacher: "Professor(a) / Instrutor(a)"
+            independent_worker: "Pessoa Autônoma, consultoria independente"
+            team_manager: "Gerente de time, líder de squad"
+            portfolio_manager: "Gerente/owner de produto, projeto ou programa"
+            human_resources: "RH, área de pessoas"
+            designer: "Designer, UX, QA, Marketing, etc"
           status:
-            waiting: Na Fila
-            accepted: Aceita no Grupo
-            pending: Pendente
-            accepted: Aceita
-            cancelled: Cancelada
-            paid: Paga
-            confirmed: Confirmada
-            showed_in: Credenciada
-          education_level:
-            primary: "Ensino Fundamental"
-            secondary: "Ensino Médio"
-            tec_secondary: "Ensino Médio Técnico"
-            tec_terciary: "Tecnólogo"
-            bachelor: "Bacharelado"
-            master: "Mestrado"
-            doctoral: "Doutorado"
+            waiting: "Na Fila"
+            accepted: "Aceita no Grupo"
+            pending: "Pendente"
+            cancelled: "Cancelada"
+            paid: "Paga"
+            confirmed: "Confirmada"
+            showed_in: "Credenciada"
+          organization_size:
+            no_org_size_informed: "Não Informado"
+            micro_enterprises: "Micro empresa: 1 a 9 pessoas"
+            small_enterprises: "Pequena empresa: 10 a 49 pessoas"
+            medium_enterprises: "Média empresa: 50 a 249 pessoas"
+            large_enterprises: "Grande empresa: +250 pessoas"
+          experience_in_agility:
+            no_agile_expirience_informed: "Não informado"
+            less_than_two: "Menos de 2 anos"
+            three_to_seven: "De 2 a 7 anos"
+            more_than_seven: "Mais de 7 anos"
+          years_of_experience:
+            no_experience_informed: "Não informado"
+            less_than_five: "Menos de 5 anos"
+            six_to_ten: "6 a 10 anos"
+            eleven_to_twenty: "11 a 20 anos"
+            twenty_one_to_thirty: "21 a 30 anos"
+            thirty_or_more: "Mais de 30 anos"
+          source_of_interest:
+            no_source_informed: "Não informada"
+            facebook: "Facebook"
+            instagram: "Instagram"
+            linkedin: "Linkedin"
+            twitter: "Twitter"
+            whatsapp: "Whatsapp"
+            friend_referral: "Indicação de Amigos"
+            community_dissemination: "Divulgação em Comunidade Ágil"
+            company_dissemination: "Divulgação na Empresa"
+            internet_search: "Busca na Internet"
         user_for_attendance: "Participação para o Usuário"
       event:
         name: Nome
@@ -169,28 +184,57 @@ pt:
         quota: Cota
         price: Preço
       user:
-        first_name: Nome
-        last_name: Sobrenome
-        email: Email
-        password: Senha
-        password_confirmation: Confirmação de senha
-        remember_me: Lembrar
+        first_name: "Nome"
+        last_name: "Sobrenome"
+        email: "Email"
+        password: "Senha"
+        password_confirmation: "Confirmação de senha"
+        remember_me: "Lembrar"
         name: "Nome"
         roles: "Papéis"
         city: "Cidade"
         state: "Estado"
         country: "País"
-        organization: "Organização"
-        zip_code: "CEP"
-        twitter_user: "Usuário no Twitter"
-        phone: "Telefone"
-        default_locale: "Localização Padrão"
+        gender: "Gênero"
+        education_level: "Educação"
+        ethnicity: "Raça/Cor"
+        disability: "Deficiências"
         enums:
           roles:
-            admin: Administrador
-            user: Usuário
-            organizer: Organizador
-        role: Função no Sistema
+            admin: "Administrador"
+            user: "Usuário"
+            organizer: "Organizador"
+          gender:
+            cisgender_man: "Homem cisgênero"
+            transgender_man: "Homem transgênero/transexual"
+            cisgender_woman: "Mulher cisgênera"
+            transgender_woman: "Mulher transgênera/transexual"
+            non_binary: "Não binária"
+            gender_not_informed: "Prefiro não informar"
+          education_level:
+            no_education_informed: "Não informado"
+            primary: "Ensino Fundamental"
+            secondary: "Ensino Médio"
+            tec_secondary: "Ensino Médio Técnico"
+            tec_terciary: "Tecnólogo"
+            bachelor: "Bacharelado"
+            master: "Mestrado"
+            doctoral: "Doutorado"
+          ethnicity:
+            no_ethnicity_informed: "Não informadas"
+            yellow: "Amarela"
+            white: "Branca"
+            indian: "Indígena"
+            brown: "Parda"
+            black: "Preta"
+          disability:
+            no_disability: "Nenhuma deficiência"
+            visually_impairment: "Deficiência visual"
+            hearing_impairment: "Deficiência auditiva"
+            physical_impairment: "Deficiência físico/motora"
+            mental_impairment: "Deficiência mental/intelectual"
+            disability_not_informed: "Não informada"
+        role: "Função no Sistema"
         cpf: "CPF"
   registration_group:
     paid_in_advance:

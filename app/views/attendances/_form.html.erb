@@ -4,31 +4,33 @@
 
   <% if current_user.organizer_of?(@event) %>
     <div class="row">
-      <div class="col-xl-12 col-sm-6 form-group">
+      <div class="col-xl-6 col-sm-6 form-group">
         <%= form.label I18n.t('activerecord.attributes.attendance.user_for_attendance') %>
         <%= form.select :user_id, options_for_select(User.all.order(:first_name, :last_name).map { |user| [user.full_name, user.id] }, (params[:user_id] || @attendance&.user&.id || current_user.id)), { include_blank: t('general.include_blank') }, class: 'form-control user-select' %>
         <span class="inline-hints"><%= t('attendances.new.user_for_attendance.help') %></span>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-xl-12 col-sm-6 form-group">
+      <div class="col-xl-6 col-sm-6 form-group">
         <%= label_tag t('activerecord.attributes.attendance.payment_type') %>
         <%= select_tag :payment_type, options_for_select(payment_types_options, @attendance.payment_type), class: 'form-control' %>
       </div>
     </div>
   <% end %>
 
+  <hr>
+
+  <div class="row">
+    <div class="col-xl-12 col-sm-6 form-group">
+      <%= label_tag t('attendances.new.form.token_field'), nil, class: 'control-label' %>
+      <%= text_field_tag :registration_token, nil, class: 'form-control' %>
+      <span class="help-block"><%= attendance.errors[:registration_group].join(', ') %></span>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-xl col-sm-6 form-group">
-      <%= form.label :cpf, class: 'control-label required' %>
-      <%= form.text_field :cpf, value: (attendance.cpf || user.cpf|| current_user.cpf), class: 'form-control' %>
-      <span class="inline-hints"><%= t('attendances.new.cpf.help') %></span>
-      <span class="help-block"><%= attendance.errors[:cpf].join(', ') %></span>
-    </div>
-    <div class="col-xl col-sm-6 form-group">
       <%= form.label :email, class: 'control-label required' %>
-      <%= form.text_field :email, value: (attendance.email || user.email || current_user.email),class: 'form-control', id: 'attendance_email' %>
+      <%= form.text_field :email, value: (user.email || current_user.email),class: 'form-control', id: 'attendance_email' %>
       <span class="help-block" id="help-block-email"><%= attendance.errors[:email].join(', ') %></span>
     </div>
     <% if current_user.organizer_of?(@event) %>
@@ -45,27 +47,13 @@
     <% end %>
   </div>
 
+  <hr>
+
   <div class="row">
     <div class="col-xl-3 col-sm-6 form-group">
-      <%= form.label :first_name, class: 'control-label required' %>
-      <%= form.text_field :first_name, value: (attendance.first_name || user.first_name || current_user.first_name), class: 'form-control' %>
-      <span class="help-block"><%= attendance.errors[:first_name].join(', ') %></span>
-    </div>
-    <div class="col-xl-3 col-sm-6 form-group">
-      <%= form.label :last_name, class: 'control-label required' %>
-      <%= form.text_field :last_name, value: (attendance.last_name || user.last_name || current_user.last_name), class: 'form-control' %>
-      <span class="help-block"><%= attendance.errors[:last_name].join(', ') %></span>
-    </div>
-    <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :badge_name, class: 'control-label' %>
-      <%= form.text_field :badge_name, value: (attendance.badge_name || user.badge_name || current_user.badge_name), class: 'form-control' %>
+      <%= form.text_field :badge_name, value: attendance.badge_name, class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:badge_name].join(', ') %></span>
-    </div>
-    <div class="col-xl-3 col-sm-6 form-group">
-      <%= form.label :gender, class: 'control-label' %>
-      <%= select_tag :gender, options_for_select(gender_options, (attendance.gender || user.gender)), { include_blank: t('general.include_blank'), class: 'form-control' } %>
-      <span class="help-block"><%= attendance.errors[:gender].join(', ') %></span>
-      <span class="inline-hints"><%= t('attendances.new.gender.help') %></span>
     </div>
   </div>
 
@@ -85,17 +73,14 @@
       <%= form.text_field :city, value: (attendance.city || user.city || current_user.city), class: 'form-control' %>
       <span class="help-block"><%= attendance.errors[:city].join(', ') %></span>
     </div>
-    <div class="col-xl-3 col-sm-6 form-group">
-      <%= form.label :phone, class: 'control-label required' %>
-      <%= form.text_field :phone, value: (attendance.phone || user.phone || current_user.phone), class: 'form-control' %>
-      <span class="help-block"><%= attendance.errors[:phone].join(', ') %></span>
-    </div>
   </div>
+
+  <hr>
 
   <div class="row">
     <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :organization, class: 'control-label' %>
-      <%= form.text_field :organization, value: (attendance.organization || user.organization || current_user.organization), class: 'form-control' %>
+      <%= form.text_field :organization, class: 'form-control' %>
     </div>
     <div class="col-xl-3 col-sm-6 form-group">
       <%= form.label :organization_size, class: 'control-label' %>
@@ -122,21 +107,7 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-xl-4 col-sm-6 form-group">
-      <%= form.label :school, class: 'control-label' %>
-      <%= form.text_field :school, class: 'form-control' %>
-    </div>
-    <div class="col-xl-4 col-sm-6 form-group">
-      <%= form.label :education_level, class: 'control-label' %>
-      <%= form.select :education_level, education_level_options, { include_blank: t('general.include_blank') }, class: 'form-control' %>
-    </div>
-    <div class="col-xl-4 col-sm-6 form-group">
-      <%= label_tag t('attendances.new.form.token_field'), nil, class: 'control-label' %>
-      <%= text_field_tag :registration_token, nil, class: 'form-control' %>
-      <span class="help-block"><%= attendance.errors[:registration_group].join(', ') %></span>
-    </div>
-  </div>
+  <hr>
 
   <div class="row">
     <div class="col-xl-12 col-sm-6 form-group">

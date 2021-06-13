@@ -16,49 +16,12 @@ RSpec.describe Attendance, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of :first_name }
-    it { is_expected.to validate_presence_of :last_name }
-    it { is_expected.to validate_presence_of :email }
-    it { is_expected.to validate_presence_of :phone }
     it { is_expected.to validate_presence_of :country }
     it { is_expected.to validate_presence_of :city }
     it { is_expected.to validate_presence_of :user }
     it { is_expected.to validate_presence_of :event }
 
-    it { is_expected.to allow_value('1234-2345').for(:phone) }
-    it { is_expected.to allow_value('+55 11 5555 2234').for(:phone) }
-    it { is_expected.to allow_value('+1 (304) 543.3333').for(:phone) }
-    it { is_expected.to allow_value('07753423456').for(:phone) }
-    it { is_expected.not_to allow_value('a').for(:phone) }
-    it { is_expected.not_to allow_value('1234-bfd').for(:phone) }
-    it { is_expected.not_to allow_value(')(*&^%$@!').for(:phone) }
-    it { is_expected.not_to allow_value('[=+]').for(:phone) }
     it { is_expected.to validate_presence_of :state }
-
-    context 'brazilians' do
-      subject { Fabricate.build(:attendance, country: 'BR') }
-
-      it { is_expected.to validate_presence_of :cpf }
-    end
-
-    context 'foreigners' do
-      subject { Fabricate.build(:attendance, country: 'US') }
-
-      it { is_expected.not_to validate_presence_of :cpf }
-    end
-
-    it { is_expected.to validate_length_of(:email).is_at_least(6).is_at_most(100) }
-    it { is_expected.to validate_length_of(:first_name).is_at_most(100) }
-    it { is_expected.to validate_length_of(:last_name).is_at_most(100) }
-    it { is_expected.to validate_length_of(:city).is_at_most(100) }
-    it { is_expected.to validate_length_of(:organization).is_at_most(100) }
-
-    it { is_expected.to allow_value('user@domain.com.br').for(:email) }
-    it { is_expected.to allow_value('test_user.name@a.co.uk').for(:email) }
-    it { is_expected.not_to allow_value('a').for(:email) }
-    it { is_expected.not_to allow_value('a@').for(:email) }
-    it { is_expected.not_to allow_value('a@a').for(:email) }
-    it { is_expected.not_to allow_value('@12.com').for(:email) }
   end
 
   context 'scopes' do
@@ -133,9 +96,9 @@ RSpec.describe Attendance, type: :model do
       end
 
       describe '.with_time_in_queue' do
-        let!(:attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar', queue_time: 100 }
-        let!(:other_attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar', queue_time: 2 }
-        let!(:out_attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar', queue_time: 0 }
+        let!(:attendance) { Fabricate :attendance, queue_time: 100 }
+        let!(:other_attendance) { Fabricate :attendance, queue_time: 2 }
+        let!(:out_attendance) { Fabricate :attendance, queue_time: 0 }
 
         it { expect(described_class.with_time_in_queue).to match_array [attendance, other_attendance] }
       end
@@ -389,12 +352,6 @@ RSpec.describe Attendance, type: :model do
       it { expect(attendance.group_name).to eq group.name }
       it { expect(attendance.event_name).to eq attendance.event.name }
     end
-  end
-
-  describe '#to_s' do
-    let(:attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar' }
-
-    it { expect(attendance.to_s).to eq 'bar, foo' }
   end
 
   describe '#price_band?' do

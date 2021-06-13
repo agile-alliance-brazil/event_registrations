@@ -9,39 +9,23 @@ module AttendanceHelper
     event.price_table_link.gsub(%r{:locale(/?)}, "#{locale}\\1")
   end
 
-  def education_level_options
-    [
-      [I18n.t('activerecord.attributes.attendance.enums.education_level.primary'), 'Primary education'],
-      [I18n.t('activerecord.attributes.attendance.enums.education_level.secondary'), 'Secondary education'],
-      [I18n.t('activerecord.attributes.attendance.enums.education_level.tec_secondary'), 'Post-secondary non-tertiary education'],
-      [I18n.t('activerecord.attributes.attendance.enums.education_level.tec_terciary'), 'Short-cycle tertiary education'],
-      [I18n.t('activerecord.attributes.attendance.enums.education_level.bachelor'), 'Bachelor or equivalent'],
-      [I18n.t('activerecord.attributes.attendance.enums.education_level.master'), 'Master or equivalent'],
-      [I18n.t('activerecord.attributes.attendance.enums.education_level.doctoral'), 'Doctoral or equivalent']
-    ]
-  end
-
   def year_of_experience_options
-    ['0 - 5', '6 - 10', '11 - 20', '21 - 30', '31 -']
+    Attendance.years_of_experiences.map { |exp, key| [I18n.t("activerecord.attributes.attendance.enums.year_of_experience.#{exp}"), key] }
   end
 
   def experience_in_agility_options
-    ['0 - 2', '3 - 7', '7 -']
+    Attendance.experience_in_agilities.map { |exp, key| [I18n.t("activerecord.attributes.attendance.enums.experience_in_agility.#{exp}"), key] }
   end
 
   def organization_size_options
-    ['1 - 10', '11 - 30', '31 - 100', '100 - 500', '500 -']
+    Attendance.organization_sizes.map { |gender_options, key| [I18n.t("activerecord.attributes.attendance.enums.organization_size.#{gender_options}"), key] }
   end
 
   def job_role_options
-    Attendance.job_roles.map { |job_role| [I18n.t("activerecord.attributes.attendance.enums.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] }
+    Attendance.job_roles.map { |job_role, key| [I18n.t("activerecord.attributes.attendance.enums.job_role.#{job_role}"), key] }.sort_by { |roles| roles[0] }
   end
 
   def payment_types_options
     Attendance.payment_types.map { |payment_type, _| [I18n.t("activerecord.attributes.attendance.enums.payment_types.#{payment_type}"), payment_type] }
-  end
-
-  def gender_options
-    { I18n.t('gender.male') => 'M', I18n.t('gender.female') => 'F', I18n.t('gender.other') => 'O' }
   end
 end

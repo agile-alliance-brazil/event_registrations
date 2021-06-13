@@ -13,6 +13,15 @@ class AttendancesController < AuthenticatedController
   end
 
   def create
+    user_for_attendance = User.find(user_id)
+    @attendance = user_for_attendance.attendances.where(event: @event).not_cancelled.first
+
+    if @attendance.present?
+      flash[:alert] = I18n.t('attendances.create.already_existent')
+
+      return render :new
+    end
+
     create_params = AttendanceParams.new(current_user, @event, params)
     @attendance = CreateAttendance.run_for(create_params)
     return redirect_to(event_attendance_path(@event, @attendance), flash: { notice: I18n.t('attendances.create.success') }) if @attendance.valid?
@@ -86,18 +95,27 @@ class AttendancesController < AuthenticatedController
   end
 
   def attendance_past_info
-    @attendance = Attendance.where(email: params[:email]).order(created_at: :desc).first.dup if params[:email].present?
-    @attendance = Attendance.new(email: params[:email]) if @attendance.blank?
+    user = User.find_by(email: params[:email])
+    @attendance = if user.present? && user.attendances.present?
+                    @attendance = user.attendances.order(:registration_date).last.dup
+                  else
+                    Attendance.new(user: user)
+                  end
+
     render 'attendances/attendance_info'
   end
 
   def user_info
     @user = User.where(id: params[:user_id]).first_or_initialize
-    @attendance = Attendance.new
+    @attendance = Attendance.new(user: @user)
     respond_to { |format| format.js { render 'attendances/user_info' } }
   end
 
   private
+
+  def user_id
+    @user_id ||= params[:attendance][:user_id] || current_user.id
+  end
 
   def assign_attendance
     @attendance = Attendance.find(params[:id])

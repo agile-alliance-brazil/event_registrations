@@ -52,83 +52,132 @@ en:
               invalid_period: "End date must be after the start date."
     attributes:
       attendance:
-        full_name: "Name"
         status: "Status"
         payment_type: "Payment type"
         organization_size: "Organization size"
         organization: "Organization"
-        phone: "Phone"
-        email: "Email"
         state: "State"
         city: "City"
         country: "Country"
-        first_name: "Name"
-        last_name: "Last Name"
         badge_name: "Badge Name"
-        gender: "Gender"
         discount: "Discount"
-        twitter_user: User on twitter
-        default_locale: Default Locale
         job_role: "Job role"
         years_of_experience: "Years of Experience"
         experience_in_agility: "Experience in Agility"
-        school: "School"
-        education_level: "Education Level"
         enums:
           payment_types:
-            gateway: Gateway
-            bank_deposit: Bank Deposit
-            statement_agreement: Statement of Agreement
-            nil: No Payment Type
+            gateway: "Gateway"
+            bank_deposit: "Bank Deposit"
+            statement_agreement: "Statement of Agreement"
+            nil: "No Payment Type"
           job_role:
-            not_informed: Not Informed
-            student: Student, researcher, academy member
-            analyst: Business / system analist
-            manager: Middle management, manager of managers
-            vp: VP, Directors, high management, board member
-            president: C-level / President
-            coach: Agilist, agile/scrum master, agile coach, etc
-            other: Other
-            developer: Software engineer, data, operations, etc
-            teacher: Teacher, instructor
-            independent_worker: Independent worker/consultant
-            team_manager: Team manager, squad lead
-            portfolio_manager: Product, project or program manager/owner
-            human_resources: HR, People and Culture
-            designer: Designer, UX, QA, marketing, etc
+            not_informed: "Not Informed"
+            student: "Student, researcher, academy member"
+            analyst: "Business / system analist"
+            manager: "Middle management, manager of managers"
+            vp: "VP, Directors, high management, board member"
+            president: "C-level / President"
+            coach: "Agilist, agile/scrum master, agile coach, etc"
+            other: "Other"
+            developer: "Software engineer, data, operations, etc"
+            teacher: "Teacher, instructor"
+            independent_worker: "Independent worker/consultant"
+            team_manager: "Team manager, squad lead"
+            portfolio_manager: "Product, project or program manager/owner"
+            human_resources: "HR, People and Culture"
+            designer: "Designer, UX, QA, marketing, etc"
           status:
-            waiting: Waiting
-            accepted: Accepted in the Group
-            pending: Pending
-            accepted: Accepted
-            cancelled: Cancelled
-            paid: Paid
-            confirmed: Confirmed
-            showed_in: Showed In
+            waiting: "Waiting"
+            accepted: "Accepted in the Group"
+            pending: "Pending"
+            cancelled: "Cancelled"
+            paid: "Paid"
+            confirmed: "Confirmed"
+            showed_in: "Showed In"
           education_level:
-            primary: Primary Education
-            secondary: Secondary education
-            tec_secondary: Post-secondary non-tertiary education
-            tec_terciary: Short-cycle tertiary education
-            bachelor: Bachelor or equivalent
-            master: Master or equivalent
-            doctoral: Doctoral or equivalent
+            primary: "Primary Education"
+            secondary: "Secondary education"
+            tec_secondary: "Post-secondary non-tertiary education"
+            tec_terciary: "Short-cycle tertiary education"
+            bachelor: "Bachelor or equivalent"
+            master: "Master or equivalent"
+            doctoral: "Doctoral or equivalent"
+          organization_size:
+            no_org_size_informed: "Not informed"
+            micro_enterprises: "Microentreprises: 1 to 9 employees"
+            small_enterprises: "Small enterprises: 10 to 49 employees"
+            medium_enterprises: "Medium-sized enterprises: 50 to 249 employees"
+            large_enterprises: "Large enterprises: +250 employees"
+          experience_in_agility:
+            no_agile_expirience_informed: "Not informed"
+            less_than_two: "Less than 2 years"
+            three_to_seven: "2 to 7 years"
+            more_than_seven: "More than 7 years"
+          years_of_experience:
+            no_experience_informed: "Not informed"
+            less_than_five: "Less than 5 years"
+            six_to_ten: "6 to 10 years"
+            eleven_to_twenty: "11 to 20 years"
+            twenty_one_to_thirty: "21 to 30 years"
+            thirty_or_more: "More than 30 years"
+          source_of_interest:
+            no_source_informed: "Not informed"
+            facebook: "Facebook"
+            instagram: "Instagram"
+            linkedin: "Linkedin"
+            twitter: "Twitter"
+            whatsapp: "Whatsapp"
+            friend_referral: "Friend Referral"
+            community_dissemination: "Community dissemination"
+            company_dissemination: "Company dissemination"
+            internet_search: "Search on the Internet"
         user_for_attendance: "Attendance for User"
       user:
-        role: Role in System
-        email: Email
-        name: Name
+        role: "Role in System"
+        email: "Email"
+        full_name: "Name"
+        first_name: "Name"
+        last_name: "Last name"
         country: "Country"
-        organization: "Organization"
-        zip_code: "Zip Code"
-        default_locale: "Default Locale"
-        phone: "Phone"
-        twitter_user: "Twiter User"
+        gender: "Gender"
+        education_level: "Education"
+        ethnicity: "Ethnicity"
+        disability: "Disability"
         enums:
           role:
-            admin: Admin
-            user: User
-            organizer: Organizer
+            admin: "Admin"
+            user: "User"
+            organizer: "Organizer"
+          gender:
+            cisgender_man: "Cisgender man"
+            transgender_man: "Transgender/transsexual man"
+            cisgender_woman: "Cisgender woman"
+            transgender_woman: "Transgender/transsexual woman"
+            non_binary: "Non-binary"
+            gender_not_informed: "I prefer not to inform"
+          education_level:
+            no_education_informed: "no_education_informed"
+            primary: "Primary Education"
+            secondary: "Secondary education"
+            tec_secondary: "Post-secondary non-tertiary education"
+            tec_terciary: "Short-cycle tertiary education"
+            bachelor: "Bachelor or equivalent"
+            master: "Master or equivalent"
+            doctoral: "Doctoral or equivalent"
+          ethnicity:
+            no_ethnicity_informed: "Not informed"
+            yellow: "Yellow"
+            white: "White"
+            indian: "Indian"
+            brown: "Brown"
+            black: "Brown"
+          disability:
+            no_disability: "No disability"
+            visually_impairment: "Visually impairment"
+            hearing_impairment: "Hearing impairment"
+            physical_impairment: "Physical impairment"
+            mental_impairment: "Mental impairment"
+            disability_not_informed: "Not informed"
         cpf: "CPF"
       event:
         full_price: "Full price"

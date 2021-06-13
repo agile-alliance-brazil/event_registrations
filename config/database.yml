@@ -26,5 +26,5 @@ staging:
 production:
   <<: *default
   database: registrations_production
-  username: registrations_db
+  username:
   password: <%= Figaro.env.registrations_database_password %>

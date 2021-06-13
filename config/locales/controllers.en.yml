@@ -210,10 +210,6 @@ en:
   header:
     aa:
       members: "Members"
-  gender:
-    male: "Male"
-    female: "Female"
-    other: "Other"
   registration_quotas:
     index:
       attendances: "Attendances"

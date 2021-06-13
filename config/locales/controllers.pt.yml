@@ -210,10 +210,6 @@ pt:
   header:
     aa:
       members: "Membros"
-  gender:
-    male: "Masculino"
-    female: "Feminino"
-    other: "Outro"
   registration_quotas:
     index:
       attendances: "Participantes"

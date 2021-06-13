@@ -27,7 +27,7 @@ RSpec.describe User, type: :model do
       it 'only show event once if user has multiple attendances' do
         user = Fabricate(:user)
         first_attendance = Fabricate(:attendance, user: user)
-        Fabricate(:attendance, user: user, event: first_attendance.event, email: 'foo@bar.com')
+        Fabricate(:attendance, user: user, event: first_attendance.event)
 
         expect(user.events.size).to eq(1)
       end
@@ -41,20 +41,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'virtual attributes' do
-    context 'twitter user' do
-      it 'removes @ from start if present' do
-        user = Fabricate.build(:user, twitter_user: '@agilebrazil')
-        expect(user.twitter_user).to eq('agilebrazil')
-      end
-
-      it 'keeps as given if doesnt start with @' do
-        user = Fabricate.build(:user, twitter_user: 'agilebrazil')
-        expect(user.twitter_user).to eq('agilebrazil')
-      end
-    end
-  end
-
   describe '#registrations_for_event' do
     let(:event) { Fabricate :event }
 
@@ -62,9 +48,9 @@ RSpec.describe User, type: :model do
       let(:user) { Fabricate :user }
 
       it 'returns all the registrations' do
-        first = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        second = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        third = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
+        first = Fabricate(:attendance, user: user, event: event)
+        second = Fabricate(:attendance, user: user, event: event)
+        third = Fabricate(:attendance, user: user, event: event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second, third]
       end
@@ -75,8 +61,8 @@ RSpec.describe User, type: :model do
       let(:other_user) { Fabricate :user }
 
       it 'returns all the registrations for the user' do
-        first = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        second = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
+        first = Fabricate(:attendance, user: user, event: event)
+        second = Fabricate(:attendance, user: user, event: event)
         Fabricate(:attendance, user: other_user, event: event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]
@@ -88,8 +74,8 @@ RSpec.describe User, type: :model do
       let(:other_event) { Fabricate :event }
 
       it 'returns all the registrations for the user' do
-        first = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        second = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
+        first = Fabricate(:attendance, user: user, event: event)
+        second = Fabricate(:attendance, user: user, event: event)
         Fabricate(:attendance, user: user, event: other_event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]

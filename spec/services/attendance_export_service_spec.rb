@@ -5,23 +5,16 @@ describe AttendanceExportService, type: :service do
     context 'with attendances' do
       let(:event) { Fabricate :event }
       let(:group) { Fabricate :registration_group, event: event, name: 'Group for to csv test' }
-      let!(:attendance) do
-        Fabricate(:attendance,
-                  event: event,
-                  status: :showed_in,
-                  first_name: 'bLa',
-                  registration_group: group)
-      end
+      let!(:attendance) { Fabricate(:attendance, event: event, status: :showed_in, registration_group: group) }
 
       let(:expected) do
-        title = "id,status,registration_date,first_name,last_name,phone,organization,email,payment_type,group_name,city,state,value,experience_in_agility,education_level,job_role\n"
+        title = "id,status,registration_date,first_name,last_name,organization,email,payment_type,group_name,city,state,value,experience_in_agility,education_level,job_role\n"
         body =
           "#{attendance.id},"\
           "#{I18n.t("activerecord.attributes.attendance.enums.status.#{attendance.status}", count: 1)},"\
           "#{attendance.registration_date},"\
           "#{attendance.first_name},"\
           "#{attendance.last_name},"\
-          "#{attendance.phone},"\
           "#{attendance.organization},"\
           "#{attendance.email},"\
           "#{attendance.payment_type},"\

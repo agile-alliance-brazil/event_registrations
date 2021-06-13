@@ -18,7 +18,7 @@
 #
 # Indexes
 #
-#  idx_4524819_index_payment_notifications_on_attendance_id  (attendance_id)
+#  idx_4539845_index_payment_notifications_on_attendance_id  (attendance_id)
 #
 # Foreign Keys
 #

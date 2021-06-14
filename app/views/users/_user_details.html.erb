@@ -1,0 +1,78 @@
+<div class="row bottom-spaced-component">
+  <div class="col-xl">
+    <% if user.avatar_valid? %>
+      <%= image_tag user.user_image.url, size: '150x150', class: 'user-avatar' %>
+    <% else %>
+      <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623596492/150-1503945_transparent-user-png-default-user-image-png-png_jsthbv.png', size: '150x131' %>
+    <% end %>
+  </div>
+
+  <div class="col-xl">
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.name') %>:</b>
+      <%= user.full_name %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.email') %>:</b>
+      <%= user.email %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.education_level') %>:</b>
+      <%= I18n.t("activerecord.attributes.user.enums.education_level.#{user.education_level}") %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.school') %>:</b>
+      <%= user.school %>
+    </p>
+  </div>
+
+  <div class="col-xl">
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.gender') %>:</b>
+      <%= I18n.t("activerecord.attributes.user.enums.gender.#{user.gender}") %>
+    </p>
+    <% if I18n.locale == :pt %>
+      <p>
+        <b><%= I18n.t('activerecord.attributes.user.ethnicity') %>:</b>
+        <%= I18n.t("activerecord.attributes.user.enums.ethnicity.#{user.ethnicity}") %>
+      </p>
+    <% end %>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.disability') %>:</b>
+      <%= I18n.t("activerecord.attributes.user.enums.disability.#{user.disability}") %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.birth_date') %>:</b>
+      <% if user.birth_date.present? %>
+        <%= I18n.l(user.birth_date) %>
+      <% else %>
+        <%= I18n.t('general.not_informed') %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="col-xl">
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.country') %>:</b>
+      <% if user.country.present? %>
+        <%= ISO3166::Country[user.country].translations[I18n.locale.to_s] %>
+      <% else %>
+        <%= I18n.t('general.not_informed') %>
+      <% end %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.state') %>:</b>
+      <%= user.state %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.user.city') %>:</b>
+      <%= user.city %>
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl">
+    <%= link_to t('users.show.edit.button'), edit_user_path(user), class: 'btn btn-sm btn-primary' if user == current_user %>
+  </div>
+</div>

@@ -10,11 +10,10 @@
 #  confirmation_token     :string(255)      indexed
 #  confirmed_at           :datetime
 #  country                :string(255)
-#  cpf                    :string(255)
 #  created_at             :datetime         not null
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string(255)
-#  disability             :integer          default("no_disability"), not null, indexed
+#  disability             :integer          default("disability_not_informed"), not null, indexed
 #  education_level        :integer          default("no_education_informed"), indexed
 #  email                  :string(255)      not null, indexed
 #  encrypted_password     :string(255)      default(""), not null
@@ -23,12 +22,10 @@
 #  first_name             :string(255)      not null
 #  gender                 :integer          default("gender_not_informed"), indexed
 #  id                     :bigint(8)        not null, primary key
-#  job_role               :integer          default(0), indexed
 #  last_name              :string(255)      not null
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :string(255)
 #  locked_at              :datetime
-#  other_job_role         :string
 #  registration_group_id  :bigint(8)        indexed
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -54,7 +51,6 @@
 #  index_users_on_education_level                   (education_level)
 #  index_users_on_ethnicity                         (ethnicity)
 #  index_users_on_gender                            (gender)
-#  index_users_on_job_role                          (job_role)
 #
 # Foreign Keys
 #
@@ -65,7 +61,7 @@ class User < ApplicationRecord
   enum role: { user: 0, organizer: 1, admin: 2 }
   enum gender: { cisgender_man: 0, transgender_man: 1, cisgender_woman: 2, transgender_woman: 3, non_binary: 4, gender_not_informed: 5 }
   enum education_level: { no_education_informed: 0, primary: 1, secondary: 2, tec_secondary: 3, tec_terciary: 4, bachelor: 5, master: 6, doctoral: 7 }
-  enum ethnicity: { no_ethnicity_informed: 0, yellow: 1, white: 2, indian: 3, brown: 4, black: 5 }
+  enum ethnicity: { no_ethnicity_informed: 0, asian: 1, white: 2, indian: 3, brown: 4, black: 5 }
   enum disability: { no_disability: 0, visually_impairment: 1, hearing_impairment: 2, physical_impairment: 3, mental_impairment: 4, disability_not_informed: 5 }
 
   devise :database_authenticatable, :registerable,
@@ -107,8 +103,12 @@ class User < ApplicationRecord
     attendances.select { |attendance| attendance.event_id == event.id }
   end
 
+  def registrations_for_other_users
+    Attendance.where(id: (registered_attendances - attendances).map(&:id)).order(registration_date: :desc)
+  end
+
   def full_name
-    [first_name.titleize, last_name.titleize].join(' ')
+    [first_name&.titleize, last_name&.titleize].join(' ')
   end
 
   def organizer_of?(event)

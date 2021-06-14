@@ -1,10 +1,10 @@
 <%= form_for @user do |f| %>
   <div class="row">
     <div class="col-xl-2 form-group">
-      <% if @user.user_image.present? %>
-        <%= image_tag @user.user_image.url, class: 'card-img-top' %>
+      <% if @user.avatar_valid? %>
+        <%= image_tag @user.user_image.url, size: '150x150', class: 'user-avatar' %>
       <% else %>
-        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623596492/150-1503945_transparent-user-png-default-user-image-png-png_jsthbv.png', class: 'card-img-top' %>
+        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623596492/150-1503945_transparent-user-png-default-user-image-png-png_jsthbv.png', size: '150x131', class: 'user-avatar' %>
       <% end %>
     </div>
     <div class="col-xl-10 form-group">
@@ -13,44 +13,74 @@
   </div>
 
   <div class="row">
-    <div class="col-xl-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= f.label :first_name, class: 'control-label' %>
       <%= f.text_field :first_name, class: 'form-control', autofocus: true %>
       <span class="help-block"><%= @user.errors[:first_name].join(', ') %></span>
     </div>
-    <div class="col-xl-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= f.label :last_name, class: 'control-label' %>
       <%= f.text_field :last_name, class: 'form-control' %>
       <span class="help-block"><%= @user.errors[:last_name].join(', ') %></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-6 form-group">
+    <div class="col-xl-3 col-sm-6 form-group">
       <%= f.label :email, class: 'control-label' %>
       <%= f.text_field :email, class: 'form-control' %>
       <span class="help-block"><%= @user.errors[:email].join(', ') %></span>
     </div>
+    <div class="col-xl-3 col-sm-6 form-group">
+      <%= f.label :birth_date, class: 'control-label' %>
+      <%= f.date_field :birth_date, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:gender].join(', ') %></span>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col-xl-6 col-sm-6 form-group">
+    <div class="col-xl col-sm-6 form-group">
+      <%= f.label :gender, class: 'control-label' %>
+      <%= f.select :gender, gender_options(@user.gender), {}, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:gender].join(', ') %></span>
+    </div>
+    <div class="col-xl col-sm-6 form-group">
+      <%= f.label :disability, class: 'control-label' %>
+      <%= f.select :disability, disability_options(@user.disability), {}, class: 'form-control' %>
+    </div>
+
+    <% if I18n.locale == :pt %>
+      <div class="col-xl col-sm-6 form-group">
+        <%= f.label :ethnicity, class: 'control-label' %>
+        <%= f.select :ethnicity, ethnicity_options(@user.ethnicity), {}, class: 'form-control' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-4 col-sm-6 form-group">
       <%= f.label :country, class: 'control-label' %>
       <%= f.country_select :country, priority_countries = ["Brazil"], options = {}, html_options = { class: 'form-control' } %>
       <span class="help-block"><%= @user.errors[:country].join(', ') %></span>
     </div>
-    <div class="col-xl-6 form-group">
+    <div class="col-xl-4 form-group">
       <%= f.label :state, class: 'control-label' %>
       <%= f.text_field :state, class: 'form-control' %>
       <span class="help-block"><%= @user.errors[:state].join(', ') %></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-6 form-group">
+    <div class="col-xl-4 form-group">
       <%= f.label :city, class: 'control-label' %>
       <%= f.text_field :city, class: 'form-control' %>
       <span class="help-block"><%= @user.errors[:city].join(', ') %></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-4 col-sm-6 form-group">
+      <%= f.label :education_level, class: 'control-label' %>
+      <%= f.select :education_level, education_level_options(@user.education_level), {}, class: 'form-control' %>
+      <span class="help-block"><%= @user.errors[:education_level].join(', ') %></span>
+    </div>
+    <div class="col-xl-4 col-sm-6 form-group">
+      <%= f.label :school, class: 'control-label' %>
+      <%= f.text_field :school, class: 'form-control' %>
     </div>
   </div>
 

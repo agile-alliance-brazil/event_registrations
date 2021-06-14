@@ -31,7 +31,6 @@ Current::Application.routes.draw do
       collection do
         get :pending_attendances
         get :search
-        get :attendance_past_info
         get :user_info
       end
     end

@@ -1,61 +1,35 @@
 # frozen_string_literal: true
 
-class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migration[6.0]
+class ChangeGenderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migration[6.0]
   def up
-    Attendance.all.each do |attendance|
-      attendance_email = attendance.email.downcase
-      user_email = attendance.email.downcase
-      next unless attendance.email != user_email
+    execute('INSERT INTO users (email, first_name, last_name, gender, encrypted_password, sign_in_count, created_at, updated_at) SELECT DISTINCT ON (email) email, first_name, last_name, gender, md5(random()::text), 0, created_at, updated_at FROM attendances a WHERE a.email NOT IN (SELECT email FROM users);')
 
-      user = User.where('lower(email) = :attendance_email', attendance_email: attendance_email).first
+    execute('UPDATE attendances a SET user_id = (SELECT id FROM users u WHERE u.email = a.email)')
 
-      if user.present?
-        attendance.update(user: user)
-      else
-        random_hex = SecureRandom.hex
-        gender = case attendance.gender
-                 when 'M'
-                   '0'
-                 when 'F'
-                   '2'
-                 else
-                   '5'
-                 end
-        u = User.create(first_name: attendance.first_name, last_name: attendance.last_name, email: attendance_email, country: attendance.country,
-                        state: attendance.state, city: attendance.city, gender: gender.to_i, password: random_hex, password_confirmation: random_hex, sign_in_count: 0)
+    execute("UPDATE users SET gender = '0' WHERE gender = 'M'")
+    execute("UPDATE users SET gender = '2' WHERE gender = 'F'")
+    execute("UPDATE users SET gender = '5' WHERE gender = 'O' OR gender IS NULL OR gender = ''")
 
-        attendance.update(user: u)
-      end
-    end
-
-    execute("UPDATE attendances SET gender = '0' WHERE gender = 'M'")
-    execute("UPDATE attendances SET gender = '2' WHERE gender = 'F'")
-    execute("UPDATE attendances SET gender = '5' WHERE gender = 'O'")
-
-    execute("UPDATE attendances SET years_of_experience = '0' WHERE years_of_experience IS NULL")
-    execute("UPDATE attendances SET years_of_experience = '0' WHERE years_of_experience = ''")
+    execute("UPDATE attendances SET years_of_experience = '0' WHERE years_of_experience IS NULL OR years_of_experience = ''")
     execute("UPDATE attendances SET years_of_experience = '1' WHERE years_of_experience = '0 - 5'")
     execute("UPDATE attendances SET years_of_experience = '2' WHERE years_of_experience = '6 - 10'")
     execute("UPDATE attendances SET years_of_experience = '3' WHERE years_of_experience = '11 - 20'")
     execute("UPDATE attendances SET years_of_experience = '4' WHERE years_of_experience = '21 - 30'")
     execute("UPDATE attendances SET years_of_experience = '5' WHERE years_of_experience = '31 -'")
 
-    execute("UPDATE attendances SET experience_in_agility = '0' WHERE experience_in_agility IS NULL")
-    execute("UPDATE attendances SET experience_in_agility = '0' WHERE experience_in_agility = ''")
+    execute("UPDATE attendances SET experience_in_agility = '0' WHERE experience_in_agility IS NULL OR experience_in_agility = ''")
     execute("UPDATE attendances SET experience_in_agility = '1' WHERE experience_in_agility = '0 - 2'")
     execute("UPDATE attendances SET experience_in_agility = '2' WHERE experience_in_agility = '3 - 7'")
     execute("UPDATE attendances SET experience_in_agility = '3' WHERE experience_in_agility = '7 -'")
 
-    execute("UPDATE attendances SET organization_size = '0' WHERE organization_size IS NULL")
-    execute("UPDATE attendances SET organization_size = '0' WHERE organization_size = ''")
+    execute("UPDATE attendances SET organization_size = '0' WHERE organization_size IS NULL OR organization_size = ''")
     execute("UPDATE attendances SET organization_size = '1' WHERE organization_size = '1 - 10'")
     execute("UPDATE attendances SET organization_size = '2' WHERE organization_size = '11 - 30'")
     execute("UPDATE attendances SET organization_size = '3' WHERE organization_size = '31 - 100'")
     execute("UPDATE attendances SET organization_size = '4' WHERE organization_size = '100 - 500'")
     execute("UPDATE attendances SET organization_size = '4' WHERE organization_size = '500 -'")
 
-    execute("UPDATE attendances SET education_level = '0' WHERE education_level IS NULL")
-    execute("UPDATE attendances SET education_level = '0' WHERE education_level = ''")
+    execute("UPDATE attendances SET education_level = '0' WHERE education_level IS NULL OR education_level = ''")
     execute("UPDATE attendances SET education_level = '1' WHERE education_level = 'Primary education'")
     execute("UPDATE attendances SET education_level = '2' WHERE education_level = 'Lower secondary education'")
     execute("UPDATE attendances SET education_level = '2' WHERE education_level = 'Secondary education'")
@@ -73,11 +47,9 @@ class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migratio
 
       t.date :birth_date, null: true
       t.integer :education_level, default: 0, index: true
-      t.integer :job_role, default: 0, null: true, index: true
-      t.string :other_job_role
       t.string :school
       t.integer :ethnicity, default: 0, null: false, index: true
-      t.integer :disability, default: 0, null: false, index: true
+      t.integer :disability, default: 5, null: false, index: true
 
       t.remove :twitter_user
       t.remove :default_locale
@@ -87,6 +59,7 @@ class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migratio
       t.remove :zipcode
       t.remove :address
       t.remove :phone
+      t.remove :cpf
     end
     add_index :users, :gender
 
@@ -124,14 +97,21 @@ class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migratio
 
     add_index :attendances, :education_level
     add_index :attendances, :years_of_experience
+
+    change_table :events, bulk: true do |t|
+      t.remove :logo
+      t.remove :allow_voting
+      t.remove :location_and_date
+      t.remove :price_table_link
+    end
   end
 
   def down
     change_table :users, bulk: true do |t|
+      t.change :gender, :string
+
       t.remove :birth_date
       t.remove :education_level
-      t.remove :job_role
-      t.remove :other_job_role
       t.remove :school
       t.remove :disability
       t.remove :ethnicity
@@ -144,6 +124,7 @@ class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migratio
       t.string :zipcode
       t.string :address
       t.string :phone
+      t.string :cpf
     end
 
     remove_index :users, :gender
@@ -195,5 +176,20 @@ class ChangeGennderToEnumAndAddingNewFieldsToAttendance < ActiveRecord::Migratio
     execute("UPDATE attendances SET education_level = 'Bachelor or equivalent' WHERE education_level = '5'")
     execute("UPDATE attendances SET education_level = 'Master or equivalent' WHERE education_level = '6'")
     execute("UPDATE attendances SET education_level = 'Doctoral or equivalent' WHERE education_level = '7'")
+
+    execute("UPDATE attendances SET gender = 'M' WHERE gender = '0'")
+    execute("UPDATE attendances SET gender = 'F' WHERE gender = '2'")
+    execute("UPDATE attendances SET gender = '0' WHERE gender = '5'")
+
+    execute("UPDATE users SET gender = 'M' WHERE gender = '0'")
+    execute("UPDATE users SET gender = 'F' WHERE gender = '2'")
+    execute("UPDATE users SET gender = '0' WHERE gender = '5'")
+
+    change_table :events, bulk: true do |t|
+      t.string :logo
+      t.string :allow_voting
+      t.string :location_and_date
+      t.string :price_table_link
+    end
   end
 end

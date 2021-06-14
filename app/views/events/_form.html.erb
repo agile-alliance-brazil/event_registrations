@@ -1,13 +1,13 @@
 <%= form_for event do |f| %>
   <div class="row">
-    <div class="col-xl-4 form-group">
+    <div class="col-xl-3 form-group">
       <% if @event.event_image_valid? %>
-        <%= image_tag @event.event_image.url, class: 'card-img-top' %>
+        <%= image_tag @event.event_image.url, size: '300x300', class: 'card-img-top' %>
       <% else %>
-        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623597789/img-empty_b8hdek.png', class: 'card-img-top' %>
+        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623597789/img-empty_b8hdek.png', size: '300x300' %>
       <% end %>
     </div>
-    <div class="col-xl-8 form-group">
+    <div class="col-xl-9 form-group">
       <%= f.file_field :event_image, class: 'form-control' %>
     </div>
   </div>
@@ -37,7 +37,6 @@
       <span class="help-block"><%= event.errors[:days_to_charge].join(', ') %></span>
     </div>
   </div>
-
 
   <div class="row">
     <div class="col-xl-6 form-group">
@@ -70,18 +69,14 @@
   </div>
 
   <div class="row">
-    <div class="col-xl-4 form-group">
+    <div class="col-xl-6 form-group">
       <%= f.label :full_price, class: 'control-label' %>
       <%= f.text_field :full_price, class: 'form-control' %>
       <span class="help-block"><%= event.errors[:full_price].join(', ') %></span>
     </div>
-    <div class="col-xl-4 form-group">
+    <div class="col-xl-6 form-group">
       <%= f.label :link, class: 'control-label' %>
       <%= f.text_field :link, class: 'form-control' %>
-    </div>
-    <div class="col-xl-4 form-group">
-      <%= f.label :logo, class: 'control-label' %>
-      <%= f.text_field :logo, class: 'form-control' %>
     </div>
   </div>
 

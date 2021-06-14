@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.describe User, type: :model do
+  context 'enums' do
+    it { is_expected.to define_enum_for(:role).with_values(user: 0, organizer: 1, admin: 2) }
+    it { is_expected.to define_enum_for(:gender).with_values(cisgender_man: 0, transgender_man: 1, cisgender_woman: 2, transgender_woman: 3, non_binary: 4, gender_not_informed: 5) }
+    it { is_expected.to define_enum_for(:education_level).with_values(no_education_informed: 0, primary: 1, secondary: 2, tec_secondary: 3, tec_terciary: 4, bachelor: 5, master: 6, doctoral: 7) }
+    it { is_expected.to define_enum_for(:ethnicity).with_values(no_ethnicity_informed: 0, asian: 1, white: 2, indian: 3, brown: 4, black: 5) }
+    it { is_expected.to define_enum_for(:disability).with_values(no_disability: 0, visually_impairment: 1, hearing_impairment: 2, physical_impairment: 3, mental_impairment: 4, disability_not_informed: 5) }
+  end
+
   context 'associations' do
     it { is_expected.to have_many :attendances }
     it { is_expected.to have_many :events }
@@ -228,6 +236,24 @@ RSpec.describe User, type: :model do
       allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(false)
       allow(NetServices.instance).to(receive(:url_found?)).and_return(true)
       expect(user.avatar_valid?).to be true
+    end
+  end
+
+  describe '#registrations_for_other_users' do
+    let(:user) { Fabricate :user }
+    let(:other_user) { Fabricate :user }
+    let(:no_attendances_user) { Fabricate :user }
+
+    it 'returns the registrations for other users' do
+      first_attendance = Fabricate :attendance, user: other_user, registered_by_user: user, registration_date: 2.days.ago
+      second_attendance = Fabricate :attendance, user: other_user, registered_by_user: user, registration_date: 1.day.ago
+      third_attendance = Fabricate :attendance, user: other_user, registered_by_user: user, registration_date: Time.zone.now
+      Fabricate :attendance, user: user, registered_by_user: user, registration_date: 4.days.ago
+      Fabricate :attendance, user: user, registered_by_user: user, registration_date: 3.days.ago
+
+      expect(user.registrations_for_other_users).to eq [third_attendance, second_attendance, first_attendance]
+      expect(other_user.registrations_for_other_users).to eq []
+      expect(no_attendances_user.registrations_for_other_users).to eq []
     end
   end
 end

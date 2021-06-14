@@ -39,5 +39,9 @@
     font-size: large;
 }
 
+.dropdown-menu {
+    margin-right: 100px;
+}
+
 
 label.required:after{content: " *"}

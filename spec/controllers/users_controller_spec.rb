@@ -154,11 +154,18 @@ RSpec.describe UsersController, type: :controller do
 
       describe 'PUT #update' do
         context 'with an existent user' do
-          before { put :update, params: { id: user.id, user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com' } } }
+          before { put :update, params: { id: user.id, user: { first_name: 'xpto', last_name: 'bla', email: 'xpto@bla.com', gender: :transgender_woman, education_level: :tec_secondary, ethnicity: :black, disability: :hearing_impairment, birth_date: Date.new(2006, 6, 29) } } }
 
-          it { expect(User.last.first_name).to eq 'xpto' }
-          it { expect(User.last.last_name).to eq 'bla' }
-          it { expect(User.last.email).to eq 'xpto@bla.com' }
+          it 'updates the informed user' do
+            expect(User.last.first_name).to eq 'xpto'
+            expect(User.last.last_name).to eq 'bla'
+            expect(User.last.email).to eq 'xpto@bla.com'
+            expect(User.last.birth_date).to eq Date.new(2006, 6, 29)
+            expect(User.last.gender).to eq 'transgender_woman'
+            expect(User.last.education_level).to eq 'tec_secondary'
+            expect(User.last.ethnicity).to eq 'black'
+            expect(User.last.disability).to eq 'hearing_impairment'
+          end
         end
 
         context 'with an inexistent user' do

@@ -18,6 +18,7 @@ en:
       reset: "Clean Form"
     include_blank: "Select..."
     cancel: "Cancel"
+    not_informed: "Not informed"
   registration:
     quantity: "Quantity"
     details:

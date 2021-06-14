@@ -154,7 +154,7 @@ en:
             cisgender_woman: "Cisgender woman"
             transgender_woman: "Transgender/transsexual woman"
             non_binary: "Non-binary"
-            gender_not_informed: "I prefer not to inform"
+            gender_not_informed: "Not informed"
           education_level:
             no_education_informed: "no_education_informed"
             primary: "Primary Education"
@@ -166,7 +166,7 @@ en:
             doctoral: "Doctoral or equivalent"
           ethnicity:
             no_ethnicity_informed: "Not informed"
-            yellow: "Yellow"
+            asian: "Asian"
             white: "White"
             indian: "Indian"
             brown: "Brown"
@@ -178,9 +178,16 @@ en:
             physical_impairment: "Physical impairment"
             mental_impairment: "Mental impairment"
             disability_not_informed: "Not informed"
-        cpf: "CPF"
+        name: "Name"
+        state: "State"
+        city: "City"
+        birth_date: "Birth date"
+        school: "School"
       event:
         full_price: "Full price"
+        country: "Country"
+        state: "State"
+        city: "City"
   registration_group:
     paid_in_advance: "Reserved"
     errors:

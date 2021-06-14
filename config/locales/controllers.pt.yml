@@ -18,6 +18,7 @@ pt:
       reset: "Limpar Formulário"
     include_blank: "Selecione..."
     cancel: "Cancelar"
+    not_informed: "Não informado"
   registration:
     quantity: "Quantidade"
     details:

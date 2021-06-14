@@ -2,11 +2,13 @@
 
 class AttendancesController < AuthenticatedController
   before_action :assign_event
-  before_action :assign_attendance, except: %i[index create new search attendance_past_info user_info]
+  before_action :assign_attendance, except: %i[index create new search user_info]
 
   before_action :check_organizer, only: %i[index search user_info]
   before_action :check_user, only: %i[show edit update]
   before_action :check_event, only: %i[new create]
+
+  before_action :assign_last_attendance_for_user, only: %i[new create edit update]
 
   def new
     @attendance = Attendance.new(event: @event)
@@ -94,17 +96,6 @@ class AttendancesController < AuthenticatedController
     respond_to { |format| format.js { render 'attendances/search' } }
   end
 
-  def attendance_past_info
-    user = User.find_by(email: params[:email])
-    @attendance = if user.present? && user.attendances.present?
-                    @attendance = user.attendances.order(:registration_date).last.dup
-                  else
-                    Attendance.new(user: user)
-                  end
-
-    render 'attendances/attendance_info'
-  end
-
   def user_info
     @user = User.where(id: params[:user_id]).first_or_initialize
     @attendance = Attendance.new(user: @user)
@@ -112,6 +103,10 @@ class AttendancesController < AuthenticatedController
   end
 
   private
+
+  def assign_last_attendance_for_user
+    @user_last_attendance = current_user.attendances.not_cancelled.order(registration_date: :asc).last
+  end
 
   def user_id
     @user_id ||= params[:attendance][:user_id] || current_user.id

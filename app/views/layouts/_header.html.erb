@@ -1,31 +1,22 @@
-<div class="container-fluid">
-  <%= render 'layouts/aa' %>
-</div>
+<%= render 'layouts/aa' %>
 
-<div class="container">
-  <div class="row bottom-spaced-component">
-    <div class="col-xl-6">
-      <% if @event.present? && @event.logo.present? %>
-        <%= image_tag @event.logo, size: '220x80' %>
+<div class="row bottom-spaced-component">
+
+  <div class="col-xl-12">
+    <div class="dropdown topnav-right">
+      <% if current_user&.avatar_valid? %>
+        <%= image_tag current_user.user_image.url, size: '50x50', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>
+      <% else %>
+        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623596492/150-1503945_transparent-user-png-default-user-image-png-png_jsthbv.png', size: '50x44', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>
       <% end %>
-    </div>
 
-    <div class="col-xl-6">
-      <div class="dropdown topnav-right">
-        <% if current_user&.avatar_valid? %>
-          <%= image_tag current_user.user_image.url, size: '50x50', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>
+      <div class="dropdown-menu">
+        <% if current_user.present? %>
+          <%= link_to t('users.account.self'), current_user, class: 'nav-link'%>
+          <%= link_to t('devise.sessions.logout'), destroy_user_session_path, method: :delete, class: 'nav-link'%>
         <% else %>
-          <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623596492/150-1503945_transparent-user-png-default-user-image-png-png_jsthbv.png', size: '50x50', class: 'user-avatar dropdown-toggle', 'data-toggle' => 'dropdown' %>
+          <%= link_to t('devise.sessions.login'), new_user_session_path, class: 'nav-link'%>
         <% end %>
-
-        <div class="dropdown-menu">
-          <% if current_user.present? %>
-            <%= link_to t('users.account.self'), current_user, class: 'nav-link'%>
-            <%= link_to t('devise.sessions.logout'), destroy_user_session_path, method: :delete, class: 'nav-link'%>
-          <% else %>
-            <%= link_to t('devise.sessions.login'), new_user_session_path, class: 'nav-link'%>
-          <% end %>
-        </div>
       </div>
     </div>
   </div>

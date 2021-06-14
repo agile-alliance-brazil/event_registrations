@@ -68,7 +68,7 @@ class UsersController < AuthenticatedController
   end
 
   def update_user_params
-    params.require(:user).permit(:user_image, :first_name, :last_name, :email, :country, :state, :city, :organization, :twitter_user)
+    params.require(:user).permit(:user_image, :first_name, :last_name, :email, :country, :state, :city, :ethnicity, :disability, :school, :education_level, :gender, :birth_date)
   end
 
   def update_default_password_params

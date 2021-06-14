@@ -3,51 +3,15 @@
     <div class="col-xl-12">
       <%= link_to t('events.index.title'), events_path %>
       >
-      <%= t('users.show.title') %>
+      <%= I18n.t('users.show.title') %>
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-xl-4">
-    <p>
-      <% if @user.avatar_valid? %>
-        <%= image_tag @user.user_image.url, class: 'card-img-top' %>
-      <% else %>
-        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623596492/150-1503945_transparent-user-png-default-user-image-png-png_jsthbv.png', class: 'card-img-top' %>
-      <% end %>
-    </p>
-    <div class="col-xl-12">
-      <b><%= @user.full_name %></b>
-    </div>
-    <div class="col-xl-12">
-      <p><%= t("activerecord.attributes.user.enums.roles.#{@user.role}") %></p>
-    </div>
-    <div class="col-xl-12">
-      <%= link_to t('users.show.edit.button'), edit_user_path(@user), class: 'btn btn-sm btn-primary' %>
-    </div>
-  </div>
-
-  <div class="col-xl-8">
-    <div class="col-xl-12">
-      <b><%= "#{t('activerecord.attributes.user.email')}: " %></b> <%= @user.email %>
-    </div>
-    <div class="col-xl-12">
-      <b><%= "#{t('activerecord.attributes.user.cpf')}: " %></b> <%= @user.cpf %>
-    </div>
-    <% if @user.city.present? && @user.state.present? %>
-      <div class="col-xl-12">
-        <b><%= "#{t('users.show.city_state')}: " %></b> <%= "#{@user.city} / #{@user.state}" %>
-      </div>
-    <% end %>
-    <div class="col-xl-12">
-      <b><%= "#{t('activerecord.attributes.user.country')}: " %></b> <%= @user.country %>
-    </div>
-  </div>
-</div>
+<%= render 'users/user_details', user: @user %>
 
 <hr />
 
 <%= render 'attendances/attendances_list', attendances_list: @user.attendances.order(created_at: :desc), attendances_list_csv: AttendanceExportService.to_csv(@user.attendances.order(created_at: :desc)), list_title: t('attendances.index.title') %>
 
-<%= render 'attendances/attendances_list', attendances_list: @user.registered_attendances.order(created_at: :desc), attendances_list_csv: AttendanceExportService.to_csv(@user.registered_attendances.order(created_at: :desc)), list_title: t('attendances.index.other_attendances') %>
+<%= render 'attendances/attendances_list', attendances_list: @user.registrations_for_other_users.order(created_at: :desc), attendances_list_csv: AttendanceExportService.to_csv(@user.registered_attendances.order(created_at: :desc)), list_title: t('attendances.index.other_attendances') %>

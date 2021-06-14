@@ -22,7 +22,22 @@
 
   <div class="col-xl-8">
     <p><h3><%= @event.name %></h3></p>
-    <b><%= "#{@event.city} / #{@event.state} - #{@event.country}" %></b>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.event.country') %>:</b>
+      <% if @event.country.present? %>
+        <%= ISO3166::Country[@event.country].translations[I18n.locale.to_s] %>
+      <% else %>
+        <%= I18n.t('general.not_informed') %>
+      <% end %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.event.state') %>:</b>
+      <%= @event.state %>
+    </p>
+    <p>
+      <b><%= I18n.t('activerecord.attributes.event.city') %>:</b>
+      <%= @event.city %>
+    </p>
     <p><h6><%= "#{Event.human_attribute_name(:full_price)}: #{number_to_currency(@event.full_price)}" %></h6></p>
     <p><h7><%= "#{t('events.show.current_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, :gateway))}" %></h7></p>
     <p><h7><%= "#{t('events.show.statement_agreement_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement'))}" %></h7></p>
@@ -51,17 +66,17 @@
   </ul>
 
   <div class="tab-content">
-    <div class="tab-pane container active" id="organizers-list">
+    <div class="tab-pane active" id="organizers-list">
       <%= render 'users/event_organizers_list', organizers_list: @event.organizers.order(:first_name, :last_name) %>
     </div>
 
-    <div class="tab-pane container fade" id="periods-list">
+    <div class="tab-pane fade" id="periods-list">
       <%= render 'registration_periods/periods_list', event: @event %>
     </div>
-    <div class="tab-pane container fade" id="quotas-list">
+    <div class="tab-pane fade" id="quotas-list">
       <%= render 'registration_quotas/quotas_list', event: @event %>
     </div>
-    <div class="tab-pane container fade" id="groups-list">
+    <div class="tab-pane fade" id="groups-list">
       <%= render 'registration_groups/groups_list', event: @event %>
     </div>
   </div>

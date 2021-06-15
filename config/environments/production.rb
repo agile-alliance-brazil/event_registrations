@@ -53,7 +53,7 @@ Current::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   config.action_mailer.delivery_method = :smtp
-  host = 'https://inscricoes.agilebrazil.com/'
+  host = Figaro.env.application_host
   config.action_mailer.default_url_options = { host: host }
   config.action_mailer.asset_host = host
 

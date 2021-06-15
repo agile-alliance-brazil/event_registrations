@@ -1,39 +1,69 @@
 # frozen_string_literal: true
 
-# Simple Role Syntax
-# ==================
-# Supports bulk-adding hosts to roles, the primary
-# server in each group is considered to be the first
-# unless any hosts have the primary property set.
-# Don't declare `role :all`, it's a meta role
-# role :app, %w{deploy@example.com}
-# role :web, %w{deploy@example.com}
-# role :db,  %w{deploy@example.com}
+Current::Application.configure do
+  # Settings specified here will take precedence over those in config/application.rb
 
-# Extended Server Syntax
-# ======================
-# This can be used to drop a more detailed server
-# definition into the server list. The second argument
-# something that quacks like a hash can be used to set
-# extended properties on the server.
-server 'inscricoes-staging.agilebrazil.com', user: 'ubuntu', roles: %w[web app db]
-set :manifest, 'default'
-set :server_url, 'inscricoes-staging.agilebrazil.com'
+  # Code is not reloaded between requests
+  config.cache_classes = true
 
-# you can set custom ssh options
-# it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
-# you can see them in [net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start)
-# set it globally
-set :ssh_options, {
-  keys: [
-    File.join(File.dirname(__FILE__), '../../certs/digital_ocean_staging'),
-    File.expand_path('~/.ssh/id_inscricoes-staging.agilebrazil.com')
-  ],
-  forward_agent: true,
-  auth_methods: %w[publickey]
-  # password: 'please use keys'
-}
+  # Full error reports are disabled and caching is turned on
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
 
-host = 'https://event-registrations-staging.herokuapp.com/'
-config.action_mailer.default_url_options = { host: host }
-config.action_mailer.asset_host = host
+  # Disable Rails's static asset server (Apache or nginx will already do this)
+  config.serve_static_assets = false
+
+  # Compress JavaScripts and CSS
+  config.assets.compress = true
+
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  config.assets.compile = false
+
+  # Generate digests for assets URLs
+  config.assets.digest = true
+
+  # Defaults to nil and saved in location specified by config.assets.prefix
+  # config.assets.manifest = YOUR_PATH
+
+  # Specifies the header that your server uses for sending files
+  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  config.force_ssl = true
+
+  # See everything in the log (default is :info)
+  # config.log_level = :debug
+
+  # Prepend all log lines with the following tags
+  # config.log_tags = [ :subdomain, :uuid ]
+
+  # Use a different logger for distributed setups
+  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+
+  # Use a different cache store in production
+  # config.cache_store = :mem_cache_store
+
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server
+  # config.action_controller.asset_host = "http://assets.example.com"
+
+  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
+  # config.assets.precompile += %w( search.js )
+  # config.active_job.queue_adapter = :sidekiq
+
+  # Disable delivery errors, bad email addresses will be ignored
+  config.action_mailer.delivery_method = :smtp
+  host = 'https://inscricoes-staging.agilebrazil.com/'
+  config.action_mailer.default_url_options = { host: host }
+  config.action_mailer.asset_host = host
+
+  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation can not be found)
+  config.i18n.fallbacks = false
+
+  # Send deprecation notices to registered listeners
+  config.active_support.deprecation = :notify
+
+  # Loading classes policy. true to load at start. false to load as needed
+  config.eager_load = true
+end

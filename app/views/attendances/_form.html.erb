@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-xl-6 col-sm-6 form-group">
         <%= form.label I18n.t('activerecord.attributes.attendance.user_for_attendance') %>
-        <%= form.select :user_id, options_for_select(User.all.order(:first_name, :last_name).map { |user| [user.full_name, user.id] }, (params[:user_id] || @attendance&.user&.id || current_user.id)), { include_blank: t('general.include_blank') }, class: 'form-control user-select' %>
+        <%= form.select :user_id, options_for_select(User.all.order(:first_name, :last_name).map { |user| ["#{user.full_name} (#{user.email})", user.id] }, (params[:user_id] || @attendance&.user&.id || current_user.id)), { include_blank: I18n.t('general.include_blank') }, class: 'form-control user-select' %>
         <span class="inline-hints"><%= t('attendances.new.user_for_attendance.help') %></span>
       </div>
 

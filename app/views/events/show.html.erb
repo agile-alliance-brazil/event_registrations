@@ -13,9 +13,9 @@
   <div class="col-xl-4">
     <p>
       <% if @event.event_image_valid? %>
-        <%= image_tag @event.event_image.url, class: 'card-img-top' %>
+        <%= image_tag @event.event_image.url, size: '300x300', class: 'card-img-top' %>
       <% else %>
-        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623597789/img-empty_b8hdek.png' %>
+        <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623597789/img-empty_b8hdek.png', size: '300x300', class: 'card-img-top' %>
       <% end %>
     </p>
   </div>
@@ -38,13 +38,29 @@
       <b><%= I18n.t('activerecord.attributes.event.city') %>:</b>
       <%= @event.city %>
     </p>
-    <p><h6><%= "#{Event.human_attribute_name(:full_price)}: #{number_to_currency(@event.full_price)}" %></h6></p>
-    <p><h7><%= "#{t('events.show.current_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, :gateway))}" %></h7></p>
-    <p><h7><%= "#{t('events.show.statement_agreement_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement'))}" %></h7></p>
-    <p><h7><%= "#{t('events.show.student_price')}: #{number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement') / 2)}" %></h7></p>
-    <p><%= "#{Event.human_attribute_name(:main_email_contact)}: "%> <%= mail_to @event.main_email_contact, @event.main_email_contact %></p>
+    <p>
+      <b><%= Event.human_attribute_name(:full_price) %>:</b>
+      <%= number_to_currency(@event.full_price) %>
+    </p>
+    <p>
+      <b><%= I18n.t('events.show.current_price') %>:</b>
+      <%= number_to_currency(@event.registration_price_for(Attendance.new, :gateway)) %>
+    </p>
+    <p>
+      <b><%= I18n.t('events.show.statement_agreement_price') %>:</b>
+      <%= number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement')) %>
+    </p>
+    <p>
+      <b><%= I18n.t('events.show.student_price') %>:</b>
+      <%= number_to_currency(@event.registration_price_for(Attendance.new, 'statement_agreement') / 2) %>
+    </p>
+    <p>
+      <b><%= Event.human_attribute_name(:main_email_contact) %>:</b>
+      <%= mail_to(@event.main_email_contact, @event.main_email_contact) %>
+    </p>
+
     <% if current_user&.organizer_of?(@event) %>
-      <p><%= link_to t('events.edit.title'), edit_event_path(@event), class: 'btn btn-sm btn-success float-right' %></p>
+      <p><%= link_to I18n.t('events.edit.title'), edit_event_path(@event), class: 'btn btn-sm btn-success' %></p>
     <% end %>
   </div>
 </div>

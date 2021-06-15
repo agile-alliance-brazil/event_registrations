@@ -3,9 +3,9 @@
     <div class="col-xl-4">
       <div class="card event-card">
         <% if event.event_image_valid? %>
-          <%= image_tag event.event_image.url, class: 'card-img-top' %>
+          <%= image_tag event.event_image.url, size: '200x180', class: 'card-img-top' %>
         <% else %>
-          <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623597789/img-empty_b8hdek.png', class: 'card-img-top' %>
+          <%= image_tag 'https://res.cloudinary.com/agile-alliance-brazil/image/upload/v1623597789/img-empty_b8hdek.png', size: '200x180', class: 'card-img-top' %>
         <% end %>
 
         <div class="card-body">

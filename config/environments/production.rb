@@ -49,9 +49,10 @@ Current::Application.configure do
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
+  config.active_job.queue_adapter = :sidekiq
 
   # Disable delivery errors, bad email addresses will be ignored
-  config.action_mailer.delivery_method = :ses
+  config.action_mailer.delivery_method = :smtp
   host = 'https://inscricoes.agilebrazil.com/'
   config.action_mailer.default_url_options = { host: host }
   config.action_mailer.asset_host = host

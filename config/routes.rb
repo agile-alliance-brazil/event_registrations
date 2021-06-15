@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
-Current::Application.routes.draw do
+require 'sidekiq/web'
+
+Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: 'devise_custom/sessions', registrations: 'devise_custom/registrations', omniauth_callbacks: 'devise_custom/omniauth_callbacks' }
+
+  authenticated :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   resources :users, only: %i[show edit update index] do
     member do

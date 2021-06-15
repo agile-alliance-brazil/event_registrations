@@ -27,6 +27,8 @@ gem 'pg'
 gem 'rake'
 gem 'sass'
 gem 'sass-rails'
+gem 'sidekiq'
+gem 'sidekiq-limit_fetch'
 gem 'will_paginate'
 gem 'yui-compressor', require: 'yui/compressor'
 

@@ -57,6 +57,8 @@ module Current
     config.assets.version = '1.0'
     # config.assets.css_compressor = :yui
     # config.assets.js_compressor = :uglifier
-    #
+
+    require 'sidekiq/web'
+    Sidekiq::Web.disable :sessions
   end
 end

@@ -230,6 +230,8 @@ en:
   attendandes:
     new:
       title: "New Registration"
+    show:
+      title: "Show Attendance"
   reistration_groups:
     index:
       title: "Index of Groups"

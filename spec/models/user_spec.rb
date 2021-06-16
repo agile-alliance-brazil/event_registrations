@@ -256,4 +256,33 @@ RSpec.describe User, type: :model do
       expect(no_attendances_user.registrations_for_other_users).to eq []
     end
   end
+
+  describe '#valid_attendance_for_event' do
+    it 'returns the first not cancelled attendance for user in the event' do
+      user = Fabricate :user
+      first_event = Fabricate :event
+      second_event = Fabricate :event
+      third_event = Fabricate :event
+      fourth_event = Fabricate :event
+      fifth_event = Fabricate :event
+      sixth_event = Fabricate :event
+      seventh_event = Fabricate :event
+
+      first_attendance = Fabricate :attendance, user: user, event: first_event, status: :pending
+      second_attendance = Fabricate :attendance, user: user, event: second_event, status: :waiting
+      third_attendance = Fabricate :attendance, user: user, event: third_event, status: :accepted
+      fourth_attendance = Fabricate :attendance, user: user, event: fourth_event, status: :paid
+      fifth_attendance = Fabricate :attendance, user: user, event: fifth_event, status: :confirmed
+      sixth_attendance = Fabricate :attendance, user: user, event: sixth_event, status: :showed_in
+      Fabricate :attendance, user: user, event: seventh_event, status: :cancelled
+
+      expect(user.valid_attendance_for_event(first_event)).to eq first_attendance
+      expect(user.valid_attendance_for_event(second_event)).to eq second_attendance
+      expect(user.valid_attendance_for_event(third_event)).to eq third_attendance
+      expect(user.valid_attendance_for_event(fourth_event)).to eq fourth_attendance
+      expect(user.valid_attendance_for_event(fifth_event)).to eq fifth_attendance
+      expect(user.valid_attendance_for_event(sixth_event)).to eq sixth_attendance
+      expect(user.valid_attendance_for_event(seventh_event)).to be_nil
+    end
+  end
 end

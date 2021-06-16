@@ -100,11 +100,15 @@ class User < ApplicationRecord
   end
 
   def registrations_for_event(event)
-    attendances.select { |attendance| attendance.event_id == event.id }
+    Attendance.where(id: attendances.select { |attendance| attendance.event_id == event.id }.map(&:id))
   end
 
   def registrations_for_other_users
     Attendance.where(id: (registered_attendances - attendances).map(&:id)).order(registration_date: :desc)
+  end
+
+  def valid_attendance_for_event(event)
+    registrations_for_event(event).not_cancelled.first
   end
 
   def full_name

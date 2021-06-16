@@ -230,6 +230,8 @@ pt:
   attendandes:
     new:
       title: "Nova Inscrição"
+    show:
+      title: "Ver Inscrição"
   reistration_groups:
     index:
       title: "Lista de Grupos"

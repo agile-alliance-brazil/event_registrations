@@ -17,9 +17,17 @@
           <p class="card-text small"><%= l(event.start_date.to_date) %></p>
           <p class="card-text small"><%= number_to_currency(event.registration_price_for(Attendance.new, :gateway)) %></p>
 
-          <%= link_to new_event_attendance_path(event), class: 'event-action-item' do %>
-            <i class="fa fa-plus-square"></i>
-            <%= t('attendandes.new.title') %>
+          <% if current_user.present? && current_user.registrations_for_event(event).not_cancelled.present? %>
+            <%= link_to event_attendance_path(event, current_user.valid_attendance_for_event(event)), class: 'event-action-item' do %>
+              <i class="fa fa-eye"></i>
+              <%= I18n.t('attendandes.show.title') %>
+            <% end %>
+          <% else %>
+            <%= link_to new_event_attendance_path(event), class: 'event-action-item' do %>
+              <i class="fa fa-plus-square"></i>
+              <%= I18n.t('attendandes.new.title') %>
+            <% end %>
+
           <% end %>
 
           <% if current_user&.admin? %>

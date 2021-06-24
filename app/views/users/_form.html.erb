@@ -1,4 +1,6 @@
-<%= form_for @user do |f| %>
+<h5 class="aligned-center bottom-spaced-component font-italic"><%= I18n.t('users.new.form.diversity_message') %></h5>
+
+<%= form_for @user, html: { class: "form-container" } do |f| %>
   <div class="row">
     <div class="col-xl-2 form-group">
       <% if @user.avatar_valid? %>

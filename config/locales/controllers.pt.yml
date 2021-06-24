@@ -191,6 +191,9 @@ pt:
         title: "Novo(a) Organizador(a)"
     update:
       success: "Usuário atualizado"
+    new:
+      form:
+        diversity_message: 'Estes dados são coletados para entendermos melhor o perfil de quem participa nesta conferência. Caso não se sinta confortável compartilhando esses dados, por favor selecione "Prefiro não informar". Desde já agradecemos.'
   event_attendances:
     form:
       state: "Estado - ex: SP"

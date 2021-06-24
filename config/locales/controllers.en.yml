@@ -191,6 +191,9 @@ en:
         title: "New Organizer"
     update:
       success: "User updated"
+    new:
+      form:
+        diversity_message: 'This data is collected to allow us to have a better understanding of our attendant profile. If you do not feel comfortable sharing it, please select "I prefer not to inform". Thank you'
   event_attendances:
     form:
       state: "State"

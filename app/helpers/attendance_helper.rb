@@ -5,43 +5,27 @@ module AttendanceHelper
     attendance.registration_value
   end
 
-  def price_table_link(event, locale)
-    event.price_table_link.gsub(%r{:locale(/?)}, "#{locale}\\1")
+  def year_of_experience_options(selected_value = :no_experience_informed)
+    options_for_select(Attendance.years_of_experiences.map { |exp, _key| [I18n.t("activerecord.attributes.attendance.enums.years_of_experience.#{exp}"), exp] }, selected_value)
   end
 
-  def education_level_options
-    [
-      [t('activerecord.attributes.attendance.enums.education_level.primary'), 'Primary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.secondary'), 'Secondary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.tec_secondary'), 'Post-secondary non-tertiary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.tec_terciary'), 'Short-cycle tertiary education'],
-      [t('activerecord.attributes.attendance.enums.education_level.bachelor'), 'Bachelor or equivalent'],
-      [t('activerecord.attributes.attendance.enums.education_level.master'), 'Master or equivalent'],
-      [t('activerecord.attributes.attendance.enums.education_level.doctoral'), 'Doctoral or equivalent']
-    ]
+  def experience_in_agility_options(selected_value = :no_agile_expirience_informed)
+    options_for_select(Attendance.experience_in_agilities.map { |exp, _key| [I18n.t("activerecord.attributes.attendance.enums.experience_in_agility.#{exp}"), exp] }, selected_value)
   end
 
-  def year_of_experience_options
-    ['0 - 5', '6 - 10', '11 - 20', '21 - 30', '31 -']
+  def organization_size_options(selected_value = :no_org_size_informed)
+    options_for_select(Attendance.organization_sizes.map { |gender_options, _key| [I18n.t("activerecord.attributes.attendance.enums.organization_size.#{gender_options}"), gender_options] }, selected_value)
   end
 
-  def experience_in_agility_options
-    ['0 - 2', '3 - 7', '7 -']
+  def job_role_options(selected_value = :not_informed)
+    options_for_select(Attendance.job_roles.map { |job_role, _key| [I18n.t("activerecord.attributes.attendance.enums.job_role.#{job_role}"), job_role] }.sort_by { |roles| roles[0] }, selected_value)
   end
 
-  def organization_size_options
-    ['1 - 10', '11 - 30', '31 - 100', '100 - 500', '500 -']
+  def payment_types_options(selected_value = :gateway)
+    options_for_select(Attendance.payment_types.map { |payment_type, _key| [I18n.t("activerecord.attributes.attendance.enums.payment_types.#{payment_type}"), payment_type] }, selected_value)
   end
 
-  def job_role_options
-    Attendance.job_roles.map { |job_role| [t("activerecord.attributes.attendance.enums.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] }
-  end
-
-  def payment_types_options
-    Attendance.payment_types.map { |payment_type, _| [I18n.t("activerecord.attributes.attendance.enums.payment_types.#{payment_type}"), payment_type] }
-  end
-
-  def gender_options
-    { I18n.t('gender.male') => 'M', I18n.t('gender.female') => 'F', I18n.t('gender.other') => 'O' }
+  def source_of_interest_options(selected_value = :no_source_informed)
+    options_for_select(Attendance.source_of_interests.map { |interest, _key| [I18n.t("activerecord.attributes.attendance.enums.source_of_interest.#{interest}"), interest] }, selected_value)
   end
 end

@@ -9,61 +9,65 @@
 #  badge_name              :string(255)
 #  city                    :string(255)
 #  country                 :string(255)
-#  cpf                     :string(255)
-#  created_at              :datetime
+#  created_at              :datetime         not null
 #  due_date                :datetime
-#  education_level         :string(255)
-#  email                   :string(255)
+#  education_level         :integer          default(0), indexed
 #  email_sent              :boolean          default(FALSE)
-#  event_id                :integer          not null, indexed
+#  event_id                :bigint(8)        not null, indexed
 #  event_price             :decimal(10, )
-#  experience_in_agility   :string(255)
-#  first_name              :string(255)
-#  gender                  :string(255)
-#  id                      :integer          not null, primary key
-#  job_role                :integer          default("not_informed")
-#  last_name               :string(255)
+#  experience_in_agility   :integer          default("no_agile_expirience_informed")
+#  id                      :bigint(8)        not null, primary key
+#  job_role                :bigint(8)        default("not_informed")
 #  last_status_change_date :datetime
 #  notes                   :string(255)
 #  organization            :string(255)
-#  organization_size       :string(255)
-#  payment_type            :integer
-#  phone                   :string(255)
-#  queue_time              :integer
-#  registered_by_id        :integer          not null, indexed
+#  organization_size       :integer          default("no_org_size_informed")
+#  other_job_role          :string
+#  payment_type            :bigint(8)
+#  queue_time              :bigint(8)
+#  registered_by_id        :bigint(8)        not null, indexed
 #  registration_date       :datetime
-#  registration_group_id   :integer
-#  registration_period_id  :integer          indexed
-#  registration_quota_id   :integer          indexed
+#  registration_group_id   :bigint(8)
+#  registration_period_id  :bigint(8)        indexed
+#  registration_quota_id   :bigint(8)        indexed
 #  registration_value      :decimal(10, )
-#  school                  :string(255)
+#  source_of_interest      :integer          default("no_source_informed"), not null, indexed
 #  state                   :string(255)
-#  status                  :integer
-#  updated_at              :datetime
-#  user_id                 :integer          not null, indexed
-#  years_of_experience     :string(255)
+#  status                  :bigint(8)
+#  updated_at              :datetime         not null
+#  user_id                 :bigint(8)        not null, indexed
+#  years_of_experience     :integer          default("no_experience_informed"), indexed
 #
 # Indexes
 #
-#  fk_rails_4eb9f97929                         (registered_by_id)
-#  fk_rails_a2b9ca8d82                         (registration_period_id)
-#  index_attendances_on_event_id               (event_id)
-#  index_attendances_on_registration_quota_id  (registration_quota_id)
-#  index_attendances_on_user_id                (user_id)
+#  idx_4539782_fk_rails_4eb9f97929                         (registered_by_id)
+#  idx_4539782_fk_rails_a2b9ca8d82                         (registration_period_id)
+#  idx_4539782_index_attendances_on_event_id               (event_id)
+#  idx_4539782_index_attendances_on_registration_quota_id  (registration_quota_id)
+#  idx_4539782_index_attendances_on_user_id                (user_id)
+#  index_attendances_on_education_level                    (education_level)
+#  index_attendances_on_source_of_interest                 (source_of_interest)
+#  index_attendances_on_years_of_experience                (years_of_experience)
 #
 # Foreign Keys
 #
-#  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id)
-#  fk_rails_4eb9f97929  (registered_by_id => users.id)
-#  fk_rails_777eb7170a  (event_id => events.id)
-#  fk_rails_77ad02f5c5  (user_id => users.id)
-#  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id)
+#  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_4eb9f97929  (registered_by_id => users.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_777eb7170a  (event_id => events.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_77ad02f5c5  (user_id => users.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id) ON DELETE => restrict ON UPDATE => restrict
 #
 
 class Attendance < ApplicationRecord
-  before_create :set_last_status_change
+  enum source_of_interest: { no_source_informed: 0, facebook: 1, instagram: 2, linkedin: 3, twitter: 4, whatsapp: 5, friend_referral: 6, community_dissemination: 7, company_dissemination: 8, internet_search: 9 }
+  enum years_of_experience: { no_experience_informed: 0, less_than_five: 1, six_to_ten: 2, eleven_to_twenty: 3, twenty_one_to_thirty: 4, thirty_or_more: 5 }
+  enum experience_in_agility: { no_agile_expirience_informed: 0, less_than_two: 1, three_to_seven: 2, more_than_seven: 3 }
+  enum organization_size: { no_org_size_informed: 0, micro_enterprises: 1, small_enterprises: 2, medium_enterprises: 3, large_enterprises: 4 }
 
-  enum job_role: { not_informed: 0, student: 1, analyst: 2, manager: 3, vp: 4, president: 5, clevel: 6, coach: 7, other: 8, developer: 9 }
+  enum job_role: { not_informed: 0, student: 1, analyst: 2, manager: 3, vp: 4, president: 5, designer: 6, coach: 7,
+                   other: 8, developer: 9, teacher: 10, independent_worker: 11, team_manager: 12, portfolio_manager: 13,
+                   human_resources: 14 }
+
   enum status: { waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6 }
   enum payment_type: { gateway: 1, bank_deposit: 2, statement_agreement: 3 }
 
@@ -84,30 +88,18 @@ class Attendance < ApplicationRecord
 
   has_many :payment_notifications, dependent: :destroy
 
-  validates :first_name, :last_name, :email, :phone, :country, :city, :state, :registration_date, :user, :event, presence: true
-  validates :cpf, presence: true, if: ->(a) { a.in_brazil? }
+  validates :country, :city, :state, :registration_date, :user, :event, presence: true
 
-  validates :first_name, :last_name, presence: true, length: { maximum: 100 }
-  validates :phone, :city, :organization, length: { maximum: 100, allow_blank: true }
-
-  validates :email, format: { with: /\A([\w.%+\-]+)@([\w\-]+\.)+(\w{2,})\z/i }, length: { minimum: 6, maximum: 100 }
-  validates :phone, format: { with: /\A[0-9() .\-+]+\Z/i, allow_blank: true }
-
-  validate :duplicated_active_email_in_event?, on: :create
+  delegate :first_name, to: :user, allow_nil: true
+  delegate :last_name, to: :user, allow_nil: true
+  delegate :full_name, to: :user, allow_nil: true
+  delegate :email, to: :user, allow_nil: true
 
   delegate :token, to: :registration_group, allow_nil: true
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
   delegate :name, to: :event, prefix: :event, allow_nil: true
 
-  usar_como_cpf :cpf
-
-  def full_name
-    [first_name, last_name].join(' ')
-  end
-
-  def in_brazil?
-    country == 'BR'
-  end
+  before_save :set_last_status_change
 
   def discount
     amount = 1
@@ -117,10 +109,6 @@ class Attendance < ApplicationRecord
 
   def grouped?
     registration_group.present?
-  end
-
-  def to_s
-    "#{last_name}, #{first_name}"
   end
 
   def advise!
@@ -162,12 +150,5 @@ class Attendance < ApplicationRecord
 
   def set_last_status_change
     self.last_status_change_date = Time.zone.now if last_status_change_date.blank?
-  end
-
-  def duplicated_active_email_in_event?
-    duplicated_attendance = event&.attendances&.not_cancelled&.find_by(email: email)
-    return if duplicated_attendance.blank?
-
-    errors.add(:email, I18n.t('attendances.create.already_existent'))
   end
 end

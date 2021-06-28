@@ -3,8 +3,12 @@
 RSpec.describe Attendance, type: :model do
   context 'enums' do
     it { is_expected.to define_enum_for(:status).with_values(waiting: 0, pending: 1, accepted: 2, cancelled: 3, paid: 4, confirmed: 5, showed_in: 6) }
-    it { is_expected.to define_enum_for(:job_role).with_values(%i[not_informed student analyst manager vp president clevel coach other developer]) }
+    it { is_expected.to define_enum_for(:job_role).with_values(not_informed: 0, student: 1, analyst: 2, manager: 3, vp: 4, president: 5, designer: 6, coach: 7, other: 8, developer: 9, teacher: 10, independent_worker: 11, team_manager: 12, portfolio_manager: 13, human_resources: 14) }
     it { is_expected.to define_enum_for(:payment_type).with_values(gateway: 1, bank_deposit: 2, statement_agreement: 3) }
+    it { is_expected.to define_enum_for(:source_of_interest).with_values(no_source_informed: 0, facebook: 1, instagram: 2, linkedin: 3, twitter: 4, whatsapp: 5, friend_referral: 6, community_dissemination: 7, company_dissemination: 8, internet_search: 9) }
+    it { is_expected.to define_enum_for(:years_of_experience).with_values(no_experience_informed: 0, less_than_five: 1, six_to_ten: 2, eleven_to_twenty: 3, twenty_one_to_thirty: 4, thirty_or_more: 5) }
+    it { is_expected.to define_enum_for(:experience_in_agility).with_values(no_agile_expirience_informed: 0, less_than_two: 1, three_to_seven: 2, more_than_seven: 3) }
+    it { is_expected.to define_enum_for(:organization_size).with_values(no_org_size_informed: 0, micro_enterprises: 1, small_enterprises: 2, medium_enterprises: 3, large_enterprises: 4) }
   end
 
   context 'associations' do
@@ -16,49 +20,12 @@ RSpec.describe Attendance, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of :first_name }
-    it { is_expected.to validate_presence_of :last_name }
-    it { is_expected.to validate_presence_of :email }
-    it { is_expected.to validate_presence_of :phone }
     it { is_expected.to validate_presence_of :country }
     it { is_expected.to validate_presence_of :city }
     it { is_expected.to validate_presence_of :user }
     it { is_expected.to validate_presence_of :event }
 
-    it { is_expected.to allow_value('1234-2345').for(:phone) }
-    it { is_expected.to allow_value('+55 11 5555 2234').for(:phone) }
-    it { is_expected.to allow_value('+1 (304) 543.3333').for(:phone) }
-    it { is_expected.to allow_value('07753423456').for(:phone) }
-    it { is_expected.not_to allow_value('a').for(:phone) }
-    it { is_expected.not_to allow_value('1234-bfd').for(:phone) }
-    it { is_expected.not_to allow_value(')(*&^%$@!').for(:phone) }
-    it { is_expected.not_to allow_value('[=+]').for(:phone) }
     it { is_expected.to validate_presence_of :state }
-
-    context 'brazilians' do
-      subject { Fabricate.build(:attendance, country: 'BR') }
-
-      it { is_expected.to validate_presence_of :cpf }
-    end
-
-    context 'foreigners' do
-      subject { Fabricate.build(:attendance, country: 'US') }
-
-      it { is_expected.not_to validate_presence_of :cpf }
-    end
-
-    it { is_expected.to validate_length_of(:email).is_at_least(6).is_at_most(100) }
-    it { is_expected.to validate_length_of(:first_name).is_at_most(100) }
-    it { is_expected.to validate_length_of(:last_name).is_at_most(100) }
-    it { is_expected.to validate_length_of(:city).is_at_most(100) }
-    it { is_expected.to validate_length_of(:organization).is_at_most(100) }
-
-    it { is_expected.to allow_value('user@domain.com.br').for(:email) }
-    it { is_expected.to allow_value('test_user.name@a.co.uk').for(:email) }
-    it { is_expected.not_to allow_value('a').for(:email) }
-    it { is_expected.not_to allow_value('a@').for(:email) }
-    it { is_expected.not_to allow_value('a@a').for(:email) }
-    it { is_expected.not_to allow_value('@12.com').for(:email) }
   end
 
   context 'scopes' do
@@ -133,9 +100,9 @@ RSpec.describe Attendance, type: :model do
       end
 
       describe '.with_time_in_queue' do
-        let!(:attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar', queue_time: 100 }
-        let!(:other_attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar', queue_time: 2 }
-        let!(:out_attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar', queue_time: 0 }
+        let!(:attendance) { Fabricate :attendance, queue_time: 100 }
+        let!(:other_attendance) { Fabricate :attendance, queue_time: 2 }
+        let!(:out_attendance) { Fabricate :attendance, queue_time: 0 }
 
         it { expect(described_class.with_time_in_queue).to match_array [attendance, other_attendance] }
       end
@@ -389,12 +356,6 @@ RSpec.describe Attendance, type: :model do
       it { expect(attendance.group_name).to eq group.name }
       it { expect(attendance.event_name).to eq attendance.event.name }
     end
-  end
-
-  describe '#to_s' do
-    let(:attendance) { Fabricate :attendance, first_name: 'foo', last_name: 'bar' }
-
-    it { expect(attendance.to_s).to eq 'bar, foo' }
   end
 
   describe '#price_band?' do

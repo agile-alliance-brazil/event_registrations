@@ -1,19 +1,19 @@
 <div class="breadcrumb">
   <div class="row">
     <div class="col-xl-12">
-      <%= link_to t('events.index.title'), events_path %>
+      <%= link_to I18n.t('events.index.title'), events_path %>
       >
-      <%= link_to t('users.show.title'), user_path(@user) %>
+      <%= link_to I18n.t('users.show.title'), user_path(@user) %>
       >
-      <%= t('users.edit.title') %>
+      <%= I18n.t('users.edit.title') %>
     </div>
   </div>
 </div>
 
-<div class="form-container">
-  <div class="row justify-content-center">
+<div>
+  <div class="row">
     <div class="col-xl-12">
-      <%= render 'form', event: @event %>
+      <%= render 'users/form', event: @event %>
     </div>
   </div>
 </div>

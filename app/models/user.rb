@@ -4,61 +4,65 @@
 #
 # Table name: users
 #
-#  address                :string(255)
-#  badge_name             :string(255)
+#  birth_date             :date
 #  city                   :string(255)
 #  confirmation_sent_at   :datetime
 #  confirmation_token     :string(255)      indexed
 #  confirmed_at           :datetime
 #  country                :string(255)
-#  cpf                    :string(255)
-#  created_at             :datetime
+#  created_at             :datetime         not null
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string(255)
-#  default_locale         :string(255)      default("pt")
+#  disability             :integer          default("disability_not_informed"), not null, indexed
+#  education_level        :integer          default("no_education_informed"), indexed
 #  email                  :string(255)      not null, indexed
 #  encrypted_password     :string(255)      default(""), not null
-#  failed_attempts        :integer          default(0), not null
+#  ethnicity              :integer          default("no_ethnicity_informed"), not null, indexed
+#  failed_attempts        :bigint(8)        default(0), not null
 #  first_name             :string(255)      not null
-#  gender                 :string(255)
-#  id                     :integer          not null, primary key
+#  gender                 :integer          default("gender_not_informed"), indexed
+#  id                     :bigint(8)        not null, primary key
 #  last_name              :string(255)      not null
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :string(255)
 #  locked_at              :datetime
-#  neighbourhood          :string(255)
-#  organization           :string(255)
-#  phone                  :string(255)
-#  registration_group_id  :integer          indexed
+#  registration_group_id  :bigint(8)        indexed
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)      indexed
-#  role                   :integer          default("user"), not null
-#  roles_mask             :integer
-#  sign_in_count          :integer          default(0), not null
+#  role                   :bigint(8)        default("user"), not null
+#  roles_mask             :bigint(8)
+#  school                 :string
+#  sign_in_count          :bigint(8)        default(0), not null
 #  state                  :string(255)
-#  twitter_user           :string(255)
 #  unconfirmed_email      :string(255)
 #  unlock_token           :string(255)      indexed
-#  updated_at             :datetime
+#  updated_at             :datetime         not null
 #  user_image             :string(255)
-#  zipcode                :string(255)
 #
 # Indexes
 #
-#  fk_rails_ebe9fba698                  (registration_group_id)
-#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
-#  index_users_on_unlock_token          (unlock_token) UNIQUE
+#  idx_4539890_fk_rails_ebe9fba698                  (registration_group_id)
+#  idx_4539890_index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  idx_4539890_index_users_on_email                 (email) UNIQUE
+#  idx_4539890_index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  idx_4539890_index_users_on_unlock_token          (unlock_token) UNIQUE
+#  index_users_on_disability                        (disability)
+#  index_users_on_education_level                   (education_level)
+#  index_users_on_ethnicity                         (ethnicity)
+#  index_users_on_gender                            (gender)
 #
 # Foreign Keys
 #
-#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id)
+#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id) ON DELETE => restrict ON UPDATE => restrict
 #
 
 class User < ApplicationRecord
   enum role: { user: 0, organizer: 1, admin: 2 }
+  enum gender: { cisgender_man: 0, transgender_man: 1, cisgender_woman: 2, transgender_woman: 3, non_binary: 4, gender_not_informed: 5 }
+  enum education_level: { no_education_informed: 0, primary: 1, secondary: 2, tec_secondary: 3, tec_terciary: 4, bachelor: 5, master: 6, doctoral: 7 }
+  enum ethnicity: { no_ethnicity_informed: 0, asian: 1, white: 2, indian: 3, brown: 4, black: 5 }
+  enum disability: { no_disability: 0, visually_impairment: 1, hearing_impairment: 2, physical_impairment: 3, mental_impairment: 4, disability_not_informed: 5 }
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
@@ -76,12 +80,9 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :organized_events, class_name: 'Event'
 
-  validates :default_locale, inclusion: %w[en pt]
   validates :first_name, :last_name, presence: true, length: { maximum: 100 }
   validates :email, format: { with: /\A([\w.%+\-]+)@([\w\-]+\.)+(\w{2,})\z/i, allow_blank: true }
   validates :email, uniqueness: { case_sensitive: false, allow_blank: true }
-
-  usar_como_cpf :cpf
 
   def self.from_omniauth(omniauth_params)
     name = omniauth_params.info.name
@@ -99,19 +100,19 @@ class User < ApplicationRecord
   end
 
   def registrations_for_event(event)
-    attendances.select { |attendance| attendance.event_id == event.id }
+    Attendance.where(id: attendances.select { |attendance| attendance.event_id == event.id }.map(&:id))
   end
 
-  def gender=(value)
-    self[:gender] = value.nil? ? nil : value == 'M'
+  def registrations_for_other_users
+    Attendance.where(id: (registered_attendances - attendances).map(&:id)).order(registration_date: :desc)
   end
 
-  def twitter_user=(value)
-    self[:twitter_user] = value.try(:start_with?, '@') ? value[1..] : value
+  def valid_attendance_for_event(event)
+    registrations_for_event(event).not_cancelled.first
   end
 
   def full_name
-    [first_name.titleize, last_name.titleize].join(' ')
+    [first_name&.titleize, last_name&.titleize].join(' ')
   end
 
   def organizer_of?(event)
@@ -135,5 +136,11 @@ class User < ApplicationRecord
     else
       update(role: :organizer)
     end
+  end
+
+  def avatar_valid?
+    return false if user_image.blank?
+
+    NetServices.instance.url_found?(user_image.url)
   end
 end

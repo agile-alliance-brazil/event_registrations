@@ -4,74 +4,27 @@ RSpec.describe AttendanceRepository, type: :repository do
   let(:event) { Fabricate :event }
 
   describe '#search_for_list' do
-    context 'and no attendances' do
+    context 'with no attendances' do
       it { expect(described_class.instance.search_for_list(event, 'bla', [])).to eq [] }
     end
 
-    context 'and having attendances' do
-      let!(:for_other_event) { Fabricate(:attendance, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
-      let!(:attendance) { Fabricate(:attendance, event: event, status: :pending, first_name: 'xpto', last_name: 'bla', organization: 'foo', email: 'sbrubles@xpto.com') }
-      let!(:other_attendance) { Fabricate(:attendance, event: event, status: :pending, first_name: 'zoom', last_name: 'monkey', organization: 'beatles', email: 'john@lennon.com') }
-
+    context 'with attendances' do
       let(:all_statuses) { %w[pending accepted paid confirmed cancelled] }
 
-      context 'with one attendance' do
-        context 'and matching fields' do
-          context 'entire field' do
-            it { expect(described_class.instance.search_for_list(event, 'xPTo', all_statuses)).to match_array [attendance] }
-            it { expect(described_class.instance.search_for_list(event, 'bLa', all_statuses)).to match_array [attendance] }
-            it { expect(described_class.instance.search_for_list(event, 'FoO', all_statuses)).to match_array [attendance] }
-            it { expect(described_class.instance.search_for_list(event, 'sbRUblEs', all_statuses)).to match_array [attendance] }
-          end
+      it 'searches according to the parameters' do
+        user = Fabricate :user, first_name: 'bla', last_name: 'xpto', email: 'foo@xpto.com'
+        other_user = Fabricate :user, first_name: 'Foo', last_name: 'Dijkstra', email: 'xpto@node.path'
+        out_user = Fabricate :user, first_name: 'Edsger', last_name: 'Dijkstra', email: 'other@node.path'
 
-          context 'field part' do
-            it { expect(described_class.instance.search_for_list(event, 'PT', all_statuses)).to match_array [attendance] }
-            it { expect(described_class.instance.search_for_list(event, 'bL', all_statuses)).to match_array [attendance] }
-            it { expect(described_class.instance.search_for_list(event, 'oO', all_statuses)).to match_array [attendance, other_attendance] }
-            it { expect(described_class.instance.search_for_list(event, 'RUblEs', all_statuses)).to match_array [attendance] }
-          end
-        end
-      end
+        Fabricate(:attendance, user: user, organization: 'foo')
+        attendance = Fabricate(:attendance, user: user, event: event, status: :pending, organization: 'foo')
+        other_attendance = Fabricate(:attendance, user: other_user, event: event, status: :pending, organization: 'beatles')
 
-      context 'with three attendances, one not matching' do
-        let!(:other_attendance) { Fabricate(:attendance, event: event, first_name: 'bla', last_name: 'xpto', organization: 'sbrubles', email: 'foo@xpto.com') }
-        let!(:out_attendance) { Fabricate(:attendance, event: event, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path') }
-        let!(:for_other_event) { Fabricate(:attendance, first_name: 'Edsger', last_name: 'Dijkstra', organization: 'Turing', email: 'algorithm@node.path') }
+        Fabricate(:attendance, user: out_user, event: event, organization: 'Turing')
+        Fabricate(:attendance, user: out_user, organization: 'Turing')
 
-        context 'entire field' do
-          it { expect(described_class.instance.search_for_list(event, 'xPTo', all_statuses)).to match_array [attendance, other_attendance] }
-
-          it do
-            expect(described_class.instance.search_for_list(event, 'bLa', all_statuses)).to match_array [attendance, other_attendance]
-          end
-
-          it { expect(described_class.instance.search_for_list(event, 'FoO', all_statuses)).to match_array [attendance, other_attendance] }
-          it { expect(described_class.instance.search_for_list(event, 'sbRUblEs', all_statuses)).to match_array [attendance, other_attendance] }
-        end
-
-        context 'field part' do
-          it { expect(described_class.instance.search_for_list(event, 'PT', all_statuses)).to match_array [attendance, other_attendance] }
-          it { expect(described_class.instance.search_for_list(event, 'bL', all_statuses)).to match_array [attendance, other_attendance] }
-          it { expect(described_class.instance.search_for_list(event, 'oO', all_statuses)).to match_array [attendance, other_attendance] }
-          it { expect(described_class.instance.search_for_list(event, 'RUblEs', all_statuses)).to match_array [attendance, other_attendance] }
-        end
-      end
-
-      context 'with three attendances, all matching' do
-        let!(:event) { Fabricate :event }
-
-        it 'will order by created at descending' do
-          now = Time.zone.local(2015, 4, 30, 0, 0, 0)
-          travel_to(now)
-          attendance = Fabricate(:attendance, event: event, first_name: 'April event')
-          now = Time.zone.local(2014, 4, 30, 0, 0, 0)
-          travel_to(now)
-          other_attendance = Fabricate(:attendance, event: event, first_name: '2014 event')
-          travel_back
-          another_attendance = Fabricate(:attendance, event: event, first_name: 'Today event')
-
-          expect(described_class.instance.search_for_list(event, 'event', all_statuses)).to eq [another_attendance, attendance, other_attendance]
-        end
+        expect(described_class.instance.search_for_list(event, 'xPTo', all_statuses)).to match_array [attendance, other_attendance]
+        expect(described_class.instance.search_for_list(event, 'bLa', all_statuses)).to eq [attendance]
       end
     end
   end
@@ -145,13 +98,13 @@ RSpec.describe AttendanceRepository, type: :repository do
     let!(:second_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: Time.zone.today }
     let!(:third_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: 2.days.ago }
 
-    it { expect(described_class.instance.event_queue(event)).to eq [third_waiting, second_waiting, first_waiting] }
+    it { expect(described_class.instance.event_queue(event)).to match_array [third_waiting, second_waiting, first_waiting] }
   end
 
   describe '.older_than' do
     let(:user) { Fabricate :user }
     let!(:attendance) { Fabricate(:attendance, event: event, user: user, last_status_change_date: 2.days.ago) }
-    let!(:other_attendance) { Fabricate(:attendance, event: event, user: user, last_status_change_date: 4.days.ago, email: Faker::Internet.email) }
+    let!(:other_attendance) { Fabricate(:attendance, event: event, user: user, last_status_change_date: 4.days.ago) }
 
     it { expect(described_class.instance.send(:older_than)).to match_array [attendance, other_attendance] }
     it { expect(described_class.instance.send(:older_than, 3.days.ago)).to eq [other_attendance] }

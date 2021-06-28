@@ -18,6 +18,7 @@ en:
       reset: "Clean Form"
     include_blank: "Select..."
     cancel: "Cancel"
+    not_informed: "Not informed"
   registration:
     quantity: "Quantity"
     details:
@@ -190,6 +191,9 @@ en:
         title: "New Organizer"
     update:
       success: "User updated"
+    new:
+      form:
+        diversity_message: 'This data is collected to allow us to have a better understanding of our attendant profile. If you do not feel comfortable sharing it, please select "I prefer not to inform". Thank you'
   event_attendances:
     form:
       state: "State"
@@ -210,10 +214,6 @@ en:
   header:
     aa:
       members: "Members"
-  gender:
-    male: "Male"
-    female: "Female"
-    other: "Other"
   registration_quotas:
     index:
       attendances: "Attendances"
@@ -233,6 +233,8 @@ en:
   attendandes:
     new:
       title: "New Registration"
+    show:
+      title: "Show Attendance"
   reistration_groups:
     index:
       title: "Index of Groups"

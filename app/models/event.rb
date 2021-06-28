@@ -5,24 +5,24 @@
 # Table name: events
 #
 #  allow_voting       :boolean
-#  attendance_limit   :integer
+#  attendance_limit   :bigint(8)
 #  city               :string(255)      not null
 #  country            :string(255)      not null
-#  created_at         :datetime
-#  days_to_charge     :integer          default(7)
+#  created_at         :datetime         not null
+#  days_to_charge     :bigint(8)        default(7)
 #  end_date           :datetime
 #  event_image        :string(255)
 #  full_price         :decimal(10, )
-#  id                 :integer          not null, primary key
+#  id                 :bigint(8)        not null, primary key
 #  link               :string(255)
 #  location_and_date  :string(255)
 #  logo               :string(255)
-#  main_email_contact :string(255)      default(""), not null
+#  main_email_contact :string(255)      not null
 #  name               :string(255)
 #  price_table_link   :string(255)
 #  start_date         :datetime
 #  state              :string(255)      not null
-#  updated_at         :datetime
+#  updated_at         :datetime         not null
 #
 
 class Event < ApplicationRecord
@@ -122,6 +122,12 @@ class Event < ApplicationRecord
 
   def ended?
     end_date < Time.zone.now
+  end
+
+  def event_image_valid?
+    return false if event_image.blank?
+
+    NetServices.instance.url_found?(event_image.url)
   end
 
   private

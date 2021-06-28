@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.describe User, type: :model do
+  context 'enums' do
+    it { is_expected.to define_enum_for(:role).with_values(user: 0, organizer: 1, admin: 2) }
+    it { is_expected.to define_enum_for(:gender).with_values(cisgender_man: 0, transgender_man: 1, cisgender_woman: 2, transgender_woman: 3, non_binary: 4, gender_not_informed: 5) }
+    it { is_expected.to define_enum_for(:education_level).with_values(no_education_informed: 0, primary: 1, secondary: 2, tec_secondary: 3, tec_terciary: 4, bachelor: 5, master: 6, doctoral: 7) }
+    it { is_expected.to define_enum_for(:ethnicity).with_values(no_ethnicity_informed: 0, asian: 1, white: 2, indian: 3, brown: 4, black: 5) }
+    it { is_expected.to define_enum_for(:disability).with_values(no_disability: 0, visually_impairment: 1, hearing_impairment: 2, physical_impairment: 3, mental_impairment: 4, disability_not_informed: 5) }
+  end
+
   context 'associations' do
     it { is_expected.to have_many :attendances }
     it { is_expected.to have_many :events }
@@ -27,7 +35,7 @@ RSpec.describe User, type: :model do
       it 'only show event once if user has multiple attendances' do
         user = Fabricate(:user)
         first_attendance = Fabricate(:attendance, user: user)
-        Fabricate(:attendance, user: user, event: first_attendance.event, email: 'foo@bar.com')
+        Fabricate(:attendance, user: user, event: first_attendance.event)
 
         expect(user.events.size).to eq(1)
       end
@@ -41,20 +49,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'virtual attributes' do
-    context 'twitter user' do
-      it 'removes @ from start if present' do
-        user = Fabricate.build(:user, twitter_user: '@agilebrazil')
-        expect(user.twitter_user).to eq('agilebrazil')
-      end
-
-      it 'keeps as given if doesnt start with @' do
-        user = Fabricate.build(:user, twitter_user: 'agilebrazil')
-        expect(user.twitter_user).to eq('agilebrazil')
-      end
-    end
-  end
-
   describe '#registrations_for_event' do
     let(:event) { Fabricate :event }
 
@@ -62,9 +56,9 @@ RSpec.describe User, type: :model do
       let(:user) { Fabricate :user }
 
       it 'returns all the registrations' do
-        first = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        second = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        third = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
+        first = Fabricate(:attendance, user: user, event: event)
+        second = Fabricate(:attendance, user: user, event: event)
+        third = Fabricate(:attendance, user: user, event: event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second, third]
       end
@@ -75,8 +69,8 @@ RSpec.describe User, type: :model do
       let(:other_user) { Fabricate :user }
 
       it 'returns all the registrations for the user' do
-        first = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        second = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
+        first = Fabricate(:attendance, user: user, event: event)
+        second = Fabricate(:attendance, user: user, event: event)
         Fabricate(:attendance, user: other_user, event: event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]
@@ -88,8 +82,8 @@ RSpec.describe User, type: :model do
       let(:other_event) { Fabricate :event }
 
       it 'returns all the registrations for the user' do
-        first = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
-        second = Fabricate(:attendance, user: user, event: event, email: Faker::Internet.email)
+        first = Fabricate(:attendance, user: user, event: event)
+        second = Fabricate(:attendance, user: user, event: event)
         Fabricate(:attendance, user: user, event: other_event)
         registrations = user.registrations_for_event(event)
         expect(registrations).to match_array [first, second]
@@ -221,6 +215,74 @@ RSpec.describe User, type: :model do
 
       it { expect(described_class.last.organizer?).to be true }
       it { expect(described_class.last.user?).to be false }
+    end
+  end
+
+  describe '#avatar_valid?' do
+    let(:user) { Fabricate :user }
+
+    it 'returns false when the URL is not valid' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(false)
+      allow(NetServices.instance).to(receive(:url_found?)).and_return(false)
+      expect(user.avatar_valid?).to be false
+    end
+
+    it 'returns false when the image is null' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(true)
+      expect(user.avatar_valid?).to be false
+    end
+
+    it 'returns true when the URL was found' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(false)
+      allow(NetServices.instance).to(receive(:url_found?)).and_return(true)
+      expect(user.avatar_valid?).to be true
+    end
+  end
+
+  describe '#registrations_for_other_users' do
+    let(:user) { Fabricate :user }
+    let(:other_user) { Fabricate :user }
+    let(:no_attendances_user) { Fabricate :user }
+
+    it 'returns the registrations for other users' do
+      first_attendance = Fabricate :attendance, user: other_user, registered_by_user: user, registration_date: 2.days.ago
+      second_attendance = Fabricate :attendance, user: other_user, registered_by_user: user, registration_date: 1.day.ago
+      third_attendance = Fabricate :attendance, user: other_user, registered_by_user: user, registration_date: Time.zone.now
+      Fabricate :attendance, user: user, registered_by_user: user, registration_date: 4.days.ago
+      Fabricate :attendance, user: user, registered_by_user: user, registration_date: 3.days.ago
+
+      expect(user.registrations_for_other_users).to eq [third_attendance, second_attendance, first_attendance]
+      expect(other_user.registrations_for_other_users).to eq []
+      expect(no_attendances_user.registrations_for_other_users).to eq []
+    end
+  end
+
+  describe '#valid_attendance_for_event' do
+    it 'returns the first not cancelled attendance for user in the event' do
+      user = Fabricate :user
+      first_event = Fabricate :event
+      second_event = Fabricate :event
+      third_event = Fabricate :event
+      fourth_event = Fabricate :event
+      fifth_event = Fabricate :event
+      sixth_event = Fabricate :event
+      seventh_event = Fabricate :event
+
+      first_attendance = Fabricate :attendance, user: user, event: first_event, status: :pending
+      second_attendance = Fabricate :attendance, user: user, event: second_event, status: :waiting
+      third_attendance = Fabricate :attendance, user: user, event: third_event, status: :accepted
+      fourth_attendance = Fabricate :attendance, user: user, event: fourth_event, status: :paid
+      fifth_attendance = Fabricate :attendance, user: user, event: fifth_event, status: :confirmed
+      sixth_attendance = Fabricate :attendance, user: user, event: sixth_event, status: :showed_in
+      Fabricate :attendance, user: user, event: seventh_event, status: :cancelled
+
+      expect(user.valid_attendance_for_event(first_event)).to eq first_attendance
+      expect(user.valid_attendance_for_event(second_event)).to eq second_attendance
+      expect(user.valid_attendance_for_event(third_event)).to eq third_attendance
+      expect(user.valid_attendance_for_event(fourth_event)).to eq fourth_attendance
+      expect(user.valid_attendance_for_event(fifth_event)).to eq fifth_attendance
+      expect(user.valid_attendance_for_event(sixth_event)).to eq sixth_attendance
+      expect(user.valid_attendance_for_event(seventh_event)).to be_nil
     end
   end
 end

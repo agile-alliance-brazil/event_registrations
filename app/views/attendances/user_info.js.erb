@@ -1,1 +1,1 @@
-$('#attendance-form').html("<%= escape_javascript(render('attendances/form', event: @event, attendance: @attendance, user: @user )).html_safe %>");
+$('#attendance-form').html("<%= escape_javascript(render('attendances/form', event: @event, attendance: @attendance, user: @user, user_last_attendance: @user_last_attendance )).html_safe %>");

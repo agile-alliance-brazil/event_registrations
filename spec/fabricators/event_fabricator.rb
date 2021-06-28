@@ -2,8 +2,7 @@
 
 Fabricator :event do
   name { Faker::Company.name.gsub(/\W/, '') }
-  price_table_link { 'http://localhost:9292/link' }
-  country { Faker::Address.country }
+  country { 'BR' }
   state { Faker::Address.state }
   city { Faker::Address.city }
   full_price { 850.00 }

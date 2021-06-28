@@ -472,4 +472,25 @@ RSpec.describe Event, type: :model do
       it { expect(event.average_ticket).to eq 0 }
     end
   end
+
+  describe '#event_image_valid?' do
+    let(:event) { Fabricate :event }
+
+    it 'returns false when the URL was not found' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(false)
+      allow(NetServices.instance).to(receive(:url_found?)).and_return(false)
+      expect(event.event_image_valid?).to be false
+    end
+
+    it 'returns false when the image is null' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(true)
+      expect(event.event_image_valid?).to be false
+    end
+
+    it 'returns true when it was found' do
+      allow_any_instance_of(RegistrationsImageUploader).to(receive(:blank?)).and_return(false)
+      allow(NetServices.instance).to(receive(:url_found?)).and_return(true)
+      expect(event.event_image_valid?).to be true
+    end
+  end
 end

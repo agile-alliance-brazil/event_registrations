@@ -8,40 +8,27 @@ RSpec.describe AttendanceHelper, type: :helper do
     end
   end
 
-  describe '#price_table_link' do
-    it 'show pure link if no locale information in the link' do
-      event = Fabricate.build(:event)
-      expect(price_table_link(event, :pt)).to eq(event.price_table_link)
-      expect(price_table_link(event, :en)).to eq(event.price_table_link)
-    end
-
-    it 'replaces :locale placeholder in the link if present' do
-      event = Fabricate.build(:event, price_table_link: 'http://localhost:9292/testing/:locale/works')
-      expect(price_table_link(event, :pt)).to eq('http://localhost:9292/testing/pt/works')
-      expect(price_table_link(event, :en)).to eq('http://localhost:9292/testing/en/works')
-    end
-
-    it 'works as a query param as well' do
-      event = Fabricate.build(:event, price_table_link: 'http://localhost:9292/testing?locale=:locale')
-      expect(price_table_link(event, :pt)).to eq('http://localhost:9292/testing?locale=pt')
-      expect(price_table_link(event, :en)).to eq('http://localhost:9292/testing?locale=en')
-    end
-  end
-
   describe '#payment_types_options' do
-    it 'returns the payment type values' do
-      options = Attendance.payment_types.map do |payment_type, _|
-        [I18n.t("activerecord.attributes.attendance.enums.payment_types.#{payment_type}"), payment_type]
-      end
-      expect(payment_types_options).to eq(options)
-    end
+    it { expect(payment_types_options).to eq(options_for_select(Attendance.payment_types.map { |payment_type, _key| [I18n.t("activerecord.attributes.attendance.enums.payment_types.#{payment_type}"), payment_type] }, :gateway)) }
   end
 
   describe '#job_role_options' do
-    it { expect(job_role_options).to eq(Attendance.job_roles.map { |job_role| [t("activerecord.attributes.attendance.enums.job_role.#{job_role[0]}"), job_role[0]] }.sort_by { |roles| roles[0] }) }
+    it { expect(job_role_options).to eq(options_for_select(Attendance.job_roles.map { |job_role, _key| [I18n.t("activerecord.attributes.attendance.enums.job_role.#{job_role}"), job_role] }.sort_by { |roles| roles[0] }, :not_informed)) }
   end
 
-  describe '#gender_options' do
-    it { expect(gender_options).to eq('Feminino' => 'F', 'Masculino' => 'M', 'Outro' => 'O') }
+  describe '#source_of_interest_options' do
+    it { expect(source_of_interest_options).to eq(options_for_select(Attendance.source_of_interests.map { |interest, _key| [I18n.t("activerecord.attributes.attendance.enums.source_of_interest.#{interest}"), interest] }, :no_source_informed)) }
+  end
+
+  describe '#organization_size_options' do
+    it { expect(organization_size_options).to eq(options_for_select(Attendance.organization_sizes.map { |gender_options, _key| [I18n.t("activerecord.attributes.attendance.enums.organization_size.#{gender_options}"), gender_options] }, :no_org_size_informed)) }
+  end
+
+  describe '#experience_in_agility_options' do
+    it { expect(experience_in_agility_options).to eq(options_for_select(Attendance.experience_in_agilities.map { |exp, _key| [I18n.t("activerecord.attributes.attendance.enums.experience_in_agility.#{exp}"), exp] }, :no_agile_expirience_informed)) }
+  end
+
+  describe '#year_of_experience_options' do
+    it { expect(year_of_experience_options).to eq(options_for_select(Attendance.years_of_experiences.map { |exp, _key| [I18n.t("activerecord.attributes.attendance.enums.years_of_experience.#{exp}"), exp] }, :no_experience_informed)) }
   end
 end

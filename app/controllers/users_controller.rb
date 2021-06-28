@@ -15,7 +15,6 @@ class UsersController < AuthenticatedController
   def edit; end
 
   def update
-    locale = params[:user][:default_locale].to_sym if params[:user][:default_locale]
     I18n.locale = locale if locale.present?
 
     if @user.update(update_user_params)
@@ -69,7 +68,7 @@ class UsersController < AuthenticatedController
   end
 
   def update_user_params
-    params.require(:user).permit(:user_image, :first_name, :last_name, :email, :phone, :country, :state, :city, :organization, :twitter_user, :default_locale)
+    params.require(:user).permit(:user_image, :first_name, :last_name, :email, :country, :state, :city, :ethnicity, :disability, :school, :education_level, :gender, :birth_date)
   end
 
   def update_default_password_params

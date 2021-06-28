@@ -171,7 +171,7 @@ RSpec.describe EventsController, type: :controller do
         it 'updates the event' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          put :update, params: { id: event, event: { event_image: 'bla', name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278, price_table_link: 'http://xpto', logo: 'bla.jpg' } }
+          put :update, params: { id: event, event: { event_image: 'bla', name: 'name', attendance_limit: 65, days_to_charge: 5, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 278 } }
           event_updated = event.reload
           expect(response).to redirect_to event_path(event_updated)
           expect(event_updated.event_image).not_to be_nil
@@ -181,13 +181,11 @@ RSpec.describe EventsController, type: :controller do
           expect(event_updated.start_date.utc.to_i).to eq start_date.to_i
           expect(event_updated.end_date.utc.to_i).to eq end_date.to_i
           expect(event_updated.full_price).to eq 278
-          expect(event_updated.price_table_link).to eq 'http://xpto'
-          expect(event_updated.logo).to eq 'bla.jpg'
         end
       end
 
       context 'with invalid parameters' do
-        before { put :update, params: { id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '', price_table_link: '' } } }
+        before { put :update, params: { id: event, event: { name: '', attendance_limit: nil, days_to_charge: nil, start_date: '', end_date: '', full_price: '' } } }
 
         it 'renderes the form with the errors' do
           expect(response).to render_template :edit
@@ -240,7 +238,7 @@ RSpec.describe EventsController, type: :controller do
         it 'creates the event and redirects to index of events' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          post :create, params: { event: { event_image: 'bla', name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, price_table_link: 'http://bla', logo: 'bla.jpg', city: 'foo', state: 'bar', country: 'BR' } }
+          post :create, params: { event: { event_image: 'bla', name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, city: 'foo', state: 'bar', country: 'BR' } }
           expect(Event.count).to eq 1
           event_persisted = Event.last
           expect(event_persisted.event_image).not_to be_nil
@@ -250,8 +248,6 @@ RSpec.describe EventsController, type: :controller do
           expect(event_persisted.start_date.utc.to_i).to eq start_date.to_i
           expect(event_persisted.end_date.utc.to_i).to eq end_date.to_i
           expect(event_persisted.full_price).to eq 100
-          expect(event_persisted.price_table_link).to eq 'http://bla'
-          expect(event_persisted.logo).to eq 'bla.jpg'
 
           expect(response).to redirect_to event_path(event_persisted)
         end

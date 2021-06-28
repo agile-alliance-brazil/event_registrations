@@ -7,16 +7,8 @@ Fabricator :user do
   password { 'abc123456' }
   password_confirmation { 'abc123456' }
 
-  phone { '(11) 3322-1234' }
   country { 'BR' }
   state { 'SP' }
   city { 'São Paulo' }
-  organization { 'ThoughtWorks' }
-  badge_name { Faker::Company.name.gsub(/\W/, '') }
-  cpf { '111.444.777-35' }
-  gender { 'M' }
-  twitter_user { Faker::Company.name.gsub(/\W/, '') }
-  address { 'Rua dos Bobos, 0' }
-  neighbourhood { 'Vila Perdida' }
-  zipcode { '12345000' }
+  gender { User.genders.keys.sample }
 end

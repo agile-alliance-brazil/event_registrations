@@ -18,6 +18,11 @@ AllCops:
     - 'app/jobs/**/*'
   NewCops: enable
 
+Metrics/ClassLength:
+  Exclude:
+    - 'db/migrate/**/*'
+    - 'app/controllers/attendances_controller.rb'
+
 Metrics/MethodLength:
   Exclude:
     - 'app/routes/**/*'
@@ -37,6 +42,8 @@ Metrics/BlockLength:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'lib/**/*'
+    - 'config/routes.rb'
+    - 'db/migrate/**/*'
 
 Metrics/PerceivedComplexity:
   Exclude:

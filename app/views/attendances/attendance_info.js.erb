@@ -1,8 +1,0 @@
-<% if @attendance.first_name.present? %>
-  $('#attendance-form').html("<%= escape_javascript(render 'form', event: @event, attendance: @attendance, user: current_user) %>");
-<% else %>
-  $('#help-block-email').html("<%= I18n.t('attendances.new.load.not_found') %>")
-<% end %>
-
-bindClickToAttendanceSearch();
-bindClickToLoadUser();

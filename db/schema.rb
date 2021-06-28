@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `bin/rails
-# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_03_134846) do
+ActiveRecord::Schema.define(version: 2021_06_09_132902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,17 +23,11 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.boolean "email_sent", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email"
     t.string "organization"
-    t.string "phone"
     t.string "country"
     t.string "state"
     t.string "city"
     t.string "badge_name"
-    t.string "cpf"
-    t.string "gender"
     t.string "notes"
     t.decimal "event_price"
     t.integer "registration_quota_id"
@@ -41,11 +35,10 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.integer "registration_period_id"
     t.boolean "advised", default: false
     t.datetime "advised_at"
-    t.string "organization_size"
-    t.string "years_of_experience"
-    t.string "experience_in_agility"
-    t.string "school"
-    t.string "education_level"
+    t.integer "organization_size", default: 0
+    t.integer "years_of_experience", default: 0
+    t.integer "experience_in_agility", default: 0
+    t.integer "education_level", default: 0
     t.integer "queue_time"
     t.datetime "last_status_change_date"
     t.integer "job_role", default: 0
@@ -53,9 +46,14 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.integer "status"
     t.integer "payment_type"
     t.integer "registered_by_id", null: false
+    t.string "other_job_role"
+    t.integer "source_of_interest", default: 0, null: false
+    t.index ["education_level"], name: "index_attendances_on_education_level"
     t.index ["event_id"], name: "index_attendances_on_event_id"
     t.index ["registration_quota_id"], name: "index_attendances_on_registration_quota_id"
+    t.index ["source_of_interest"], name: "index_attendances_on_source_of_interest"
     t.index ["user_id"], name: "index_attendances_on_user_id"
+    t.index ["years_of_experience"], name: "index_attendances_on_years_of_experience"
   end
 
   create_table "authentications", id: :serial, force: :cascade do |t|
@@ -69,17 +67,13 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
 
   create_table "events", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.string "location_and_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "price_table_link"
-    t.boolean "allow_voting"
     t.integer "attendance_limit"
     t.decimal "full_price"
     t.datetime "start_date"
     t.datetime "end_date"
     t.string "link"
-    t.string "logo"
     t.integer "days_to_charge", default: 7
     t.string "main_email_contact", default: "", null: false
     t.string "event_image"
@@ -152,20 +146,11 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "email", null: false
-    t.string "organization"
-    t.string "phone"
     t.string "country"
     t.string "state"
     t.string "city"
-    t.string "badge_name"
-    t.string "cpf"
-    t.string "gender"
-    t.string "twitter_user"
-    t.string "address"
-    t.string "neighbourhood"
-    t.string "zipcode"
+    t.integer "gender", default: 5
     t.integer "roles_mask"
-    t.string "default_locale", default: "pt"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "registration_group_id"
@@ -187,8 +172,17 @@ ActiveRecord::Schema.define(version: 2019_01_03_134846) do
     t.string "unlock_token"
     t.datetime "locked_at"
     t.string "user_image"
+    t.date "birth_date"
+    t.integer "education_level", default: 0
+    t.string "school"
+    t.integer "ethnicity", default: 0, null: false
+    t.integer "disability", default: 5, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["disability"], name: "index_users_on_disability"
+    t.index ["education_level"], name: "index_users_on_education_level"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["ethnicity"], name: "index_users_on_ethnicity"
+    t.index ["gender"], name: "index_users_on_gender"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end

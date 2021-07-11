@@ -54,7 +54,7 @@ pt:
       cpf:
         help: "Deixe em branco caso não seja brasileiro"
       agreement:
-        attendance: "Ao me inscrever na conferência, declaro estar ciente da Política de Privacidade (http://agilebrazil.com/2021/inscricoes)."
+        attendance: "Ao me inscrever na conferência, declaro estar ciente da Política de Privacidade. Clique aqui para acessar a política."
       user_for_attendance:
         help: Para garantir que o usuário tenha acesso à sua inscrição, se você está cadastrando a inscrição para terceiros, essa pessoa deve ter entrado no sistema
       load:

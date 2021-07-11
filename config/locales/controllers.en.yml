@@ -55,7 +55,7 @@ en:
       cpf:
         help: "Leave blank if you are not brazilian"
       agreement:
-        attendance: "By registering for the conference, I declare I acknowledge the Privacy Policy (http://agilebrazil.com/2021/inscricoes)."
+        attendance: "By registering for the conference, I declare I acknowledge the Privacy Policy. Click here to access."
       user_for_attendance:
         help: "In order to guarantee the user access, if you are registering for a third part, the user must have been signed up to the system"
       load:

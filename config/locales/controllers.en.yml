@@ -55,8 +55,7 @@ en:
       cpf:
         help: "Leave blank if you are not brazilian"
       agreement:
-        attendance: "By registering for the conference, I acknowledge that my name and email will be shared with the sponsors of the conference."
-        workshop: "By registering for the workshops, I declare being aware that the minimum attendance to each workshop is 12 people, and that if this number is not reached, I will have the opportunity to either join another workshop, or get a refund."
+        attendance: "By registering for the conference, I declare I acknowledge the Privacy Policy. Click here to access."
       user_for_attendance:
         help: "In order to guarantee the user access, if you are registering for a third part, the user must have been signed up to the system"
       load:

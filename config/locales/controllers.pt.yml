@@ -54,8 +54,7 @@ pt:
       cpf:
         help: "Deixe em branco caso não seja brasileiro"
       agreement:
-        attendance: "Ao me inscrever na conferência, declaro estar ciente que o meu nome e email poderá ser compartilhado com os patrocinadores da conferência."
-        workshop: "Ao me inscrever para workshops, declaro estar ciente de que o número mínimo de participantes para cada workshop é de 12 pessoas e que, se o número não for atingido, terei a chance de trocar de workshop ou receber meu dinheiro de volta."
+        attendance: "Ao me inscrever na conferência, declaro estar ciente da Política de Privacidade. Clique aqui para acessar a política."
       user_for_attendance:
         help: Para garantir que o usuário tenha acesso à sua inscrição, se você está cadastrando a inscrição para terceiros, essa pessoa deve ter entrado no sistema
       load:

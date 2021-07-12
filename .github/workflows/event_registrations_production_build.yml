@@ -78,10 +78,6 @@ jobs:
           AGILE_ALLIANCE_API_HOST: 'https://aa-service-bus.herokuapp.com'
           AGILE_ALLIANCE_API_TOKEN: 'xpto'
           PAG_SEGURO_STORE_CODE: 'pagseguro_store_code'
-          AIRBRAKE_ACCESS_KEY: 'foo'
-          AIRBRAKE_PROJECT_ID: '12345'
-          AIRBRAKE_PROJECT_KEY: 'bar'
-          AIRBRAKE_ENVIRONMENT: 'development'
 
   deploy-production:
     runs-on: ubuntu-latest

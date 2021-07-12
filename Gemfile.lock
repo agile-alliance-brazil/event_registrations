@@ -69,8 +69,6 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    airbrake-ruby (5.2.0)
-      rbtree3 (~> 0.5)
     aitch (0.5.0)
       nokogiri (>= 1.6.0)
     annotate (3.1.1)
@@ -284,7 +282,6 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rbtree3 (0.6.0)
     redis (4.3.1)
     regexp_parser (2.1.1)
     responders (3.0.1)
@@ -296,6 +293,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
+    rollbar (3.2.0)
     rspec-collection_matchers (1.2.0)
       rspec-expectations (>= 2.99.0.beta1)
     rspec-core (3.10.1)
@@ -418,7 +416,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  airbrake-ruby
   annotate
   barnes
   brakeman
@@ -450,6 +447,7 @@ DEPENDENCIES
   rails-controller-testing
   rails_12factor
   rake
+  rollbar
   rspec-collection_matchers
   rspec-rails
   rspec_junit_formatter
@@ -473,4 +471,4 @@ RUBY VERSION
    ruby 3.0.1p64
 
 BUNDLED WITH
-   2.2.19
+   2.2.21

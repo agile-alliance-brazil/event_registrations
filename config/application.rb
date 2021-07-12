@@ -59,6 +59,5 @@ module Current
     # config.assets.js_compressor = :uglifier
 
     require 'sidekiq/web'
-    Sidekiq::Web.disable :sessions
   end
 end

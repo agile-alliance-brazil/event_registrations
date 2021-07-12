@@ -17,7 +17,8 @@ class AddImageFieldToEventAndUser < ActiveRecord::Migration[5.2]
     change_column_null :events, :state, false
     change_column_null :events, :city, false
 
-    add_column :attendances, :registered_by_id, :integer, index: true
+    add_column :attendances, :registered_by_id, :integer
+    add_index :attendances, :registered_by_id
     execute('UPDATE attendances SET registered_by_id = user_id')
     change_column_null :attendances, :registered_by_id, false
 

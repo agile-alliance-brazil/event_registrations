@@ -1,9 +1,5 @@
 # encoding: UTF-8
 ---
-airbrake_access_key: ''
-airbrake_project_id: ''
-airbrake_project_key: ''
-airbrake_environment: ''
 google_tracker_id: ''
 google_conversion_id: ''
 google_conversion_label: ''
@@ -22,3 +18,4 @@ pag_seguro_store_code: ''
 agile_alliance_api_host: ''
 agile_alliance_api_token: ''
 sendgrid_api_key: ''
+rollbar_access_token: ''

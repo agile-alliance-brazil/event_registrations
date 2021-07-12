@@ -4,8 +4,6 @@ source 'https://rubygems.org'
 ruby '3.0.1'
 gem 'rails'
 
-gem 'airbrake-ruby'
-
 gem 'barnes'
 gem 'carrierwave'
 gem 'cloudinary'
@@ -25,6 +23,7 @@ gem 'omniauth-twitter'
 gem 'pagseguro-oficial', git: 'https://github.com/celsoMartins/ruby', branch: 'sandbox-find-by-notification-code' # due to the BigDecimal error on pagseguro bank ticket (boleto)
 gem 'pg'
 gem 'rake'
+gem 'rollbar'
 gem 'sass'
 gem 'sass-rails'
 gem 'sidekiq'

@@ -42,7 +42,7 @@ class Event < ApplicationRecord
   scope :active_for, ->(date) { where('end_date > ?', date) }
   scope :not_started, -> { where('start_date > ?', Time.zone.today) }
   scope :ended, -> { where('end_date < ?', Time.zone.today) }
-  scope :tomorrow_events, -> { where(start_date: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day) }
+  scope :tomorrow_events, -> { where(start_date: Time.zone.now.all_day) }
 
   def full?
     places_sold = reserved_count + attendances.active.size

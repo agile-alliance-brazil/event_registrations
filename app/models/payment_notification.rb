@@ -46,7 +46,7 @@ class PaymentNotification < ApplicationRecord
     if params[:store_code] == Figaro.env.pag_seguro_store_code
       attendance.paid!
     else
-      Airbrake.notify("Failed Payment Notification for attendance: #{attendance.full_name}", params)
+      Rollbar.log('error', "Failed Payment Notification for attendance: #{attendance.full_name}")
     end
   end
 

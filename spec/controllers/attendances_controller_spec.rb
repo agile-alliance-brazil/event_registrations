@@ -153,7 +153,10 @@ RSpec.describe AttendancesController, type: :controller do
               context 'and it is a fresh new registration' do
                 context 'and it is for the same user signed in' do
                   it 'creates the attendance and redirects to the show' do
+                    Fabricate :slack_configuration, event: event
+
                     expect(EmailNotificationsMailer).to(receive(:registration_pending)).once.and_call_original
+                    expect(Slack::SlackNotificationService.instance).to(receive(:notify_new_registration)).once
 
                     post :create, params: { event_id: event, attendance: valid_attendance }
                     created_attendance = assigns(:attendance)
@@ -181,9 +184,11 @@ RSpec.describe AttendancesController, type: :controller do
                 end
               end
 
-              context 'and it is for a different user' do
+              context 'and it is for a different user and it has no slack config' do
                 it 'creates the attendance to the specified user' do
                   expect(EmailNotificationsMailer).to(receive(:registration_pending)).and_call_original
+                  expect(Slack::SlackNotificationService.instance).not_to(receive(:notify_new_registration))
+
                   post :create, params: { event_id: event, attendance: valid_attendance }
                   created_attendance = assigns(:attendance)
                   expect(created_attendance.event).to eq event

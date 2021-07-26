@@ -28,6 +28,7 @@ gem 'sass'
 gem 'sass-rails'
 gem 'sidekiq'
 gem 'sidekiq-limit_fetch'
+gem 'slack-notifier'
 gem 'will_paginate'
 gem 'yui-compressor', require: 'yui/compressor'
 

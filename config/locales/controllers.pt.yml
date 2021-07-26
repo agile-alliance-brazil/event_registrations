@@ -245,3 +245,10 @@ pt:
   reistration_periods:
     index:
       title: "Lista de Períodos de Inscrição"
+  slack_configurations:
+    notifications:
+      notify_new_registration:
+        attendance: "> *%{attendance_name}* se inscreveu para *%{event_name}* em %{registration_date}"
+        group: "No grupo %{group_name}"
+        registration_value: "Valor: *%{registration_value}*"
+        attendances_summary: "*Inscrições:* (%{pending}) Pendentes / (%{accepted}) Aceitas / *(%{paid}) Pagas* / *(%{confirmed}) Confirmadas*"

@@ -17,13 +17,13 @@
 <% if current_user.organizer_of?(event) %>
   <td>
     <% if attendance.pending? && attendance.grouped? %>
-      <%= link_to change_status_event_attendance_path(event, attendance, :accept), method: :patch, remote: true do %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :accept), data: { confirm: I18n.t('general.confirm') }, method: :patch, remote: true do %>
         <i class="fa fa-check" data-toggle="tooltip" data-placement="bottom" title=<%= "#{I18n.t('attendances.actions.accept')}" %>></i>
       <% end %>
     <% end %>
 
     <% if attendance.confirmed? %>
-      <%= link_to change_status_event_attendance_path(event, attendance, :mark_show), method: :patch, remote: true do %>
+      <%= link_to change_status_event_attendance_path(event, attendance, :mark_show), method: :patch, data: { confirm: I18n.t('general.confirm') }, remote: true do %>
         <i class="far fa-address-card" data-toggle="tooltip" data-placement="bottom" title=<%= "#{I18n.t('attendances.actions.mark_show')}" %>></i>
       <% end %>
     <% end %>

@@ -32,7 +32,7 @@ en:
     waiting_message: "Your registration request to %{event_name} was queued."
     waiting_vacancy_message: "You can check the status in the following page, but don' worry, we will notify you if we get a free vacancy to your subscription."
     confirmed_message: "Your registration to %{event_name} was confirmed."
-    confirmed_message_event_date: "Be prepared to %{event_start_date}."
+    confirmed_message_event_date: "We will be waiting for you at %{event_start_date}."
     dequeued_message: "We bring great news! Your registration was accepted and you was removed from the queue!"
     follow_process: "In order to complete the process, please follow the instructions on your attendance page."
     welcome_message: "The %{event_name} is about to start."

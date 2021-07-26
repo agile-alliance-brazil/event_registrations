@@ -32,7 +32,7 @@ pt:
     waiting_message: "Seu pedido de inscrição para %{event_name} entrou na nossa fila de espera."
     waiting_vacancy_message: "Você poderá acompanhar o status na seguinte página, mas não se preocupe, avisaremos caso apareça vaga para a sua inscrição."
     confirmed_message: "Sua inscrição na %{event_name} foi confirmada."
-    confirmed_message_event_date: "Esteja preparado em %{event_start_date}"
+    confirmed_message_event_date: "Esperamos você em %{event_start_date}"
     dequeued_message: "Trazemos ótimas notícias! Nossa fila andou e chegou a sua vez!"
     follow_process: "Para completar o processo, por favor siga as instruções descritas na página da sua inscrição."
     welcome_message: "O %{event_name} está para começar."

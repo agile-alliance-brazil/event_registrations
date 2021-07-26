@@ -4,7 +4,6 @@
 #
 # Table name: events
 #
-#  allow_voting       :boolean
 #  attendance_limit   :bigint(8)
 #  city               :string(255)      not null
 #  country            :string(255)      not null
@@ -15,11 +14,8 @@
 #  full_price         :decimal(10, )
 #  id                 :bigint(8)        not null, primary key
 #  link               :string(255)
-#  location_and_date  :string(255)
-#  logo               :string(255)
 #  main_email_contact :string(255)      not null
 #  name               :string(255)
-#  price_table_link   :string(255)
 #  start_date         :datetime
 #  state              :string(255)      not null
 #  updated_at         :datetime         not null
@@ -31,8 +27,8 @@ class Event < ApplicationRecord
   has_many :attendances, dependent: :restrict_with_exception
   has_many :registration_periods, dependent: :destroy
   has_many :registration_quotas, dependent: :destroy
-
   has_many :registration_groups, dependent: :destroy
+  has_many :slack_configurations, dependent: :destroy, class_name: 'Slack::SlackConfiguration'
 
   has_and_belongs_to_many :organizers, class_name: 'User'
 

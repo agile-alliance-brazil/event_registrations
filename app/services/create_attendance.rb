@@ -34,6 +34,11 @@ class CreateAttendance
   def self.notify_attendance
     if @attendance.pending?
       EmailNotificationsMailer.registration_pending(@attendance).deliver
+      @attendance.event.slack_configurations.each do |slack_config|
+        slack_notifier = Slack::Notifier.new(slack_config.room_webhook)
+        Slack::SlackNotificationService.instance.notify_new_registration(slack_notifier, @attendance)
+      end
+
     elsif @attendance.waiting?
       EmailNotificationsMailer.registration_waiting(@attendance).deliver
     end

@@ -245,3 +245,10 @@ en:
   reistration_periods:
     index:
       title: "Index of Event Periods"
+  slack_configurations:
+    notifications:
+      notify_new_registration:
+        attendance: "> *%{attendance_name}* registered to *%{event_name}*"
+        group: "In the group *%{group_name}*"
+        registration_value: "Value: *%{registration_value}*"
+        attendances_summary: "Attendances: (%{pending}) Pending / (%{accepted}) Accepted / *(%{paid}) Paid* / *(%{confirmed}) Confirmed*"

@@ -69,6 +69,9 @@ pt:
       user:
         one: "Usuário"
         other: "Usuários"
+      slack_configuration:
+        one: "Configuração do Slack"
+        other: "Configurações do Slack"
     attributes:
       attendance:
         full_name: "Nome"
@@ -240,6 +243,9 @@ pt:
             disability_not_informed: "Não informada"
         role: "Função no Sistema"
         birth_date: "Data de Nascimento"
+      slack_configuration:
+        event: "Evento"
+        room_webhook: "Webhook da Sala"
   registration_group:
     paid_in_advance:
       one: "Reservada"

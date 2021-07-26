@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_09_132902) do
+ActiveRecord::Schema.define(version: 2021_07_26_201638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,14 @@ ActiveRecord::Schema.define(version: 2021_06_09_132902) do
     t.decimal "price", null: false
   end
 
+  create_table "slack_configurations", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.string "room_webhook", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_id"], name: "index_slack_configurations_on_event_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
@@ -193,5 +201,6 @@ ActiveRecord::Schema.define(version: 2021_06_09_132902) do
   add_foreign_key "attendances", "users"
   add_foreign_key "attendances", "users", column: "registered_by_id"
   add_foreign_key "payment_notifications", "attendances"
+  add_foreign_key "slack_configurations", "events"
   add_foreign_key "users", "registration_groups"
 end

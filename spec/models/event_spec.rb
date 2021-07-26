@@ -2,8 +2,12 @@
 
 RSpec.describe Event, type: :model do
   context 'associations' do
-    it { is_expected.to have_many :attendances }
-    it { is_expected.to have_many :registration_periods }
+    it { is_expected.to have_many(:attendances).dependent(:restrict_with_exception) }
+    it { is_expected.to have_many(:registration_quotas).dependent(:destroy) }
+    it { is_expected.to have_many(:registration_periods).dependent(:destroy) }
+    it { is_expected.to have_many(:registration_groups).dependent(:destroy) }
+    it { is_expected.to have_many(:slack_configurations).dependent(:destroy) }
+
     it { is_expected.to have_and_belong_to_many(:organizers).class_name('User') }
   end
 

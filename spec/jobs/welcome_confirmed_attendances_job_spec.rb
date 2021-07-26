@@ -2,8 +2,8 @@
 
 describe WelcomeConfirmedAttendancesJob, type: :job do
   context 'with active events to advise' do
-    let!(:event) { Fabricate :event, start_date: Time.zone.now }
-    let!(:other_event) { Fabricate :event, start_date: Time.zone.now }
+    let!(:event) { Fabricate :event, start_date: Time.zone.tomorrow }
+    let!(:other_event) { Fabricate :event, start_date: Time.zone.tomorrow }
     let!(:yesterday_event) { Fabricate :event, start_date: 1.day.ago }
     let!(:today_event) { Fabricate :event, start_date: Time.zone.now }
     let!(:past_event) { Fabricate :event, start_date: 3.days.ago, end_date: 2.days.ago }

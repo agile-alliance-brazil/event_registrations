@@ -1,6 +1,6 @@
 <% if @attendance.gateway? && @attendance.registration_value.positive? %>
   <div class="payments">
-    <div class="payment_type float-right">
+    <div class="payment_type">
       <%= form_tag checkout_event_payment_path(event_id: @event, id: @attendance), method: :post do %>
         <%= image_submit_tag 'https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif', alt: 'Pague com PagSeguro', class: 'pagseguro' %>
       <% end %>

@@ -1,18 +1,18 @@
 <div class="breadcrumb">
   <div class="row">
     <div class="col-xl-12">
-      <%= link_to t('events.index.title'), events_path %>
+      <%= link_to I18n.t('events.index.title'), events_path %>
       >
 
       <%= link_to @event.name, event_path(@event) %>
       >
 
       <% if current_user.organizer_of?(@event) %>
-        <%= link_to t('attendances.index.title'), event_attendances_path(@event) %>
+        <%= link_to I18n.t('attendances.index.title'), event_attendances_path(@event) %>
         >
       <% end %>
 
-      <%= t('attendances.show.title') %>
+      <%= I18n.t('attendances.show.title') %>
     </div>
   </div>
 </div>
@@ -27,23 +27,22 @@
       <% end %>
     </p>
     <p><h4><%= @event.name %></h4></p>
+    <%= link_to I18n.t('general.edit'), edit_event_attendance_path(@event, @attendance) %>
+    <% if @attendance.cancellable? %>
+      <p><%= link_to I18n.t('general.cancel'),event_attendance_path(@event, @attendance), method: :delete, class: 'btn btn-danger', data: { confirm: I18n.t('general.confirm', event: @attendance.event_name ) } %></p>
+    <% else %>
+      <% if current_user.organizer_of?(@event) %>
+        <p><%= link_to I18n.t('attendances.actions.recover'), change_status_event_attendance_path(@event, @attendance, :pending), method: :patch, class: 'btn btn-success', data: { confirm: I18n.t('general.confirm', event: @attendance.event_name ) } %></p>
+      <% end %>
+    <% end %>
   </div>
   <div class="col-xl-8">
     <p><h3><%= @attendance.full_name %></h3></p>
     <p><h6><%= @attendance.email %></h6></p>
     <p><h6><%= @attendance.organization %></h6></p>
     <p><%= "Inscrito em: #{l(@attendance.created_at, format: :short)}" %></p>
-    <p><i><%= t("activerecord.attributes.attendance.enums.status.#{@attendance.status}") %></i></p>
+    <p><i><%= I18n.t("activerecord.attributes.attendance.enums.status.#{@attendance.status}") %></i></p>
     <p><b><%= number_to_currency(@attendance.registration_value) %></b></p>
-    <%= link_to I18n.t('general.edit'), edit_event_attendance_path(@event, @attendance) %>
-    <% if @attendance.cancellable? %>
-      <p><%= link_to t('general.cancel'),event_attendance_path(@event, @attendance), method: :delete, class: 'btn btn-danger', data: { confirm: t('general.confirm', event: @attendance.event_name ) } %></p>
-    <% else %>
-      <% if current_user.organizer_of?(@event) %>
-        <p><%= link_to t('attendances.actions.recover'), change_status_event_attendance_path(@event, @attendance, :pending), method: :patch, class: 'btn btn-success', data: { confirm: t('general.confirm', event: @attendance.event_name ) } %></p>
-      <% end %>
-    <% end %>
-
     <% if @attendance.grouped? && @attendance.pending? %>
       <%= render 'attendances/group_registration', { attendance: @attendance } %>
     <% else %>

@@ -156,7 +156,7 @@ pt:
       event:
         name: Nome
         attendance_limit: Capacidade
-        main_email_contact: Contato
+        main_email_contact: E-mail de Contato
         days_to_charge: Dias para cobrar pendentes
         start_date: Inicia em
         end_date: Termina em

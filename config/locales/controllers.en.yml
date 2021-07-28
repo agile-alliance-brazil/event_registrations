@@ -248,7 +248,7 @@ en:
   slack_configurations:
     notifications:
       notify_new_registration:
-        attendance: "> *%{attendance_name}* registered to *%{event_name}*"
+        attendance: "> New registration to *%{event_name}* at %{registration_date}"
         group: "In the group *%{group_name}*"
         registration_value: "Value: *%{registration_value}*"
         attendances_summary: "Attendances: (%{pending}) Pending / (%{accepted}) Accepted / *(%{paid}) Paid* / *(%{confirmed}) Confirmed*"

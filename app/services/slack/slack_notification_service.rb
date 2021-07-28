@@ -11,7 +11,6 @@ module Slack
 
       attendance_message = I18n.t('slack_configurations.notifications.notify_new_registration.attendance',
                                   event_name: attendance.event_name,
-                                  attendance_name: attendance.full_name,
                                   registration_date: I18n.l(attendance.registration_date, format: :short))
 
       group_message = ''

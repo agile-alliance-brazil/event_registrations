@@ -15,7 +15,7 @@ module Slack
 
       group_message = ''
 
-      I18n.t('slack_configurations.notifications.notify_new_registration.group', group_name: attendance.group_name) if attendance.registration_group.present?
+      group_message = I18n.t('slack_configurations.notifications.notify_new_registration.group', group_name: attendance.group_name) if attendance.registration_group.present?
 
       value_message = I18n.t('slack_configurations.notifications.notify_new_registration.registration_value',
                              registration_value: number_to_currency(attendance.registration_value))

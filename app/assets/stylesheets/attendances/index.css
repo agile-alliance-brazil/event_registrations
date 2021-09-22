@@ -1,0 +1,9 @@
+.attendance-summary {
+    font-size: small;
+    margin-bottom: 20px;
+}
+
+.search-button {
+    position: absolute;
+    bottom: 0;
+}

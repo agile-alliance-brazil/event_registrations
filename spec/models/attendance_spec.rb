@@ -348,14 +348,16 @@ RSpec.describe Attendance, type: :model do
   end
 
   context 'delegations' do
-    describe '#token' do
-      let(:group) { Fabricate :registration_group }
-      let(:attendance) { Fabricate :attendance, registration_group: group }
+    let(:user) { Fabricate :user, disability: :hearing_impairment }
+    let(:group) { Fabricate :registration_group }
+    let(:attendance) { Fabricate :attendance, registration_group: group, user: user }
 
-      it { expect(attendance.token).to eq group.token }
-      it { expect(attendance.group_name).to eq group.name }
-      it { expect(attendance.event_name).to eq attendance.event.name }
-    end
+    it { expect(attendance.token).to eq group.token }
+    it { expect(attendance.group_name).to eq group.name }
+    it { expect(attendance.event_name).to eq attendance.event.name }
+    it { expect(attendance.disability).to eq 'hearing_impairment' }
+    it { expect(attendance.no_disability?).to eq user.no_disability? }
+    it { expect(attendance.disability_not_informed?).to eq user.disability_not_informed? }
   end
 
   describe '#price_band?' do

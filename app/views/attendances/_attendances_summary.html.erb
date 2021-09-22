@@ -1,54 +1,61 @@
-<div class="row">
-  <div class="col-xl-12 col-sm-4 col-sm-offset-1">
-    <p class="attendance-information-header">
-      <%= "#{t('attendances.summary.registration_total')}: #{@attendances_list.count} inscrições | " %>
-      <%= "#{t('registration_group.paid_in_advance', count: @reserved_total)}: #{@reserved_total} inscrições | " %>
-      <%= "#{t('event.average_ticket')}: #{number_to_currency(@event.average_ticket)} | " %>
-    </p>
+<div class="attendance-summary">
+  <div class="row">
+    <div class="col-xl-12 col-sm-4 col-sm-offset-1">
+      <p class="attendance-information-header">
+        <%= "#{t('attendances.summary.registration_total')}: #{@attendances_list.count} inscrições | " %>
+        <%= "#{t('registration_group.paid_in_advance', count: @reserved_total)}: #{@reserved_total} inscrições | " %>
+        <%= "#{t('event.average_ticket')}: #{number_to_currency(@event.average_ticket)} | " %>
+      </p>
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-xl-3 col-sm-1 col-sm-offset-1">
-    <%= check_box_tag 'waiting', 1, (params['waiting'] || true), class: 'search-attendance' %>
-    <%= label_tag 'waiting', "#{t('activerecord.attributes.attendance.enums.status.waiting', count: @waiting_total)} (#{@waiting_total})" %>
+  <div class="row">
+    <div class="col-xl-3 col-sm-1 col-sm-offset-1">
+      <%= check_box_tag 'waiting', 1, (params['waiting'] || true), class: 'search-attendance' %>
+      <%= label_tag 'waiting', "#{t('activerecord.attributes.attendance.enums.status.waiting', count: @waiting_total)} (#{@waiting_total})" %>
+    </div>
+    <div class="col-xl-3 col-sm-1 col-sm-offset-1">
+      <%= check_box_tag 'pending', 2, (params['pending'] || true), class: 'search-attendance' %>
+      <%= label_tag 'pending', "#{t('activerecord.attributes.attendance.enums.status.pending', count: @pending_total)} (#{@pending_total})" %>
+    </div>
+    <div class="col-xl-3 col-sm-1 col-sm-offset-1">
+      <%= check_box_tag 'accepted', 3, (params['accepted'] || true), class: 'search-attendance' %>
+      <%= label_tag 'accepted', "#{t('activerecord.attributes.attendance.enums.status.accepted', count: @accepted_total)} (#{@accepted_total})" %>
+    </div>
+    <div class="col-xl-3 col-sm-1 col-sm-offset-1">
+      <%= check_box_tag 'paid', 4, (params['paid'] || true), class: 'search-attendance' %>
+      <%= label_tag 'paid', "#{t('activerecord.attributes.attendance.enums.status.paid', count: @paid_total)} (#{@paid_total})" %>
+    </div>
   </div>
-  <div class="col-xl-3 col-sm-1 col-sm-offset-1">
-    <%= check_box_tag 'pending', 2, (params['pending'] || true), class: 'search-attendance' %>
-    <%= label_tag 'pending', "#{t('activerecord.attributes.attendance.enums.status.pending', count: @pending_total)} (#{@pending_total})" %>
-  </div>
-  <div class="col-xl-3 col-sm-1 col-sm-offset-1">
-    <%= check_box_tag 'accepted', 3, (params['accepted'] || true), class: 'search-attendance' %>
-    <%= label_tag 'accepted', "#{t('activerecord.attributes.attendance.enums.status.accepted', count: @accepted_total)} (#{@accepted_total})" %>
-  </div>
-  <div class="col-xl-3 col-sm-1 col-sm-offset-1">
-    <%= check_box_tag 'paid', 4, (params['paid'] || true), class: 'search-attendance' %>
-    <%= label_tag 'paid', "#{t('activerecord.attributes.attendance.enums.status.paid', count: @paid_total)} (#{@paid_total})" %>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-xl-3 col-sm-1 col-sm-offset-1">
-    <%= check_box_tag 'confirmed', 5, (params['confirmed'] || true), class: 'search-attendance' %>
-    <%= label_tag 'confirmed', "#{t('activerecord.attributes.attendance.enums.status.confirmed', count: @confirmed_total)} (#{@confirmed_total})" %>
+  <div class="row">
+    <div class="col-xl-3 col-sm-1 col-sm-offset-1">
+      <%= check_box_tag 'confirmed', 5, (params['confirmed'] || true), class: 'search-attendance' %>
+      <%= label_tag 'confirmed', "#{t('activerecord.attributes.attendance.enums.status.confirmed', count: @confirmed_total)} (#{@confirmed_total})" %>
+    </div>
+    <div class="col-xl-3 col-sm-1 col-sm-offset-1">
+      <%= check_box_tag 'showed_in', 6, (params['showed_in'] || true), class: 'search-attendance' %>
+      <%= label_tag 'showed_in', "#{t('activerecord.attributes.attendance.enums.status.showed_in', count: @accredited_total)} (#{@accredited_total})" %>
+    </div>
+    <div class="col-xl-3 col-sm-1 col-sm-offset-1">
+      <%= check_box_tag 'cancelled', 7, (params['cancelled'] || false), class: 'search-attendance' %>
+      <%= label_tag 'cancelled', "#{t('activerecord.attributes.attendance.enums.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})" %>
+    </div>
   </div>
-  <div class="col-xl-3 col-sm-1 col-sm-offset-1">
-    <%= check_box_tag 'showed_in', 6, (params['showed_in'] || true), class: 'search-attendance' %>
-    <%= label_tag 'showed_in', "#{t('activerecord.attributes.attendance.enums.status.showed_in', count: @accredited_total)} (#{@accredited_total})" %>
-  </div>
-  <div class="col-xl-3 col-sm-1 col-sm-offset-1">
-    <%= check_box_tag 'cancelled', 7, (params['cancelled'] || false), class: 'search-attendance' %>
-    <%= label_tag 'cancelled', "#{t('activerecord.attributes.attendance.enums.status.cancelled', count: @cancelled_total)} (#{@cancelled_total})" %>
-  </div>
-</div>
 
-<div class="row">
-  <div class='col-xl-6 form-group'>
-    <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: t('attendances.index.search') %>
-  </div>
-  <div class="input-group-btn">
-    <%= link_to '#', class: 'btn btn-light search-attendance' do %>
-      <i class="fa fa-search"></i>
-    <% end %>
+  <div class="row">
+    <div class='col-xl-6 form-group'>
+      <%= label_tag I18n.t('attendances.index.search.free_search') %>
+      <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: I18n.t('attendances.index.search.placeholder') %>
+    </div>
+    <div class='col-xl-5 form-group'>
+      <%= label_tag I18n.t('attendances.index.search.disability') %>
+      <%= select_tag :user_disability, options_for_select(disability_options(params[:user_disability])), { include_blank: I18n.t('general.include_blank'), class: 'form-control' } %>
+    </div>
+    <div class="col-xl-1 form-group">
+      <%= link_to '#', class: 'btn btn-light search-attendance search-button' do %>
+        <i class="fa fa-search"></i>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -16,8 +16,6 @@ describe RegistrationPeriod, type: :model do
   describe '.for' do
     before { travel_to Time.zone.local(2019, 9, 3, 16, 0, 0) }
 
-    after { travel_back }
-
     let(:event) { Fabricate :event }
     let!(:first_period) { Fabricate :registration_period, start_at: 2.days.ago, end_at: 1.day.from_now.end_of_day, event: event }
     let!(:second_period) { Fabricate :registration_period, start_at: 2.days.from_now, end_at: 4.days.from_now.end_of_day, event: event }

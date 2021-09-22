@@ -4,7 +4,7 @@ module UserHelper
     options_for_select(User.genders.map { |gender_value, _key| [I18n.t("activerecord.attributes.user.enums.gender.#{gender_value}"), gender_value] }, selected_value)
   end
 
-  def disability_options(selected_value = :disability_not_informed)
+  def disability_options(selected_value)
     options_for_select(User.disabilities.map { |disability_values, _key| [I18n.t("activerecord.attributes.user.enums.disability.#{disability_values}"), disability_values] }, selected_value)
   end
 

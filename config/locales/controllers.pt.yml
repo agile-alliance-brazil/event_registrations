@@ -32,7 +32,10 @@ pt:
       registration_total: "Total"
     index:
       title: "Participações"
-      search: "Buscar por nome, empresa, email ou ID"
+      search:
+        placeholder: "Buscar por nome, empresa, email ou ID"
+        disability: "Deficiência"
+        free_search: "Buscar"
       reports:
         active_by_state: "Ativos por estado"
         active_by_city: "Ativos por cidade"

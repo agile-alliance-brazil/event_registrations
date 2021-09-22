@@ -33,7 +33,10 @@ en:
       registration_total: "Total"
     index:
       title: "Attendances"
-      search: "Search by name, company, email or ID"
+      search:
+        placeholder: "Search by name, company, email or ID"
+        disability: "Disability"
+        free_search: "Search"
       reports:
         active_by_state: "Active by state"
         active_by_city: "Active by city"

@@ -1,0 +1,5 @@
+.table-overflow-screen {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}

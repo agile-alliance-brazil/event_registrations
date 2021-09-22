@@ -5,16 +5,16 @@ RSpec.describe AttendanceRepository, type: :repository do
 
   describe '#search_for_list' do
     context 'with no attendances' do
-      it { expect(described_class.instance.search_for_list(event, 'bla', [])).to eq [] }
+      it { expect(described_class.instance.search_for_list(event, 'bla', nil, [])).to eq [] }
     end
 
     context 'with attendances' do
       let(:all_statuses) { %w[pending accepted paid confirmed cancelled] }
 
       it 'searches according to the parameters' do
-        user = Fabricate :user, first_name: 'bla', last_name: 'xpto', email: 'foo@xpto.com'
-        other_user = Fabricate :user, first_name: 'Foo', last_name: 'Dijkstra', email: 'xpto@node.path'
-        out_user = Fabricate :user, first_name: 'Edsger', last_name: 'Dijkstra', email: 'other@node.path'
+        user = Fabricate :user, first_name: 'bla', last_name: 'xpto', email: 'foo@xpto.com', disability: :disability_not_informed
+        other_user = Fabricate :user, first_name: 'Foo', last_name: 'Dijkstra', email: 'xpto@node.path', disability: :no_disability
+        out_user = Fabricate :user, first_name: 'Edsger', last_name: 'Dijkstra', email: 'other@node.path', disability: :hearing_impairment
 
         Fabricate(:attendance, user: user, organization: 'foo')
         attendance = Fabricate(:attendance, user: user, event: event, status: :pending, organization: 'foo')
@@ -23,8 +23,9 @@ RSpec.describe AttendanceRepository, type: :repository do
         Fabricate(:attendance, user: out_user, event: event, organization: 'Turing')
         Fabricate(:attendance, user: out_user, organization: 'Turing')
 
-        expect(described_class.instance.search_for_list(event, 'xPTo', all_statuses)).to match_array [attendance, other_attendance]
-        expect(described_class.instance.search_for_list(event, 'bLa', all_statuses)).to eq [attendance]
+        expect(described_class.instance.search_for_list(event, 'xPTo', nil, all_statuses)).to match_array [attendance, other_attendance]
+        expect(described_class.instance.search_for_list(event, 'bLa', nil, all_statuses)).to eq [attendance]
+        expect(described_class.instance.search_for_list(event, 'xPTo', 0, all_statuses)).to match_array [other_attendance]
       end
     end
   end
@@ -57,8 +58,6 @@ RSpec.describe AttendanceRepository, type: :repository do
 
     context 'with a pending status and belonging to a group' do
       before { travel_to Time.zone.local(2018, 5, 16, 10, 0, 0) }
-
-      after { travel_back }
 
       let!(:pending) { Fabricate(:attendance, event: event, status: :pending, payment_type: :gateway, last_status_change_date: 7.days.ago) }
       let!(:group) { Fabricate :registration_group, automatic_approval: false }

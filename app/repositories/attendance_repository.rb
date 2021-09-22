@@ -3,9 +3,12 @@
 class AttendanceRepository
   include Singleton
 
-  def search_for_list(event, text, statuses)
+  def search_for_list(event, text, user_disability, statuses)
     statuses_keys = statuses.map { |status| Attendance.statuses[status] }
-    event.attendances.joins(:user).where(status: statuses_keys).where('((users.first_name ILIKE :search_param OR users.last_name ILIKE :search_param OR organization ILIKE :search_param OR users.email ILIKE :search_param))', search_param: "%#{text&.downcase}%").order(updated_at: :desc)
+    attendances = event.attendances.joins(:user).where(status: statuses_keys).where('((users.first_name ILIKE :search_param OR users.last_name ILIKE :search_param OR organization ILIKE :search_param OR users.email ILIKE :search_param))', search_param: "%#{text&.downcase}%").order(updated_at: :desc)
+    return attendances if user_disability.blank?
+
+    attendances.where(users: { disability: user_disability })
   end
 
   def for_cancelation_warning(event)

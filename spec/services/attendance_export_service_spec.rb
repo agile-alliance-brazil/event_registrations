@@ -8,7 +8,7 @@ describe AttendanceExportService, type: :service do
       let!(:attendance) { Fabricate(:attendance, event: event, status: :showed_in, registration_group: group) }
 
       let(:expected) do
-        title = "id,status,registration_date,first_name,last_name,organization,email,payment_type,group_name,city,state,value,experience_in_agility,education_level,job_role\n"
+        title = "id,status,registration_date,first_name,last_name,organization,email,payment_type,group_name,city,state,value,experience_in_agility,education_level,job_role,disability\n"
         body =
           "#{attendance.id},"\
           "#{I18n.t("activerecord.attributes.attendance.enums.status.#{attendance.status}", count: 1)},"\
@@ -25,7 +25,8 @@ describe AttendanceExportService, type: :service do
           "#{attendance.experience_in_agility},"\
           "#{attendance.education_level},"\
           "#{attendance.organization_size},"\
-          "#{attendance.job_role}\n"
+          "#{attendance.job_role},"\
+          "#{I18n.t("activerecord.attributes.user.enums.disability.#{attendance.disability}")}\n"
         title + body
       end
 

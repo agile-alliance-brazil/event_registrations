@@ -530,8 +530,6 @@ RSpec.describe AttendancesController, type: :controller do
     describe 'GET #index' do
       before { travel_to Time.zone.local(2018, 2, 20, 10, 0, 0) }
 
-      after { travel_back }
-
       context 'passing no search parameter' do
         context 'and no attendances' do
           let!(:event) { Fabricate(:event, organizers: [user]) }

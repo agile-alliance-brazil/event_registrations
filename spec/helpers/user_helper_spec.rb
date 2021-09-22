@@ -6,7 +6,8 @@ RSpec.describe UserHelper, type: :helper do
   end
 
   describe '#disability_options' do
-    it { expect(disability_options).to eq(options_for_select(User.disabilities.map { |disability_values, _key| [I18n.t("activerecord.attributes.user.enums.disability.#{disability_values}"), disability_values] }, :disability_not_informed)) }
+    it { expect(disability_options(nil)).to eq(options_for_select(User.disabilities.map { |disability_values, _key| [I18n.t("activerecord.attributes.user.enums.disability.#{disability_values}"), disability_values] }, nil)) }
+    it { expect(disability_options(:disability_not_informed)).to eq(options_for_select(User.disabilities.map { |disability_values, _key| [I18n.t("activerecord.attributes.user.enums.disability.#{disability_values}"), disability_values] }, :disability_not_informed)) }
   end
 
   describe '#ethnicity_options' do

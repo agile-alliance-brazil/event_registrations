@@ -98,8 +98,12 @@ class Attendance < ApplicationRecord
   delegate :token, to: :registration_group, allow_nil: true
   delegate :name, to: :registration_group, prefix: :group, allow_nil: true
   delegate :name, to: :event, prefix: :event, allow_nil: true
+  delegate :disability, to: :user
 
   before_save :set_last_status_change
+
+  delegate :no_disability?, to: :user
+  delegate :disability_not_informed?, to: :user
 
   def discount
     amount = 1

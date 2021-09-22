@@ -90,7 +90,7 @@ class AttendancesController < AuthenticatedController
   end
 
   def search
-    @attendances_list = AttendanceRepository.instance.search_for_list(@event, params[:search], statuses_params).order(updated_at: :desc)
+    @attendances_list = AttendanceRepository.instance.search_for_list(@event, params[:search], params[:user_disability], statuses_params).order(updated_at: :desc)
     @attendances_list_csv = AttendanceExportService.to_csv(@attendances_list)
 
     respond_to { |format| format.js { render 'attendances/search' } }

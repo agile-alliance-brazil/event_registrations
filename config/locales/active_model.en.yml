@@ -132,6 +132,7 @@ en:
             company_dissemination: "Company dissemination"
             internet_search: "Search on the Internet"
         user_for_attendance: "Attendance for User"
+        full_name: "Full Name"
       user:
         role: "Role in System"
         email: "Email"

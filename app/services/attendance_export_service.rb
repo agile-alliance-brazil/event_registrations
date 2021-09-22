@@ -3,7 +3,7 @@
 class AttendanceExportService
   def self.to_csv(attendances_list)
     CSV.generate do |csv|
-      csv << %i[id status registration_date first_name last_name organization email payment_type group_name city state value experience_in_agility education_level job_role]
+      csv << %i[id status registration_date first_name last_name organization email payment_type group_name city state value experience_in_agility education_level job_role disability]
       attendances_list.each do |attendance|
         csv << [attendance.id,
                 I18n.t("activerecord.attributes.attendance.enums.status.#{attendance.status}", count: 1),
@@ -20,7 +20,8 @@ class AttendanceExportService
                 attendance.experience_in_agility,
                 attendance.education_level,
                 attendance.organization_size,
-                attendance.job_role]
+                attendance.job_role,
+                I18n.t("activerecord.attributes.user.enums.disability.#{attendance.disability}")]
       end
     end
   end

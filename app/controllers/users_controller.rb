@@ -15,8 +15,6 @@ class UsersController < AuthenticatedController
   def edit; end
 
   def update
-    I18n.locale = locale if locale.present?
-
     if @user.update(update_user_params)
       flash[:notice] = I18n.t('users.update.success')
       return redirect_to user_path(@user)

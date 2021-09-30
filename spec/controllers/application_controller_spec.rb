@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe ApplicationController, type: :controller do
-  describe '#switch_locale' do
+  describe '#set_locale' do
     controller do
       def index
         head :ok, params: { content_type: 'text/html' }

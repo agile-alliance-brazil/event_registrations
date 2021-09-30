@@ -99,6 +99,12 @@ class User < ApplicationRecord
     end
   end
 
+  def user_locale
+    return 'pt' if country == 'BR' || country == 'PT'
+
+    'en'
+  end
+
   def registrations_for_event(event)
     Attendance.where(id: attendances.select { |attendance| attendance.event_id == event.id }.map(&:id))
   end

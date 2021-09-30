@@ -8,7 +8,7 @@ class RegistrationNotifier
       AttendanceRepository.instance.for_cancelation(event).each do |attendance|
         Rails.logger.info("[Attendance] #{attendance.to_param}")
         attendance.cancelled!
-        EmailNotificationsMailer.cancelling_registration(attendance).deliver
+        I18n.with_locale(attendance.user_locale) { EmailNotificationsMailer.cancelling_registration(attendance).deliver }
       end
     end
   end
@@ -22,7 +22,7 @@ class RegistrationNotifier
         Rails.logger.info("[Warning attendance] #{attendance.to_param}")
         Rails.logger.info('[Sending warning]')
         attendance.advise!
-        EmailNotificationsMailer.cancelling_registration_warning(attendance).deliver
+        I18n.with_locale(attendance.user_locale) { EmailNotificationsMailer.cancelling_registration_warning(attendance).deliver }
       end
     end
   end

@@ -136,21 +136,25 @@ RSpec.describe EmailNotificationsMailer, type: :mailer do
 
   describe '#welcome_attendance' do
     let(:event) { Fabricate(:event, start_date: 1.day.from_now) }
-    let(:out_event) { Fabricate(:event, start_date: 2.days.from_now) }
     let(:attendance) { Fabricate(:attendance, event: event) }
-    let(:out_attendance) { Fabricate(:attendance, event: out_event) }
 
-    context 'having organizers in the event' do
-      let(:organizer) { Fabricate(:user, role: :organizer) }
-      let(:other_organizer) { Fabricate :user, role: :organizer }
-      let!(:event) { Fabricate :event, start_date: 1.day.from_now, organizers: [organizer, other_organizer] }
+    it 'sends to attendee and cc the events organizer' do
+      mail = described_class.welcome_attendance(attendance).deliver
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      expect(mail.to).to eq [attendance.email]
+      expect(mail.cc).to eq [event.main_email_contact]
+    end
+  end
 
-      it 'sends to attendee and cc the events organizer' do
-        mail = described_class.welcome_attendance(attendance).deliver
-        expect(ActionMailer::Base.deliveries.size).to eq 1
-        expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [event.main_email_contact]
-      end
+  describe '#welcome_attendance_remote_event' do
+    let(:event) { Fabricate(:event, start_date: 1.day.from_now) }
+    let(:attendance) { Fabricate(:attendance, event: event) }
+
+    it 'sends to attendee and cc the events organizer' do
+      mail = described_class.welcome_attendance_remote_event(attendance).deliver
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      expect(mail.to).to eq [attendance.email]
+      expect(mail.cc).to eq [event.main_email_contact]
     end
   end
 end

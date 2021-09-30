@@ -43,3 +43,11 @@ pt:
     cancel_warning_registrations_first_message: "Existe uma pendência no pagamento da sua inscrição para %{event_name}. Caso não seja regularizada até %{due_date} as %{due_time}, a sua inscrição será automaticamente cancelada."
     cancel_warning_registrations_full_message: "O evento está cheio e agora temos uma fila de espera. Caso você não complete a sua inscrição a tempo e o nosso sistema automático a cancele, você precisará submeter uma nova inscrição, que o colocará nesta fila."
     cancel_warning_registrations_second_message: "Caso a pendência já tenha sido regularizada, favor entrar em contato com a organização"
+    welcome_attendance_remote_event:
+      subject: "Nos vemos nas nuvens com a %{event_nickname} na terça-feira!"
+      sentence_one: "O dia do nosso encontro nas nuvens para a %{event_name} está chegando. Já organizou a sua agenda?"
+      sentence_two: "Esperamos você no dia <b>%{event_date}</b>, para um reencontro cheio de conteúdo e oportunidades de troca de experiências, do jeito que a nossa comunidade gosta. A programação completa está disponível em %{event_schedule_link}."
+      sentence_three: "Estamos preparando um evento com vários espaços de interação que só quem já esteve nos corredores da %{event_nickname} sabe: vai ter tanto aprendizado quanto os que rolam nas salas de palestra."
+      sentence_four: "Mas tudo o que estamos preparando só fará sentido se você estiver conosco participando ativamente durante o evento. Podemos contar com você para sentirmos, mesmo que virtualmente, aquela energia boa dos corredores da %{event_name}?"
+      sentence_five: "Para que você possa ir se preparando, que tal dar uma olhada no manual para participantes disponível no link a seguir? %{event_remote_manual_link}"
+      sentence_six: "<b>ATENÇÃO:</b> o seu acesso ao evento será por um link exclusivo que a plataforma %{remote_platform_name} enviará no dia <b>%{event_date}</b> bem cedinho. Portanto, atente-se ao seu e-mail e, de preferência, tenha o endereço <b>%{event_remote_platform_mail}</b> cadastrado em seus contatos para evitar que o link de acesso caia em sua caixa de spam."

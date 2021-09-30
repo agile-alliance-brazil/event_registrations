@@ -27,6 +27,11 @@ class EmailNotificationsPreview < ActionMailer::Preview
     EmailNotificationsMailer.with(attendance).registration_confirmed(attendance)
   end
 
+  def welcome_attendance_remote_event
+    attendance = Attendance.last
+    EmailNotificationsMailer.with(attendance).welcome_attendance_remote_event(attendance)
+  end
+
   def welcome_attendance
     attendance = Attendance.last
     EmailNotificationsMailer.with(attendance).welcome_attendance(attendance)

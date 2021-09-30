@@ -74,7 +74,7 @@ class EventsController < AuthenticatedController
   end
 
   def event_params
-    params.require(:event).permit(:event_image, :name, :attendance_limit, :days_to_charge, :start_date, :end_date, :city, :state, :country, :main_email_contact, :full_price, :link)
+    params.require(:event).permit(:event_image, :name, :attendance_limit, :days_to_charge, :start_date, :end_date, :city, :state, :country, :main_email_contact, :full_price, :link, :event_nickname, :event_remote, :event_remote_platform_mail, :event_remote_platform_name, :event_remote_manual_link, :event_schedule_link)
   end
 
   def assign_event

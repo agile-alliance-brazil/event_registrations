@@ -285,4 +285,30 @@ RSpec.describe User, type: :model do
       expect(user.valid_attendance_for_event(seventh_event)).to be_nil
     end
   end
+
+  describe '#user_locale' do
+    context 'with brazilian user' do
+      let(:user) { Fabricate :user, country: 'BR' }
+
+      it { expect(user.user_locale).to eq 'pt' }
+    end
+
+    context 'with portuguese user' do
+      let(:user) { Fabricate :user, country: 'PT' }
+
+      it { expect(user.user_locale).to eq 'pt' }
+    end
+
+    context 'with english speaker' do
+      let(:user) { Fabricate :user, country: 'EN' }
+
+      it { expect(user.user_locale).to eq 'en' }
+    end
+
+    context 'with french speaker' do
+      let(:user) { Fabricate :user, country: 'FR' }
+
+      it { expect(user.user_locale).to eq 'en' }
+    end
+  end
 end

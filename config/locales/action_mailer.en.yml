@@ -45,3 +45,11 @@ en:
     cancel_warning_registrations_second_message: "If you already settled your registration payment, please contact us."
     new:
       load_info_by_email_hint: "Load the info you used in the last registration using the email beside."
+    welcome_attendance_remote_event:
+      subject: "See you in the clouds with %{event_nickname} on Tuesday!"
+      sentence_one: "The day of our meeting in the clouds for %{event_name} is coming. Have you organized your schedule?"
+      sentence_two: "We look forward to seeing you at <b>%{event_date}</b> for a reunion full of content and opportunities to exchange experiences, just the way our community likes it. The full schedule is available at %{event_schedule_link}"
+      sentence_three: "We are preparing an event with several spaces for interaction that only those who have been in the halls of %{event_nickname} know: there will be as much learning as the ones that take place in the lecture halls."
+      sentence_four: "But everything we are preparing will only make sense if you are actively participating with us during the event. Can we count on you to feel, even virtually, that good energy of the %{event_name} halls?"
+      sentence_five: "So that you can get ready, how about taking a look at the manual for participants available at the following link? %{event_remote_manual_link}"
+      sentence_six: "<b>ATTENTION:</b> your access to the event will be through an exclusive link that the %{remote_platform_name} platform will send on <b>%{event_date}</b> very early. So, pay attention to your e-mail and, preferably, have the address <b>%{event_remote_platform_mail}</b> registered in your contacts to prevent the access link from falling into your spam box."

@@ -170,6 +170,12 @@ pt:
         state: Estado
         city: Cidade
         registered_by_user: Inscrito por
+        event_remote_manual_link: Manual do Evento Remoto
+        event_schedule_link: Programação
+        event_remote_platform_name: Plataforma para Evento Remoto
+        event_remote_platform_mail: Email da Plataforma
+        event_remote: Evento Remoto?
+        event_nickname: Apelido do Evento
       registration_group:
         name: Nome
         discount: Desconto (%)

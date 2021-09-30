@@ -238,7 +238,7 @@ RSpec.describe EventsController, type: :controller do
         it 'creates the event and redirects to index of events' do
           start_date = Time.zone.now
           end_date = 1.week.from_now
-          post :create, params: { event: { event_image: 'bla', name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, city: 'foo', state: 'bar', country: 'BR' } }
+          post :create, params: { event: { event_image: 'bla', name: 'foo', attendance_limit: 10, days_to_charge: 3, start_date: start_date, end_date: end_date, main_email_contact: 'contact@foo.com.br', full_price: 100, city: 'foo', state: 'bar', country: 'BR', event_nickname: 'xpto', event_remote: true, event_remote_platform_mail: 'foo@bar.com', event_remote_platform_name: 'barfoo', event_schedule_link: 'bar.com', event_remote_manual_link: 'xpto.com' } }
           expect(Event.count).to eq 1
           event_persisted = Event.last
           expect(event_persisted.event_image).not_to be_nil
@@ -248,6 +248,12 @@ RSpec.describe EventsController, type: :controller do
           expect(event_persisted.start_date.utc.to_i).to eq start_date.to_i
           expect(event_persisted.end_date.utc.to_i).to eq end_date.to_i
           expect(event_persisted.full_price).to eq 100
+          expect(event_persisted.event_nickname).to eq 'xpto'
+          expect(event_persisted.event_remote).to eq true
+          expect(event_persisted.event_remote_platform_mail).to eq 'foo@bar.com'
+          expect(event_persisted.event_remote_platform_name).to eq 'barfoo'
+          expect(event_persisted.event_schedule_link).to eq 'bar.com'
+          expect(event_persisted.event_remote_manual_link).to eq 'xpto.com'
 
           expect(response).to redirect_to event_path(event_persisted)
         end

@@ -104,6 +104,7 @@ class Attendance < ApplicationRecord
 
   delegate :no_disability?, to: :user
   delegate :disability_not_informed?, to: :user
+  delegate :user_locale, to: :user
 
   def discount
     amount = 1

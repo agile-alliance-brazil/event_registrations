@@ -4,21 +4,27 @@
 #
 # Table name: events
 #
-#  attendance_limit   :bigint(8)
-#  city               :string(255)      not null
-#  country            :string(255)      not null
-#  created_at         :datetime         not null
-#  days_to_charge     :bigint(8)        default(7)
-#  end_date           :datetime
-#  event_image        :string(255)
-#  full_price         :decimal(10, )
-#  id                 :bigint(8)        not null, primary key
-#  link               :string(255)
-#  main_email_contact :string(255)      not null
-#  name               :string(255)
-#  start_date         :datetime
-#  state              :string(255)      not null
-#  updated_at         :datetime         not null
+#  attendance_limit           :bigint(8)
+#  city                       :string(255)      not null
+#  country                    :string(255)      not null
+#  created_at                 :datetime         not null
+#  days_to_charge             :bigint(8)        default(7)
+#  end_date                   :datetime
+#  event_image                :string(255)
+#  event_nickname             :string
+#  event_remote               :boolean          default(FALSE)
+#  event_remote_manual_link   :string
+#  event_remote_platform_mail :string
+#  event_remote_platform_name :string
+#  event_schedule_link        :string
+#  full_price                 :decimal(10, )
+#  id                         :bigint(8)        not null, primary key
+#  link                       :string(255)
+#  main_email_contact         :string(255)      not null
+#  name                       :string(255)
+#  start_date                 :datetime
+#  state                      :string(255)      not null
+#  updated_at                 :datetime         not null
 #
 
 class Event < ApplicationRecord
@@ -38,7 +44,7 @@ class Event < ApplicationRecord
   scope :active_for, ->(date) { where('end_date > ?', date) }
   scope :not_started, -> { where('start_date > ?', Time.zone.today) }
   scope :ended, -> { where('end_date < ?', Time.zone.today) }
-  scope :tomorrow_events, -> { where('date(start_date) = :limit_date', limit_date: Time.zone.tomorrow.to_date) }
+  scope :events_to_welcome_attendances, -> { where('date(start_date) = :limit_date', limit_date: 4.days.from_now.to_date) }
 
   def full?
     places_sold = reserved_count + attendances.active.size

@@ -33,13 +33,17 @@ class EmailNotificationsMailer < ApplicationMailer
     mail_attendance(attendance, sent_at, 'email.welcome_attendance.subject')
   end
 
+  def welcome_attendance_remote_event(attendance, sent_at = Time.zone.now)
+    mail_attendance(attendance, sent_at, 'attendances.welcome_attendance_remote_event.subject')
+  end
+
   private
 
   def mail_attendance(attendance, sent_at, title)
     @attendance = attendance
     @event = attendance.event
 
-    subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id).to_s
+    subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id, event_nickname: attendance.event.event_nickname).to_s
     Rails.logger.info("[EmailNotificationsMailer:mail_attendance] { mail informations: { subject: #{subject} } }")
 
     from_email = @event.main_email_contact || 'inscricoes@agilebrazil.com'

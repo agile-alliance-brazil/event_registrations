@@ -10,7 +10,7 @@ class QueueService
       attendance = event_queue.shift
       attendance.pending!
       attendance.update(queue_time: ((Time.zone.now - attendance.created_at) / 1.hour).round)
-      EmailNotificationsMailer.registration_dequeued(attendance).deliver if attendance.reload.pending?
+      I18n.with_locale(attendance.user_locale) { EmailNotificationsMailer.registration_dequeued(attendance).deliver if attendance.reload.pending? }
     end
   end
 end

@@ -235,6 +235,15 @@ RSpec.describe Event, type: :model do
         it { expect(described_class.ended).to eq [event] }
       end
     end
+
+    describe '.events_to_welcome_attendances' do
+      let!(:event) { Fabricate(:event, start_date: 3.months.ago, end_date: 2.months.from_now) }
+      let!(:other_event) { Fabricate(:event, start_date: 2.days.ago, end_date: Time.zone.today) }
+      let!(:out) { Fabricate(:event, start_date: 2.days.ago, end_date: Time.zone.yesterday) }
+      let!(:other_out) { Fabricate(:event, start_date: 5.days.from_now, end_date: 6.days.from_now) }
+
+      it { expect(described_class.events_to_welcome_attendances).to match_array [event, other_event] }
+    end
   end
 
   describe '#period_for' do

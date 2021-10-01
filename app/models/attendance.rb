@@ -78,6 +78,7 @@ class Attendance < ApplicationRecord
   scope :waiting_approval, -> { where('status = 1 AND registration_group_id IS NOT NULL') }
   scope :non_free, -> { where('registration_value > 0') }
   scope :with_time_in_queue, -> { where('queue_time > 0') }
+  scope :not_welcomed, -> { where(welcome_email_sent: false) }
 
   belongs_to :event
   belongs_to :user

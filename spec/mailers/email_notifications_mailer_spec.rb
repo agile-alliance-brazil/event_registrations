@@ -45,11 +45,11 @@ RSpec.describe EmailNotificationsMailer, type: :mailer do
     let(:attendance) { Fabricate(:attendance, event: event, registration_date: Time.zone.local(2013, 5, 1, 12, 0, 0)) }
 
     context 'when the event starts before the end date' do
-      it 'sends the confirmation' do
+      it 'sends the confirmation email' do
         mail = described_class.registration_confirmed(attendance).deliver
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(mail.to).to eq [attendance.email]
-        expect(mail.subject).to eq("Inscrição para #{event.name} confirmada")
+        expect(mail.subject).to eq(I18n.t('email.registration_confirmed.subject', event_name: attendance.event_name, attendance_id: attendance.id, event_nickname: attendance.event.event_nickname).to_s)
       end
     end
 
@@ -75,7 +75,8 @@ RSpec.describe EmailNotificationsMailer, type: :mailer do
       mail = described_class.cancelling_registration(attendance).deliver
       expect(ActionMailer::Base.deliveries.size).to eq 1
       expect(mail.to).to eq([attendance.email])
-      expect(mail.subject).to eq("Aviso de cancelamento da inscrição #{attendance.id} para #{event.name}")
+
+      expect(mail.subject).to eq(I18n.t('email.cancelling_registration.subject', event_name: attendance.event_name, attendance_id: attendance.id).to_s)
     end
 
     context 'with organizers in the event' do
@@ -96,11 +97,11 @@ RSpec.describe EmailNotificationsMailer, type: :mailer do
     let(:event) { Fabricate :event }
     let(:attendance) { Fabricate :attendance, event: event }
 
-    it 'is sent to pending attendee' do
+    it 'is sent to delayed pending attendance' do
       mail = described_class.cancelling_registration_warning(attendance).deliver
       expect(ActionMailer::Base.deliveries.size).to eq 1
       expect(mail.to).to eq([attendance.email])
-      expect(mail.subject).to eq("Lembrete de pagamento da inscrição #{attendance.id} para #{event.name}")
+      expect(mail.subject).to eq(I18n.t('email.cancelling_registration_warning.subject', event_name: attendance.event_name, attendance_id: attendance.id).to_s)
     end
 
     context 'with organizers in the event' do

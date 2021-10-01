@@ -7,8 +7,8 @@ RSpec.describe WelcomeConfirmedAttendancesJob, type: :job do
     let!(:yesterday_event) { Fabricate :event, start_date: 1.day.ago }
     let!(:today_event) { Fabricate :event, start_date: Time.zone.now }
     let!(:past_event) { Fabricate :event, start_date: 3.days.ago, end_date: 2.days.ago }
-    let(:user) { Fabricate :user, country: 'US' }
-    let(:other_user) { Fabricate :user, country: 'US' }
+    let(:user) { Fabricate :user, country: 'US', email: 'luciana.mdias@gmail.com' }
+    let(:other_user) { Fabricate :user, country: 'US', email: 'celso@taller.net.br' }
     let!(:attendance) { Fabricate :attendance, event: event, user: user, status: :confirmed }
     let!(:other_attendance) { Fabricate :attendance, event: other_event, user: other_user, status: :confirmed }
     let!(:out) { Fabricate :attendance, event: other_event, status: :pending }

@@ -44,7 +44,7 @@ pt:
     cancel_warning_registrations_full_message: "O evento está cheio e agora temos uma fila de espera. Caso você não complete a sua inscrição a tempo e o nosso sistema automático a cancele, você precisará submeter uma nova inscrição, que o colocará nesta fila."
     cancel_warning_registrations_second_message: "Caso a pendência já tenha sido regularizada, favor entrar em contato com a organização"
     welcome_attendance_remote_event:
-      subject: "Nos vemos nas nuvens com a %{event_nickname} na terça-feira!"
+      subject: "Nos vemos nas nuvens com a %{event_nickname} na %{event_day_of_week}!"
       sentence_one: "O dia do nosso encontro nas nuvens para a %{event_name} está chegando. Já organizou a sua agenda?"
       sentence_two: "Esperamos você no dia <b>%{event_date}</b>, para um reencontro cheio de conteúdo e oportunidades de troca de experiências, do jeito que a nossa comunidade gosta. A programação completa está disponível em %{event_schedule_link}."
       sentence_three: "Estamos preparando um evento com vários espaços de interação que só quem já esteve nos corredores da %{event_nickname} sabe: vai ter tanto aprendizado quanto os que rolam nas salas de palestra."

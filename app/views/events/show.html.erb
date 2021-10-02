@@ -24,7 +24,7 @@
     <p><h3><%= @event.name %></h3></p>
     <p>
       <b><%= I18n.t('activerecord.attributes.event.country') %>:</b>
-      <% if @event.country.present? %>
+      <% if @event.country.present? && ISO3166::Country[@event.country].present? %>
         <%= ISO3166::Country[@event.country].translations[I18n.locale.to_s] %>
       <% else %>
         <%= I18n.t('general.not_informed') %>

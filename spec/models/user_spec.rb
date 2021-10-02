@@ -310,5 +310,11 @@ RSpec.describe User, type: :model do
 
       it { expect(user.user_locale).to eq 'en' }
     end
+
+    context 'with no country specified' do
+      let(:user) { Fabricate :user, country: nil }
+
+      it { expect(user.user_locale).to eq 'pt' }
+    end
   end
 end

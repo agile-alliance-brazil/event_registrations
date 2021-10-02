@@ -100,7 +100,7 @@ class User < ApplicationRecord
   end
 
   def user_locale
-    return 'pt' if country == 'BR' || country == 'PT'
+    return 'pt' if country == 'BR' || country == 'PT' || country.blank?
 
     'en'
   end

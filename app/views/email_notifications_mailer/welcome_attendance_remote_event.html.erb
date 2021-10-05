@@ -6,11 +6,11 @@
       <%= render 'email_notifications_mailer/greetings', event: @event, attendance: @attendance %>
 
       <p><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_one', event_name: @event.name) %></p>
-      <p><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_two', event_date: I18n.l(@event.start_date.to_date, format: :short), event_schedule_link: link_to(@event.event_schedule_link, @event.event_schedule_link)).html_safe %></p>
+      <p><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_two', event_date: I18n.l(@start_date.to_date, format: :short), event_schedule_link: link_to(@event.event_schedule_link, @event.event_schedule_link)).html_safe %></p>
       <p><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_three', event_nickname: @event.event_nickname) %></p>
       <p><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_four', event_name: @event.name, event_schedule_link: link_to(@event.event_schedule_link, @event.event_schedule_link)).html_safe %></p>
       <p><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_five', event_remote_manual_link: link_to(@event.event_remote_manual_link, @event.event_remote_manual_link)).html_safe %></p>
-      <p style="background-color: lightyellow"><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_six', event_date: I18n.l(@event.start_date.to_date, format: :short), event_remote_platform_mail: @event.event_remote_platform_mail, remote_platform_name: @event.event_remote_platform_name).html_safe %></p>
+      <p style="background-color: lightyellow; font-size: x-large"><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_six', event_date: I18n.l(@start_date.to_date, format: :short), event_remote_platform_mail: @event.event_remote_platform_mail, remote_platform_name: @event.event_remote_platform_name, remote_event_link: link_to(@event_link, @event_link)).html_safe %></p>
 
       <%= render 'email_notifications_mailer/email_signature', event: @event, attendance: @attendance %>
     </div>

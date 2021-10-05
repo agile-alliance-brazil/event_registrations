@@ -44,15 +44,26 @@ class EmailNotificationsMailer < ApplicationMailer
     @attendance = attendance
     @event = attendance.event
 
-    @start_date = [@event.start_date, Time.zone.today].max
-    @start_date = Time.zone.tomorrow.to_date if Time.zone.now.hour > 18
+    define_date_to_email
 
-    subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id, event_nickname: attendance.event.event_nickname, event_day_of_week: I18n.l(@start_date, format: '%A')).to_s
+    subject = I18n.t(title, event_name: attendance.event_name, attendance_id: attendance.id, event_nickname: attendance.event.event_nickname, event_day_of_week: @event_date.downcase).to_s
     Rails.logger.info("[EmailNotificationsMailer:mail_attendance] { mail informations: { subject: #{subject} } }")
 
     from_email = @event.main_email_contact || 'inscricoes@agilebrazil.com'
     headers = { from: from_email, to: attendance.email, subject: subject, date: sent_at }
     headers[:cc] = @attendance.event.main_email_contact if @attendance.event.main_email_contact
     mail(headers)
+  end
+
+  def define_date_to_email
+    start_date = [@event.start_date, Time.zone.today].max
+
+    @event_date = if Time.zone.now < @event.start_date
+                    I18n.l(start_date, format: '%A')
+                  elsif Time.zone.now < @event.end_date && Time.zone.now.hour > 18
+                    I18n.t('date.close_dates.tomorrow')
+                  elsif Time.zone.now < @event.end_date && Time.zone.now.hour < 18
+                    I18n.t('date.close_dates.today')
+                  end
   end
 end

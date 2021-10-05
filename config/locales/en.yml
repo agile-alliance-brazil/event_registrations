@@ -46,3 +46,7 @@ en:
   geenral:
     connector:
       and: "and"
+  date:
+    close_dates:
+      tomorrow: "Tomorrow"
+      today: "Today"

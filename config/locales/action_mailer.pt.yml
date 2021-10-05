@@ -50,4 +50,4 @@ pt:
       sentence_three: "Estamos preparando um evento com vários espaços de interação que só quem já esteve nos corredores da %{event_nickname} sabe: vai ter tanto aprendizado quanto os que rolam nas salas de palestra."
       sentence_four: "Mas tudo o que estamos preparando só fará sentido se você estiver conosco participando ativamente durante o evento. Podemos contar com você para sentirmos, mesmo que virtualmente, aquela energia boa dos corredores da %{event_name}?"
       sentence_five: "Para que você possa ir se preparando, que tal dar uma olhada no manual para participantes disponível no link a seguir? %{event_remote_manual_link}"
-      sentence_six: "<b>ATENÇÃO:</b> o seu acesso ao evento será através do link exclusivo %{remote_event_link}."
+      sentence_six: "<b>ATENÇÃO:</b> o seu acesso ao evento será através do link exclusivo %{remote_event_link}.</br>Um pequeno atraso poderá ocorrer para a confirmação do acesso na %{remote_platform_name}"

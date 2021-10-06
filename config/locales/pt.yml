@@ -56,6 +56,9 @@ pt:
     - :day
     - :month
     - :year
+    close_dates:
+      tomorrow: "Amanhã"
+      today: "Hoje"
   datetime:
     distance_in_words:
       about_x_hours:

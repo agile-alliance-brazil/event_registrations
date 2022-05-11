@@ -4,6 +4,8 @@ pt:
       subject: "Pedido de inscrição para %{event_name} enviado"
     registration_accepted:
       subject: "Pedido de inscrição para %{event_name} aceito"
+    registration_paid:
+      subject: "Recebemos o pagamento pela sua inscrição."
     registration_confirmed:
       subject: "Inscrição para %{event_name} confirmada"
       fail: "Ocorreu um problema para enviar o email de confirmação. Sua inscrição foi recebida mas não foi possível entregar o email de confirmação. Tentaremos mais tarde mas se não receber o email em 24 horas, entre em contato via %{email}."
@@ -53,7 +55,7 @@ pt:
       sentence_six: "<b>ATENÇÃO:</b> o seu acesso ao evento será através do link exclusivo %{remote_event_link}.</br>Um pequeno atraso poderá ocorrer para a confirmação do acesso na %{remote_platform_name}"
     cancelled_registrations_goodbye: "Queremos ter você conosco!"
     confirmed:
-      see_ya: "Nos vemos lá."
+      see_ya: "Nos vemos lá!"
     goodbye:
       pre_payment: "Que bom podermos ter você conosco!"
       waiting: "Esperamos poder ter você conosco!"
@@ -61,3 +63,9 @@ pt:
       payment_page: "Acesse a página da sua inscrição para seguir com o pagamento."
     waiting:
       queue_movement: "Vamos fazer o possível para viabilizar a sua vaga e avisaremos caso a gente consiga."
+    registration_paid:
+      payment_ok: "Já identificamos o pagamento da sua inscrição para a %{event_name}."
+      invoice_contact: "Caso necessite de nota fiscal, envie um e-mail para %{event_email} informando:"
+      invoice_name: "Nome da pessoa inscrita."
+      invoice_cnpj: "Em caso de NF para Pessoa Jurídica: razão social e CNPJ."
+      invoice_cpf: "Em caso de NF para Pessoa Física: nome completo, endereço completo e CPF."

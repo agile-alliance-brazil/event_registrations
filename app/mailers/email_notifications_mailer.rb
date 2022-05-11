@@ -33,6 +33,10 @@ class EmailNotificationsMailer < ApplicationMailer
     mail_attendance(attendance, sent_at, 'email.welcome_attendance.subject')
   end
 
+  def registration_paid(attendance, sent_at = Time.zone.now)
+    mail_attendance(attendance, sent_at, 'email.registration_paid.subject')
+  end
+
   def welcome_attendance_remote_event(attendance, sent_at = Time.zone.now)
     @event_link = "https://hybri.online/auth?email=#{attendance.email}&eventId=ab2021"
     mail_attendance(attendance, sent_at, 'attendances.welcome_attendance_remote_event.subject')

@@ -1,0 +1,21 @@
+<html>
+  <body>
+    <%= render 'email_header' %>
+
+    <div style="padding-left: 100px;padding-right: 100px;padding-top: 30px;">
+      <%= render 'email_notifications_mailer/greetings', event: @event, attendance: @attendance %>
+
+      <p><%= I18n.t('attendances.registration_paid.payment_ok', event_name: @event.name) %></p>
+
+      <p><%= link_to I18n.t('attendances.registrations_page'), event_attendance_url(@event, @attendance) %></p>
+
+      <p><%= I18n.t('attendances.registration_paid.invoice_contact', event_email: @event.main_email_contact) %></p>
+      <div><%= I18n.t('attendances.registration_paid.invoice_name') %></div>
+      <div><%= I18n.t('attendances.registration_paid.invoice_cnpj') %></div>
+      <div><%= I18n.t('attendances.registration_paid.invoice_cpf') %></div>
+      <br/>
+      <p><%= I18n.t('attendances.confirmed.see_ya') %></p>
+      <p><%= I18n.t('attendances.event_team', event_name: @event.name) %></p>
+    </div>
+  </body>
+</html>

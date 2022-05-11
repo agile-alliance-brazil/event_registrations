@@ -74,6 +74,7 @@ class AttendancesController < AuthenticatedController
       EmailNotificationsMailer.registration_group_accepted(@attendance).deliver
     when 'pay'
       @attendance.paid!
+      EmailNotificationsMailer.registration_paid(@attendance).deliver
     when 'confirm'
       @attendance.confirmed!
       EmailNotificationsMailer.registration_confirmed(@attendance).deliver

@@ -7,6 +7,8 @@ en:
     registration_confirmed:
       subject: "Registration request to %{event_name} confirmed"
       fail: "There was a problem while sending your confirmation email. Your registration was received but we could not deliver the confirmation email. We will try later but if you do not receive it in 24 hours, please contact us at %{email}."
+    registration_paid:
+      subject: "We received the payment for your registration"
     registration_waiting:
       subject: "Your registration request to %{event_name} was queued"
     cancelling_registration:
@@ -63,3 +65,9 @@ en:
       payment_page: "Go to your registration page to complete the payment."
     waiting:
       queue_movement: "We will do our best to make your spot available and will let you know if we can."
+    registration_paid:
+      payment_ok: "We already received your payment for %{event_name}."
+      invoice_contact: ""
+      invoice_cnpj: ""
+      invoice_name: ""
+      invoice_cpf: ""

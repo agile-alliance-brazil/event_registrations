@@ -22,6 +22,10 @@ class EmailNotificationsPreview < ActionMailer::Preview
     EmailNotificationsMailer.with(attendance).registration_confirmed(attendance)
   end
 
+  def registration_paid
+    EmailNotificationsMailer.with(attendance).registration_paid(attendance)
+  end
+
   def welcome_attendance_remote_event
     EmailNotificationsMailer.with(attendance).welcome_attendance_remote_event(attendance)
   end

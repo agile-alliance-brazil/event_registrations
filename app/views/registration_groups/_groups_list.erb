@@ -16,7 +16,7 @@
       <% event.registration_groups.each do |group| %>
         <tr>
           <td><%= link_to group.name, event_registration_group_path(@event, group) %></td>
-          <td><%= group.leader.full_name %></td>
+          <td><%= group.leader&.full_name %></td>
           <td><%= number_to_percentage(group.discount) %></td>
           <td><%= number_to_currency(group.amount) %></td>
           <td><%= group.qtd_attendances %></td>

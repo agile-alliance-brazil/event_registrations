@@ -176,6 +176,7 @@ pt:
         event_remote_platform_mail: Email da Plataforma
         event_remote: Evento Remoto?
         event_nickname: Apelido do Evento
+        privacy_policy: Política de Privacidade
       registration_group:
         name: Nome
         discount: Desconto (%)

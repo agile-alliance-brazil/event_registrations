@@ -4,25 +4,25 @@
 #
 # Table name: payment_notifications
 #
-#  attendance_id   :bigint(8)        indexed
-#  created_at      :datetime         not null
-#  id              :bigint(8)        not null, primary key
+#  attendance_id   :integer          indexed
+#  created_at      :datetime
+#  id              :integer          not null, primary key
 #  notes           :text
 #  params          :text
-#  payer_email     :string(255)
-#  settle_amount   :decimal(10, )
-#  settle_currency :string(255)
-#  status          :string(255)
-#  transaction_id  :string(255)
-#  updated_at      :datetime         not null
+#  payer_email     :string
+#  settle_amount   :decimal(, )
+#  settle_currency :string
+#  status          :string
+#  transaction_id  :string
+#  updated_at      :datetime
 #
 # Indexes
 #
-#  idx_4539845_index_payment_notifications_on_attendance_id  (attendance_id)
+#  index_payment_notifications_on_attendance_id  (attendance_id)
 #
 # Foreign Keys
 #
-#  fk_rails_2e64051bbf  (attendance_id => attendances.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_2e64051bbf  (attendance_id => attendances.id)
 #
 
 class PaymentNotification < ApplicationRecord

@@ -5,56 +5,55 @@
 # Table name: users
 #
 #  birth_date             :date
-#  city                   :string(255)
+#  city                   :string
 #  confirmation_sent_at   :datetime
-#  confirmation_token     :string(255)      indexed
+#  confirmation_token     :string           indexed
 #  confirmed_at           :datetime
-#  country                :string(255)
-#  created_at             :datetime         not null
+#  country                :string
+#  created_at             :datetime
 #  current_sign_in_at     :datetime
-#  current_sign_in_ip     :string(255)
+#  current_sign_in_ip     :string
 #  disability             :integer          default("disability_not_informed"), not null, indexed
 #  education_level        :integer          default("no_education_informed"), indexed
-#  email                  :string(255)      not null, indexed
-#  encrypted_password     :string(255)      default(""), not null
+#  email                  :string           not null, indexed
+#  encrypted_password     :string           default(""), not null
 #  ethnicity              :integer          default("no_ethnicity_informed"), not null, indexed
-#  failed_attempts        :bigint(8)        default(0), not null
-#  first_name             :string(255)      not null
+#  failed_attempts        :integer          default(0), not null
+#  first_name             :string           not null
 #  gender                 :integer          default("gender_not_informed"), indexed
-#  id                     :bigint(8)        not null, primary key
-#  last_name              :string(255)      not null
+#  id                     :integer          not null, primary key
+#  last_name              :string           not null
 #  last_sign_in_at        :datetime
-#  last_sign_in_ip        :string(255)
+#  last_sign_in_ip        :string
 #  locked_at              :datetime
-#  registration_group_id  :bigint(8)        indexed
+#  registration_group_id  :integer
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
-#  reset_password_token   :string(255)      indexed
-#  role                   :bigint(8)        default("user"), not null
-#  roles_mask             :bigint(8)
+#  reset_password_token   :string           indexed
+#  role                   :integer          default("user"), not null
+#  roles_mask             :integer
 #  school                 :string
-#  sign_in_count          :bigint(8)        default(0), not null
-#  state                  :string(255)
-#  unconfirmed_email      :string(255)
-#  unlock_token           :string(255)      indexed
-#  updated_at             :datetime         not null
-#  user_image             :string(255)
+#  sign_in_count          :integer          default(0), not null
+#  state                  :string
+#  unconfirmed_email      :string
+#  unlock_token           :string           indexed
+#  updated_at             :datetime
+#  user_image             :string
 #
 # Indexes
 #
-#  idx_4539890_fk_rails_ebe9fba698                  (registration_group_id)
-#  idx_4539890_index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  idx_4539890_index_users_on_email                 (email) UNIQUE
-#  idx_4539890_index_users_on_reset_password_token  (reset_password_token) UNIQUE
-#  idx_4539890_index_users_on_unlock_token          (unlock_token) UNIQUE
-#  index_users_on_disability                        (disability)
-#  index_users_on_education_level                   (education_level)
-#  index_users_on_ethnicity                         (ethnicity)
-#  index_users_on_gender                            (gender)
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_disability            (disability)
+#  index_users_on_education_level       (education_level)
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_ethnicity             (ethnicity)
+#  index_users_on_gender                (gender)
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_unlock_token          (unlock_token) UNIQUE
 #
 # Foreign Keys
 #
-#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_ebe9fba698  (registration_group_id => registration_groups.id)
 #
 
 class User < ApplicationRecord

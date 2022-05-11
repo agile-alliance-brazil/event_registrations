@@ -58,6 +58,13 @@
       <b><%= Event.human_attribute_name(:main_email_contact) %>:</b>
       <%= mail_to(@event.main_email_contact, @event.main_email_contact) %>
     </p>
+    <p>
+      <% if @event.privacy_policy %>
+        <%= link_to Event.human_attribute_name(:privacy_policy), @event.privacy_policy %>
+      <% else %>
+      <%= I18n.t('events.show.no_policy') %>
+      <% end %>
+    </p>
 
     <% if current_user&.organizer_of?(@event) %>
       <p><%= link_to I18n.t('events.edit.title'), edit_event_path(@event), class: 'btn btn-sm btn-success' %></p>

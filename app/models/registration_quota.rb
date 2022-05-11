@@ -6,12 +6,12 @@
 #
 #  closed                :boolean          default(FALSE)
 #  created_at            :datetime
-#  event_id              :bigint(8)
-#  id                    :bigint(8)        not null, primary key
-#  order                 :bigint(8)
-#  price                 :decimal(10, )    not null
-#  quota                 :bigint(8)
-#  registration_price_id :bigint(8)
+#  event_id              :integer
+#  id                    :integer          not null, primary key
+#  order                 :integer
+#  price                 :decimal(, )      not null
+#  quota                 :integer
+#  registration_price_id :integer
 #  updated_at            :datetime
 #
 

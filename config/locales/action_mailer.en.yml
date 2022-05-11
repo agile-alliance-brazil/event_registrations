@@ -53,3 +53,13 @@ en:
       sentence_four: "But everything we are preparing will only make sense if you are actively participating with us during the event. Can we count on you to feel, even virtually, that good energy of the %{event_name} halls?"
       sentence_five: "So that you can get ready, how about taking a look at the manual for participants available at the following link? %{event_remote_manual_link}"
       sentence_six: "<b>ATTENTION:</b> your access to the event will be through an exclusive link %{remote_event_link}.</br>A small delay might occur to confirm the access in the %{remote_platform_name}"
+    cancelled_registrations_goodbye: "We want to share this moment with you!"
+    confirmed:
+      see_ya: "See you there."
+    goodbye:
+      pre_payment: "We are happy that you're coming!"
+      waiting: "We hope to have you with us!"
+    accepted_group:
+      payment_page: "Go to your registration page to complete the payment."
+    waiting:
+      queue_movement: "We will do our best to make your spot available and will let you know if we can."

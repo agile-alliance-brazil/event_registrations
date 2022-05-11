@@ -6,9 +6,13 @@
       <%= render 'greetings', event: @event, attendance: @attendance %>
 
       <p><%= I18n.t('attendances.waiting_message', event_name: @event.name) %></p>
+      <p><%= I18n.t('attendances.waiting.queue_movement') %></p>
       <p><%= I18n.t('attendances.waiting_vacancy_message') %></p>
 
-      <%= render 'email_signature', event: @event, attendance: @attendance %>
+      <p><%= link_to I18n.t('attendances.registrations_page'), event_attendance_url(@event, @attendance) %></p>
+      <br/>
+      <p><%= I18n.t('attendances.goodbye.waiting') %></p>
+      <p><%= I18n.t('attendances.event_team', event_name: @event.name) %></p>
     </div>
   </body>
 </html>

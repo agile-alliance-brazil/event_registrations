@@ -13,7 +13,10 @@
 
       <p><%= I18n.t('attendances.cancel_warning_registrations_second_message') %></p>
 
-      <%= render 'email_signature', event: @event, attendance: @attendance %>
+      <p><%= link_to I18n.t('attendances.registrations_page'), event_attendance_url(@event, @attendance) %></p>
+      <br/>
+      <p><%= I18n.t('attendances.cancelled_registrations_goodbye') %></p>
+      <p><%= I18n.t('attendances.event_team', event_name: @event.name) %></p>
     </div>
   </body>
 </html>

@@ -731,7 +731,7 @@ RSpec.describe AttendancesController, type: :controller do
 
                 expect(response).to render_template 'attendances/search'
                 attendances_list = [pending, accepted, paid, confirmed, cancelled]
-                expect(assigns(:attendances_list)).to eq attendances_list
+                expect(assigns(:attendances_list)).to match_array attendances_list
                 expect(assigns(:attendances_list_csv)).to eq AttendanceExportService.to_csv(attendances_list)
               end
             end

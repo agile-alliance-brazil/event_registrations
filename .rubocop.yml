@@ -75,6 +75,10 @@ Rails/BulkChangeTable:
     - 'db/migrate/20150503072125_add_start_and_end_date_to_event.rb'
     - 'db/migrate/20130318014329_add_user_info_to_attendance.rb'
 
+Rails/I18nLocaleTexts:
+  Exclude:
+    - 'spec/helpers/application_helper_spec.rb'
+
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 

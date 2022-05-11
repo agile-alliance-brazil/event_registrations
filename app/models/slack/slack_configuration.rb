@@ -23,6 +23,6 @@ module Slack
   class SlackConfiguration < ApplicationRecord
     belongs_to :event
 
-    validates :event, :room_webhook, presence: true
+    validates :room_webhook, presence: true
   end
 end

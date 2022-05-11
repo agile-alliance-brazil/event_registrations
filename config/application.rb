@@ -27,14 +27,20 @@ module Current
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    config.time_zone = 'Brasilia'
+    config.load_defaults 5.0
+
+    config.active_support.default_message_encryptor_serializer = :hybrid
+
+    config.active_record.schema_format = :sql
+    config.active_record.legacy_connection_handling = false
+
+    config.action_controller.default_protect_from_forgery = true
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.enforce_available_locales = false
     config.i18n.available_locales = %w[pt en]
     config.i18n.default_locale = 'pt'
+    config.time_zone = 'Brasilia'
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'
@@ -44,11 +50,6 @@ module Current
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
-
-    # Use SQL instead of Active Record's schema dumper when creating the database.
-    # This is necessary if your schema can't be completely dumped by the schema dumper,
-    # like if you have constraints or database-specific column types
-    # config.active_record.schema_format = :sql
 
     # Enable the asset pipeline
     config.assets.enabled = true

@@ -249,7 +249,7 @@ RSpec.describe EventsController, type: :controller do
           expect(event_persisted.end_date.utc.to_i).to eq end_date.to_i
           expect(event_persisted.full_price).to eq 100
           expect(event_persisted.event_nickname).to eq 'xpto'
-          expect(event_persisted.event_remote).to eq true
+          expect(event_persisted.event_remote).to be true
           expect(event_persisted.event_remote_platform_mail).to eq 'foo@bar.com'
           expect(event_persisted.event_remote_platform_name).to eq 'barfoo'
           expect(event_persisted.event_schedule_link).to eq 'bar.com'

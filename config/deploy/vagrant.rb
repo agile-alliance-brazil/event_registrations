@@ -27,7 +27,7 @@ set :server_url, 'inscricoes.localhost'
 set :ssh_options, {
   keys: [
     File.join(File.dirname(__FILE__), '../../certs/insecure_private_key'),
-    File.join(ENV['HOME'], '.vagrant.d/insecure_private_key')
+    File.join(Dir.home, '.vagrant.d/insecure_private_key')
   ],
   forward_agent: true,
   auth_methods: %w[publickey]

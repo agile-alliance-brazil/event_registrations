@@ -7,12 +7,11 @@ RSpec.describe RegistrationGroup, type: :model do
   context 'associations' do
     it { is_expected.to have_many(:attendances).dependent(:restrict_with_error) }
     it { is_expected.to belong_to :event }
-    it { is_expected.to belong_to(:leader).class_name('User') }
-    it { is_expected.to belong_to(:registration_quota) }
+    it { is_expected.to belong_to(:leader).class_name('User').optional }
+    it { is_expected.to belong_to(:registration_quota).optional }
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of :event }
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_numericality_of(:discount).allow_nil }
 
@@ -209,7 +208,7 @@ RSpec.describe RegistrationGroup, type: :model do
     context 'with an undefined leader' do
       let(:group) { Fabricate :registration_group, event: event }
 
-      it { expect(group.leader_name).to eq nil }
+      it { expect(group.leader_name).to be_nil }
     end
   end
 
@@ -343,7 +342,7 @@ RSpec.describe RegistrationGroup, type: :model do
       let!(:other_attendance) { Fabricate :attendance, registration_group: group, status: :accepted }
       let!(:cancelled_attendance) { Fabricate :attendance, registration_group: group, status: :cancelled }
 
-      it { expect(group.vacancies?).to eq true }
+      it { expect(group.vacancies?).to be true }
     end
 
     context 'having no vacancies' do
@@ -352,7 +351,7 @@ RSpec.describe RegistrationGroup, type: :model do
       let!(:cancelled_attendance) { Fabricate :attendance, registration_group: group, status: :cancelled }
       let!(:other_attendance) { Fabricate :attendance, registration_group: group, status: :accepted }
 
-      it { expect(group.vacancies?).to eq false }
+      it { expect(group.vacancies?).to be false }
     end
 
     context 'having no capacity defined' do

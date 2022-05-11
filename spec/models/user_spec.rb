@@ -157,8 +157,8 @@ RSpec.describe User, type: :model do
 
         it 'creates the user using the attributes' do
           expect(user).not_to be_persisted
-          expect(user.first_name).to eq nil
-          expect(user.last_name).to eq nil
+          expect(user.first_name).to be_nil
+          expect(user.last_name).to be_nil
           expect(user.email).to eq 'foo@bar.com.br'
         end
       end

@@ -5,10 +5,6 @@ RSpec.describe PaymentNotification, type: :model do
     it { is_expected.to belong_to :attendance }
   end
 
-  context 'validations' do
-    it { is_expected.to validate_presence_of :attendance }
-  end
-
   context 'callbacks' do
     describe 'pagseguro payment' do
       let(:attendance) { Fabricate(:attendance, registration_date: Time.zone.now, status: :pending) }

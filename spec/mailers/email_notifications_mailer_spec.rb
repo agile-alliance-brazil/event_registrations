@@ -179,15 +179,17 @@ RSpec.describe EmailNotificationsMailer, type: :mailer do
 
     context 'event is occurring and it is after 18' do
       it 'sends to attendee and cc the events organizer' do
-        event = Fabricate(:event, start_date: 1.day.ago)
-        attendance = Fabricate(:attendance, event: event)
+        travel_to Time.zone.local(2021, 10, 5, 19, 0, 0) do
+          event = Fabricate(:event, start_date: 1.day.ago)
+          attendance = Fabricate(:attendance, event: event)
 
-        allow(Time.zone).to(receive(:now)).and_return(Time.zone.local(2021, 10, 5, 19, 0, 0))
-        mail = described_class.welcome_attendance_remote_event(attendance).deliver
-        expect(ActionMailer::Base.deliveries.size).to eq 1
-        expect(mail.to).to eq [attendance.email]
-        expect(mail.cc).to eq [event.main_email_contact]
-        expect(mail.subject).to eq I18n.t('attendances.welcome_attendance_remote_event.subject', event_name: attendance.event_name, attendance_id: attendance.id, event_nickname: attendance.event.event_nickname, event_day_of_week: I18n.t('date.close_dates.tomorrow').downcase).to_s
+          allow(Time.zone).to(receive(:now)).and_return(Time.zone.local(2021, 10, 5, 19, 0, 0))
+          mail = described_class.welcome_attendance_remote_event(attendance).deliver
+          expect(ActionMailer::Base.deliveries.size).to eq 1
+          expect(mail.to).to eq [attendance.email]
+          expect(mail.cc).to eq [event.main_email_contact]
+          expect(mail.subject).to eq I18n.t('attendances.welcome_attendance_remote_event.subject', event_name: attendance.event_name, attendance_id: attendance.id, event_nickname: attendance.event.event_nickname, event_day_of_week: I18n.t('date.close_dates.tomorrow').downcase).to_s
+        end
       end
     end
   end

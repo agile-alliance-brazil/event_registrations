@@ -30,7 +30,6 @@ class PaymentNotification < ApplicationRecord
   serialize :params
 
   after_create :mark_attendance_as_paid, if: ->(n) { n.status == 'Completed' }
-  validates :attendance, presence: true
 
   scope :pag_seguro, -> { where('params LIKE ?', '%type: pag_seguro%') }
   scope :completed, -> { where(status: 'Completed') }

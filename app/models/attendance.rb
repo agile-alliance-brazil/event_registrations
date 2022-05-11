@@ -83,13 +83,13 @@ class Attendance < ApplicationRecord
   belongs_to :event
   belongs_to :user
   belongs_to :registered_by_user, class_name: 'User', foreign_key: :registered_by_id, inverse_of: :registered_attendances
-  belongs_to :registration_period
-  belongs_to :registration_group
-  belongs_to :registration_quota
+  belongs_to :registration_period, optional: true
+  belongs_to :registration_group, optional: true
+  belongs_to :registration_quota, optional: true
 
   has_many :payment_notifications, dependent: :destroy
 
-  validates :country, :city, :state, :registration_date, :user, :event, presence: true
+  validates :country, :city, :state, :registration_date, presence: true
 
   delegate :first_name, to: :user, allow_nil: true
   delegate :last_name, to: :user, allow_nil: true

@@ -26,8 +26,8 @@
     - `rvm install ruby-3.1.2`
         - Create the gemset to the project under the correct version
     - In the project folder run:
-    - `rvm use 3.0.1@event_registrations --create`
-    - `rvm --ruby-version use 3.0.1`
+    - `rvm use 3.1.2@event_registrations --create`
+    - `rvm --ruby-version use 3.1.2`
     - `gem install bundler`
     - `bundle install`
 - In the project folder run:

@@ -23,8 +23,6 @@ RSpec.describe Attendance, type: :model do
   context 'validations' do
     it { is_expected.to validate_presence_of :country }
     it { is_expected.to validate_presence_of :city }
-    it { is_expected.to validate_presence_of :user }
-    it { is_expected.to validate_presence_of :event }
 
     it { is_expected.to validate_presence_of :state }
   end

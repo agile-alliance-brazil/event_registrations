@@ -8,7 +8,10 @@
       <p><%= I18n.t('attendances.confirmed_message', event_name: @event.name) %></p>
       <p><%= I18n.t('attendances.confirmed_message_event_date', event_start_date: l(@event.start_date, format: :short)) %></p>
 
-      <%= render 'email_signature', event: @event, attendance: @attendance %>
+      <p><%= link_to I18n.t('attendances.registrations_page'), event_attendance_url(@event, @attendance) %></p>
+      <br/>
+      <p><%= I18n.t('attendances.confirmed.see_ya') %></p>
+      <p><%= I18n.t('attendances.event_team', event_name: @event.name) %></p>
     </div>
   </body>
 </html>

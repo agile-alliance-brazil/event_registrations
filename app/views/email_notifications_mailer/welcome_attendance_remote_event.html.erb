@@ -12,7 +12,10 @@
       <p><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_five', event_remote_manual_link: link_to(@event.event_remote_manual_link, @event.event_remote_manual_link)).html_safe %></p>
       <p style="background-color: lightyellow; font-size: x-large"><%= I18n.t('attendances.welcome_attendance_remote_event.sentence_six', event_date: @event_date, event_remote_platform_mail: @event.event_remote_platform_mail, remote_platform_name: @event.event_remote_platform_name, remote_event_link: link_to(@event_link, @event_link)).html_safe %></p>
 
-      <%= render 'email_notifications_mailer/email_signature', event: @event, attendance: @attendance %>
+      <p><%= link_to I18n.t('attendances.registrations_page'), event_attendance_url(@event, @attendance) %></p>
+      <br/>
+      <p><%= I18n.t('attendances.goodbye.pre_payment') %></p>
+      <p><%= I18n.t('attendances.event_team', event_name: @event.name) %></p>
     </div>
   </body>
 </html>

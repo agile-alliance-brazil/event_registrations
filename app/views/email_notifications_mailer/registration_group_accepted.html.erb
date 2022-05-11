@@ -6,8 +6,12 @@
       <%= render 'greetings', event: @event, attendance: @attendance %>
 
       <p><%= I18n.t('attendances.accepted_group_message', event_name: @event.name, group_name: @attendance.registration_group.name) %></p>
+      <p><%= I18n.t('attendances.accepted_group.payment_page') %></p>
 
-      <%= render 'email_signature', event: @event, attendance: @attendance %>
+      <p><%= link_to I18n.t('attendances.registrations_page'), event_attendance_url(@event, @attendance) %></p>
+      <br/>
+      <p><%= I18n.t('attendances.goodbye.pre_payment') %></p>
+      <p><%= I18n.t('attendances.event_team', event_name: @event.name) %></p>
     </div>
   </body>
 </html>

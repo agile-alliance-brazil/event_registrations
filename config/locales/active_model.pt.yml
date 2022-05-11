@@ -212,7 +212,7 @@ pt:
         education_level: "Educação"
         school: "Escola"
         ethnicity: "Qual cor/ raça melhor te define?"
-        disability: "Você possui alguma deficiência?  "
+        disability: "Você precisa de algum tipo de acessibilidade?"
         enums:
           roles:
             admin: "Administrador"

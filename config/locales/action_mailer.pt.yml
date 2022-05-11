@@ -40,7 +40,7 @@ pt:
     cancelled_registrations_first_message: "A sua inscrição para %{event_name} foi cancelada porque ainda não identificamos o pagamento."
     cancelled_registrations_second_message: "Caso já tenha realizado o pagamento, pedimos desculpas pelo equívoco do nosso sistema. Nos envie o comprovante para que possamos restaurar a sua inscrição."
     cancelled_registrations_new_registration: "Nova Inscrição"
-    cancel_warning_registrations_first_message: "Ainda não identificamos o pagamento da sua inscrição para a %{event_name}. Caso o pagamento não seja regularizada realizado até %{due_date} às %{due_time}, a sua inscrição será automaticamente cancelada."
+    cancel_warning_registrations_first_message: "Ainda não identificamos o pagamento da sua inscrição para a %{event_name}. Caso o pagamento não seja realizado até %{due_date} às %{due_time}, a sua inscrição será automaticamente cancelada."
     cancel_warning_registrations_full_message: "O evento está cheio e agora temos uma fila de espera. Caso você não complete a sua inscrição a tempo e o nosso sistema automático a cancele, você precisará submeter uma nova inscrição, que o colocará nesta fila."
     cancel_warning_registrations_second_message: "Caso já tenha realizado o pagamento, pedimos desculpas pelo equívoco do nosso sistema. Nos envie o comprovante para que possamos confirmar a sua inscrição."
     welcome_attendance_remote_event:

@@ -2,7 +2,7 @@
 
 Spring.after_fork do
   if ENV['DEBUGGER_STORED_RUBYLIB']
-    starter = ENV['BUNDLER_ORIG_RUBYOPT'][2..]
+    starter = ENV.fetch('BUNDLER_ORIG_RUBYOPT', nil)[2..]
     load("#{starter}.rb")
   end
 end

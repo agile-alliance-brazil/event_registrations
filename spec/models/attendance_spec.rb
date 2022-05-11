@@ -14,8 +14,9 @@ RSpec.describe Attendance, type: :model do
   context 'associations' do
     it { is_expected.to belong_to :event }
     it { is_expected.to belong_to :user }
-    it { is_expected.to belong_to :registration_group }
-    it { is_expected.to belong_to :registration_quota }
+    it { is_expected.to belong_to(:registration_group).optional }
+    it { is_expected.to belong_to(:registration_quota).optional }
+    it { is_expected.to belong_to(:registration_period).optional }
     it { is_expected.to have_many :payment_notifications }
   end
 
@@ -280,7 +281,7 @@ RSpec.describe Attendance, type: :model do
     context 'with no registration group' do
       let!(:attendance) { Fabricate(:attendance, event: event) }
 
-      it { expect(attendance.group_name).to eq nil }
+      it { expect(attendance.group_name).to be_nil }
     end
   end
 

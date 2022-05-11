@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '3.0.1'
+ruby '3.1.2'
 gem 'rails'
 
 gem 'barnes'
@@ -20,7 +20,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-github'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-twitter'
-gem 'pagseguro-oficial', git: 'https://github.com/celsoMartins/ruby', branch: 'sandbox-find-by-notification-code' # due to the BigDecimal error on pagseguro bank ticket (boleto)
+gem 'pagseguro-oficial'
 gem 'pg'
 gem 'rake'
 gem 'rollbar'

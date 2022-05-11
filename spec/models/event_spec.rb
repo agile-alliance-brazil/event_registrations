@@ -258,7 +258,7 @@ RSpec.describe Event, type: :model do
     end
 
     context 'with no period' do
-      it { expect(event.period_for).to eq nil }
+      it { expect(event.period_for).to be_nil }
     end
   end
 

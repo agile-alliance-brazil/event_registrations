@@ -22,12 +22,12 @@
 
 class RegistrationGroup < ApplicationRecord
   belongs_to :event
-  belongs_to :leader, class_name: 'User', inverse_of: :led_groups
-  belongs_to :registration_quota
+  belongs_to :leader, class_name: 'User', inverse_of: :led_groups, optional: true
+  belongs_to :registration_quota, optional: true
 
   has_many :attendances, dependent: :restrict_with_error
 
-  validates :event, :name, presence: true
+  validates :name, presence: true
   validates :capacity, :amount, presence: true, if: :paid_in_advance?
   validates :discount, numericality: { greater_than: 0 }, allow_nil: true
   validate :enough_capacity, if: :paid_in_advance?

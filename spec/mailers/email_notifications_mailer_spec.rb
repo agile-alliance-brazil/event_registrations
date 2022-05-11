@@ -67,6 +67,32 @@ RSpec.describe EmailNotificationsMailer, type: :mailer do
     end
   end
 
+  describe '#registration_paid' do
+    let(:attendance) { Fabricate(:attendance, event: event, registration_date: Time.zone.local(2013, 5, 1, 12, 0, 0)) }
+
+    context 'when the event starts before the end date' do
+      it 'sends the confirmation email' do
+        mail = described_class.registration_paid(attendance).deliver
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(mail.to).to eq [attendance.email]
+        expect(mail.subject).to eq(I18n.t('email.registration_paid.subject', event_name: attendance.event_name, attendance_id: attendance.id, event_nickname: attendance.event.event_nickname).to_s)
+      end
+    end
+
+    context 'with organizers in the event' do
+      let(:organizer) { Fabricate(:user, role: :organizer) }
+      let(:other_organizer) { Fabricate :user, role: :organizer }
+      let!(:event) { Fabricate :event, organizers: [organizer, other_organizer], main_email_contact: 'xpto@sbbrubles.com' }
+
+      it 'sends to attendee cc the events organizer' do
+        mail = described_class.registration_paid(attendance).deliver
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(mail.to).to eq [attendance.email]
+        expect(mail.cc).to eq ['xpto@sbbrubles.com']
+      end
+    end
+  end
+
   describe '#cancelling_registration' do
     let(:event) { Fabricate :event }
     let(:attendance) { Fabricate :attendance, event: event }

@@ -148,7 +148,8 @@ CREATE TABLE public.events (
     event_remote_manual_link character varying,
     event_remote_platform_name character varying,
     event_remote_platform_mail character varying,
-    event_remote boolean DEFAULT false
+    event_remote boolean DEFAULT false,
+    privacy_policy character varying
 );
 
 
@@ -853,6 +854,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210609132902'),
 ('20210726201638'),
 ('20210930193404'),
-('20211001162719');
+('20211001162719'),
+('20220511192202');
 
 

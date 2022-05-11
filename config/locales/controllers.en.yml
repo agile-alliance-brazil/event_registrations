@@ -134,6 +134,7 @@ en:
         tab: "Registration Quotes"
       registration_groups:
         tab: "Registration Groups"
+      no_policy: "No Privacy Policy"
     edit:
       title: "Edit Event"
     delete:

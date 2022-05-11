@@ -134,6 +134,7 @@ pt:
         tab: "Cotas de Inscrição"
       registration_groups:
         tab: "Grupos de Inscrições"
+      no_policy: "Sem Política de Privacidade"
     edit:
       title: "Editar Evento"
     delete:

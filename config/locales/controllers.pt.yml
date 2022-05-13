@@ -110,6 +110,9 @@ pt:
       title: "Você se registrou através do grupo %{group_name}."
       paid_group_title: "Sua entrada precisará ser aprovada por um administrador. Você receberá mais informações em breve."
       free_group_title: "Você realizou a inscrição através de um grupo gratuito. Aguarde até o administrador confirmar a sua inscrição."
+    payment:
+      pagseguro:
+        issues: "Estamos com problemas para processar o pagamento no PagSeguro. Já estamos trabalhando nisso. Assim que normalizar, entraremos em contato."
   events:
     index:
       title: "Eventos"

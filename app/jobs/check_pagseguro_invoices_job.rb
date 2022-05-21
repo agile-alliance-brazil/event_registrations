@@ -13,6 +13,8 @@ class CheckPagseguroInvoicesJob < ApplicationJob
       response = HTTParty.get("#{Figaro.env.pag_seguro_url}/transactions?email=#{Figaro.env.pag_seguro_email}&token=#{Figaro.env.pag_seguro_token}&initialDate=#{min_date.iso8601}&finalDate=#{max_date.iso8601}",
                               headers: { 'Content-Type' => 'application/json' })
 
+      Rails.logger.info("Checking payments response code #{response.code}")
+      Rails.logger.info("Checking payments response body #{response.read_body}")
       response_hash = Hash.from_xml(response.read_body)
 
       PagseguroAdapter.instance.read_pag_seguro_body(response_hash['transactionSearchResult']['transactions'])

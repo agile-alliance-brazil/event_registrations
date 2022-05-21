@@ -462,6 +462,7 @@ DEPENDENCIES
   rails-controller-testing
   rails_12factor
   rake
+  rexml (~> 3.2, >= 3.2.4)
   rollbar
   rspec-collection_matchers
   rspec-rails

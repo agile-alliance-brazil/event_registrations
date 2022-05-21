@@ -6,14 +6,6 @@ module DeviseCustom
       process_omniauth('devise.github_data', 'github')
     end
 
-    def facebook
-      process_omniauth('devise.faceook_data', 'facebook')
-    end
-
-    def twitter
-      process_omniauth('devise.twitter_data', 'twitter')
-    end
-
     private
 
     def process_omniauth(omniauth_session, omniauth_provider)

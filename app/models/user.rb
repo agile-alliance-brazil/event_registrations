@@ -68,7 +68,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :lockable, :omniauthable
 
-  devise :omniauthable, omniauth_providers: %i[github facebook twitter]
+  devise :omniauthable, omniauth_providers: %i[github]
 
   mount_uploader :user_image, RegistrationsImageUploader
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe PaymentNotificationsController, type: :controller do
+RSpec.describe InvoicesController, type: :controller do
   before { WebMock.enable! }
 
   after { WebMock.disable! }
@@ -16,7 +16,7 @@ RSpec.describe PaymentNotificationsController, type: :controller do
           expect(PagSeguro::Transaction).to(receive(:find_by_notification_code)).once.and_return(transaction)
 
           post :create, params: { type: 'pag_seguro', status: 'Aprovada', transacao_id: '12345678', pedido: attendance.id, store_code: Figaro.env.pag_seguro_store_code }
-          expect(PaymentNotification.count).to eq 1
+          expect(Invoice.count).to eq 1
           expect(Attendance.last.status).to eq 'paid'
         end
       end
@@ -29,7 +29,7 @@ RSpec.describe PaymentNotificationsController, type: :controller do
         expect_any_instance_of(PagSeguro::Transaction).to(receive(:status)).once.and_return(nil)
 
         post :create, params: { type: 'pag_seguro', status: 'Aprovada', transacao_id: '12345678', pedido: attendance.id, store_code: Figaro.env.pag_seguro_store_code }
-        expect(PaymentNotification.count).to eq 0
+        expect(Invoice.count).to eq 0
         expect(Attendance.last.status).to eq 'pending'
       end
     end

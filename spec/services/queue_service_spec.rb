@@ -26,7 +26,7 @@ describe QueueService, type: :service do
       let(:event) { Fabricate :event, attendance_limit: 3 }
       let!(:pending) { Fabricate :attendance, event: event, status: :pending }
       let!(:first_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: 1.day.from_now }
-      let!(:second_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: Time.zone.today }
+      let!(:second_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: Time.zone.now }
       let!(:third_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: 2.days.ago }
 
       it 'dequeues all the attendances and sends the notification' do
@@ -42,7 +42,7 @@ describe QueueService, type: :service do
       let(:event) { Fabricate :event, attendance_limit: 10 }
       let!(:pending) { Fabricate :attendance, event: event }
       let!(:first_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: 1.day.from_now }
-      let!(:second_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: Time.zone.today }
+      let!(:second_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: Time.zone.now }
       let!(:third_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: 2.days.ago }
 
       it 'dequeues all the attendances and sends the notification' do

@@ -108,7 +108,7 @@ RSpec.describe Event, type: :model do
     end
 
     context 'with a period ending yesterday in the end of the day' do
-      let!(:registration_period) { Fabricate :registration_period, event: event, start_at: 1.week.ago, end_at: Time.zone.yesterday.end_of_day, price: 100 }
+      let!(:registration_period) { Fabricate :registration_period, event: event, start_at: 1.week.ago, end_at: 1.day.ago.end_of_day, price: 100 }
 
       it { expect(event.registration_price_for(attendance, 'gateway')).to eq event.full_price }
     end
@@ -203,15 +203,15 @@ RSpec.describe Event, type: :model do
   context 'scopes' do
     describe '.active_for' do
       context 'with one event available and other with end date at past year' do
-        let!(:event) { Fabricate :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+        let!(:event) { Fabricate :event, start_date: 1.day.ago, end_date: 1.day.from_now }
         let!(:other_event) { Fabricate :event, start_date: 1.year.ago, end_date: 1.year.ago }
 
         it { expect(described_class.active_for(Time.zone.today)).to match_array [event] }
       end
 
       context 'with two events available and other with end date at past year' do
-        let!(:event) { Fabricate :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-        let!(:other_event_valid) { Fabricate :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+        let!(:event) { Fabricate :event, start_date: 1.day.ago, end_date: 1.day.from_now }
+        let!(:other_event_valid) { Fabricate :event, start_date: 1.day.ago, end_date: 1.day.from_now }
         let!(:other_event) { Fabricate :event, start_date: 1.year.ago, end_date: 1.year.ago }
 
         it { expect(described_class.active_for(Time.zone.today)).to match_array [event, other_event_valid] }
@@ -238,8 +238,8 @@ RSpec.describe Event, type: :model do
 
     describe '.events_to_welcome_attendances' do
       let!(:event) { Fabricate(:event, start_date: 3.months.ago, end_date: 2.months.from_now) }
-      let!(:other_event) { Fabricate(:event, start_date: 2.days.ago, end_date: Time.zone.today) }
-      let!(:out) { Fabricate(:event, start_date: 2.days.ago, end_date: Time.zone.yesterday) }
+      let!(:other_event) { Fabricate(:event, start_date: 2.days.ago, end_date: Time.zone.now) }
+      let!(:out) { Fabricate(:event, start_date: 2.days.ago, end_date: 1.day.ago) }
       let!(:other_out) { Fabricate(:event, start_date: 5.days.from_now, end_date: 6.days.from_now) }
 
       it { expect(described_class.events_to_welcome_attendances).to match_array [event, other_event] }

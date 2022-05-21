@@ -17,7 +17,7 @@ RSpec.describe Attendance, type: :model do
     it { is_expected.to belong_to(:registration_group).optional }
     it { is_expected.to belong_to(:registration_quota).optional }
     it { is_expected.to belong_to(:registration_period).optional }
-    it { is_expected.to have_many :payment_notifications }
+    it { is_expected.to have_many :invoices }
   end
 
   context 'validations' do
@@ -337,12 +337,12 @@ RSpec.describe Attendance, type: :model do
     end
 
     context 'when the event start date is before the attendance due date' do
-      let(:event) { Fabricate :event, start_date: Date.new(2017, 5, 8), days_to_charge: 5 }
+      let(:event) { Fabricate :event, start_date: Time.zone.local(2017, 5, 8, 10, 0, 0), days_to_charge: 5 }
       let!(:attendance) { Fabricate(:attendance, event: event) }
 
       before { attendance.advise! }
 
-      it { expect(described_class.last.due_date).to eq Time.zone.local(2017, 5, 8, 0, 0, 0) }
+      it { expect(described_class.last.due_date).to eq Time.zone.local(2017, 5, 8, 10, 0, 0).utc }
     end
   end
 

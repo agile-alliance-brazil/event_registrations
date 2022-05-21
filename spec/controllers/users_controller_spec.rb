@@ -90,7 +90,7 @@ RSpec.describe UsersController, type: :controller do
       describe 'GET #show' do
         context 'with an existent user' do
           context 'with only one event available for date' do
-            let!(:event) { Fabricate :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+            let!(:event) { Fabricate :event, start_date: 1.day.ago, end_date: 1.day.from_now }
 
             before { get :show, params: { id: user.id } }
 
@@ -100,9 +100,9 @@ RSpec.describe UsersController, type: :controller do
           end
 
           context 'with two events available for date and one unavaiable' do
-            let!(:event) { Fabricate :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
-            let!(:other_event) { Fabricate :event, start_date: Time.zone.yesterday, end_date: 5.days.from_now }
-            let!(:already_attending) { Fabricate :event, start_date: Time.zone.yesterday, end_date: Time.zone.tomorrow }
+            let!(:event) { Fabricate :event, start_date: 1.day.ago, end_date: 1.day.from_now }
+            let!(:other_event) { Fabricate :event, start_date: 1.day.ago, end_date: 5.days.from_now }
+            let!(:already_attending) { Fabricate :event, start_date: 1.day.ago, end_date: 1.day.from_now }
             let!(:attendance) { Fabricate(:attendance, user: user, event: already_attending) }
             let!(:cancelled_attendance) { Fabricate(:attendance, user: user, event: other_event, status: :cancelled) }
 

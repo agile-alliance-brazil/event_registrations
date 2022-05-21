@@ -28,6 +28,10 @@ Current::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  config.logger = Logger.new(STDOUT)
+  config.log_level = :INFO
+
+
   # Loading classes policy. true to load at start. false to load as needed
   config.eager_load = false
 

@@ -29,7 +29,7 @@ class PaymentsController < ApplicationController
   end
 
   def notification_url
-    payment_notifications_url(
+    invoices_url(
       type: 'pag_seguro',
       pedido: @attendance.id,
       store_code: Figaro.env.pag_seguro_store_code

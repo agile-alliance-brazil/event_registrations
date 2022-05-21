@@ -94,7 +94,7 @@ RSpec.describe AttendanceRepository, type: :repository do
 
   describe '#event_queue' do
     let!(:first_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: 1.day.from_now }
-    let!(:second_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: Time.zone.today }
+    let!(:second_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: Time.zone.now }
     let!(:third_waiting) { Fabricate :attendance, event: event, status: :waiting, created_at: 2.days.ago }
 
     it { expect(described_class.instance.event_queue(event)).to match_array [third_waiting, second_waiting, first_waiting] }

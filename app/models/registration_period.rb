@@ -4,14 +4,14 @@
 #
 # Table name: registration_periods
 #
-#  created_at :datetime
-#  end_at     :datetime
-#  event_id   :integer
-#  id         :integer          not null, primary key
-#  price      :decimal(, )      not null
-#  start_at   :datetime
-#  title      :string
-#  updated_at :datetime
+#  created_at :timestamptz      not null
+#  end_at     :timestamptz
+#  event_id   :bigint(8)
+#  id         :bigint(8)        not null, primary key
+#  price      :decimal(10, )    not null
+#  start_at   :timestamptz
+#  title      :string(255)
+#  updated_at :timestamptz      not null
 #
 
 class RegistrationPeriod < ApplicationRecord

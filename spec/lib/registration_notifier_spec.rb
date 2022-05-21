@@ -109,7 +109,7 @@ RSpec.describe RegistrationNotifier do
           end
 
           context 'and has been already advised' do
-            let!(:attendance) { Fabricate(:attendance, event: event, payment_type: :gateway, last_status_change_date: 7.days.ago, advised: true, advised_at: Time.zone.today) }
+            let!(:attendance) { Fabricate(:attendance, event: event, payment_type: :gateway, last_status_change_date: 7.days.ago, advised: true, advised_at: Time.zone.now) }
 
             it 'notifies the pending attendance and mark as advised' do
               expect(EmailNotificationsMailer).not_to(receive(:cancelling_registration))

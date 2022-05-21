@@ -10,7 +10,7 @@ RSpec.describe EventsController, type: :controller do
       end
 
       context 'with events' do
-        let!(:event) { Fabricate(:event, name: 'Foo', start_date: Time.zone.today - 1, end_date: 1.month.from_now) }
+        let!(:event) { Fabricate(:event, name: 'Foo', start_date: Time.zone.now - 1, end_date: 1.month.from_now) }
 
         context 'and one event at the right period' do
           before { get :index }
@@ -19,7 +19,7 @@ RSpec.describe EventsController, type: :controller do
         end
 
         context 'and two at the right period' do
-          let!(:other_event) { Fabricate(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
+          let!(:other_event) { Fabricate(:event, start_date: Time.zone.now - 1, end_date: 2.months.from_now) }
 
           before { get :index }
 
@@ -35,7 +35,7 @@ RSpec.describe EventsController, type: :controller do
         end
 
         context 'and two at the right period and other not' do
-          let!(:other_event) { Fabricate(:event, start_date: Time.zone.today - 1, end_date: 2.months.from_now) }
+          let!(:other_event) { Fabricate(:event, start_date: Time.zone.now - 1, end_date: 2.months.from_now) }
           let!(:out) { Fabricate(:event, start_date: 2.years.ago, end_date: 1.year.ago) }
 
           before { get :index }

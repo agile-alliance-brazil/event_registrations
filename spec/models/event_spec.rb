@@ -237,12 +237,16 @@ RSpec.describe Event, type: :model do
     end
 
     describe '.events_to_welcome_attendances' do
-      let!(:event) { Fabricate(:event, start_date: 3.months.ago, end_date: 2.months.from_now) }
-      let!(:other_event) { Fabricate(:event, start_date: 2.days.ago, end_date: Time.zone.now) }
-      let!(:out) { Fabricate(:event, start_date: 2.days.ago, end_date: 1.day.ago) }
-      let!(:other_out) { Fabricate(:event, start_date: 5.days.from_now, end_date: 6.days.from_now) }
+      it 'returns the events to welcome attendances' do
+        travel_to Time.zone.local(2022, 5, 20, 10, 0, 0) do
+          event = Fabricate(:event, start_date: 3.months.ago, end_date: 2.months.from_now)
+          other_event = Fabricate(:event, start_date: 2.days.ago, end_date: Time.zone.now)
+          Fabricate(:event, start_date: 2.days.ago, end_date: 1.day.ago)
+          Fabricate(:event, start_date: 5.days.from_now, end_date: 6.days.from_now)
 
-      it { expect(described_class.events_to_welcome_attendances).to match_array [event, other_event] }
+          expect(described_class.events_to_welcome_attendances).to match_array [event, other_event]
+        end
+      end
     end
   end
 

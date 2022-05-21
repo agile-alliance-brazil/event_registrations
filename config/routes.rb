@@ -51,7 +51,5 @@ Rails.application.routes.draw do
     resources :registration_quotas, only: %i[new create destroy edit update]
   end
 
-  resources :invoices, only: :create
-
   root to: 'events#index'
 end

@@ -37,5 +37,5 @@ Current::Application.configure do
 
   config.force_ssl = false
 
-  config.hosts << 'f0cc-161-22-56-164.sa.ngrok.io'
+  config.hosts << 'da24-161-22-56-164.sa.ngrok.io'
 end

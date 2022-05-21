@@ -6,6 +6,7 @@ require 'simplecov'
 SimpleCov.start do
   add_filter 'config/initializers/rack_profiler.rb'
   add_filter 'config/initializers/ses.rb'
+  add_filter 'app/job/check_pagseguro_invoices_job.rb'
   minimum_coverage 100
 end
 

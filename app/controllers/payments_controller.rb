@@ -7,7 +7,7 @@ class PaymentsController < ApplicationController
   def checkout
     PagSeguroService.config
     payment = PagSeguro::PaymentRequest.new
-    payment.notification_url = notification_url
+    payment.notification_url = ''
     payment.redirect_url = back_url
     response = PagSeguroService.checkout(@attendance, payment)
 
@@ -26,14 +26,6 @@ class PaymentsController < ApplicationController
 
   def back_url
     request.referer || root_path
-  end
-
-  def notification_url
-    invoices_url(
-      type: 'pag_seguro',
-      pedido: @attendance.id,
-      store_code: Figaro.env.pag_seguro_store_code
-    )
   end
 
   def assign_attendance

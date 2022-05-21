@@ -4,12 +4,13 @@ class PagseguroAdapter
   include Singleton
 
   def read_pag_seguro_body(response_hash)
-    response_hash.each do |transation|
+    response_hash.each do |transaction|
       Rails.logger.info('code,reference,status,grossAmount,date')
-      transation.second.each do |invoice_params|
-        Rails.logger.info("#{invoice_params['code']},#{invoice_params['reference']},#{invoice_params['status']},#{invoice_params['grossAmount']},#{invoice_params['date']}")
+      transaction.second.each do |invoice_params|
+        next if invoice_params.is_a?(Array) || invoice_params['reference'].blank?
 
-        next if invoice_params['reference'].blank?
+        Rails.logger.info(invoice_params)
+        Rails.logger.info("#{invoice_params['code']},#{invoice_params['reference']},#{invoice_params['status']},#{invoice_params['grossAmount']},#{invoice_params['date']}")
 
         attendance = Attendance.find_by(id: invoice_params['reference'])
 

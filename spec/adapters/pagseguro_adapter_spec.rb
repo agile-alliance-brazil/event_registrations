@@ -11,7 +11,7 @@ RSpec.describe PagseguroAdapter, type: :adapter do
       Fabricate :attendance, id: 8669, status: :pending, registration_value: 460
       Fabricate :attendance, id: 8668, status: :pending, registration_value: 460
       Fabricate :attendance, id: 8655, status: :pending, registration_value: 460
-      Fabricate :attendance, id: 8654, status: :pending, registration_value: 460
+      # Fabricate :attendance, id: 8654, status: :pending, registration_value: 460
       paid_less = Fabricate :attendance, id: 8651, status: :pending, registration_value: 470
       no_invoice = Fabricate :attendance, id: 976, status: :pending, registration_value: 470
 
@@ -19,14 +19,14 @@ RSpec.describe PagseguroAdapter, type: :adapter do
 
       described_class.instance.read_pag_seguro_body(JSON.parse(response))
 
-      expect(Invoice.all.count).to eq 10
+      expect(Invoice.all.count).to eq 9
 
       expect(cancelled.reload.invoices.map(&:status).uniq).to eq ['cancelled']
       expect(paid_less.reload.invoices.map(&:status).uniq).to eq ['paid']
       expect(paid_less.reload.pending?).to be true
       expect(no_invoice.reload.pending?).to be true
 
-      expect(Attendance.paid.count).to eq 7
+      expect(Attendance.paid.count).to eq 6
     end
   end
 end

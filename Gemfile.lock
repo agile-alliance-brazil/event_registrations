@@ -204,7 +204,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
-    oauth (0.5.10)
     oauth2 (1.4.9)
       faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
@@ -215,23 +214,15 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
       rack-protection
-    omniauth-facebook (9.0.0)
-      omniauth-oauth2 (~> 1.2)
     omniauth-github (2.0.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.7.1)
-    omniauth-oauth (1.2.0)
-      oauth
-      omniauth (>= 1.0, < 3)
     omniauth-oauth2 (1.7.2)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
     omniauth-rails_csrf_protection (1.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    omniauth-twitter (1.4.0)
-      omniauth-oauth (~> 1.1)
-      rack
     orm_adapter (0.5.0)
     pagseguro-oficial (2.4.0)
       aitch (>= 0.2.1)
@@ -449,10 +440,8 @@ DEPENDENCIES
   jquery-rails
   mini_magick
   omniauth
-  omniauth-facebook
   omniauth-github
   omniauth-rails_csrf_protection
-  omniauth-twitter
   pagseguro-oficial
   parser
   pg

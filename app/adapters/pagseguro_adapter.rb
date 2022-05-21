@@ -27,16 +27,12 @@ class PagseguroAdapter
   def process_valid_invoice(attendance, invoice, invoice_params)
     return unless attendance.pending? || attendance.accepted?
 
-    if invoice.valid?
-      Rails.logger.info("Invoice #{invoice_params['reference']} processed.")
+    Rails.logger.info("Invoice #{invoice_params['reference']} processed.")
 
-      if invoice.paid?
-        Rails.logger.info("Attendance #{attendance.id} paid.")
-        attendance.paid!
-        EmailNotificationsMailer.registration_paid(attendance).deliver
-      end
-    else
-      Rails.logger.info("Failed to process Invoice #{invoice_params['reference']}. Errors: #{invoice.errors.full_messages}")
-    end
+    return unless invoice.paid?
+
+    Rails.logger.info("Attendance #{attendance.id} paid.")
+    attendance.paid!
+    EmailNotificationsMailer.registration_paid(attendance).deliver
   end
 end

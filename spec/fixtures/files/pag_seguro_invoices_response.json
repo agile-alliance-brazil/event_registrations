@@ -1,0 +1,270 @@
+{
+  "transaction": [
+    {
+      "date": "2022-05-20T04:00:16.000-03:00",
+      "code": "3D214F1D-E29F-4630-878D-78849566C34A",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "13.47",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "13.47"
+    },
+    {
+      "date": "2022-05-19T21:06:22.000-03:00",
+      "reference": "8644",
+      "code": "D75609FC-7C59-4FED-B0FE-1F235678D0C6",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-19T21:08:09.000-03:00"
+    },
+    {
+      "date": "2022-05-19T18:24:30.000-03:00",
+      "reference": "8677",
+      "code": "6362805A-5419-4345-A4DF-4E1539F5FF27",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-19T18:27:13.000-03:00"
+    },
+    {
+      "date": "2022-05-19T13:55:45.000-03:00",
+      "reference": "8647",
+      "code": "95131271-E7C8-4EF2-830C-72372264D62B",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-19T13:58:13.000-03:00"
+    },
+    {
+      "date": "2022-05-19T03:45:59.000-03:00",
+      "code": "EE6B5746-6771-406B-A29E-7D4B85BF3518",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "37.22",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "37.22"
+    },
+    {
+      "date": "2022-05-18T03:51:58.000-03:00",
+      "code": "3D08EA91-806D-4D69-A8ED-1184C58EB472",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "43.04",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "43.04"
+    },
+    {
+      "date": "2022-05-17T17:52:11.000-03:00",
+      "reference": "8669",
+      "code": "DAD03543-0F60-4DC0-80C7-1BC834A064FB",
+      "type": "1",
+      "status": "7",
+      "cancellationSource": "EXTERNAL",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-17T17:55:16.000-03:00"
+    },
+    {
+      "date": "2022-05-17T15:26:55.000-03:00",
+      "reference": "8668",
+      "code": "0BC87643-6ED9-40AF-96AD-0F3EBFEF3B62",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-17T15:30:05.000-03:00"
+    },
+    {
+      "date": "2022-05-17T09:50:36.000-03:00",
+      "reference": "8655",
+      "code": "3F8C5218-E3EB-4A55-8AD0-F97651E17B74",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-17T09:51:26.000-03:00"
+    },
+    {
+      "date": "2022-05-17T07:58:15.000-03:00",
+      "reference": "8654",
+      "code": "BD7E98AC-96C9-42FD-9C73-10CCEB86129A",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-17T08:07:36.000-03:00"
+    },
+    {
+      "date": "2022-05-17T05:02:49.000-03:00",
+      "code": "649AE97E-73DF-4145-9EA7-2E5ED4530294",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "7.14",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "7.14"
+    },
+    {
+      "date": "2022-05-16T19:44:47.000-03:00",
+      "reference": "8651",
+      "code": "6855814A-576B-44A1-97CE-3E55CDF7C92E",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "460.00",
+      "discountAmount": "0.00",
+      "feeAmount": "23.35",
+      "netAmount": "436.65",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-16T19:51:57.000-03:00"
+    },
+    {
+      "date": "2022-05-16T16:41:29.000-03:00",
+      "reference": "4",
+      "code": "31DD569A-FD19-4EA9-9D80-55A9C99BE60D",
+      "type": "1",
+      "status": "3",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "1.00",
+      "discountAmount": "0.00",
+      "feeAmount": "0.45",
+      "netAmount": "0.55",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-16T17:24:59.000-03:00"
+    },
+    {
+      "date": "2022-05-16T14:43:15.000-03:00",
+      "reference": "3",
+      "code": "8E04D003-4467-446A-A101-72A7D38ED32D",
+      "type": "1",
+      "status": "7",
+      "cancellationSource": "INTERNAL",
+      "paymentMethod": {
+        "type": "1"
+      },
+      "grossAmount": "1.00",
+      "discountAmount": "0.00",
+      "feeAmount": "0.45",
+      "netAmount": "0.55",
+      "extraAmount": "0.00",
+      "lastEventDate": "2022-05-16T19:17:58.000-03:00"
+    },
+    {
+      "date": "2022-05-16T05:04:23.000-03:00",
+      "code": "3FEE2ED0-98BB-4AF4-BEA3-AE8C9C277ED0",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "36.80",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "36.80"
+    },
+    {
+      "date": "2022-05-15T05:02:15.000-03:00",
+      "code": "A0081447-DE2B-4CF8-8E5F-6D06C130C279",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "40.16",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "40.16"
+    },
+    {
+      "date": "2022-05-14T04:14:28.000-03:00",
+      "code": "A275B8CA-2824-48D3-9FE1-F674AF5B9FE1",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "22.57",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "22.57"
+    },
+    {
+      "date": "2022-05-13T03:55:28.000-03:00",
+      "code": "26D9205F-E38C-4269-8E04-96037C7B5330",
+      "type": "9",
+      "status": "4",
+      "paymentMethod": {
+        "type": "4"
+      },
+      "grossAmount": "16.68",
+      "discountAmount": "0.00",
+      "feeAmount": "0.00",
+      "netAmount": "16.68"
+    }
+  ]
+}

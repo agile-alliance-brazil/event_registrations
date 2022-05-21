@@ -4,28 +4,28 @@
 #
 # Table name: events
 #
-#  attendance_limit           :integer
-#  city                       :string           not null
-#  country                    :string           not null
-#  created_at                 :datetime
-#  days_to_charge             :integer          default(7)
-#  end_date                   :datetime
-#  event_image                :string
+#  attendance_limit           :bigint(8)
+#  city                       :string(255)      not null
+#  country                    :string(255)      not null
+#  created_at                 :timestamptz      not null
+#  days_to_charge             :bigint(8)        default(7)
+#  end_date                   :timestamptz
+#  event_image                :string(255)
 #  event_nickname             :string
 #  event_remote               :boolean          default(FALSE)
 #  event_remote_manual_link   :string
 #  event_remote_platform_mail :string
 #  event_remote_platform_name :string
 #  event_schedule_link        :string
-#  full_price                 :decimal(, )
-#  id                         :integer          not null, primary key
-#  link                       :string
-#  main_email_contact         :string           default(""), not null
-#  name                       :string
+#  full_price                 :decimal(10, )
+#  id                         :bigint(8)        not null, primary key
+#  link                       :string(255)
+#  main_email_contact         :string(255)      not null
+#  name                       :string(255)
 #  privacy_policy             :string
-#  start_date                 :datetime
-#  state                      :string           not null
-#  updated_at                 :datetime
+#  start_date                 :timestamptz
+#  state                      :string(255)      not null
+#  updated_at                 :timestamptz      not null
 #
 
 class Event < ApplicationRecord

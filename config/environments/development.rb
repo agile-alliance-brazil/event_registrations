@@ -28,10 +28,14 @@ Current::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  config.logger = Logger.new(STDOUT)
+  config.log_level = :INFO
+
+
   # Loading classes policy. true to load at start. false to load as needed
   config.eager_load = false
 
   config.force_ssl = false
 
-  config.hosts << 'f0cc-161-22-56-164.sa.ngrok.io'
+  config.hosts << 'da24-161-22-56-164.sa.ngrok.io'
 end

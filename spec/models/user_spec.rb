@@ -13,7 +13,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many :attendances }
     it { is_expected.to have_many :events }
     it { is_expected.to have_and_belong_to_many(:organized_events).class_name('Event') }
-    it { is_expected.to have_many(:payment_notifications).through(:attendances).dependent(:destroy) }
+    it { is_expected.to have_many(:invoices).through(:attendances).dependent(:destroy) }
     it { is_expected.to have_many(:led_groups).class_name('RegistrationGroup').dependent(:nullify) }
     it { is_expected.to have_many(:registered_attendances).class_name('Attendance').dependent(:restrict_with_exception) }
   end

@@ -5,58 +5,59 @@
 # Table name: attendances
 #
 #  advised                 :boolean          default(FALSE)
-#  advised_at              :datetime
-#  badge_name              :string
-#  city                    :string
-#  country                 :string
-#  created_at              :datetime
-#  due_date                :datetime
+#  advised_at              :timestamptz
+#  badge_name              :string(255)
+#  city                    :string(255)
+#  country                 :string(255)
+#  created_at              :timestamptz      not null
+#  due_date                :timestamptz
 #  education_level         :integer          default(0), indexed
 #  email_sent              :boolean          default(FALSE)
-#  event_id                :integer          not null, indexed
-#  event_price             :decimal(, )
+#  event_id                :bigint(8)        not null, indexed
+#  event_price             :decimal(10, )
 #  experience_in_agility   :integer          default("no_agile_expirience_informed")
-#  id                      :integer          not null, primary key
-#  job_role                :integer          default("not_informed")
-#  last_status_change_date :datetime
+#  id                      :bigint(8)        not null, primary key
+#  job_role                :bigint(8)        default("not_informed")
+#  last_status_change_date :timestamptz
 #  lock_version            :integer
-#  notes                   :string
-#  organization            :string
+#  notes                   :string(255)
+#  organization            :string(255)
 #  organization_size       :integer          default("no_org_size_informed")
 #  other_job_role          :string
-#  payment_type            :integer
-#  queue_time              :integer
-#  registered_by_id        :integer          not null, indexed
-#  registration_date       :datetime
-#  registration_group_id   :integer
-#  registration_period_id  :integer
-#  registration_quota_id   :integer          indexed
+#  payment_type            :bigint(8)
+#  queue_time              :bigint(8)
+#  registered_by_id        :bigint(8)        not null, indexed
+#  registration_date       :timestamptz
+#  registration_group_id   :bigint(8)
+#  registration_period_id  :bigint(8)        indexed
+#  registration_quota_id   :bigint(8)        indexed
 #  registration_value      :decimal(10, )
 #  source_of_interest      :integer          default("no_source_informed"), not null, indexed
-#  state                   :string
-#  status                  :integer
-#  updated_at              :datetime
-#  user_id                 :integer          not null, indexed
+#  state                   :string(255)
+#  status                  :bigint(8)
+#  updated_at              :timestamptz      not null
+#  user_id                 :bigint(8)        not null, indexed
 #  welcome_email_sent      :boolean          default(FALSE)
 #  years_of_experience     :integer          default("no_experience_informed"), indexed
 #
 # Indexes
 #
-#  index_attendances_on_education_level        (education_level)
-#  index_attendances_on_event_id               (event_id)
-#  index_attendances_on_registered_by_id       (registered_by_id)
-#  index_attendances_on_registration_quota_id  (registration_quota_id)
-#  index_attendances_on_source_of_interest     (source_of_interest)
-#  index_attendances_on_user_id                (user_id)
-#  index_attendances_on_years_of_experience    (years_of_experience)
+#  idx_4539782_fk_rails_4eb9f97929                         (registered_by_id)
+#  idx_4539782_fk_rails_a2b9ca8d82                         (registration_period_id)
+#  idx_4539782_index_attendances_on_event_id               (event_id)
+#  idx_4539782_index_attendances_on_registration_quota_id  (registration_quota_id)
+#  idx_4539782_index_attendances_on_user_id                (user_id)
+#  index_attendances_on_education_level                    (education_level)
+#  index_attendances_on_source_of_interest                 (source_of_interest)
+#  index_attendances_on_years_of_experience                (years_of_experience)
 #
 # Foreign Keys
 #
-#  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id)
-#  fk_rails_4eb9f97929  (registered_by_id => users.id)
-#  fk_rails_777eb7170a  (event_id => events.id)
-#  fk_rails_77ad02f5c5  (user_id => users.id)
-#  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id)
+#  fk_rails_23280a60c9  (registration_quota_id => registration_quotas.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_4eb9f97929  (registered_by_id => users.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_777eb7170a  (event_id => events.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_77ad02f5c5  (user_id => users.id) ON DELETE => restrict ON UPDATE => restrict
+#  fk_rails_a2b9ca8d82  (registration_period_id => registration_periods.id) ON DELETE => restrict ON UPDATE => restrict
 #
 
 class Attendance < ApplicationRecord
@@ -88,7 +89,7 @@ class Attendance < ApplicationRecord
   belongs_to :registration_group, optional: true
   belongs_to :registration_quota, optional: true
 
-  has_many :payment_notifications, dependent: :destroy
+  has_many :invoices, dependent: :destroy
 
   validates :country, :city, :state, :registration_date, presence: true
 
@@ -128,7 +129,7 @@ class Attendance < ApplicationRecord
   end
 
   def band_value
-    registration_period.try(:price) || registration_quota.try(:price)
+    registration_period&.price || registration_quota&.price
   end
 
   def cancellable?

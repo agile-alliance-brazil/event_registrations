@@ -41,19 +41,15 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :transfers, only: %i[new create]
-
     resources :registration_groups, only: %i[new destroy show create edit update]
 
-    resources :payments, only: :checkout do
+    resources :payments, only: [] do
       member { post :checkout }
     end
 
     resources :registration_periods, only: %i[new create destroy edit update]
     resources :registration_quotas, only: %i[new create destroy edit update]
   end
-
-  resources :payment_notifications, only: :create
 
   root to: 'events#index'
 end

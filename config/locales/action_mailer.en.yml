@@ -58,6 +58,7 @@ en:
     cancelled_registrations_goodbye: "We want to share this moment with you!"
     confirmed:
       see_ya: "See you there."
+      share: "Follow the link and tell everybody on your social networks. #AgileBrazil2022EuVou"
     goodbye:
       pre_payment: "We are happy that you're coming!"
       waiting: "We hope to have you with us!"
@@ -71,3 +72,4 @@ en:
       invoice_cnpj: ""
       invoice_name: ""
       invoice_cpf: ""
+

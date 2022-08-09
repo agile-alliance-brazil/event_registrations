@@ -27,7 +27,7 @@
     <div class="row">
       <div class="col-xl-12 col-sm-6 form-group">
         <%= label_tag t('attendances.new.form.token_field'), nil, class: 'control-label' %>
-        <%= text_field_tag :registration_token, nil, class: 'form-control' %>
+        <%= text_field_tag :registration_token, params[:registration_token], class: 'form-control' %>
         <span class="help-block"><%= attendance.errors[:registration_group].join(', ') %></span>
       </div>
     </div>

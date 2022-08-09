@@ -18,10 +18,10 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.ar_internal_metadata (
-    key character varying(255) NOT NULL,
-    value character varying(255) DEFAULT NULL::character varying,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -30,37 +30,37 @@ CREATE TABLE public.ar_internal_metadata (
 --
 
 CREATE TABLE public.attendances (
-    id bigint NOT NULL,
-    event_id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    registration_group_id bigint,
-    registration_date timestamp with time zone,
-    status bigint,
+    id integer NOT NULL,
+    event_id integer NOT NULL,
+    user_id integer NOT NULL,
+    registration_group_id integer,
+    registration_date timestamp without time zone,
     email_sent boolean DEFAULT false,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
-    organization character varying(255) DEFAULT NULL::character varying,
-    country character varying(255) DEFAULT NULL::character varying,
-    state character varying(255) DEFAULT NULL::character varying,
-    city character varying(255) DEFAULT NULL::character varying,
-    badge_name character varying(255) DEFAULT NULL::character varying,
-    notes character varying(255) DEFAULT NULL::character varying,
-    event_price numeric(10,0) DEFAULT NULL::numeric,
-    registration_quota_id bigint,
-    registration_value numeric(10,0) DEFAULT NULL::numeric,
-    registration_period_id bigint,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    organization character varying,
+    country character varying,
+    state character varying,
+    city character varying,
+    badge_name character varying,
+    notes character varying,
+    event_price numeric,
+    registration_quota_id integer,
+    registration_value numeric(10,0),
+    registration_period_id integer,
     advised boolean DEFAULT false,
-    advised_at timestamp with time zone,
+    advised_at timestamp without time zone,
     organization_size integer DEFAULT 0,
     years_of_experience integer DEFAULT 0,
     experience_in_agility integer DEFAULT 0,
     education_level integer DEFAULT 0,
-    queue_time bigint,
-    last_status_change_date timestamp with time zone,
-    job_role bigint DEFAULT '0'::bigint,
-    due_date timestamp with time zone,
-    payment_type bigint,
-    registered_by_id bigint NOT NULL,
+    queue_time integer,
+    last_status_change_date timestamp without time zone,
+    job_role integer DEFAULT 0,
+    due_date timestamp without time zone,
+    status integer,
+    payment_type integer,
+    registered_by_id integer NOT NULL,
     other_job_role character varying,
     source_of_interest integer DEFAULT 0 NOT NULL,
     welcome_email_sent boolean DEFAULT false,
@@ -73,6 +73,7 @@ CREATE TABLE public.attendances (
 --
 
 CREATE SEQUENCE public.attendances_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -92,13 +93,13 @@ ALTER SEQUENCE public.attendances_id_seq OWNED BY public.attendances.id;
 --
 
 CREATE TABLE public.authentications (
-    id bigint NOT NULL,
-    user_id bigint,
-    provider character varying(255) DEFAULT NULL::character varying,
-    uid character varying(255) DEFAULT NULL::character varying,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
-    refresh_token character varying(255) DEFAULT NULL::character varying
+    id integer NOT NULL,
+    user_id integer,
+    provider character varying,
+    uid character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    refresh_token character varying
 );
 
 
@@ -107,6 +108,7 @@ CREATE TABLE public.authentications (
 --
 
 CREATE SEQUENCE public.authentications_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -126,21 +128,21 @@ ALTER SEQUENCE public.authentications_id_seq OWNED BY public.authentications.id;
 --
 
 CREATE TABLE public.events (
-    id bigint NOT NULL,
-    name character varying(255) DEFAULT NULL::character varying,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
-    attendance_limit bigint,
-    full_price numeric(10,0) DEFAULT NULL::numeric,
-    start_date timestamp with time zone,
-    end_date timestamp with time zone,
-    link character varying(255) DEFAULT NULL::character varying,
-    days_to_charge bigint DEFAULT '7'::bigint,
-    main_email_contact character varying(255) NOT NULL,
-    event_image character varying(255) DEFAULT NULL::character varying,
-    country character varying(255) NOT NULL,
-    state character varying(255) NOT NULL,
-    city character varying(255) NOT NULL,
+    id integer NOT NULL,
+    name character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    attendance_limit integer,
+    full_price numeric,
+    start_date timestamp without time zone,
+    end_date timestamp without time zone,
+    link character varying,
+    days_to_charge integer DEFAULT 7,
+    main_email_contact character varying DEFAULT ''::character varying NOT NULL,
+    event_image character varying,
+    country character varying NOT NULL,
+    state character varying NOT NULL,
+    city character varying NOT NULL,
     event_nickname character varying,
     event_schedule_link character varying,
     event_remote_manual_link character varying,
@@ -156,6 +158,7 @@ CREATE TABLE public.events (
 --
 
 CREATE SEQUENCE public.events_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -175,8 +178,10 @@ ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
 --
 
 CREATE TABLE public.events_users (
-    event_id bigint,
-    user_id bigint
+    event_id integer,
+    user_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -185,13 +190,13 @@ CREATE TABLE public.events_users (
 --
 
 CREATE TABLE public.invoices (
-    id bigint NOT NULL,
-    transaction_id character varying(255) DEFAULT NULL::character varying NOT NULL,
-    payer_email character varying(255) DEFAULT NULL::character varying,
-    settle_amount numeric(10,0) DEFAULT NULL::numeric NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
-    attendance_id bigint,
+    id integer NOT NULL,
+    transaction_id character varying NOT NULL,
+    payer_email character varying,
+    settle_amount numeric NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    attendance_id integer,
     invoice_date timestamp without time zone NOT NULL,
     payment_type integer DEFAULT 0 NOT NULL,
     status integer DEFAULT 1
@@ -203,6 +208,7 @@ CREATE TABLE public.invoices (
 --
 
 CREATE SEQUENCE public.invoices_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -222,19 +228,19 @@ ALTER SEQUENCE public.invoices_id_seq OWNED BY public.invoices.id;
 --
 
 CREATE TABLE public.registration_groups (
-    id bigint NOT NULL,
-    event_id bigint,
-    name character varying(255) DEFAULT NULL::character varying,
-    capacity bigint,
-    discount bigint,
-    token character varying(255) DEFAULT NULL::character varying,
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone,
-    leader_id bigint,
-    minimum_size bigint,
-    amount numeric(10,0) DEFAULT NULL::numeric,
+    id integer NOT NULL,
+    event_id integer,
+    name character varying,
+    capacity integer,
+    discount integer,
+    token character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    leader_id integer,
+    minimum_size integer,
+    amount numeric,
     automatic_approval boolean DEFAULT false,
-    registration_quota_id bigint,
+    registration_quota_id integer,
     paid_in_advance boolean DEFAULT false
 );
 
@@ -244,6 +250,7 @@ CREATE TABLE public.registration_groups (
 --
 
 CREATE SEQUENCE public.registration_groups_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -263,14 +270,14 @@ ALTER SEQUENCE public.registration_groups_id_seq OWNED BY public.registration_gr
 --
 
 CREATE TABLE public.registration_periods (
-    id bigint NOT NULL,
-    event_id bigint,
-    title character varying(255) DEFAULT NULL::character varying,
-    start_at timestamp with time zone,
-    end_at timestamp with time zone,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
-    price numeric(10,0) NOT NULL
+    id integer NOT NULL,
+    event_id integer,
+    title character varying,
+    start_at timestamp without time zone,
+    end_at timestamp without time zone,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    price numeric NOT NULL
 );
 
 
@@ -279,6 +286,7 @@ CREATE TABLE public.registration_periods (
 --
 
 CREATE SEQUENCE public.registration_periods_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -298,15 +306,15 @@ ALTER SEQUENCE public.registration_periods_id_seq OWNED BY public.registration_p
 --
 
 CREATE TABLE public.registration_quotas (
-    id bigint NOT NULL,
-    quota bigint,
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone,
-    event_id bigint,
-    registration_price_id bigint,
-    "order" bigint,
+    id integer NOT NULL,
+    quota integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    event_id integer,
+    registration_price_id integer,
+    "order" integer,
     closed boolean DEFAULT false,
-    price numeric(10,0) NOT NULL
+    price numeric NOT NULL
 );
 
 
@@ -315,6 +323,7 @@ CREATE TABLE public.registration_quotas (
 --
 
 CREATE SEQUENCE public.registration_quotas_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -334,7 +343,7 @@ ALTER SEQUENCE public.registration_quotas_id_seq OWNED BY public.registration_qu
 --
 
 CREATE TABLE public.schema_migrations (
-    version character varying(255) NOT NULL
+    version character varying NOT NULL
 );
 
 
@@ -375,36 +384,36 @@ ALTER SEQUENCE public.slack_configurations_id_seq OWNED BY public.slack_configur
 --
 
 CREATE TABLE public.users (
-    id bigint NOT NULL,
-    first_name character varying(255) NOT NULL,
-    last_name character varying(255) NOT NULL,
-    email character varying(255) NOT NULL,
-    country character varying(255) DEFAULT NULL::character varying,
-    state character varying(255) DEFAULT NULL::character varying,
-    city character varying(255) DEFAULT NULL::character varying,
+    id integer NOT NULL,
+    first_name character varying NOT NULL,
+    last_name character varying NOT NULL,
+    email character varying NOT NULL,
+    country character varying,
+    state character varying,
+    city character varying,
     gender integer DEFAULT 5,
-    roles_mask bigint,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
-    registration_group_id bigint,
-    role bigint DEFAULT '0'::bigint NOT NULL,
-    encrypted_password character varying(255) DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying(255) DEFAULT NULL::character varying,
-    reset_password_sent_at timestamp with time zone,
-    remember_created_at timestamp with time zone,
-    sign_in_count bigint DEFAULT '0'::bigint NOT NULL,
-    current_sign_in_at timestamp with time zone,
-    last_sign_in_at timestamp with time zone,
-    current_sign_in_ip character varying(255) DEFAULT NULL::character varying,
-    last_sign_in_ip character varying(255) DEFAULT NULL::character varying,
-    confirmation_token character varying(255) DEFAULT NULL::character varying,
-    confirmed_at timestamp with time zone,
-    confirmation_sent_at timestamp with time zone,
-    unconfirmed_email character varying(255) DEFAULT NULL::character varying,
-    failed_attempts bigint DEFAULT '0'::bigint NOT NULL,
-    unlock_token character varying(255) DEFAULT NULL::character varying,
-    locked_at timestamp with time zone,
-    user_image character varying(255) DEFAULT NULL::character varying,
+    roles_mask integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    registration_group_id integer,
+    role integer DEFAULT 0 NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip character varying,
+    last_sign_in_ip character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    unconfirmed_email character varying,
+    failed_attempts integer DEFAULT 0 NOT NULL,
+    unlock_token character varying,
+    locked_at timestamp without time zone,
+    user_image character varying,
     birth_date date,
     education_level integer DEFAULT 0,
     school character varying,
@@ -418,6 +427,7 @@ CREATE TABLE public.users (
 --
 
 CREATE SEQUENCE public.users_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -496,75 +506,75 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Name: ar_internal_metadata idx_4539773_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ar_internal_metadata
-    ADD CONSTRAINT idx_4539773_primary PRIMARY KEY (key);
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
 --
--- Name: attendances idx_4539782_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: attendances attendances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.attendances
-    ADD CONSTRAINT idx_4539782_primary PRIMARY KEY (id);
+    ADD CONSTRAINT attendances_pkey PRIMARY KEY (id);
 
 
 --
--- Name: authentications idx_4539813_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: authentications authentications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.authentications
-    ADD CONSTRAINT idx_4539813_primary PRIMARY KEY (id);
+    ADD CONSTRAINT authentications_pkey PRIMARY KEY (id);
 
 
 --
--- Name: events idx_4539825_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.events
-    ADD CONSTRAINT idx_4539825_primary PRIMARY KEY (id);
+    ADD CONSTRAINT events_pkey PRIMARY KEY (id);
 
 
 --
--- Name: invoices idx_4539845_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: invoices invoices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.invoices
-    ADD CONSTRAINT idx_4539845_primary PRIMARY KEY (id);
+    ADD CONSTRAINT invoices_pkey PRIMARY KEY (id);
 
 
 --
--- Name: registration_groups idx_4539859_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: registration_groups registration_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.registration_groups
-    ADD CONSTRAINT idx_4539859_primary PRIMARY KEY (id);
+    ADD CONSTRAINT registration_groups_pkey PRIMARY KEY (id);
 
 
 --
--- Name: registration_periods idx_4539873_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: registration_periods registration_periods_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.registration_periods
-    ADD CONSTRAINT idx_4539873_primary PRIMARY KEY (id);
+    ADD CONSTRAINT registration_periods_pkey PRIMARY KEY (id);
 
 
 --
--- Name: registration_quotas idx_4539880_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: registration_quotas registration_quotas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.registration_quotas
-    ADD CONSTRAINT idx_4539880_primary PRIMARY KEY (id);
+    ADD CONSTRAINT registration_quotas_pkey PRIMARY KEY (id);
 
 
 --
--- Name: users idx_4539890_primary; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT idx_4539890_primary PRIMARY KEY (id);
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
 --
@@ -576,101 +586,11 @@ ALTER TABLE ONLY public.slack_configurations
 
 
 --
--- Name: idx_4539782_fk_rails_4eb9f97929; Type: INDEX; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_4539782_fk_rails_4eb9f97929 ON public.attendances USING btree (registered_by_id);
-
-
---
--- Name: idx_4539782_fk_rails_a2b9ca8d82; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539782_fk_rails_a2b9ca8d82 ON public.attendances USING btree (registration_period_id);
-
-
---
--- Name: idx_4539782_index_attendances_on_event_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539782_index_attendances_on_event_id ON public.attendances USING btree (event_id);
-
-
---
--- Name: idx_4539782_index_attendances_on_registration_quota_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539782_index_attendances_on_registration_quota_id ON public.attendances USING btree (registration_quota_id);
-
-
---
--- Name: idx_4539782_index_attendances_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539782_index_attendances_on_user_id ON public.attendances USING btree (user_id);
-
-
---
--- Name: idx_4539840_index_events_users_on_event_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539840_index_events_users_on_event_id ON public.events_users USING btree (event_id);
-
-
---
--- Name: idx_4539840_index_events_users_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539840_index_events_users_on_user_id ON public.events_users USING btree (user_id);
-
-
---
--- Name: idx_4539845_index_payment_notifications_on_attendance_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539845_index_payment_notifications_on_attendance_id ON public.invoices USING btree (attendance_id);
-
-
---
--- Name: idx_4539885_unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX idx_4539885_unique_schema_migrations ON public.schema_migrations USING btree (version);
-
-
---
--- Name: idx_4539890_fk_rails_ebe9fba698; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_4539890_fk_rails_ebe9fba698 ON public.users USING btree (registration_group_id);
-
-
---
--- Name: idx_4539890_index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX idx_4539890_index_users_on_confirmation_token ON public.users USING btree (confirmation_token);
-
-
---
--- Name: idx_4539890_index_users_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX idx_4539890_index_users_on_email ON public.users USING btree (email);
-
-
---
--- Name: idx_4539890_index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX idx_4539890_index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
-
-
---
--- Name: idx_4539890_index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX idx_4539890_index_users_on_unlock_token ON public.users USING btree (unlock_token);
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
@@ -681,6 +601,27 @@ CREATE INDEX index_attendances_on_education_level ON public.attendances USING bt
 
 
 --
+-- Name: index_attendances_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_attendances_on_event_id ON public.attendances USING btree (event_id);
+
+
+--
+-- Name: index_attendances_on_registered_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_attendances_on_registered_by_id ON public.attendances USING btree (registered_by_id);
+
+
+--
+-- Name: index_attendances_on_registration_quota_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_attendances_on_registration_quota_id ON public.attendances USING btree (registration_quota_id);
+
+
+--
 -- Name: index_attendances_on_source_of_interest; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -688,10 +629,38 @@ CREATE INDEX index_attendances_on_source_of_interest ON public.attendances USING
 
 
 --
+-- Name: index_attendances_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_attendances_on_user_id ON public.attendances USING btree (user_id);
+
+
+--
 -- Name: index_attendances_on_years_of_experience; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_attendances_on_years_of_experience ON public.attendances USING btree (years_of_experience);
+
+
+--
+-- Name: index_events_users_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_users_on_event_id ON public.events_users USING btree (event_id);
+
+
+--
+-- Name: index_events_users_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_users_on_user_id ON public.events_users USING btree (user_id);
+
+
+--
+-- Name: index_invoices_on_attendance_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_invoices_on_attendance_id ON public.invoices USING btree (attendance_id);
 
 
 --
@@ -716,6 +685,13 @@ CREATE INDEX index_slack_configurations_on_event_id ON public.slack_configuratio
 
 
 --
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_confirmation_token ON public.users USING btree (confirmation_token);
+
+
+--
 -- Name: index_users_on_disability; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -727,6 +703,13 @@ CREATE INDEX index_users_on_disability ON public.users USING btree (disability);
 --
 
 CREATE INDEX index_users_on_education_level ON public.users USING btree (education_level);
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
@@ -744,10 +727,17 @@ CREATE INDEX index_users_on_gender ON public.users USING btree (gender);
 
 
 --
--- Name: invoices_pkey; Type: INDEX; Schema: public; Owner: -
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX invoices_pkey ON public.invoices USING btree (id);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_unlock_token ON public.users USING btree (unlock_token);
 
 
 --
@@ -755,7 +745,7 @@ CREATE INDEX invoices_pkey ON public.invoices USING btree (id);
 --
 
 ALTER TABLE ONLY public.attendances
-    ADD CONSTRAINT fk_rails_23280a60c9 FOREIGN KEY (registration_quota_id) REFERENCES public.registration_quotas(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_23280a60c9 FOREIGN KEY (registration_quota_id) REFERENCES public.registration_quotas(id);
 
 
 --
@@ -771,7 +761,7 @@ ALTER TABLE ONLY public.invoices
 --
 
 ALTER TABLE ONLY public.attendances
-    ADD CONSTRAINT fk_rails_4eb9f97929 FOREIGN KEY (registered_by_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_4eb9f97929 FOREIGN KEY (registered_by_id) REFERENCES public.users(id);
 
 
 --
@@ -779,7 +769,7 @@ ALTER TABLE ONLY public.attendances
 --
 
 ALTER TABLE ONLY public.attendances
-    ADD CONSTRAINT fk_rails_777eb7170a FOREIGN KEY (event_id) REFERENCES public.events(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_777eb7170a FOREIGN KEY (event_id) REFERENCES public.events(id);
 
 
 --
@@ -787,7 +777,7 @@ ALTER TABLE ONLY public.attendances
 --
 
 ALTER TABLE ONLY public.attendances
-    ADD CONSTRAINT fk_rails_77ad02f5c5 FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_77ad02f5c5 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -803,7 +793,7 @@ ALTER TABLE ONLY public.slack_configurations
 --
 
 ALTER TABLE ONLY public.attendances
-    ADD CONSTRAINT fk_rails_a2b9ca8d82 FOREIGN KEY (registration_period_id) REFERENCES public.registration_periods(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_a2b9ca8d82 FOREIGN KEY (registration_period_id) REFERENCES public.registration_periods(id);
 
 
 --
@@ -811,7 +801,7 @@ ALTER TABLE ONLY public.attendances
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT fk_rails_ebe9fba698 FOREIGN KEY (registration_group_id) REFERENCES public.registration_groups(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_ebe9fba698 FOREIGN KEY (registration_group_id) REFERENCES public.registration_groups(id);
 
 
 --

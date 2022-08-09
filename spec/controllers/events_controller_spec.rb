@@ -290,7 +290,7 @@ RSpec.describe EventsController, type: :controller do
       context 'with invalid parameters' do
         it 'responds 404' do
           delete :destroy, params: { id: 'foo' }
-          expect(response.status).to eq 404
+          expect(response).to have_http_status :not_found
         end
       end
     end
@@ -302,7 +302,7 @@ RSpec.describe EventsController, type: :controller do
         context 'and invalid event' do
           it 'responds 404' do
             patch :add_organizer, params: { id: 'foo' }, xhr: true
-            expect(response.status).to eq 404
+            expect(response).to have_http_status :not_found
           end
         end
 
@@ -310,7 +310,7 @@ RSpec.describe EventsController, type: :controller do
           context 'passing an invalid organizer' do
             it 'responds 404' do
               patch :add_organizer, params: { id: event, organizer: 'foo' }, xhr: true
-              expect(response.status).to eq 404
+              expect(response).to have_http_status :not_found
             end
           end
 
@@ -319,7 +319,7 @@ RSpec.describe EventsController, type: :controller do
 
             it 'responds 404' do
               patch :add_organizer, params: { id: event, organizer: not_organizer }, xhr: true
-              expect(response.status).to eq 404
+              expect(response).to have_http_status :not_found
             end
           end
         end
@@ -331,7 +331,7 @@ RSpec.describe EventsController, type: :controller do
 
           it 'adds the user as organizer' do
             patch :add_organizer, params: { id: event, organizer: organizer }, xhr: true
-            expect(response.status).to eq 200
+            expect(response).to have_http_status :ok
             expect(event.reload.organizers).to include organizer
           end
         end
@@ -346,7 +346,7 @@ RSpec.describe EventsController, type: :controller do
 
           it 'adds the user as organizer' do
             patch :add_organizer, params: { id: event, organizer: organizer }, xhr: true
-            expect(response.status).to eq 200
+            expect(response).to have_http_status :ok
             expect(event.reload.organizers.count).to eq 1
           end
         end
@@ -356,7 +356,7 @@ RSpec.describe EventsController, type: :controller do
 
           it 'adds the user as organizer' do
             patch :add_organizer, params: { id: event, organizer: admin }, xhr: true
-            expect(response.status).to eq 200
+            expect(response).to have_http_status :ok
             expect(event.reload.organizers).to include admin
           end
         end
@@ -370,7 +370,7 @@ RSpec.describe EventsController, type: :controller do
         context 'and invalid event' do
           it 'responds 404' do
             delete :remove_organizer, params: { id: 'foo' }, xhr: true
-            expect(response.status).to eq 404
+            expect(response).to have_http_status :not_found
           end
         end
 
@@ -378,7 +378,7 @@ RSpec.describe EventsController, type: :controller do
           context 'passing an invalid email' do
             it 'responds 404' do
               delete :remove_organizer, params: { id: event, organizer: 'bla' }, xhr: true
-              expect(response.status).to eq 404
+              expect(response).to have_http_status :not_found
             end
           end
         end
@@ -425,7 +425,7 @@ RSpec.describe EventsController, type: :controller do
     context 'with invalid parameters' do
       it 'responds 404' do
         get :show, params: { id: 'foo' }
-        expect(response.status).to eq 404
+        expect(response).to have_http_status :not_found
       end
     end
 

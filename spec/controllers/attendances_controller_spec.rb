@@ -451,7 +451,7 @@ RSpec.describe AttendancesController, type: :controller do
             it 'responds 408' do
               allow(AgileAllianceService).to(receive(:check_member)).and_raise(Net::OpenTimeout)
               post :create, params: { event_id: event, attendance: valid_attendance }
-              expect(response.status).to eq 408
+              expect(response).to have_http_status :request_timeout
             end
           end
 
@@ -459,7 +459,7 @@ RSpec.describe AttendancesController, type: :controller do
             it 'responds 408' do
               allow(AgileAllianceService).to(receive(:check_member)).and_raise(Net::OpenTimeout)
               post :create, params: { event_id: event, attendance: valid_attendance }, xhr: true
-              expect(response.status).to eq 408
+              expect(response).to have_http_status :request_timeout
             end
           end
         end

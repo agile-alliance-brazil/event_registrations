@@ -137,14 +137,14 @@ RSpec.describe RegistrationGroupsController, type: :controller do
         it 'does not assign the instance variable responds 404' do
           get :edit, params: { event_id: 'foo', id: 'bar' }
           expect(assigns(:group)).to be_nil
-          expect(response.status).to eq 404
+          expect(response).to have_http_status :not_found
         end
       end
 
       context 'and an invalid event' do
         it 'responds 404' do
           get :edit, params: { event_id: 'foo', id: group }
-          expect(response.status).to eq 404
+          expect(response).to have_http_status :not_found
         end
       end
 
@@ -155,7 +155,7 @@ RSpec.describe RegistrationGroupsController, type: :controller do
         it 'does not assign the instance variable responds 404' do
           get :edit, params: { event_id: event, id: group }
           expect(assigns(:group)).to be_nil
-          expect(response.status).to eq 404
+          expect(response).to have_http_status :not_found
         end
       end
     end
@@ -197,14 +197,14 @@ RSpec.describe RegistrationGroupsController, type: :controller do
           it 'does not assign the instance variable responds 404' do
             put :update, params: { event_id: 'bar', id: 'foo', registration_group: valid_parameters }
             expect(assigns(:registration_group)).to be_nil
-            expect(response.status).to eq 404
+            expect(response).to have_http_status :not_found
           end
         end
 
         context 'and an invalid event' do
           it 'responds 404' do
             put :update, params: { event_id: 'bar', id: group, registration_group: valid_parameters }
-            expect(response.status).to eq 404
+            expect(response).to have_http_status :not_found
           end
         end
 
@@ -215,7 +215,7 @@ RSpec.describe RegistrationGroupsController, type: :controller do
           it 'does not assign the instance variable responds 404' do
             put :update, params: { event_id: event, id: group, registration_group: valid_parameters }
             expect(assigns(:group)).to be_nil
-            expect(response.status).to eq 404
+            expect(response).to have_http_status :not_found
           end
         end
       end

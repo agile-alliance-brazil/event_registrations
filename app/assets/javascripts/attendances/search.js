@@ -6,6 +6,7 @@ function bindAttendanceSearchEvent() {
         const confirmed = $('#confirmed').is(':checked');
         const showedIn = $('#showed_in').is(':checked');
         const cancelled = $('#cancelled').is(':checked');
+        const waiting = $('#waiting').is(':checked');
 
         const searchText = $('#search').val();
         const searchDisability = $('#user_disability').val();
@@ -14,7 +15,7 @@ function bindAttendanceSearchEvent() {
         jQuery.ajax({
             url: `/events/${eventId}/attendances/search`,
             type: "GET",
-            data: `search=${searchText}&pending=${pending}&accepted=${accepted}&paid=${paid}&confirmed=${confirmed}&showed_in=${showedIn}&cancelled=${cancelled}&user_disability=${searchDisability}`
+            data: `search=${searchText}&waiting=${waiting}&pending=${pending}&accepted=${accepted}&paid=${paid}&confirmed=${confirmed}&showed_in=${showedIn}&cancelled=${cancelled}&user_disability=${searchDisability}`
         });
     })
 }

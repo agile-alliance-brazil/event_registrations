@@ -18,7 +18,7 @@ en:
     registration_dequeued:
       subject: 'Wooray! We accepted your registration for %{event_name} from the queue!'
     welcome_attendance:
-      subject: 'Welcome to %{event_name}! It will be in place tomorrow!'
+      subject: 'Welcome to %{event_name}! It is coming!'
   attendances:
     status:
       pending:
